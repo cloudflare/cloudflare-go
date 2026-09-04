@@ -295,12 +295,13 @@ type BucketCORSUpdateParamsCfR2Jurisdiction string
 const (
 	BucketCORSUpdateParamsCfR2JurisdictionDefault BucketCORSUpdateParamsCfR2Jurisdiction = "default"
 	BucketCORSUpdateParamsCfR2JurisdictionEu      BucketCORSUpdateParamsCfR2Jurisdiction = "eu"
+	BucketCORSUpdateParamsCfR2JurisdictionUs      BucketCORSUpdateParamsCfR2Jurisdiction = "us"
 	BucketCORSUpdateParamsCfR2JurisdictionFedramp BucketCORSUpdateParamsCfR2Jurisdiction = "fedramp"
 )
 
 func (r BucketCORSUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketCORSUpdateParamsCfR2JurisdictionDefault, BucketCORSUpdateParamsCfR2JurisdictionEu, BucketCORSUpdateParamsCfR2JurisdictionFedramp:
+	case BucketCORSUpdateParamsCfR2JurisdictionDefault, BucketCORSUpdateParamsCfR2JurisdictionEu, BucketCORSUpdateParamsCfR2JurisdictionUs, BucketCORSUpdateParamsCfR2JurisdictionFedramp:
 		return true
 	}
 	return false
@@ -362,12 +363,13 @@ type BucketCORSDeleteParamsCfR2Jurisdiction string
 const (
 	BucketCORSDeleteParamsCfR2JurisdictionDefault BucketCORSDeleteParamsCfR2Jurisdiction = "default"
 	BucketCORSDeleteParamsCfR2JurisdictionEu      BucketCORSDeleteParamsCfR2Jurisdiction = "eu"
+	BucketCORSDeleteParamsCfR2JurisdictionUs      BucketCORSDeleteParamsCfR2Jurisdiction = "us"
 	BucketCORSDeleteParamsCfR2JurisdictionFedramp BucketCORSDeleteParamsCfR2Jurisdiction = "fedramp"
 )
 
 func (r BucketCORSDeleteParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketCORSDeleteParamsCfR2JurisdictionDefault, BucketCORSDeleteParamsCfR2JurisdictionEu, BucketCORSDeleteParamsCfR2JurisdictionFedramp:
+	case BucketCORSDeleteParamsCfR2JurisdictionDefault, BucketCORSDeleteParamsCfR2JurisdictionEu, BucketCORSDeleteParamsCfR2JurisdictionUs, BucketCORSDeleteParamsCfR2JurisdictionFedramp:
 		return true
 	}
 	return false
@@ -429,12 +431,13 @@ type BucketCORSGetParamsCfR2Jurisdiction string
 const (
 	BucketCORSGetParamsCfR2JurisdictionDefault BucketCORSGetParamsCfR2Jurisdiction = "default"
 	BucketCORSGetParamsCfR2JurisdictionEu      BucketCORSGetParamsCfR2Jurisdiction = "eu"
+	BucketCORSGetParamsCfR2JurisdictionUs      BucketCORSGetParamsCfR2Jurisdiction = "us"
 	BucketCORSGetParamsCfR2JurisdictionFedramp BucketCORSGetParamsCfR2Jurisdiction = "fedramp"
 )
 
 func (r BucketCORSGetParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketCORSGetParamsCfR2JurisdictionDefault, BucketCORSGetParamsCfR2JurisdictionEu, BucketCORSGetParamsCfR2JurisdictionFedramp:
+	case BucketCORSGetParamsCfR2JurisdictionDefault, BucketCORSGetParamsCfR2JurisdictionEu, BucketCORSGetParamsCfR2JurisdictionUs, BucketCORSGetParamsCfR2JurisdictionFedramp:
 		return true
 	}
 	return false

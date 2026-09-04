@@ -5433,6 +5433,9 @@ type SetCacheSettingsRuleActionParameters struct {
 	OriginCacheControl bool `json:"origin_cache_control"`
 	// Whether to generate Cloudflare error pages for issues from the origin server.
 	OriginErrorPagePassthru bool `json:"origin_error_page_passthru"`
+	// Controls whether Cloudflare fetches a large asset from the origin as a series of
+	// range requests instead of one whole-body request.
+	OriginRangeRequests SetCacheSettingsRuleActionParametersOriginRangeRequests `json:"origin_range_requests"`
 	// A timeout value between two successive read operations to use for your origin
 	// server. Historically, the timeout value between two read options from Cloudflare
 	// to an origin server is 100 seconds. If you are attempting to reduce HTTP 524
@@ -5471,6 +5474,7 @@ type setCacheSettingsRuleActionParametersJSON struct {
 	EdgeTTL                  apijson.Field
 	OriginCacheControl       apijson.Field
 	OriginErrorPagePassthru  apijson.Field
+	OriginRangeRequests      apijson.Field
 	ReadTimeout              apijson.Field
 	RespectStrongEtags       apijson.Field
 	ServeStale               apijson.Field
@@ -5968,6 +5972,50 @@ func (r setCacheSettingsRuleActionParametersEdgeTTLStatusCodeTTLStatusCodeRangeJ
 	return r.raw
 }
 
+// Controls whether Cloudflare fetches a large asset from the origin as a series of
+// range requests instead of one whole-body request.
+type SetCacheSettingsRuleActionParametersOriginRangeRequests struct {
+	// Whether to use range requests. `default` is the behaviour the zone gets without
+	// this rule.
+	Mode SetCacheSettingsRuleActionParametersOriginRangeRequestsMode `json:"mode" api:"required"`
+	JSON setCacheSettingsRuleActionParametersOriginRangeRequestsJSON `json:"-"`
+}
+
+// setCacheSettingsRuleActionParametersOriginRangeRequestsJSON contains the JSON
+// metadata for the struct
+// [SetCacheSettingsRuleActionParametersOriginRangeRequests]
+type setCacheSettingsRuleActionParametersOriginRangeRequestsJSON struct {
+	Mode        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SetCacheSettingsRuleActionParametersOriginRangeRequests) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r setCacheSettingsRuleActionParametersOriginRangeRequestsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether to use range requests. `default` is the behaviour the zone gets without
+// this rule.
+type SetCacheSettingsRuleActionParametersOriginRangeRequestsMode string
+
+const (
+	SetCacheSettingsRuleActionParametersOriginRangeRequestsModeOn      SetCacheSettingsRuleActionParametersOriginRangeRequestsMode = "on"
+	SetCacheSettingsRuleActionParametersOriginRangeRequestsModeOff     SetCacheSettingsRuleActionParametersOriginRangeRequestsMode = "off"
+	SetCacheSettingsRuleActionParametersOriginRangeRequestsModeDefault SetCacheSettingsRuleActionParametersOriginRangeRequestsMode = "default"
+)
+
+func (r SetCacheSettingsRuleActionParametersOriginRangeRequestsMode) IsKnown() bool {
+	switch r {
+	case SetCacheSettingsRuleActionParametersOriginRangeRequestsModeOn, SetCacheSettingsRuleActionParametersOriginRangeRequestsModeOff, SetCacheSettingsRuleActionParametersOriginRangeRequestsModeDefault:
+		return true
+	}
+	return false
+}
+
 // When to serve stale content from cache.
 type SetCacheSettingsRuleActionParametersServeStale struct {
 	// Whether Cloudflare should disable serving stale content while getting the latest
@@ -6267,6 +6315,9 @@ type SetCacheSettingsRuleActionParametersParam struct {
 	OriginCacheControl param.Field[bool] `json:"origin_cache_control"`
 	// Whether to generate Cloudflare error pages for issues from the origin server.
 	OriginErrorPagePassthru param.Field[bool] `json:"origin_error_page_passthru"`
+	// Controls whether Cloudflare fetches a large asset from the origin as a series of
+	// range requests instead of one whole-body request.
+	OriginRangeRequests param.Field[SetCacheSettingsRuleActionParametersOriginRangeRequestsParam] `json:"origin_range_requests"`
 	// A timeout value between two successive read operations to use for your origin
 	// server. Historically, the timeout value between two read options from Cloudflare
 	// to an origin server is 100 seconds. If you are attempting to reduce HTTP 524
@@ -6492,6 +6543,18 @@ type SetCacheSettingsRuleActionParametersEdgeTTLStatusCodeTTLStatusCodeRangePara
 }
 
 func (r SetCacheSettingsRuleActionParametersEdgeTTLStatusCodeTTLStatusCodeRangeParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Controls whether Cloudflare fetches a large asset from the origin as a series of
+// range requests instead of one whole-body request.
+type SetCacheSettingsRuleActionParametersOriginRangeRequestsParam struct {
+	// Whether to use range requests. `default` is the behaviour the zone gets without
+	// this rule.
+	Mode param.Field[SetCacheSettingsRuleActionParametersOriginRangeRequestsMode] `json:"mode" api:"required"`
+}
+
+func (r SetCacheSettingsRuleActionParametersOriginRangeRequestsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

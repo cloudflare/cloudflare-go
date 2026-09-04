@@ -22,6 +22,7 @@ type SpectrumService struct {
 	Options   []option.RequestOption
 	Analytics *AnalyticsService
 	Apps      *AppService
+	Protocols *ProtocolService
 }
 
 // NewSpectrumService generates a new service that applies the given options to
@@ -32,6 +33,7 @@ func NewSpectrumService(opts ...option.RequestOption) (r *SpectrumService) {
 	r.Options = opts
 	r.Analytics = NewAnalyticsService(opts...)
 	r.Apps = NewAppService(opts...)
+	r.Protocols = NewProtocolService(opts...)
 	return
 }
 

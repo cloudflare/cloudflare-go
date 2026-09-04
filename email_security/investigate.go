@@ -408,11 +408,12 @@ const (
 	InvestigateListResponseDeliveryStatusDeferred    InvestigateListResponseDeliveryStatus = "deferred"
 	InvestigateListResponseDeliveryStatusBounced     InvestigateListResponseDeliveryStatus = "bounced"
 	InvestigateListResponseDeliveryStatusQueued      InvestigateListResponseDeliveryStatus = "queued"
+	InvestigateListResponseDeliveryStatusMoveFailed  InvestigateListResponseDeliveryStatus = "move_failed"
 )
 
 func (r InvestigateListResponseDeliveryStatus) IsKnown() bool {
 	switch r {
-	case InvestigateListResponseDeliveryStatusDelivered, InvestigateListResponseDeliveryStatusMoved, InvestigateListResponseDeliveryStatusQuarantined, InvestigateListResponseDeliveryStatusRejected, InvestigateListResponseDeliveryStatusDeferred, InvestigateListResponseDeliveryStatusBounced, InvestigateListResponseDeliveryStatusQueued:
+	case InvestigateListResponseDeliveryStatusDelivered, InvestigateListResponseDeliveryStatusMoved, InvestigateListResponseDeliveryStatusQuarantined, InvestigateListResponseDeliveryStatusRejected, InvestigateListResponseDeliveryStatusDeferred, InvestigateListResponseDeliveryStatusBounced, InvestigateListResponseDeliveryStatusQueued, InvestigateListResponseDeliveryStatusMoveFailed:
 		return true
 	}
 	return false
@@ -903,11 +904,12 @@ const (
 	InvestigateGetResponseDeliveryStatusDeferred    InvestigateGetResponseDeliveryStatus = "deferred"
 	InvestigateGetResponseDeliveryStatusBounced     InvestigateGetResponseDeliveryStatus = "bounced"
 	InvestigateGetResponseDeliveryStatusQueued      InvestigateGetResponseDeliveryStatus = "queued"
+	InvestigateGetResponseDeliveryStatusMoveFailed  InvestigateGetResponseDeliveryStatus = "move_failed"
 )
 
 func (r InvestigateGetResponseDeliveryStatus) IsKnown() bool {
 	switch r {
-	case InvestigateGetResponseDeliveryStatusDelivered, InvestigateGetResponseDeliveryStatusMoved, InvestigateGetResponseDeliveryStatusQuarantined, InvestigateGetResponseDeliveryStatusRejected, InvestigateGetResponseDeliveryStatusDeferred, InvestigateGetResponseDeliveryStatusBounced, InvestigateGetResponseDeliveryStatusQueued:
+	case InvestigateGetResponseDeliveryStatusDelivered, InvestigateGetResponseDeliveryStatusMoved, InvestigateGetResponseDeliveryStatusQuarantined, InvestigateGetResponseDeliveryStatusRejected, InvestigateGetResponseDeliveryStatusDeferred, InvestigateGetResponseDeliveryStatusBounced, InvestigateGetResponseDeliveryStatusQueued, InvestigateGetResponseDeliveryStatusMoveFailed:
 		return true
 	}
 	return false
@@ -1121,6 +1123,8 @@ type InvestigateListParams struct {
 	Query     param.Field[string] `query:"query"`
 	Recipient param.Field[string] `query:"recipient"`
 	Sender    param.Field[string] `query:"sender"`
+	// Matches messages whose SMTP HELO server IP address equals this value.
+	SmtpHeloIP param.Field[string] `query:"smtp_helo_ip"`
 	// The beginning of the search date range. Defaults to `now - 30 days`. Must not be
 	// in the future.
 	Start   param.Field[time.Time] `query:"start" format:"date-time"`
@@ -1146,11 +1150,12 @@ const (
 	InvestigateListParamsDeliveryStatusDeferred    InvestigateListParamsDeliveryStatus = "deferred"
 	InvestigateListParamsDeliveryStatusBounced     InvestigateListParamsDeliveryStatus = "bounced"
 	InvestigateListParamsDeliveryStatusQueued      InvestigateListParamsDeliveryStatus = "queued"
+	InvestigateListParamsDeliveryStatusMoveFailed  InvestigateListParamsDeliveryStatus = "move_failed"
 )
 
 func (r InvestigateListParamsDeliveryStatus) IsKnown() bool {
 	switch r {
-	case InvestigateListParamsDeliveryStatusDelivered, InvestigateListParamsDeliveryStatusMoved, InvestigateListParamsDeliveryStatusQuarantined, InvestigateListParamsDeliveryStatusRejected, InvestigateListParamsDeliveryStatusDeferred, InvestigateListParamsDeliveryStatusBounced, InvestigateListParamsDeliveryStatusQueued:
+	case InvestigateListParamsDeliveryStatusDelivered, InvestigateListParamsDeliveryStatusMoved, InvestigateListParamsDeliveryStatusQuarantined, InvestigateListParamsDeliveryStatusRejected, InvestigateListParamsDeliveryStatusDeferred, InvestigateListParamsDeliveryStatusBounced, InvestigateListParamsDeliveryStatusQueued, InvestigateListParamsDeliveryStatusMoveFailed:
 		return true
 	}
 	return false

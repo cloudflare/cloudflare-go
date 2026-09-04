@@ -74,29 +74,29 @@ func (r trafficAnomalyGetResponseJSON) RawJSON() string {
 }
 
 type TrafficAnomalyGetResponseTrafficAnomaly struct {
+	ASNDetails           TrafficAnomalyGetResponseTrafficAnomaliesASNDetails      `json:"asnDetails" api:"required,nullable"`
+	EndDate              time.Time                                                `json:"endDate" api:"required,nullable" format:"date-time"`
+	LocationDetails      TrafficAnomalyGetResponseTrafficAnomaliesLocationDetails `json:"locationDetails" api:"required,nullable"`
+	OriginDetails        TrafficAnomalyGetResponseTrafficAnomaliesOriginDetails   `json:"originDetails" api:"required,nullable"`
 	StartDate            string                                                   `json:"startDate" api:"required"`
 	Status               string                                                   `json:"status" api:"required"`
 	Type                 string                                                   `json:"type" api:"required"`
 	UUID                 string                                                   `json:"uuid" api:"required"`
-	ASNDetails           TrafficAnomalyGetResponseTrafficAnomaliesASNDetails      `json:"asnDetails"`
-	EndDate              time.Time                                                `json:"endDate" format:"date-time"`
-	LocationDetails      TrafficAnomalyGetResponseTrafficAnomaliesLocationDetails `json:"locationDetails"`
-	OriginDetails        TrafficAnomalyGetResponseTrafficAnomaliesOriginDetails   `json:"originDetails"`
-	VisibleInDataSources []string                                                 `json:"visibleInDataSources"`
+	VisibleInDataSources []string                                                 `json:"visibleInDataSources" api:"required,nullable"`
 	JSON                 trafficAnomalyGetResponseTrafficAnomalyJSON              `json:"-"`
 }
 
 // trafficAnomalyGetResponseTrafficAnomalyJSON contains the JSON metadata for the
 // struct [TrafficAnomalyGetResponseTrafficAnomaly]
 type trafficAnomalyGetResponseTrafficAnomalyJSON struct {
-	StartDate            apijson.Field
-	Status               apijson.Field
-	Type                 apijson.Field
-	UUID                 apijson.Field
 	ASNDetails           apijson.Field
 	EndDate              apijson.Field
 	LocationDetails      apijson.Field
 	OriginDetails        apijson.Field
+	StartDate            apijson.Field
+	Status               apijson.Field
+	Type                 apijson.Field
+	UUID                 apijson.Field
 	VisibleInDataSources apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
@@ -111,18 +111,18 @@ func (r trafficAnomalyGetResponseTrafficAnomalyJSON) RawJSON() string {
 }
 
 type TrafficAnomalyGetResponseTrafficAnomaliesASNDetails struct {
-	ASN       string                                                       `json:"asn" api:"required"`
-	Name      string                                                       `json:"name" api:"required"`
-	Locations TrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocations `json:"locations"`
-	JSON      trafficAnomalyGetResponseTrafficAnomaliesASNDetailsJSON      `json:"-"`
+	ASN      string                                                      `json:"asn" api:"required"`
+	Location TrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocation `json:"location" api:"required,nullable"`
+	Name     string                                                      `json:"name" api:"required,nullable"`
+	JSON     trafficAnomalyGetResponseTrafficAnomaliesASNDetailsJSON     `json:"-"`
 }
 
 // trafficAnomalyGetResponseTrafficAnomaliesASNDetailsJSON contains the JSON
 // metadata for the struct [TrafficAnomalyGetResponseTrafficAnomaliesASNDetails]
 type trafficAnomalyGetResponseTrafficAnomaliesASNDetailsJSON struct {
 	ASN         apijson.Field
+	Location    apijson.Field
 	Name        apijson.Field
-	Locations   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -135,27 +135,27 @@ func (r trafficAnomalyGetResponseTrafficAnomaliesASNDetailsJSON) RawJSON() strin
 	return r.raw
 }
 
-type TrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocations struct {
-	Code string                                                           `json:"code" api:"required"`
-	Name string                                                           `json:"name" api:"required"`
-	JSON trafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocationsJSON `json:"-"`
+type TrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocation struct {
+	Code string                                                          `json:"code" api:"required"`
+	Name string                                                          `json:"name" api:"required"`
+	JSON trafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocationJSON `json:"-"`
 }
 
-// trafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocationsJSON contains the
+// trafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocationJSON contains the
 // JSON metadata for the struct
-// [TrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocations]
-type trafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocationsJSON struct {
+// [TrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocation]
+type trafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocationJSON struct {
 	Code        apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocations) UnmarshalJSON(data []byte) (err error) {
+func (r *TrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r trafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocationsJSON) RawJSON() string {
+func (r trafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -184,7 +184,7 @@ func (r trafficAnomalyGetResponseTrafficAnomaliesLocationDetailsJSON) RawJSON() 
 }
 
 type TrafficAnomalyGetResponseTrafficAnomaliesOriginDetails struct {
-	Name   string                                                     `json:"name" api:"required"`
+	Name   string                                                     `json:"name" api:"required,nullable"`
 	Origin string                                                     `json:"origin" api:"required"`
 	JSON   trafficAnomalyGetResponseTrafficAnomaliesOriginDetailsJSON `json:"-"`
 }
@@ -210,6 +210,8 @@ type TrafficAnomalyGetParams struct {
 	// Filters results by Autonomous System. Specify a single Autonomous System Number
 	// (ASN) as integer.
 	ASN param.Field[int64] `query:"asn"`
+	// Filters results by data source.
+	DataSource param.Field[TrafficAnomalyGetParamsDataSource] `query:"dataSource"`
 	// End of the date range (inclusive). Alternative to `dateRange`; provide together
 	// with `dateStart`.
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
@@ -247,6 +249,45 @@ func (r TrafficAnomalyGetParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Filters results by data source.
+type TrafficAnomalyGetParamsDataSource string
+
+const (
+	TrafficAnomalyGetParamsDataSourceAll                TrafficAnomalyGetParamsDataSource = "ALL"
+	TrafficAnomalyGetParamsDataSourceAIBots             TrafficAnomalyGetParamsDataSource = "AI_BOTS"
+	TrafficAnomalyGetParamsDataSourceAIGateway          TrafficAnomalyGetParamsDataSource = "AI_GATEWAY"
+	TrafficAnomalyGetParamsDataSourceBGP                TrafficAnomalyGetParamsDataSource = "BGP"
+	TrafficAnomalyGetParamsDataSourceBots               TrafficAnomalyGetParamsDataSource = "BOTS"
+	TrafficAnomalyGetParamsDataSourceConnectionAnomaly  TrafficAnomalyGetParamsDataSource = "CONNECTION_ANOMALY"
+	TrafficAnomalyGetParamsDataSourceCT                 TrafficAnomalyGetParamsDataSource = "CT"
+	TrafficAnomalyGetParamsDataSourceDNS                TrafficAnomalyGetParamsDataSource = "DNS"
+	TrafficAnomalyGetParamsDataSourceDNSMagnitude       TrafficAnomalyGetParamsDataSource = "DNS_MAGNITUDE"
+	TrafficAnomalyGetParamsDataSourceDNSAS112           TrafficAnomalyGetParamsDataSource = "DNS_AS112"
+	TrafficAnomalyGetParamsDataSourceDos                TrafficAnomalyGetParamsDataSource = "DOS"
+	TrafficAnomalyGetParamsDataSourceEmailRouting       TrafficAnomalyGetParamsDataSource = "EMAIL_ROUTING"
+	TrafficAnomalyGetParamsDataSourceEmailSecurity      TrafficAnomalyGetParamsDataSource = "EMAIL_SECURITY"
+	TrafficAnomalyGetParamsDataSourceFw                 TrafficAnomalyGetParamsDataSource = "FW"
+	TrafficAnomalyGetParamsDataSourceFwPg               TrafficAnomalyGetParamsDataSource = "FW_PG"
+	TrafficAnomalyGetParamsDataSourceHTTP               TrafficAnomalyGetParamsDataSource = "HTTP"
+	TrafficAnomalyGetParamsDataSourceHTTPControl        TrafficAnomalyGetParamsDataSource = "HTTP_CONTROL"
+	TrafficAnomalyGetParamsDataSourceHTTPCrawlerReferer TrafficAnomalyGetParamsDataSource = "HTTP_CRAWLER_REFERER"
+	TrafficAnomalyGetParamsDataSourceHTTPOrigins        TrafficAnomalyGetParamsDataSource = "HTTP_ORIGINS"
+	TrafficAnomalyGetParamsDataSourceIQI                TrafficAnomalyGetParamsDataSource = "IQI"
+	TrafficAnomalyGetParamsDataSourceLeakedCredentials  TrafficAnomalyGetParamsDataSource = "LEAKED_CREDENTIALS"
+	TrafficAnomalyGetParamsDataSourceNet                TrafficAnomalyGetParamsDataSource = "NET"
+	TrafficAnomalyGetParamsDataSourceRobotsTXT          TrafficAnomalyGetParamsDataSource = "ROBOTS_TXT"
+	TrafficAnomalyGetParamsDataSourceSpeed              TrafficAnomalyGetParamsDataSource = "SPEED"
+	TrafficAnomalyGetParamsDataSourceWorkersAI          TrafficAnomalyGetParamsDataSource = "WORKERS_AI"
+)
+
+func (r TrafficAnomalyGetParamsDataSource) IsKnown() bool {
+	switch r {
+	case TrafficAnomalyGetParamsDataSourceAll, TrafficAnomalyGetParamsDataSourceAIBots, TrafficAnomalyGetParamsDataSourceAIGateway, TrafficAnomalyGetParamsDataSourceBGP, TrafficAnomalyGetParamsDataSourceBots, TrafficAnomalyGetParamsDataSourceConnectionAnomaly, TrafficAnomalyGetParamsDataSourceCT, TrafficAnomalyGetParamsDataSourceDNS, TrafficAnomalyGetParamsDataSourceDNSMagnitude, TrafficAnomalyGetParamsDataSourceDNSAS112, TrafficAnomalyGetParamsDataSourceDos, TrafficAnomalyGetParamsDataSourceEmailRouting, TrafficAnomalyGetParamsDataSourceEmailSecurity, TrafficAnomalyGetParamsDataSourceFw, TrafficAnomalyGetParamsDataSourceFwPg, TrafficAnomalyGetParamsDataSourceHTTP, TrafficAnomalyGetParamsDataSourceHTTPControl, TrafficAnomalyGetParamsDataSourceHTTPCrawlerReferer, TrafficAnomalyGetParamsDataSourceHTTPOrigins, TrafficAnomalyGetParamsDataSourceIQI, TrafficAnomalyGetParamsDataSourceLeakedCredentials, TrafficAnomalyGetParamsDataSourceNet, TrafficAnomalyGetParamsDataSourceRobotsTXT, TrafficAnomalyGetParamsDataSourceSpeed, TrafficAnomalyGetParamsDataSourceWorkersAI:
+		return true
+	}
+	return false
 }
 
 // Format in which results will be returned.

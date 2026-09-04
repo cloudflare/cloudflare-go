@@ -215,6 +215,10 @@ type OAuthClientNewResponse struct {
 	HasRotatedSecret bool `json:"has_rotated_secret"`
 	// URL of the client's logo.
 	LogoURI string `json:"logo_uri"`
+	// Scopes that the authorizing user may decline during consent. Each value must
+	// also appear in `scopes`. The scopes `openid`, `offline`, and `offline_access`
+	// cannot be optional.
+	OptionalScopes []string `json:"optional_scopes"`
 	// URL that points to a privacy policy document.
 	PolicyURI string `json:"policy_uri"`
 	// Array of allowed post-logout redirect URIs.
@@ -254,6 +258,7 @@ type oauthClientNewResponseJSON struct {
 	GrantTypes              apijson.Field
 	HasRotatedSecret        apijson.Field
 	LogoURI                 apijson.Field
+	OptionalScopes          apijson.Field
 	PolicyURI               apijson.Field
 	PostLogoutRedirectURIs  apijson.Field
 	PromotedAt              apijson.Field
@@ -407,6 +412,10 @@ type OAuthClientUpdateResponse struct {
 	HasRotatedSecret bool `json:"has_rotated_secret"`
 	// URL of the client's logo.
 	LogoURI string `json:"logo_uri"`
+	// Scopes that the authorizing user may decline during consent. Each value must
+	// also appear in `scopes`. The scopes `openid`, `offline`, and `offline_access`
+	// cannot be optional.
+	OptionalScopes []string `json:"optional_scopes"`
 	// URL that points to a privacy policy document.
 	PolicyURI string `json:"policy_uri"`
 	// Array of allowed post-logout redirect URIs.
@@ -445,6 +454,7 @@ type oauthClientUpdateResponseJSON struct {
 	GrantTypes              apijson.Field
 	HasRotatedSecret        apijson.Field
 	LogoURI                 apijson.Field
+	OptionalScopes          apijson.Field
 	PolicyURI               apijson.Field
 	PostLogoutRedirectURIs  apijson.Field
 	PromotedAt              apijson.Field
@@ -598,6 +608,10 @@ type OAuthClientListResponse struct {
 	HasRotatedSecret bool `json:"has_rotated_secret"`
 	// URL of the client's logo.
 	LogoURI string `json:"logo_uri"`
+	// Scopes that the authorizing user may decline during consent. Each value must
+	// also appear in `scopes`. The scopes `openid`, `offline`, and `offline_access`
+	// cannot be optional.
+	OptionalScopes []string `json:"optional_scopes"`
 	// URL that points to a privacy policy document.
 	PolicyURI string `json:"policy_uri"`
 	// Array of allowed post-logout redirect URIs.
@@ -636,6 +650,7 @@ type oauthClientListResponseJSON struct {
 	GrantTypes              apijson.Field
 	HasRotatedSecret        apijson.Field
 	LogoURI                 apijson.Field
+	OptionalScopes          apijson.Field
 	PolicyURI               apijson.Field
 	PostLogoutRedirectURIs  apijson.Field
 	PromotedAt              apijson.Field
@@ -833,6 +848,10 @@ type OAuthClientGetResponse struct {
 	HasRotatedSecret bool `json:"has_rotated_secret"`
 	// URL of the client's logo.
 	LogoURI string `json:"logo_uri"`
+	// Scopes that the authorizing user may decline during consent. Each value must
+	// also appear in `scopes`. The scopes `openid`, `offline`, and `offline_access`
+	// cannot be optional.
+	OptionalScopes []string `json:"optional_scopes"`
 	// URL that points to a privacy policy document.
 	PolicyURI string `json:"policy_uri"`
 	// Array of allowed post-logout redirect URIs.
@@ -871,6 +890,7 @@ type oauthClientGetResponseJSON struct {
 	GrantTypes              apijson.Field
 	HasRotatedSecret        apijson.Field
 	LogoURI                 apijson.Field
+	OptionalScopes          apijson.Field
 	PolicyURI               apijson.Field
 	PostLogoutRedirectURIs  apijson.Field
 	PromotedAt              apijson.Field
@@ -1049,6 +1069,10 @@ type OAuthClientNewParams struct {
 	ClientURI param.Field[string] `json:"client_uri"`
 	// URL of the client's logo.
 	LogoURI param.Field[string] `json:"logo_uri"`
+	// Scopes that the authorizing user may decline during consent. Each value must
+	// also appear in `scopes`. The scopes `openid`, `offline`, and `offline_access`
+	// cannot be optional.
+	OptionalScopes param.Field[[]string] `json:"optional_scopes"`
 	// URL that points to a privacy policy document.
 	PolicyURI param.Field[string] `json:"policy_uri"`
 	// Array of allowed post-logout redirect URIs.
@@ -1263,6 +1287,10 @@ type OAuthClientUpdateParams struct {
 	GrantTypes param.Field[[]OAuthClientUpdateParamsGrantType] `json:"grant_types"`
 	// URL of the client's logo.
 	LogoURI param.Field[string] `json:"logo_uri"`
+	// Scopes that the authorizing user may decline during consent. Each value must
+	// also appear in `scopes`. The scopes `openid`, `offline`, and `offline_access`
+	// cannot be optional.
+	OptionalScopes param.Field[[]string] `json:"optional_scopes"`
 	// URL that points to a privacy policy document.
 	PolicyURI param.Field[string] `json:"policy_uri"`
 	// Array of allowed post-logout redirect URIs.

@@ -86,9 +86,12 @@ func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParam
 	return res, err
 }
 
-// Use `datasetId=all` or `datasetId=*` to query all event datasets for the account
-// (limited to 50). When `datasetId` is unspecified, events are listed from the
-// default Cloudforce One Threat Events dataset. To list existing datasets, use the
+// Use `datasetId=all` or `datasetId=*` for the legacy all-datasets scope,
+// `datasetId=analytics` for datasets with `isAnalytics=true`, or
+// `datasetId=operational` for datasets with `isAnalytics=false` (limited to 50).
+// Scope values must be used alone. When `datasetId` is unspecified, events are
+// listed from the default Cloudforce One Threat Events dataset. To list existing
+// datasets, use the
 // [`List Datasets`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/list/)
 // endpoint.
 func (r *ThreatEventService) List(ctx context.Context, params ThreatEventListParams, opts ...option.RequestOption) (res *[]ThreatEventListResponse, err error) {
@@ -646,12 +649,15 @@ type ThreatEventNewParams struct {
 	Indicator       param.Field[string]                  `json:"indicator"`
 	// Array of indicators for this event. Supports multiple indicators per event for
 	// complex scenarios.
-	Indicators     param.Field[[]ThreatEventNewParamsIndicator] `json:"indicators"`
-	IndicatorType  param.Field[string]                          `json:"indicatorType"`
-	Insight        param.Field[string]                          `json:"insight"`
-	Tags           param.Field[[]string]                        `json:"tags"`
-	TargetCountry  param.Field[string]                          `json:"targetCountry"`
-	TargetIndustry param.Field[string]                          `json:"targetIndustry"`
+	Indicators    param.Field[[]ThreatEventNewParamsIndicator] `json:"indicators"`
+	IndicatorType param.Field[string]                          `json:"indicatorType"`
+	Insight       param.Field[string]                          `json:"insight"`
+	// Controlled provenance for an event and its indicators derived from a Threat
+	// Signals article.
+	Source         param.Field[ThreatEventNewParamsSource] `json:"source"`
+	Tags           param.Field[[]string]                   `json:"tags"`
+	TargetCountry  param.Field[string]                     `json:"targetCountry"`
+	TargetIndustry param.Field[string]                     `json:"targetIndustry"`
 }
 
 func (r ThreatEventNewParams) MarshalJSON() (data []byte, err error) {
@@ -679,6 +685,46 @@ func (r ThreatEventNewParamsIndicator) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Controlled provenance for an event and its indicators derived from a Threat
+// Signals article.
+type ThreatEventNewParamsSource struct {
+	ResourceID   param.Field[string]                                 `json:"resourceId" api:"required" format:"uuid"`
+	ResourceType param.Field[ThreatEventNewParamsSourceResourceType] `json:"resourceType" api:"required"`
+	System       param.Field[ThreatEventNewParamsSourceSystem]       `json:"system" api:"required"`
+}
+
+func (r ThreatEventNewParamsSource) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ThreatEventNewParamsSourceResourceType string
+
+const (
+	ThreatEventNewParamsSourceResourceTypeArticle ThreatEventNewParamsSourceResourceType = "article"
+)
+
+func (r ThreatEventNewParamsSourceResourceType) IsKnown() bool {
+	switch r {
+	case ThreatEventNewParamsSourceResourceTypeArticle:
+		return true
+	}
+	return false
+}
+
+type ThreatEventNewParamsSourceSystem string
+
+const (
+	ThreatEventNewParamsSourceSystemThreatSignals ThreatEventNewParamsSourceSystem = "threat-signals"
+)
+
+func (r ThreatEventNewParamsSourceSystem) IsKnown() bool {
+	switch r {
+	case ThreatEventNewParamsSourceSystemThreatSignals:
+		return true
+	}
+	return false
+}
+
 type ThreatEventListParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -690,9 +736,10 @@ type ThreatEventListParams struct {
 	// result_info.cursor field. Use cursor-based pagination for deep pagination
 	// (beyond 100,000 records) or for optimal performance.
 	Cursor param.Field[string] `query:"cursor"`
-	// Dataset IDs to query events from (array of UUIDs), or special value 'all' or
-	// '\*' to query all event datasets for the account. If not provided, uses the
-	// default dataset.
+	// Dataset UUIDs to query, or one standalone scope value: 'all'/'\*' for the legacy
+	// all-datasets behavior, 'analytics' for isAnalytics=true datasets, or
+	// 'operational' for isAnalytics=false datasets. If not provided, uses the default
+	// dataset.
 	DatasetID    param.Field[[]string]                    `query:"datasetId"`
 	ForceRefresh param.Field[bool]                        `query:"forceRefresh"`
 	Format       param.Field[ThreatEventListParamsFormat] `query:"format"`
@@ -702,8 +749,8 @@ type ThreatEventListParams struct {
 	// 100,000 records. For deep pagination, use cursor-based pagination instead.
 	Page param.Field[float64] `query:"page"`
 	// Number of results per page. Maximum 25,000.
-	PageSize param.Field[float64]                       `query:"pageSize"`
-	Search   param.Field[[]ThreatEventListParamsSearch] `query:"search"`
+	PageSize param.Field[float64]                            `query:"pageSize"`
+	Search   param.Field[[]ThreatEventListParamsSearchUnion] `query:"search"`
 }
 
 // URLQuery serializes [ThreatEventListParams]'s query parameters as `url.Values`.
@@ -762,29 +809,127 @@ func (r ThreatEventListParamsOrder) IsKnown() bool {
 }
 
 type ThreatEventListParamsSearch struct {
-	// Event field to search on. Allowed: attacker, attackerCountry, category,
-	// createdAt, date, event, indicator, indicatorType, killChain, mitreAttack, tags,
-	// targetCountry, targetIndustry, tlp, uuid.
-	Field param.Field[string] `query:"field"`
-	// Search operator. Use 'in' for bulk lookup of up to 100 values at once, e.g.
-	// {field:'tags', op:'in', value:['malware','apt']}.
-	Op param.Field[ThreatEventListParamsSearchOp] `query:"op"`
-	// Search value. String or number for most operators. Array for 'in' operator (max
-	// 100 items).
-	Value param.Field[ThreatEventListParamsSearchValueUnion] `query:"value"`
+	Field param.Field[ThreatEventListParamsSearchField] `json:"field" api:"required"`
+	Op    param.Field[ThreatEventListParamsSearchOp]    `json:"op" api:"required"`
+	Value param.Field[interface{}]                      `json:"value" api:"required"`
 }
 
-// URLQuery serializes [ThreatEventListParamsSearch]'s query parameters as
+func (r ThreatEventListParamsSearch) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ThreatEventListParamsSearch) implementsThreatEventListParamsSearchUnion() {}
+
+// Satisfied by [cloudforce_one.ThreatEventListParamsSearchObject],
+// [cloudforce_one.ThreatEventListParamsSearchObject],
+// [cloudforce_one.ThreatEventListParamsSearchObject],
+// [cloudforce_one.ThreatEventListParamsSearchObject],
+// [cloudforce_one.ThreatEventListParamsSearchObject],
+// [cloudforce_one.ThreatEventListParamsSearchObject],
+// [ThreatEventListParamsSearch].
+type ThreatEventListParamsSearchUnion interface {
+	implementsThreatEventListParamsSearchUnion()
+}
+
+type ThreatEventListParamsSearchObject struct {
+	Field param.Field[ThreatEventListParamsSearchObjectField] `query:"field" api:"required"`
+	Op    param.Field[ThreatEventListParamsSearchObjectOp]    `query:"op" api:"required"`
+	Value param.Field[string]                                 `query:"value" api:"required"`
+}
+
+// URLQuery serializes [ThreatEventListParamsSearchObject]'s query parameters as
 // `url.Values`.
-func (r ThreatEventListParamsSearch) URLQuery() (v url.Values) {
+func (r ThreatEventListParamsSearchObject) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
-// Search operator. Use 'in' for bulk lookup of up to 100 values at once, e.g.
-// {field:'tags', op:'in', value:['malware','apt']}.
+func (r ThreatEventListParamsSearchObject) implementsThreatEventListParamsSearchUnion() {}
+
+type ThreatEventListParamsSearchObjectField string
+
+const (
+	ThreatEventListParamsSearchObjectFieldAttacker        ThreatEventListParamsSearchObjectField = "attacker"
+	ThreatEventListParamsSearchObjectFieldAttackerCountry ThreatEventListParamsSearchObjectField = "attackerCountry"
+	ThreatEventListParamsSearchObjectFieldCategory        ThreatEventListParamsSearchObjectField = "category"
+	ThreatEventListParamsSearchObjectFieldCreatedAt       ThreatEventListParamsSearchObjectField = "createdAt"
+	ThreatEventListParamsSearchObjectFieldDate            ThreatEventListParamsSearchObjectField = "date"
+	ThreatEventListParamsSearchObjectFieldEvent           ThreatEventListParamsSearchObjectField = "event"
+	ThreatEventListParamsSearchObjectFieldIndicator       ThreatEventListParamsSearchObjectField = "indicator"
+	ThreatEventListParamsSearchObjectFieldIndicatorType   ThreatEventListParamsSearchObjectField = "indicatorType"
+	ThreatEventListParamsSearchObjectFieldMitreAttack     ThreatEventListParamsSearchObjectField = "mitreAttack"
+	ThreatEventListParamsSearchObjectFieldMitreCapec      ThreatEventListParamsSearchObjectField = "mitreCapec"
+	ThreatEventListParamsSearchObjectFieldTags            ThreatEventListParamsSearchObjectField = "tags"
+	ThreatEventListParamsSearchObjectFieldTargetCountry   ThreatEventListParamsSearchObjectField = "targetCountry"
+	ThreatEventListParamsSearchObjectFieldTargetIndustry  ThreatEventListParamsSearchObjectField = "targetIndustry"
+	ThreatEventListParamsSearchObjectFieldTLP             ThreatEventListParamsSearchObjectField = "tlp"
+	ThreatEventListParamsSearchObjectFieldUUID            ThreatEventListParamsSearchObjectField = "uuid"
+)
+
+func (r ThreatEventListParamsSearchObjectField) IsKnown() bool {
+	switch r {
+	case ThreatEventListParamsSearchObjectFieldAttacker, ThreatEventListParamsSearchObjectFieldAttackerCountry, ThreatEventListParamsSearchObjectFieldCategory, ThreatEventListParamsSearchObjectFieldCreatedAt, ThreatEventListParamsSearchObjectFieldDate, ThreatEventListParamsSearchObjectFieldEvent, ThreatEventListParamsSearchObjectFieldIndicator, ThreatEventListParamsSearchObjectFieldIndicatorType, ThreatEventListParamsSearchObjectFieldMitreAttack, ThreatEventListParamsSearchObjectFieldMitreCapec, ThreatEventListParamsSearchObjectFieldTags, ThreatEventListParamsSearchObjectFieldTargetCountry, ThreatEventListParamsSearchObjectFieldTargetIndustry, ThreatEventListParamsSearchObjectFieldTLP, ThreatEventListParamsSearchObjectFieldUUID:
+		return true
+	}
+	return false
+}
+
+type ThreatEventListParamsSearchObjectOp string
+
+const (
+	ThreatEventListParamsSearchObjectOpEquals     ThreatEventListParamsSearchObjectOp = "equals"
+	ThreatEventListParamsSearchObjectOpNot        ThreatEventListParamsSearchObjectOp = "not"
+	ThreatEventListParamsSearchObjectOpGt         ThreatEventListParamsSearchObjectOp = "gt"
+	ThreatEventListParamsSearchObjectOpGte        ThreatEventListParamsSearchObjectOp = "gte"
+	ThreatEventListParamsSearchObjectOpLt         ThreatEventListParamsSearchObjectOp = "lt"
+	ThreatEventListParamsSearchObjectOpLte        ThreatEventListParamsSearchObjectOp = "lte"
+	ThreatEventListParamsSearchObjectOpLike       ThreatEventListParamsSearchObjectOp = "like"
+	ThreatEventListParamsSearchObjectOpContains   ThreatEventListParamsSearchObjectOp = "contains"
+	ThreatEventListParamsSearchObjectOpStartsWith ThreatEventListParamsSearchObjectOp = "startsWith"
+	ThreatEventListParamsSearchObjectOpEndsWith   ThreatEventListParamsSearchObjectOp = "endsWith"
+	ThreatEventListParamsSearchObjectOpFind       ThreatEventListParamsSearchObjectOp = "find"
+)
+
+func (r ThreatEventListParamsSearchObjectOp) IsKnown() bool {
+	switch r {
+	case ThreatEventListParamsSearchObjectOpEquals, ThreatEventListParamsSearchObjectOpNot, ThreatEventListParamsSearchObjectOpGt, ThreatEventListParamsSearchObjectOpGte, ThreatEventListParamsSearchObjectOpLt, ThreatEventListParamsSearchObjectOpLte, ThreatEventListParamsSearchObjectOpLike, ThreatEventListParamsSearchObjectOpContains, ThreatEventListParamsSearchObjectOpStartsWith, ThreatEventListParamsSearchObjectOpEndsWith, ThreatEventListParamsSearchObjectOpFind:
+		return true
+	}
+	return false
+}
+
+type ThreatEventListParamsSearchField string
+
+const (
+	ThreatEventListParamsSearchFieldAttacker        ThreatEventListParamsSearchField = "attacker"
+	ThreatEventListParamsSearchFieldAttackerCountry ThreatEventListParamsSearchField = "attackerCountry"
+	ThreatEventListParamsSearchFieldCategory        ThreatEventListParamsSearchField = "category"
+	ThreatEventListParamsSearchFieldCreatedAt       ThreatEventListParamsSearchField = "createdAt"
+	ThreatEventListParamsSearchFieldDate            ThreatEventListParamsSearchField = "date"
+	ThreatEventListParamsSearchFieldEvent           ThreatEventListParamsSearchField = "event"
+	ThreatEventListParamsSearchFieldIndicator       ThreatEventListParamsSearchField = "indicator"
+	ThreatEventListParamsSearchFieldIndicatorType   ThreatEventListParamsSearchField = "indicatorType"
+	ThreatEventListParamsSearchFieldMitreAttack     ThreatEventListParamsSearchField = "mitreAttack"
+	ThreatEventListParamsSearchFieldMitreCapec      ThreatEventListParamsSearchField = "mitreCapec"
+	ThreatEventListParamsSearchFieldTags            ThreatEventListParamsSearchField = "tags"
+	ThreatEventListParamsSearchFieldTargetCountry   ThreatEventListParamsSearchField = "targetCountry"
+	ThreatEventListParamsSearchFieldTargetIndustry  ThreatEventListParamsSearchField = "targetIndustry"
+	ThreatEventListParamsSearchFieldTLP             ThreatEventListParamsSearchField = "tlp"
+	ThreatEventListParamsSearchFieldUUID            ThreatEventListParamsSearchField = "uuid"
+	ThreatEventListParamsSearchFieldKillChain       ThreatEventListParamsSearchField = "killChain"
+	ThreatEventListParamsSearchFieldHasChildren     ThreatEventListParamsSearchField = "hasChildren"
+)
+
+func (r ThreatEventListParamsSearchField) IsKnown() bool {
+	switch r {
+	case ThreatEventListParamsSearchFieldAttacker, ThreatEventListParamsSearchFieldAttackerCountry, ThreatEventListParamsSearchFieldCategory, ThreatEventListParamsSearchFieldCreatedAt, ThreatEventListParamsSearchFieldDate, ThreatEventListParamsSearchFieldEvent, ThreatEventListParamsSearchFieldIndicator, ThreatEventListParamsSearchFieldIndicatorType, ThreatEventListParamsSearchFieldMitreAttack, ThreatEventListParamsSearchFieldMitreCapec, ThreatEventListParamsSearchFieldTags, ThreatEventListParamsSearchFieldTargetCountry, ThreatEventListParamsSearchFieldTargetIndustry, ThreatEventListParamsSearchFieldTLP, ThreatEventListParamsSearchFieldUUID, ThreatEventListParamsSearchFieldKillChain, ThreatEventListParamsSearchFieldHasChildren:
+		return true
+	}
+	return false
+}
+
 type ThreatEventListParamsSearchOp string
 
 const (
@@ -798,34 +943,16 @@ const (
 	ThreatEventListParamsSearchOpContains   ThreatEventListParamsSearchOp = "contains"
 	ThreatEventListParamsSearchOpStartsWith ThreatEventListParamsSearchOp = "startsWith"
 	ThreatEventListParamsSearchOpEndsWith   ThreatEventListParamsSearchOp = "endsWith"
-	ThreatEventListParamsSearchOpIn         ThreatEventListParamsSearchOp = "in"
 	ThreatEventListParamsSearchOpFind       ThreatEventListParamsSearchOp = "find"
+	ThreatEventListParamsSearchOpIn         ThreatEventListParamsSearchOp = "in"
 )
 
 func (r ThreatEventListParamsSearchOp) IsKnown() bool {
 	switch r {
-	case ThreatEventListParamsSearchOpEquals, ThreatEventListParamsSearchOpNot, ThreatEventListParamsSearchOpGt, ThreatEventListParamsSearchOpGte, ThreatEventListParamsSearchOpLt, ThreatEventListParamsSearchOpLte, ThreatEventListParamsSearchOpLike, ThreatEventListParamsSearchOpContains, ThreatEventListParamsSearchOpStartsWith, ThreatEventListParamsSearchOpEndsWith, ThreatEventListParamsSearchOpIn, ThreatEventListParamsSearchOpFind:
+	case ThreatEventListParamsSearchOpEquals, ThreatEventListParamsSearchOpNot, ThreatEventListParamsSearchOpGt, ThreatEventListParamsSearchOpGte, ThreatEventListParamsSearchOpLt, ThreatEventListParamsSearchOpLte, ThreatEventListParamsSearchOpLike, ThreatEventListParamsSearchOpContains, ThreatEventListParamsSearchOpStartsWith, ThreatEventListParamsSearchOpEndsWith, ThreatEventListParamsSearchOpFind, ThreatEventListParamsSearchOpIn:
 		return true
 	}
 	return false
-}
-
-// Search value. String or number for most operators. Array for 'in' operator (max
-// 100 items).
-//
-// Satisfied by [shared.UnionString], [shared.UnionFloat],
-// [cloudforce_one.ThreatEventListParamsSearchValueArray].
-type ThreatEventListParamsSearchValueUnion interface {
-	ImplementsThreatEventListParamsSearchValueUnion()
-}
-
-type ThreatEventListParamsSearchValueArray []ThreatEventListParamsSearchValueArrayItemUnion
-
-func (r ThreatEventListParamsSearchValueArray) ImplementsThreatEventListParamsSearchValueUnion() {}
-
-// Satisfied by [shared.UnionString], [shared.UnionFloat].
-type ThreatEventListParamsSearchValueArrayItemUnion interface {
-	ImplementsThreatEventListParamsSearchValueArrayItemUnion()
 }
 
 type ThreatEventBulkNewParams struct {

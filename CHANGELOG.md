@@ -1,5 +1,66 @@
 # Changelog
 
+## 7.10.0 (2026-09-04)
+
+Full Changelog: [v7.9.0...v7.10.0](https://github.com/cloudflare/cloudflare-go/compare/v7.9.0...v7.10.0)
+
+### Breaking Changes
+
+* **email_routing:** `DNS.Get()` return type changed from `*DNSGetResponse` to `*[]DNSRecord`. The `DNSGetResponse` type is removed.
+* **email_routing:** `DNS.Delete()` return type changed from `*pagination.SinglePage[DNSRecord]` to `*Settings`.
+* **magic_transit:** `HealthCheckParam` and `HealthCheck` types removed from the `magic_transit` package.
+* **page_shield:** `PageShield.Get()` return type changed from `*Setting` to `*PageShieldGetResponse`. The `Setting` type is removed.
+* **page_shield:** `PolicyParam` type removed from the `page_shield` package.
+* **page_shield:** `Connection` type removed and split into `ConnectionListResponse` and `ConnectionGetResponse`. `Connections.List()` now returns `*pagination.SinglePage[ConnectionListResponse]` and `Connections.Get()` now returns `*ConnectionGetResponse`.
+* **page_shield:** `Script` type removed and replaced by `ScriptListResponse`. `Scripts.List()` now returns `*pagination.SinglePage[ScriptListResponse]`.
+* **realtime_kit:** `Livestreams.NewIndependentLivestream()` method removed along with the `LivestreamNewIndependentLivestreamResponse` type.
+
+### Features
+
+* **accounts:** add `Subscriptions.CancelDowngrade()` method (`POST /accounts/{account_id}/subscriptions/cancel-downgrade`)
+* **accounts:** add `Subscriptions.GetByIdentifier()` method (`GET /accounts/{account_id}/subscriptions/{subscription_identifier}`)
+* **accounts:** add `Subscriptions.CancelReason` sub-resource with `New()` and `Get()` methods
+* **accounts:** add `Subscriptions.Actions` sub-resource with `Append()` method
+* **accounts:** add `Subscriptions.Bulk` sub-resource with `New()` method (`POST /accounts/{account_id}/bulk/subscriptions`)
+* **accounts:** add `PaymentMethods` sub-resource with `New()`, `Update()`, `List()`, `Delete()`, `Get()`, and `SetAsDefault()` methods
+* **accounts:** add `PayInvoice` sub-resource with `New()` method (`POST /accounts/{account_id}/pay-invoice`)
+* **accounts:** add `PayBadDebt` sub-resource with `New()` method (`POST /accounts/{account_id}/pay-bad-debt`)
+* **accounts:** add `Receipts` sub-resource with `PDF()` method (`GET /accounts/{account_id}/receipts/{receipt_id}/pdf`)
+* **accounts:** add `Invoices` sub-resource with `Edit()` method (`PATCH /accounts/{account_id}/invoices`)
+* **accounts:** add `ClientSecret` sub-resource with `New()` method (`POST /accounts/{account_id}/client-secret`)
+* **addressing:** add `Prefixes.BGPPrefixes.Delete()` method (`DELETE /accounts/{account_id}/addressing/prefixes/{prefix_id}/bgp/prefixes/{bgp_prefix_id}`)
+* **billing:** add `Billing.AddressValidation()` method (`POST /billing/address-validation`)
+* **billing:** add `Profiles.New()`, `Update()`, `Delete()`, and `UpdateBillingEmail()` methods
+* **billing:** add `Profiles.PaymentMethod` sub-resource with `New()` method
+* **billing:** add `Credits` sub-resource with `Get()` method (`GET /accounts/{account_id}/billing/credits`)
+* **billing:** add `History` sub-resource with `List()` method (`GET /accounts/{account_id}/billing/history`)
+* **billing:** add `BadDebt` sub-resource with `Get()` method (`GET /accounts/{account_id}/billing/bad-debt`)
+* **billing:** add `UnpaidInvoice` sub-resource with `Get()` method (`GET /accounts/{account_id}/billing/unpaid-invoice`)
+* **billing:** add `RatePlans` sub-resource with `Get()` method (`GET /billing/rate_plans/{public_key}`)
+* **browser_rendering:** add `Devtools.Browser.LiveView.New()` method (`POST /accounts/{account_id}/browser-rendering/devtools/browser/{session_id}/live_view`)
+* **content_scanning:** add `Payloads.Update()` method (`PATCH /zones/{zone_id}/content-upload-scan/payloads/{expression_id}`)
+* **email_security:** add `Settings.AllowPolicies.Batch()` method (`POST /accounts/{account_id}/email-security/settings/allow_policies/batch`)
+* **email_security:** add `Settings.BlockSenders.Batch()` method (`POST /accounts/{account_id}/email-security/settings/block_senders/batch`)
+* **email_security:** add `Settings.ContentPolicies` sub-resource with `New()`, `List()`, `Delete()`, `Batch()`, `Edit()`, and `Get()` methods
+* **email_security:** add `Settings.Domains.New()`, `Update()`, and `Batch()` methods
+* **email_security:** add `Settings.TrustedDomains.Batch()` method (`POST /accounts/{account_id}/email-security/settings/trusted_domains/batch`)
+* **email_sending:** add `Suppressions` sub-resource with `New()`, `List()`, `Delete()`, `Edit()`, `Get()`, and `Import()` methods
+* **email_sending:** add `Subdomains.Edit()` method (`PATCH /zones/{zone_id}/email/sending/subdomains/{subdomain_id}`)
+* **logpush:** add `Transformers` sub-resource with `New()`, `Update()`, `List()`, `Delete()`, `Get()`, and `Preview()` methods
+* **logpush:** add `Transformers.Content` sub-resource with `Get()` method (`GET /accounts/{account_id}/logpush/transformers/{transformer_id}/content`)
+* **logpush:** add `Transformers.Versions` sub-resource with `List()` method (`GET /accounts/{account_id}/logpush/transformers/{transformer_id}/versions`)
+* **realtime_kit:** add `Presets.ReplacePresetByID()` method (`PUT /accounts/{account_id}/realtime/kit/{app_id}/presets/{preset_id}`)
+* **spectrum:** add `Protocols` sub-resource with `List()` method (`GET /zones/{zone_id}/spectrum/protocols`)
+* **ssl:** add `Recommendations` sub-resource with `Get()` method (`GET /zones/{zone_id}/ssl/recommendation`)
+* **token_validation:** add `Configuration.Credentials.Edit()` method (`PATCH /zones/{zone_id}/token_validation/config/{config_id}/credentials`)
+* **user:** add `SpectrumAnalytics.Zones.Reports` sub-resource with `Get()` method (`GET /user/spectrum_analytics/zones/report`)
+* **zero_trust:** add `ResourceLibrary.Applications.New()` method (`POST /accounts/{account_id}/resource-library/applications`)
+* **zero_trust:** add `ResourceLibrary.Applications.Update()` method (`PATCH /accounts/{account_id}/resource-library/applications/{id}`)
+* **zero_trust:** add `ResourceLibrary.Applications.Delete()` method (`DELETE /accounts/{account_id}/resource-library/applications/{id}`)
+* **zones:** add `NEL` sub-resource with `Edit()` and `Get()` methods (`PATCH`/`GET /zones/{zone_id}/settings/nel`)
+
+### Bug Fixes
+
 ## 7.9.0 (2026-08-19)
 
 Full Changelog: [v7.8.0...v7.9.0](https://github.com/cloudflare/cloudflare-go/compare/v7.8.0...v7.9.0)

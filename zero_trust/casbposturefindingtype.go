@@ -98,8 +98,10 @@ type CasbPostureFindingTypeListResponse struct {
 	// The severity level of a finding.
 	Severity CasbPostureFindingTypeListResponseSeverity `json:"severity" api:"required"`
 	// The SaaS/Cloud vendor of the platform with which the finding is associated.
-	Vendor string                                 `json:"vendor" api:"required"`
-	JSON   casbPostureFindingTypeListResponseJSON `json:"-"`
+	Vendor string `json:"vendor" api:"required"`
+	// Detailed description of the finding.
+	Description string                                 `json:"description" api:"nullable"`
+	JSON        casbPostureFindingTypeListResponseJSON `json:"-"`
 }
 
 // casbPostureFindingTypeListResponseJSON contains the JSON metadata for the struct
@@ -110,6 +112,7 @@ type casbPostureFindingTypeListResponseJSON struct {
 	Name        apijson.Field
 	Severity    apijson.Field
 	Vendor      apijson.Field
+	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -229,8 +232,10 @@ type CasbPostureFindingTypeGetResponse struct {
 	// The severity level of a finding.
 	Severity CasbPostureFindingTypeGetResponseSeverity `json:"severity" api:"required"`
 	// The SaaS/Cloud vendor of the platform with which the finding is associated.
-	Vendor string                                `json:"vendor" api:"required"`
-	JSON   casbPostureFindingTypeGetResponseJSON `json:"-"`
+	Vendor string `json:"vendor" api:"required"`
+	// Detailed description of the finding.
+	Description string                                `json:"description" api:"nullable"`
+	JSON        casbPostureFindingTypeGetResponseJSON `json:"-"`
 }
 
 // casbPostureFindingTypeGetResponseJSON contains the JSON metadata for the struct
@@ -241,6 +246,7 @@ type casbPostureFindingTypeGetResponseJSON struct {
 	Name        apijson.Field
 	Severity    apijson.Field
 	Vendor      apijson.Field
+	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -355,7 +361,11 @@ type CasbPostureFindingTypeListParams struct {
 	Page param.Field[int64] `query:"page"`
 	// Number of results to return per page.
 	PerPage param.Field[int64] `query:"per_page"`
-	// Filter finding types by vendor. Supports multiple comma-separated values.
+	// Filter finding types by name or ID (case-insensitive substring match).
+	Search param.Field[string] `query:"search"`
+	// Filter finding types by vendor. Supports multiple comma-separated values. Each
+	// value may be either the vendor enum (GOOGLE_WORKSPACE) or the friendly name
+	// returned by the read routes (Google Workspace).
 	Vendors param.Field[[]CasbPostureFindingTypeListParamsVendor] `query:"vendors"`
 }
 

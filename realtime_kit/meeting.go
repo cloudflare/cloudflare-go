@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"slices"
 	"time"
 
@@ -16,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/tidwall/gjson"
 )
 
 // MeetingService contains methods and other services that help with interacting
@@ -659,75 +661,170 @@ func (r meetingNewResponseDataRecordingConfigRealtimekitBucketConfigJSON) RawJSO
 }
 
 type MeetingNewResponseDataRecordingConfigStorageConfig struct {
-	// Type of storage media.
-	Type MeetingNewResponseDataRecordingConfigStorageConfigType `json:"type" api:"required"`
+	// This field can have the runtime type of [string], [interface{}].
+	AccessKey interface{} `json:"access_key"`
 	// Authentication method used for "sftp" type storage medium
 	AuthMethod MeetingNewResponseDataRecordingConfigStorageConfigAuthMethod `json:"auth_method"`
 	// Name of the storage medium's bucket.
 	Bucket string `json:"bucket"`
 	// SSH destination server host for SFTP type storage medium
 	Host string `json:"host"`
-	// SSH destination server password for SFTP type storage medium when auth_method is
-	// "PASSWORD". If auth_method is "KEY", this specifies the password for the ssh
-	// private key.
-	Password string `json:"password"`
 	// Path relative to the bucket root at which the recording will be placed.
 	Path string `json:"path"`
 	// SSH destination server port for SFTP type storage medium
 	Port float64 `json:"port"`
-	// Private key used to login to destination SSH server for SFTP type storage
-	// medium, when auth_method used is "KEY"
-	PrivateKey string `json:"private_key"`
-	// Region of the storage medium.
-	Region string `json:"region"`
-	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
-	// by clients, not readable.
-	Secret string `json:"secret"`
+	// This field can have the runtime type of [string], [interface{}].
+	Region interface{}                                            `json:"region"`
+	Type   MeetingNewResponseDataRecordingConfigStorageConfigType `json:"type"`
 	// SSH destination server username for SFTP type storage medium
 	Username string                                                 `json:"username"`
 	JSON     meetingNewResponseDataRecordingConfigStorageConfigJSON `json:"-"`
+	union    MeetingNewResponseDataRecordingConfigStorageConfigUnion
 }
 
 // meetingNewResponseDataRecordingConfigStorageConfigJSON contains the JSON
 // metadata for the struct [MeetingNewResponseDataRecordingConfigStorageConfig]
 type meetingNewResponseDataRecordingConfigStorageConfigJSON struct {
-	Type        apijson.Field
+	AccessKey   apijson.Field
 	AuthMethod  apijson.Field
 	Bucket      apijson.Field
 	Host        apijson.Field
-	Password    apijson.Field
 	Path        apijson.Field
 	Port        apijson.Field
-	PrivateKey  apijson.Field
 	Region      apijson.Field
-	Secret      apijson.Field
+	Type        apijson.Field
 	Username    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
-}
-
-func (r *MeetingNewResponseDataRecordingConfigStorageConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 func (r meetingNewResponseDataRecordingConfigStorageConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of storage media.
-type MeetingNewResponseDataRecordingConfigStorageConfigType string
+func (r *MeetingNewResponseDataRecordingConfigStorageConfig) UnmarshalJSON(data []byte) (err error) {
+	*r = MeetingNewResponseDataRecordingConfigStorageConfig{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [MeetingNewResponseDataRecordingConfigStorageConfigUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [MeetingNewResponseDataRecordingConfigStorageConfigObject],
+// [MeetingNewResponseDataRecordingConfigStorageConfigObject],
+// [MeetingNewResponseDataRecordingConfigStorageConfigObject],
+// [MeetingNewResponseDataRecordingConfigStorageConfigObject].
+func (r MeetingNewResponseDataRecordingConfigStorageConfig) AsUnion() MeetingNewResponseDataRecordingConfigStorageConfigUnion {
+	return r.union
+}
+
+// Union satisfied by [MeetingNewResponseDataRecordingConfigStorageConfigObject],
+// [MeetingNewResponseDataRecordingConfigStorageConfigObject],
+// [MeetingNewResponseDataRecordingConfigStorageConfigObject] or
+// [MeetingNewResponseDataRecordingConfigStorageConfigObject].
+type MeetingNewResponseDataRecordingConfigStorageConfigUnion interface {
+	implementsMeetingNewResponseDataRecordingConfigStorageConfig()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*MeetingNewResponseDataRecordingConfigStorageConfigUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingNewResponseDataRecordingConfigStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingNewResponseDataRecordingConfigStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingNewResponseDataRecordingConfigStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingNewResponseDataRecordingConfigStorageConfigObject{}),
+		},
+	)
+}
+
+type MeetingNewResponseDataRecordingConfigStorageConfigObject struct {
+	// Authentication method used for "sftp" type storage medium
+	AuthMethod MeetingNewResponseDataRecordingConfigStorageConfigObjectAuthMethod `json:"auth_method"`
+	// Name of the storage medium's bucket.
+	Bucket string `json:"bucket"`
+	// SSH destination server host for SFTP type storage medium
+	Host string `json:"host"`
+	// Path relative to the bucket root at which the recording will be placed.
+	Path string `json:"path"`
+	// SSH destination server port for SFTP type storage medium
+	Port float64 `json:"port"`
+	// Region of the storage medium.
+	Region string                                                       `json:"region"`
+	Type   MeetingNewResponseDataRecordingConfigStorageConfigObjectType `json:"type"`
+	// SSH destination server username for SFTP type storage medium
+	Username string                                                       `json:"username"`
+	JSON     meetingNewResponseDataRecordingConfigStorageConfigObjectJSON `json:"-"`
+}
+
+// meetingNewResponseDataRecordingConfigStorageConfigObjectJSON contains the JSON
+// metadata for the struct
+// [MeetingNewResponseDataRecordingConfigStorageConfigObject]
+type meetingNewResponseDataRecordingConfigStorageConfigObjectJSON struct {
+	AuthMethod  apijson.Field
+	Bucket      apijson.Field
+	Host        apijson.Field
+	Path        apijson.Field
+	Port        apijson.Field
+	Region      apijson.Field
+	Type        apijson.Field
+	Username    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MeetingNewResponseDataRecordingConfigStorageConfigObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r meetingNewResponseDataRecordingConfigStorageConfigObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r MeetingNewResponseDataRecordingConfigStorageConfigObject) implementsMeetingNewResponseDataRecordingConfigStorageConfig() {
+}
+
+// Authentication method used for "sftp" type storage medium
+type MeetingNewResponseDataRecordingConfigStorageConfigObjectAuthMethod string
 
 const (
-	MeetingNewResponseDataRecordingConfigStorageConfigTypeAws          MeetingNewResponseDataRecordingConfigStorageConfigType = "aws"
-	MeetingNewResponseDataRecordingConfigStorageConfigTypeAzure        MeetingNewResponseDataRecordingConfigStorageConfigType = "azure"
-	MeetingNewResponseDataRecordingConfigStorageConfigTypeDigitalocean MeetingNewResponseDataRecordingConfigStorageConfigType = "digitalocean"
-	MeetingNewResponseDataRecordingConfigStorageConfigTypeGcs          MeetingNewResponseDataRecordingConfigStorageConfigType = "gcs"
-	MeetingNewResponseDataRecordingConfigStorageConfigTypeSftp         MeetingNewResponseDataRecordingConfigStorageConfigType = "sftp"
+	MeetingNewResponseDataRecordingConfigStorageConfigObjectAuthMethodKey      MeetingNewResponseDataRecordingConfigStorageConfigObjectAuthMethod = "KEY"
+	MeetingNewResponseDataRecordingConfigStorageConfigObjectAuthMethodPassword MeetingNewResponseDataRecordingConfigStorageConfigObjectAuthMethod = "PASSWORD"
 )
 
-func (r MeetingNewResponseDataRecordingConfigStorageConfigType) IsKnown() bool {
+func (r MeetingNewResponseDataRecordingConfigStorageConfigObjectAuthMethod) IsKnown() bool {
 	switch r {
-	case MeetingNewResponseDataRecordingConfigStorageConfigTypeAws, MeetingNewResponseDataRecordingConfigStorageConfigTypeAzure, MeetingNewResponseDataRecordingConfigStorageConfigTypeDigitalocean, MeetingNewResponseDataRecordingConfigStorageConfigTypeGcs, MeetingNewResponseDataRecordingConfigStorageConfigTypeSftp:
+	case MeetingNewResponseDataRecordingConfigStorageConfigObjectAuthMethodKey, MeetingNewResponseDataRecordingConfigStorageConfigObjectAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type MeetingNewResponseDataRecordingConfigStorageConfigObjectType string
+
+const (
+	MeetingNewResponseDataRecordingConfigStorageConfigObjectTypeGcs MeetingNewResponseDataRecordingConfigStorageConfigObjectType = "gcs"
+)
+
+func (r MeetingNewResponseDataRecordingConfigStorageConfigObjectType) IsKnown() bool {
+	switch r {
+	case MeetingNewResponseDataRecordingConfigStorageConfigObjectTypeGcs:
 		return true
 	}
 	return false
@@ -744,6 +841,24 @@ const (
 func (r MeetingNewResponseDataRecordingConfigStorageConfigAuthMethod) IsKnown() bool {
 	switch r {
 	case MeetingNewResponseDataRecordingConfigStorageConfigAuthMethodKey, MeetingNewResponseDataRecordingConfigStorageConfigAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type MeetingNewResponseDataRecordingConfigStorageConfigType string
+
+const (
+	MeetingNewResponseDataRecordingConfigStorageConfigTypeGcs          MeetingNewResponseDataRecordingConfigStorageConfigType = "gcs"
+	MeetingNewResponseDataRecordingConfigStorageConfigTypeAws          MeetingNewResponseDataRecordingConfigStorageConfigType = "aws"
+	MeetingNewResponseDataRecordingConfigStorageConfigTypeAzure        MeetingNewResponseDataRecordingConfigStorageConfigType = "azure"
+	MeetingNewResponseDataRecordingConfigStorageConfigTypeDigitalocean MeetingNewResponseDataRecordingConfigStorageConfigType = "digitalocean"
+	MeetingNewResponseDataRecordingConfigStorageConfigTypeSftp         MeetingNewResponseDataRecordingConfigStorageConfigType = "sftp"
+)
+
+func (r MeetingNewResponseDataRecordingConfigStorageConfigType) IsKnown() bool {
+	switch r {
+	case MeetingNewResponseDataRecordingConfigStorageConfigTypeGcs, MeetingNewResponseDataRecordingConfigStorageConfigTypeAws, MeetingNewResponseDataRecordingConfigStorageConfigTypeAzure, MeetingNewResponseDataRecordingConfigStorageConfigTypeDigitalocean, MeetingNewResponseDataRecordingConfigStorageConfigTypeSftp:
 		return true
 	}
 	return false
@@ -789,11 +904,12 @@ type MeetingNewResponseDataRecordingConfigVideoConfigCodec string
 const (
 	MeetingNewResponseDataRecordingConfigVideoConfigCodecH264 MeetingNewResponseDataRecordingConfigVideoConfigCodec = "H264"
 	MeetingNewResponseDataRecordingConfigVideoConfigCodecVp8  MeetingNewResponseDataRecordingConfigVideoConfigCodec = "VP8"
+	MeetingNewResponseDataRecordingConfigVideoConfigCodecVp9  MeetingNewResponseDataRecordingConfigVideoConfigCodec = "VP9"
 )
 
 func (r MeetingNewResponseDataRecordingConfigVideoConfigCodec) IsKnown() bool {
 	switch r {
-	case MeetingNewResponseDataRecordingConfigVideoConfigCodecH264, MeetingNewResponseDataRecordingConfigVideoConfigCodecVp8:
+	case MeetingNewResponseDataRecordingConfigVideoConfigCodecH264, MeetingNewResponseDataRecordingConfigVideoConfigCodecVp8, MeetingNewResponseDataRecordingConfigVideoConfigCodecVp9:
 		return true
 	}
 	return false
@@ -1328,75 +1444,170 @@ func (r meetingGetResponseDataRecordingConfigRealtimekitBucketConfigJSON) RawJSO
 }
 
 type MeetingGetResponseDataRecordingConfigStorageConfig struct {
-	// Type of storage media.
-	Type MeetingGetResponseDataRecordingConfigStorageConfigType `json:"type" api:"required"`
+	// This field can have the runtime type of [string], [interface{}].
+	AccessKey interface{} `json:"access_key"`
 	// Authentication method used for "sftp" type storage medium
 	AuthMethod MeetingGetResponseDataRecordingConfigStorageConfigAuthMethod `json:"auth_method"`
 	// Name of the storage medium's bucket.
 	Bucket string `json:"bucket"`
 	// SSH destination server host for SFTP type storage medium
 	Host string `json:"host"`
-	// SSH destination server password for SFTP type storage medium when auth_method is
-	// "PASSWORD". If auth_method is "KEY", this specifies the password for the ssh
-	// private key.
-	Password string `json:"password"`
 	// Path relative to the bucket root at which the recording will be placed.
 	Path string `json:"path"`
 	// SSH destination server port for SFTP type storage medium
 	Port float64 `json:"port"`
-	// Private key used to login to destination SSH server for SFTP type storage
-	// medium, when auth_method used is "KEY"
-	PrivateKey string `json:"private_key"`
-	// Region of the storage medium.
-	Region string `json:"region"`
-	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
-	// by clients, not readable.
-	Secret string `json:"secret"`
+	// This field can have the runtime type of [string], [interface{}].
+	Region interface{}                                            `json:"region"`
+	Type   MeetingGetResponseDataRecordingConfigStorageConfigType `json:"type"`
 	// SSH destination server username for SFTP type storage medium
 	Username string                                                 `json:"username"`
 	JSON     meetingGetResponseDataRecordingConfigStorageConfigJSON `json:"-"`
+	union    MeetingGetResponseDataRecordingConfigStorageConfigUnion
 }
 
 // meetingGetResponseDataRecordingConfigStorageConfigJSON contains the JSON
 // metadata for the struct [MeetingGetResponseDataRecordingConfigStorageConfig]
 type meetingGetResponseDataRecordingConfigStorageConfigJSON struct {
-	Type        apijson.Field
+	AccessKey   apijson.Field
 	AuthMethod  apijson.Field
 	Bucket      apijson.Field
 	Host        apijson.Field
-	Password    apijson.Field
 	Path        apijson.Field
 	Port        apijson.Field
-	PrivateKey  apijson.Field
 	Region      apijson.Field
-	Secret      apijson.Field
+	Type        apijson.Field
 	Username    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
-}
-
-func (r *MeetingGetResponseDataRecordingConfigStorageConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 func (r meetingGetResponseDataRecordingConfigStorageConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of storage media.
-type MeetingGetResponseDataRecordingConfigStorageConfigType string
+func (r *MeetingGetResponseDataRecordingConfigStorageConfig) UnmarshalJSON(data []byte) (err error) {
+	*r = MeetingGetResponseDataRecordingConfigStorageConfig{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [MeetingGetResponseDataRecordingConfigStorageConfigUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [MeetingGetResponseDataRecordingConfigStorageConfigObject],
+// [MeetingGetResponseDataRecordingConfigStorageConfigObject],
+// [MeetingGetResponseDataRecordingConfigStorageConfigObject],
+// [MeetingGetResponseDataRecordingConfigStorageConfigObject].
+func (r MeetingGetResponseDataRecordingConfigStorageConfig) AsUnion() MeetingGetResponseDataRecordingConfigStorageConfigUnion {
+	return r.union
+}
+
+// Union satisfied by [MeetingGetResponseDataRecordingConfigStorageConfigObject],
+// [MeetingGetResponseDataRecordingConfigStorageConfigObject],
+// [MeetingGetResponseDataRecordingConfigStorageConfigObject] or
+// [MeetingGetResponseDataRecordingConfigStorageConfigObject].
+type MeetingGetResponseDataRecordingConfigStorageConfigUnion interface {
+	implementsMeetingGetResponseDataRecordingConfigStorageConfig()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*MeetingGetResponseDataRecordingConfigStorageConfigUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingGetResponseDataRecordingConfigStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingGetResponseDataRecordingConfigStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingGetResponseDataRecordingConfigStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingGetResponseDataRecordingConfigStorageConfigObject{}),
+		},
+	)
+}
+
+type MeetingGetResponseDataRecordingConfigStorageConfigObject struct {
+	// Authentication method used for "sftp" type storage medium
+	AuthMethod MeetingGetResponseDataRecordingConfigStorageConfigObjectAuthMethod `json:"auth_method"`
+	// Name of the storage medium's bucket.
+	Bucket string `json:"bucket"`
+	// SSH destination server host for SFTP type storage medium
+	Host string `json:"host"`
+	// Path relative to the bucket root at which the recording will be placed.
+	Path string `json:"path"`
+	// SSH destination server port for SFTP type storage medium
+	Port float64 `json:"port"`
+	// Region of the storage medium.
+	Region string                                                       `json:"region"`
+	Type   MeetingGetResponseDataRecordingConfigStorageConfigObjectType `json:"type"`
+	// SSH destination server username for SFTP type storage medium
+	Username string                                                       `json:"username"`
+	JSON     meetingGetResponseDataRecordingConfigStorageConfigObjectJSON `json:"-"`
+}
+
+// meetingGetResponseDataRecordingConfigStorageConfigObjectJSON contains the JSON
+// metadata for the struct
+// [MeetingGetResponseDataRecordingConfigStorageConfigObject]
+type meetingGetResponseDataRecordingConfigStorageConfigObjectJSON struct {
+	AuthMethod  apijson.Field
+	Bucket      apijson.Field
+	Host        apijson.Field
+	Path        apijson.Field
+	Port        apijson.Field
+	Region      apijson.Field
+	Type        apijson.Field
+	Username    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MeetingGetResponseDataRecordingConfigStorageConfigObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r meetingGetResponseDataRecordingConfigStorageConfigObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r MeetingGetResponseDataRecordingConfigStorageConfigObject) implementsMeetingGetResponseDataRecordingConfigStorageConfig() {
+}
+
+// Authentication method used for "sftp" type storage medium
+type MeetingGetResponseDataRecordingConfigStorageConfigObjectAuthMethod string
 
 const (
-	MeetingGetResponseDataRecordingConfigStorageConfigTypeAws          MeetingGetResponseDataRecordingConfigStorageConfigType = "aws"
-	MeetingGetResponseDataRecordingConfigStorageConfigTypeAzure        MeetingGetResponseDataRecordingConfigStorageConfigType = "azure"
-	MeetingGetResponseDataRecordingConfigStorageConfigTypeDigitalocean MeetingGetResponseDataRecordingConfigStorageConfigType = "digitalocean"
-	MeetingGetResponseDataRecordingConfigStorageConfigTypeGcs          MeetingGetResponseDataRecordingConfigStorageConfigType = "gcs"
-	MeetingGetResponseDataRecordingConfigStorageConfigTypeSftp         MeetingGetResponseDataRecordingConfigStorageConfigType = "sftp"
+	MeetingGetResponseDataRecordingConfigStorageConfigObjectAuthMethodKey      MeetingGetResponseDataRecordingConfigStorageConfigObjectAuthMethod = "KEY"
+	MeetingGetResponseDataRecordingConfigStorageConfigObjectAuthMethodPassword MeetingGetResponseDataRecordingConfigStorageConfigObjectAuthMethod = "PASSWORD"
 )
 
-func (r MeetingGetResponseDataRecordingConfigStorageConfigType) IsKnown() bool {
+func (r MeetingGetResponseDataRecordingConfigStorageConfigObjectAuthMethod) IsKnown() bool {
 	switch r {
-	case MeetingGetResponseDataRecordingConfigStorageConfigTypeAws, MeetingGetResponseDataRecordingConfigStorageConfigTypeAzure, MeetingGetResponseDataRecordingConfigStorageConfigTypeDigitalocean, MeetingGetResponseDataRecordingConfigStorageConfigTypeGcs, MeetingGetResponseDataRecordingConfigStorageConfigTypeSftp:
+	case MeetingGetResponseDataRecordingConfigStorageConfigObjectAuthMethodKey, MeetingGetResponseDataRecordingConfigStorageConfigObjectAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type MeetingGetResponseDataRecordingConfigStorageConfigObjectType string
+
+const (
+	MeetingGetResponseDataRecordingConfigStorageConfigObjectTypeGcs MeetingGetResponseDataRecordingConfigStorageConfigObjectType = "gcs"
+)
+
+func (r MeetingGetResponseDataRecordingConfigStorageConfigObjectType) IsKnown() bool {
+	switch r {
+	case MeetingGetResponseDataRecordingConfigStorageConfigObjectTypeGcs:
 		return true
 	}
 	return false
@@ -1413,6 +1624,24 @@ const (
 func (r MeetingGetResponseDataRecordingConfigStorageConfigAuthMethod) IsKnown() bool {
 	switch r {
 	case MeetingGetResponseDataRecordingConfigStorageConfigAuthMethodKey, MeetingGetResponseDataRecordingConfigStorageConfigAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type MeetingGetResponseDataRecordingConfigStorageConfigType string
+
+const (
+	MeetingGetResponseDataRecordingConfigStorageConfigTypeGcs          MeetingGetResponseDataRecordingConfigStorageConfigType = "gcs"
+	MeetingGetResponseDataRecordingConfigStorageConfigTypeAws          MeetingGetResponseDataRecordingConfigStorageConfigType = "aws"
+	MeetingGetResponseDataRecordingConfigStorageConfigTypeAzure        MeetingGetResponseDataRecordingConfigStorageConfigType = "azure"
+	MeetingGetResponseDataRecordingConfigStorageConfigTypeDigitalocean MeetingGetResponseDataRecordingConfigStorageConfigType = "digitalocean"
+	MeetingGetResponseDataRecordingConfigStorageConfigTypeSftp         MeetingGetResponseDataRecordingConfigStorageConfigType = "sftp"
+)
+
+func (r MeetingGetResponseDataRecordingConfigStorageConfigType) IsKnown() bool {
+	switch r {
+	case MeetingGetResponseDataRecordingConfigStorageConfigTypeGcs, MeetingGetResponseDataRecordingConfigStorageConfigTypeAws, MeetingGetResponseDataRecordingConfigStorageConfigTypeAzure, MeetingGetResponseDataRecordingConfigStorageConfigTypeDigitalocean, MeetingGetResponseDataRecordingConfigStorageConfigTypeSftp:
 		return true
 	}
 	return false
@@ -1458,11 +1687,12 @@ type MeetingGetResponseDataRecordingConfigVideoConfigCodec string
 const (
 	MeetingGetResponseDataRecordingConfigVideoConfigCodecH264 MeetingGetResponseDataRecordingConfigVideoConfigCodec = "H264"
 	MeetingGetResponseDataRecordingConfigVideoConfigCodecVp8  MeetingGetResponseDataRecordingConfigVideoConfigCodec = "VP8"
+	MeetingGetResponseDataRecordingConfigVideoConfigCodecVp9  MeetingGetResponseDataRecordingConfigVideoConfigCodec = "VP9"
 )
 
 func (r MeetingGetResponseDataRecordingConfigVideoConfigCodec) IsKnown() bool {
 	switch r {
-	case MeetingGetResponseDataRecordingConfigVideoConfigCodecH264, MeetingGetResponseDataRecordingConfigVideoConfigCodecVp8:
+	case MeetingGetResponseDataRecordingConfigVideoConfigCodecH264, MeetingGetResponseDataRecordingConfigVideoConfigCodecVp8, MeetingGetResponseDataRecordingConfigVideoConfigCodecVp9:
 		return true
 	}
 	return false
@@ -1979,76 +2209,173 @@ func (r meetingGetMeetingByIDResponseDataRecordingConfigRealtimekitBucketConfigJ
 }
 
 type MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfig struct {
-	// Type of storage media.
-	Type MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigType `json:"type" api:"required"`
+	// This field can have the runtime type of [string], [interface{}].
+	AccessKey interface{} `json:"access_key"`
 	// Authentication method used for "sftp" type storage medium
 	AuthMethod MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigAuthMethod `json:"auth_method"`
 	// Name of the storage medium's bucket.
 	Bucket string `json:"bucket"`
 	// SSH destination server host for SFTP type storage medium
 	Host string `json:"host"`
-	// SSH destination server password for SFTP type storage medium when auth_method is
-	// "PASSWORD". If auth_method is "KEY", this specifies the password for the ssh
-	// private key.
-	Password string `json:"password"`
 	// Path relative to the bucket root at which the recording will be placed.
 	Path string `json:"path"`
 	// SSH destination server port for SFTP type storage medium
 	Port float64 `json:"port"`
-	// Private key used to login to destination SSH server for SFTP type storage
-	// medium, when auth_method used is "KEY"
-	PrivateKey string `json:"private_key"`
-	// Region of the storage medium.
-	Region string `json:"region"`
-	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
-	// by clients, not readable.
-	Secret string `json:"secret"`
+	// This field can have the runtime type of [string], [interface{}].
+	Region interface{}                                                       `json:"region"`
+	Type   MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigType `json:"type"`
 	// SSH destination server username for SFTP type storage medium
 	Username string                                                            `json:"username"`
 	JSON     meetingGetMeetingByIDResponseDataRecordingConfigStorageConfigJSON `json:"-"`
+	union    MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigUnion
 }
 
 // meetingGetMeetingByIDResponseDataRecordingConfigStorageConfigJSON contains the
 // JSON metadata for the struct
 // [MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfig]
 type meetingGetMeetingByIDResponseDataRecordingConfigStorageConfigJSON struct {
-	Type        apijson.Field
+	AccessKey   apijson.Field
 	AuthMethod  apijson.Field
 	Bucket      apijson.Field
 	Host        apijson.Field
-	Password    apijson.Field
 	Path        apijson.Field
 	Port        apijson.Field
-	PrivateKey  apijson.Field
 	Region      apijson.Field
-	Secret      apijson.Field
+	Type        apijson.Field
 	Username    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
-}
-
-func (r *MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 func (r meetingGetMeetingByIDResponseDataRecordingConfigStorageConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of storage media.
-type MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigType string
+func (r *MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfig) UnmarshalJSON(data []byte) (err error) {
+	*r = MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfig{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObject],
+// [MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObject],
+// [MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObject],
+// [MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObject].
+func (r MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfig) AsUnion() MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigUnion {
+	return r.union
+}
+
+// Union satisfied by
+// [MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObject],
+// [MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObject],
+// [MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObject] or
+// [MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObject].
+type MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigUnion interface {
+	implementsMeetingGetMeetingByIDResponseDataRecordingConfigStorageConfig()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObject{}),
+		},
+	)
+}
+
+type MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObject struct {
+	// Authentication method used for "sftp" type storage medium
+	AuthMethod MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethod `json:"auth_method"`
+	// Name of the storage medium's bucket.
+	Bucket string `json:"bucket"`
+	// SSH destination server host for SFTP type storage medium
+	Host string `json:"host"`
+	// Path relative to the bucket root at which the recording will be placed.
+	Path string `json:"path"`
+	// SSH destination server port for SFTP type storage medium
+	Port float64 `json:"port"`
+	// Region of the storage medium.
+	Region string                                                                  `json:"region"`
+	Type   MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectType `json:"type"`
+	// SSH destination server username for SFTP type storage medium
+	Username string                                                                  `json:"username"`
+	JSON     meetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectJSON `json:"-"`
+}
+
+// meetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectJSON contains
+// the JSON metadata for the struct
+// [MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObject]
+type meetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectJSON struct {
+	AuthMethod  apijson.Field
+	Bucket      apijson.Field
+	Host        apijson.Field
+	Path        apijson.Field
+	Port        apijson.Field
+	Region      apijson.Field
+	Type        apijson.Field
+	Username    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r meetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObject) implementsMeetingGetMeetingByIDResponseDataRecordingConfigStorageConfig() {
+}
+
+// Authentication method used for "sftp" type storage medium
+type MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethod string
 
 const (
-	MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeAws          MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigType = "aws"
-	MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeAzure        MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigType = "azure"
-	MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeDigitalocean MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigType = "digitalocean"
-	MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeGcs          MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigType = "gcs"
-	MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeSftp         MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigType = "sftp"
+	MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethodKey      MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethod = "KEY"
+	MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethodPassword MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethod = "PASSWORD"
 )
 
-func (r MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigType) IsKnown() bool {
+func (r MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethod) IsKnown() bool {
 	switch r {
-	case MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeAws, MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeAzure, MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeDigitalocean, MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeGcs, MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeSftp:
+	case MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethodKey, MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectType string
+
+const (
+	MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectTypeGcs MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectType = "gcs"
+)
+
+func (r MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectType) IsKnown() bool {
+	switch r {
+	case MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigObjectTypeGcs:
 		return true
 	}
 	return false
@@ -2065,6 +2392,24 @@ const (
 func (r MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigAuthMethod) IsKnown() bool {
 	switch r {
 	case MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigAuthMethodKey, MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigType string
+
+const (
+	MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeGcs          MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigType = "gcs"
+	MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeAws          MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigType = "aws"
+	MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeAzure        MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigType = "azure"
+	MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeDigitalocean MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigType = "digitalocean"
+	MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeSftp         MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigType = "sftp"
+)
+
+func (r MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigType) IsKnown() bool {
+	switch r {
+	case MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeGcs, MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeAws, MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeAzure, MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeDigitalocean, MeetingGetMeetingByIDResponseDataRecordingConfigStorageConfigTypeSftp:
 		return true
 	}
 	return false
@@ -2111,11 +2456,12 @@ type MeetingGetMeetingByIDResponseDataRecordingConfigVideoConfigCodec string
 const (
 	MeetingGetMeetingByIDResponseDataRecordingConfigVideoConfigCodecH264 MeetingGetMeetingByIDResponseDataRecordingConfigVideoConfigCodec = "H264"
 	MeetingGetMeetingByIDResponseDataRecordingConfigVideoConfigCodecVp8  MeetingGetMeetingByIDResponseDataRecordingConfigVideoConfigCodec = "VP8"
+	MeetingGetMeetingByIDResponseDataRecordingConfigVideoConfigCodecVp9  MeetingGetMeetingByIDResponseDataRecordingConfigVideoConfigCodec = "VP9"
 )
 
 func (r MeetingGetMeetingByIDResponseDataRecordingConfigVideoConfigCodec) IsKnown() bool {
 	switch r {
-	case MeetingGetMeetingByIDResponseDataRecordingConfigVideoConfigCodecH264, MeetingGetMeetingByIDResponseDataRecordingConfigVideoConfigCodecVp8:
+	case MeetingGetMeetingByIDResponseDataRecordingConfigVideoConfigCodecH264, MeetingGetMeetingByIDResponseDataRecordingConfigVideoConfigCodecVp8, MeetingGetMeetingByIDResponseDataRecordingConfigVideoConfigCodecVp9:
 		return true
 	}
 	return false
@@ -2814,76 +3160,173 @@ func (r meetingReplaceMeetingByIDResponseDataRecordingConfigRealtimekitBucketCon
 }
 
 type MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfig struct {
-	// Type of storage media.
-	Type MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigType `json:"type" api:"required"`
+	// This field can have the runtime type of [string], [interface{}].
+	AccessKey interface{} `json:"access_key"`
 	// Authentication method used for "sftp" type storage medium
 	AuthMethod MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigAuthMethod `json:"auth_method"`
 	// Name of the storage medium's bucket.
 	Bucket string `json:"bucket"`
 	// SSH destination server host for SFTP type storage medium
 	Host string `json:"host"`
-	// SSH destination server password for SFTP type storage medium when auth_method is
-	// "PASSWORD". If auth_method is "KEY", this specifies the password for the ssh
-	// private key.
-	Password string `json:"password"`
 	// Path relative to the bucket root at which the recording will be placed.
 	Path string `json:"path"`
 	// SSH destination server port for SFTP type storage medium
 	Port float64 `json:"port"`
-	// Private key used to login to destination SSH server for SFTP type storage
-	// medium, when auth_method used is "KEY"
-	PrivateKey string `json:"private_key"`
-	// Region of the storage medium.
-	Region string `json:"region"`
-	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
-	// by clients, not readable.
-	Secret string `json:"secret"`
+	// This field can have the runtime type of [string], [interface{}].
+	Region interface{}                                                           `json:"region"`
+	Type   MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigType `json:"type"`
 	// SSH destination server username for SFTP type storage medium
 	Username string                                                                `json:"username"`
 	JSON     meetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigJSON `json:"-"`
+	union    MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigUnion
 }
 
 // meetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigJSON contains
 // the JSON metadata for the struct
 // [MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfig]
 type meetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigJSON struct {
-	Type        apijson.Field
+	AccessKey   apijson.Field
 	AuthMethod  apijson.Field
 	Bucket      apijson.Field
 	Host        apijson.Field
-	Password    apijson.Field
 	Path        apijson.Field
 	Port        apijson.Field
-	PrivateKey  apijson.Field
 	Region      apijson.Field
-	Secret      apijson.Field
+	Type        apijson.Field
 	Username    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
-}
-
-func (r *MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 func (r meetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of storage media.
-type MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigType string
+func (r *MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfig) UnmarshalJSON(data []byte) (err error) {
+	*r = MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfig{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObject],
+// [MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObject],
+// [MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObject],
+// [MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObject].
+func (r MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfig) AsUnion() MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigUnion {
+	return r.union
+}
+
+// Union satisfied by
+// [MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObject],
+// [MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObject],
+// [MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObject] or
+// [MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObject].
+type MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigUnion interface {
+	implementsMeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfig()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObject{}),
+		},
+	)
+}
+
+type MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObject struct {
+	// Authentication method used for "sftp" type storage medium
+	AuthMethod MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethod `json:"auth_method"`
+	// Name of the storage medium's bucket.
+	Bucket string `json:"bucket"`
+	// SSH destination server host for SFTP type storage medium
+	Host string `json:"host"`
+	// Path relative to the bucket root at which the recording will be placed.
+	Path string `json:"path"`
+	// SSH destination server port for SFTP type storage medium
+	Port float64 `json:"port"`
+	// Region of the storage medium.
+	Region string                                                                      `json:"region"`
+	Type   MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectType `json:"type"`
+	// SSH destination server username for SFTP type storage medium
+	Username string                                                                      `json:"username"`
+	JSON     meetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectJSON `json:"-"`
+}
+
+// meetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectJSON
+// contains the JSON metadata for the struct
+// [MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObject]
+type meetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectJSON struct {
+	AuthMethod  apijson.Field
+	Bucket      apijson.Field
+	Host        apijson.Field
+	Path        apijson.Field
+	Port        apijson.Field
+	Region      apijson.Field
+	Type        apijson.Field
+	Username    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r meetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObject) implementsMeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfig() {
+}
+
+// Authentication method used for "sftp" type storage medium
+type MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethod string
 
 const (
-	MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeAws          MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigType = "aws"
-	MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeAzure        MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigType = "azure"
-	MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeDigitalocean MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigType = "digitalocean"
-	MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeGcs          MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigType = "gcs"
-	MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeSftp         MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigType = "sftp"
+	MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethodKey      MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethod = "KEY"
+	MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethodPassword MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethod = "PASSWORD"
 )
 
-func (r MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigType) IsKnown() bool {
+func (r MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethod) IsKnown() bool {
 	switch r {
-	case MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeAws, MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeAzure, MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeDigitalocean, MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeGcs, MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeSftp:
+	case MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethodKey, MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectType string
+
+const (
+	MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectTypeGcs MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectType = "gcs"
+)
+
+func (r MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectType) IsKnown() bool {
+	switch r {
+	case MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigObjectTypeGcs:
 		return true
 	}
 	return false
@@ -2900,6 +3343,24 @@ const (
 func (r MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigAuthMethod) IsKnown() bool {
 	switch r {
 	case MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigAuthMethodKey, MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigType string
+
+const (
+	MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeGcs          MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigType = "gcs"
+	MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeAws          MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigType = "aws"
+	MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeAzure        MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigType = "azure"
+	MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeDigitalocean MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigType = "digitalocean"
+	MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeSftp         MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigType = "sftp"
+)
+
+func (r MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigType) IsKnown() bool {
+	switch r {
+	case MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeGcs, MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeAws, MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeAzure, MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeDigitalocean, MeetingReplaceMeetingByIDResponseDataRecordingConfigStorageConfigTypeSftp:
 		return true
 	}
 	return false
@@ -2946,11 +3407,12 @@ type MeetingReplaceMeetingByIDResponseDataRecordingConfigVideoConfigCodec string
 const (
 	MeetingReplaceMeetingByIDResponseDataRecordingConfigVideoConfigCodecH264 MeetingReplaceMeetingByIDResponseDataRecordingConfigVideoConfigCodec = "H264"
 	MeetingReplaceMeetingByIDResponseDataRecordingConfigVideoConfigCodecVp8  MeetingReplaceMeetingByIDResponseDataRecordingConfigVideoConfigCodec = "VP8"
+	MeetingReplaceMeetingByIDResponseDataRecordingConfigVideoConfigCodecVp9  MeetingReplaceMeetingByIDResponseDataRecordingConfigVideoConfigCodec = "VP9"
 )
 
 func (r MeetingReplaceMeetingByIDResponseDataRecordingConfigVideoConfigCodec) IsKnown() bool {
 	switch r {
-	case MeetingReplaceMeetingByIDResponseDataRecordingConfigVideoConfigCodecH264, MeetingReplaceMeetingByIDResponseDataRecordingConfigVideoConfigCodecVp8:
+	case MeetingReplaceMeetingByIDResponseDataRecordingConfigVideoConfigCodecH264, MeetingReplaceMeetingByIDResponseDataRecordingConfigVideoConfigCodecVp8, MeetingReplaceMeetingByIDResponseDataRecordingConfigVideoConfigCodecVp9:
 		return true
 	}
 	return false
@@ -3444,76 +3906,173 @@ func (r meetingUpdateMeetingByIDResponseDataRecordingConfigRealtimekitBucketConf
 }
 
 type MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfig struct {
-	// Type of storage media.
-	Type MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigType `json:"type" api:"required"`
+	// This field can have the runtime type of [string], [interface{}].
+	AccessKey interface{} `json:"access_key"`
 	// Authentication method used for "sftp" type storage medium
 	AuthMethod MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigAuthMethod `json:"auth_method"`
 	// Name of the storage medium's bucket.
 	Bucket string `json:"bucket"`
 	// SSH destination server host for SFTP type storage medium
 	Host string `json:"host"`
-	// SSH destination server password for SFTP type storage medium when auth_method is
-	// "PASSWORD". If auth_method is "KEY", this specifies the password for the ssh
-	// private key.
-	Password string `json:"password"`
 	// Path relative to the bucket root at which the recording will be placed.
 	Path string `json:"path"`
 	// SSH destination server port for SFTP type storage medium
 	Port float64 `json:"port"`
-	// Private key used to login to destination SSH server for SFTP type storage
-	// medium, when auth_method used is "KEY"
-	PrivateKey string `json:"private_key"`
-	// Region of the storage medium.
-	Region string `json:"region"`
-	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
-	// by clients, not readable.
-	Secret string `json:"secret"`
+	// This field can have the runtime type of [string], [interface{}].
+	Region interface{}                                                          `json:"region"`
+	Type   MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigType `json:"type"`
 	// SSH destination server username for SFTP type storage medium
 	Username string                                                               `json:"username"`
 	JSON     meetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigJSON `json:"-"`
+	union    MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigUnion
 }
 
 // meetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigJSON contains
 // the JSON metadata for the struct
 // [MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfig]
 type meetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigJSON struct {
-	Type        apijson.Field
+	AccessKey   apijson.Field
 	AuthMethod  apijson.Field
 	Bucket      apijson.Field
 	Host        apijson.Field
-	Password    apijson.Field
 	Path        apijson.Field
 	Port        apijson.Field
-	PrivateKey  apijson.Field
 	Region      apijson.Field
-	Secret      apijson.Field
+	Type        apijson.Field
 	Username    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
-}
-
-func (r *MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 func (r meetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// Type of storage media.
-type MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigType string
+func (r *MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfig) UnmarshalJSON(data []byte) (err error) {
+	*r = MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfig{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObject],
+// [MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObject],
+// [MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObject],
+// [MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObject].
+func (r MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfig) AsUnion() MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigUnion {
+	return r.union
+}
+
+// Union satisfied by
+// [MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObject],
+// [MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObject],
+// [MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObject] or
+// [MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObject].
+type MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigUnion interface {
+	implementsMeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfig()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObject{}),
+		},
+	)
+}
+
+type MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObject struct {
+	// Authentication method used for "sftp" type storage medium
+	AuthMethod MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethod `json:"auth_method"`
+	// Name of the storage medium's bucket.
+	Bucket string `json:"bucket"`
+	// SSH destination server host for SFTP type storage medium
+	Host string `json:"host"`
+	// Path relative to the bucket root at which the recording will be placed.
+	Path string `json:"path"`
+	// SSH destination server port for SFTP type storage medium
+	Port float64 `json:"port"`
+	// Region of the storage medium.
+	Region string                                                                     `json:"region"`
+	Type   MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectType `json:"type"`
+	// SSH destination server username for SFTP type storage medium
+	Username string                                                                     `json:"username"`
+	JSON     meetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectJSON `json:"-"`
+}
+
+// meetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectJSON
+// contains the JSON metadata for the struct
+// [MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObject]
+type meetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectJSON struct {
+	AuthMethod  apijson.Field
+	Bucket      apijson.Field
+	Host        apijson.Field
+	Path        apijson.Field
+	Port        apijson.Field
+	Region      apijson.Field
+	Type        apijson.Field
+	Username    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r meetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObject) implementsMeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfig() {
+}
+
+// Authentication method used for "sftp" type storage medium
+type MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethod string
 
 const (
-	MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeAws          MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigType = "aws"
-	MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeAzure        MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigType = "azure"
-	MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeDigitalocean MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigType = "digitalocean"
-	MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeGcs          MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigType = "gcs"
-	MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeSftp         MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigType = "sftp"
+	MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethodKey      MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethod = "KEY"
+	MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethodPassword MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethod = "PASSWORD"
 )
 
-func (r MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigType) IsKnown() bool {
+func (r MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethod) IsKnown() bool {
 	switch r {
-	case MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeAws, MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeAzure, MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeDigitalocean, MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeGcs, MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeSftp:
+	case MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethodKey, MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectType string
+
+const (
+	MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectTypeGcs MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectType = "gcs"
+)
+
+func (r MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectType) IsKnown() bool {
+	switch r {
+	case MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigObjectTypeGcs:
 		return true
 	}
 	return false
@@ -3530,6 +4089,24 @@ const (
 func (r MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigAuthMethod) IsKnown() bool {
 	switch r {
 	case MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigAuthMethodKey, MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigType string
+
+const (
+	MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeGcs          MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigType = "gcs"
+	MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeAws          MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigType = "aws"
+	MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeAzure        MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigType = "azure"
+	MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeDigitalocean MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigType = "digitalocean"
+	MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeSftp         MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigType = "sftp"
+)
+
+func (r MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigType) IsKnown() bool {
+	switch r {
+	case MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeGcs, MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeAws, MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeAzure, MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeDigitalocean, MeetingUpdateMeetingByIDResponseDataRecordingConfigStorageConfigTypeSftp:
 		return true
 	}
 	return false
@@ -3576,11 +4153,12 @@ type MeetingUpdateMeetingByIDResponseDataRecordingConfigVideoConfigCodec string
 const (
 	MeetingUpdateMeetingByIDResponseDataRecordingConfigVideoConfigCodecH264 MeetingUpdateMeetingByIDResponseDataRecordingConfigVideoConfigCodec = "H264"
 	MeetingUpdateMeetingByIDResponseDataRecordingConfigVideoConfigCodecVp8  MeetingUpdateMeetingByIDResponseDataRecordingConfigVideoConfigCodec = "VP8"
+	MeetingUpdateMeetingByIDResponseDataRecordingConfigVideoConfigCodecVp9  MeetingUpdateMeetingByIDResponseDataRecordingConfigVideoConfigCodec = "VP9"
 )
 
 func (r MeetingUpdateMeetingByIDResponseDataRecordingConfigVideoConfigCodec) IsKnown() bool {
 	switch r {
-	case MeetingUpdateMeetingByIDResponseDataRecordingConfigVideoConfigCodecH264, MeetingUpdateMeetingByIDResponseDataRecordingConfigVideoConfigCodecVp8:
+	case MeetingUpdateMeetingByIDResponseDataRecordingConfigVideoConfigCodecH264, MeetingUpdateMeetingByIDResponseDataRecordingConfigVideoConfigCodecVp8, MeetingUpdateMeetingByIDResponseDataRecordingConfigVideoConfigCodecVp9:
 		return true
 	}
 	return false
@@ -3829,7 +4407,7 @@ type MeetingNewParamsRecordingConfig struct {
 	// of 60 seconds to a maximum of 24 hours.
 	MaxSeconds              param.Field[float64]                                                `json:"max_seconds"`
 	RealtimekitBucketConfig param.Field[MeetingNewParamsRecordingConfigRealtimekitBucketConfig] `json:"realtimekit_bucket_config"`
-	StorageConfig           param.Field[MeetingNewParamsRecordingConfigStorageConfig]           `json:"storage_config"`
+	StorageConfig           param.Field[MeetingNewParamsRecordingConfigStorageConfigUnion]      `json:"storage_config"`
 	VideoConfig             param.Field[MeetingNewParamsRecordingConfigVideoConfig]             `json:"video_config"`
 }
 
@@ -3908,15 +4486,57 @@ func (r MeetingNewParamsRecordingConfigRealtimekitBucketConfig) MarshalJSON() (d
 }
 
 type MeetingNewParamsRecordingConfigStorageConfig struct {
-	// Type of storage media.
-	Type param.Field[MeetingNewParamsRecordingConfigStorageConfigType] `json:"type" api:"required"`
+	AccessKey param.Field[interface{}] `json:"access_key"`
+	// Authentication method used for "sftp" type storage medium
+	AuthMethod param.Field[MeetingNewParamsRecordingConfigStorageConfigAuthMethod] `json:"auth_method"`
+	// Name of the storage medium's bucket.
+	Bucket param.Field[string] `json:"bucket"`
+	// SSH destination server host for SFTP type storage medium
+	Host param.Field[string] `json:"host"`
+	// SSH destination server password for SFTP type storage medium when auth_method is
+	// "PASSWORD". If auth_method is "KEY", this specifies the password for the ssh
+	// private key.
+	Password param.Field[string] `json:"password"`
+	// Path relative to the bucket root at which the recording will be placed.
+	Path param.Field[string] `json:"path"`
+	// SSH destination server port for SFTP type storage medium
+	Port param.Field[float64] `json:"port"`
+	// Private key used to login to destination SSH server for SFTP type storage
+	// medium, when auth_method used is "KEY"
+	PrivateKey param.Field[string]      `json:"private_key"`
+	Region     param.Field[interface{}] `json:"region"`
+	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
+	// by clients, not readable.
+	Secret param.Field[string]                                           `json:"secret"`
+	Type   param.Field[MeetingNewParamsRecordingConfigStorageConfigType] `json:"type"`
+	// SSH destination server username for SFTP type storage medium
+	Username param.Field[string] `json:"username"`
+}
+
+func (r MeetingNewParamsRecordingConfigStorageConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r MeetingNewParamsRecordingConfigStorageConfig) implementsMeetingNewParamsRecordingConfigStorageConfigUnion() {
+}
+
+// Satisfied by [realtime_kit.MeetingNewParamsRecordingConfigStorageConfigObject],
+// [realtime_kit.MeetingNewParamsRecordingConfigStorageConfigObject],
+// [realtime_kit.MeetingNewParamsRecordingConfigStorageConfigObject],
+// [realtime_kit.MeetingNewParamsRecordingConfigStorageConfigObject],
+// [MeetingNewParamsRecordingConfigStorageConfig].
+type MeetingNewParamsRecordingConfigStorageConfigUnion interface {
+	implementsMeetingNewParamsRecordingConfigStorageConfigUnion()
+}
+
+type MeetingNewParamsRecordingConfigStorageConfigObject struct {
 	// Access key of the storage medium. Access key is not required for the `gcs`
 	// storage media type.
 	//
 	// Note that this field is not readable by clients, only writeable.
 	AccessKey param.Field[string] `json:"access_key"`
 	// Authentication method used for "sftp" type storage medium
-	AuthMethod param.Field[MeetingNewParamsRecordingConfigStorageConfigAuthMethod] `json:"auth_method"`
+	AuthMethod param.Field[MeetingNewParamsRecordingConfigStorageConfigObjectAuthMethod] `json:"auth_method"`
 	// Name of the storage medium's bucket.
 	Bucket param.Field[string] `json:"bucket"`
 	// SSH destination server host for SFTP type storage medium
@@ -3936,29 +4556,44 @@ type MeetingNewParamsRecordingConfigStorageConfig struct {
 	Region param.Field[string] `json:"region"`
 	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
 	// by clients, not readable.
-	Secret param.Field[string] `json:"secret"`
+	Secret param.Field[string]                                                 `json:"secret"`
+	Type   param.Field[MeetingNewParamsRecordingConfigStorageConfigObjectType] `json:"type"`
 	// SSH destination server username for SFTP type storage medium
 	Username param.Field[string] `json:"username"`
 }
 
-func (r MeetingNewParamsRecordingConfigStorageConfig) MarshalJSON() (data []byte, err error) {
+func (r MeetingNewParamsRecordingConfigStorageConfigObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Type of storage media.
-type MeetingNewParamsRecordingConfigStorageConfigType string
+func (r MeetingNewParamsRecordingConfigStorageConfigObject) implementsMeetingNewParamsRecordingConfigStorageConfigUnion() {
+}
+
+// Authentication method used for "sftp" type storage medium
+type MeetingNewParamsRecordingConfigStorageConfigObjectAuthMethod string
 
 const (
-	MeetingNewParamsRecordingConfigStorageConfigTypeAws          MeetingNewParamsRecordingConfigStorageConfigType = "aws"
-	MeetingNewParamsRecordingConfigStorageConfigTypeAzure        MeetingNewParamsRecordingConfigStorageConfigType = "azure"
-	MeetingNewParamsRecordingConfigStorageConfigTypeDigitalocean MeetingNewParamsRecordingConfigStorageConfigType = "digitalocean"
-	MeetingNewParamsRecordingConfigStorageConfigTypeGcs          MeetingNewParamsRecordingConfigStorageConfigType = "gcs"
-	MeetingNewParamsRecordingConfigStorageConfigTypeSftp         MeetingNewParamsRecordingConfigStorageConfigType = "sftp"
+	MeetingNewParamsRecordingConfigStorageConfigObjectAuthMethodKey      MeetingNewParamsRecordingConfigStorageConfigObjectAuthMethod = "KEY"
+	MeetingNewParamsRecordingConfigStorageConfigObjectAuthMethodPassword MeetingNewParamsRecordingConfigStorageConfigObjectAuthMethod = "PASSWORD"
 )
 
-func (r MeetingNewParamsRecordingConfigStorageConfigType) IsKnown() bool {
+func (r MeetingNewParamsRecordingConfigStorageConfigObjectAuthMethod) IsKnown() bool {
 	switch r {
-	case MeetingNewParamsRecordingConfigStorageConfigTypeAws, MeetingNewParamsRecordingConfigStorageConfigTypeAzure, MeetingNewParamsRecordingConfigStorageConfigTypeDigitalocean, MeetingNewParamsRecordingConfigStorageConfigTypeGcs, MeetingNewParamsRecordingConfigStorageConfigTypeSftp:
+	case MeetingNewParamsRecordingConfigStorageConfigObjectAuthMethodKey, MeetingNewParamsRecordingConfigStorageConfigObjectAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type MeetingNewParamsRecordingConfigStorageConfigObjectType string
+
+const (
+	MeetingNewParamsRecordingConfigStorageConfigObjectTypeGcs MeetingNewParamsRecordingConfigStorageConfigObjectType = "gcs"
+)
+
+func (r MeetingNewParamsRecordingConfigStorageConfigObjectType) IsKnown() bool {
+	switch r {
+	case MeetingNewParamsRecordingConfigStorageConfigObjectTypeGcs:
 		return true
 	}
 	return false
@@ -3975,6 +4610,24 @@ const (
 func (r MeetingNewParamsRecordingConfigStorageConfigAuthMethod) IsKnown() bool {
 	switch r {
 	case MeetingNewParamsRecordingConfigStorageConfigAuthMethodKey, MeetingNewParamsRecordingConfigStorageConfigAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type MeetingNewParamsRecordingConfigStorageConfigType string
+
+const (
+	MeetingNewParamsRecordingConfigStorageConfigTypeGcs          MeetingNewParamsRecordingConfigStorageConfigType = "gcs"
+	MeetingNewParamsRecordingConfigStorageConfigTypeAws          MeetingNewParamsRecordingConfigStorageConfigType = "aws"
+	MeetingNewParamsRecordingConfigStorageConfigTypeAzure        MeetingNewParamsRecordingConfigStorageConfigType = "azure"
+	MeetingNewParamsRecordingConfigStorageConfigTypeDigitalocean MeetingNewParamsRecordingConfigStorageConfigType = "digitalocean"
+	MeetingNewParamsRecordingConfigStorageConfigTypeSftp         MeetingNewParamsRecordingConfigStorageConfigType = "sftp"
+)
+
+func (r MeetingNewParamsRecordingConfigStorageConfigType) IsKnown() bool {
+	switch r {
+	case MeetingNewParamsRecordingConfigStorageConfigTypeGcs, MeetingNewParamsRecordingConfigStorageConfigTypeAws, MeetingNewParamsRecordingConfigStorageConfigTypeAzure, MeetingNewParamsRecordingConfigStorageConfigTypeDigitalocean, MeetingNewParamsRecordingConfigStorageConfigTypeSftp:
 		return true
 	}
 	return false
@@ -4003,11 +4656,12 @@ type MeetingNewParamsRecordingConfigVideoConfigCodec string
 const (
 	MeetingNewParamsRecordingConfigVideoConfigCodecH264 MeetingNewParamsRecordingConfigVideoConfigCodec = "H264"
 	MeetingNewParamsRecordingConfigVideoConfigCodecVp8  MeetingNewParamsRecordingConfigVideoConfigCodec = "VP8"
+	MeetingNewParamsRecordingConfigVideoConfigCodecVp9  MeetingNewParamsRecordingConfigVideoConfigCodec = "VP9"
 )
 
 func (r MeetingNewParamsRecordingConfigVideoConfigCodec) IsKnown() bool {
 	switch r {
-	case MeetingNewParamsRecordingConfigVideoConfigCodecH264, MeetingNewParamsRecordingConfigVideoConfigCodecVp8:
+	case MeetingNewParamsRecordingConfigVideoConfigCodecH264, MeetingNewParamsRecordingConfigVideoConfigCodecVp8, MeetingNewParamsRecordingConfigVideoConfigCodecVp9:
 		return true
 	}
 	return false
@@ -4332,7 +4986,7 @@ type MeetingReplaceMeetingByIDParamsRecordingConfig struct {
 	// of 60 seconds to a maximum of 24 hours.
 	MaxSeconds              param.Field[float64]                                                               `json:"max_seconds"`
 	RealtimekitBucketConfig param.Field[MeetingReplaceMeetingByIDParamsRecordingConfigRealtimekitBucketConfig] `json:"realtimekit_bucket_config"`
-	StorageConfig           param.Field[MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfig]           `json:"storage_config"`
+	StorageConfig           param.Field[MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigUnion]      `json:"storage_config"`
 	VideoConfig             param.Field[MeetingReplaceMeetingByIDParamsRecordingConfigVideoConfig]             `json:"video_config"`
 }
 
@@ -4411,15 +5065,58 @@ func (r MeetingReplaceMeetingByIDParamsRecordingConfigRealtimekitBucketConfig) M
 }
 
 type MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfig struct {
-	// Type of storage media.
-	Type param.Field[MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigType] `json:"type" api:"required"`
+	AccessKey param.Field[interface{}] `json:"access_key"`
+	// Authentication method used for "sftp" type storage medium
+	AuthMethod param.Field[MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigAuthMethod] `json:"auth_method"`
+	// Name of the storage medium's bucket.
+	Bucket param.Field[string] `json:"bucket"`
+	// SSH destination server host for SFTP type storage medium
+	Host param.Field[string] `json:"host"`
+	// SSH destination server password for SFTP type storage medium when auth_method is
+	// "PASSWORD". If auth_method is "KEY", this specifies the password for the ssh
+	// private key.
+	Password param.Field[string] `json:"password"`
+	// Path relative to the bucket root at which the recording will be placed.
+	Path param.Field[string] `json:"path"`
+	// SSH destination server port for SFTP type storage medium
+	Port param.Field[float64] `json:"port"`
+	// Private key used to login to destination SSH server for SFTP type storage
+	// medium, when auth_method used is "KEY"
+	PrivateKey param.Field[string]      `json:"private_key"`
+	Region     param.Field[interface{}] `json:"region"`
+	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
+	// by clients, not readable.
+	Secret param.Field[string]                                                          `json:"secret"`
+	Type   param.Field[MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigType] `json:"type"`
+	// SSH destination server username for SFTP type storage medium
+	Username param.Field[string] `json:"username"`
+}
+
+func (r MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfig) implementsMeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigUnion() {
+}
+
+// Satisfied by
+// [realtime_kit.MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObject],
+// [realtime_kit.MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObject],
+// [realtime_kit.MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObject],
+// [realtime_kit.MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObject],
+// [MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfig].
+type MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigUnion interface {
+	implementsMeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigUnion()
+}
+
+type MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObject struct {
 	// Access key of the storage medium. Access key is not required for the `gcs`
 	// storage media type.
 	//
 	// Note that this field is not readable by clients, only writeable.
 	AccessKey param.Field[string] `json:"access_key"`
 	// Authentication method used for "sftp" type storage medium
-	AuthMethod param.Field[MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigAuthMethod] `json:"auth_method"`
+	AuthMethod param.Field[MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethod] `json:"auth_method"`
 	// Name of the storage medium's bucket.
 	Bucket param.Field[string] `json:"bucket"`
 	// SSH destination server host for SFTP type storage medium
@@ -4439,29 +5136,44 @@ type MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfig struct {
 	Region param.Field[string] `json:"region"`
 	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
 	// by clients, not readable.
-	Secret param.Field[string] `json:"secret"`
+	Secret param.Field[string]                                                                `json:"secret"`
+	Type   param.Field[MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObjectType] `json:"type"`
 	// SSH destination server username for SFTP type storage medium
 	Username param.Field[string] `json:"username"`
 }
 
-func (r MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfig) MarshalJSON() (data []byte, err error) {
+func (r MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Type of storage media.
-type MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigType string
+func (r MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObject) implementsMeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigUnion() {
+}
+
+// Authentication method used for "sftp" type storage medium
+type MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethod string
 
 const (
-	MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeAws          MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigType = "aws"
-	MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeAzure        MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigType = "azure"
-	MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeDigitalocean MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigType = "digitalocean"
-	MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeGcs          MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigType = "gcs"
-	MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeSftp         MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigType = "sftp"
+	MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethodKey      MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethod = "KEY"
+	MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethodPassword MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethod = "PASSWORD"
 )
 
-func (r MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigType) IsKnown() bool {
+func (r MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethod) IsKnown() bool {
 	switch r {
-	case MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeAws, MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeAzure, MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeDigitalocean, MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeGcs, MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeSftp:
+	case MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethodKey, MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObjectType string
+
+const (
+	MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObjectTypeGcs MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObjectType = "gcs"
+)
+
+func (r MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObjectType) IsKnown() bool {
+	switch r {
+	case MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigObjectTypeGcs:
 		return true
 	}
 	return false
@@ -4478,6 +5190,24 @@ const (
 func (r MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigAuthMethod) IsKnown() bool {
 	switch r {
 	case MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigAuthMethodKey, MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigType string
+
+const (
+	MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeGcs          MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigType = "gcs"
+	MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeAws          MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigType = "aws"
+	MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeAzure        MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigType = "azure"
+	MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeDigitalocean MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigType = "digitalocean"
+	MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeSftp         MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigType = "sftp"
+)
+
+func (r MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigType) IsKnown() bool {
+	switch r {
+	case MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeGcs, MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeAws, MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeAzure, MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeDigitalocean, MeetingReplaceMeetingByIDParamsRecordingConfigStorageConfigTypeSftp:
 		return true
 	}
 	return false
@@ -4506,11 +5236,12 @@ type MeetingReplaceMeetingByIDParamsRecordingConfigVideoConfigCodec string
 const (
 	MeetingReplaceMeetingByIDParamsRecordingConfigVideoConfigCodecH264 MeetingReplaceMeetingByIDParamsRecordingConfigVideoConfigCodec = "H264"
 	MeetingReplaceMeetingByIDParamsRecordingConfigVideoConfigCodecVp8  MeetingReplaceMeetingByIDParamsRecordingConfigVideoConfigCodec = "VP8"
+	MeetingReplaceMeetingByIDParamsRecordingConfigVideoConfigCodecVp9  MeetingReplaceMeetingByIDParamsRecordingConfigVideoConfigCodec = "VP9"
 )
 
 func (r MeetingReplaceMeetingByIDParamsRecordingConfigVideoConfigCodec) IsKnown() bool {
 	switch r {
-	case MeetingReplaceMeetingByIDParamsRecordingConfigVideoConfigCodecH264, MeetingReplaceMeetingByIDParamsRecordingConfigVideoConfigCodecVp8:
+	case MeetingReplaceMeetingByIDParamsRecordingConfigVideoConfigCodecH264, MeetingReplaceMeetingByIDParamsRecordingConfigVideoConfigCodecVp8, MeetingReplaceMeetingByIDParamsRecordingConfigVideoConfigCodecVp9:
 		return true
 	}
 	return false
@@ -4714,7 +5445,7 @@ type MeetingUpdateMeetingByIDParamsRecordingConfig struct {
 	// of 60 seconds to a maximum of 24 hours.
 	MaxSeconds              param.Field[float64]                                                              `json:"max_seconds"`
 	RealtimekitBucketConfig param.Field[MeetingUpdateMeetingByIDParamsRecordingConfigRealtimekitBucketConfig] `json:"realtimekit_bucket_config"`
-	StorageConfig           param.Field[MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfig]           `json:"storage_config"`
+	StorageConfig           param.Field[MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigUnion]      `json:"storage_config"`
 	VideoConfig             param.Field[MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfig]             `json:"video_config"`
 }
 
@@ -4793,15 +5524,58 @@ func (r MeetingUpdateMeetingByIDParamsRecordingConfigRealtimekitBucketConfig) Ma
 }
 
 type MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfig struct {
-	// Type of storage media.
-	Type param.Field[MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigType] `json:"type" api:"required"`
+	AccessKey param.Field[interface{}] `json:"access_key"`
+	// Authentication method used for "sftp" type storage medium
+	AuthMethod param.Field[MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigAuthMethod] `json:"auth_method"`
+	// Name of the storage medium's bucket.
+	Bucket param.Field[string] `json:"bucket"`
+	// SSH destination server host for SFTP type storage medium
+	Host param.Field[string] `json:"host"`
+	// SSH destination server password for SFTP type storage medium when auth_method is
+	// "PASSWORD". If auth_method is "KEY", this specifies the password for the ssh
+	// private key.
+	Password param.Field[string] `json:"password"`
+	// Path relative to the bucket root at which the recording will be placed.
+	Path param.Field[string] `json:"path"`
+	// SSH destination server port for SFTP type storage medium
+	Port param.Field[float64] `json:"port"`
+	// Private key used to login to destination SSH server for SFTP type storage
+	// medium, when auth_method used is "KEY"
+	PrivateKey param.Field[string]      `json:"private_key"`
+	Region     param.Field[interface{}] `json:"region"`
+	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
+	// by clients, not readable.
+	Secret param.Field[string]                                                         `json:"secret"`
+	Type   param.Field[MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigType] `json:"type"`
+	// SSH destination server username for SFTP type storage medium
+	Username param.Field[string] `json:"username"`
+}
+
+func (r MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfig) implementsMeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigUnion() {
+}
+
+// Satisfied by
+// [realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObject],
+// [realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObject],
+// [realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObject],
+// [realtime_kit.MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObject],
+// [MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfig].
+type MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigUnion interface {
+	implementsMeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigUnion()
+}
+
+type MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObject struct {
 	// Access key of the storage medium. Access key is not required for the `gcs`
 	// storage media type.
 	//
 	// Note that this field is not readable by clients, only writeable.
 	AccessKey param.Field[string] `json:"access_key"`
 	// Authentication method used for "sftp" type storage medium
-	AuthMethod param.Field[MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigAuthMethod] `json:"auth_method"`
+	AuthMethod param.Field[MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethod] `json:"auth_method"`
 	// Name of the storage medium's bucket.
 	Bucket param.Field[string] `json:"bucket"`
 	// SSH destination server host for SFTP type storage medium
@@ -4821,29 +5595,44 @@ type MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfig struct {
 	Region param.Field[string] `json:"region"`
 	// Secret key of the storage medium. Similar to `access_key`, it is only writeable
 	// by clients, not readable.
-	Secret param.Field[string] `json:"secret"`
+	Secret param.Field[string]                                                               `json:"secret"`
+	Type   param.Field[MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObjectType] `json:"type"`
 	// SSH destination server username for SFTP type storage medium
 	Username param.Field[string] `json:"username"`
 }
 
-func (r MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfig) MarshalJSON() (data []byte, err error) {
+func (r MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Type of storage media.
-type MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigType string
+func (r MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObject) implementsMeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigUnion() {
+}
+
+// Authentication method used for "sftp" type storage medium
+type MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethod string
 
 const (
-	MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeAws          MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigType = "aws"
-	MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeAzure        MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigType = "azure"
-	MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeDigitalocean MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigType = "digitalocean"
-	MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeGcs          MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigType = "gcs"
-	MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeSftp         MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigType = "sftp"
+	MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethodKey      MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethod = "KEY"
+	MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethodPassword MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethod = "PASSWORD"
 )
 
-func (r MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigType) IsKnown() bool {
+func (r MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethod) IsKnown() bool {
 	switch r {
-	case MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeAws, MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeAzure, MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeDigitalocean, MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeGcs, MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeSftp:
+	case MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethodKey, MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObjectAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObjectType string
+
+const (
+	MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObjectTypeGcs MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObjectType = "gcs"
+)
+
+func (r MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObjectType) IsKnown() bool {
+	switch r {
+	case MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigObjectTypeGcs:
 		return true
 	}
 	return false
@@ -4860,6 +5649,24 @@ const (
 func (r MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigAuthMethod) IsKnown() bool {
 	switch r {
 	case MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigAuthMethodKey, MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigAuthMethodPassword:
+		return true
+	}
+	return false
+}
+
+type MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigType string
+
+const (
+	MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeGcs          MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigType = "gcs"
+	MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeAws          MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigType = "aws"
+	MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeAzure        MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigType = "azure"
+	MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeDigitalocean MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigType = "digitalocean"
+	MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeSftp         MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigType = "sftp"
+)
+
+func (r MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigType) IsKnown() bool {
+	switch r {
+	case MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeGcs, MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeAws, MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeAzure, MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeDigitalocean, MeetingUpdateMeetingByIDParamsRecordingConfigStorageConfigTypeSftp:
 		return true
 	}
 	return false
@@ -4888,11 +5695,12 @@ type MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfigCodec string
 const (
 	MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfigCodecH264 MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfigCodec = "H264"
 	MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfigCodecVp8  MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfigCodec = "VP8"
+	MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfigCodecVp9  MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfigCodec = "VP9"
 )
 
 func (r MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfigCodec) IsKnown() bool {
 	switch r {
-	case MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfigCodecH264, MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfigCodecVp8:
+	case MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfigCodecH264, MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfigCodecVp8, MeetingUpdateMeetingByIDParamsRecordingConfigVideoConfigCodecVp9:
 		return true
 	}
 	return false

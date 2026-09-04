@@ -155,6 +155,9 @@ type LiveInput struct {
 	Meta interface{} `json:"meta"`
 	// The date and time the live input was last modified.
 	Modified time.Time `json:"modified" format:"date-time"`
+	// Details for playing a live input's broadcast using the HLS or DASH manifests.
+	// URLs reference the live input ID.
+	Playback LiveInputPlayback `json:"playback"`
 	// When enabled, the live stream is delivered using Low-Latency HLS (LL-HLS),
 	// reducing glass-to-glass latency for viewers at the cost of reduced player
 	// compatibility.
@@ -190,6 +193,7 @@ type liveInputJSON struct {
 	KeysRotatedAt            apijson.Field
 	Meta                     apijson.Field
 	Modified                 apijson.Field
+	Playback                 apijson.Field
 	PreferLowLatency         apijson.Field
 	Recording                apijson.Field
 	Rtmps                    apijson.Field
@@ -209,6 +213,33 @@ func (r *LiveInput) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r liveInputJSON) RawJSON() string {
+	return r.raw
+}
+
+// Details for playing a live input's broadcast using the HLS or DASH manifests.
+// URLs reference the live input ID.
+type LiveInputPlayback struct {
+	// The DASH manifest URL used to play live video, referencing the live input ID.
+	Dash string `json:"dash" api:"required"`
+	// The HLS manifest URL used to play live video, referencing the live input ID.
+	Hls  string                `json:"hls" api:"required"`
+	JSON liveInputPlaybackJSON `json:"-"`
+}
+
+// liveInputPlaybackJSON contains the JSON metadata for the struct
+// [LiveInputPlayback]
+type liveInputPlaybackJSON struct {
+	Dash        apijson.Field
+	Hls         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LiveInputPlayback) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r liveInputPlaybackJSON) RawJSON() string {
 	return r.raw
 }
 

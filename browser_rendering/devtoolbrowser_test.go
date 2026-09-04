@@ -98,10 +98,11 @@ func TestDevtoolBrowserConnectWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		browser_rendering.DevtoolBrowserConnectParams{
-			AccountID: cloudflare.F("account_id"),
-			KeepAlive: cloudflare.F(10000.000000),
-			Lab:       cloudflare.F(true),
-			Recording: cloudflare.F(true),
+			AccountID:         cloudflare.F("account_id"),
+			KeepAlive:         cloudflare.F(10000.000000),
+			Lab:               cloudflare.F(true),
+			Recording:         cloudflare.F(true),
+			CfBrapiGuardrails: cloudflare.F("eyJtb2RlIjoicmVhZG9ubHkifQ"),
 		},
 	)
 	if err != nil {

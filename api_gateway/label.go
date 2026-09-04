@@ -42,7 +42,8 @@ func NewLabelService(opts ...option.RequestOption) (r *LabelService) {
 	return
 }
 
-// Retrieve all labels
+// Returns all managed and user-defined labels available for web and API operations
+// in the zone.
 func (r *LabelService) List(ctx context.Context, params LabelListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[LabelListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -64,7 +65,8 @@ func (r *LabelService) List(ctx context.Context, params LabelListParams, opts ..
 	return res, nil
 }
 
-// Retrieve all labels
+// Returns all managed and user-defined labels available for web and API operations
+// in the zone.
 func (r *LabelService) ListAutoPaging(ctx context.Context, params LabelListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[LabelListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }

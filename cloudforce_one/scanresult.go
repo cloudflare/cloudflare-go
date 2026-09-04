@@ -34,7 +34,8 @@ func NewScanResultService(opts ...option.RequestOption) (r *ScanResultService) {
 	return
 }
 
-// Get the Latest Scan Result
+// Retrieves the latest scan results for a Cloudforce One scan configuration,
+// including discovered open ports.
 func (r *ScanResultService) Get(ctx context.Context, configID string, query ScanResultGetParams, opts ...option.RequestOption) (res *ScanResultGetResponse, err error) {
 	var env ScanResultGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

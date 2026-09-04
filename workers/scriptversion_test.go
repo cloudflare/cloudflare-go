@@ -39,9 +39,14 @@ func TestScriptVersionNewWithOptionalParams(t *testing.T) {
 			Metadata: cloudflare.F(workers.ScriptVersionNewParamsMetadata{
 				MainModule: cloudflare.F("worker.js"),
 				Annotations: cloudflare.F(workers.ScriptVersionNewParamsMetadataAnnotations{
-					WorkersAlias:   cloudflare.F("staging"),
-					WorkersMessage: cloudflare.F("Fixed worker code."),
-					WorkersTag:     cloudflare.F("any-identifier-from-external-system"),
+					WorkersAlias:             cloudflare.F("staging"),
+					WorkersCommitSha:         cloudflare.F("8b6aeb38455e2f92e170deb46313b90166ccc1e5"),
+					WorkersMessage:           cloudflare.F("Fixed worker code."),
+					WorkersPullRequestNumber: cloudflare.F("14966"),
+					WorkersPullRequestTitle:  cloudflare.F("Add a cool new feature"),
+					WorkersPullRequestURL:    cloudflare.F("https://github.com/cloudflare/workers-sdk/pull/14966"),
+					WorkersRepositoryURL:     cloudflare.F("https://github.com/cloudflare/workers-sdk"),
+					WorkersTag:               cloudflare.F("any-identifier-from-external-system"),
 				}),
 				Bindings: cloudflare.F([]workers.ScriptVersionNewParamsMetadataBindingUnion{workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainText{
 					Name: cloudflare.F("MY_ENV_VAR"),
@@ -52,7 +57,7 @@ func TestScriptVersionNewWithOptionalParams(t *testing.T) {
 					Enabled:           cloudflare.F(true),
 					CrossVersionCache: cloudflare.F(true),
 				}),
-				CompatibilityDate:  cloudflare.F("2021-01-01"),
+				CompatibilityDate:  cloudflare.F("2021-01-01T00:00:00Z"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
 				Exports: cloudflare.F(map[string]workers.ScriptVersionNewParamsMetadataExportsUnion{
 					"Admin": workers.ScriptVersionNewParamsMetadataExportsWorkersWorkerExport{

@@ -35,8 +35,8 @@ func NewTunnelCloudflaredManagementService(opts ...option.RequestOption) (r *Tun
 	return
 }
 
-// Gets a management token used to access the management resources (i.e. Streaming
-// Logs) of a tunnel.
+// Creates a short-lived management token for the requested Tunnel management
+// resources, such as streaming logs. Treat the token as a secret.
 func (r *TunnelCloudflaredManagementService) New(ctx context.Context, tunnelID string, params TunnelCloudflaredManagementNewParams, opts ...option.RequestOption) (res *string, err error) {
 	var env TunnelCloudflaredManagementNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

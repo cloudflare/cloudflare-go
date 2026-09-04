@@ -57,7 +57,7 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 					"BROWSER": {},
 				}),
 				BuildImageMajorVersion: cloudflare.F(int64(3)),
-				CompatibilityDate:      cloudflare.F("2025-01-01"),
+				CompatibilityDate:      cloudflare.F("2025-01-01T00:00:00Z"),
 				CompatibilityFlags:     cloudflare.F([]string{"url_standard"}),
 				D1Databases: cloudflare.F(map[string]pages.ProjectNewParamsDeploymentConfigsPreviewD1Databases{
 					"D1_BINDING": {
@@ -139,7 +139,7 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 					"BROWSER": {},
 				}),
 				BuildImageMajorVersion: cloudflare.F(int64(3)),
-				CompatibilityDate:      cloudflare.F("2025-01-01"),
+				CompatibilityDate:      cloudflare.F("2025-01-01T00:00:00Z"),
 				CompatibilityFlags:     cloudflare.F([]string{"url_standard"}),
 				D1Databases: cloudflare.F(map[string]pages.ProjectNewParamsDeploymentConfigsProductionD1Databases{
 					"D1_BINDING": {
@@ -336,7 +336,7 @@ func TestProjectEditWithOptionalParams(t *testing.T) {
 						"BROWSER": {},
 					}),
 					BuildImageMajorVersion: cloudflare.F(int64(3)),
-					CompatibilityDate:      cloudflare.F("2025-01-01"),
+					CompatibilityDate:      cloudflare.F("2025-01-01T00:00:00Z"),
 					CompatibilityFlags:     cloudflare.F([]string{"url_standard"}),
 					D1Databases: cloudflare.F(map[string]pages.ProjectEditParamsDeploymentConfigsPreviewD1Databases{
 						"D1_BINDING": {
@@ -418,7 +418,7 @@ func TestProjectEditWithOptionalParams(t *testing.T) {
 						"BROWSER": {},
 					}),
 					BuildImageMajorVersion: cloudflare.F(int64(3)),
-					CompatibilityDate:      cloudflare.F("2025-01-01"),
+					CompatibilityDate:      cloudflare.F("2025-01-01T00:00:00Z"),
 					CompatibilityFlags:     cloudflare.F([]string{"url_standard"}),
 					D1Databases: cloudflare.F(map[string]pages.ProjectEditParamsDeploymentConfigsProductionD1Databases{
 						"D1_BINDING": {

@@ -251,7 +251,7 @@ type CasbPostureFindingListResponseFinding struct {
 	// Detailed description of the finding.
 	Description string `json:"description" api:"nullable"`
 	// Remediation guide information for a finding.
-	Remediation CasbPostureFindingListResponseFindingRemediation `json:"remediation"`
+	Remediation CasbPostureFindingListResponseFindingRemediation `json:"remediation" api:"nullable"`
 	JSON        casbPostureFindingListResponseFindingJSON        `json:"-"`
 }
 
@@ -801,7 +801,7 @@ type CasbPostureFindingGetResponseFinding struct {
 	// Detailed description of the finding.
 	Description string `json:"description" api:"nullable"`
 	// Remediation guide information for a finding.
-	Remediation CasbPostureFindingGetResponseFindingRemediation `json:"remediation"`
+	Remediation CasbPostureFindingGetResponseFindingRemediation `json:"remediation" api:"nullable"`
 	JSON        casbPostureFindingGetResponseFindingJSON        `json:"-"`
 }
 
@@ -1269,7 +1269,7 @@ type CasbPostureFindingIgnoreResponseFinding struct {
 	// Detailed description of the finding.
 	Description string `json:"description" api:"nullable"`
 	// Remediation guide information for a finding.
-	Remediation CasbPostureFindingIgnoreResponseFindingRemediation `json:"remediation"`
+	Remediation CasbPostureFindingIgnoreResponseFindingRemediation `json:"remediation" api:"nullable"`
 	JSON        casbPostureFindingIgnoreResponseFindingJSON        `json:"-"`
 }
 
@@ -1738,7 +1738,7 @@ type CasbPostureFindingResetSeverityResponseFinding struct {
 	// Detailed description of the finding.
 	Description string `json:"description" api:"nullable"`
 	// Remediation guide information for a finding.
-	Remediation CasbPostureFindingResetSeverityResponseFindingRemediation `json:"remediation"`
+	Remediation CasbPostureFindingResetSeverityResponseFindingRemediation `json:"remediation" api:"nullable"`
 	JSON        casbPostureFindingResetSeverityResponseFindingJSON        `json:"-"`
 }
 
@@ -2211,7 +2211,7 @@ type CasbPostureFindingTuneSeverityResponseFinding struct {
 	// Detailed description of the finding.
 	Description string `json:"description" api:"nullable"`
 	// Remediation guide information for a finding.
-	Remediation CasbPostureFindingTuneSeverityResponseFindingRemediation `json:"remediation"`
+	Remediation CasbPostureFindingTuneSeverityResponseFindingRemediation `json:"remediation" api:"nullable"`
 	JSON        casbPostureFindingTuneSeverityResponseFindingJSON        `json:"-"`
 }
 
@@ -2683,7 +2683,7 @@ type CasbPostureFindingUnignoreResponseFinding struct {
 	// Detailed description of the finding.
 	Description string `json:"description" api:"nullable"`
 	// Remediation guide information for a finding.
-	Remediation CasbPostureFindingUnignoreResponseFindingRemediation `json:"remediation"`
+	Remediation CasbPostureFindingUnignoreResponseFindingRemediation `json:"remediation" api:"nullable"`
 	JSON        casbPostureFindingUnignoreResponseFindingJSON        `json:"-"`
 }
 

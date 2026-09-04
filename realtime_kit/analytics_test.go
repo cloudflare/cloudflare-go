@@ -15,7 +15,7 @@ import (
 )
 
 func TestAnalyticsGetOrgAnalyticsWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires accumulated historical data")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -34,8 +34,8 @@ func TestAnalyticsGetOrgAnalyticsWithOptionalParams(t *testing.T) {
 		"app_id",
 		realtime_kit.AnalyticsGetOrgAnalyticsParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			EndDate:   cloudflare.F("2022-09-22"),
-			StartDate: cloudflare.F("2022-09-01"),
+			EndDate:   cloudflare.F("2022-09-22T00:00:00Z"),
+			StartDate: cloudflare.F("2022-09-01T00:00:00Z"),
 		},
 	)
 	if err != nil {

@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // ExtensionService contains methods and other services that help with interacting
@@ -114,7 +113,7 @@ func (r *ExtensionService) Get(ctx context.Context, extension string, query Exte
 // Extension entry with metadata and JSON Schema documents for the registration
 // operation.
 type ExtensionListResponse struct {
-	// Extension metadata
+	// Extension metadata.
 	Metadata ExtensionListResponseMetadata `json:"metadata" api:"required"`
 	// JSON Schema describing the expected input structure for registration operations
 	// on this extension.
@@ -139,12 +138,12 @@ func (r extensionListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Extension metadata
+// Extension metadata.
 type ExtensionListResponseMetadata struct {
-	// The full name of the extension. For example, "co.uk", or "uk"
+	// The full name of the extension. For example, "co.uk", or "uk".
 	Name string `json:"name" api:"required"`
-	// The tld of the extension. For example, for "co.uk", it's "uk". For "uk", it's
-	// "uk"
+	// The TLD of the extension. For example, for "co.uk", it is "uk". For "uk", it is
+	// "uk".
 	TLD  string                            `json:"tld" api:"required"`
 	JSON extensionListResponseMetadataJSON `json:"-"`
 }
@@ -169,7 +168,7 @@ func (r extensionListResponseMetadataJSON) RawJSON() string {
 // Extension entry with metadata and JSON Schema documents for the registration
 // operation.
 type ExtensionGetResponse struct {
-	// Extension metadata
+	// Extension metadata.
 	Metadata ExtensionGetResponseMetadata `json:"metadata" api:"required"`
 	// JSON Schema describing the expected input structure for registration operations
 	// on this extension.
@@ -194,12 +193,12 @@ func (r extensionGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Extension metadata
+// Extension metadata.
 type ExtensionGetResponseMetadata struct {
-	// The full name of the extension. For example, "co.uk", or "uk"
+	// The full name of the extension. For example, "co.uk", or "uk".
 	Name string `json:"name" api:"required"`
-	// The tld of the extension. For example, for "co.uk", it's "uk". For "uk", it's
-	// "uk"
+	// The TLD of the extension. For example, for "co.uk", it is "uk". For "uk", it is
+	// "uk".
 	TLD  string                           `json:"tld" api:"required"`
 	JSON extensionGetResponseMetadataJSON `json:"-"`
 }
@@ -222,7 +221,7 @@ func (r extensionGetResponseMetadataJSON) RawJSON() string {
 }
 
 type ExtensionListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Opaque token from a previous response's `result_info.cursor`. Pass this value to
 	// fetch the next page of results. Omit (or pass an empty string) for the first
@@ -281,17 +280,17 @@ func (r ExtensionListParamsSortBy) IsKnown() bool {
 }
 
 type ExtensionGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ExtensionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Errors   []ExtensionGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ExtensionGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Extension entry with metadata and JSON Schema documents for the registration
 	// operation.
 	Result ExtensionGetResponse `json:"result" api:"required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success ExtensionGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    extensionGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -315,7 +314,105 @@ func (r extensionGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type ExtensionGetResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source ExtensionGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON   extensionGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// extensionGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ExtensionGetResponseEnvelopeErrors]
+type extensionGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ExtensionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r extensionGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type ExtensionGetResponseEnvelopeErrorsSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                       `json:"pointer" api:"required"`
+	JSON    extensionGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// extensionGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [ExtensionGetResponseEnvelopeErrorsSource]
+type extensionGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ExtensionGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r extensionGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ExtensionGetResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source ExtensionGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON   extensionGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// extensionGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ExtensionGetResponseEnvelopeMessages]
+type extensionGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ExtensionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r extensionGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type ExtensionGetResponseEnvelopeMessagesSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                         `json:"pointer" api:"required"`
+	JSON    extensionGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// extensionGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [ExtensionGetResponseEnvelopeMessagesSource]
+type extensionGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ExtensionGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r extensionGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type ExtensionGetResponseEnvelopeSuccess bool
 
 const (

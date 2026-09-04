@@ -106,10 +106,10 @@ func (r *StreamService) ListAutoPaging(ctx context.Context, params StreamListPar
 }
 
 // Delete Stream in Account.
-func (r *StreamService) Delete(ctx context.Context, streamID string, params StreamDeleteParams, opts ...option.RequestOption) (res *StreamDeleteResponse, err error) {
+func (r *StreamService) Delete(ctx context.Context, streamID string, body StreamDeleteParams, opts ...option.RequestOption) (res *StreamDeleteResponse, err error) {
 	var env StreamDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -117,8 +117,8 @@ func (r *StreamService) Delete(ctx context.Context, streamID string, params Stre
 		err = errors.New("missing required stream_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/pipelines/v1/streams/%s", params.AccountID, streamID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pipelines/v1/streams/%s", body.AccountID, streamID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -159,10 +159,12 @@ type StreamNewResponse struct {
 	Version       int64                          `json:"version" api:"required"`
 	WorkerBinding StreamNewResponseWorkerBinding `json:"worker_binding" api:"required"`
 	// Indicates the endpoint URL of this stream.
-	Endpoint string                  `json:"endpoint" format:"uri"`
-	Format   StreamNewResponseFormat `json:"format"`
-	Schema   StreamNewResponseSchema `json:"schema"`
-	JSON     streamNewResponseJSON   `json:"-"`
+	Endpoint string `json:"endpoint" format:"uri"`
+	// Defines the data format of the events.
+	Format StreamNewResponseFormat `json:"format"`
+	// Defines the schema of the events in the data stream.
+	Schema StreamNewResponseSchema `json:"schema"`
+	JSON   streamNewResponseJSON   `json:"-"`
 }
 
 // streamNewResponseJSON contains the JSON metadata for the struct
@@ -262,6 +264,7 @@ func (r streamNewResponseWorkerBindingJSON) RawJSON() string {
 	return r.raw
 }
 
+// Defines the data format of the events.
 type StreamNewResponseFormat struct {
 	Type            StreamNewResponseFormatType            `json:"type" api:"required"`
 	Compression     StreamNewResponseFormatCompression     `json:"compression"`
@@ -308,6 +311,8 @@ func (r StreamNewResponseFormat) AsUnion() StreamNewResponseFormatUnion {
 	return r.union
 }
 
+// Defines the data format of the events.
+//
 // Union satisfied by [StreamNewResponseFormatJson] or
 // [StreamNewResponseFormatParquet].
 type StreamNewResponseFormatUnion interface {
@@ -528,9 +533,9 @@ func (r StreamNewResponseFormatTimestampFormat) IsKnown() bool {
 	return false
 }
 
+// Defines the schema of the events in the data stream.
 type StreamNewResponseSchema struct {
 	Fields   []StreamNewResponseSchemaField `json:"fields"`
-	Format   StreamNewResponseSchemaFormat  `json:"format"`
 	Inferred bool                           `json:"inferred" api:"nullable"`
 	JSON     streamNewResponseSchemaJSON    `json:"-"`
 }
@@ -539,7 +544,6 @@ type StreamNewResponseSchema struct {
 // [StreamNewResponseSchema]
 type streamNewResponseSchemaJSON struct {
 	Fields      apijson.Field
-	Format      apijson.Field
 	Inferred    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1182,272 +1186,6 @@ func (r StreamNewResponseSchemaFieldsUnit) IsKnown() bool {
 	return false
 }
 
-type StreamNewResponseSchemaFormat struct {
-	Type            StreamNewResponseSchemaFormatType            `json:"type" api:"required"`
-	Compression     StreamNewResponseSchemaFormatCompression     `json:"compression"`
-	DecimalEncoding StreamNewResponseSchemaFormatDecimalEncoding `json:"decimal_encoding"`
-	RowGroupBytes   int64                                        `json:"row_group_bytes" api:"nullable"`
-	TimestampFormat StreamNewResponseSchemaFormatTimestampFormat `json:"timestamp_format"`
-	Unstructured    bool                                         `json:"unstructured"`
-	JSON            streamNewResponseSchemaFormatJSON            `json:"-"`
-	union           StreamNewResponseSchemaFormatUnion
-}
-
-// streamNewResponseSchemaFormatJSON contains the JSON metadata for the struct
-// [StreamNewResponseSchemaFormat]
-type streamNewResponseSchemaFormatJSON struct {
-	Type            apijson.Field
-	Compression     apijson.Field
-	DecimalEncoding apijson.Field
-	RowGroupBytes   apijson.Field
-	TimestampFormat apijson.Field
-	Unstructured    apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r streamNewResponseSchemaFormatJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *StreamNewResponseSchemaFormat) UnmarshalJSON(data []byte) (err error) {
-	*r = StreamNewResponseSchemaFormat{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [StreamNewResponseSchemaFormatUnion] interface which you can
-// cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [StreamNewResponseSchemaFormatJson],
-// [StreamNewResponseSchemaFormatParquet].
-func (r StreamNewResponseSchemaFormat) AsUnion() StreamNewResponseSchemaFormatUnion {
-	return r.union
-}
-
-// Union satisfied by [StreamNewResponseSchemaFormatJson] or
-// [StreamNewResponseSchemaFormatParquet].
-type StreamNewResponseSchemaFormatUnion interface {
-	implementsStreamNewResponseSchemaFormat()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*StreamNewResponseSchemaFormatUnion)(nil)).Elem(),
-		"type",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(StreamNewResponseSchemaFormatJson{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(StreamNewResponseSchemaFormatParquet{}),
-			DiscriminatorValue: "parquet",
-		},
-	)
-}
-
-type StreamNewResponseSchemaFormatJson struct {
-	Type            StreamNewResponseSchemaFormatJsonType            `json:"type" api:"required"`
-	DecimalEncoding StreamNewResponseSchemaFormatJsonDecimalEncoding `json:"decimal_encoding"`
-	TimestampFormat StreamNewResponseSchemaFormatJsonTimestampFormat `json:"timestamp_format"`
-	Unstructured    bool                                             `json:"unstructured"`
-	JSON            streamNewResponseSchemaFormatJsonJSON            `json:"-"`
-}
-
-// streamNewResponseSchemaFormatJsonJSON contains the JSON metadata for the struct
-// [StreamNewResponseSchemaFormatJson]
-type streamNewResponseSchemaFormatJsonJSON struct {
-	Type            apijson.Field
-	DecimalEncoding apijson.Field
-	TimestampFormat apijson.Field
-	Unstructured    apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *StreamNewResponseSchemaFormatJson) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r streamNewResponseSchemaFormatJsonJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r StreamNewResponseSchemaFormatJson) implementsStreamNewResponseSchemaFormat() {}
-
-type StreamNewResponseSchemaFormatJsonType string
-
-const (
-	StreamNewResponseSchemaFormatJsonTypeJson StreamNewResponseSchemaFormatJsonType = "json"
-)
-
-func (r StreamNewResponseSchemaFormatJsonType) IsKnown() bool {
-	switch r {
-	case StreamNewResponseSchemaFormatJsonTypeJson:
-		return true
-	}
-	return false
-}
-
-type StreamNewResponseSchemaFormatJsonDecimalEncoding string
-
-const (
-	StreamNewResponseSchemaFormatJsonDecimalEncodingNumber StreamNewResponseSchemaFormatJsonDecimalEncoding = "number"
-	StreamNewResponseSchemaFormatJsonDecimalEncodingString StreamNewResponseSchemaFormatJsonDecimalEncoding = "string"
-	StreamNewResponseSchemaFormatJsonDecimalEncodingBytes  StreamNewResponseSchemaFormatJsonDecimalEncoding = "bytes"
-)
-
-func (r StreamNewResponseSchemaFormatJsonDecimalEncoding) IsKnown() bool {
-	switch r {
-	case StreamNewResponseSchemaFormatJsonDecimalEncodingNumber, StreamNewResponseSchemaFormatJsonDecimalEncodingString, StreamNewResponseSchemaFormatJsonDecimalEncodingBytes:
-		return true
-	}
-	return false
-}
-
-type StreamNewResponseSchemaFormatJsonTimestampFormat string
-
-const (
-	StreamNewResponseSchemaFormatJsonTimestampFormatRfc3339    StreamNewResponseSchemaFormatJsonTimestampFormat = "rfc3339"
-	StreamNewResponseSchemaFormatJsonTimestampFormatUnixMillis StreamNewResponseSchemaFormatJsonTimestampFormat = "unix_millis"
-)
-
-func (r StreamNewResponseSchemaFormatJsonTimestampFormat) IsKnown() bool {
-	switch r {
-	case StreamNewResponseSchemaFormatJsonTimestampFormatRfc3339, StreamNewResponseSchemaFormatJsonTimestampFormatUnixMillis:
-		return true
-	}
-	return false
-}
-
-type StreamNewResponseSchemaFormatParquet struct {
-	Type          StreamNewResponseSchemaFormatParquetType        `json:"type" api:"required"`
-	Compression   StreamNewResponseSchemaFormatParquetCompression `json:"compression"`
-	RowGroupBytes int64                                           `json:"row_group_bytes" api:"nullable"`
-	JSON          streamNewResponseSchemaFormatParquetJSON        `json:"-"`
-}
-
-// streamNewResponseSchemaFormatParquetJSON contains the JSON metadata for the
-// struct [StreamNewResponseSchemaFormatParquet]
-type streamNewResponseSchemaFormatParquetJSON struct {
-	Type          apijson.Field
-	Compression   apijson.Field
-	RowGroupBytes apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *StreamNewResponseSchemaFormatParquet) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r streamNewResponseSchemaFormatParquetJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r StreamNewResponseSchemaFormatParquet) implementsStreamNewResponseSchemaFormat() {}
-
-type StreamNewResponseSchemaFormatParquetType string
-
-const (
-	StreamNewResponseSchemaFormatParquetTypeParquet StreamNewResponseSchemaFormatParquetType = "parquet"
-)
-
-func (r StreamNewResponseSchemaFormatParquetType) IsKnown() bool {
-	switch r {
-	case StreamNewResponseSchemaFormatParquetTypeParquet:
-		return true
-	}
-	return false
-}
-
-type StreamNewResponseSchemaFormatParquetCompression string
-
-const (
-	StreamNewResponseSchemaFormatParquetCompressionUncompressed StreamNewResponseSchemaFormatParquetCompression = "uncompressed"
-	StreamNewResponseSchemaFormatParquetCompressionSnappy       StreamNewResponseSchemaFormatParquetCompression = "snappy"
-	StreamNewResponseSchemaFormatParquetCompressionGzip         StreamNewResponseSchemaFormatParquetCompression = "gzip"
-	StreamNewResponseSchemaFormatParquetCompressionZstd         StreamNewResponseSchemaFormatParquetCompression = "zstd"
-	StreamNewResponseSchemaFormatParquetCompressionLz4          StreamNewResponseSchemaFormatParquetCompression = "lz4"
-)
-
-func (r StreamNewResponseSchemaFormatParquetCompression) IsKnown() bool {
-	switch r {
-	case StreamNewResponseSchemaFormatParquetCompressionUncompressed, StreamNewResponseSchemaFormatParquetCompressionSnappy, StreamNewResponseSchemaFormatParquetCompressionGzip, StreamNewResponseSchemaFormatParquetCompressionZstd, StreamNewResponseSchemaFormatParquetCompressionLz4:
-		return true
-	}
-	return false
-}
-
-type StreamNewResponseSchemaFormatType string
-
-const (
-	StreamNewResponseSchemaFormatTypeJson    StreamNewResponseSchemaFormatType = "json"
-	StreamNewResponseSchemaFormatTypeParquet StreamNewResponseSchemaFormatType = "parquet"
-)
-
-func (r StreamNewResponseSchemaFormatType) IsKnown() bool {
-	switch r {
-	case StreamNewResponseSchemaFormatTypeJson, StreamNewResponseSchemaFormatTypeParquet:
-		return true
-	}
-	return false
-}
-
-type StreamNewResponseSchemaFormatCompression string
-
-const (
-	StreamNewResponseSchemaFormatCompressionUncompressed StreamNewResponseSchemaFormatCompression = "uncompressed"
-	StreamNewResponseSchemaFormatCompressionSnappy       StreamNewResponseSchemaFormatCompression = "snappy"
-	StreamNewResponseSchemaFormatCompressionGzip         StreamNewResponseSchemaFormatCompression = "gzip"
-	StreamNewResponseSchemaFormatCompressionZstd         StreamNewResponseSchemaFormatCompression = "zstd"
-	StreamNewResponseSchemaFormatCompressionLz4          StreamNewResponseSchemaFormatCompression = "lz4"
-)
-
-func (r StreamNewResponseSchemaFormatCompression) IsKnown() bool {
-	switch r {
-	case StreamNewResponseSchemaFormatCompressionUncompressed, StreamNewResponseSchemaFormatCompressionSnappy, StreamNewResponseSchemaFormatCompressionGzip, StreamNewResponseSchemaFormatCompressionZstd, StreamNewResponseSchemaFormatCompressionLz4:
-		return true
-	}
-	return false
-}
-
-type StreamNewResponseSchemaFormatDecimalEncoding string
-
-const (
-	StreamNewResponseSchemaFormatDecimalEncodingNumber StreamNewResponseSchemaFormatDecimalEncoding = "number"
-	StreamNewResponseSchemaFormatDecimalEncodingString StreamNewResponseSchemaFormatDecimalEncoding = "string"
-	StreamNewResponseSchemaFormatDecimalEncodingBytes  StreamNewResponseSchemaFormatDecimalEncoding = "bytes"
-)
-
-func (r StreamNewResponseSchemaFormatDecimalEncoding) IsKnown() bool {
-	switch r {
-	case StreamNewResponseSchemaFormatDecimalEncodingNumber, StreamNewResponseSchemaFormatDecimalEncodingString, StreamNewResponseSchemaFormatDecimalEncodingBytes:
-		return true
-	}
-	return false
-}
-
-type StreamNewResponseSchemaFormatTimestampFormat string
-
-const (
-	StreamNewResponseSchemaFormatTimestampFormatRfc3339    StreamNewResponseSchemaFormatTimestampFormat = "rfc3339"
-	StreamNewResponseSchemaFormatTimestampFormatUnixMillis StreamNewResponseSchemaFormatTimestampFormat = "unix_millis"
-)
-
-func (r StreamNewResponseSchemaFormatTimestampFormat) IsKnown() bool {
-	switch r {
-	case StreamNewResponseSchemaFormatTimestampFormatRfc3339, StreamNewResponseSchemaFormatTimestampFormatUnixMillis:
-		return true
-	}
-	return false
-}
-
 type StreamUpdateResponse struct {
 	// Indicates a unique identifier for this stream.
 	ID         string                   `json:"id" api:"required"`
@@ -1460,9 +1198,12 @@ type StreamUpdateResponse struct {
 	Version       int64                             `json:"version" api:"required"`
 	WorkerBinding StreamUpdateResponseWorkerBinding `json:"worker_binding" api:"required"`
 	// Indicates the endpoint URL of this stream.
-	Endpoint string                     `json:"endpoint" format:"uri"`
-	Format   StreamUpdateResponseFormat `json:"format"`
-	JSON     streamUpdateResponseJSON   `json:"-"`
+	Endpoint string `json:"endpoint" format:"uri"`
+	// Defines the data format of the events.
+	Format StreamUpdateResponseFormat `json:"format"`
+	// Defines the schema of the events in the data stream.
+	Schema StreamUpdateResponseSchema `json:"schema"`
+	JSON   streamUpdateResponseJSON   `json:"-"`
 }
 
 // streamUpdateResponseJSON contains the JSON metadata for the struct
@@ -1477,6 +1218,7 @@ type streamUpdateResponseJSON struct {
 	WorkerBinding apijson.Field
 	Endpoint      apijson.Field
 	Format        apijson.Field
+	Schema        apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -1561,6 +1303,7 @@ func (r streamUpdateResponseWorkerBindingJSON) RawJSON() string {
 	return r.raw
 }
 
+// Defines the data format of the events.
 type StreamUpdateResponseFormat struct {
 	Type            StreamUpdateResponseFormatType            `json:"type" api:"required"`
 	Compression     StreamUpdateResponseFormatCompression     `json:"compression"`
@@ -1607,6 +1350,8 @@ func (r StreamUpdateResponseFormat) AsUnion() StreamUpdateResponseFormatUnion {
 	return r.union
 }
 
+// Defines the data format of the events.
+//
 // Union satisfied by [StreamUpdateResponseFormatJson] or
 // [StreamUpdateResponseFormatParquet].
 type StreamUpdateResponseFormatUnion interface {
@@ -1827,6 +1572,668 @@ func (r StreamUpdateResponseFormatTimestampFormat) IsKnown() bool {
 	return false
 }
 
+// Defines the schema of the events in the data stream.
+type StreamUpdateResponseSchema struct {
+	Fields   []StreamUpdateResponseSchemaField `json:"fields"`
+	Inferred bool                              `json:"inferred" api:"nullable"`
+	JSON     streamUpdateResponseSchemaJSON    `json:"-"`
+}
+
+// streamUpdateResponseSchemaJSON contains the JSON metadata for the struct
+// [StreamUpdateResponseSchema]
+type streamUpdateResponseSchemaJSON struct {
+	Fields      apijson.Field
+	Inferred    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamUpdateResponseSchema) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamUpdateResponseSchemaJSON) RawJSON() string {
+	return r.raw
+}
+
+type StreamUpdateResponseSchemaField struct {
+	Type        StreamUpdateResponseSchemaFieldsType `json:"type" api:"required"`
+	MetadataKey string                               `json:"metadata_key" api:"nullable"`
+	Name        string                               `json:"name"`
+	Required    bool                                 `json:"required"`
+	SqlName     string                               `json:"sql_name"`
+	Unit        StreamUpdateResponseSchemaFieldsUnit `json:"unit"`
+	JSON        streamUpdateResponseSchemaFieldJSON  `json:"-"`
+	union       StreamUpdateResponseSchemaFieldsUnion
+}
+
+// streamUpdateResponseSchemaFieldJSON contains the JSON metadata for the struct
+// [StreamUpdateResponseSchemaField]
+type streamUpdateResponseSchemaFieldJSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	Unit        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r streamUpdateResponseSchemaFieldJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *StreamUpdateResponseSchemaField) UnmarshalJSON(data []byte) (err error) {
+	*r = StreamUpdateResponseSchemaField{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [StreamUpdateResponseSchemaFieldsUnion] interface which you
+// can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [StreamUpdateResponseSchemaFieldsInt32],
+// [StreamUpdateResponseSchemaFieldsInt64],
+// [StreamUpdateResponseSchemaFieldsFloat32],
+// [StreamUpdateResponseSchemaFieldsFloat64],
+// [StreamUpdateResponseSchemaFieldsBool],
+// [StreamUpdateResponseSchemaFieldsString],
+// [StreamUpdateResponseSchemaFieldsBinary],
+// [StreamUpdateResponseSchemaFieldsTimestamp],
+// [StreamUpdateResponseSchemaFieldsJson],
+// [StreamUpdateResponseSchemaFieldsStruct],
+// [StreamUpdateResponseSchemaFieldsList].
+func (r StreamUpdateResponseSchemaField) AsUnion() StreamUpdateResponseSchemaFieldsUnion {
+	return r.union
+}
+
+// Union satisfied by [StreamUpdateResponseSchemaFieldsInt32],
+// [StreamUpdateResponseSchemaFieldsInt64],
+// [StreamUpdateResponseSchemaFieldsFloat32],
+// [StreamUpdateResponseSchemaFieldsFloat64],
+// [StreamUpdateResponseSchemaFieldsBool],
+// [StreamUpdateResponseSchemaFieldsString],
+// [StreamUpdateResponseSchemaFieldsBinary],
+// [StreamUpdateResponseSchemaFieldsTimestamp],
+// [StreamUpdateResponseSchemaFieldsJson], [StreamUpdateResponseSchemaFieldsStruct]
+// or [StreamUpdateResponseSchemaFieldsList].
+type StreamUpdateResponseSchemaFieldsUnion interface {
+	implementsStreamUpdateResponseSchemaField()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*StreamUpdateResponseSchemaFieldsUnion)(nil)).Elem(),
+		"type",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(StreamUpdateResponseSchemaFieldsInt32{}),
+			DiscriminatorValue: "int32",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(StreamUpdateResponseSchemaFieldsInt64{}),
+			DiscriminatorValue: "int64",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(StreamUpdateResponseSchemaFieldsFloat32{}),
+			DiscriminatorValue: "float32",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(StreamUpdateResponseSchemaFieldsFloat64{}),
+			DiscriminatorValue: "float64",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(StreamUpdateResponseSchemaFieldsBool{}),
+			DiscriminatorValue: "bool",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(StreamUpdateResponseSchemaFieldsString{}),
+			DiscriminatorValue: "string",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(StreamUpdateResponseSchemaFieldsBinary{}),
+			DiscriminatorValue: "binary",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(StreamUpdateResponseSchemaFieldsTimestamp{}),
+			DiscriminatorValue: "timestamp",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(StreamUpdateResponseSchemaFieldsJson{}),
+			DiscriminatorValue: "json",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(StreamUpdateResponseSchemaFieldsStruct{}),
+			DiscriminatorValue: "struct",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(StreamUpdateResponseSchemaFieldsList{}),
+			DiscriminatorValue: "list",
+		},
+	)
+}
+
+type StreamUpdateResponseSchemaFieldsInt32 struct {
+	Type        StreamUpdateResponseSchemaFieldsInt32Type `json:"type" api:"required"`
+	MetadataKey string                                    `json:"metadata_key" api:"nullable"`
+	Name        string                                    `json:"name"`
+	Required    bool                                      `json:"required"`
+	SqlName     string                                    `json:"sql_name"`
+	JSON        streamUpdateResponseSchemaFieldsInt32JSON `json:"-"`
+}
+
+// streamUpdateResponseSchemaFieldsInt32JSON contains the JSON metadata for the
+// struct [StreamUpdateResponseSchemaFieldsInt32]
+type streamUpdateResponseSchemaFieldsInt32JSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamUpdateResponseSchemaFieldsInt32) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamUpdateResponseSchemaFieldsInt32JSON) RawJSON() string {
+	return r.raw
+}
+
+func (r StreamUpdateResponseSchemaFieldsInt32) implementsStreamUpdateResponseSchemaField() {}
+
+type StreamUpdateResponseSchemaFieldsInt32Type string
+
+const (
+	StreamUpdateResponseSchemaFieldsInt32TypeInt32 StreamUpdateResponseSchemaFieldsInt32Type = "int32"
+)
+
+func (r StreamUpdateResponseSchemaFieldsInt32Type) IsKnown() bool {
+	switch r {
+	case StreamUpdateResponseSchemaFieldsInt32TypeInt32:
+		return true
+	}
+	return false
+}
+
+type StreamUpdateResponseSchemaFieldsInt64 struct {
+	Type        StreamUpdateResponseSchemaFieldsInt64Type `json:"type" api:"required"`
+	MetadataKey string                                    `json:"metadata_key" api:"nullable"`
+	Name        string                                    `json:"name"`
+	Required    bool                                      `json:"required"`
+	SqlName     string                                    `json:"sql_name"`
+	JSON        streamUpdateResponseSchemaFieldsInt64JSON `json:"-"`
+}
+
+// streamUpdateResponseSchemaFieldsInt64JSON contains the JSON metadata for the
+// struct [StreamUpdateResponseSchemaFieldsInt64]
+type streamUpdateResponseSchemaFieldsInt64JSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamUpdateResponseSchemaFieldsInt64) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamUpdateResponseSchemaFieldsInt64JSON) RawJSON() string {
+	return r.raw
+}
+
+func (r StreamUpdateResponseSchemaFieldsInt64) implementsStreamUpdateResponseSchemaField() {}
+
+type StreamUpdateResponseSchemaFieldsInt64Type string
+
+const (
+	StreamUpdateResponseSchemaFieldsInt64TypeInt64 StreamUpdateResponseSchemaFieldsInt64Type = "int64"
+)
+
+func (r StreamUpdateResponseSchemaFieldsInt64Type) IsKnown() bool {
+	switch r {
+	case StreamUpdateResponseSchemaFieldsInt64TypeInt64:
+		return true
+	}
+	return false
+}
+
+type StreamUpdateResponseSchemaFieldsFloat32 struct {
+	Type        StreamUpdateResponseSchemaFieldsFloat32Type `json:"type" api:"required"`
+	MetadataKey string                                      `json:"metadata_key" api:"nullable"`
+	Name        string                                      `json:"name"`
+	Required    bool                                        `json:"required"`
+	SqlName     string                                      `json:"sql_name"`
+	JSON        streamUpdateResponseSchemaFieldsFloat32JSON `json:"-"`
+}
+
+// streamUpdateResponseSchemaFieldsFloat32JSON contains the JSON metadata for the
+// struct [StreamUpdateResponseSchemaFieldsFloat32]
+type streamUpdateResponseSchemaFieldsFloat32JSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamUpdateResponseSchemaFieldsFloat32) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamUpdateResponseSchemaFieldsFloat32JSON) RawJSON() string {
+	return r.raw
+}
+
+func (r StreamUpdateResponseSchemaFieldsFloat32) implementsStreamUpdateResponseSchemaField() {}
+
+type StreamUpdateResponseSchemaFieldsFloat32Type string
+
+const (
+	StreamUpdateResponseSchemaFieldsFloat32TypeFloat32 StreamUpdateResponseSchemaFieldsFloat32Type = "float32"
+)
+
+func (r StreamUpdateResponseSchemaFieldsFloat32Type) IsKnown() bool {
+	switch r {
+	case StreamUpdateResponseSchemaFieldsFloat32TypeFloat32:
+		return true
+	}
+	return false
+}
+
+type StreamUpdateResponseSchemaFieldsFloat64 struct {
+	Type        StreamUpdateResponseSchemaFieldsFloat64Type `json:"type" api:"required"`
+	MetadataKey string                                      `json:"metadata_key" api:"nullable"`
+	Name        string                                      `json:"name"`
+	Required    bool                                        `json:"required"`
+	SqlName     string                                      `json:"sql_name"`
+	JSON        streamUpdateResponseSchemaFieldsFloat64JSON `json:"-"`
+}
+
+// streamUpdateResponseSchemaFieldsFloat64JSON contains the JSON metadata for the
+// struct [StreamUpdateResponseSchemaFieldsFloat64]
+type streamUpdateResponseSchemaFieldsFloat64JSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamUpdateResponseSchemaFieldsFloat64) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamUpdateResponseSchemaFieldsFloat64JSON) RawJSON() string {
+	return r.raw
+}
+
+func (r StreamUpdateResponseSchemaFieldsFloat64) implementsStreamUpdateResponseSchemaField() {}
+
+type StreamUpdateResponseSchemaFieldsFloat64Type string
+
+const (
+	StreamUpdateResponseSchemaFieldsFloat64TypeFloat64 StreamUpdateResponseSchemaFieldsFloat64Type = "float64"
+)
+
+func (r StreamUpdateResponseSchemaFieldsFloat64Type) IsKnown() bool {
+	switch r {
+	case StreamUpdateResponseSchemaFieldsFloat64TypeFloat64:
+		return true
+	}
+	return false
+}
+
+type StreamUpdateResponseSchemaFieldsBool struct {
+	Type        StreamUpdateResponseSchemaFieldsBoolType `json:"type" api:"required"`
+	MetadataKey string                                   `json:"metadata_key" api:"nullable"`
+	Name        string                                   `json:"name"`
+	Required    bool                                     `json:"required"`
+	SqlName     string                                   `json:"sql_name"`
+	JSON        streamUpdateResponseSchemaFieldsBoolJSON `json:"-"`
+}
+
+// streamUpdateResponseSchemaFieldsBoolJSON contains the JSON metadata for the
+// struct [StreamUpdateResponseSchemaFieldsBool]
+type streamUpdateResponseSchemaFieldsBoolJSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamUpdateResponseSchemaFieldsBool) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamUpdateResponseSchemaFieldsBoolJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r StreamUpdateResponseSchemaFieldsBool) implementsStreamUpdateResponseSchemaField() {}
+
+type StreamUpdateResponseSchemaFieldsBoolType string
+
+const (
+	StreamUpdateResponseSchemaFieldsBoolTypeBool StreamUpdateResponseSchemaFieldsBoolType = "bool"
+)
+
+func (r StreamUpdateResponseSchemaFieldsBoolType) IsKnown() bool {
+	switch r {
+	case StreamUpdateResponseSchemaFieldsBoolTypeBool:
+		return true
+	}
+	return false
+}
+
+type StreamUpdateResponseSchemaFieldsString struct {
+	Type        StreamUpdateResponseSchemaFieldsStringType `json:"type" api:"required"`
+	MetadataKey string                                     `json:"metadata_key" api:"nullable"`
+	Name        string                                     `json:"name"`
+	Required    bool                                       `json:"required"`
+	SqlName     string                                     `json:"sql_name"`
+	JSON        streamUpdateResponseSchemaFieldsStringJSON `json:"-"`
+}
+
+// streamUpdateResponseSchemaFieldsStringJSON contains the JSON metadata for the
+// struct [StreamUpdateResponseSchemaFieldsString]
+type streamUpdateResponseSchemaFieldsStringJSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamUpdateResponseSchemaFieldsString) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamUpdateResponseSchemaFieldsStringJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r StreamUpdateResponseSchemaFieldsString) implementsStreamUpdateResponseSchemaField() {}
+
+type StreamUpdateResponseSchemaFieldsStringType string
+
+const (
+	StreamUpdateResponseSchemaFieldsStringTypeString StreamUpdateResponseSchemaFieldsStringType = "string"
+)
+
+func (r StreamUpdateResponseSchemaFieldsStringType) IsKnown() bool {
+	switch r {
+	case StreamUpdateResponseSchemaFieldsStringTypeString:
+		return true
+	}
+	return false
+}
+
+type StreamUpdateResponseSchemaFieldsBinary struct {
+	Type        StreamUpdateResponseSchemaFieldsBinaryType `json:"type" api:"required"`
+	MetadataKey string                                     `json:"metadata_key" api:"nullable"`
+	Name        string                                     `json:"name"`
+	Required    bool                                       `json:"required"`
+	SqlName     string                                     `json:"sql_name"`
+	JSON        streamUpdateResponseSchemaFieldsBinaryJSON `json:"-"`
+}
+
+// streamUpdateResponseSchemaFieldsBinaryJSON contains the JSON metadata for the
+// struct [StreamUpdateResponseSchemaFieldsBinary]
+type streamUpdateResponseSchemaFieldsBinaryJSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamUpdateResponseSchemaFieldsBinary) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamUpdateResponseSchemaFieldsBinaryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r StreamUpdateResponseSchemaFieldsBinary) implementsStreamUpdateResponseSchemaField() {}
+
+type StreamUpdateResponseSchemaFieldsBinaryType string
+
+const (
+	StreamUpdateResponseSchemaFieldsBinaryTypeBinary StreamUpdateResponseSchemaFieldsBinaryType = "binary"
+)
+
+func (r StreamUpdateResponseSchemaFieldsBinaryType) IsKnown() bool {
+	switch r {
+	case StreamUpdateResponseSchemaFieldsBinaryTypeBinary:
+		return true
+	}
+	return false
+}
+
+type StreamUpdateResponseSchemaFieldsTimestamp struct {
+	Type        StreamUpdateResponseSchemaFieldsTimestampType `json:"type" api:"required"`
+	MetadataKey string                                        `json:"metadata_key" api:"nullable"`
+	Name        string                                        `json:"name"`
+	Required    bool                                          `json:"required"`
+	SqlName     string                                        `json:"sql_name"`
+	Unit        StreamUpdateResponseSchemaFieldsTimestampUnit `json:"unit"`
+	JSON        streamUpdateResponseSchemaFieldsTimestampJSON `json:"-"`
+}
+
+// streamUpdateResponseSchemaFieldsTimestampJSON contains the JSON metadata for the
+// struct [StreamUpdateResponseSchemaFieldsTimestamp]
+type streamUpdateResponseSchemaFieldsTimestampJSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	Unit        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamUpdateResponseSchemaFieldsTimestamp) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamUpdateResponseSchemaFieldsTimestampJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r StreamUpdateResponseSchemaFieldsTimestamp) implementsStreamUpdateResponseSchemaField() {}
+
+type StreamUpdateResponseSchemaFieldsTimestampType string
+
+const (
+	StreamUpdateResponseSchemaFieldsTimestampTypeTimestamp StreamUpdateResponseSchemaFieldsTimestampType = "timestamp"
+)
+
+func (r StreamUpdateResponseSchemaFieldsTimestampType) IsKnown() bool {
+	switch r {
+	case StreamUpdateResponseSchemaFieldsTimestampTypeTimestamp:
+		return true
+	}
+	return false
+}
+
+type StreamUpdateResponseSchemaFieldsTimestampUnit string
+
+const (
+	StreamUpdateResponseSchemaFieldsTimestampUnitSecond      StreamUpdateResponseSchemaFieldsTimestampUnit = "second"
+	StreamUpdateResponseSchemaFieldsTimestampUnitMillisecond StreamUpdateResponseSchemaFieldsTimestampUnit = "millisecond"
+	StreamUpdateResponseSchemaFieldsTimestampUnitMicrosecond StreamUpdateResponseSchemaFieldsTimestampUnit = "microsecond"
+	StreamUpdateResponseSchemaFieldsTimestampUnitNanosecond  StreamUpdateResponseSchemaFieldsTimestampUnit = "nanosecond"
+)
+
+func (r StreamUpdateResponseSchemaFieldsTimestampUnit) IsKnown() bool {
+	switch r {
+	case StreamUpdateResponseSchemaFieldsTimestampUnitSecond, StreamUpdateResponseSchemaFieldsTimestampUnitMillisecond, StreamUpdateResponseSchemaFieldsTimestampUnitMicrosecond, StreamUpdateResponseSchemaFieldsTimestampUnitNanosecond:
+		return true
+	}
+	return false
+}
+
+type StreamUpdateResponseSchemaFieldsJson struct {
+	Type        StreamUpdateResponseSchemaFieldsJsonType `json:"type" api:"required"`
+	MetadataKey string                                   `json:"metadata_key" api:"nullable"`
+	Name        string                                   `json:"name"`
+	Required    bool                                     `json:"required"`
+	SqlName     string                                   `json:"sql_name"`
+	JSON        streamUpdateResponseSchemaFieldsJsonJSON `json:"-"`
+}
+
+// streamUpdateResponseSchemaFieldsJsonJSON contains the JSON metadata for the
+// struct [StreamUpdateResponseSchemaFieldsJson]
+type streamUpdateResponseSchemaFieldsJsonJSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamUpdateResponseSchemaFieldsJson) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamUpdateResponseSchemaFieldsJsonJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r StreamUpdateResponseSchemaFieldsJson) implementsStreamUpdateResponseSchemaField() {}
+
+type StreamUpdateResponseSchemaFieldsJsonType string
+
+const (
+	StreamUpdateResponseSchemaFieldsJsonTypeJson StreamUpdateResponseSchemaFieldsJsonType = "json"
+)
+
+func (r StreamUpdateResponseSchemaFieldsJsonType) IsKnown() bool {
+	switch r {
+	case StreamUpdateResponseSchemaFieldsJsonTypeJson:
+		return true
+	}
+	return false
+}
+
+type StreamUpdateResponseSchemaFieldsStruct struct {
+	JSON streamUpdateResponseSchemaFieldsStructJSON `json:"-"`
+}
+
+// streamUpdateResponseSchemaFieldsStructJSON contains the JSON metadata for the
+// struct [StreamUpdateResponseSchemaFieldsStruct]
+type streamUpdateResponseSchemaFieldsStructJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamUpdateResponseSchemaFieldsStruct) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamUpdateResponseSchemaFieldsStructJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r StreamUpdateResponseSchemaFieldsStruct) implementsStreamUpdateResponseSchemaField() {}
+
+type StreamUpdateResponseSchemaFieldsList struct {
+	JSON streamUpdateResponseSchemaFieldsListJSON `json:"-"`
+}
+
+// streamUpdateResponseSchemaFieldsListJSON contains the JSON metadata for the
+// struct [StreamUpdateResponseSchemaFieldsList]
+type streamUpdateResponseSchemaFieldsListJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamUpdateResponseSchemaFieldsList) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamUpdateResponseSchemaFieldsListJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r StreamUpdateResponseSchemaFieldsList) implementsStreamUpdateResponseSchemaField() {}
+
+type StreamUpdateResponseSchemaFieldsType string
+
+const (
+	StreamUpdateResponseSchemaFieldsTypeInt32     StreamUpdateResponseSchemaFieldsType = "int32"
+	StreamUpdateResponseSchemaFieldsTypeInt64     StreamUpdateResponseSchemaFieldsType = "int64"
+	StreamUpdateResponseSchemaFieldsTypeFloat32   StreamUpdateResponseSchemaFieldsType = "float32"
+	StreamUpdateResponseSchemaFieldsTypeFloat64   StreamUpdateResponseSchemaFieldsType = "float64"
+	StreamUpdateResponseSchemaFieldsTypeBool      StreamUpdateResponseSchemaFieldsType = "bool"
+	StreamUpdateResponseSchemaFieldsTypeString    StreamUpdateResponseSchemaFieldsType = "string"
+	StreamUpdateResponseSchemaFieldsTypeBinary    StreamUpdateResponseSchemaFieldsType = "binary"
+	StreamUpdateResponseSchemaFieldsTypeTimestamp StreamUpdateResponseSchemaFieldsType = "timestamp"
+	StreamUpdateResponseSchemaFieldsTypeJson      StreamUpdateResponseSchemaFieldsType = "json"
+	StreamUpdateResponseSchemaFieldsTypeStruct    StreamUpdateResponseSchemaFieldsType = "struct"
+	StreamUpdateResponseSchemaFieldsTypeList      StreamUpdateResponseSchemaFieldsType = "list"
+)
+
+func (r StreamUpdateResponseSchemaFieldsType) IsKnown() bool {
+	switch r {
+	case StreamUpdateResponseSchemaFieldsTypeInt32, StreamUpdateResponseSchemaFieldsTypeInt64, StreamUpdateResponseSchemaFieldsTypeFloat32, StreamUpdateResponseSchemaFieldsTypeFloat64, StreamUpdateResponseSchemaFieldsTypeBool, StreamUpdateResponseSchemaFieldsTypeString, StreamUpdateResponseSchemaFieldsTypeBinary, StreamUpdateResponseSchemaFieldsTypeTimestamp, StreamUpdateResponseSchemaFieldsTypeJson, StreamUpdateResponseSchemaFieldsTypeStruct, StreamUpdateResponseSchemaFieldsTypeList:
+		return true
+	}
+	return false
+}
+
+type StreamUpdateResponseSchemaFieldsUnit string
+
+const (
+	StreamUpdateResponseSchemaFieldsUnitSecond      StreamUpdateResponseSchemaFieldsUnit = "second"
+	StreamUpdateResponseSchemaFieldsUnitMillisecond StreamUpdateResponseSchemaFieldsUnit = "millisecond"
+	StreamUpdateResponseSchemaFieldsUnitMicrosecond StreamUpdateResponseSchemaFieldsUnit = "microsecond"
+	StreamUpdateResponseSchemaFieldsUnitNanosecond  StreamUpdateResponseSchemaFieldsUnit = "nanosecond"
+)
+
+func (r StreamUpdateResponseSchemaFieldsUnit) IsKnown() bool {
+	switch r {
+	case StreamUpdateResponseSchemaFieldsUnitSecond, StreamUpdateResponseSchemaFieldsUnitMillisecond, StreamUpdateResponseSchemaFieldsUnitMicrosecond, StreamUpdateResponseSchemaFieldsUnitNanosecond:
+		return true
+	}
+	return false
+}
+
 type StreamListResponse struct {
 	// Indicates a unique identifier for this stream.
 	ID         string                 `json:"id" api:"required"`
@@ -1839,10 +2246,12 @@ type StreamListResponse struct {
 	Version       int64                           `json:"version" api:"required"`
 	WorkerBinding StreamListResponseWorkerBinding `json:"worker_binding" api:"required"`
 	// Indicates the endpoint URL of this stream.
-	Endpoint string                   `json:"endpoint" format:"uri"`
-	Format   StreamListResponseFormat `json:"format"`
-	Schema   StreamListResponseSchema `json:"schema"`
-	JSON     streamListResponseJSON   `json:"-"`
+	Endpoint string `json:"endpoint" format:"uri"`
+	// Defines the data format of the events.
+	Format StreamListResponseFormat `json:"format"`
+	// Defines the schema of the events in the data stream.
+	Schema StreamListResponseSchema `json:"schema"`
+	JSON   streamListResponseJSON   `json:"-"`
 }
 
 // streamListResponseJSON contains the JSON metadata for the struct
@@ -1942,6 +2351,7 @@ func (r streamListResponseWorkerBindingJSON) RawJSON() string {
 	return r.raw
 }
 
+// Defines the data format of the events.
 type StreamListResponseFormat struct {
 	Type            StreamListResponseFormatType            `json:"type" api:"required"`
 	Compression     StreamListResponseFormatCompression     `json:"compression"`
@@ -1988,6 +2398,8 @@ func (r StreamListResponseFormat) AsUnion() StreamListResponseFormatUnion {
 	return r.union
 }
 
+// Defines the data format of the events.
+//
 // Union satisfied by [StreamListResponseFormatJson] or
 // [StreamListResponseFormatParquet].
 type StreamListResponseFormatUnion interface {
@@ -2208,9 +2620,9 @@ func (r StreamListResponseFormatTimestampFormat) IsKnown() bool {
 	return false
 }
 
+// Defines the schema of the events in the data stream.
 type StreamListResponseSchema struct {
 	Fields   []StreamListResponseSchemaField `json:"fields"`
-	Format   StreamListResponseSchemaFormat  `json:"format"`
 	Inferred bool                            `json:"inferred" api:"nullable"`
 	JSON     streamListResponseSchemaJSON    `json:"-"`
 }
@@ -2219,7 +2631,6 @@ type StreamListResponseSchema struct {
 // [StreamListResponseSchema]
 type streamListResponseSchemaJSON struct {
 	Fields      apijson.Field
-	Format      apijson.Field
 	Inferred    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -2862,272 +3273,6 @@ func (r StreamListResponseSchemaFieldsUnit) IsKnown() bool {
 	return false
 }
 
-type StreamListResponseSchemaFormat struct {
-	Type            StreamListResponseSchemaFormatType            `json:"type" api:"required"`
-	Compression     StreamListResponseSchemaFormatCompression     `json:"compression"`
-	DecimalEncoding StreamListResponseSchemaFormatDecimalEncoding `json:"decimal_encoding"`
-	RowGroupBytes   int64                                         `json:"row_group_bytes" api:"nullable"`
-	TimestampFormat StreamListResponseSchemaFormatTimestampFormat `json:"timestamp_format"`
-	Unstructured    bool                                          `json:"unstructured"`
-	JSON            streamListResponseSchemaFormatJSON            `json:"-"`
-	union           StreamListResponseSchemaFormatUnion
-}
-
-// streamListResponseSchemaFormatJSON contains the JSON metadata for the struct
-// [StreamListResponseSchemaFormat]
-type streamListResponseSchemaFormatJSON struct {
-	Type            apijson.Field
-	Compression     apijson.Field
-	DecimalEncoding apijson.Field
-	RowGroupBytes   apijson.Field
-	TimestampFormat apijson.Field
-	Unstructured    apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r streamListResponseSchemaFormatJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *StreamListResponseSchemaFormat) UnmarshalJSON(data []byte) (err error) {
-	*r = StreamListResponseSchemaFormat{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [StreamListResponseSchemaFormatUnion] interface which you can
-// cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [StreamListResponseSchemaFormatJson],
-// [StreamListResponseSchemaFormatParquet].
-func (r StreamListResponseSchemaFormat) AsUnion() StreamListResponseSchemaFormatUnion {
-	return r.union
-}
-
-// Union satisfied by [StreamListResponseSchemaFormatJson] or
-// [StreamListResponseSchemaFormatParquet].
-type StreamListResponseSchemaFormatUnion interface {
-	implementsStreamListResponseSchemaFormat()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*StreamListResponseSchemaFormatUnion)(nil)).Elem(),
-		"type",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(StreamListResponseSchemaFormatJson{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(StreamListResponseSchemaFormatParquet{}),
-			DiscriminatorValue: "parquet",
-		},
-	)
-}
-
-type StreamListResponseSchemaFormatJson struct {
-	Type            StreamListResponseSchemaFormatJsonType            `json:"type" api:"required"`
-	DecimalEncoding StreamListResponseSchemaFormatJsonDecimalEncoding `json:"decimal_encoding"`
-	TimestampFormat StreamListResponseSchemaFormatJsonTimestampFormat `json:"timestamp_format"`
-	Unstructured    bool                                              `json:"unstructured"`
-	JSON            streamListResponseSchemaFormatJsonJSON            `json:"-"`
-}
-
-// streamListResponseSchemaFormatJsonJSON contains the JSON metadata for the struct
-// [StreamListResponseSchemaFormatJson]
-type streamListResponseSchemaFormatJsonJSON struct {
-	Type            apijson.Field
-	DecimalEncoding apijson.Field
-	TimestampFormat apijson.Field
-	Unstructured    apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *StreamListResponseSchemaFormatJson) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r streamListResponseSchemaFormatJsonJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r StreamListResponseSchemaFormatJson) implementsStreamListResponseSchemaFormat() {}
-
-type StreamListResponseSchemaFormatJsonType string
-
-const (
-	StreamListResponseSchemaFormatJsonTypeJson StreamListResponseSchemaFormatJsonType = "json"
-)
-
-func (r StreamListResponseSchemaFormatJsonType) IsKnown() bool {
-	switch r {
-	case StreamListResponseSchemaFormatJsonTypeJson:
-		return true
-	}
-	return false
-}
-
-type StreamListResponseSchemaFormatJsonDecimalEncoding string
-
-const (
-	StreamListResponseSchemaFormatJsonDecimalEncodingNumber StreamListResponseSchemaFormatJsonDecimalEncoding = "number"
-	StreamListResponseSchemaFormatJsonDecimalEncodingString StreamListResponseSchemaFormatJsonDecimalEncoding = "string"
-	StreamListResponseSchemaFormatJsonDecimalEncodingBytes  StreamListResponseSchemaFormatJsonDecimalEncoding = "bytes"
-)
-
-func (r StreamListResponseSchemaFormatJsonDecimalEncoding) IsKnown() bool {
-	switch r {
-	case StreamListResponseSchemaFormatJsonDecimalEncodingNumber, StreamListResponseSchemaFormatJsonDecimalEncodingString, StreamListResponseSchemaFormatJsonDecimalEncodingBytes:
-		return true
-	}
-	return false
-}
-
-type StreamListResponseSchemaFormatJsonTimestampFormat string
-
-const (
-	StreamListResponseSchemaFormatJsonTimestampFormatRfc3339    StreamListResponseSchemaFormatJsonTimestampFormat = "rfc3339"
-	StreamListResponseSchemaFormatJsonTimestampFormatUnixMillis StreamListResponseSchemaFormatJsonTimestampFormat = "unix_millis"
-)
-
-func (r StreamListResponseSchemaFormatJsonTimestampFormat) IsKnown() bool {
-	switch r {
-	case StreamListResponseSchemaFormatJsonTimestampFormatRfc3339, StreamListResponseSchemaFormatJsonTimestampFormatUnixMillis:
-		return true
-	}
-	return false
-}
-
-type StreamListResponseSchemaFormatParquet struct {
-	Type          StreamListResponseSchemaFormatParquetType        `json:"type" api:"required"`
-	Compression   StreamListResponseSchemaFormatParquetCompression `json:"compression"`
-	RowGroupBytes int64                                            `json:"row_group_bytes" api:"nullable"`
-	JSON          streamListResponseSchemaFormatParquetJSON        `json:"-"`
-}
-
-// streamListResponseSchemaFormatParquetJSON contains the JSON metadata for the
-// struct [StreamListResponseSchemaFormatParquet]
-type streamListResponseSchemaFormatParquetJSON struct {
-	Type          apijson.Field
-	Compression   apijson.Field
-	RowGroupBytes apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *StreamListResponseSchemaFormatParquet) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r streamListResponseSchemaFormatParquetJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r StreamListResponseSchemaFormatParquet) implementsStreamListResponseSchemaFormat() {}
-
-type StreamListResponseSchemaFormatParquetType string
-
-const (
-	StreamListResponseSchemaFormatParquetTypeParquet StreamListResponseSchemaFormatParquetType = "parquet"
-)
-
-func (r StreamListResponseSchemaFormatParquetType) IsKnown() bool {
-	switch r {
-	case StreamListResponseSchemaFormatParquetTypeParquet:
-		return true
-	}
-	return false
-}
-
-type StreamListResponseSchemaFormatParquetCompression string
-
-const (
-	StreamListResponseSchemaFormatParquetCompressionUncompressed StreamListResponseSchemaFormatParquetCompression = "uncompressed"
-	StreamListResponseSchemaFormatParquetCompressionSnappy       StreamListResponseSchemaFormatParquetCompression = "snappy"
-	StreamListResponseSchemaFormatParquetCompressionGzip         StreamListResponseSchemaFormatParquetCompression = "gzip"
-	StreamListResponseSchemaFormatParquetCompressionZstd         StreamListResponseSchemaFormatParquetCompression = "zstd"
-	StreamListResponseSchemaFormatParquetCompressionLz4          StreamListResponseSchemaFormatParquetCompression = "lz4"
-)
-
-func (r StreamListResponseSchemaFormatParquetCompression) IsKnown() bool {
-	switch r {
-	case StreamListResponseSchemaFormatParquetCompressionUncompressed, StreamListResponseSchemaFormatParquetCompressionSnappy, StreamListResponseSchemaFormatParquetCompressionGzip, StreamListResponseSchemaFormatParquetCompressionZstd, StreamListResponseSchemaFormatParquetCompressionLz4:
-		return true
-	}
-	return false
-}
-
-type StreamListResponseSchemaFormatType string
-
-const (
-	StreamListResponseSchemaFormatTypeJson    StreamListResponseSchemaFormatType = "json"
-	StreamListResponseSchemaFormatTypeParquet StreamListResponseSchemaFormatType = "parquet"
-)
-
-func (r StreamListResponseSchemaFormatType) IsKnown() bool {
-	switch r {
-	case StreamListResponseSchemaFormatTypeJson, StreamListResponseSchemaFormatTypeParquet:
-		return true
-	}
-	return false
-}
-
-type StreamListResponseSchemaFormatCompression string
-
-const (
-	StreamListResponseSchemaFormatCompressionUncompressed StreamListResponseSchemaFormatCompression = "uncompressed"
-	StreamListResponseSchemaFormatCompressionSnappy       StreamListResponseSchemaFormatCompression = "snappy"
-	StreamListResponseSchemaFormatCompressionGzip         StreamListResponseSchemaFormatCompression = "gzip"
-	StreamListResponseSchemaFormatCompressionZstd         StreamListResponseSchemaFormatCompression = "zstd"
-	StreamListResponseSchemaFormatCompressionLz4          StreamListResponseSchemaFormatCompression = "lz4"
-)
-
-func (r StreamListResponseSchemaFormatCompression) IsKnown() bool {
-	switch r {
-	case StreamListResponseSchemaFormatCompressionUncompressed, StreamListResponseSchemaFormatCompressionSnappy, StreamListResponseSchemaFormatCompressionGzip, StreamListResponseSchemaFormatCompressionZstd, StreamListResponseSchemaFormatCompressionLz4:
-		return true
-	}
-	return false
-}
-
-type StreamListResponseSchemaFormatDecimalEncoding string
-
-const (
-	StreamListResponseSchemaFormatDecimalEncodingNumber StreamListResponseSchemaFormatDecimalEncoding = "number"
-	StreamListResponseSchemaFormatDecimalEncodingString StreamListResponseSchemaFormatDecimalEncoding = "string"
-	StreamListResponseSchemaFormatDecimalEncodingBytes  StreamListResponseSchemaFormatDecimalEncoding = "bytes"
-)
-
-func (r StreamListResponseSchemaFormatDecimalEncoding) IsKnown() bool {
-	switch r {
-	case StreamListResponseSchemaFormatDecimalEncodingNumber, StreamListResponseSchemaFormatDecimalEncodingString, StreamListResponseSchemaFormatDecimalEncodingBytes:
-		return true
-	}
-	return false
-}
-
-type StreamListResponseSchemaFormatTimestampFormat string
-
-const (
-	StreamListResponseSchemaFormatTimestampFormatRfc3339    StreamListResponseSchemaFormatTimestampFormat = "rfc3339"
-	StreamListResponseSchemaFormatTimestampFormatUnixMillis StreamListResponseSchemaFormatTimestampFormat = "unix_millis"
-)
-
-func (r StreamListResponseSchemaFormatTimestampFormat) IsKnown() bool {
-	switch r {
-	case StreamListResponseSchemaFormatTimestampFormatRfc3339, StreamListResponseSchemaFormatTimestampFormatUnixMillis:
-		return true
-	}
-	return false
-}
-
 type StreamDeleteResponse = interface{}
 
 type StreamGetResponse struct {
@@ -3142,10 +3287,12 @@ type StreamGetResponse struct {
 	Version       int64                          `json:"version" api:"required"`
 	WorkerBinding StreamGetResponseWorkerBinding `json:"worker_binding" api:"required"`
 	// Indicates the endpoint URL of this stream.
-	Endpoint string                  `json:"endpoint" format:"uri"`
-	Format   StreamGetResponseFormat `json:"format"`
-	Schema   StreamGetResponseSchema `json:"schema"`
-	JSON     streamGetResponseJSON   `json:"-"`
+	Endpoint string `json:"endpoint" format:"uri"`
+	// Defines the data format of the events.
+	Format StreamGetResponseFormat `json:"format"`
+	// Defines the schema of the events in the data stream.
+	Schema StreamGetResponseSchema `json:"schema"`
+	JSON   streamGetResponseJSON   `json:"-"`
 }
 
 // streamGetResponseJSON contains the JSON metadata for the struct
@@ -3245,6 +3392,7 @@ func (r streamGetResponseWorkerBindingJSON) RawJSON() string {
 	return r.raw
 }
 
+// Defines the data format of the events.
 type StreamGetResponseFormat struct {
 	Type            StreamGetResponseFormatType            `json:"type" api:"required"`
 	Compression     StreamGetResponseFormatCompression     `json:"compression"`
@@ -3291,6 +3439,8 @@ func (r StreamGetResponseFormat) AsUnion() StreamGetResponseFormatUnion {
 	return r.union
 }
 
+// Defines the data format of the events.
+//
 // Union satisfied by [StreamGetResponseFormatJson] or
 // [StreamGetResponseFormatParquet].
 type StreamGetResponseFormatUnion interface {
@@ -3511,9 +3661,9 @@ func (r StreamGetResponseFormatTimestampFormat) IsKnown() bool {
 	return false
 }
 
+// Defines the schema of the events in the data stream.
 type StreamGetResponseSchema struct {
 	Fields   []StreamGetResponseSchemaField `json:"fields"`
-	Format   StreamGetResponseSchemaFormat  `json:"format"`
 	Inferred bool                           `json:"inferred" api:"nullable"`
 	JSON     streamGetResponseSchemaJSON    `json:"-"`
 }
@@ -3522,7 +3672,6 @@ type StreamGetResponseSchema struct {
 // [StreamGetResponseSchema]
 type streamGetResponseSchemaJSON struct {
 	Fields      apijson.Field
-	Format      apijson.Field
 	Inferred    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -4165,279 +4314,15 @@ func (r StreamGetResponseSchemaFieldsUnit) IsKnown() bool {
 	return false
 }
 
-type StreamGetResponseSchemaFormat struct {
-	Type            StreamGetResponseSchemaFormatType            `json:"type" api:"required"`
-	Compression     StreamGetResponseSchemaFormatCompression     `json:"compression"`
-	DecimalEncoding StreamGetResponseSchemaFormatDecimalEncoding `json:"decimal_encoding"`
-	RowGroupBytes   int64                                        `json:"row_group_bytes" api:"nullable"`
-	TimestampFormat StreamGetResponseSchemaFormatTimestampFormat `json:"timestamp_format"`
-	Unstructured    bool                                         `json:"unstructured"`
-	JSON            streamGetResponseSchemaFormatJSON            `json:"-"`
-	union           StreamGetResponseSchemaFormatUnion
-}
-
-// streamGetResponseSchemaFormatJSON contains the JSON metadata for the struct
-// [StreamGetResponseSchemaFormat]
-type streamGetResponseSchemaFormatJSON struct {
-	Type            apijson.Field
-	Compression     apijson.Field
-	DecimalEncoding apijson.Field
-	RowGroupBytes   apijson.Field
-	TimestampFormat apijson.Field
-	Unstructured    apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r streamGetResponseSchemaFormatJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *StreamGetResponseSchemaFormat) UnmarshalJSON(data []byte) (err error) {
-	*r = StreamGetResponseSchemaFormat{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [StreamGetResponseSchemaFormatUnion] interface which you can
-// cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [StreamGetResponseSchemaFormatJson],
-// [StreamGetResponseSchemaFormatParquet].
-func (r StreamGetResponseSchemaFormat) AsUnion() StreamGetResponseSchemaFormatUnion {
-	return r.union
-}
-
-// Union satisfied by [StreamGetResponseSchemaFormatJson] or
-// [StreamGetResponseSchemaFormatParquet].
-type StreamGetResponseSchemaFormatUnion interface {
-	implementsStreamGetResponseSchemaFormat()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*StreamGetResponseSchemaFormatUnion)(nil)).Elem(),
-		"type",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(StreamGetResponseSchemaFormatJson{}),
-			DiscriminatorValue: "json",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(StreamGetResponseSchemaFormatParquet{}),
-			DiscriminatorValue: "parquet",
-		},
-	)
-}
-
-type StreamGetResponseSchemaFormatJson struct {
-	Type            StreamGetResponseSchemaFormatJsonType            `json:"type" api:"required"`
-	DecimalEncoding StreamGetResponseSchemaFormatJsonDecimalEncoding `json:"decimal_encoding"`
-	TimestampFormat StreamGetResponseSchemaFormatJsonTimestampFormat `json:"timestamp_format"`
-	Unstructured    bool                                             `json:"unstructured"`
-	JSON            streamGetResponseSchemaFormatJsonJSON            `json:"-"`
-}
-
-// streamGetResponseSchemaFormatJsonJSON contains the JSON metadata for the struct
-// [StreamGetResponseSchemaFormatJson]
-type streamGetResponseSchemaFormatJsonJSON struct {
-	Type            apijson.Field
-	DecimalEncoding apijson.Field
-	TimestampFormat apijson.Field
-	Unstructured    apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *StreamGetResponseSchemaFormatJson) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r streamGetResponseSchemaFormatJsonJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r StreamGetResponseSchemaFormatJson) implementsStreamGetResponseSchemaFormat() {}
-
-type StreamGetResponseSchemaFormatJsonType string
-
-const (
-	StreamGetResponseSchemaFormatJsonTypeJson StreamGetResponseSchemaFormatJsonType = "json"
-)
-
-func (r StreamGetResponseSchemaFormatJsonType) IsKnown() bool {
-	switch r {
-	case StreamGetResponseSchemaFormatJsonTypeJson:
-		return true
-	}
-	return false
-}
-
-type StreamGetResponseSchemaFormatJsonDecimalEncoding string
-
-const (
-	StreamGetResponseSchemaFormatJsonDecimalEncodingNumber StreamGetResponseSchemaFormatJsonDecimalEncoding = "number"
-	StreamGetResponseSchemaFormatJsonDecimalEncodingString StreamGetResponseSchemaFormatJsonDecimalEncoding = "string"
-	StreamGetResponseSchemaFormatJsonDecimalEncodingBytes  StreamGetResponseSchemaFormatJsonDecimalEncoding = "bytes"
-)
-
-func (r StreamGetResponseSchemaFormatJsonDecimalEncoding) IsKnown() bool {
-	switch r {
-	case StreamGetResponseSchemaFormatJsonDecimalEncodingNumber, StreamGetResponseSchemaFormatJsonDecimalEncodingString, StreamGetResponseSchemaFormatJsonDecimalEncodingBytes:
-		return true
-	}
-	return false
-}
-
-type StreamGetResponseSchemaFormatJsonTimestampFormat string
-
-const (
-	StreamGetResponseSchemaFormatJsonTimestampFormatRfc3339    StreamGetResponseSchemaFormatJsonTimestampFormat = "rfc3339"
-	StreamGetResponseSchemaFormatJsonTimestampFormatUnixMillis StreamGetResponseSchemaFormatJsonTimestampFormat = "unix_millis"
-)
-
-func (r StreamGetResponseSchemaFormatJsonTimestampFormat) IsKnown() bool {
-	switch r {
-	case StreamGetResponseSchemaFormatJsonTimestampFormatRfc3339, StreamGetResponseSchemaFormatJsonTimestampFormatUnixMillis:
-		return true
-	}
-	return false
-}
-
-type StreamGetResponseSchemaFormatParquet struct {
-	Type          StreamGetResponseSchemaFormatParquetType        `json:"type" api:"required"`
-	Compression   StreamGetResponseSchemaFormatParquetCompression `json:"compression"`
-	RowGroupBytes int64                                           `json:"row_group_bytes" api:"nullable"`
-	JSON          streamGetResponseSchemaFormatParquetJSON        `json:"-"`
-}
-
-// streamGetResponseSchemaFormatParquetJSON contains the JSON metadata for the
-// struct [StreamGetResponseSchemaFormatParquet]
-type streamGetResponseSchemaFormatParquetJSON struct {
-	Type          apijson.Field
-	Compression   apijson.Field
-	RowGroupBytes apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *StreamGetResponseSchemaFormatParquet) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r streamGetResponseSchemaFormatParquetJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r StreamGetResponseSchemaFormatParquet) implementsStreamGetResponseSchemaFormat() {}
-
-type StreamGetResponseSchemaFormatParquetType string
-
-const (
-	StreamGetResponseSchemaFormatParquetTypeParquet StreamGetResponseSchemaFormatParquetType = "parquet"
-)
-
-func (r StreamGetResponseSchemaFormatParquetType) IsKnown() bool {
-	switch r {
-	case StreamGetResponseSchemaFormatParquetTypeParquet:
-		return true
-	}
-	return false
-}
-
-type StreamGetResponseSchemaFormatParquetCompression string
-
-const (
-	StreamGetResponseSchemaFormatParquetCompressionUncompressed StreamGetResponseSchemaFormatParquetCompression = "uncompressed"
-	StreamGetResponseSchemaFormatParquetCompressionSnappy       StreamGetResponseSchemaFormatParquetCompression = "snappy"
-	StreamGetResponseSchemaFormatParquetCompressionGzip         StreamGetResponseSchemaFormatParquetCompression = "gzip"
-	StreamGetResponseSchemaFormatParquetCompressionZstd         StreamGetResponseSchemaFormatParquetCompression = "zstd"
-	StreamGetResponseSchemaFormatParquetCompressionLz4          StreamGetResponseSchemaFormatParquetCompression = "lz4"
-)
-
-func (r StreamGetResponseSchemaFormatParquetCompression) IsKnown() bool {
-	switch r {
-	case StreamGetResponseSchemaFormatParquetCompressionUncompressed, StreamGetResponseSchemaFormatParquetCompressionSnappy, StreamGetResponseSchemaFormatParquetCompressionGzip, StreamGetResponseSchemaFormatParquetCompressionZstd, StreamGetResponseSchemaFormatParquetCompressionLz4:
-		return true
-	}
-	return false
-}
-
-type StreamGetResponseSchemaFormatType string
-
-const (
-	StreamGetResponseSchemaFormatTypeJson    StreamGetResponseSchemaFormatType = "json"
-	StreamGetResponseSchemaFormatTypeParquet StreamGetResponseSchemaFormatType = "parquet"
-)
-
-func (r StreamGetResponseSchemaFormatType) IsKnown() bool {
-	switch r {
-	case StreamGetResponseSchemaFormatTypeJson, StreamGetResponseSchemaFormatTypeParquet:
-		return true
-	}
-	return false
-}
-
-type StreamGetResponseSchemaFormatCompression string
-
-const (
-	StreamGetResponseSchemaFormatCompressionUncompressed StreamGetResponseSchemaFormatCompression = "uncompressed"
-	StreamGetResponseSchemaFormatCompressionSnappy       StreamGetResponseSchemaFormatCompression = "snappy"
-	StreamGetResponseSchemaFormatCompressionGzip         StreamGetResponseSchemaFormatCompression = "gzip"
-	StreamGetResponseSchemaFormatCompressionZstd         StreamGetResponseSchemaFormatCompression = "zstd"
-	StreamGetResponseSchemaFormatCompressionLz4          StreamGetResponseSchemaFormatCompression = "lz4"
-)
-
-func (r StreamGetResponseSchemaFormatCompression) IsKnown() bool {
-	switch r {
-	case StreamGetResponseSchemaFormatCompressionUncompressed, StreamGetResponseSchemaFormatCompressionSnappy, StreamGetResponseSchemaFormatCompressionGzip, StreamGetResponseSchemaFormatCompressionZstd, StreamGetResponseSchemaFormatCompressionLz4:
-		return true
-	}
-	return false
-}
-
-type StreamGetResponseSchemaFormatDecimalEncoding string
-
-const (
-	StreamGetResponseSchemaFormatDecimalEncodingNumber StreamGetResponseSchemaFormatDecimalEncoding = "number"
-	StreamGetResponseSchemaFormatDecimalEncodingString StreamGetResponseSchemaFormatDecimalEncoding = "string"
-	StreamGetResponseSchemaFormatDecimalEncodingBytes  StreamGetResponseSchemaFormatDecimalEncoding = "bytes"
-)
-
-func (r StreamGetResponseSchemaFormatDecimalEncoding) IsKnown() bool {
-	switch r {
-	case StreamGetResponseSchemaFormatDecimalEncodingNumber, StreamGetResponseSchemaFormatDecimalEncodingString, StreamGetResponseSchemaFormatDecimalEncodingBytes:
-		return true
-	}
-	return false
-}
-
-type StreamGetResponseSchemaFormatTimestampFormat string
-
-const (
-	StreamGetResponseSchemaFormatTimestampFormatRfc3339    StreamGetResponseSchemaFormatTimestampFormat = "rfc3339"
-	StreamGetResponseSchemaFormatTimestampFormatUnixMillis StreamGetResponseSchemaFormatTimestampFormat = "unix_millis"
-)
-
-func (r StreamGetResponseSchemaFormatTimestampFormat) IsKnown() bool {
-	switch r {
-	case StreamGetResponseSchemaFormatTimestampFormatRfc3339, StreamGetResponseSchemaFormatTimestampFormatUnixMillis:
-		return true
-	}
-	return false
-}
-
 type StreamNewParams struct {
 	// Specifies the public ID of the account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specifies the name of the Stream.
-	Name          param.Field[string]                       `json:"name" api:"required"`
-	Format        param.Field[StreamNewParamsFormatUnion]   `json:"format"`
-	HTTP          param.Field[StreamNewParamsHTTP]          `json:"http"`
+	Name param.Field[string] `json:"name" api:"required"`
+	// Defines the data format of the events.
+	Format param.Field[StreamNewParamsFormatUnion] `json:"format"`
+	HTTP   param.Field[StreamNewParamsHTTP]        `json:"http"`
+	// Defines the schema of the events in the data stream.
 	Schema        param.Field[StreamNewParamsSchema]        `json:"schema"`
 	WorkerBinding param.Field[StreamNewParamsWorkerBinding] `json:"worker_binding"`
 }
@@ -4446,6 +4331,7 @@ func (r StreamNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Defines the data format of the events.
 type StreamNewParamsFormat struct {
 	Type            param.Field[StreamNewParamsFormatType]            `json:"type" api:"required"`
 	Compression     param.Field[StreamNewParamsFormatCompression]     `json:"compression"`
@@ -4461,6 +4347,8 @@ func (r StreamNewParamsFormat) MarshalJSON() (data []byte, err error) {
 
 func (r StreamNewParamsFormat) implementsStreamNewParamsFormatUnion() {}
 
+// Defines the data format of the events.
+//
 // Satisfied by [pipelines.StreamNewParamsFormatJson],
 // [pipelines.StreamNewParamsFormatParquet], [StreamNewParamsFormat].
 type StreamNewParamsFormatUnion interface {
@@ -4655,9 +4543,9 @@ func (r StreamNewParamsHTTPCORS) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Defines the schema of the events in the data stream.
 type StreamNewParamsSchema struct {
 	Fields   param.Field[[]StreamNewParamsSchemaFieldUnion] `json:"fields"`
-	Format   param.Field[StreamNewParamsSchemaFormatUnion]  `json:"format"`
 	Inferred param.Field[bool]                              `json:"inferred"`
 }
 
@@ -5024,193 +4912,6 @@ func (r StreamNewParamsSchemaFieldsUnit) IsKnown() bool {
 	return false
 }
 
-type StreamNewParamsSchemaFormat struct {
-	Type            param.Field[StreamNewParamsSchemaFormatType]            `json:"type" api:"required"`
-	Compression     param.Field[StreamNewParamsSchemaFormatCompression]     `json:"compression"`
-	DecimalEncoding param.Field[StreamNewParamsSchemaFormatDecimalEncoding] `json:"decimal_encoding"`
-	RowGroupBytes   param.Field[int64]                                      `json:"row_group_bytes"`
-	TimestampFormat param.Field[StreamNewParamsSchemaFormatTimestampFormat] `json:"timestamp_format"`
-	Unstructured    param.Field[bool]                                       `json:"unstructured"`
-}
-
-func (r StreamNewParamsSchemaFormat) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r StreamNewParamsSchemaFormat) implementsStreamNewParamsSchemaFormatUnion() {}
-
-// Satisfied by [pipelines.StreamNewParamsSchemaFormatJson],
-// [pipelines.StreamNewParamsSchemaFormatParquet], [StreamNewParamsSchemaFormat].
-type StreamNewParamsSchemaFormatUnion interface {
-	implementsStreamNewParamsSchemaFormatUnion()
-}
-
-type StreamNewParamsSchemaFormatJson struct {
-	Type            param.Field[StreamNewParamsSchemaFormatJsonType]            `json:"type" api:"required"`
-	DecimalEncoding param.Field[StreamNewParamsSchemaFormatJsonDecimalEncoding] `json:"decimal_encoding"`
-	TimestampFormat param.Field[StreamNewParamsSchemaFormatJsonTimestampFormat] `json:"timestamp_format"`
-	Unstructured    param.Field[bool]                                           `json:"unstructured"`
-}
-
-func (r StreamNewParamsSchemaFormatJson) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r StreamNewParamsSchemaFormatJson) implementsStreamNewParamsSchemaFormatUnion() {}
-
-type StreamNewParamsSchemaFormatJsonType string
-
-const (
-	StreamNewParamsSchemaFormatJsonTypeJson StreamNewParamsSchemaFormatJsonType = "json"
-)
-
-func (r StreamNewParamsSchemaFormatJsonType) IsKnown() bool {
-	switch r {
-	case StreamNewParamsSchemaFormatJsonTypeJson:
-		return true
-	}
-	return false
-}
-
-type StreamNewParamsSchemaFormatJsonDecimalEncoding string
-
-const (
-	StreamNewParamsSchemaFormatJsonDecimalEncodingNumber StreamNewParamsSchemaFormatJsonDecimalEncoding = "number"
-	StreamNewParamsSchemaFormatJsonDecimalEncodingString StreamNewParamsSchemaFormatJsonDecimalEncoding = "string"
-	StreamNewParamsSchemaFormatJsonDecimalEncodingBytes  StreamNewParamsSchemaFormatJsonDecimalEncoding = "bytes"
-)
-
-func (r StreamNewParamsSchemaFormatJsonDecimalEncoding) IsKnown() bool {
-	switch r {
-	case StreamNewParamsSchemaFormatJsonDecimalEncodingNumber, StreamNewParamsSchemaFormatJsonDecimalEncodingString, StreamNewParamsSchemaFormatJsonDecimalEncodingBytes:
-		return true
-	}
-	return false
-}
-
-type StreamNewParamsSchemaFormatJsonTimestampFormat string
-
-const (
-	StreamNewParamsSchemaFormatJsonTimestampFormatRfc3339    StreamNewParamsSchemaFormatJsonTimestampFormat = "rfc3339"
-	StreamNewParamsSchemaFormatJsonTimestampFormatUnixMillis StreamNewParamsSchemaFormatJsonTimestampFormat = "unix_millis"
-)
-
-func (r StreamNewParamsSchemaFormatJsonTimestampFormat) IsKnown() bool {
-	switch r {
-	case StreamNewParamsSchemaFormatJsonTimestampFormatRfc3339, StreamNewParamsSchemaFormatJsonTimestampFormatUnixMillis:
-		return true
-	}
-	return false
-}
-
-type StreamNewParamsSchemaFormatParquet struct {
-	Type          param.Field[StreamNewParamsSchemaFormatParquetType]        `json:"type" api:"required"`
-	Compression   param.Field[StreamNewParamsSchemaFormatParquetCompression] `json:"compression"`
-	RowGroupBytes param.Field[int64]                                         `json:"row_group_bytes"`
-}
-
-func (r StreamNewParamsSchemaFormatParquet) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r StreamNewParamsSchemaFormatParquet) implementsStreamNewParamsSchemaFormatUnion() {}
-
-type StreamNewParamsSchemaFormatParquetType string
-
-const (
-	StreamNewParamsSchemaFormatParquetTypeParquet StreamNewParamsSchemaFormatParquetType = "parquet"
-)
-
-func (r StreamNewParamsSchemaFormatParquetType) IsKnown() bool {
-	switch r {
-	case StreamNewParamsSchemaFormatParquetTypeParquet:
-		return true
-	}
-	return false
-}
-
-type StreamNewParamsSchemaFormatParquetCompression string
-
-const (
-	StreamNewParamsSchemaFormatParquetCompressionUncompressed StreamNewParamsSchemaFormatParquetCompression = "uncompressed"
-	StreamNewParamsSchemaFormatParquetCompressionSnappy       StreamNewParamsSchemaFormatParquetCompression = "snappy"
-	StreamNewParamsSchemaFormatParquetCompressionGzip         StreamNewParamsSchemaFormatParquetCompression = "gzip"
-	StreamNewParamsSchemaFormatParquetCompressionZstd         StreamNewParamsSchemaFormatParquetCompression = "zstd"
-	StreamNewParamsSchemaFormatParquetCompressionLz4          StreamNewParamsSchemaFormatParquetCompression = "lz4"
-)
-
-func (r StreamNewParamsSchemaFormatParquetCompression) IsKnown() bool {
-	switch r {
-	case StreamNewParamsSchemaFormatParquetCompressionUncompressed, StreamNewParamsSchemaFormatParquetCompressionSnappy, StreamNewParamsSchemaFormatParquetCompressionGzip, StreamNewParamsSchemaFormatParquetCompressionZstd, StreamNewParamsSchemaFormatParquetCompressionLz4:
-		return true
-	}
-	return false
-}
-
-type StreamNewParamsSchemaFormatType string
-
-const (
-	StreamNewParamsSchemaFormatTypeJson    StreamNewParamsSchemaFormatType = "json"
-	StreamNewParamsSchemaFormatTypeParquet StreamNewParamsSchemaFormatType = "parquet"
-)
-
-func (r StreamNewParamsSchemaFormatType) IsKnown() bool {
-	switch r {
-	case StreamNewParamsSchemaFormatTypeJson, StreamNewParamsSchemaFormatTypeParquet:
-		return true
-	}
-	return false
-}
-
-type StreamNewParamsSchemaFormatCompression string
-
-const (
-	StreamNewParamsSchemaFormatCompressionUncompressed StreamNewParamsSchemaFormatCompression = "uncompressed"
-	StreamNewParamsSchemaFormatCompressionSnappy       StreamNewParamsSchemaFormatCompression = "snappy"
-	StreamNewParamsSchemaFormatCompressionGzip         StreamNewParamsSchemaFormatCompression = "gzip"
-	StreamNewParamsSchemaFormatCompressionZstd         StreamNewParamsSchemaFormatCompression = "zstd"
-	StreamNewParamsSchemaFormatCompressionLz4          StreamNewParamsSchemaFormatCompression = "lz4"
-)
-
-func (r StreamNewParamsSchemaFormatCompression) IsKnown() bool {
-	switch r {
-	case StreamNewParamsSchemaFormatCompressionUncompressed, StreamNewParamsSchemaFormatCompressionSnappy, StreamNewParamsSchemaFormatCompressionGzip, StreamNewParamsSchemaFormatCompressionZstd, StreamNewParamsSchemaFormatCompressionLz4:
-		return true
-	}
-	return false
-}
-
-type StreamNewParamsSchemaFormatDecimalEncoding string
-
-const (
-	StreamNewParamsSchemaFormatDecimalEncodingNumber StreamNewParamsSchemaFormatDecimalEncoding = "number"
-	StreamNewParamsSchemaFormatDecimalEncodingString StreamNewParamsSchemaFormatDecimalEncoding = "string"
-	StreamNewParamsSchemaFormatDecimalEncodingBytes  StreamNewParamsSchemaFormatDecimalEncoding = "bytes"
-)
-
-func (r StreamNewParamsSchemaFormatDecimalEncoding) IsKnown() bool {
-	switch r {
-	case StreamNewParamsSchemaFormatDecimalEncodingNumber, StreamNewParamsSchemaFormatDecimalEncodingString, StreamNewParamsSchemaFormatDecimalEncodingBytes:
-		return true
-	}
-	return false
-}
-
-type StreamNewParamsSchemaFormatTimestampFormat string
-
-const (
-	StreamNewParamsSchemaFormatTimestampFormatRfc3339    StreamNewParamsSchemaFormatTimestampFormat = "rfc3339"
-	StreamNewParamsSchemaFormatTimestampFormatUnixMillis StreamNewParamsSchemaFormatTimestampFormat = "unix_millis"
-)
-
-func (r StreamNewParamsSchemaFormatTimestampFormat) IsKnown() bool {
-	switch r {
-	case StreamNewParamsSchemaFormatTimestampFormatRfc3339, StreamNewParamsSchemaFormatTimestampFormatUnixMillis:
-		return true
-	}
-	return false
-}
-
 type StreamNewParamsWorkerBinding struct {
 	// Indicates that the worker binding is enabled.
 	Enabled param.Field[bool] `json:"enabled" api:"required"`
@@ -5332,17 +5033,6 @@ func (r StreamListParams) URLQuery() (v url.Values) {
 type StreamDeleteParams struct {
 	// Specifies the public ID of the account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Deprecated: Delete stream forcefully, including deleting any dependent
-	// pipelines.
-	Force param.Field[string] `query:"force"`
-}
-
-// URLQuery serializes [StreamDeleteParams]'s query parameters as `url.Values`.
-func (r StreamDeleteParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
 }
 
 type StreamDeleteResponseEnvelope struct {

@@ -271,14 +271,17 @@ func (r AccessDevicePostureRule) implementsAccessRule() {}
 
 type AccessDevicePostureRuleDevicePosture struct {
 	// The ID of a device posture integration.
-	IntegrationUID string                                   `json:"integration_uid" api:"required"`
-	JSON           accessDevicePostureRuleDevicePostureJSON `json:"-"`
+	IntegrationUID string `json:"integration_uid" api:"required"`
+	// The ID of the account that owns the device posture integration.
+	AccountID string                                   `json:"account_id"`
+	JSON      accessDevicePostureRuleDevicePostureJSON `json:"-"`
 }
 
 // accessDevicePostureRuleDevicePostureJSON contains the JSON metadata for the
 // struct [AccessDevicePostureRuleDevicePosture]
 type accessDevicePostureRuleDevicePostureJSON struct {
 	IntegrationUID apijson.Field
+	AccountID      apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -305,6 +308,8 @@ func (r AccessDevicePostureRuleParam) implementsAccessRuleUnionParam() {}
 type AccessDevicePostureRuleDevicePostureParam struct {
 	// The ID of a device posture integration.
 	IntegrationUID param.Field[string] `json:"integration_uid" api:"required"`
+	// The ID of the account that owns the device posture integration.
+	AccountID param.Field[string] `json:"account_id"`
 }
 
 func (r AccessDevicePostureRuleDevicePostureParam) MarshalJSON() (data []byte, err error) {

@@ -44,6 +44,7 @@ func TestBetaWorkerNewWithOptionalParams(t *testing.T) {
 					InvocationLogs:   cloudflare.F(true),
 					Persist:          cloudflare.F(true),
 				}),
+				RedactQueryString: cloudflare.F(true),
 				Traces: cloudflare.F(workers.WorkerObservabilityTracesParam{
 					Destinations:      cloudflare.F([]string{"string"}),
 					Enabled:           cloudflare.F(true),
@@ -104,6 +105,7 @@ func TestBetaWorkerUpdateWithOptionalParams(t *testing.T) {
 						InvocationLogs:   cloudflare.F(true),
 						Persist:          cloudflare.F(true),
 					}),
+					RedactQueryString: cloudflare.F(true),
 					Traces: cloudflare.F(workers.WorkerObservabilityTracesParam{
 						Destinations:      cloudflare.F([]string{"string"}),
 						Enabled:           cloudflare.F(true),
@@ -224,6 +226,7 @@ func TestBetaWorkerEditWithOptionalParams(t *testing.T) {
 						InvocationLogs:   cloudflare.F(true),
 						Persist:          cloudflare.F(true),
 					}),
+					RedactQueryString: cloudflare.F(true),
 					Traces: cloudflare.F(workers.WorkerObservabilityTracesParam{
 						Destinations:      cloudflare.F([]string{"string"}),
 						Enabled:           cloudflare.F(true),

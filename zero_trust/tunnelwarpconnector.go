@@ -228,6 +228,14 @@ type TunnelWARPConnectorNewResponseConnection struct {
 	ClientVersion string `json:"client_version"`
 	// The Cloudflare data center used for this connection.
 	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	//
+	// Deprecated: This functionality has been removed. The is_pending_reconnect field
+	// will now always report false.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
 	// Timestamp of when the connection was established.
 	OpenedAt time.Time `json:"opened_at" format:"date-time"`
 	// The public IP address of the host running cloudflared.
@@ -240,15 +248,16 @@ type TunnelWARPConnectorNewResponseConnection struct {
 // tunnelWARPConnectorNewResponseConnectionJSON contains the JSON metadata for the
 // struct [TunnelWARPConnectorNewResponseConnection]
 type tunnelWARPConnectorNewResponseConnectionJSON struct {
-	ID            apijson.Field
-	ClientID      apijson.Field
-	ClientVersion apijson.Field
-	ColoName      apijson.Field
-	OpenedAt      apijson.Field
-	OriginIP      apijson.Field
-	UUID          apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	UUID               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *TunnelWARPConnectorNewResponseConnection) UnmarshalJSON(data []byte) (err error) {
@@ -373,6 +382,14 @@ type TunnelWARPConnectorListResponseConnection struct {
 	ClientVersion string `json:"client_version"`
 	// The Cloudflare data center used for this connection.
 	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	//
+	// Deprecated: This functionality has been removed. The is_pending_reconnect field
+	// will now always report false.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
 	// Timestamp of when the connection was established.
 	OpenedAt time.Time `json:"opened_at" format:"date-time"`
 	// The public IP address of the host running cloudflared.
@@ -385,15 +402,16 @@ type TunnelWARPConnectorListResponseConnection struct {
 // tunnelWARPConnectorListResponseConnectionJSON contains the JSON metadata for the
 // struct [TunnelWARPConnectorListResponseConnection]
 type tunnelWARPConnectorListResponseConnectionJSON struct {
-	ID            apijson.Field
-	ClientID      apijson.Field
-	ClientVersion apijson.Field
-	ColoName      apijson.Field
-	OpenedAt      apijson.Field
-	OriginIP      apijson.Field
-	UUID          apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	UUID               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *TunnelWARPConnectorListResponseConnection) UnmarshalJSON(data []byte) (err error) {
@@ -518,6 +536,14 @@ type TunnelWARPConnectorDeleteResponseConnection struct {
 	ClientVersion string `json:"client_version"`
 	// The Cloudflare data center used for this connection.
 	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	//
+	// Deprecated: This functionality has been removed. The is_pending_reconnect field
+	// will now always report false.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
 	// Timestamp of when the connection was established.
 	OpenedAt time.Time `json:"opened_at" format:"date-time"`
 	// The public IP address of the host running cloudflared.
@@ -530,15 +556,16 @@ type TunnelWARPConnectorDeleteResponseConnection struct {
 // tunnelWARPConnectorDeleteResponseConnectionJSON contains the JSON metadata for
 // the struct [TunnelWARPConnectorDeleteResponseConnection]
 type tunnelWARPConnectorDeleteResponseConnectionJSON struct {
-	ID            apijson.Field
-	ClientID      apijson.Field
-	ClientVersion apijson.Field
-	ColoName      apijson.Field
-	OpenedAt      apijson.Field
-	OriginIP      apijson.Field
-	UUID          apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	UUID               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *TunnelWARPConnectorDeleteResponseConnection) UnmarshalJSON(data []byte) (err error) {
@@ -663,6 +690,14 @@ type TunnelWARPConnectorEditResponseConnection struct {
 	ClientVersion string `json:"client_version"`
 	// The Cloudflare data center used for this connection.
 	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	//
+	// Deprecated: This functionality has been removed. The is_pending_reconnect field
+	// will now always report false.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
 	// Timestamp of when the connection was established.
 	OpenedAt time.Time `json:"opened_at" format:"date-time"`
 	// The public IP address of the host running cloudflared.
@@ -675,15 +710,16 @@ type TunnelWARPConnectorEditResponseConnection struct {
 // tunnelWARPConnectorEditResponseConnectionJSON contains the JSON metadata for the
 // struct [TunnelWARPConnectorEditResponseConnection]
 type tunnelWARPConnectorEditResponseConnectionJSON struct {
-	ID            apijson.Field
-	ClientID      apijson.Field
-	ClientVersion apijson.Field
-	ColoName      apijson.Field
-	OpenedAt      apijson.Field
-	OriginIP      apijson.Field
-	UUID          apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	UUID               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *TunnelWARPConnectorEditResponseConnection) UnmarshalJSON(data []byte) (err error) {
@@ -808,6 +844,14 @@ type TunnelWARPConnectorGetResponseConnection struct {
 	ClientVersion string `json:"client_version"`
 	// The Cloudflare data center used for this connection.
 	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	//
+	// Deprecated: This functionality has been removed. The is_pending_reconnect field
+	// will now always report false.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
 	// Timestamp of when the connection was established.
 	OpenedAt time.Time `json:"opened_at" format:"date-time"`
 	// The public IP address of the host running cloudflared.
@@ -820,15 +864,16 @@ type TunnelWARPConnectorGetResponseConnection struct {
 // tunnelWARPConnectorGetResponseConnectionJSON contains the JSON metadata for the
 // struct [TunnelWARPConnectorGetResponseConnection]
 type tunnelWARPConnectorGetResponseConnectionJSON struct {
-	ID            apijson.Field
-	ClientID      apijson.Field
-	ClientVersion apijson.Field
-	ColoName      apijson.Field
-	OpenedAt      apijson.Field
-	OriginIP      apijson.Field
-	UUID          apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	UUID               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *TunnelWARPConnectorGetResponseConnection) UnmarshalJSON(data []byte) (err error) {

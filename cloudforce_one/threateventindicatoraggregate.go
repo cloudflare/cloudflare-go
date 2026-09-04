@@ -116,14 +116,20 @@ type ThreatEventIndicatorAggregateListParams struct {
 	// Filter indicators created before this date/datetime (ISO 8601, e.g.,
 	// '2024-12-31' or '2024-12-31T23:59:59Z')
 	CreatedBefore param.Field[ThreatEventIndicatorAggregateListParamsCreatedBeforeUnion] `query:"createdBefore" format:"date-time"`
-	// Dataset ID(s) to filter by. Can be a single dataset ID or comma-separated list.
-	// If not provided, aggregates across all accessible datasets
+	// Dataset UUIDs to filter by, or one standalone scope value: 'all'/'\*' for all
+	// accessible datasets, 'analytics' for isAnalytics=true datasets, or 'operational'
+	// for isAnalytics=false datasets. If not provided, aggregates across all
+	// accessible datasets.
 	DatasetIDs param.Field[[]string] `query:"datasetIds"`
-	// For measure=relationships: only count event links whose eventDate is on/after
-	// this date (ISO 8601). Use to bound 'top indicator' to recent activity.
+	// For measure=relationships: only count indicator→event links whose relationship
+	// was created/observed on or after this date (ISO 8601). Bounds the activity view
+	// to recently-observed links. Note: this filters by the relationship's createdAt
+	// (link-observation time), not the underlying event's business date.
 	EventDateAfter param.Field[string] `query:"eventDateAfter"`
-	// For measure=relationships: only count event links whose eventDate is on/before
-	// this date (ISO 8601).
+	// For measure=relationships: only count indicator→event links whose relationship
+	// was created/observed on or before this date (ISO 8601). Bounds the activity view
+	// by the relationship's createdAt (link-observation time), not the underlying
+	// event's business date.
 	EventDateBefore param.Field[string] `query:"eventDateBefore"`
 	// Maximum number of aggregation results to return (1-100)
 	Limit param.Field[float64] `query:"limit"`

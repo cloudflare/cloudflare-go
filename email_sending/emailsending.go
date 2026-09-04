@@ -22,8 +22,9 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewEmailSendingService] method instead.
 type EmailSendingService struct {
-	Options    []option.RequestOption
-	Subdomains *SubdomainService
+	Options      []option.RequestOption
+	Suppressions *SuppressionService
+	Subdomains   *SubdomainService
 }
 
 // NewEmailSendingService generates a new service that applies the given options to
@@ -32,6 +33,7 @@ type EmailSendingService struct {
 func NewEmailSendingService(opts ...option.RequestOption) (r *EmailSendingService) {
 	r = &EmailSendingService{}
 	r.Options = opts
+	r.Suppressions = NewSuppressionService(opts...)
 	r.Subdomains = NewSubdomainService(opts...)
 	return
 }
@@ -81,19 +83,24 @@ type EmailSendingSendResponse struct {
 	// Email addresses that permanently bounced.
 	PermanentBounces []string `json:"permanent_bounces" api:"required"`
 	// Email addresses for which delivery was queued for later.
-	Queued []string                     `json:"queued" api:"required"`
-	JSON   emailSendingSendResponseJSON `json:"-"`
+	Queued []string `json:"queued" api:"required"`
+	// Email addresses dropped because they are on the suppression list. Returned when
+	// suppressed-recipient dropping is enabled for the sending subdomain; otherwise
+	// the request fails instead.
+	SuppressedRecipients []string                     `json:"suppressed_recipients" api:"required"`
+	JSON                 emailSendingSendResponseJSON `json:"-"`
 }
 
 // emailSendingSendResponseJSON contains the JSON metadata for the struct
 // [EmailSendingSendResponse]
 type emailSendingSendResponseJSON struct {
-	Delivered        apijson.Field
-	MessageID        apijson.Field
-	PermanentBounces apijson.Field
-	Queued           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Delivered            apijson.Field
+	MessageID            apijson.Field
+	PermanentBounces     apijson.Field
+	Queued               apijson.Field
+	SuppressedRecipients apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *EmailSendingSendResponse) UnmarshalJSON(data []byte) (err error) {
@@ -112,19 +119,24 @@ type EmailSendingSendRawResponse struct {
 	// Email addresses that permanently bounced.
 	PermanentBounces []string `json:"permanent_bounces" api:"required"`
 	// Email addresses for which delivery was queued for later.
-	Queued []string                        `json:"queued" api:"required"`
-	JSON   emailSendingSendRawResponseJSON `json:"-"`
+	Queued []string `json:"queued" api:"required"`
+	// Email addresses dropped because they are on the suppression list. Returned when
+	// suppressed-recipient dropping is enabled for the sending subdomain; otherwise
+	// the request fails instead.
+	SuppressedRecipients []string                        `json:"suppressed_recipients" api:"required"`
+	JSON                 emailSendingSendRawResponseJSON `json:"-"`
 }
 
 // emailSendingSendRawResponseJSON contains the JSON metadata for the struct
 // [EmailSendingSendRawResponse]
 type emailSendingSendRawResponseJSON struct {
-	Delivered        apijson.Field
-	MessageID        apijson.Field
-	PermanentBounces apijson.Field
-	Queued           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Delivered            apijson.Field
+	MessageID            apijson.Field
+	PermanentBounces     apijson.Field
+	Queued               apijson.Field
+	SuppressedRecipients apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *EmailSendingSendRawResponse) UnmarshalJSON(data []byte) (err error) {

@@ -211,28 +211,30 @@ func (r organizationMetaJSON) RawJSON() string {
 
 // Enable features for Organizations.
 type OrganizationMetaTenantFlags struct {
-	AccountCreation      string                          `json:"account_creation" api:"required"`
-	AccountDeletion      string                          `json:"account_deletion" api:"required"`
-	AccountMigration     string                          `json:"account_migration" api:"required"`
-	AccountMobility      string                          `json:"account_mobility" api:"required"`
-	EnterpriseCapability string                          `json:"enterprise_capability" api:"required"`
-	MemberManagement     string                          `json:"member_management" api:"required"`
-	SubOrgCreation       string                          `json:"sub_org_creation" api:"required"`
-	JSON                 organizationMetaTenantFlagsJSON `json:"-"`
+	AccountCreation                      string                          `json:"account_creation" api:"required"`
+	AccountCreationAppliesTenantDefaults string                          `json:"account_creation_applies_tenant_defaults" api:"required"`
+	AccountDeletion                      string                          `json:"account_deletion" api:"required"`
+	AccountMigration                     string                          `json:"account_migration" api:"required"`
+	AccountMobility                      string                          `json:"account_mobility" api:"required"`
+	EnterpriseCapability                 string                          `json:"enterprise_capability" api:"required"`
+	MemberManagement                     string                          `json:"member_management" api:"required"`
+	SubOrgCreation                       string                          `json:"sub_org_creation" api:"required"`
+	JSON                                 organizationMetaTenantFlagsJSON `json:"-"`
 }
 
 // organizationMetaTenantFlagsJSON contains the JSON metadata for the struct
 // [OrganizationMetaTenantFlags]
 type organizationMetaTenantFlagsJSON struct {
-	AccountCreation      apijson.Field
-	AccountDeletion      apijson.Field
-	AccountMigration     apijson.Field
-	AccountMobility      apijson.Field
-	EnterpriseCapability apijson.Field
-	MemberManagement     apijson.Field
-	SubOrgCreation       apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
+	AccountCreation                      apijson.Field
+	AccountCreationAppliesTenantDefaults apijson.Field
+	AccountDeletion                      apijson.Field
+	AccountMigration                     apijson.Field
+	AccountMobility                      apijson.Field
+	EnterpriseCapability                 apijson.Field
+	MemberManagement                     apijson.Field
+	SubOrgCreation                       apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *OrganizationMetaTenantFlags) UnmarshalJSON(data []byte) (err error) {
@@ -296,13 +298,14 @@ func (r OrganizationMetaParam) MarshalJSON() (data []byte, err error) {
 
 // Enable features for Organizations.
 type OrganizationMetaTenantFlagsParam struct {
-	AccountCreation      param.Field[string] `json:"account_creation" api:"required"`
-	AccountDeletion      param.Field[string] `json:"account_deletion" api:"required"`
-	AccountMigration     param.Field[string] `json:"account_migration" api:"required"`
-	AccountMobility      param.Field[string] `json:"account_mobility" api:"required"`
-	EnterpriseCapability param.Field[string] `json:"enterprise_capability" api:"required"`
-	MemberManagement     param.Field[string] `json:"member_management" api:"required"`
-	SubOrgCreation       param.Field[string] `json:"sub_org_creation" api:"required"`
+	AccountCreation                      param.Field[string] `json:"account_creation" api:"required"`
+	AccountCreationAppliesTenantDefaults param.Field[string] `json:"account_creation_applies_tenant_defaults" api:"required"`
+	AccountDeletion                      param.Field[string] `json:"account_deletion" api:"required"`
+	AccountMigration                     param.Field[string] `json:"account_migration" api:"required"`
+	AccountMobility                      param.Field[string] `json:"account_mobility" api:"required"`
+	EnterpriseCapability                 param.Field[string] `json:"enterprise_capability" api:"required"`
+	MemberManagement                     param.Field[string] `json:"member_management" api:"required"`
+	SubOrgCreation                       param.Field[string] `json:"sub_org_creation" api:"required"`
 }
 
 func (r OrganizationMetaTenantFlagsParam) MarshalJSON() (data []byte, err error) {

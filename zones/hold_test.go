@@ -84,7 +84,7 @@ func TestHoldEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Zones.Holds.Edit(context.TODO(), zones.HoldEditParams{
 		ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		HoldAfter:         cloudflare.F("2023-01-31T15:56:36+00:00"),
+		HoldAfter:         cloudflare.F("2023-01-31T15:56:36Z"),
 		IncludeSubdomains: cloudflare.F(true),
 	})
 	if err != nil {

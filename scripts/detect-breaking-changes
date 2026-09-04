@@ -14,11 +14,20 @@ TEST_PATHS=(
 	accounts/member_test.go
 	accounts/role_test.go
 	accounts/subscription_test.go
+	accounts/subscriptioncancelreason_test.go
+	accounts/subscriptionaction_test.go
+	accounts/subscriptionbulk_test.go
 	accounts/token_test.go
 	accounts/tokenpermissiongroup_test.go
 	accounts/tokenvalue_test.go
 	accounts/logaudit_test.go
 	accounts/speedsettingtransformation_test.go
+	accounts/paymentmethod_test.go
+	accounts/payinvoice_test.go
+	accounts/paybaddebt_test.go
+	accounts/receipt_test.go
+	accounts/invoice_test.go
+	accounts/clientsecret_test.go
 	organizations/organization_test.go
 	organizations/organizationaccount_test.go
 	organizations/organizationprofile_test.go
@@ -39,6 +48,7 @@ TEST_PATHS=(
 	user/billingprofile_test.go
 	user/invite_test.go
 	user/organization_test.go
+	user/spectrumanalyticszonereport_test.go
 	user/subscription_test.go
 	user/tenant_test.go
 	user/token_test.go
@@ -49,6 +59,7 @@ TEST_PATHS=(
 	zones/setting_test.go
 	zones/transformationsallowedorigin_test.go
 	zones/transformationsc2pa_test.go
+	zones/nel_test.go
 	zones/environment_test.go
 	zones/customnameserver_test.go
 	zones/hold_test.go
@@ -77,6 +88,7 @@ TEST_PATHS=(
 	ssl/analyze_test.go
 	ssl/certificatepack_test.go
 	ssl/certificatepackquota_test.go
+	ssl/recommendation_test.go
 	ssl/autoorigintlskex_test.go
 	ssl/universalsetting_test.go
 	ssl/verification_test.go
@@ -133,6 +145,7 @@ TEST_PATHS=(
 	email_security/phishguardreport_test.go
 	email_security/settingallowpolicy_test.go
 	email_security/settingblocksender_test.go
+	email_security/settingcontentpolicy_test.go
 	email_security/settingdomain_test.go
 	email_security/settingimpersonationregistry_test.go
 	email_security/settingsendingdomainrestriction_test.go
@@ -148,6 +161,7 @@ TEST_PATHS=(
 	email_routing/accountrule_test.go
 	email_routing/address_test.go
 	email_sending/emailsending_test.go
+	email_sending/suppression_test.go
 	email_sending/subdomain_test.go
 	email_sending/subdomaindns_test.go
 	filters/filter_test.go
@@ -167,6 +181,9 @@ TEST_PATHS=(
 	logpush/edge_test.go
 	logpush/job_test.go
 	logpush/ownership_test.go
+	logpush/transformer_test.go
+	logpush/transformercontent_test.go
+	logpush/transformerversion_test.go
 	logpush/validate_test.go
 	logs/logexplorerquery_test.go
 	logs/logexplorerdataset_test.go
@@ -259,6 +276,7 @@ TEST_PATHS=(
 	spectrum/analyticseventbytime_test.go
 	spectrum/analyticseventsummary_test.go
 	spectrum/app_test.go
+	spectrum/protocol_test.go
 	addressing/regionalhostname_test.go
 	addressing/regionalhostnameregion_test.go
 	addressing/service_test.go
@@ -275,8 +293,15 @@ TEST_PATHS=(
 	dls/region_test.go
 	dls/regionalserviceprefixbinding_test.go
 	audit_logs/auditlog_test.go
+	billing/billing_test.go
 	billing/profile_test.go
+	billing/profilepaymentmethod_test.go
 	billing/usage_test.go
+	billing/credit_test.go
+	billing/history_test.go
+	billing/baddebt_test.go
+	billing/unpaidinvoice_test.go
+	billing/rateplan_test.go
 	brand_protection/brandprotection_test.go
 	brand_protection/query_test.go
 	brand_protection/match_test.go
@@ -867,6 +892,7 @@ TEST_PATHS=(
 	browser_rendering/crawl_test.go
 	browser_rendering/devtoolsession_test.go
 	browser_rendering/devtoolbrowser_test.go
+	browser_rendering/devtoolbrowserliveview_test.go
 	browser_rendering/devtoolbrowserpage_test.go
 	browser_rendering/devtoolbrowsertarget_test.go
 	custom_pages/custompage_test.go

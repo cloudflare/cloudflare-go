@@ -392,12 +392,13 @@ type BucketEventNotificationUpdateParamsCfR2Jurisdiction string
 const (
 	BucketEventNotificationUpdateParamsCfR2JurisdictionDefault BucketEventNotificationUpdateParamsCfR2Jurisdiction = "default"
 	BucketEventNotificationUpdateParamsCfR2JurisdictionEu      BucketEventNotificationUpdateParamsCfR2Jurisdiction = "eu"
+	BucketEventNotificationUpdateParamsCfR2JurisdictionUs      BucketEventNotificationUpdateParamsCfR2Jurisdiction = "us"
 	BucketEventNotificationUpdateParamsCfR2JurisdictionFedramp BucketEventNotificationUpdateParamsCfR2Jurisdiction = "fedramp"
 )
 
 func (r BucketEventNotificationUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketEventNotificationUpdateParamsCfR2JurisdictionDefault, BucketEventNotificationUpdateParamsCfR2JurisdictionEu, BucketEventNotificationUpdateParamsCfR2JurisdictionFedramp:
+	case BucketEventNotificationUpdateParamsCfR2JurisdictionDefault, BucketEventNotificationUpdateParamsCfR2JurisdictionEu, BucketEventNotificationUpdateParamsCfR2JurisdictionUs, BucketEventNotificationUpdateParamsCfR2JurisdictionFedramp:
 		return true
 	}
 	return false
@@ -459,12 +460,13 @@ type BucketEventNotificationListParamsCfR2Jurisdiction string
 const (
 	BucketEventNotificationListParamsCfR2JurisdictionDefault BucketEventNotificationListParamsCfR2Jurisdiction = "default"
 	BucketEventNotificationListParamsCfR2JurisdictionEu      BucketEventNotificationListParamsCfR2Jurisdiction = "eu"
+	BucketEventNotificationListParamsCfR2JurisdictionUs      BucketEventNotificationListParamsCfR2Jurisdiction = "us"
 	BucketEventNotificationListParamsCfR2JurisdictionFedramp BucketEventNotificationListParamsCfR2Jurisdiction = "fedramp"
 )
 
 func (r BucketEventNotificationListParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketEventNotificationListParamsCfR2JurisdictionDefault, BucketEventNotificationListParamsCfR2JurisdictionEu, BucketEventNotificationListParamsCfR2JurisdictionFedramp:
+	case BucketEventNotificationListParamsCfR2JurisdictionDefault, BucketEventNotificationListParamsCfR2JurisdictionEu, BucketEventNotificationListParamsCfR2JurisdictionUs, BucketEventNotificationListParamsCfR2JurisdictionFedramp:
 		return true
 	}
 	return false
@@ -526,12 +528,13 @@ type BucketEventNotificationDeleteParamsCfR2Jurisdiction string
 const (
 	BucketEventNotificationDeleteParamsCfR2JurisdictionDefault BucketEventNotificationDeleteParamsCfR2Jurisdiction = "default"
 	BucketEventNotificationDeleteParamsCfR2JurisdictionEu      BucketEventNotificationDeleteParamsCfR2Jurisdiction = "eu"
+	BucketEventNotificationDeleteParamsCfR2JurisdictionUs      BucketEventNotificationDeleteParamsCfR2Jurisdiction = "us"
 	BucketEventNotificationDeleteParamsCfR2JurisdictionFedramp BucketEventNotificationDeleteParamsCfR2Jurisdiction = "fedramp"
 )
 
 func (r BucketEventNotificationDeleteParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketEventNotificationDeleteParamsCfR2JurisdictionDefault, BucketEventNotificationDeleteParamsCfR2JurisdictionEu, BucketEventNotificationDeleteParamsCfR2JurisdictionFedramp:
+	case BucketEventNotificationDeleteParamsCfR2JurisdictionDefault, BucketEventNotificationDeleteParamsCfR2JurisdictionEu, BucketEventNotificationDeleteParamsCfR2JurisdictionUs, BucketEventNotificationDeleteParamsCfR2JurisdictionFedramp:
 		return true
 	}
 	return false
@@ -593,12 +596,13 @@ type BucketEventNotificationGetParamsCfR2Jurisdiction string
 const (
 	BucketEventNotificationGetParamsCfR2JurisdictionDefault BucketEventNotificationGetParamsCfR2Jurisdiction = "default"
 	BucketEventNotificationGetParamsCfR2JurisdictionEu      BucketEventNotificationGetParamsCfR2Jurisdiction = "eu"
+	BucketEventNotificationGetParamsCfR2JurisdictionUs      BucketEventNotificationGetParamsCfR2Jurisdiction = "us"
 	BucketEventNotificationGetParamsCfR2JurisdictionFedramp BucketEventNotificationGetParamsCfR2Jurisdiction = "fedramp"
 )
 
 func (r BucketEventNotificationGetParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketEventNotificationGetParamsCfR2JurisdictionDefault, BucketEventNotificationGetParamsCfR2JurisdictionEu, BucketEventNotificationGetParamsCfR2JurisdictionFedramp:
+	case BucketEventNotificationGetParamsCfR2JurisdictionDefault, BucketEventNotificationGetParamsCfR2JurisdictionEu, BucketEventNotificationGetParamsCfR2JurisdictionUs, BucketEventNotificationGetParamsCfR2JurisdictionFedramp:
 		return true
 	}
 	return false

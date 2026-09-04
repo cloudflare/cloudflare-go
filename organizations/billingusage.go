@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"slices"
 	"time"
 
@@ -16,6 +17,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/cloudflare/cloudflare-go/v7/shared"
+	"github.com/tidwall/gjson"
 )
 
 // BillingUsageService contains methods and other services that help with
@@ -150,6 +153,10 @@ type BillingUsageGetResponse struct {
 	// Name assigned to a grouping of services. For Cloudflare, this is the
 	// subscription or contract display name.
 	SubAccountName string `json:"SubAccountName"`
+	// Tag values for the requested `GroupBy` keys. Omitted when `GroupBy` is not
+	// provided. Missing keys are omitted, and key-only tags are returned as boolean
+	// `true`. All other tag values are strings.
+	Tags map[string]BillingUsageGetResponseTagsUnion `json:"Tags"`
 	// The product category the charge belongs to (e.g., "Developer", "Cloudflare
 	// One"). Cloudflare extension; replaces FOCUS ServiceCategory.
 	XProductCategoryName string `json:"x_ProductCategoryName"`
@@ -199,6 +206,7 @@ type billingUsageGetResponseJSON struct {
 	RegionName           apijson.Field
 	SubAccountID         apijson.Field
 	SubAccountName       apijson.Field
+	Tags                 apijson.Field
 	XProductCategoryName apijson.Field
 	XProductFamilyID     apijson.Field
 	XProductFamilyName   apijson.Field
@@ -262,6 +270,46 @@ func (r BillingUsageGetResponseChargeClass) IsKnown() bool {
 	}
 	return false
 }
+
+// Union satisfied by [shared.UnionString] or [BillingUsageGetResponseTagsBoolean].
+type BillingUsageGetResponseTagsUnion interface {
+	ImplementsBillingUsageGetResponseTagsUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*BillingUsageGetResponseTagsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(BillingUsageGetResponseTagsBoolean(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(BillingUsageGetResponseTagsBoolean(false)),
+		},
+	)
+}
+
+type BillingUsageGetResponseTagsBoolean bool
+
+const (
+	BillingUsageGetResponseTagsBooleanTrue BillingUsageGetResponseTagsBoolean = true
+)
+
+func (r BillingUsageGetResponseTagsBoolean) IsKnown() bool {
+	switch r {
+	case BillingUsageGetResponseTagsBooleanTrue:
+		return true
+	}
+	return false
+}
+
+func (r BillingUsageGetResponseTagsBoolean) ImplementsBillingUsageGetResponseTagsUnion() {}
 
 type BillingUsageGetParams struct {
 	// Start date for the usage query (ISO 8601). Required if `to` is set. When omitted

@@ -239,6 +239,8 @@ type DHCPServer struct {
 	// A valid IPv4 address.
 	DHCPPoolStart string `json:"dhcp_pool_start"`
 	// A valid IPv4 address.
+	//
+	// Deprecated: deprecated
 	DNSServer  string   `json:"dns_server"`
 	DNSServers []string `json:"dns_servers"`
 	// Mapping of MAC addresses to IP addresses
@@ -334,6 +336,8 @@ type DHCPServerParam struct {
 	// A valid IPv4 address.
 	DHCPPoolStart param.Field[string] `json:"dhcp_pool_start"`
 	// A valid IPv4 address.
+	//
+	// Deprecated: deprecated
 	DNSServer  param.Field[string]   `json:"dns_server"`
 	DNSServers param.Field[[]string] `json:"dns_servers"`
 	// Mapping of MAC addresses to IP addresses

@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"reflect"
 	"slices"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
@@ -87,14 +88,14 @@ func (r *ObservabilityQueryService) ListAutoPaging(ctx context.Context, params O
 type ObservabilityQueryNewResponse struct {
 	ID string `json:"id" api:"required"`
 	// If the query wasn't explcitly saved
-	Adhoc       bool   `json:"adhoc" api:"required"`
-	Created     string `json:"created" api:"required"`
-	CreatedBy   string `json:"createdBy" api:"required"`
-	Description string `json:"description" api:"required,nullable"`
+	Adhoc       bool      `json:"adhoc" api:"required"`
+	Created     time.Time `json:"created" api:"required" format:"date-time"`
+	CreatedBy   string    `json:"createdBy" api:"required"`
+	Description string    `json:"description" api:"required,nullable"`
 	// Query name
 	Name       string                                  `json:"name" api:"required"`
 	Parameters ObservabilityQueryNewResponseParameters `json:"parameters" api:"required"`
-	Updated    string                                  `json:"updated" api:"required"`
+	Updated    time.Time                               `json:"updated" api:"required" format:"date-time"`
 	UpdatedBy  string                                  `json:"updatedBy" api:"required"`
 	JSON       observabilityQueryNewResponseJSON       `json:"-"`
 }
@@ -1148,14 +1149,14 @@ func (r ObservabilityQueryNewResponseParametersOrderByOrder) IsKnown() bool {
 type ObservabilityQueryListResponse struct {
 	ID string `json:"id" api:"required"`
 	// If the query wasn't explcitly saved
-	Adhoc       bool   `json:"adhoc" api:"required"`
-	Created     string `json:"created" api:"required"`
-	CreatedBy   string `json:"createdBy" api:"required"`
-	Description string `json:"description" api:"required,nullable"`
+	Adhoc       bool      `json:"adhoc" api:"required"`
+	Created     time.Time `json:"created" api:"required" format:"date-time"`
+	CreatedBy   string    `json:"createdBy" api:"required"`
+	Description string    `json:"description" api:"required,nullable"`
 	// Query name
 	Name       string                                   `json:"name" api:"required"`
 	Parameters ObservabilityQueryListResponseParameters `json:"parameters" api:"required"`
-	Updated    string                                   `json:"updated" api:"required"`
+	Updated    time.Time                                `json:"updated" api:"required" format:"date-time"`
 	UpdatedBy  string                                   `json:"updatedBy" api:"required"`
 	JSON       observabilityQueryListResponseJSON       `json:"-"`
 }

@@ -59,7 +59,7 @@ func (r *SettingOperationService) Update(ctx context.Context, operationID string
 	return res, nil
 }
 
-// Lists all per-operation schema validation settings configured for the zone.
+// Lists per-operation schema validation settings configured for the zone.
 func (r *SettingOperationService) List(ctx context.Context, params SettingOperationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SettingOperationListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -81,7 +81,7 @@ func (r *SettingOperationService) List(ctx context.Context, params SettingOperat
 	return res, nil
 }
 
-// Lists all per-operation schema validation settings configured for the zone.
+// Lists per-operation schema validation settings configured for the zone.
 func (r *SettingOperationService) ListAutoPaging(ctx context.Context, params SettingOperationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[SettingOperationListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -152,11 +152,11 @@ type SettingOperationUpdateResponse struct {
 	// When set, this applies a mitigation action to this operation which supersedes a
 	// global schema validation setting just for this operation
 	//
-	//   - `"log"` - log request when request does not conform to schema for this
-	//     operation
-	//   - `"block"` - deny access to the site when request does not conform to schema
-	//     for this operation
-	//   - `"none"` - will skip mitigation for this operation
+	// - `"log"` - log request when request does not conform to schema for this
+	//   operation
+	// - `"block"` - deny access to the site when request does not conform to schema
+	//   for this operation
+	// - `"none"` - will skip mitigation for this operation
 	MitigationAction SettingOperationUpdateResponseMitigationAction `json:"mitigation_action" api:"required"`
 	// UUID.
 	OperationID string                             `json:"operation_id" api:"required"`
@@ -208,11 +208,11 @@ type SettingOperationListResponse struct {
 	// When set, this applies a mitigation action to this operation which supersedes a
 	// global schema validation setting just for this operation
 	//
-	//   - `"log"` - log request when request does not conform to schema for this
-	//     operation
-	//   - `"block"` - deny access to the site when request does not conform to schema
-	//     for this operation
-	//   - `"none"` - will skip mitigation for this operation
+	// - `"log"` - log request when request does not conform to schema for this
+	//   operation
+	// - `"block"` - deny access to the site when request does not conform to schema
+	//   for this operation
+	// - `"none"` - will skip mitigation for this operation
 	MitigationAction SettingOperationListResponseMitigationAction `json:"mitigation_action" api:"required"`
 	// UUID.
 	OperationID string                           `json:"operation_id" api:"required"`
@@ -285,25 +285,22 @@ func (r settingOperationDeleteResponseJSON) RawJSON() string {
 type SettingOperationBulkEditResponse map[string]SettingOperationBulkEditResponseItem
 
 type SettingOperationBulkEditResponseItem struct {
-	// When set, this applies a mitigation action to this operation which supersedes a
-	// global schema validation setting just for this operation
+	// When set, this applies a mitigation action to this operation
 	//
-	//   - `"log"` - log request when request does not conform to schema for this
-	//     operation
-	//   - `"block"` - deny access to the site when request does not conform to schema
-	//     for this operation
-	//   - `"none"` - will skip mitigation for this operation
-	MitigationAction SettingOperationBulkEditResponseItemMitigationAction `json:"mitigation_action" api:"required"`
-	// UUID.
-	OperationID string                                   `json:"operation_id" api:"required"`
-	JSON        settingOperationBulkEditResponseItemJSON `json:"-"`
+	// - `"log"` - log request when request does not conform to schema for this
+	//   operation
+	// - `"block"` - deny access to the site when request does not conform to schema
+	//   for this operation
+	// - `"none"` - will skip mitigation for this operation
+	// - `null` - clears any mitigation action
+	MitigationAction SettingOperationBulkEditResponseItemMitigationAction `json:"mitigation_action" api:"nullable"`
+	JSON             settingOperationBulkEditResponseItemJSON             `json:"-"`
 }
 
 // settingOperationBulkEditResponseItemJSON contains the JSON metadata for the
 // struct [SettingOperationBulkEditResponseItem]
 type settingOperationBulkEditResponseItemJSON struct {
 	MitigationAction apijson.Field
-	OperationID      apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -316,14 +313,14 @@ func (r settingOperationBulkEditResponseItemJSON) RawJSON() string {
 	return r.raw
 }
 
-// When set, this applies a mitigation action to this operation which supersedes a
-// global schema validation setting just for this operation
+// When set, this applies a mitigation action to this operation
 //
 //   - `"log"` - log request when request does not conform to schema for this
 //     operation
 //   - `"block"` - deny access to the site when request does not conform to schema
 //     for this operation
 //   - `"none"` - will skip mitigation for this operation
+//   - `null` - clears any mitigation action
 type SettingOperationBulkEditResponseItemMitigationAction string
 
 const (
@@ -344,11 +341,11 @@ type SettingOperationGetResponse struct {
 	// When set, this applies a mitigation action to this operation which supersedes a
 	// global schema validation setting just for this operation
 	//
-	//   - `"log"` - log request when request does not conform to schema for this
-	//     operation
-	//   - `"block"` - deny access to the site when request does not conform to schema
-	//     for this operation
-	//   - `"none"` - will skip mitigation for this operation
+	// - `"log"` - log request when request does not conform to schema for this
+	//   operation
+	// - `"block"` - deny access to the site when request does not conform to schema
+	//   for this operation
+	// - `"none"` - will skip mitigation for this operation
 	MitigationAction SettingOperationGetResponseMitigationAction `json:"mitigation_action" api:"required"`
 	// UUID.
 	OperationID string                          `json:"operation_id" api:"required"`
@@ -401,12 +398,12 @@ type SettingOperationUpdateParams struct {
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// When set, this applies a mitigation action to this operation
 	//
-	//   - `"log"` - log request when request does not conform to schema for this
-	//     operation
-	//   - `"block"` - deny access to the site when request does not conform to schema
-	//     for this operation
-	//   - `"none"` - will skip mitigation for this operation
-	//   - `null` - clears any mitigation action
+	// - `"log"` - log request when request does not conform to schema for this
+	//   operation
+	// - `"block"` - deny access to the site when request does not conform to schema
+	//   for this operation
+	// - `"none"` - will skip mitigation for this operation
+	// - `null` - clears any mitigation action
 	MitigationAction param.Field[SettingOperationUpdateParamsMitigationAction] `json:"mitigation_action" api:"required"`
 }
 
@@ -561,9 +558,9 @@ func (r SettingOperationBulkEditParams) MarshalJSON() (data []byte, err error) {
 type SettingOperationBulkEditParamsBody struct {
 	// Mitigation actions are as follows:
 	//
-	//   - `log` - log request when request does not conform to schema _ `block` - deny
-	//     access to the site when request does not conform to schema _ `none` - skip
-	//     running schema validation \* null - clears any existing per-operation setting
+	// - `log` - log request when request does not conform to schema _ `block` - deny
+	//   access to the site when request does not conform to schema _ `none` - skip
+	//   running schema validation \* null - clears any existing per-operation setting
 	MitigationAction param.Field[SettingOperationBulkEditParamsBodyMitigationAction] `json:"mitigation_action"`
 }
 
@@ -595,7 +592,7 @@ func (r SettingOperationBulkEditParamsBodyMitigationAction) IsKnown() bool {
 type SettingOperationBulkEditResponseEnvelope struct {
 	Errors   api_gateway.Message `json:"errors" api:"required"`
 	Messages api_gateway.Message `json:"messages" api:"required"`
-	// Operation ID to per operation setting mapping
+	// Operation ID to updated mitigation action mapping
 	Result SettingOperationBulkEditResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
 	Success SettingOperationBulkEditResponseEnvelopeSuccess `json:"success" api:"required"`

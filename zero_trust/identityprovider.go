@@ -1386,8 +1386,10 @@ type IdentityProviderAccessGoogleAppsConfig struct {
 	// Your OAuth Client Secret
 	ClientSecret string `json:"client_secret"`
 	// The claim name for email in the id_token response.
-	EmailClaimName string                                     `json:"email_claim_name"`
-	JSON           identityProviderAccessGoogleAppsConfigJSON `json:"-"`
+	EmailClaimName string `json:"email_claim_name"`
+	// Configures the Google account chooser prompt.
+	Prompt IdentityProviderAccessGoogleAppsConfigPrompt `json:"prompt"`
+	JSON   identityProviderAccessGoogleAppsConfigJSON   `json:"-"`
 }
 
 // identityProviderAccessGoogleAppsConfigJSON contains the JSON metadata for the
@@ -1398,6 +1400,7 @@ type identityProviderAccessGoogleAppsConfigJSON struct {
 	ClientID       apijson.Field
 	ClientSecret   apijson.Field
 	EmailClaimName apijson.Field
+	Prompt         apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -1408,6 +1411,21 @@ func (r *IdentityProviderAccessGoogleAppsConfig) UnmarshalJSON(data []byte) (err
 
 func (r identityProviderAccessGoogleAppsConfigJSON) RawJSON() string {
 	return r.raw
+}
+
+// Configures the Google account chooser prompt.
+type IdentityProviderAccessGoogleAppsConfigPrompt string
+
+const (
+	IdentityProviderAccessGoogleAppsConfigPromptSelectAccount IdentityProviderAccessGoogleAppsConfigPrompt = "select_account"
+)
+
+func (r IdentityProviderAccessGoogleAppsConfigPrompt) IsKnown() bool {
+	switch r {
+	case IdentityProviderAccessGoogleAppsConfigPromptSelectAccount:
+		return true
+	}
+	return false
 }
 
 // The SAML encryption certificate set details, including current and previous
@@ -2361,14 +2379,16 @@ type IdentityProviderAccessSAMLConfig struct {
 	//
 	// To enable encryption:
 	//
-	//  1. Create a certificate set via POST to
-	//     `/identity_providers/{id}/saml_certificate`
-	//  2. Set this field to `true` and include `saml_certificate_set_id` in the PUT
-	//     request
-	//  3. Configure the public certificate in your external Identity Provider
+	// 1. Create a certificate set via POST to
+	//    `/identity_providers/{id}/saml_certificate`
+	// 2. Set this field to `true` and include `saml_certificate_set_id` in the PUT
+	//    request
+	// 3. Configure the public certificate in your external Identity Provider
 	//
 	// Note: Requires `saml_certificate_set_id` to be set when `true`.
 	EnableEncryption bool `json:"enable_encryption"`
+	// Asks the IdP to reauthenticate the user for each SAML authentication request.
+	ForceAuthn bool `json:"force_authn"`
 	// Add a list of attribute names that will be returned in the response header from
 	// the Access callback.
 	HeaderAttributes []IdentityProviderAccessSAMLConfigHeaderAttribute `json:"header_attributes"`
@@ -2376,6 +2396,11 @@ type IdentityProviderAccessSAMLConfig struct {
 	IdPPublicCERTs []string `json:"idp_public_certs"`
 	// IdP Entity ID or Issuer URL
 	IssuerURL string `json:"issuer_url"`
+	// The maximum URL length the IdP accepts for the SSO redirect URL. When the
+	// constructed SSO URL would exceed this length, the RelayState is stored
+	// server-side and a short nonce is passed to the IdP instead. Set this if your IdP
+	// enforces a URL length limit.
+	MaxSSOURLLength int64 `json:"max_sso_url_length"`
 	// Sign the SAML authentication request with Access credentials. To verify the
 	// signature, use the public key from the Access certs endpoints.
 	SignRequest bool `json:"sign_request"`
@@ -2390,9 +2415,11 @@ type identityProviderAccessSAMLConfigJSON struct {
 	Attributes         apijson.Field
 	EmailAttributeName apijson.Field
 	EnableEncryption   apijson.Field
+	ForceAuthn         apijson.Field
 	HeaderAttributes   apijson.Field
 	IdPPublicCERTs     apijson.Field
 	IssuerURL          apijson.Field
+	MaxSSOURLLength    apijson.Field
 	SignRequest        apijson.Field
 	SSOTargetURL       apijson.Field
 	raw                string
@@ -3318,6 +3345,8 @@ type IdentityProviderAccessGoogleAppsConfigParam struct {
 	ClientSecret param.Field[string] `json:"client_secret"`
 	// The claim name for email in the id_token response.
 	EmailClaimName param.Field[string] `json:"email_claim_name"`
+	// Configures the Google account chooser prompt.
+	Prompt param.Field[IdentityProviderAccessGoogleAppsConfigPrompt] `json:"prompt"`
 }
 
 func (r IdentityProviderAccessGoogleAppsConfigParam) MarshalJSON() (data []byte, err error) {
@@ -3800,14 +3829,16 @@ type IdentityProviderAccessSAMLConfigParam struct {
 	//
 	// To enable encryption:
 	//
-	//  1. Create a certificate set via POST to
-	//     `/identity_providers/{id}/saml_certificate`
-	//  2. Set this field to `true` and include `saml_certificate_set_id` in the PUT
-	//     request
-	//  3. Configure the public certificate in your external Identity Provider
+	// 1. Create a certificate set via POST to
+	//    `/identity_providers/{id}/saml_certificate`
+	// 2. Set this field to `true` and include `saml_certificate_set_id` in the PUT
+	//    request
+	// 3. Configure the public certificate in your external Identity Provider
 	//
 	// Note: Requires `saml_certificate_set_id` to be set when `true`.
 	EnableEncryption param.Field[bool] `json:"enable_encryption"`
+	// Asks the IdP to reauthenticate the user for each SAML authentication request.
+	ForceAuthn param.Field[bool] `json:"force_authn"`
 	// Add a list of attribute names that will be returned in the response header from
 	// the Access callback.
 	HeaderAttributes param.Field[[]IdentityProviderAccessSAMLConfigHeaderAttributeParam] `json:"header_attributes"`
@@ -3815,6 +3846,11 @@ type IdentityProviderAccessSAMLConfigParam struct {
 	IdPPublicCERTs param.Field[[]string] `json:"idp_public_certs"`
 	// IdP Entity ID or Issuer URL
 	IssuerURL param.Field[string] `json:"issuer_url"`
+	// The maximum URL length the IdP accepts for the SSO redirect URL. When the
+	// constructed SSO URL would exceed this length, the RelayState is stored
+	// server-side and a short nonce is passed to the IdP instead. Set this if your IdP
+	// enforces a URL length limit.
+	MaxSSOURLLength param.Field[int64] `json:"max_sso_url_length"`
 	// Sign the SAML authentication request with Access credentials. To verify the
 	// signature, use the public key from the Access certs endpoints.
 	SignRequest param.Field[bool] `json:"sign_request"`
@@ -5062,8 +5098,10 @@ type IdentityProviderListResponseAccessGoogleAppsConfig struct {
 	// Your OAuth Client Secret
 	ClientSecret string `json:"client_secret"`
 	// The claim name for email in the id_token response.
-	EmailClaimName string                                                 `json:"email_claim_name"`
-	JSON           identityProviderListResponseAccessGoogleAppsConfigJSON `json:"-"`
+	EmailClaimName string `json:"email_claim_name"`
+	// Configures the Google account chooser prompt.
+	Prompt IdentityProviderListResponseAccessGoogleAppsConfigPrompt `json:"prompt"`
+	JSON   identityProviderListResponseAccessGoogleAppsConfigJSON   `json:"-"`
 }
 
 // identityProviderListResponseAccessGoogleAppsConfigJSON contains the JSON
@@ -5074,6 +5112,7 @@ type identityProviderListResponseAccessGoogleAppsConfigJSON struct {
 	ClientID       apijson.Field
 	ClientSecret   apijson.Field
 	EmailClaimName apijson.Field
+	Prompt         apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -5084,6 +5123,21 @@ func (r *IdentityProviderListResponseAccessGoogleAppsConfig) UnmarshalJSON(data 
 
 func (r identityProviderListResponseAccessGoogleAppsConfigJSON) RawJSON() string {
 	return r.raw
+}
+
+// Configures the Google account chooser prompt.
+type IdentityProviderListResponseAccessGoogleAppsConfigPrompt string
+
+const (
+	IdentityProviderListResponseAccessGoogleAppsConfigPromptSelectAccount IdentityProviderListResponseAccessGoogleAppsConfigPrompt = "select_account"
+)
+
+func (r IdentityProviderListResponseAccessGoogleAppsConfigPrompt) IsKnown() bool {
+	switch r {
+	case IdentityProviderListResponseAccessGoogleAppsConfigPromptSelectAccount:
+		return true
+	}
+	return false
 }
 
 // The SAML encryption certificate set details, including current and previous
@@ -6043,14 +6097,16 @@ type IdentityProviderListResponseAccessSAMLConfig struct {
 	//
 	// To enable encryption:
 	//
-	//  1. Create a certificate set via POST to
-	//     `/identity_providers/{id}/saml_certificate`
-	//  2. Set this field to `true` and include `saml_certificate_set_id` in the PUT
-	//     request
-	//  3. Configure the public certificate in your external Identity Provider
+	// 1. Create a certificate set via POST to
+	//    `/identity_providers/{id}/saml_certificate`
+	// 2. Set this field to `true` and include `saml_certificate_set_id` in the PUT
+	//    request
+	// 3. Configure the public certificate in your external Identity Provider
 	//
 	// Note: Requires `saml_certificate_set_id` to be set when `true`.
 	EnableEncryption bool `json:"enable_encryption"`
+	// Asks the IdP to reauthenticate the user for each SAML authentication request.
+	ForceAuthn bool `json:"force_authn"`
 	// Add a list of attribute names that will be returned in the response header from
 	// the Access callback.
 	HeaderAttributes []IdentityProviderListResponseAccessSAMLConfigHeaderAttribute `json:"header_attributes"`
@@ -6058,6 +6114,11 @@ type IdentityProviderListResponseAccessSAMLConfig struct {
 	IdPPublicCERTs []string `json:"idp_public_certs"`
 	// IdP Entity ID or Issuer URL
 	IssuerURL string `json:"issuer_url"`
+	// The maximum URL length the IdP accepts for the SSO redirect URL. When the
+	// constructed SSO URL would exceed this length, the RelayState is stored
+	// server-side and a short nonce is passed to the IdP instead. Set this if your IdP
+	// enforces a URL length limit.
+	MaxSSOURLLength int64 `json:"max_sso_url_length"`
 	// Sign the SAML authentication request with Access credentials. To verify the
 	// signature, use the public key from the Access certs endpoints.
 	SignRequest bool `json:"sign_request"`
@@ -6072,9 +6133,11 @@ type identityProviderListResponseAccessSAMLConfigJSON struct {
 	Attributes         apijson.Field
 	EmailAttributeName apijson.Field
 	EnableEncryption   apijson.Field
+	ForceAuthn         apijson.Field
 	HeaderAttributes   apijson.Field
 	IdPPublicCERTs     apijson.Field
 	IssuerURL          apijson.Field
+	MaxSSOURLLength    apijson.Field
 	SignRequest        apijson.Field
 	SSOTargetURL       apijson.Field
 	raw                string

@@ -35,7 +35,8 @@ func NewLabelUserResourceOperationService(opts ...option.RequestOption) (r *Labe
 	return
 }
 
-// Replace all operations(s) attached to a user label
+// Replaces the complete set of web and API operations attached to the user-defined
+// label.
 func (r *LabelUserResourceOperationService) Update(ctx context.Context, name string, params LabelUserResourceOperationUpdateParams, opts ...option.RequestOption) (res *LabelUserResourceOperationUpdateResponse, err error) {
 	var env LabelUserResourceOperationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

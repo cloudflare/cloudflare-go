@@ -37,7 +37,7 @@ func NewDiscoveryOperationService(opts ...option.RequestOption) (r *DiscoveryOpe
 	return
 }
 
-// Retrieve the most up to date view of discovered operations
+// Returns the latest web and API operations discovered from zone traffic.
 func (r *DiscoveryOperationService) List(ctx context.Context, params DiscoveryOperationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DiscoveryOperation], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -59,12 +59,12 @@ func (r *DiscoveryOperationService) List(ctx context.Context, params DiscoveryOp
 	return res, nil
 }
 
-// Retrieve the most up to date view of discovered operations
+// Returns the latest web and API operations discovered from zone traffic.
 func (r *DiscoveryOperationService) ListAutoPaging(ctx context.Context, params DiscoveryOperationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[DiscoveryOperation] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Update the `state` on one or more discovered operations
+// Updates the state of one or more discovered web and API operations.
 func (r *DiscoveryOperationService) BulkEdit(ctx context.Context, params DiscoveryOperationBulkEditParams, opts ...option.RequestOption) (res *DiscoveryOperationBulkEditResponse, err error) {
 	var env DiscoveryOperationBulkEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -147,9 +147,9 @@ type DiscoveryOperationListParams struct {
 	// Filter results to only include discovery results sourced from a particular
 	// discovery engine
 	//
-	//   - `ML` - Discovered operations that were sourced using ML API Discovery
-	//   - `SessionIdentifier` - Discovered operations that were sourced using Session
-	//     Identifier API Discovery
+	// - `ML` - Discovered operations that were sourced using ML API Discovery
+	// - `SessionIdentifier` - Discovered operations that were sourced using Session
+	//   Identifier API Discovery
 	Origin param.Field[DiscoveryOperationListParamsOrigin] `query:"origin"`
 	// Page number of paginated results.
 	Page param.Field[int64] `query:"page"`
@@ -158,11 +158,11 @@ type DiscoveryOperationListParams struct {
 	// Filter results to only include discovery results in a particular state. States
 	// are as follows
 	//
-	//   - `review` - Discovered operations that are not saved into API Shield Endpoint
-	//     Management
-	//   - `saved` - Discovered operations that are already saved into API Shield
-	//     Endpoint Management
-	//   - `ignored` - Discovered operations that have been marked as ignored
+	// - `review` - Discovered operations that are not saved into API Shield Endpoint
+	//   Management
+	// - `saved` - Discovered operations that are already saved into API Shield
+	//   Endpoint Management
+	// - `ignored` - Discovered operations that have been marked as ignored
 	State param.Field[DiscoveryOperationListParamsState] `query:"state"`
 }
 

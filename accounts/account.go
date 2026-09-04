@@ -32,11 +32,17 @@ type AccountService struct {
 	Members              *MemberService
 	// Deprecated: Use the
 	// [github.com/cloudflare/cloudflare-go/v7/iam.PermissionGroupService] instead
-	Roles         *RoleService
-	Subscriptions *SubscriptionService
-	Tokens        *TokenService
-	Logs          *LogService
-	SpeedSettings *SpeedSettingService
+	Roles          *RoleService
+	Subscriptions  *SubscriptionService
+	Tokens         *TokenService
+	Logs           *LogService
+	SpeedSettings  *SpeedSettingService
+	PaymentMethods *PaymentMethodService
+	PayInvoice     *PayInvoiceService
+	PayBadDebt     *PayBadDebtService
+	Receipts       *ReceiptService
+	Invoices       *InvoiceService
+	ClientSecret   *ClientSecretService
 }
 
 // NewAccountService generates a new service that applies the given options to each
@@ -53,6 +59,12 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 	r.Tokens = NewTokenService(opts...)
 	r.Logs = NewLogService(opts...)
 	r.SpeedSettings = NewSpeedSettingService(opts...)
+	r.PaymentMethods = NewPaymentMethodService(opts...)
+	r.PayInvoice = NewPayInvoiceService(opts...)
+	r.PayBadDebt = NewPayBadDebtService(opts...)
+	r.Receipts = NewReceiptService(opts...)
+	r.Invoices = NewInvoiceService(opts...)
+	r.ClientSecret = NewClientSecretService(opts...)
 	return
 }
 

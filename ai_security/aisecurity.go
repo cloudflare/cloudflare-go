@@ -37,9 +37,10 @@ func NewAISecurityService(opts ...option.RequestOption) (r *AISecurityService) {
 	return
 }
 
-// Enable or disable AI Security for Apps for a zone.
-//
-// Changes can take up to a minute to propagate to the zone.
+// Update the AI Security for Apps status for the zone, enabling or disabling the
+// detection. The detection results are exposed as `cf.llm.prompt.*` fields for use
+// in custom rules and rate limiting rules; changes can take up to a minute to
+// propagate.
 func (r *AISecurityService) Update(ctx context.Context, params AISecurityUpdateParams, opts ...option.RequestOption) (res *AISecurityUpdateResponse, err error) {
 	var env AISecurityUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,7 +57,9 @@ func (r *AISecurityService) Update(ctx context.Context, params AISecurityUpdateP
 	return res, nil
 }
 
-// Get whether AI Security for Apps is enabled or disabled for a zone.
+// Get the current AI Security for Apps status for the zone. While enabled,
+// Cloudflare scans prompts sent to endpoints labeled `cf-llm` for personally
+// identifiable information, unsafe topics, and prompt injection attempts.
 func (r *AISecurityService) Get(ctx context.Context, query AISecurityGetParams, opts ...option.RequestOption) (res *AISecurityGetResponse, err error) {
 	var env AISecurityGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

@@ -131,6 +131,17 @@ Methods:
 - <code title="patch /zones/{zone_id}/settings/transformations_c2pa">client.Zones.TransformationsC2pa.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#TransformationsC2paService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#TransformationsC2paEditParams">TransformationsC2paEditParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#TransformationsC2pa">TransformationsC2pa</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /zones/{zone_id}/settings/transformations_c2pa">client.Zones.TransformationsC2pa.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#TransformationsC2paService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#TransformationsC2paGetParams">TransformationsC2paGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#TransformationsC2pa">TransformationsC2pa</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+## NEL
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#Setting">Setting</a>
+
+Methods:
+
+- <code title="patch /zones/{zone_id}/settings/nel">client.Zones.NEL.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#NELService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#NELEditParams">NELEditParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#Setting">Setting</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_id}/settings/nel">client.Zones.NEL.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#NELService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#NELGetParams">NELGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#Setting">Setting</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## Environments
 
 Response Types:

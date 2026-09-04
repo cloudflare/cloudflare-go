@@ -44,9 +44,10 @@ func NewThreatEventIndicatorService(opts ...option.RequestOption) (r *ThreatEven
 }
 
 // Retrieves indicators across specified datasets, ordered by createdAt descending
-// then UUID, dataset ID, and shard ID ascending. Use datasetIds=all or
-// datasetIds=\* to query all datasets for the account. If no datasetIds provided,
-// uses the default dataset.
+// then UUID, dataset ID, and shard ID ascending. Use the standalone datasetIds
+// value 'all'/'\*' for legacy all-datasets behavior, 'analytics' for
+// isAnalytics=true datasets, or 'operational' for isAnalytics=false datasets. If
+// no datasetIds are provided, uses the default dataset.
 func (r *ThreatEventIndicatorService) List(ctx context.Context, params ThreatEventIndicatorListParams, opts ...option.RequestOption) (res *ThreatEventIndicatorListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -413,14 +414,19 @@ func (r threatEventIndicatorListResponsePropertiesIndicatorsJSON) RawJSON() stri
 type ThreatEventIndicatorListResponsePropertiesIndicatorsItems struct {
 	CreatedAt     time.Time `json:"createdAt" api:"required" format:"date-time"`
 	IndicatorType string    `json:"indicatorType" api:"required"`
-	UpdatedAt     time.Time `json:"updatedAt" api:"required" format:"date-time"`
-	UUID          string    `json:"uuid" api:"required"`
-	Value         string    `json:"value" api:"required"`
+	// RSS article sources from which this indicator was extracted.
+	Sources   []ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSource `json:"sources" api:"required"`
+	UpdatedAt time.Time                                                         `json:"updatedAt" api:"required" format:"date-time"`
+	UUID      string                                                            `json:"uuid" api:"required"`
+	Value     string                                                            `json:"value" api:"required"`
 	// The dataset ID this indicator belongs to. Included in list responses.
 	DatasetID     string                                                                  `json:"datasetId"`
 	RelatedEvents []ThreatEventIndicatorListResponsePropertiesIndicatorsItemsRelatedEvent `json:"relatedEvents"`
 	Tags          []ThreatEventIndicatorListResponsePropertiesIndicatorsItemsTag          `json:"tags"`
-	JSON          threatEventIndicatorListResponsePropertiesIndicatorsItemsJSON           `json:"-"`
+	// Traffic Light Protocol designation. UPPERCASE. Possible values: CLEAR, GREEN,
+	// AMBER, AMBER-STRICT, RED, PURPLE. Null when not set.
+	TLP  string                                                        `json:"tlp" api:"nullable"`
+	JSON threatEventIndicatorListResponsePropertiesIndicatorsItemsJSON `json:"-"`
 }
 
 // threatEventIndicatorListResponsePropertiesIndicatorsItemsJSON contains the JSON
@@ -429,12 +435,14 @@ type ThreatEventIndicatorListResponsePropertiesIndicatorsItems struct {
 type threatEventIndicatorListResponsePropertiesIndicatorsItemsJSON struct {
 	CreatedAt     apijson.Field
 	IndicatorType apijson.Field
+	Sources       apijson.Field
 	UpdatedAt     apijson.Field
 	UUID          apijson.Field
 	Value         apijson.Field
 	DatasetID     apijson.Field
 	RelatedEvents apijson.Field
 	Tags          apijson.Field
+	TLP           apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -445,6 +453,60 @@ func (r *ThreatEventIndicatorListResponsePropertiesIndicatorsItems) UnmarshalJSO
 
 func (r threatEventIndicatorListResponsePropertiesIndicatorsItemsJSON) RawJSON() string {
 	return r.raw
+}
+
+type ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSource struct {
+	ResourceID   string                                                                       `json:"resourceId" api:"required" format:"uuid"`
+	ResourceType ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSourcesResourceType `json:"resourceType" api:"required"`
+	System       ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSourcesSystem       `json:"system" api:"required"`
+	JSON         threatEventIndicatorListResponsePropertiesIndicatorsItemsSourceJSON          `json:"-"`
+}
+
+// threatEventIndicatorListResponsePropertiesIndicatorsItemsSourceJSON contains the
+// JSON metadata for the struct
+// [ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSource]
+type threatEventIndicatorListResponsePropertiesIndicatorsItemsSourceJSON struct {
+	ResourceID   apijson.Field
+	ResourceType apijson.Field
+	System       apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorListResponsePropertiesIndicatorsItemsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSourcesResourceType string
+
+const (
+	ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSourcesResourceTypeArticle ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSourcesResourceType = "article"
+)
+
+func (r ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSourcesResourceType) IsKnown() bool {
+	switch r {
+	case ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSourcesResourceTypeArticle:
+		return true
+	}
+	return false
+}
+
+type ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSourcesSystem string
+
+const (
+	ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSourcesSystemThreatSignals ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSourcesSystem = "threat-signals"
+)
+
+func (r ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSourcesSystem) IsKnown() bool {
+	switch r {
+	case ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSourcesSystemThreatSignals:
+		return true
+	}
+	return false
 }
 
 type ThreatEventIndicatorListResponsePropertiesIndicatorsItemsRelatedEvent struct {
@@ -476,6 +538,8 @@ func (r threatEventIndicatorListResponsePropertiesIndicatorsItemsRelatedEventJSO
 }
 
 type ThreatEventIndicatorListResponsePropertiesIndicatorsItemsTag struct {
+	// The UUID of the tag category, or null when the tag is uncategorized.
+	CategoryID   string                                                           `json:"categoryId" api:"nullable"`
 	CategoryName string                                                           `json:"categoryName"`
 	UUID         string                                                           `json:"uuid"`
 	Value        string                                                           `json:"value"`
@@ -486,6 +550,7 @@ type ThreatEventIndicatorListResponsePropertiesIndicatorsItemsTag struct {
 // JSON metadata for the struct
 // [ThreatEventIndicatorListResponsePropertiesIndicatorsItemsTag]
 type threatEventIndicatorListResponsePropertiesIndicatorsItemsTagJSON struct {
+	CategoryID   apijson.Field
 	CategoryName apijson.Field
 	UUID         apijson.Field
 	Value        apijson.Field
@@ -746,8 +811,10 @@ type ThreatEventIndicatorListParams struct {
 	// that has since been reconfigured as analytics-only yields a 400
 	// `InvalidCursorError`.
 	Cursor param.Field[string] `query:"cursor"`
-	// Dataset IDs to query indicators from (array of UUIDs), or special value 'all' or
-	// '\*' to query all datasets. If not provided, uses the default dataset.
+	// Dataset UUIDs to query, or one standalone scope value: 'all'/'\*' for legacy
+	// all-datasets behavior, 'analytics' for isAnalytics=true datasets, or
+	// 'operational' for isAnalytics=false datasets. If not provided, uses the default
+	// dataset.
 	DatasetIDs param.Field[[]string] `query:"datasetIds"`
 	// Output format for indicator data. 'json' returns the default format, 'stix2'
 	// returns STIX 2.1 Indicator SDOs, 'taxii' returns a TAXII 2.1 Envelope with

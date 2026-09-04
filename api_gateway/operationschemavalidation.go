@@ -38,7 +38,8 @@ func NewOperationSchemaValidationService(opts ...option.RequestOption) (r *Opera
 	return
 }
 
-// Updates operation-level schema validation settings on the zone
+// Updates operation-level schema validation settings on the zone. Deprecated; use
+// `/zones/{zone_id}/schema_validation/settings/operations/{operation_id}` instead.
 //
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
@@ -58,7 +59,9 @@ func (r *OperationSchemaValidationService) Update(ctx context.Context, operation
 	return res, err
 }
 
-// Updates multiple operation-level schema validation settings on the zone
+// Updates multiple operation-level schema validation settings on the zone.
+// Deprecated; use `/zones/{zone_id}/schema_validation/settings/operations`
+// instead.
 //
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
@@ -79,7 +82,9 @@ func (r *OperationSchemaValidationService) Edit(ctx context.Context, params Oper
 	return res, nil
 }
 
-// Retrieves operation-level schema validation settings on the zone
+// Retrieves operation-level schema validation settings on the zone. Deprecated;
+// use `/zones/{zone_id}/schema_validation/settings/operations/{operation_id}`
+// instead.
 //
 // Deprecated: Use
 // [Schema Validation API](https://developers.cloudflare.com/api/resources/schema_validation/)
@@ -105,12 +110,12 @@ type SettingsMultipleRequest map[string]SettingsMultipleRequestItem
 type SettingsMultipleRequestItem struct {
 	// When set, this applies a mitigation action to this operation
 	//
-	//   - `log` log request when request does not conform to schema for this operation
-	//   - `block` deny access to the site when request does not conform to schema for
-	//     this operation
-	//   - `none` will skip mitigation for this operation
-	//   - `null` indicates that no operation level mitigation is in place, see Zone
-	//     Level Schema Validation Settings for mitigation action that will be applied
+	// - `log` log request when request does not conform to schema for this operation
+	// - `block` deny access to the site when request does not conform to schema for
+	//   this operation
+	// - `none` will skip mitigation for this operation
+	// - `null` indicates that no operation level mitigation is in place, see Zone
+	//   Level Schema Validation Settings for mitigation action that will be applied
 	MitigationAction SettingsMultipleRequestItemMitigationAction `json:"mitigation_action" api:"nullable"`
 	JSON             settingsMultipleRequestItemJSON             `json:"-"`
 }
@@ -161,12 +166,12 @@ type SettingsMultipleRequestParam map[string]SettingsMultipleRequestItemParam
 type SettingsMultipleRequestItemParam struct {
 	// When set, this applies a mitigation action to this operation
 	//
-	//   - `log` log request when request does not conform to schema for this operation
-	//   - `block` deny access to the site when request does not conform to schema for
-	//     this operation
-	//   - `none` will skip mitigation for this operation
-	//   - `null` indicates that no operation level mitigation is in place, see Zone
-	//     Level Schema Validation Settings for mitigation action that will be applied
+	// - `log` log request when request does not conform to schema for this operation
+	// - `block` deny access to the site when request does not conform to schema for
+	//   this operation
+	// - `none` will skip mitigation for this operation
+	// - `null` indicates that no operation level mitigation is in place, see Zone
+	//   Level Schema Validation Settings for mitigation action that will be applied
 	MitigationAction param.Field[SettingsMultipleRequestItemMitigationAction] `json:"mitigation_action"`
 }
 
@@ -177,12 +182,12 @@ func (r SettingsMultipleRequestItemParam) MarshalJSON() (data []byte, err error)
 type OperationSchemaValidationUpdateResponse struct {
 	// When set, this applies a mitigation action to this operation
 	//
-	//   - `log` log request when request does not conform to schema for this operation
-	//   - `block` deny access to the site when request does not conform to schema for
-	//     this operation
-	//   - `none` will skip mitigation for this operation
-	//   - `null` indicates that no operation level mitigation is in place, see Zone
-	//     Level Schema Validation Settings for mitigation action that will be applied
+	// - `log` log request when request does not conform to schema for this operation
+	// - `block` deny access to the site when request does not conform to schema for
+	//   this operation
+	// - `none` will skip mitigation for this operation
+	// - `null` indicates that no operation level mitigation is in place, see Zone
+	//   Level Schema Validation Settings for mitigation action that will be applied
 	MitigationAction OperationSchemaValidationUpdateResponseMitigationAction `json:"mitigation_action" api:"nullable"`
 	// UUID.
 	OperationID string                                      `json:"operation_id"`
@@ -233,12 +238,12 @@ func (r OperationSchemaValidationUpdateResponseMitigationAction) IsKnown() bool 
 type OperationSchemaValidationGetResponse struct {
 	// When set, this applies a mitigation action to this operation
 	//
-	//   - `log` log request when request does not conform to schema for this operation
-	//   - `block` deny access to the site when request does not conform to schema for
-	//     this operation
-	//   - `none` will skip mitigation for this operation
-	//   - `null` indicates that no operation level mitigation is in place, see Zone
-	//     Level Schema Validation Settings for mitigation action that will be applied
+	// - `log` log request when request does not conform to schema for this operation
+	// - `block` deny access to the site when request does not conform to schema for
+	//   this operation
+	// - `none` will skip mitigation for this operation
+	// - `null` indicates that no operation level mitigation is in place, see Zone
+	//   Level Schema Validation Settings for mitigation action that will be applied
 	MitigationAction OperationSchemaValidationGetResponseMitigationAction `json:"mitigation_action" api:"nullable"`
 	// UUID.
 	OperationID string                                   `json:"operation_id"`
@@ -291,12 +296,12 @@ type OperationSchemaValidationUpdateParams struct {
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// When set, this applies a mitigation action to this operation
 	//
-	//   - `log` log request when request does not conform to schema for this operation
-	//   - `block` deny access to the site when request does not conform to schema for
-	//     this operation
-	//   - `none` will skip mitigation for this operation
-	//   - `null` indicates that no operation level mitigation is in place, see Zone
-	//     Level Schema Validation Settings for mitigation action that will be applied
+	// - `log` log request when request does not conform to schema for this operation
+	// - `block` deny access to the site when request does not conform to schema for
+	//   this operation
+	// - `none` will skip mitigation for this operation
+	// - `null` indicates that no operation level mitigation is in place, see Zone
+	//   Level Schema Validation Settings for mitigation action that will be applied
 	MitigationAction param.Field[OperationSchemaValidationUpdateParamsMitigationAction] `json:"mitigation_action"`
 }
 

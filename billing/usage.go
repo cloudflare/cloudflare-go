@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"slices"
 	"time"
 
@@ -16,6 +17,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/cloudflare/cloudflare-go/v7/shared"
+	"github.com/tidwall/gjson"
 )
 
 // UsageService contains methods and other services that help with interacting with
@@ -256,6 +259,10 @@ type UsageGetResponse struct {
 	// Name assigned to a grouping of services. For Cloudflare, this is the
 	// subscription or contract display name.
 	SubAccountName string `json:"SubAccountName"`
+	// Tag values for the requested `GroupBy` keys. Omitted when `GroupBy` is not
+	// provided. Missing keys are omitted, and key-only tags are returned as boolean
+	// `true`. All other tag values are strings.
+	Tags map[string]UsageGetResponseTagsUnion `json:"Tags"`
 	// The product category the charge belongs to (e.g., "Developer", "Cloudflare
 	// One"). Cloudflare extension; replaces FOCUS ServiceCategory.
 	XProductCategoryName string `json:"x_ProductCategoryName"`
@@ -305,6 +312,7 @@ type usageGetResponseJSON struct {
 	RegionName           apijson.Field
 	SubAccountID         apijson.Field
 	SubAccountName       apijson.Field
+	Tags                 apijson.Field
 	XProductCategoryName apijson.Field
 	XProductFamilyID     apijson.Field
 	XProductFamilyName   apijson.Field
@@ -368,6 +376,46 @@ func (r UsageGetResponseChargeClass) IsKnown() bool {
 	}
 	return false
 }
+
+// Union satisfied by [shared.UnionString] or [UsageGetResponseTagsBoolean].
+type UsageGetResponseTagsUnion interface {
+	ImplementsUsageGetResponseTagsUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*UsageGetResponseTagsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(UsageGetResponseTagsBoolean(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(UsageGetResponseTagsBoolean(false)),
+		},
+	)
+}
+
+type UsageGetResponseTagsBoolean bool
+
+const (
+	UsageGetResponseTagsBooleanTrue UsageGetResponseTagsBoolean = true
+)
+
+func (r UsageGetResponseTagsBoolean) IsKnown() bool {
+	switch r {
+	case UsageGetResponseTagsBooleanTrue:
+		return true
+	}
+	return false
+}
+
+func (r UsageGetResponseTagsBoolean) ImplementsUsageGetResponseTagsUnion() {}
 
 // Contains the usage info.
 type UsageGetAccountUsageInfoV1Response struct {
@@ -488,7 +536,7 @@ type UsageGetAccountUsageV1Response struct {
 	ContractedCost float64 `json:"ContractedCost" api:"required"`
 	// Specifies the cumulated cost for the billing period in the billing currency.
 	CumulatedContractedCost float64 `json:"CumulatedContractedCost" api:"required"`
-	// Specifies the cumulated pricing quantity for the billing period.
+	// Specifies the portion of usage that is actually subject to a unit price.
 	CumulatedPricingQuantity int64 `json:"CumulatedPricingQuantity" api:"required"`
 	// The amortized cost of the charge. PayGo has no upfront commitments, so this
 	// equals ContractedCost.
@@ -661,6 +709,10 @@ type UsageGetAccountUsageV2Response struct {
 	// Name assigned to a grouping of services. For Cloudflare, this is the
 	// subscription or contract display name.
 	SubAccountName string `json:"SubAccountName"`
+	// Tag values for the requested `GroupBy` keys. Omitted when `GroupBy` is not
+	// provided. Missing keys are omitted, and key-only tags are returned as boolean
+	// `true`. All other tag values are strings.
+	Tags map[string]UsageGetAccountUsageV2ResponseTagsUnion `json:"Tags"`
 	// The product category the charge belongs to (e.g., "Developer", "Cloudflare
 	// One"). Cloudflare extension; replaces FOCUS ServiceCategory.
 	XProductCategoryName string `json:"x_ProductCategoryName"`
@@ -710,6 +762,7 @@ type usageGetAccountUsageV2ResponseJSON struct {
 	RegionName           apijson.Field
 	SubAccountID         apijson.Field
 	SubAccountName       apijson.Field
+	Tags                 apijson.Field
 	XProductCategoryName apijson.Field
 	XProductFamilyID     apijson.Field
 	XProductFamilyName   apijson.Field
@@ -774,6 +827,48 @@ func (r UsageGetAccountUsageV2ResponseChargeClass) IsKnown() bool {
 	return false
 }
 
+// Union satisfied by [shared.UnionString] or
+// [UsageGetAccountUsageV2ResponseTagsBoolean].
+type UsageGetAccountUsageV2ResponseTagsUnion interface {
+	ImplementsUsageGetAccountUsageV2ResponseTagsUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*UsageGetAccountUsageV2ResponseTagsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(UsageGetAccountUsageV2ResponseTagsBoolean(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(UsageGetAccountUsageV2ResponseTagsBoolean(false)),
+		},
+	)
+}
+
+type UsageGetAccountUsageV2ResponseTagsBoolean bool
+
+const (
+	UsageGetAccountUsageV2ResponseTagsBooleanTrue UsageGetAccountUsageV2ResponseTagsBoolean = true
+)
+
+func (r UsageGetAccountUsageV2ResponseTagsBoolean) IsKnown() bool {
+	switch r {
+	case UsageGetAccountUsageV2ResponseTagsBooleanTrue:
+		return true
+	}
+	return false
+}
+
+func (r UsageGetAccountUsageV2ResponseTagsBoolean) ImplementsUsageGetAccountUsageV2ResponseTagsUnion() {
+}
+
 // Represents a single billable usage record.
 //
 // This schema carries 19 of the 21 columns FOCUS 1.3 marks as mandatory. Mandatory
@@ -835,7 +930,7 @@ type UsagePaygoResponse struct {
 	ContractedCost float64 `json:"ContractedCost" api:"required"`
 	// Specifies the cumulated cost for the billing period in the billing currency.
 	CumulatedContractedCost float64 `json:"CumulatedContractedCost" api:"required"`
-	// Specifies the cumulated pricing quantity for the billing period.
+	// Specifies the portion of usage that is actually subject to a unit price.
 	CumulatedPricingQuantity int64 `json:"CumulatedPricingQuantity" api:"required"`
 	// The amortized cost of the charge. PayGo has no upfront commitments, so this
 	// equals ContractedCost.

@@ -39,7 +39,9 @@ func NewContentScanningService(opts ...option.RequestOption) (r *ContentScanning
 	return
 }
 
-// Update the Content Scanning status.
+// Update the Content Scanning status by setting the status value to `enabled` or
+// `disabled`. This is equivalent to calling the dedicated enable and disable
+// endpoints.
 func (r *ContentScanningService) New(ctx context.Context, params ContentScanningNewParams, opts ...option.RequestOption) (res *ContentScanningNewResponse, err error) {
 	var env ContentScanningNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,7 +58,9 @@ func (r *ContentScanningService) New(ctx context.Context, params ContentScanning
 	return res, nil
 }
 
-// Update the Content Scanning status.
+// Update the Content Scanning status by setting the status value to `enabled` or
+// `disabled`. This is equivalent to calling the dedicated enable and disable
+// endpoints.
 func (r *ContentScanningService) Update(ctx context.Context, params ContentScanningUpdateParams, opts ...option.RequestOption) (res *ContentScanningUpdateResponse, err error) {
 	var env ContentScanningUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -73,7 +77,8 @@ func (r *ContentScanningService) Update(ctx context.Context, params ContentScann
 	return res, nil
 }
 
-// Disable Content Scanning.
+// Disable Content Scanning for a zone. The `cf.waf.content_scan.*` fields are no
+// longer populated, so rules that reference them stop matching.
 func (r *ContentScanningService) Disable(ctx context.Context, body ContentScanningDisableParams, opts ...option.RequestOption) (res *ContentScanningDisableResponse, err error) {
 	var env ContentScanningDisableResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -90,7 +95,10 @@ func (r *ContentScanningService) Disable(ctx context.Context, body ContentScanni
 	return res, nil
 }
 
-// Enable Content Scanning.
+// Enable Content Scanning for a zone, so that Cloudflare inspects content objects
+// uploaded to the zone and checks them for malware. Scan results populate the
+// `cf.waf.content_scan.*` fields, which you can reference in custom rules and rate
+// limiting rules.
 func (r *ContentScanningService) Enable(ctx context.Context, body ContentScanningEnableParams, opts ...option.RequestOption) (res *ContentScanningEnableResponse, err error) {
 	var env ContentScanningEnableResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -107,7 +115,8 @@ func (r *ContentScanningService) Enable(ctx context.Context, body ContentScannin
 	return res, nil
 }
 
-// Retrieve the current status of Content Scanning.
+// Get the current Content Scanning status for the zone, together with the date the
+// status was last modified.
 func (r *ContentScanningService) Get(ctx context.Context, query ContentScanningGetParams, opts ...option.RequestOption) (res *ContentScanningGetResponse, err error) {
 	var env ContentScanningGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

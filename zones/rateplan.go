@@ -104,7 +104,7 @@ type RatePlanGetResponseComponent struct {
 	Default float64 `json:"default"`
 	// The unique component.
 	Name RatePlanGetResponseComponentsName `json:"name"`
-	// The unit price of the addon.
+	// The unit price of the component.
 	UnitPrice float64                          `json:"unit_price"`
 	JSON      ratePlanGetResponseComponentJSON `json:"-"`
 }

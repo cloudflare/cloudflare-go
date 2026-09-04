@@ -185,10 +185,10 @@ func (r *IPSECTunnelService) Get(ctx context.Context, ipsecTunnelID string, para
 // without persisting changes. After a PSK is generated, the PSK is immediately
 // persisted to Cloudflare's edge and cannot be retrieved later. Store the PSK in a
 // safe place.
-func (r *IPSECTunnelService) PSKGenerate(ctx context.Context, ipsecTunnelID string, params IPSECTunnelPSKGenerateParams, opts ...option.RequestOption) (res *IPSECTunnelPSKGenerateResponse, err error) {
+func (r *IPSECTunnelService) PSKGenerate(ctx context.Context, ipsecTunnelID string, body IPSECTunnelPSKGenerateParams, opts ...option.RequestOption) (res *IPSECTunnelPSKGenerateResponse, err error) {
 	var env IPSECTunnelPSKGenerateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -196,8 +196,8 @@ func (r *IPSECTunnelService) PSKGenerate(ctx context.Context, ipsecTunnelID stri
 		err = errors.New("missing required ipsec_tunnel_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s/psk_generate", params.AccountID, ipsecTunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s/psk_generate", body.AccountID, ipsecTunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -3102,11 +3102,6 @@ func (r IPSECTunnelGetResponseEnvelopeSuccess) IsKnown() bool {
 type IPSECTunnelPSKGenerateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Body      interface{}         `json:"body" api:"required"`
-}
-
-func (r IPSECTunnelPSKGenerateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type IPSECTunnelPSKGenerateResponseEnvelope struct {

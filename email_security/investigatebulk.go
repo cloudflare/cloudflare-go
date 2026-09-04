@@ -458,6 +458,8 @@ type InvestigateBulkNewResponseSearchParams struct {
 	Query            string                                                 `json:"query" api:"nullable"`
 	Recipient        string                                                 `json:"recipient" api:"nullable"`
 	Sender           string                                                 `json:"sender" api:"nullable"`
+	// Matches messages whose SMTP HELO server IP address equals this value.
+	SmtpHeloIP string `json:"smtp_helo_ip" api:"nullable"`
 	// Beginning of search date range.
 	Start       time.Time                                  `json:"start" format:"date-time"`
 	Subject     string                                     `json:"subject" api:"nullable"`
@@ -482,6 +484,7 @@ type investigateBulkNewResponseSearchParamsJSON struct {
 	Query            apijson.Field
 	Recipient        apijson.Field
 	Sender           apijson.Field
+	SmtpHeloIP       apijson.Field
 	Start            apijson.Field
 	Subject          apijson.Field
 	Submissions      apijson.Field
@@ -508,11 +511,12 @@ const (
 	InvestigateBulkNewResponseSearchParamsDeliveryStatusDeferred    InvestigateBulkNewResponseSearchParamsDeliveryStatus = "deferred"
 	InvestigateBulkNewResponseSearchParamsDeliveryStatusBounced     InvestigateBulkNewResponseSearchParamsDeliveryStatus = "bounced"
 	InvestigateBulkNewResponseSearchParamsDeliveryStatusQueued      InvestigateBulkNewResponseSearchParamsDeliveryStatus = "queued"
+	InvestigateBulkNewResponseSearchParamsDeliveryStatusMoveFailed  InvestigateBulkNewResponseSearchParamsDeliveryStatus = "move_failed"
 )
 
 func (r InvestigateBulkNewResponseSearchParamsDeliveryStatus) IsKnown() bool {
 	switch r {
-	case InvestigateBulkNewResponseSearchParamsDeliveryStatusDelivered, InvestigateBulkNewResponseSearchParamsDeliveryStatusMoved, InvestigateBulkNewResponseSearchParamsDeliveryStatusQuarantined, InvestigateBulkNewResponseSearchParamsDeliveryStatusRejected, InvestigateBulkNewResponseSearchParamsDeliveryStatusDeferred, InvestigateBulkNewResponseSearchParamsDeliveryStatusBounced, InvestigateBulkNewResponseSearchParamsDeliveryStatusQueued:
+	case InvestigateBulkNewResponseSearchParamsDeliveryStatusDelivered, InvestigateBulkNewResponseSearchParamsDeliveryStatusMoved, InvestigateBulkNewResponseSearchParamsDeliveryStatusQuarantined, InvestigateBulkNewResponseSearchParamsDeliveryStatusRejected, InvestigateBulkNewResponseSearchParamsDeliveryStatusDeferred, InvestigateBulkNewResponseSearchParamsDeliveryStatusBounced, InvestigateBulkNewResponseSearchParamsDeliveryStatusQueued, InvestigateBulkNewResponseSearchParamsDeliveryStatusMoveFailed:
 		return true
 	}
 	return false
@@ -901,6 +905,8 @@ type InvestigateBulkListResponseSearchParams struct {
 	Query            string                                                  `json:"query" api:"nullable"`
 	Recipient        string                                                  `json:"recipient" api:"nullable"`
 	Sender           string                                                  `json:"sender" api:"nullable"`
+	// Matches messages whose SMTP HELO server IP address equals this value.
+	SmtpHeloIP string `json:"smtp_helo_ip" api:"nullable"`
 	// Beginning of search date range.
 	Start       time.Time                                   `json:"start" format:"date-time"`
 	Subject     string                                      `json:"subject" api:"nullable"`
@@ -925,6 +931,7 @@ type investigateBulkListResponseSearchParamsJSON struct {
 	Query            apijson.Field
 	Recipient        apijson.Field
 	Sender           apijson.Field
+	SmtpHeloIP       apijson.Field
 	Start            apijson.Field
 	Subject          apijson.Field
 	Submissions      apijson.Field
@@ -951,11 +958,12 @@ const (
 	InvestigateBulkListResponseSearchParamsDeliveryStatusDeferred    InvestigateBulkListResponseSearchParamsDeliveryStatus = "deferred"
 	InvestigateBulkListResponseSearchParamsDeliveryStatusBounced     InvestigateBulkListResponseSearchParamsDeliveryStatus = "bounced"
 	InvestigateBulkListResponseSearchParamsDeliveryStatusQueued      InvestigateBulkListResponseSearchParamsDeliveryStatus = "queued"
+	InvestigateBulkListResponseSearchParamsDeliveryStatusMoveFailed  InvestigateBulkListResponseSearchParamsDeliveryStatus = "move_failed"
 )
 
 func (r InvestigateBulkListResponseSearchParamsDeliveryStatus) IsKnown() bool {
 	switch r {
-	case InvestigateBulkListResponseSearchParamsDeliveryStatusDelivered, InvestigateBulkListResponseSearchParamsDeliveryStatusMoved, InvestigateBulkListResponseSearchParamsDeliveryStatusQuarantined, InvestigateBulkListResponseSearchParamsDeliveryStatusRejected, InvestigateBulkListResponseSearchParamsDeliveryStatusDeferred, InvestigateBulkListResponseSearchParamsDeliveryStatusBounced, InvestigateBulkListResponseSearchParamsDeliveryStatusQueued:
+	case InvestigateBulkListResponseSearchParamsDeliveryStatusDelivered, InvestigateBulkListResponseSearchParamsDeliveryStatusMoved, InvestigateBulkListResponseSearchParamsDeliveryStatusQuarantined, InvestigateBulkListResponseSearchParamsDeliveryStatusRejected, InvestigateBulkListResponseSearchParamsDeliveryStatusDeferred, InvestigateBulkListResponseSearchParamsDeliveryStatusBounced, InvestigateBulkListResponseSearchParamsDeliveryStatusQueued, InvestigateBulkListResponseSearchParamsDeliveryStatusMoveFailed:
 		return true
 	}
 	return false
@@ -1365,6 +1373,8 @@ type InvestigateBulkGetResponseSearchParams struct {
 	Query            string                                                 `json:"query" api:"nullable"`
 	Recipient        string                                                 `json:"recipient" api:"nullable"`
 	Sender           string                                                 `json:"sender" api:"nullable"`
+	// Matches messages whose SMTP HELO server IP address equals this value.
+	SmtpHeloIP string `json:"smtp_helo_ip" api:"nullable"`
 	// Beginning of search date range.
 	Start       time.Time                                  `json:"start" format:"date-time"`
 	Subject     string                                     `json:"subject" api:"nullable"`
@@ -1389,6 +1399,7 @@ type investigateBulkGetResponseSearchParamsJSON struct {
 	Query            apijson.Field
 	Recipient        apijson.Field
 	Sender           apijson.Field
+	SmtpHeloIP       apijson.Field
 	Start            apijson.Field
 	Subject          apijson.Field
 	Submissions      apijson.Field
@@ -1415,11 +1426,12 @@ const (
 	InvestigateBulkGetResponseSearchParamsDeliveryStatusDeferred    InvestigateBulkGetResponseSearchParamsDeliveryStatus = "deferred"
 	InvestigateBulkGetResponseSearchParamsDeliveryStatusBounced     InvestigateBulkGetResponseSearchParamsDeliveryStatus = "bounced"
 	InvestigateBulkGetResponseSearchParamsDeliveryStatusQueued      InvestigateBulkGetResponseSearchParamsDeliveryStatus = "queued"
+	InvestigateBulkGetResponseSearchParamsDeliveryStatusMoveFailed  InvestigateBulkGetResponseSearchParamsDeliveryStatus = "move_failed"
 )
 
 func (r InvestigateBulkGetResponseSearchParamsDeliveryStatus) IsKnown() bool {
 	switch r {
-	case InvestigateBulkGetResponseSearchParamsDeliveryStatusDelivered, InvestigateBulkGetResponseSearchParamsDeliveryStatusMoved, InvestigateBulkGetResponseSearchParamsDeliveryStatusQuarantined, InvestigateBulkGetResponseSearchParamsDeliveryStatusRejected, InvestigateBulkGetResponseSearchParamsDeliveryStatusDeferred, InvestigateBulkGetResponseSearchParamsDeliveryStatusBounced, InvestigateBulkGetResponseSearchParamsDeliveryStatusQueued:
+	case InvestigateBulkGetResponseSearchParamsDeliveryStatusDelivered, InvestigateBulkGetResponseSearchParamsDeliveryStatusMoved, InvestigateBulkGetResponseSearchParamsDeliveryStatusQuarantined, InvestigateBulkGetResponseSearchParamsDeliveryStatusRejected, InvestigateBulkGetResponseSearchParamsDeliveryStatusDeferred, InvestigateBulkGetResponseSearchParamsDeliveryStatusBounced, InvestigateBulkGetResponseSearchParamsDeliveryStatusQueued, InvestigateBulkGetResponseSearchParamsDeliveryStatusMoveFailed:
 		return true
 	}
 	return false
@@ -1534,6 +1546,8 @@ type InvestigateBulkNewParamsSearchParams struct {
 	Query            param.Field[string]                                               `json:"query"`
 	Recipient        param.Field[string]                                               `json:"recipient"`
 	Sender           param.Field[string]                                               `json:"sender"`
+	// Matches messages whose SMTP HELO server IP address equals this value.
+	SmtpHeloIP param.Field[string] `json:"smtp_helo_ip"`
 	// Beginning of search date range.
 	Start       param.Field[time.Time] `json:"start" format:"date-time"`
 	Subject     param.Field[string]    `json:"subject"`
@@ -1555,11 +1569,12 @@ const (
 	InvestigateBulkNewParamsSearchParamsDeliveryStatusDeferred    InvestigateBulkNewParamsSearchParamsDeliveryStatus = "deferred"
 	InvestigateBulkNewParamsSearchParamsDeliveryStatusBounced     InvestigateBulkNewParamsSearchParamsDeliveryStatus = "bounced"
 	InvestigateBulkNewParamsSearchParamsDeliveryStatusQueued      InvestigateBulkNewParamsSearchParamsDeliveryStatus = "queued"
+	InvestigateBulkNewParamsSearchParamsDeliveryStatusMoveFailed  InvestigateBulkNewParamsSearchParamsDeliveryStatus = "move_failed"
 )
 
 func (r InvestigateBulkNewParamsSearchParamsDeliveryStatus) IsKnown() bool {
 	switch r {
-	case InvestigateBulkNewParamsSearchParamsDeliveryStatusDelivered, InvestigateBulkNewParamsSearchParamsDeliveryStatusMoved, InvestigateBulkNewParamsSearchParamsDeliveryStatusQuarantined, InvestigateBulkNewParamsSearchParamsDeliveryStatusRejected, InvestigateBulkNewParamsSearchParamsDeliveryStatusDeferred, InvestigateBulkNewParamsSearchParamsDeliveryStatusBounced, InvestigateBulkNewParamsSearchParamsDeliveryStatusQueued:
+	case InvestigateBulkNewParamsSearchParamsDeliveryStatusDelivered, InvestigateBulkNewParamsSearchParamsDeliveryStatusMoved, InvestigateBulkNewParamsSearchParamsDeliveryStatusQuarantined, InvestigateBulkNewParamsSearchParamsDeliveryStatusRejected, InvestigateBulkNewParamsSearchParamsDeliveryStatusDeferred, InvestigateBulkNewParamsSearchParamsDeliveryStatusBounced, InvestigateBulkNewParamsSearchParamsDeliveryStatusQueued, InvestigateBulkNewParamsSearchParamsDeliveryStatusMoveFailed:
 		return true
 	}
 	return false

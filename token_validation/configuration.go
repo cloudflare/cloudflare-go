@@ -43,7 +43,7 @@ func NewConfigurationService(opts ...option.RequestOption) (r *ConfigurationServ
 	return
 }
 
-// Create a new Token Validation configuration
+// Creates a JWT validation configuration for the zone.
 func (r *ConfigurationService) New(ctx context.Context, params ConfigurationNewParams, opts ...option.RequestOption) (res *TokenConfig, err error) {
 	var env ConfigurationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -60,7 +60,7 @@ func (r *ConfigurationService) New(ctx context.Context, params ConfigurationNewP
 	return res, nil
 }
 
-// Lists all token validation configurations for this zone
+// Lists the JWT validation configurations defined for the zone.
 func (r *ConfigurationService) List(ctx context.Context, params ConfigurationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[TokenConfig], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -82,12 +82,12 @@ func (r *ConfigurationService) List(ctx context.Context, params ConfigurationLis
 	return res, nil
 }
 
-// Lists all token validation configurations for this zone
+// Lists the JWT validation configurations defined for the zone.
 func (r *ConfigurationService) ListAutoPaging(ctx context.Context, params ConfigurationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[TokenConfig] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete Token Configuration
+// Deletes a JWT validation configuration from the zone.
 func (r *ConfigurationService) Delete(ctx context.Context, configID string, body ConfigurationDeleteParams, opts ...option.RequestOption) (res *ConfigurationDeleteResponse, err error) {
 	var env ConfigurationDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -108,7 +108,7 @@ func (r *ConfigurationService) Delete(ctx context.Context, configID string, body
 	return res, nil
 }
 
-// Edit fields of an existing Token Configuration
+// Updates only the supplied fields on a JWT validation configuration.
 func (r *ConfigurationService) Edit(ctx context.Context, configID string, params ConfigurationEditParams, opts ...option.RequestOption) (res *ConfigurationEditResponse, err error) {
 	var env ConfigurationEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -129,7 +129,7 @@ func (r *ConfigurationService) Edit(ctx context.Context, configID string, params
 	return res, nil
 }
 
-// Get a single Token Configuration
+// Returns a JWT validation configuration by ID.
 func (r *ConfigurationService) Get(ctx context.Context, configID string, query ConfigurationGetParams, opts ...option.RequestOption) (res *TokenConfig, err error) {
 	var env ConfigurationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

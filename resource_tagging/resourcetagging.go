@@ -2614,6 +2614,9 @@ type ResourceTaggingListParams struct {
 	// Filter by resource ID. Can be repeated up to 50 times to filter by multiple IDs.
 	// Example: ?id=abc&id=def
 	ID param.Field[[]string] `query:"id"`
+	// Match `tag` keys and values case-insensitively. Stored casing is unchanged.
+	// Example: ?tag=environment=production&case_insensitive=true
+	CaseInsensitive param.Field[bool] `query:"case_insensitive"`
 	// Cursor for pagination.
 	Cursor param.Field[string] `query:"cursor"`
 	// Filter by resource name. Performs a case-insensitive substring match. Example:
@@ -2624,16 +2627,16 @@ type ResourceTaggingListParams struct {
 	//
 	// Supported syntax:
 	//
-	//   - **Key-only**: `tag=<key>` - Resource must have the tag key (e.g.,
-	//     `tag=production`)
-	//   - **Key-value**: `tag=<key>=<value>` - Resource must have the tag with specific
-	//     value (e.g., `tag=env=prod`)
-	//   - **Multiple values (OR)**: `tag=<key>=<v1>,<v2>` - Resource must have tag with
-	//     any of the values (e.g., `tag=env=prod,staging`)
-	//   - **Negate key-only**: `tag=!<key>` - Resource must not have the tag key (e.g.,
-	//     `tag=!archived`)
-	//   - **Negate key-value**: `tag=<key>!=<value>` - Resource must not have the tag
-	//     with specific value (e.g., `tag=region!=us-west-1`)
+	// - **Key-only**: `tag=<key>` - Resource must have the tag key (e.g.,
+	//   `tag=production`)
+	// - **Key-value**: `tag=<key>=<value>` - Resource must have the tag with specific
+	//   value (e.g., `tag=env=prod`)
+	// - **Multiple values (OR)**: `tag=<key>=<v1>,<v2>` - Resource must have tag with
+	//   any of the values (e.g., `tag=env=prod,staging`)
+	// - **Negate key-only**: `tag=!<key>` - Resource must not have the tag key (e.g.,
+	//   `tag=!archived`)
+	// - **Negate key-value**: `tag=<key>!=<value>` - Resource must not have the tag
+	//   with specific value (e.g., `tag=region!=us-west-1`)
 	//
 	// Multiple tag parameters are combined with AND logic.
 	Tag param.Field[[]string] `query:"tag"`

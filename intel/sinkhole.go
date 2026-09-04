@@ -58,7 +58,9 @@ func (r *SinkholeService) New(ctx context.Context, params SinkholeNewParams, opt
 	return res, nil
 }
 
-// Update the name or R2 configuration of the specified sinkhole.
+// Replaces the name or R2 configuration of the specified sinkhole. This is a full
+// replacement. All fields, including r2_secret, must be re-supplied. Omitting
+// r2_secret overwrites the stored value with an empty string.
 func (r *SinkholeService) Update(ctx context.Context, sinkholeID string, params SinkholeUpdateParams, opts ...option.RequestOption) (res *SinkholeUpdateResponse, err error) {
 	var env SinkholeUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -193,7 +195,7 @@ type SinkholeUpdateResponse = interface{}
 type SinkholeDeleteResponse = interface{}
 
 type SinkholeNewParams struct {
-	// Identifier.
+	// An identifier for the resource.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the sinkhole.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -352,7 +354,7 @@ func (r SinkholeNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SinkholeUpdateParams struct {
-	// Identifier.
+	// An identifier for the resource.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the sinkhole.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -511,12 +513,12 @@ func (r SinkholeUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SinkholeListParams struct {
-	// Identifier.
+	// An identifier for the resource.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type SinkholeDeleteParams struct {
-	// Identifier.
+	// An identifier for the resource.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -660,7 +662,7 @@ func (r SinkholeDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SinkholeGetParams struct {
-	// Identifier.
+	// An identifier for the resource.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

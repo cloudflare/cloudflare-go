@@ -36,7 +36,8 @@ func NewPolicyService(opts ...option.RequestOption) (r *PolicyService) {
 	return
 }
 
-// Create a Page Shield policy.
+// Creates a rule that applies a client-side security action when its filter
+// expression matches.
 func (r *PolicyService) New(ctx context.Context, params PolicyNewParams, opts ...option.RequestOption) (res *PolicyNewResponse, err error) {
 	var env PolicyNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -53,7 +54,8 @@ func (r *PolicyService) New(ctx context.Context, params PolicyNewParams, opts ..
 	return res, nil
 }
 
-// Update a Page Shield policy by ID.
+// Updates the description, action, expression, enabled state, and policy value for
+// a content security rule.
 func (r *PolicyService) Update(ctx context.Context, policyID string, params PolicyUpdateParams, opts ...option.RequestOption) (res *PolicyUpdateResponse, err error) {
 	var env PolicyUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -74,7 +76,7 @@ func (r *PolicyService) Update(ctx context.Context, policyID string, params Poli
 	return res, nil
 }
 
-// Lists all Page Shield policies.
+// Lists content security rules configured for the zone.
 func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PolicyListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -96,12 +98,12 @@ func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts .
 	return res, nil
 }
 
-// Lists all Page Shield policies.
+// Lists content security rules configured for the zone.
 func (r *PolicyService) ListAutoPaging(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PolicyListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Delete a Page Shield policy by ID.
+// Permanently deletes a content security rule by ID.
 func (r *PolicyService) Delete(ctx context.Context, policyID string, body PolicyDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -118,7 +120,7 @@ func (r *PolicyService) Delete(ctx context.Context, policyID string, body Policy
 	return err
 }
 
-// Fetches a Page Shield policy by ID.
+// Returns a content security rule by ID.
 func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGetParams, opts ...option.RequestOption) (res *PolicyGetResponse, err error) {
 	var env PolicyGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -137,41 +139,6 @@ func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGe
 	}
 	res = &env.Result
 	return res, nil
-}
-
-type PolicyParam struct {
-	// The action to take if the expression matches
-	Action param.Field[PolicyAction] `json:"action" api:"required"`
-	// A description for the policy
-	Description param.Field[string] `json:"description" api:"required"`
-	// Whether the policy is enabled
-	Enabled param.Field[bool] `json:"enabled" api:"required"`
-	// The expression which must match for the policy to be applied, using the
-	// Cloudflare Firewall rule expression syntax
-	Expression param.Field[string] `json:"expression" api:"required"`
-	// The policy which will be applied
-	Value param.Field[string] `json:"value" api:"required"`
-}
-
-func (r PolicyParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The action to take if the expression matches
-type PolicyAction string
-
-const (
-	PolicyActionAllow                  PolicyAction = "allow"
-	PolicyActionLog                    PolicyAction = "log"
-	PolicyActionAddReportingDirectives PolicyAction = "add_reporting_directives"
-)
-
-func (r PolicyAction) IsKnown() bool {
-	switch r {
-	case PolicyActionAllow, PolicyActionLog, PolicyActionAddReportingDirectives:
-		return true
-	}
-	return false
 }
 
 type PolicyNewResponse struct {
@@ -397,11 +364,38 @@ func (r PolicyGetResponseAction) IsKnown() bool {
 type PolicyNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-	Policy PolicyParam         `json:"policy" api:"required"`
+	// The action to take if the expression matches
+	Action param.Field[PolicyNewParamsAction] `json:"action" api:"required"`
+	// A description for the policy
+	Description param.Field[string] `json:"description" api:"required"`
+	// Whether the policy is enabled
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
+	// The expression which must match for the policy to be applied, using the
+	// Cloudflare Firewall rule expression syntax
+	Expression param.Field[string] `json:"expression" api:"required"`
+	// The policy which will be applied
+	Value param.Field[string] `json:"value" api:"required"`
 }
 
 func (r PolicyNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Policy)
+	return apijson.MarshalRoot(r)
+}
+
+// The action to take if the expression matches
+type PolicyNewParamsAction string
+
+const (
+	PolicyNewParamsActionAllow                  PolicyNewParamsAction = "allow"
+	PolicyNewParamsActionLog                    PolicyNewParamsAction = "log"
+	PolicyNewParamsActionAddReportingDirectives PolicyNewParamsAction = "add_reporting_directives"
+)
+
+func (r PolicyNewParamsAction) IsKnown() bool {
+	switch r {
+	case PolicyNewParamsActionAllow, PolicyNewParamsActionLog, PolicyNewParamsActionAddReportingDirectives:
+		return true
+	}
+	return false
 }
 
 type PolicyNewResponseEnvelope struct {

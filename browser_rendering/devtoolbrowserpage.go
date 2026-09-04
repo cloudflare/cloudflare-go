@@ -34,10 +34,13 @@ func NewDevtoolBrowserPageService(opts ...option.RequestOption) (r *DevtoolBrows
 }
 
 // Establishes a WebSocket connection to a specific Chrome DevTools target or page.
-func (r *DevtoolBrowserPageService) Get(ctx context.Context, sessionID string, targetID string, query DevtoolBrowserPageGetParams, opts ...option.RequestOption) (err error) {
+func (r *DevtoolBrowserPageService) Get(ctx context.Context, sessionID string, targetID string, params DevtoolBrowserPageGetParams, opts ...option.RequestOption) (err error) {
+	if params.CfBrapiGuardrails.Present {
+		opts = append(opts, option.WithHeader("cf-brapi-guardrails", fmt.Sprintf("%v", params.CfBrapiGuardrails)))
+	}
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return err
 	}
@@ -49,7 +52,7 @@ func (r *DevtoolBrowserPageService) Get(ctx context.Context, sessionID string, t
 		err = errors.New("missing required target_id parameter")
 		return err
 	}
-	path := fmt.Sprintf("accounts/%s/browser-rendering/devtools/browser/%s/page/%s", query.AccountID, sessionID, targetID)
+	path := fmt.Sprintf("accounts/%s/browser-rendering/devtools/browser/%s/page/%s", params.AccountID, sessionID, targetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, nil, opts...)
 	return err
 }
@@ -57,4 +60,6 @@ func (r *DevtoolBrowserPageService) Get(ctx context.Context, sessionID string, t
 type DevtoolBrowserPageGetParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Optional base64url-encoded JSON connection guardrails (mode)
+	CfBrapiGuardrails param.Field[string] `header:"cf-brapi-guardrails"`
 }

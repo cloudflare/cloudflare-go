@@ -66,7 +66,7 @@ func (r *DatasetFieldService) Get(ctx context.Context, datasetID DatasetFieldGet
 	return res, nil
 }
 
-type DatasetFieldGetResponse = interface{}
+type DatasetFieldGetResponse map[string]string
 
 type DatasetFieldGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -81,6 +81,7 @@ type DatasetFieldGetParamsDatasetID string
 
 const (
 	DatasetFieldGetParamsDatasetIDAccessRequests                  DatasetFieldGetParamsDatasetID = "access_requests"
+	DatasetFieldGetParamsDatasetIDAccountAbuseProtectionEvents    DatasetFieldGetParamsDatasetID = "account_abuse_protection_events"
 	DatasetFieldGetParamsDatasetIDAuditLogs                       DatasetFieldGetParamsDatasetID = "audit_logs"
 	DatasetFieldGetParamsDatasetIDAuditLogsV2                     DatasetFieldGetParamsDatasetID = "audit_logs_v2"
 	DatasetFieldGetParamsDatasetIDBISOUserActions                 DatasetFieldGetParamsDatasetID = "biso_user_actions"
@@ -99,6 +100,7 @@ const (
 	DatasetFieldGetParamsDatasetIDGatewayNetwork                  DatasetFieldGetParamsDatasetID = "gateway_network"
 	DatasetFieldGetParamsDatasetIDHTTPRequests                    DatasetFieldGetParamsDatasetID = "http_requests"
 	DatasetFieldGetParamsDatasetIDIPSECLogs                       DatasetFieldGetParamsDatasetID = "ipsec_logs"
+	DatasetFieldGetParamsDatasetIDMagicBGPLogs                    DatasetFieldGetParamsDatasetID = "magic_bgp_logs"
 	DatasetFieldGetParamsDatasetIDMagicIDsDetections              DatasetFieldGetParamsDatasetID = "magic_ids_detections"
 	DatasetFieldGetParamsDatasetIDMcpPortalLogs                   DatasetFieldGetParamsDatasetID = "mcp_portal_logs"
 	DatasetFieldGetParamsDatasetIDMNMFlowLogs                     DatasetFieldGetParamsDatasetID = "mnm_flow_logs"
@@ -119,7 +121,7 @@ const (
 
 func (r DatasetFieldGetParamsDatasetID) IsKnown() bool {
 	switch r {
-	case DatasetFieldGetParamsDatasetIDAccessRequests, DatasetFieldGetParamsDatasetIDAuditLogs, DatasetFieldGetParamsDatasetIDAuditLogsV2, DatasetFieldGetParamsDatasetIDBISOUserActions, DatasetFieldGetParamsDatasetIDCasbFindings, DatasetFieldGetParamsDatasetIDDevicePostureResults, DatasetFieldGetParamsDatasetIDDEXApplicationTests, DatasetFieldGetParamsDatasetIDDEXDeviceStateEvents, DatasetFieldGetParamsDatasetIDDLPForensicCopies, DatasetFieldGetParamsDatasetIDDNSFirewallLogs, DatasetFieldGetParamsDatasetIDDNSLogs, DatasetFieldGetParamsDatasetIDEmailSecurityAlerts, DatasetFieldGetParamsDatasetIDEmailSecurityPostDeliveryEvents, DatasetFieldGetParamsDatasetIDFirewallEvents, DatasetFieldGetParamsDatasetIDGatewayDNS, DatasetFieldGetParamsDatasetIDGatewayHTTP, DatasetFieldGetParamsDatasetIDGatewayNetwork, DatasetFieldGetParamsDatasetIDHTTPRequests, DatasetFieldGetParamsDatasetIDIPSECLogs, DatasetFieldGetParamsDatasetIDMagicIDsDetections, DatasetFieldGetParamsDatasetIDMcpPortalLogs, DatasetFieldGetParamsDatasetIDMNMFlowLogs, DatasetFieldGetParamsDatasetIDNELReports, DatasetFieldGetParamsDatasetIDNetworkAnalyticsLogs, DatasetFieldGetParamsDatasetIDPageShieldEvents, DatasetFieldGetParamsDatasetIDSinkholeHTTPLogs, DatasetFieldGetParamsDatasetIDSpectrumEvents, DatasetFieldGetParamsDatasetIDSSHLogs, DatasetFieldGetParamsDatasetIDTurnstileEvents, DatasetFieldGetParamsDatasetIDWARPConfigChanges, DatasetFieldGetParamsDatasetIDWARPToggleChanges, DatasetFieldGetParamsDatasetIDWebsocketAnalytics, DatasetFieldGetParamsDatasetIDWorkersTraceEvents, DatasetFieldGetParamsDatasetIDZarazEvents, DatasetFieldGetParamsDatasetIDZeroTrustNetworkSessions:
+	case DatasetFieldGetParamsDatasetIDAccessRequests, DatasetFieldGetParamsDatasetIDAccountAbuseProtectionEvents, DatasetFieldGetParamsDatasetIDAuditLogs, DatasetFieldGetParamsDatasetIDAuditLogsV2, DatasetFieldGetParamsDatasetIDBISOUserActions, DatasetFieldGetParamsDatasetIDCasbFindings, DatasetFieldGetParamsDatasetIDDevicePostureResults, DatasetFieldGetParamsDatasetIDDEXApplicationTests, DatasetFieldGetParamsDatasetIDDEXDeviceStateEvents, DatasetFieldGetParamsDatasetIDDLPForensicCopies, DatasetFieldGetParamsDatasetIDDNSFirewallLogs, DatasetFieldGetParamsDatasetIDDNSLogs, DatasetFieldGetParamsDatasetIDEmailSecurityAlerts, DatasetFieldGetParamsDatasetIDEmailSecurityPostDeliveryEvents, DatasetFieldGetParamsDatasetIDFirewallEvents, DatasetFieldGetParamsDatasetIDGatewayDNS, DatasetFieldGetParamsDatasetIDGatewayHTTP, DatasetFieldGetParamsDatasetIDGatewayNetwork, DatasetFieldGetParamsDatasetIDHTTPRequests, DatasetFieldGetParamsDatasetIDIPSECLogs, DatasetFieldGetParamsDatasetIDMagicBGPLogs, DatasetFieldGetParamsDatasetIDMagicIDsDetections, DatasetFieldGetParamsDatasetIDMcpPortalLogs, DatasetFieldGetParamsDatasetIDMNMFlowLogs, DatasetFieldGetParamsDatasetIDNELReports, DatasetFieldGetParamsDatasetIDNetworkAnalyticsLogs, DatasetFieldGetParamsDatasetIDPageShieldEvents, DatasetFieldGetParamsDatasetIDSinkholeHTTPLogs, DatasetFieldGetParamsDatasetIDSpectrumEvents, DatasetFieldGetParamsDatasetIDSSHLogs, DatasetFieldGetParamsDatasetIDTurnstileEvents, DatasetFieldGetParamsDatasetIDWARPConfigChanges, DatasetFieldGetParamsDatasetIDWARPToggleChanges, DatasetFieldGetParamsDatasetIDWebsocketAnalytics, DatasetFieldGetParamsDatasetIDWorkersTraceEvents, DatasetFieldGetParamsDatasetIDZarazEvents, DatasetFieldGetParamsDatasetIDZeroTrustNetworkSessions:
 		return true
 	}
 	return false

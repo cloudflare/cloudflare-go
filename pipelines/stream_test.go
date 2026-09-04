@@ -52,12 +52,6 @@ func TestStreamNewWithOptionalParams(t *testing.T) {
 				Required:    cloudflare.F(true),
 				SqlName:     cloudflare.F("sql_name"),
 			}}),
-			Format: cloudflare.F[pipelines.StreamNewParamsSchemaFormatUnion](pipelines.StreamNewParamsSchemaFormatJson{
-				Type:            cloudflare.F(pipelines.StreamNewParamsSchemaFormatJsonTypeJson),
-				DecimalEncoding: cloudflare.F(pipelines.StreamNewParamsSchemaFormatJsonDecimalEncodingNumber),
-				TimestampFormat: cloudflare.F(pipelines.StreamNewParamsSchemaFormatJsonTimestampFormatRfc3339),
-				Unstructured:    cloudflare.F(true),
-			}),
 			Inferred: cloudflare.F(true),
 		}),
 		WorkerBinding: cloudflare.F(pipelines.StreamNewParamsWorkerBinding{
@@ -143,7 +137,7 @@ func TestStreamListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestStreamDeleteWithOptionalParams(t *testing.T) {
+func TestStreamDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -162,7 +156,6 @@ func TestStreamDeleteWithOptionalParams(t *testing.T) {
 		"033e105f4ecef8ad9ca31a8372d0c353",
 		pipelines.StreamDeleteParams{
 			AccountID: cloudflare.F("0123105f4ecef8ad9ca31a8372d0c353"),
-			Force:     cloudflare.F("force"),
 		},
 	)
 	if err != nil {

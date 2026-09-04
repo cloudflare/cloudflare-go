@@ -33,7 +33,7 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 		AccountID:      cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
 		ID:             cloudflare.F("my-ai-search"),
 		AIGatewayID:    cloudflare.F("ai_gateway_id"),
-		AISearchModel:  cloudflare.F(ai_search.InstanceNewParamsAISearchModelCfMetaLlama3_3_70bInstructFp8Fast),
+		AISearchModel:  cloudflare.F("ai_search_model"),
 		Cache:          cloudflare.F(true),
 		CacheThreshold: cloudflare.F(ai_search.InstanceNewParamsCacheThresholdSuperStrictMatch),
 		CacheTTL:       cloudflare.F(ai_search.InstanceNewParamsCacheTTL600),
@@ -44,7 +44,7 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 			DataType:  cloudflare.F(ai_search.InstanceNewParamsCustomMetadataDataTypeText),
 			FieldName: cloudflare.F("x"),
 		}}),
-		EmbeddingModel:      cloudflare.F(ai_search.InstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b),
+		EmbeddingModel:      cloudflare.F("embedding_model"),
 		FusionMethod:        cloudflare.F(ai_search.InstanceNewParamsFusionMethodMax),
 		HybridSearchEnabled: cloudflare.F(true),
 		IndexMethod: cloudflare.F(ai_search.InstanceNewParamsIndexMethod{
@@ -81,7 +81,7 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 			}),
 		}),
 		Reranking:      cloudflare.F(true),
-		RerankingModel: cloudflare.F(ai_search.InstanceNewParamsRerankingModelCfBaaiBgeRerankerBase),
+		RerankingModel: cloudflare.F("reranking_model"),
 		RetrievalOptions: cloudflare.F(ai_search.InstanceNewParamsRetrievalOptions{
 			BoostBy: cloudflare.F([]ai_search.InstanceNewParamsRetrievalOptionsBoostBy{{
 				Field:     cloudflare.F("timestamp"),
@@ -89,7 +89,7 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 			}}),
 			KeywordMatchMode: cloudflare.F(ai_search.InstanceNewParamsRetrievalOptionsKeywordMatchModeAnd),
 		}),
-		RewriteModel:   cloudflare.F(ai_search.InstanceNewParamsRewriteModelCfMetaLlama3_3_70bInstructFp8Fast),
+		RewriteModel:   cloudflare.F("rewrite_model"),
 		RewriteQuery:   cloudflare.F(true),
 		ScoreThreshold: cloudflare.F(0.000000),
 		Source:         cloudflare.F("source"),
@@ -158,7 +158,7 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 		ai_search.InstanceUpdateParams{
 			AccountID:      cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
 			AIGatewayID:    cloudflare.F("ai_gateway_id"),
-			AISearchModel:  cloudflare.F(ai_search.InstanceUpdateParamsAISearchModelCfMetaLlama3_3_70bInstructFp8Fast),
+			AISearchModel:  cloudflare.F("ai_search_model"),
 			Cache:          cloudflare.F(true),
 			CacheThreshold: cloudflare.F(ai_search.InstanceUpdateParamsCacheThresholdSuperStrictMatch),
 			CacheTTL:       cloudflare.F(ai_search.InstanceUpdateParamsCacheTTL600),
@@ -169,7 +169,7 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 				DataType:  cloudflare.F(ai_search.InstanceUpdateParamsCustomMetadataDataTypeText),
 				FieldName: cloudflare.F("x"),
 			}}),
-			EmbeddingModel: cloudflare.F(ai_search.InstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b),
+			EmbeddingModel: cloudflare.F("embedding_model"),
 			FusionMethod:   cloudflare.F(ai_search.InstanceUpdateParamsFusionMethodMax),
 			IndexMethod: cloudflare.F(ai_search.InstanceUpdateParamsIndexMethod{
 				Keyword: cloudflare.F(true),
@@ -206,7 +206,7 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 				}),
 			}),
 			Reranking:      cloudflare.F(true),
-			RerankingModel: cloudflare.F(ai_search.InstanceUpdateParamsRerankingModelCfBaaiBgeRerankerBase),
+			RerankingModel: cloudflare.F("reranking_model"),
 			RetrievalOptions: cloudflare.F(ai_search.InstanceUpdateParamsRetrievalOptions{
 				BoostBy: cloudflare.F([]ai_search.InstanceUpdateParamsRetrievalOptionsBoostBy{{
 					Field:     cloudflare.F("timestamp"),
@@ -214,7 +214,7 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 				}}),
 				KeywordMatchMode: cloudflare.F(ai_search.InstanceUpdateParamsRetrievalOptionsKeywordMatchModeAnd),
 			}),
-			RewriteModel:   cloudflare.F(ai_search.InstanceUpdateParamsRewriteModelCfMetaLlama3_3_70bInstructFp8Fast),
+			RewriteModel:   cloudflare.F("rewrite_model"),
 			RewriteQuery:   cloudflare.F(true),
 			ScoreThreshold: cloudflare.F(0.000000),
 			Source:         cloudflare.F("source"),
@@ -251,7 +251,7 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 				}),
 			}),
 			Summarization:                  cloudflare.F(true),
-			SummarizationModel:             cloudflare.F(ai_search.InstanceUpdateParamsSummarizationModelCfMetaLlama3_3_70bInstructFp8Fast),
+			SummarizationModel:             cloudflare.F("summarization_model"),
 			SyncInterval:                   cloudflare.F(ai_search.InstanceUpdateParamsSyncInterval900),
 			SystemPromptAISearch:           cloudflare.F("system_prompt_ai_search"),
 			SystemPromptIndexSummarization: cloudflare.F("system_prompt_index_summarization"),
@@ -360,13 +360,13 @@ func TestInstanceChatCompletionsWithOptionalParams(t *testing.T) {
 				}),
 				QueryRewrite: cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptionsQueryRewrite{
 					Enabled:       cloudflare.F(true),
-					Model:         cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast),
+					Model:         cloudflare.F("model"),
 					RewritePrompt: cloudflare.F("rewrite_prompt"),
 				}),
 				Reranking: cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptionsReranking{
 					Enabled:        cloudflare.F(true),
 					MatchThreshold: cloudflare.F(0.000000),
-					Model:          cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptionsRerankingModelCfBaaiBgeRerankerBase),
+					Model:          cloudflare.F("model"),
 				}),
 				Retrieval: cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptionsRetrieval{
 					BoostBy: cloudflare.F([]ai_search.InstanceChatCompletionsParamsAISearchOptionsRetrievalBoostBy{{
@@ -385,7 +385,7 @@ func TestInstanceChatCompletionsWithOptionalParams(t *testing.T) {
 					ReturnOnFailure:  cloudflare.F(true),
 				}),
 			}),
-			Model:  cloudflare.F(ai_search.InstanceChatCompletionsParamsModelCfMetaLlama3_3_70bInstructFp8Fast),
+			Model:  cloudflare.F("model"),
 			Stream: cloudflare.F(true),
 		},
 	)
@@ -454,13 +454,13 @@ func TestInstanceSearchWithOptionalParams(t *testing.T) {
 				}),
 				QueryRewrite: cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsQueryRewrite{
 					Enabled:       cloudflare.F(true),
-					Model:         cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast),
+					Model:         cloudflare.F("model"),
 					RewritePrompt: cloudflare.F("rewrite_prompt"),
 				}),
 				Reranking: cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsReranking{
 					Enabled:        cloudflare.F(true),
 					MatchThreshold: cloudflare.F(0.000000),
-					Model:          cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsRerankingModelCfBaaiBgeRerankerBase),
+					Model:          cloudflare.F("model"),
 				}),
 				Retrieval: cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsRetrieval{
 					BoostBy: cloudflare.F([]ai_search.InstanceSearchParamsAISearchOptionsRetrievalBoostBy{{

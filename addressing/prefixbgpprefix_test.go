@@ -73,6 +73,36 @@ func TestPrefixBGPPrefixList(t *testing.T) {
 	}
 }
 
+func TestPrefixBGPPrefixDelete(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.Addressing.Prefixes.BGPPrefixes.Delete(
+		context.TODO(),
+		"2af39739cc4e3b5910c918468bb89828",
+		"7009ba364c7a5760798ceb430e603b74",
+		addressing.PrefixBGPPrefixDeleteParams{
+			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestPrefixBGPPrefixEditWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {

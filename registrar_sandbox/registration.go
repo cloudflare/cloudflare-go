@@ -17,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // RegistrationService contains methods and other services that help with
@@ -44,7 +43,7 @@ func NewRegistrationService(opts ...option.RequestOption) (r *RegistrationServic
 // ### Prerequisites
 //
 //   - The account must not already be at the maximum supported domain limit. A
-//     single account may own up to 100 domains in total across registrations created
+//     single account may own up to 500 domains in total across registrations created
 //     through either the dashboard or this API.
 //   - The domain must be on a supported extension for programmatic registration.
 //   - Use `POST /domain-check` immediately before calling this endpoint to confirm
@@ -196,42 +195,41 @@ func (r *RegistrationService) Get(ctx context.Context, domainName string, query 
 
 // Status of an async registration workflow.
 type RegistrationNewResponse struct {
-	// Whether the workflow has reached a terminal state. `true` when `state` is
-	// `succeeded` or `failed`. `false` for `pending`, `in_progress`,
-	// `action_required`, and `blocked`.
+	// Indicates whether the workflow reached a terminal state. A `succeeded` or
+	// `failed` state returns `true`; `pending`, `in_progress`, `action_required`, and
+	// `blocked` return `false`.
 	Completed bool                         `json:"completed" api:"required"`
 	CreatedAt time.Time                    `json:"created_at" api:"required" format:"date-time"`
 	Links     RegistrationNewResponseLinks `json:"links" api:"required"`
-	// Workflow lifecycle state.
+	// Describes the workflow lifecycle state.
 	//
-	//   - `pending`: Workflow has been created but not yet started processing.
-	//   - `in_progress`: Actively processing. Continue polling `links.self`. The
-	//     workflow has an internal deadline and will not remain in this state
-	//     indefinitely.
-	//   - `action_required`: Paused — requires action by the user (not the system). See
-	//     `context.action` for what is needed. An automated polling loop must break on
-	//     this state; it will not resolve on its own without user intervention.
-	//   - `blocked`: The workflow cannot make progress due to a third party such as the
-	//     domain extension's registry or a losing registrar. No user action will help.
-	//     Continue polling — the block may resolve when the third party responds.
-	//   - `succeeded`: Terminal. The operation completed successfully. `completed` will
-	//     be `true`. For registrations, `context.registration` contains the resulting
-	//     registration resource.
-	//   - `failed`: Terminal. The operation failed. `completed` will be `true`. See
-	//     `error.code` and `error.message` for the reason. Do not auto-retry without
-	//     user review.
+	// - `pending`: The workflow awaits processing.
+	// - `in_progress`: Processing started. Continue polling `links.self`. An internal
+	//   deadline limits the duration of this state.
+	// - `action_required`: The workflow pauses for user action. See `context.action`
+	//   for details. Stop automated polling until the user completes the required
+	//   action.
+	// - `blocked`: A third party, such as the domain extension's registry or a losing
+	//   registrar, prevents progress. Continue polling because the block may resolve
+	//   when the third party responds.
+	// - `succeeded`: Terminal state. The operation completed successfully. `completed`
+	//   equals `true`. For registrations, `context.registration` contains the
+	//   resulting registration resource.
+	// - `failed`: Terminal state. The operation failed. `completed` equals `true`. See
+	//   `error.code` and `error.message` for the reason. Require user review before
+	//   retrying.
 	State     RegistrationNewResponseState `json:"state" api:"required"`
 	UpdatedAt time.Time                    `json:"updated_at" api:"required" format:"date-time"`
-	// Workflow-specific data for this workflow.
+	// Provides workflow-specific data.
 	//
-	// The workflow subject is identified by `context.domain_name` for domain-centric
-	// workflows.
+	// For domain-centric workflows, `context.domain_name` identifies the workflow
+	// subject.
 	Context map[string]interface{} `json:"context"`
-	// Error details when a workflow reaches the `failed` state. The specific error
-	// codes and messages depend on the workflow type (registration, update, etc.) and
-	// the underlying registry response. These workflow error codes are separate from
-	// immediate HTTP error `errors[].code` values returned by non-2xx responses.
-	// Surface `error.message` to the user for context.
+	// Provides error details when a workflow reaches the `failed` state. The workflow
+	// type (registration, update, etc.) and underlying registry response determine the
+	// specific codes and messages. Workflow error codes differ from immediate HTTP
+	// error `errors[].code` values in non-2xx responses. Surface `error.message` to
+	// the user for context.
 	Error RegistrationNewResponseError `json:"error" api:"nullable"`
 	JSON  registrationNewResponseJSON  `json:"-"`
 }
@@ -283,24 +281,23 @@ func (r registrationNewResponseLinksJSON) RawJSON() string {
 	return r.raw
 }
 
-// Workflow lifecycle state.
+// Describes the workflow lifecycle state.
 //
-//   - `pending`: Workflow has been created but not yet started processing.
-//   - `in_progress`: Actively processing. Continue polling `links.self`. The
-//     workflow has an internal deadline and will not remain in this state
-//     indefinitely.
-//   - `action_required`: Paused — requires action by the user (not the system). See
-//     `context.action` for what is needed. An automated polling loop must break on
-//     this state; it will not resolve on its own without user intervention.
-//   - `blocked`: The workflow cannot make progress due to a third party such as the
-//     domain extension's registry or a losing registrar. No user action will help.
-//     Continue polling — the block may resolve when the third party responds.
-//   - `succeeded`: Terminal. The operation completed successfully. `completed` will
-//     be `true`. For registrations, `context.registration` contains the resulting
-//     registration resource.
-//   - `failed`: Terminal. The operation failed. `completed` will be `true`. See
-//     `error.code` and `error.message` for the reason. Do not auto-retry without
-//     user review.
+//   - `pending`: The workflow awaits processing.
+//   - `in_progress`: Processing started. Continue polling `links.self`. An internal
+//     deadline limits the duration of this state.
+//   - `action_required`: The workflow pauses for user action. See `context.action`
+//     for details. Stop automated polling until the user completes the required
+//     action.
+//   - `blocked`: A third party, such as the domain extension's registry or a losing
+//     registrar, prevents progress. Continue polling because the block may resolve
+//     when the third party responds.
+//   - `succeeded`: Terminal state. The operation completed successfully. `completed`
+//     equals `true`. For registrations, `context.registration` contains the
+//     resulting registration resource.
+//   - `failed`: Terminal state. The operation failed. `completed` equals `true`. See
+//     `error.code` and `error.message` for the reason. Require user review before
+//     retrying.
 type RegistrationNewResponseState string
 
 const (
@@ -320,11 +317,11 @@ func (r RegistrationNewResponseState) IsKnown() bool {
 	return false
 }
 
-// Error details when a workflow reaches the `failed` state. The specific error
-// codes and messages depend on the workflow type (registration, update, etc.) and
-// the underlying registry response. These workflow error codes are separate from
-// immediate HTTP error `errors[].code` values returned by non-2xx responses.
-// Surface `error.message` to the user for context.
+// Provides error details when a workflow reaches the `failed` state. The workflow
+// type (registration, update, etc.) and underlying registry response determine the
+// specific codes and messages. Workflow error codes differ from immediate HTTP
+// error `errors[].code` values in non-2xx responses. Surface `error.message` to
+// the user for context.
 type RegistrationNewResponseError struct {
 	// Machine-readable error code identifying the failure reason.
 	Code string `json:"code" api:"required"`
@@ -354,17 +351,17 @@ func (r registrationNewResponseErrorJSON) RawJSON() string {
 // A domain registration resource representing the current state of a registered
 // domain.
 type RegistrationListResponse struct {
-	// Whether the domain will be automatically renewed before expiration.
+	// Whether automatic renewal occurs before expiration.
 	AutoRenew bool `json:"auto_renew" api:"required"`
 	// When the domain was registered. Present when the registration resource exists.
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	// Fully qualified domain name (FQDN) including the extension (e.g., `example.com`,
-	// `mybrand.app`). The domain name uniquely identifies a registration — the same
-	// domain cannot be registered twice, making it a natural idempotency key for
-	// registration requests.
+	// Provides a fully qualified domain name (FQDN), including the extension (e.g.,
+	// `example.com`, `mybrand.app`). The domain name uniquely identifies a
+	// registration. Cloudflare permits only one registration per domain, making the
+	// domain name a natural idempotency key for registration requests.
 	DomainName string `json:"domain_name" api:"required"`
-	// When the domain registration expires. Present when the registration is ready;
-	// may be null only while `status` is `registration_pending`.
+	// When the domain registration expires. Ready registrations include this value;
+	// only `registration_pending` may return null.
 	ExpiresAt time.Time `json:"expires_at" api:"required,nullable" format:"date-time"`
 	// Whether the domain is locked for transfer.
 	Locked bool `json:"locked" api:"required"`
@@ -372,12 +369,12 @@ type RegistrationListResponse struct {
 	PrivacyMode RegistrationListResponsePrivacyMode `json:"privacy_mode" api:"required"`
 	// Current registration status.
 	//
-	// - `active`: Domain is registered and operational
-	// - `registration_pending`: Registration is in progress
-	// - `expired`: Domain has expired
-	// - `suspended`: Domain is suspended by the registry
-	// - `redemption_period`: Domain is in the redemption grace period
-	// - `pending_delete`: Domain is pending deletion by the registry
+	// - `active`: The domain operates with an active registration.
+	// - `registration_pending`: Registration remains in progress.
+	// - `expired`: The domain registration expired.
+	// - `suspended`: The registry suspended the domain.
+	// - `redemption_period`: The domain entered the redemption grace period.
+	// - `pending_delete`: The registry scheduled the domain for deletion.
 	Status RegistrationListResponseStatus `json:"status" api:"required"`
 	JSON   registrationListResponseJSON   `json:"-"`
 }
@@ -408,12 +405,13 @@ func (r registrationListResponseJSON) RawJSON() string {
 type RegistrationListResponsePrivacyMode string
 
 const (
+	RegistrationListResponsePrivacyModeOff       RegistrationListResponsePrivacyMode = "off"
 	RegistrationListResponsePrivacyModeRedaction RegistrationListResponsePrivacyMode = "redaction"
 )
 
 func (r RegistrationListResponsePrivacyMode) IsKnown() bool {
 	switch r {
-	case RegistrationListResponsePrivacyModeRedaction:
+	case RegistrationListResponsePrivacyModeOff, RegistrationListResponsePrivacyModeRedaction:
 		return true
 	}
 	return false
@@ -421,12 +419,12 @@ func (r RegistrationListResponsePrivacyMode) IsKnown() bool {
 
 // Current registration status.
 //
-// - `active`: Domain is registered and operational
-// - `registration_pending`: Registration is in progress
-// - `expired`: Domain has expired
-// - `suspended`: Domain is suspended by the registry
-// - `redemption_period`: Domain is in the redemption grace period
-// - `pending_delete`: Domain is pending deletion by the registry
+// - `active`: The domain operates with an active registration.
+// - `registration_pending`: Registration remains in progress.
+// - `expired`: The domain registration expired.
+// - `suspended`: The registry suspended the domain.
+// - `redemption_period`: The domain entered the redemption grace period.
+// - `pending_delete`: The registry scheduled the domain for deletion.
 type RegistrationListResponseStatus string
 
 const (
@@ -448,42 +446,41 @@ func (r RegistrationListResponseStatus) IsKnown() bool {
 
 // Status of an async registration workflow.
 type RegistrationEditResponse struct {
-	// Whether the workflow has reached a terminal state. `true` when `state` is
-	// `succeeded` or `failed`. `false` for `pending`, `in_progress`,
-	// `action_required`, and `blocked`.
+	// Indicates whether the workflow reached a terminal state. A `succeeded` or
+	// `failed` state returns `true`; `pending`, `in_progress`, `action_required`, and
+	// `blocked` return `false`.
 	Completed bool                          `json:"completed" api:"required"`
 	CreatedAt time.Time                     `json:"created_at" api:"required" format:"date-time"`
 	Links     RegistrationEditResponseLinks `json:"links" api:"required"`
-	// Workflow lifecycle state.
+	// Describes the workflow lifecycle state.
 	//
-	//   - `pending`: Workflow has been created but not yet started processing.
-	//   - `in_progress`: Actively processing. Continue polling `links.self`. The
-	//     workflow has an internal deadline and will not remain in this state
-	//     indefinitely.
-	//   - `action_required`: Paused — requires action by the user (not the system). See
-	//     `context.action` for what is needed. An automated polling loop must break on
-	//     this state; it will not resolve on its own without user intervention.
-	//   - `blocked`: The workflow cannot make progress due to a third party such as the
-	//     domain extension's registry or a losing registrar. No user action will help.
-	//     Continue polling — the block may resolve when the third party responds.
-	//   - `succeeded`: Terminal. The operation completed successfully. `completed` will
-	//     be `true`. For registrations, `context.registration` contains the resulting
-	//     registration resource.
-	//   - `failed`: Terminal. The operation failed. `completed` will be `true`. See
-	//     `error.code` and `error.message` for the reason. Do not auto-retry without
-	//     user review.
+	// - `pending`: The workflow awaits processing.
+	// - `in_progress`: Processing started. Continue polling `links.self`. An internal
+	//   deadline limits the duration of this state.
+	// - `action_required`: The workflow pauses for user action. See `context.action`
+	//   for details. Stop automated polling until the user completes the required
+	//   action.
+	// - `blocked`: A third party, such as the domain extension's registry or a losing
+	//   registrar, prevents progress. Continue polling because the block may resolve
+	//   when the third party responds.
+	// - `succeeded`: Terminal state. The operation completed successfully. `completed`
+	//   equals `true`. For registrations, `context.registration` contains the
+	//   resulting registration resource.
+	// - `failed`: Terminal state. The operation failed. `completed` equals `true`. See
+	//   `error.code` and `error.message` for the reason. Require user review before
+	//   retrying.
 	State     RegistrationEditResponseState `json:"state" api:"required"`
 	UpdatedAt time.Time                     `json:"updated_at" api:"required" format:"date-time"`
-	// Workflow-specific data for this workflow.
+	// Provides workflow-specific data.
 	//
-	// The workflow subject is identified by `context.domain_name` for domain-centric
-	// workflows.
+	// For domain-centric workflows, `context.domain_name` identifies the workflow
+	// subject.
 	Context map[string]interface{} `json:"context"`
-	// Error details when a workflow reaches the `failed` state. The specific error
-	// codes and messages depend on the workflow type (registration, update, etc.) and
-	// the underlying registry response. These workflow error codes are separate from
-	// immediate HTTP error `errors[].code` values returned by non-2xx responses.
-	// Surface `error.message` to the user for context.
+	// Provides error details when a workflow reaches the `failed` state. The workflow
+	// type (registration, update, etc.) and underlying registry response determine the
+	// specific codes and messages. Workflow error codes differ from immediate HTTP
+	// error `errors[].code` values in non-2xx responses. Surface `error.message` to
+	// the user for context.
 	Error RegistrationEditResponseError `json:"error" api:"nullable"`
 	JSON  registrationEditResponseJSON  `json:"-"`
 }
@@ -535,24 +532,23 @@ func (r registrationEditResponseLinksJSON) RawJSON() string {
 	return r.raw
 }
 
-// Workflow lifecycle state.
+// Describes the workflow lifecycle state.
 //
-//   - `pending`: Workflow has been created but not yet started processing.
-//   - `in_progress`: Actively processing. Continue polling `links.self`. The
-//     workflow has an internal deadline and will not remain in this state
-//     indefinitely.
-//   - `action_required`: Paused — requires action by the user (not the system). See
-//     `context.action` for what is needed. An automated polling loop must break on
-//     this state; it will not resolve on its own without user intervention.
-//   - `blocked`: The workflow cannot make progress due to a third party such as the
-//     domain extension's registry or a losing registrar. No user action will help.
-//     Continue polling — the block may resolve when the third party responds.
-//   - `succeeded`: Terminal. The operation completed successfully. `completed` will
-//     be `true`. For registrations, `context.registration` contains the resulting
-//     registration resource.
-//   - `failed`: Terminal. The operation failed. `completed` will be `true`. See
-//     `error.code` and `error.message` for the reason. Do not auto-retry without
-//     user review.
+//   - `pending`: The workflow awaits processing.
+//   - `in_progress`: Processing started. Continue polling `links.self`. An internal
+//     deadline limits the duration of this state.
+//   - `action_required`: The workflow pauses for user action. See `context.action`
+//     for details. Stop automated polling until the user completes the required
+//     action.
+//   - `blocked`: A third party, such as the domain extension's registry or a losing
+//     registrar, prevents progress. Continue polling because the block may resolve
+//     when the third party responds.
+//   - `succeeded`: Terminal state. The operation completed successfully. `completed`
+//     equals `true`. For registrations, `context.registration` contains the
+//     resulting registration resource.
+//   - `failed`: Terminal state. The operation failed. `completed` equals `true`. See
+//     `error.code` and `error.message` for the reason. Require user review before
+//     retrying.
 type RegistrationEditResponseState string
 
 const (
@@ -572,11 +568,11 @@ func (r RegistrationEditResponseState) IsKnown() bool {
 	return false
 }
 
-// Error details when a workflow reaches the `failed` state. The specific error
-// codes and messages depend on the workflow type (registration, update, etc.) and
-// the underlying registry response. These workflow error codes are separate from
-// immediate HTTP error `errors[].code` values returned by non-2xx responses.
-// Surface `error.message` to the user for context.
+// Provides error details when a workflow reaches the `failed` state. The workflow
+// type (registration, update, etc.) and underlying registry response determine the
+// specific codes and messages. Workflow error codes differ from immediate HTTP
+// error `errors[].code` values in non-2xx responses. Surface `error.message` to
+// the user for context.
 type RegistrationEditResponseError struct {
 	// Machine-readable error code identifying the failure reason.
 	Code string `json:"code" api:"required"`
@@ -606,17 +602,17 @@ func (r registrationEditResponseErrorJSON) RawJSON() string {
 // A domain registration resource representing the current state of a registered
 // domain.
 type RegistrationGetResponse struct {
-	// Whether the domain will be automatically renewed before expiration.
+	// Whether automatic renewal occurs before expiration.
 	AutoRenew bool `json:"auto_renew" api:"required"`
 	// When the domain was registered. Present when the registration resource exists.
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	// Fully qualified domain name (FQDN) including the extension (e.g., `example.com`,
-	// `mybrand.app`). The domain name uniquely identifies a registration — the same
-	// domain cannot be registered twice, making it a natural idempotency key for
-	// registration requests.
+	// Provides a fully qualified domain name (FQDN), including the extension (e.g.,
+	// `example.com`, `mybrand.app`). The domain name uniquely identifies a
+	// registration. Cloudflare permits only one registration per domain, making the
+	// domain name a natural idempotency key for registration requests.
 	DomainName string `json:"domain_name" api:"required"`
-	// When the domain registration expires. Present when the registration is ready;
-	// may be null only while `status` is `registration_pending`.
+	// When the domain registration expires. Ready registrations include this value;
+	// only `registration_pending` may return null.
 	ExpiresAt time.Time `json:"expires_at" api:"required,nullable" format:"date-time"`
 	// Whether the domain is locked for transfer.
 	Locked bool `json:"locked" api:"required"`
@@ -624,12 +620,12 @@ type RegistrationGetResponse struct {
 	PrivacyMode RegistrationGetResponsePrivacyMode `json:"privacy_mode" api:"required"`
 	// Current registration status.
 	//
-	// - `active`: Domain is registered and operational
-	// - `registration_pending`: Registration is in progress
-	// - `expired`: Domain has expired
-	// - `suspended`: Domain is suspended by the registry
-	// - `redemption_period`: Domain is in the redemption grace period
-	// - `pending_delete`: Domain is pending deletion by the registry
+	// - `active`: The domain operates with an active registration.
+	// - `registration_pending`: Registration remains in progress.
+	// - `expired`: The domain registration expired.
+	// - `suspended`: The registry suspended the domain.
+	// - `redemption_period`: The domain entered the redemption grace period.
+	// - `pending_delete`: The registry scheduled the domain for deletion.
 	Status RegistrationGetResponseStatus `json:"status" api:"required"`
 	JSON   registrationGetResponseJSON   `json:"-"`
 }
@@ -660,12 +656,13 @@ func (r registrationGetResponseJSON) RawJSON() string {
 type RegistrationGetResponsePrivacyMode string
 
 const (
+	RegistrationGetResponsePrivacyModeOff       RegistrationGetResponsePrivacyMode = "off"
 	RegistrationGetResponsePrivacyModeRedaction RegistrationGetResponsePrivacyMode = "redaction"
 )
 
 func (r RegistrationGetResponsePrivacyMode) IsKnown() bool {
 	switch r {
-	case RegistrationGetResponsePrivacyModeRedaction:
+	case RegistrationGetResponsePrivacyModeOff, RegistrationGetResponsePrivacyModeRedaction:
 		return true
 	}
 	return false
@@ -673,12 +670,12 @@ func (r RegistrationGetResponsePrivacyMode) IsKnown() bool {
 
 // Current registration status.
 //
-// - `active`: Domain is registered and operational
-// - `registration_pending`: Registration is in progress
-// - `expired`: Domain has expired
-// - `suspended`: Domain is suspended by the registry
-// - `redemption_period`: Domain is in the redemption grace period
-// - `pending_delete`: Domain is pending deletion by the registry
+// - `active`: The domain operates with an active registration.
+// - `registration_pending`: Registration remains in progress.
+// - `expired`: The domain registration expired.
+// - `suspended`: The registry suspended the domain.
+// - `redemption_period`: The domain entered the redemption grace period.
+// - `pending_delete`: The registry scheduled the domain for deletion.
 type RegistrationGetResponseStatus string
 
 const (
@@ -699,16 +696,16 @@ func (r RegistrationGetResponseStatus) IsKnown() bool {
 }
 
 type RegistrationNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Fully qualified domain name (FQDN) including the extension (e.g., `example.com`,
-	// `mybrand.app`). The domain name uniquely identifies a registration — the same
-	// domain cannot be registered twice, making it a natural idempotency key for
-	// registration requests.
+	// Provides a fully qualified domain name (FQDN), including the extension (e.g.,
+	// `example.com`, `mybrand.app`). The domain name uniquely identifies a
+	// registration. Cloudflare permits only one registration per domain, making the
+	// domain name a natural idempotency key for registration requests.
 	DomainName param.Field[string] `json:"domain_name" api:"required"`
-	// User acknowledgements required by a specific extension or premium registration
-	// flow. The expected keys are described by the extension registration schema
-	// returned by the extension discovery endpoint.
+	// Provides user acknowledgements for a specific extension or premium registration
+	// flow. The extension registration schema from the extension discovery endpoint
+	// identifies the required keys.
 	Acknowledgements param.Field[map[string]interface{}] `json:"acknowledgements"`
 	// Enable or disable automatic renewal. Defaults to `false` if omitted. Setting
 	// this field to `true` is an explicit opt-in authorizing Cloudflare to charge the
@@ -716,51 +713,49 @@ type RegistrationNewParams struct {
 	// domain automatically. Renewal pricing may change over time based on registry
 	// pricing.
 	AutoRenew param.Field[bool] `json:"auto_renew"`
-	// Registry-specific contact extension values for the registrant. The required keys
-	// and allowed values vary by extension and are described by
-	// `GET /accounts/{account_id}/registrar/extensions/{extension}` in the
+	// Provides registry-specific contact extension values for the registrant.
+	// `GET /accounts/{account_id}/registrar/extensions/{extension}` identifies the
+	// required keys and allowed values for each extension in the
 	// `registration_schema.properties.contact_extensions` object.
 	//
 	// Examples include `.us` nexus fields, `.uk` registrant type fields, and `.ca`
-	// legal type fields. Omit this object for extensions whose registration schema
-	// does not include `contact_extensions`.
+	// legal type fields. Omit this object when the extension's registration schema
+	// excludes `contact_extensions`.
 	ContactExtensions param.Field[map[string]interface{}] `json:"contact_extensions"`
-	// Contact data for the registration request.
+	// Provides contact data for the registration request.
 	//
-	// The per-extension schema returned by
-	// `GET /accounts/{account_id}/registrar/extensions/{extension}` is the
-	// authoritative contract for which contact roles are accepted. Every currently
-	// supported extension requires only `contacts.registrant` from API callers.
-	// Additional roles such as `technical`, `administrator`, and `billing` may be
-	// provided when the extension schema includes them. If a registry requires one of
-	// those roles and the caller omits it, Cloudflare may derive that contact from
-	// `contacts.registrant`.
+	// The per-extension schema from
+	// `GET /accounts/{account_id}/registrar/extensions/{extension}` defines the
+	// accepted contact roles. Every currently supported extension requires only
+	// `contacts.registrant` from API callers. Callers may provide additional roles
+	// such as `technical`, `administrator`, and `billing` when the extension schema
+	// includes them. When a registry requires an omitted role, Cloudflare may derive
+	// that contact from `contacts.registrant`.
 	//
-	// If the `contacts` object is omitted entirely from the request, or if
-	// `contacts.registrant` is not provided, the system will use the account's default
-	// address book entry as the registrant contact. This default must be
-	// pre-configured by the account owner at
+	// When the request omits either the entire `contacts` object or
+	// `contacts.registrant`, the system uses the account's default address book entry
+	// as the registrant contact. The account owner must configure this default at
 	// `https://dash.cloudflare.com/{account_id}/domains/registrations`, where they can
-	// create or update the address book entry and accept the required agreement. No
-	// API exists for managing address book entries at this time.
+	// create or update the address book entry and accept the required agreement.
+	// Dashboard settings currently provide the only way to manage address book
+	// entries.
 	//
-	// If no default address book entry exists and no registrant contact is provided,
-	// the registration request will fail with a validation error.
+	// Without either a default address book entry or a registrant contact, the
+	// registration request fails validation.
 	Contacts param.Field[RegistrationNewParamsContacts] `json:"contacts"`
-	// WHOIS privacy mode for the registration. Defaults to `redaction`.
+	// Sets the WHOIS privacy mode for the registration. Defaults to `redaction`.
 	//
-	//   - `off`: Do not request WHOIS privacy.
-	//   - `redaction`: Request WHOIS redaction where supported by the extension. Some
-	//     extensions do not support privacy/redaction.
+	// - `off`: Disables WHOIS privacy.
+	// - `redaction`: Requests WHOIS redaction where the extension supports it. Some
+	//   extensions exclude privacy and redaction.
 	PrivacyMode param.Field[RegistrationNewParamsPrivacyMode] `json:"privacy_mode"`
-	// Number of years to register (1–10). If omitted, defaults to the minimum
-	// registration period required by the registry for this extension. For most
-	// extensions this is 1 year, but some extensions require longer minimum terms
-	// (e.g., `.ai` requires a minimum of 2 years).
+	// Sets the registration term from 1 to 10 years. When omitted, this field defaults
+	// to the registry's minimum registration period for the extension. Most extensions
+	// require 1 year, while some require longer minimum terms (e.g., `.ai` requires 2
+	// years).
 	//
-	// The registry for each extension may also enforce its own maximum registration
-	// term. If the requested value exceeds the registry's maximum, the registration
-	// will be rejected. When in doubt, use the default by omitting this field.
+	// Each registry may also enforce its own maximum registration term. A request
+	// above that maximum fails. When uncertain, omit this field to use the default.
 	Years  param.Field[int64]  `json:"years"`
 	Prefer param.Field[string] `header:"Prefer"`
 }
@@ -769,43 +764,41 @@ func (r RegistrationNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Contact data for the registration request.
+// Provides contact data for the registration request.
 //
-// The per-extension schema returned by
-// `GET /accounts/{account_id}/registrar/extensions/{extension}` is the
-// authoritative contract for which contact roles are accepted. Every currently
-// supported extension requires only `contacts.registrant` from API callers.
-// Additional roles such as `technical`, `administrator`, and `billing` may be
-// provided when the extension schema includes them. If a registry requires one of
-// those roles and the caller omits it, Cloudflare may derive that contact from
-// `contacts.registrant`.
+// The per-extension schema from
+// `GET /accounts/{account_id}/registrar/extensions/{extension}` defines the
+// accepted contact roles. Every currently supported extension requires only
+// `contacts.registrant` from API callers. Callers may provide additional roles
+// such as `technical`, `administrator`, and `billing` when the extension schema
+// includes them. When a registry requires an omitted role, Cloudflare may derive
+// that contact from `contacts.registrant`.
 //
-// If the `contacts` object is omitted entirely from the request, or if
-// `contacts.registrant` is not provided, the system will use the account's default
-// address book entry as the registrant contact. This default must be
-// pre-configured by the account owner at
+// When the request omits either the entire `contacts` object or
+// `contacts.registrant`, the system uses the account's default address book entry
+// as the registrant contact. The account owner must configure this default at
 // `https://dash.cloudflare.com/{account_id}/domains/registrations`, where they can
-// create or update the address book entry and accept the required agreement. No
-// API exists for managing address book entries at this time.
+// create or update the address book entry and accept the required agreement.
+// Dashboard settings currently provide the only way to manage address book
+// entries.
 //
-// If no default address book entry exists and no registrant contact is provided,
-// the registration request will fail with a validation error.
+// Without either a default address book entry or a registrant contact, the
+// registration request fails validation.
 type RegistrationNewParamsContacts struct {
-	// Contact data for the domain registration. This information is submitted to the
-	// domain registry and, depending on extension and privacy settings, may appear in
-	// public WHOIS records.
+	// Optional administrator contact. Accepted only when the extension schema includes
+	// this role. When the registry requires an omitted contact, Cloudflare may derive
+	// it from `contacts.registrant`.
 	Administrator param.Field[RegistrationNewParamsContactsAdministrator] `json:"administrator"`
-	// Contact data for the domain registration. This information is submitted to the
-	// domain registry and, depending on extension and privacy settings, may appear in
-	// public WHOIS records.
+	// Optional billing contact. Accepted only when the extension schema includes this
+	// role. When the registry requires an omitted contact, Cloudflare may derive it
+	// from `contacts.registrant`.
 	Billing param.Field[RegistrationNewParamsContactsBilling] `json:"billing"`
-	// Contact data for the domain registration. This information is submitted to the
-	// domain registry and, depending on extension and privacy settings, may appear in
-	// public WHOIS records.
+	// Optional registrant contact. If omitted, the account's default address book
+	// entry is used instead.
 	Registrant param.Field[RegistrationNewParamsContactsRegistrant] `json:"registrant"`
-	// Contact data for the domain registration. This information is submitted to the
-	// domain registry and, depending on extension and privacy settings, may appear in
-	// public WHOIS records.
+	// Optional technical contact. Accepted only when the extension schema includes
+	// this role. When the registry requires an omitted contact, Cloudflare may derive
+	// it from `contacts.registrant`.
 	Technical param.Field[RegistrationNewParamsContactsTechnical] `json:"technical"`
 }
 
@@ -813,14 +806,14 @@ func (r RegistrationNewParamsContacts) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Contact data for the domain registration. This information is submitted to the
-// domain registry and, depending on extension and privacy settings, may appear in
-// public WHOIS records.
+// Optional administrator contact. Accepted only when the extension schema includes
+// this role. When the registry requires an omitted contact, Cloudflare may derive
+// it from `contacts.registrant`.
 type RegistrationNewParamsContactsAdministrator struct {
 	// Email address for the registrant. Used for domain-related communications from
 	// the registry, including ownership verification and renewal notices.
 	Email param.Field[string] `json:"email" api:"required" format:"email"`
-	// Phone number in E.164 format: `+{country_code}.{number}` with no spaces or
+	// Phone number in E.164 format: `+{country_code}.{number}` without spaces or
 	// dashes. Examples: `+1.5555555555` (US), `+44.2071234567` (UK), `+81.312345678`
 	// (Japan).
 	Phone param.Field[string] `json:"phone" api:"required"`
@@ -878,14 +871,14 @@ func (r RegistrationNewParamsContactsAdministratorPostalInfoAddress) MarshalJSON
 	return apijson.MarshalRoot(r)
 }
 
-// Contact data for the domain registration. This information is submitted to the
-// domain registry and, depending on extension and privacy settings, may appear in
-// public WHOIS records.
+// Optional billing contact. Accepted only when the extension schema includes this
+// role. When the registry requires an omitted contact, Cloudflare may derive it
+// from `contacts.registrant`.
 type RegistrationNewParamsContactsBilling struct {
 	// Email address for the registrant. Used for domain-related communications from
 	// the registry, including ownership verification and renewal notices.
 	Email param.Field[string] `json:"email" api:"required" format:"email"`
-	// Phone number in E.164 format: `+{country_code}.{number}` with no spaces or
+	// Phone number in E.164 format: `+{country_code}.{number}` without spaces or
 	// dashes. Examples: `+1.5555555555` (US), `+44.2071234567` (UK), `+81.312345678`
 	// (Japan).
 	Phone param.Field[string] `json:"phone" api:"required"`
@@ -943,14 +936,13 @@ func (r RegistrationNewParamsContactsBillingPostalInfoAddress) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-// Contact data for the domain registration. This information is submitted to the
-// domain registry and, depending on extension and privacy settings, may appear in
-// public WHOIS records.
+// Optional registrant contact. If omitted, the account's default address book
+// entry is used instead.
 type RegistrationNewParamsContactsRegistrant struct {
 	// Email address for the registrant. Used for domain-related communications from
 	// the registry, including ownership verification and renewal notices.
 	Email param.Field[string] `json:"email" api:"required" format:"email"`
-	// Phone number in E.164 format: `+{country_code}.{number}` with no spaces or
+	// Phone number in E.164 format: `+{country_code}.{number}` without spaces or
 	// dashes. Examples: `+1.5555555555` (US), `+44.2071234567` (UK), `+81.312345678`
 	// (Japan).
 	Phone param.Field[string] `json:"phone" api:"required"`
@@ -1008,14 +1000,14 @@ func (r RegistrationNewParamsContactsRegistrantPostalInfoAddress) MarshalJSON() 
 	return apijson.MarshalRoot(r)
 }
 
-// Contact data for the domain registration. This information is submitted to the
-// domain registry and, depending on extension and privacy settings, may appear in
-// public WHOIS records.
+// Optional technical contact. Accepted only when the extension schema includes
+// this role. When the registry requires an omitted contact, Cloudflare may derive
+// it from `contacts.registrant`.
 type RegistrationNewParamsContactsTechnical struct {
 	// Email address for the registrant. Used for domain-related communications from
 	// the registry, including ownership verification and renewal notices.
 	Email param.Field[string] `json:"email" api:"required" format:"email"`
-	// Phone number in E.164 format: `+{country_code}.{number}` with no spaces or
+	// Phone number in E.164 format: `+{country_code}.{number}` without spaces or
 	// dashes. Examples: `+1.5555555555` (US), `+44.2071234567` (UK), `+81.312345678`
 	// (Japan).
 	Phone param.Field[string] `json:"phone" api:"required"`
@@ -1073,31 +1065,32 @@ func (r RegistrationNewParamsContactsTechnicalPostalInfoAddress) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-// WHOIS privacy mode for the registration. Defaults to `redaction`.
+// Sets the WHOIS privacy mode for the registration. Defaults to `redaction`.
 //
-//   - `off`: Do not request WHOIS privacy.
-//   - `redaction`: Request WHOIS redaction where supported by the extension. Some
-//     extensions do not support privacy/redaction.
+//   - `off`: Disables WHOIS privacy.
+//   - `redaction`: Requests WHOIS redaction where the extension supports it. Some
+//     extensions exclude privacy and redaction.
 type RegistrationNewParamsPrivacyMode string
 
 const (
+	RegistrationNewParamsPrivacyModeOff       RegistrationNewParamsPrivacyMode = "off"
 	RegistrationNewParamsPrivacyModeRedaction RegistrationNewParamsPrivacyMode = "redaction"
 )
 
 func (r RegistrationNewParamsPrivacyMode) IsKnown() bool {
 	switch r {
-	case RegistrationNewParamsPrivacyModeRedaction:
+	case RegistrationNewParamsPrivacyModeOff, RegistrationNewParamsPrivacyModeRedaction:
 		return true
 	}
 	return false
 }
 
 type RegistrationNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Errors   []RegistrationNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RegistrationNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Status of an async registration workflow.
 	Result RegistrationNewResponse `json:"result" api:"required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success RegistrationNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    registrationNewResponseEnvelopeJSON    `json:"-"`
 }
@@ -1121,7 +1114,105 @@ func (r registrationNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RegistrationNewResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source RegistrationNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON   registrationNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// registrationNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RegistrationNewResponseEnvelopeErrors]
+type registrationNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type RegistrationNewResponseEnvelopeErrorsSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                          `json:"pointer" api:"required"`
+	JSON    registrationNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// registrationNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [RegistrationNewResponseEnvelopeErrorsSource]
+type registrationNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RegistrationNewResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source RegistrationNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON   registrationNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// registrationNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RegistrationNewResponseEnvelopeMessages]
+type registrationNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type RegistrationNewResponseEnvelopeMessagesSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                            `json:"pointer" api:"required"`
+	JSON    registrationNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// registrationNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [RegistrationNewResponseEnvelopeMessagesSource]
+type registrationNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RegistrationNewResponseEnvelopeSuccess bool
 
 const (
@@ -1137,7 +1228,7 @@ func (r RegistrationNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RegistrationListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Opaque token from a previous response's `result_info.cursor`. Pass this value to
 	// fetch the next page of results. Omit (or pass an empty string) for the first
@@ -1195,7 +1286,7 @@ func (r RegistrationListParamsSortBy) IsKnown() bool {
 }
 
 type RegistrationEditParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Enable or disable automatic renewal. Setting this field to `true` authorizes
 	// Cloudflare to charge the account's default payment method up to 30 days before
@@ -1224,11 +1315,11 @@ func (r RegistrationEditParamsPrefer) IsKnown() bool {
 }
 
 type RegistrationEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Errors   []RegistrationEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RegistrationEditResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Status of an async registration workflow.
 	Result RegistrationEditResponse `json:"result" api:"required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success RegistrationEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    registrationEditResponseEnvelopeJSON    `json:"-"`
 }
@@ -1252,7 +1343,105 @@ func (r registrationEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RegistrationEditResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source RegistrationEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON   registrationEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// registrationEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RegistrationEditResponseEnvelopeErrors]
+type registrationEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type RegistrationEditResponseEnvelopeErrorsSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                           `json:"pointer" api:"required"`
+	JSON    registrationEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// registrationEditResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [RegistrationEditResponseEnvelopeErrorsSource]
+type registrationEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RegistrationEditResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source RegistrationEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON   registrationEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// registrationEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RegistrationEditResponseEnvelopeMessages]
+type registrationEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type RegistrationEditResponseEnvelopeMessagesSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                             `json:"pointer" api:"required"`
+	JSON    registrationEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// registrationEditResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [RegistrationEditResponseEnvelopeMessagesSource]
+type registrationEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RegistrationEditResponseEnvelopeSuccess bool
 
 const (
@@ -1268,17 +1457,17 @@ func (r RegistrationEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RegistrationGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RegistrationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Errors   []RegistrationGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RegistrationGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// A domain registration resource representing the current state of a registered
 	// domain.
 	Result RegistrationGetResponse `json:"result" api:"required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success RegistrationGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    registrationGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -1302,7 +1491,105 @@ func (r registrationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RegistrationGetResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source RegistrationGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON   registrationGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// registrationGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RegistrationGetResponseEnvelopeErrors]
+type registrationGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type RegistrationGetResponseEnvelopeErrorsSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                          `json:"pointer" api:"required"`
+	JSON    registrationGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// registrationGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [RegistrationGetResponseEnvelopeErrorsSource]
+type registrationGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RegistrationGetResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source RegistrationGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON   registrationGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// registrationGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RegistrationGetResponseEnvelopeMessages]
+type registrationGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type RegistrationGetResponseEnvelopeMessagesSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                            `json:"pointer" api:"required"`
+	JSON    registrationGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// registrationGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [RegistrationGetResponseEnvelopeMessagesSource]
+type registrationGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RegistrationGetResponseEnvelopeSuccess bool
 
 const (

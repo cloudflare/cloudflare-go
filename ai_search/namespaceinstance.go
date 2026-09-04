@@ -246,11 +246,13 @@ func (r *NamespaceInstanceService) Stats(ctx context.Context, name string, id st
 
 type NamespaceInstanceNewResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID             string                                     `json:"id" api:"required"`
-	CreatedAt      time.Time                                  `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt     time.Time                                  `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID    string                                     `json:"ai_gateway_id" api:"nullable"`
-	AISearchModel  NamespaceInstanceNewResponseAISearchModel  `json:"ai_search_model" api:"nullable"`
+	ID          string    `json:"id" api:"required"`
+	CreatedAt   time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt  time.Time `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID string    `json:"ai_gateway_id" api:"nullable"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	AISearchModel  string                                     `json:"ai_search_model" api:"nullable"`
 	Cache          bool                                       `json:"cache"`
 	CacheThreshold NamespaceInstanceNewResponseCacheThreshold `json:"cache_threshold"`
 	// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
@@ -261,7 +263,7 @@ type NamespaceInstanceNewResponse struct {
 	ChunkSize      int64                                        `json:"chunk_size"`
 	CreatedBy      string                                       `json:"created_by" api:"nullable"`
 	CustomMetadata []NamespaceInstanceNewResponseCustomMetadata `json:"custom_metadata"`
-	EmbeddingModel NamespaceInstanceNewResponseEmbeddingModel   `json:"embedding_model" api:"nullable"`
+	EmbeddingModel string                                       `json:"embedding_model" api:"nullable"`
 	Enable         bool                                         `json:"enable"`
 	EngineVersion  float64                                      `json:"engine_version"`
 	FusionMethod   NamespaceInstanceNewResponseFusionMethod     `json:"fusion_method"`
@@ -282,14 +284,16 @@ type NamespaceInstanceNewResponse struct {
 	PublicEndpointID     string                                           `json:"public_endpoint_id" api:"nullable"`
 	PublicEndpointParams NamespaceInstanceNewResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                             `json:"reranking"`
-	RerankingModel       NamespaceInstanceNewResponseRerankingModel       `json:"reranking_model" api:"nullable"`
+	RerankingModel       string                                           `json:"reranking_model" api:"nullable"`
 	RetrievalOptions     NamespaceInstanceNewResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
-	RewriteModel         NamespaceInstanceNewResponseRewriteModel         `json:"rewrite_model" api:"nullable"`
-	RewriteQuery         bool                                             `json:"rewrite_query"`
-	ScoreThreshold       float64                                          `json:"score_threshold"`
-	Source               string                                           `json:"source" api:"nullable"`
-	SourceParams         NamespaceInstanceNewResponseSourceParams         `json:"source_params" api:"nullable"`
-	Status               string                                           `json:"status"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	RewriteModel   string                                   `json:"rewrite_model" api:"nullable"`
+	RewriteQuery   bool                                     `json:"rewrite_query"`
+	ScoreThreshold float64                                  `json:"score_threshold"`
+	Source         string                                   `json:"source" api:"nullable"`
+	SourceParams   NamespaceInstanceNewResponseSourceParams `json:"source_params" api:"nullable"`
+	Status         string                                   `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval NamespaceInstanceNewResponseSyncInterval `json:"sync_interval"`
@@ -350,49 +354,6 @@ func (r *NamespaceInstanceNewResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r namespaceInstanceNewResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type NamespaceInstanceNewResponseAISearchModel string
-
-const (
-	NamespaceInstanceNewResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceInstanceNewResponseAISearchModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceInstanceNewResponseAISearchModelCfZaiOrgGlm4_7Flash                   NamespaceInstanceNewResponseAISearchModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceInstanceNewResponseAISearchModelCfMetaLlama3_1_8bInstructFast         NamespaceInstanceNewResponseAISearchModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceInstanceNewResponseAISearchModelCfMetaLlama3_1_8bInstructFp8          NamespaceInstanceNewResponseAISearchModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceInstanceNewResponseAISearchModelCfMetaLlama4Scout17b16eInstruct       NamespaceInstanceNewResponseAISearchModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceNewResponseAISearchModelCfQwenQwen3_30bA3bFp8                 NamespaceInstanceNewResponseAISearchModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceInstanceNewResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceInstanceNewResponseAISearchModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceInstanceNewResponseAISearchModelCfMoonshotaiKimiK2Instruct            NamespaceInstanceNewResponseAISearchModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceInstanceNewResponseAISearchModelCfGoogleGemma3_12bIt                  NamespaceInstanceNewResponseAISearchModel = "@cf/google/gemma-3-12b-it"
-	NamespaceInstanceNewResponseAISearchModelCfGoogleGemma4_26bA4bIt               NamespaceInstanceNewResponseAISearchModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceInstanceNewResponseAISearchModelCfMoonshotaiKimiK2_5                  NamespaceInstanceNewResponseAISearchModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceInstanceNewResponseAISearchModelAnthropicClaude3_7Sonnet              NamespaceInstanceNewResponseAISearchModel = "anthropic/claude-3-7-sonnet"
-	NamespaceInstanceNewResponseAISearchModelAnthropicClaudeSonnet4                NamespaceInstanceNewResponseAISearchModel = "anthropic/claude-sonnet-4"
-	NamespaceInstanceNewResponseAISearchModelAnthropicClaudeOpus4                  NamespaceInstanceNewResponseAISearchModel = "anthropic/claude-opus-4"
-	NamespaceInstanceNewResponseAISearchModelAnthropicClaude3_5Haiku               NamespaceInstanceNewResponseAISearchModel = "anthropic/claude-3-5-haiku"
-	NamespaceInstanceNewResponseAISearchModelCerebrasQwen3_235bA22bInstruct        NamespaceInstanceNewResponseAISearchModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceInstanceNewResponseAISearchModelCerebrasQwen3_235bA22bThinking        NamespaceInstanceNewResponseAISearchModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceInstanceNewResponseAISearchModelCerebrasLlama3_3_70b                  NamespaceInstanceNewResponseAISearchModel = "cerebras/llama-3.3-70b"
-	NamespaceInstanceNewResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct NamespaceInstanceNewResponseAISearchModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceInstanceNewResponseAISearchModelCerebrasLlama4Scout17b16eInstruct     NamespaceInstanceNewResponseAISearchModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceNewResponseAISearchModelCerebrasGptOSs120b                    NamespaceInstanceNewResponseAISearchModel = "cerebras/gpt-oss-120b"
-	NamespaceInstanceNewResponseAISearchModelGoogleAIStudioGemini2_5Flash          NamespaceInstanceNewResponseAISearchModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceInstanceNewResponseAISearchModelGoogleAIStudioGemini2_5Pro            NamespaceInstanceNewResponseAISearchModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceInstanceNewResponseAISearchModelGrokGrok4                             NamespaceInstanceNewResponseAISearchModel = "grok/grok-4"
-	NamespaceInstanceNewResponseAISearchModelGroqLlama3_3_70bVersatile             NamespaceInstanceNewResponseAISearchModel = "groq/llama-3.3-70b-versatile"
-	NamespaceInstanceNewResponseAISearchModelGroqLlama3_1_8bInstant                NamespaceInstanceNewResponseAISearchModel = "groq/llama-3.1-8b-instant"
-	NamespaceInstanceNewResponseAISearchModelOpenAIGpt5                            NamespaceInstanceNewResponseAISearchModel = "openai/gpt-5"
-	NamespaceInstanceNewResponseAISearchModelOpenAIGpt5Mini                        NamespaceInstanceNewResponseAISearchModel = "openai/gpt-5-mini"
-	NamespaceInstanceNewResponseAISearchModelOpenAIGpt5Nano                        NamespaceInstanceNewResponseAISearchModel = "openai/gpt-5-nano"
-	NamespaceInstanceNewResponseAISearchModelEmpty                                 NamespaceInstanceNewResponseAISearchModel = ""
-)
-
-func (r NamespaceInstanceNewResponseAISearchModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceNewResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceInstanceNewResponseAISearchModelCfZaiOrgGlm4_7Flash, NamespaceInstanceNewResponseAISearchModelCfMetaLlama3_1_8bInstructFast, NamespaceInstanceNewResponseAISearchModelCfMetaLlama3_1_8bInstructFp8, NamespaceInstanceNewResponseAISearchModelCfMetaLlama4Scout17b16eInstruct, NamespaceInstanceNewResponseAISearchModelCfQwenQwen3_30bA3bFp8, NamespaceInstanceNewResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceInstanceNewResponseAISearchModelCfMoonshotaiKimiK2Instruct, NamespaceInstanceNewResponseAISearchModelCfGoogleGemma3_12bIt, NamespaceInstanceNewResponseAISearchModelCfGoogleGemma4_26bA4bIt, NamespaceInstanceNewResponseAISearchModelCfMoonshotaiKimiK2_5, NamespaceInstanceNewResponseAISearchModelAnthropicClaude3_7Sonnet, NamespaceInstanceNewResponseAISearchModelAnthropicClaudeSonnet4, NamespaceInstanceNewResponseAISearchModelAnthropicClaudeOpus4, NamespaceInstanceNewResponseAISearchModelAnthropicClaude3_5Haiku, NamespaceInstanceNewResponseAISearchModelCerebrasQwen3_235bA22bInstruct, NamespaceInstanceNewResponseAISearchModelCerebrasQwen3_235bA22bThinking, NamespaceInstanceNewResponseAISearchModelCerebrasLlama3_3_70b, NamespaceInstanceNewResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct, NamespaceInstanceNewResponseAISearchModelCerebrasLlama4Scout17b16eInstruct, NamespaceInstanceNewResponseAISearchModelCerebrasGptOSs120b, NamespaceInstanceNewResponseAISearchModelGoogleAIStudioGemini2_5Flash, NamespaceInstanceNewResponseAISearchModelGoogleAIStudioGemini2_5Pro, NamespaceInstanceNewResponseAISearchModelGrokGrok4, NamespaceInstanceNewResponseAISearchModelGroqLlama3_3_70bVersatile, NamespaceInstanceNewResponseAISearchModelGroqLlama3_1_8bInstant, NamespaceInstanceNewResponseAISearchModelOpenAIGpt5, NamespaceInstanceNewResponseAISearchModelOpenAIGpt5Mini, NamespaceInstanceNewResponseAISearchModelOpenAIGpt5Nano, NamespaceInstanceNewResponseAISearchModelEmpty:
-		return true
-	}
-	return false
 }
 
 type NamespaceInstanceNewResponseCacheThreshold string
@@ -473,30 +434,6 @@ const (
 func (r NamespaceInstanceNewResponseCustomMetadataDataType) IsKnown() bool {
 	switch r {
 	case NamespaceInstanceNewResponseCustomMetadataDataTypeText, NamespaceInstanceNewResponseCustomMetadataDataTypeNumber, NamespaceInstanceNewResponseCustomMetadataDataTypeBoolean, NamespaceInstanceNewResponseCustomMetadataDataTypeDatetime:
-		return true
-	}
-	return false
-}
-
-type NamespaceInstanceNewResponseEmbeddingModel string
-
-const (
-	NamespaceInstanceNewResponseEmbeddingModelCfQwenQwen3Embedding0_6b              NamespaceInstanceNewResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
-	NamespaceInstanceNewResponseEmbeddingModelCfQwenQwen3VlEmbedding2b              NamespaceInstanceNewResponseEmbeddingModel = "@cf/qwen/qwen3-vl-embedding-2b"
-	NamespaceInstanceNewResponseEmbeddingModelCfBaaiBgeM3                           NamespaceInstanceNewResponseEmbeddingModel = "@cf/baai/bge-m3"
-	NamespaceInstanceNewResponseEmbeddingModelCfBaaiBgeLargeEnV1_5                  NamespaceInstanceNewResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
-	NamespaceInstanceNewResponseEmbeddingModelCfGoogleEmbeddinggemma300m            NamespaceInstanceNewResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	NamespaceInstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      NamespaceInstanceNewResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
-	NamespaceInstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview NamespaceInstanceNewResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
-	NamespaceInstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2        NamespaceInstanceNewResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2"
-	NamespaceInstanceNewResponseEmbeddingModelOpenAITextEmbedding3Small             NamespaceInstanceNewResponseEmbeddingModel = "openai/text-embedding-3-small"
-	NamespaceInstanceNewResponseEmbeddingModelOpenAITextEmbedding3Large             NamespaceInstanceNewResponseEmbeddingModel = "openai/text-embedding-3-large"
-	NamespaceInstanceNewResponseEmbeddingModelEmpty                                 NamespaceInstanceNewResponseEmbeddingModel = ""
-)
-
-func (r NamespaceInstanceNewResponseEmbeddingModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceNewResponseEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceNewResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceNewResponseEmbeddingModelCfBaaiBgeM3, NamespaceInstanceNewResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceNewResponseEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceNewResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2, NamespaceInstanceNewResponseEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceNewResponseEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceNewResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -766,21 +703,6 @@ func (r namespaceInstanceNewResponsePublicEndpointParamsSearchEndpointJSON) RawJ
 	return r.raw
 }
 
-type NamespaceInstanceNewResponseRerankingModel string
-
-const (
-	NamespaceInstanceNewResponseRerankingModelCfBaaiBgeRerankerBase NamespaceInstanceNewResponseRerankingModel = "@cf/baai/bge-reranker-base"
-	NamespaceInstanceNewResponseRerankingModelEmpty                 NamespaceInstanceNewResponseRerankingModel = ""
-)
-
-func (r NamespaceInstanceNewResponseRerankingModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceNewResponseRerankingModelCfBaaiBgeRerankerBase, NamespaceInstanceNewResponseRerankingModelEmpty:
-		return true
-	}
-	return false
-}
-
 type NamespaceInstanceNewResponseRetrievalOptions struct {
 	// Metadata fields to boost search results by. Each entry specifies a metadata
 	// field and an optional direction. Direction defaults to 'asc' for
@@ -880,49 +802,6 @@ const (
 func (r NamespaceInstanceNewResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
 	case NamespaceInstanceNewResponseRetrievalOptionsKeywordMatchModeAnd, NamespaceInstanceNewResponseRetrievalOptionsKeywordMatchModeOr:
-		return true
-	}
-	return false
-}
-
-type NamespaceInstanceNewResponseRewriteModel string
-
-const (
-	NamespaceInstanceNewResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceInstanceNewResponseRewriteModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceInstanceNewResponseRewriteModelCfZaiOrgGlm4_7Flash                   NamespaceInstanceNewResponseRewriteModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceInstanceNewResponseRewriteModelCfMetaLlama3_1_8bInstructFast         NamespaceInstanceNewResponseRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceInstanceNewResponseRewriteModelCfMetaLlama3_1_8bInstructFp8          NamespaceInstanceNewResponseRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceInstanceNewResponseRewriteModelCfMetaLlama4Scout17b16eInstruct       NamespaceInstanceNewResponseRewriteModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceNewResponseRewriteModelCfQwenQwen3_30bA3bFp8                 NamespaceInstanceNewResponseRewriteModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceInstanceNewResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceInstanceNewResponseRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceInstanceNewResponseRewriteModelCfMoonshotaiKimiK2Instruct            NamespaceInstanceNewResponseRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceInstanceNewResponseRewriteModelCfGoogleGemma3_12bIt                  NamespaceInstanceNewResponseRewriteModel = "@cf/google/gemma-3-12b-it"
-	NamespaceInstanceNewResponseRewriteModelCfGoogleGemma4_26bA4bIt               NamespaceInstanceNewResponseRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceInstanceNewResponseRewriteModelCfMoonshotaiKimiK2_5                  NamespaceInstanceNewResponseRewriteModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceInstanceNewResponseRewriteModelAnthropicClaude3_7Sonnet              NamespaceInstanceNewResponseRewriteModel = "anthropic/claude-3-7-sonnet"
-	NamespaceInstanceNewResponseRewriteModelAnthropicClaudeSonnet4                NamespaceInstanceNewResponseRewriteModel = "anthropic/claude-sonnet-4"
-	NamespaceInstanceNewResponseRewriteModelAnthropicClaudeOpus4                  NamespaceInstanceNewResponseRewriteModel = "anthropic/claude-opus-4"
-	NamespaceInstanceNewResponseRewriteModelAnthropicClaude3_5Haiku               NamespaceInstanceNewResponseRewriteModel = "anthropic/claude-3-5-haiku"
-	NamespaceInstanceNewResponseRewriteModelCerebrasQwen3_235bA22bInstruct        NamespaceInstanceNewResponseRewriteModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceInstanceNewResponseRewriteModelCerebrasQwen3_235bA22bThinking        NamespaceInstanceNewResponseRewriteModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceInstanceNewResponseRewriteModelCerebrasLlama3_3_70b                  NamespaceInstanceNewResponseRewriteModel = "cerebras/llama-3.3-70b"
-	NamespaceInstanceNewResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct NamespaceInstanceNewResponseRewriteModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceInstanceNewResponseRewriteModelCerebrasLlama4Scout17b16eInstruct     NamespaceInstanceNewResponseRewriteModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceNewResponseRewriteModelCerebrasGptOSs120b                    NamespaceInstanceNewResponseRewriteModel = "cerebras/gpt-oss-120b"
-	NamespaceInstanceNewResponseRewriteModelGoogleAIStudioGemini2_5Flash          NamespaceInstanceNewResponseRewriteModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceInstanceNewResponseRewriteModelGoogleAIStudioGemini2_5Pro            NamespaceInstanceNewResponseRewriteModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceInstanceNewResponseRewriteModelGrokGrok4                             NamespaceInstanceNewResponseRewriteModel = "grok/grok-4"
-	NamespaceInstanceNewResponseRewriteModelGroqLlama3_3_70bVersatile             NamespaceInstanceNewResponseRewriteModel = "groq/llama-3.3-70b-versatile"
-	NamespaceInstanceNewResponseRewriteModelGroqLlama3_1_8bInstant                NamespaceInstanceNewResponseRewriteModel = "groq/llama-3.1-8b-instant"
-	NamespaceInstanceNewResponseRewriteModelOpenAIGpt5                            NamespaceInstanceNewResponseRewriteModel = "openai/gpt-5"
-	NamespaceInstanceNewResponseRewriteModelOpenAIGpt5Mini                        NamespaceInstanceNewResponseRewriteModel = "openai/gpt-5-mini"
-	NamespaceInstanceNewResponseRewriteModelOpenAIGpt5Nano                        NamespaceInstanceNewResponseRewriteModel = "openai/gpt-5-nano"
-	NamespaceInstanceNewResponseRewriteModelEmpty                                 NamespaceInstanceNewResponseRewriteModel = ""
-)
-
-func (r NamespaceInstanceNewResponseRewriteModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceNewResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceInstanceNewResponseRewriteModelCfZaiOrgGlm4_7Flash, NamespaceInstanceNewResponseRewriteModelCfMetaLlama3_1_8bInstructFast, NamespaceInstanceNewResponseRewriteModelCfMetaLlama3_1_8bInstructFp8, NamespaceInstanceNewResponseRewriteModelCfMetaLlama4Scout17b16eInstruct, NamespaceInstanceNewResponseRewriteModelCfQwenQwen3_30bA3bFp8, NamespaceInstanceNewResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceInstanceNewResponseRewriteModelCfMoonshotaiKimiK2Instruct, NamespaceInstanceNewResponseRewriteModelCfGoogleGemma3_12bIt, NamespaceInstanceNewResponseRewriteModelCfGoogleGemma4_26bA4bIt, NamespaceInstanceNewResponseRewriteModelCfMoonshotaiKimiK2_5, NamespaceInstanceNewResponseRewriteModelAnthropicClaude3_7Sonnet, NamespaceInstanceNewResponseRewriteModelAnthropicClaudeSonnet4, NamespaceInstanceNewResponseRewriteModelAnthropicClaudeOpus4, NamespaceInstanceNewResponseRewriteModelAnthropicClaude3_5Haiku, NamespaceInstanceNewResponseRewriteModelCerebrasQwen3_235bA22bInstruct, NamespaceInstanceNewResponseRewriteModelCerebrasQwen3_235bA22bThinking, NamespaceInstanceNewResponseRewriteModelCerebrasLlama3_3_70b, NamespaceInstanceNewResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct, NamespaceInstanceNewResponseRewriteModelCerebrasLlama4Scout17b16eInstruct, NamespaceInstanceNewResponseRewriteModelCerebrasGptOSs120b, NamespaceInstanceNewResponseRewriteModelGoogleAIStudioGemini2_5Flash, NamespaceInstanceNewResponseRewriteModelGoogleAIStudioGemini2_5Pro, NamespaceInstanceNewResponseRewriteModelGrokGrok4, NamespaceInstanceNewResponseRewriteModelGroqLlama3_3_70bVersatile, NamespaceInstanceNewResponseRewriteModelGroqLlama3_1_8bInstant, NamespaceInstanceNewResponseRewriteModelOpenAIGpt5, NamespaceInstanceNewResponseRewriteModelOpenAIGpt5Mini, NamespaceInstanceNewResponseRewriteModelOpenAIGpt5Nano, NamespaceInstanceNewResponseRewriteModelEmpty:
 		return true
 	}
 	return false
@@ -1179,11 +1058,13 @@ func (r NamespaceInstanceNewResponseType) IsKnown() bool {
 
 type NamespaceInstanceUpdateResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID             string                                        `json:"id" api:"required"`
-	CreatedAt      time.Time                                     `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt     time.Time                                     `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID    string                                        `json:"ai_gateway_id" api:"nullable"`
-	AISearchModel  NamespaceInstanceUpdateResponseAISearchModel  `json:"ai_search_model" api:"nullable"`
+	ID          string    `json:"id" api:"required"`
+	CreatedAt   time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt  time.Time `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID string    `json:"ai_gateway_id" api:"nullable"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	AISearchModel  string                                        `json:"ai_search_model" api:"nullable"`
 	Cache          bool                                          `json:"cache"`
 	CacheThreshold NamespaceInstanceUpdateResponseCacheThreshold `json:"cache_threshold"`
 	// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
@@ -1194,7 +1075,7 @@ type NamespaceInstanceUpdateResponse struct {
 	ChunkSize      int64                                           `json:"chunk_size"`
 	CreatedBy      string                                          `json:"created_by" api:"nullable"`
 	CustomMetadata []NamespaceInstanceUpdateResponseCustomMetadata `json:"custom_metadata"`
-	EmbeddingModel NamespaceInstanceUpdateResponseEmbeddingModel   `json:"embedding_model" api:"nullable"`
+	EmbeddingModel string                                          `json:"embedding_model" api:"nullable"`
 	Enable         bool                                            `json:"enable"`
 	EngineVersion  float64                                         `json:"engine_version"`
 	FusionMethod   NamespaceInstanceUpdateResponseFusionMethod     `json:"fusion_method"`
@@ -1215,14 +1096,16 @@ type NamespaceInstanceUpdateResponse struct {
 	PublicEndpointID     string                                              `json:"public_endpoint_id" api:"nullable"`
 	PublicEndpointParams NamespaceInstanceUpdateResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                                `json:"reranking"`
-	RerankingModel       NamespaceInstanceUpdateResponseRerankingModel       `json:"reranking_model" api:"nullable"`
+	RerankingModel       string                                              `json:"reranking_model" api:"nullable"`
 	RetrievalOptions     NamespaceInstanceUpdateResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
-	RewriteModel         NamespaceInstanceUpdateResponseRewriteModel         `json:"rewrite_model" api:"nullable"`
-	RewriteQuery         bool                                                `json:"rewrite_query"`
-	ScoreThreshold       float64                                             `json:"score_threshold"`
-	Source               string                                              `json:"source" api:"nullable"`
-	SourceParams         NamespaceInstanceUpdateResponseSourceParams         `json:"source_params" api:"nullable"`
-	Status               string                                              `json:"status"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	RewriteModel   string                                      `json:"rewrite_model" api:"nullable"`
+	RewriteQuery   bool                                        `json:"rewrite_query"`
+	ScoreThreshold float64                                     `json:"score_threshold"`
+	Source         string                                      `json:"source" api:"nullable"`
+	SourceParams   NamespaceInstanceUpdateResponseSourceParams `json:"source_params" api:"nullable"`
+	Status         string                                      `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval NamespaceInstanceUpdateResponseSyncInterval `json:"sync_interval"`
@@ -1283,49 +1166,6 @@ func (r *NamespaceInstanceUpdateResponse) UnmarshalJSON(data []byte) (err error)
 
 func (r namespaceInstanceUpdateResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type NamespaceInstanceUpdateResponseAISearchModel string
-
-const (
-	NamespaceInstanceUpdateResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceInstanceUpdateResponseAISearchModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceInstanceUpdateResponseAISearchModelCfZaiOrgGlm4_7Flash                   NamespaceInstanceUpdateResponseAISearchModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceInstanceUpdateResponseAISearchModelCfMetaLlama3_1_8bInstructFast         NamespaceInstanceUpdateResponseAISearchModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceInstanceUpdateResponseAISearchModelCfMetaLlama3_1_8bInstructFp8          NamespaceInstanceUpdateResponseAISearchModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceInstanceUpdateResponseAISearchModelCfMetaLlama4Scout17b16eInstruct       NamespaceInstanceUpdateResponseAISearchModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceUpdateResponseAISearchModelCfQwenQwen3_30bA3bFp8                 NamespaceInstanceUpdateResponseAISearchModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceInstanceUpdateResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceInstanceUpdateResponseAISearchModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceInstanceUpdateResponseAISearchModelCfMoonshotaiKimiK2Instruct            NamespaceInstanceUpdateResponseAISearchModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceInstanceUpdateResponseAISearchModelCfGoogleGemma3_12bIt                  NamespaceInstanceUpdateResponseAISearchModel = "@cf/google/gemma-3-12b-it"
-	NamespaceInstanceUpdateResponseAISearchModelCfGoogleGemma4_26bA4bIt               NamespaceInstanceUpdateResponseAISearchModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceInstanceUpdateResponseAISearchModelCfMoonshotaiKimiK2_5                  NamespaceInstanceUpdateResponseAISearchModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceInstanceUpdateResponseAISearchModelAnthropicClaude3_7Sonnet              NamespaceInstanceUpdateResponseAISearchModel = "anthropic/claude-3-7-sonnet"
-	NamespaceInstanceUpdateResponseAISearchModelAnthropicClaudeSonnet4                NamespaceInstanceUpdateResponseAISearchModel = "anthropic/claude-sonnet-4"
-	NamespaceInstanceUpdateResponseAISearchModelAnthropicClaudeOpus4                  NamespaceInstanceUpdateResponseAISearchModel = "anthropic/claude-opus-4"
-	NamespaceInstanceUpdateResponseAISearchModelAnthropicClaude3_5Haiku               NamespaceInstanceUpdateResponseAISearchModel = "anthropic/claude-3-5-haiku"
-	NamespaceInstanceUpdateResponseAISearchModelCerebrasQwen3_235bA22bInstruct        NamespaceInstanceUpdateResponseAISearchModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceInstanceUpdateResponseAISearchModelCerebrasQwen3_235bA22bThinking        NamespaceInstanceUpdateResponseAISearchModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceInstanceUpdateResponseAISearchModelCerebrasLlama3_3_70b                  NamespaceInstanceUpdateResponseAISearchModel = "cerebras/llama-3.3-70b"
-	NamespaceInstanceUpdateResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct NamespaceInstanceUpdateResponseAISearchModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceInstanceUpdateResponseAISearchModelCerebrasLlama4Scout17b16eInstruct     NamespaceInstanceUpdateResponseAISearchModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceUpdateResponseAISearchModelCerebrasGptOSs120b                    NamespaceInstanceUpdateResponseAISearchModel = "cerebras/gpt-oss-120b"
-	NamespaceInstanceUpdateResponseAISearchModelGoogleAIStudioGemini2_5Flash          NamespaceInstanceUpdateResponseAISearchModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceInstanceUpdateResponseAISearchModelGoogleAIStudioGemini2_5Pro            NamespaceInstanceUpdateResponseAISearchModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceInstanceUpdateResponseAISearchModelGrokGrok4                             NamespaceInstanceUpdateResponseAISearchModel = "grok/grok-4"
-	NamespaceInstanceUpdateResponseAISearchModelGroqLlama3_3_70bVersatile             NamespaceInstanceUpdateResponseAISearchModel = "groq/llama-3.3-70b-versatile"
-	NamespaceInstanceUpdateResponseAISearchModelGroqLlama3_1_8bInstant                NamespaceInstanceUpdateResponseAISearchModel = "groq/llama-3.1-8b-instant"
-	NamespaceInstanceUpdateResponseAISearchModelOpenAIGpt5                            NamespaceInstanceUpdateResponseAISearchModel = "openai/gpt-5"
-	NamespaceInstanceUpdateResponseAISearchModelOpenAIGpt5Mini                        NamespaceInstanceUpdateResponseAISearchModel = "openai/gpt-5-mini"
-	NamespaceInstanceUpdateResponseAISearchModelOpenAIGpt5Nano                        NamespaceInstanceUpdateResponseAISearchModel = "openai/gpt-5-nano"
-	NamespaceInstanceUpdateResponseAISearchModelEmpty                                 NamespaceInstanceUpdateResponseAISearchModel = ""
-)
-
-func (r NamespaceInstanceUpdateResponseAISearchModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceUpdateResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceInstanceUpdateResponseAISearchModelCfZaiOrgGlm4_7Flash, NamespaceInstanceUpdateResponseAISearchModelCfMetaLlama3_1_8bInstructFast, NamespaceInstanceUpdateResponseAISearchModelCfMetaLlama3_1_8bInstructFp8, NamespaceInstanceUpdateResponseAISearchModelCfMetaLlama4Scout17b16eInstruct, NamespaceInstanceUpdateResponseAISearchModelCfQwenQwen3_30bA3bFp8, NamespaceInstanceUpdateResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceInstanceUpdateResponseAISearchModelCfMoonshotaiKimiK2Instruct, NamespaceInstanceUpdateResponseAISearchModelCfGoogleGemma3_12bIt, NamespaceInstanceUpdateResponseAISearchModelCfGoogleGemma4_26bA4bIt, NamespaceInstanceUpdateResponseAISearchModelCfMoonshotaiKimiK2_5, NamespaceInstanceUpdateResponseAISearchModelAnthropicClaude3_7Sonnet, NamespaceInstanceUpdateResponseAISearchModelAnthropicClaudeSonnet4, NamespaceInstanceUpdateResponseAISearchModelAnthropicClaudeOpus4, NamespaceInstanceUpdateResponseAISearchModelAnthropicClaude3_5Haiku, NamespaceInstanceUpdateResponseAISearchModelCerebrasQwen3_235bA22bInstruct, NamespaceInstanceUpdateResponseAISearchModelCerebrasQwen3_235bA22bThinking, NamespaceInstanceUpdateResponseAISearchModelCerebrasLlama3_3_70b, NamespaceInstanceUpdateResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct, NamespaceInstanceUpdateResponseAISearchModelCerebrasLlama4Scout17b16eInstruct, NamespaceInstanceUpdateResponseAISearchModelCerebrasGptOSs120b, NamespaceInstanceUpdateResponseAISearchModelGoogleAIStudioGemini2_5Flash, NamespaceInstanceUpdateResponseAISearchModelGoogleAIStudioGemini2_5Pro, NamespaceInstanceUpdateResponseAISearchModelGrokGrok4, NamespaceInstanceUpdateResponseAISearchModelGroqLlama3_3_70bVersatile, NamespaceInstanceUpdateResponseAISearchModelGroqLlama3_1_8bInstant, NamespaceInstanceUpdateResponseAISearchModelOpenAIGpt5, NamespaceInstanceUpdateResponseAISearchModelOpenAIGpt5Mini, NamespaceInstanceUpdateResponseAISearchModelOpenAIGpt5Nano, NamespaceInstanceUpdateResponseAISearchModelEmpty:
-		return true
-	}
-	return false
 }
 
 type NamespaceInstanceUpdateResponseCacheThreshold string
@@ -1406,30 +1246,6 @@ const (
 func (r NamespaceInstanceUpdateResponseCustomMetadataDataType) IsKnown() bool {
 	switch r {
 	case NamespaceInstanceUpdateResponseCustomMetadataDataTypeText, NamespaceInstanceUpdateResponseCustomMetadataDataTypeNumber, NamespaceInstanceUpdateResponseCustomMetadataDataTypeBoolean, NamespaceInstanceUpdateResponseCustomMetadataDataTypeDatetime:
-		return true
-	}
-	return false
-}
-
-type NamespaceInstanceUpdateResponseEmbeddingModel string
-
-const (
-	NamespaceInstanceUpdateResponseEmbeddingModelCfQwenQwen3Embedding0_6b              NamespaceInstanceUpdateResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
-	NamespaceInstanceUpdateResponseEmbeddingModelCfQwenQwen3VlEmbedding2b              NamespaceInstanceUpdateResponseEmbeddingModel = "@cf/qwen/qwen3-vl-embedding-2b"
-	NamespaceInstanceUpdateResponseEmbeddingModelCfBaaiBgeM3                           NamespaceInstanceUpdateResponseEmbeddingModel = "@cf/baai/bge-m3"
-	NamespaceInstanceUpdateResponseEmbeddingModelCfBaaiBgeLargeEnV1_5                  NamespaceInstanceUpdateResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
-	NamespaceInstanceUpdateResponseEmbeddingModelCfGoogleEmbeddinggemma300m            NamespaceInstanceUpdateResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	NamespaceInstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      NamespaceInstanceUpdateResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
-	NamespaceInstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview NamespaceInstanceUpdateResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
-	NamespaceInstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2        NamespaceInstanceUpdateResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2"
-	NamespaceInstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Small             NamespaceInstanceUpdateResponseEmbeddingModel = "openai/text-embedding-3-small"
-	NamespaceInstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Large             NamespaceInstanceUpdateResponseEmbeddingModel = "openai/text-embedding-3-large"
-	NamespaceInstanceUpdateResponseEmbeddingModelEmpty                                 NamespaceInstanceUpdateResponseEmbeddingModel = ""
-)
-
-func (r NamespaceInstanceUpdateResponseEmbeddingModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceUpdateResponseEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceUpdateResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceUpdateResponseEmbeddingModelCfBaaiBgeM3, NamespaceInstanceUpdateResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceUpdateResponseEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceUpdateResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2, NamespaceInstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceUpdateResponseEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceUpdateResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -1699,21 +1515,6 @@ func (r namespaceInstanceUpdateResponsePublicEndpointParamsSearchEndpointJSON) R
 	return r.raw
 }
 
-type NamespaceInstanceUpdateResponseRerankingModel string
-
-const (
-	NamespaceInstanceUpdateResponseRerankingModelCfBaaiBgeRerankerBase NamespaceInstanceUpdateResponseRerankingModel = "@cf/baai/bge-reranker-base"
-	NamespaceInstanceUpdateResponseRerankingModelEmpty                 NamespaceInstanceUpdateResponseRerankingModel = ""
-)
-
-func (r NamespaceInstanceUpdateResponseRerankingModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceUpdateResponseRerankingModelCfBaaiBgeRerankerBase, NamespaceInstanceUpdateResponseRerankingModelEmpty:
-		return true
-	}
-	return false
-}
-
 type NamespaceInstanceUpdateResponseRetrievalOptions struct {
 	// Metadata fields to boost search results by. Each entry specifies a metadata
 	// field and an optional direction. Direction defaults to 'asc' for
@@ -1813,49 +1614,6 @@ const (
 func (r NamespaceInstanceUpdateResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
 	case NamespaceInstanceUpdateResponseRetrievalOptionsKeywordMatchModeAnd, NamespaceInstanceUpdateResponseRetrievalOptionsKeywordMatchModeOr:
-		return true
-	}
-	return false
-}
-
-type NamespaceInstanceUpdateResponseRewriteModel string
-
-const (
-	NamespaceInstanceUpdateResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceInstanceUpdateResponseRewriteModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceInstanceUpdateResponseRewriteModelCfZaiOrgGlm4_7Flash                   NamespaceInstanceUpdateResponseRewriteModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceInstanceUpdateResponseRewriteModelCfMetaLlama3_1_8bInstructFast         NamespaceInstanceUpdateResponseRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceInstanceUpdateResponseRewriteModelCfMetaLlama3_1_8bInstructFp8          NamespaceInstanceUpdateResponseRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceInstanceUpdateResponseRewriteModelCfMetaLlama4Scout17b16eInstruct       NamespaceInstanceUpdateResponseRewriteModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceUpdateResponseRewriteModelCfQwenQwen3_30bA3bFp8                 NamespaceInstanceUpdateResponseRewriteModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceInstanceUpdateResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceInstanceUpdateResponseRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceInstanceUpdateResponseRewriteModelCfMoonshotaiKimiK2Instruct            NamespaceInstanceUpdateResponseRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceInstanceUpdateResponseRewriteModelCfGoogleGemma3_12bIt                  NamespaceInstanceUpdateResponseRewriteModel = "@cf/google/gemma-3-12b-it"
-	NamespaceInstanceUpdateResponseRewriteModelCfGoogleGemma4_26bA4bIt               NamespaceInstanceUpdateResponseRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceInstanceUpdateResponseRewriteModelCfMoonshotaiKimiK2_5                  NamespaceInstanceUpdateResponseRewriteModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceInstanceUpdateResponseRewriteModelAnthropicClaude3_7Sonnet              NamespaceInstanceUpdateResponseRewriteModel = "anthropic/claude-3-7-sonnet"
-	NamespaceInstanceUpdateResponseRewriteModelAnthropicClaudeSonnet4                NamespaceInstanceUpdateResponseRewriteModel = "anthropic/claude-sonnet-4"
-	NamespaceInstanceUpdateResponseRewriteModelAnthropicClaudeOpus4                  NamespaceInstanceUpdateResponseRewriteModel = "anthropic/claude-opus-4"
-	NamespaceInstanceUpdateResponseRewriteModelAnthropicClaude3_5Haiku               NamespaceInstanceUpdateResponseRewriteModel = "anthropic/claude-3-5-haiku"
-	NamespaceInstanceUpdateResponseRewriteModelCerebrasQwen3_235bA22bInstruct        NamespaceInstanceUpdateResponseRewriteModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceInstanceUpdateResponseRewriteModelCerebrasQwen3_235bA22bThinking        NamespaceInstanceUpdateResponseRewriteModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceInstanceUpdateResponseRewriteModelCerebrasLlama3_3_70b                  NamespaceInstanceUpdateResponseRewriteModel = "cerebras/llama-3.3-70b"
-	NamespaceInstanceUpdateResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct NamespaceInstanceUpdateResponseRewriteModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceInstanceUpdateResponseRewriteModelCerebrasLlama4Scout17b16eInstruct     NamespaceInstanceUpdateResponseRewriteModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceUpdateResponseRewriteModelCerebrasGptOSs120b                    NamespaceInstanceUpdateResponseRewriteModel = "cerebras/gpt-oss-120b"
-	NamespaceInstanceUpdateResponseRewriteModelGoogleAIStudioGemini2_5Flash          NamespaceInstanceUpdateResponseRewriteModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceInstanceUpdateResponseRewriteModelGoogleAIStudioGemini2_5Pro            NamespaceInstanceUpdateResponseRewriteModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceInstanceUpdateResponseRewriteModelGrokGrok4                             NamespaceInstanceUpdateResponseRewriteModel = "grok/grok-4"
-	NamespaceInstanceUpdateResponseRewriteModelGroqLlama3_3_70bVersatile             NamespaceInstanceUpdateResponseRewriteModel = "groq/llama-3.3-70b-versatile"
-	NamespaceInstanceUpdateResponseRewriteModelGroqLlama3_1_8bInstant                NamespaceInstanceUpdateResponseRewriteModel = "groq/llama-3.1-8b-instant"
-	NamespaceInstanceUpdateResponseRewriteModelOpenAIGpt5                            NamespaceInstanceUpdateResponseRewriteModel = "openai/gpt-5"
-	NamespaceInstanceUpdateResponseRewriteModelOpenAIGpt5Mini                        NamespaceInstanceUpdateResponseRewriteModel = "openai/gpt-5-mini"
-	NamespaceInstanceUpdateResponseRewriteModelOpenAIGpt5Nano                        NamespaceInstanceUpdateResponseRewriteModel = "openai/gpt-5-nano"
-	NamespaceInstanceUpdateResponseRewriteModelEmpty                                 NamespaceInstanceUpdateResponseRewriteModel = ""
-)
-
-func (r NamespaceInstanceUpdateResponseRewriteModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceUpdateResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceInstanceUpdateResponseRewriteModelCfZaiOrgGlm4_7Flash, NamespaceInstanceUpdateResponseRewriteModelCfMetaLlama3_1_8bInstructFast, NamespaceInstanceUpdateResponseRewriteModelCfMetaLlama3_1_8bInstructFp8, NamespaceInstanceUpdateResponseRewriteModelCfMetaLlama4Scout17b16eInstruct, NamespaceInstanceUpdateResponseRewriteModelCfQwenQwen3_30bA3bFp8, NamespaceInstanceUpdateResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceInstanceUpdateResponseRewriteModelCfMoonshotaiKimiK2Instruct, NamespaceInstanceUpdateResponseRewriteModelCfGoogleGemma3_12bIt, NamespaceInstanceUpdateResponseRewriteModelCfGoogleGemma4_26bA4bIt, NamespaceInstanceUpdateResponseRewriteModelCfMoonshotaiKimiK2_5, NamespaceInstanceUpdateResponseRewriteModelAnthropicClaude3_7Sonnet, NamespaceInstanceUpdateResponseRewriteModelAnthropicClaudeSonnet4, NamespaceInstanceUpdateResponseRewriteModelAnthropicClaudeOpus4, NamespaceInstanceUpdateResponseRewriteModelAnthropicClaude3_5Haiku, NamespaceInstanceUpdateResponseRewriteModelCerebrasQwen3_235bA22bInstruct, NamespaceInstanceUpdateResponseRewriteModelCerebrasQwen3_235bA22bThinking, NamespaceInstanceUpdateResponseRewriteModelCerebrasLlama3_3_70b, NamespaceInstanceUpdateResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct, NamespaceInstanceUpdateResponseRewriteModelCerebrasLlama4Scout17b16eInstruct, NamespaceInstanceUpdateResponseRewriteModelCerebrasGptOSs120b, NamespaceInstanceUpdateResponseRewriteModelGoogleAIStudioGemini2_5Flash, NamespaceInstanceUpdateResponseRewriteModelGoogleAIStudioGemini2_5Pro, NamespaceInstanceUpdateResponseRewriteModelGrokGrok4, NamespaceInstanceUpdateResponseRewriteModelGroqLlama3_3_70bVersatile, NamespaceInstanceUpdateResponseRewriteModelGroqLlama3_1_8bInstant, NamespaceInstanceUpdateResponseRewriteModelOpenAIGpt5, NamespaceInstanceUpdateResponseRewriteModelOpenAIGpt5Mini, NamespaceInstanceUpdateResponseRewriteModelOpenAIGpt5Nano, NamespaceInstanceUpdateResponseRewriteModelEmpty:
 		return true
 	}
 	return false
@@ -2863,11 +2621,13 @@ func (r NamespaceInstanceListResponseType) IsKnown() bool {
 
 type NamespaceInstanceDeleteResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID             string                                        `json:"id" api:"required"`
-	CreatedAt      time.Time                                     `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt     time.Time                                     `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID    string                                        `json:"ai_gateway_id" api:"nullable"`
-	AISearchModel  NamespaceInstanceDeleteResponseAISearchModel  `json:"ai_search_model" api:"nullable"`
+	ID          string    `json:"id" api:"required"`
+	CreatedAt   time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt  time.Time `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID string    `json:"ai_gateway_id" api:"nullable"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	AISearchModel  string                                        `json:"ai_search_model" api:"nullable"`
 	Cache          bool                                          `json:"cache"`
 	CacheThreshold NamespaceInstanceDeleteResponseCacheThreshold `json:"cache_threshold"`
 	// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
@@ -2878,7 +2638,7 @@ type NamespaceInstanceDeleteResponse struct {
 	ChunkSize      int64                                           `json:"chunk_size"`
 	CreatedBy      string                                          `json:"created_by" api:"nullable"`
 	CustomMetadata []NamespaceInstanceDeleteResponseCustomMetadata `json:"custom_metadata"`
-	EmbeddingModel NamespaceInstanceDeleteResponseEmbeddingModel   `json:"embedding_model" api:"nullable"`
+	EmbeddingModel string                                          `json:"embedding_model" api:"nullable"`
 	Enable         bool                                            `json:"enable"`
 	EngineVersion  float64                                         `json:"engine_version"`
 	FusionMethod   NamespaceInstanceDeleteResponseFusionMethod     `json:"fusion_method"`
@@ -2899,14 +2659,16 @@ type NamespaceInstanceDeleteResponse struct {
 	PublicEndpointID     string                                              `json:"public_endpoint_id" api:"nullable"`
 	PublicEndpointParams NamespaceInstanceDeleteResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                                `json:"reranking"`
-	RerankingModel       NamespaceInstanceDeleteResponseRerankingModel       `json:"reranking_model" api:"nullable"`
+	RerankingModel       string                                              `json:"reranking_model" api:"nullable"`
 	RetrievalOptions     NamespaceInstanceDeleteResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
-	RewriteModel         NamespaceInstanceDeleteResponseRewriteModel         `json:"rewrite_model" api:"nullable"`
-	RewriteQuery         bool                                                `json:"rewrite_query"`
-	ScoreThreshold       float64                                             `json:"score_threshold"`
-	Source               string                                              `json:"source" api:"nullable"`
-	SourceParams         NamespaceInstanceDeleteResponseSourceParams         `json:"source_params" api:"nullable"`
-	Status               string                                              `json:"status"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	RewriteModel   string                                      `json:"rewrite_model" api:"nullable"`
+	RewriteQuery   bool                                        `json:"rewrite_query"`
+	ScoreThreshold float64                                     `json:"score_threshold"`
+	Source         string                                      `json:"source" api:"nullable"`
+	SourceParams   NamespaceInstanceDeleteResponseSourceParams `json:"source_params" api:"nullable"`
+	Status         string                                      `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval NamespaceInstanceDeleteResponseSyncInterval `json:"sync_interval"`
@@ -2967,49 +2729,6 @@ func (r *NamespaceInstanceDeleteResponse) UnmarshalJSON(data []byte) (err error)
 
 func (r namespaceInstanceDeleteResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type NamespaceInstanceDeleteResponseAISearchModel string
-
-const (
-	NamespaceInstanceDeleteResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceInstanceDeleteResponseAISearchModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceInstanceDeleteResponseAISearchModelCfZaiOrgGlm4_7Flash                   NamespaceInstanceDeleteResponseAISearchModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceInstanceDeleteResponseAISearchModelCfMetaLlama3_1_8bInstructFast         NamespaceInstanceDeleteResponseAISearchModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceInstanceDeleteResponseAISearchModelCfMetaLlama3_1_8bInstructFp8          NamespaceInstanceDeleteResponseAISearchModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceInstanceDeleteResponseAISearchModelCfMetaLlama4Scout17b16eInstruct       NamespaceInstanceDeleteResponseAISearchModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceDeleteResponseAISearchModelCfQwenQwen3_30bA3bFp8                 NamespaceInstanceDeleteResponseAISearchModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceInstanceDeleteResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceInstanceDeleteResponseAISearchModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceInstanceDeleteResponseAISearchModelCfMoonshotaiKimiK2Instruct            NamespaceInstanceDeleteResponseAISearchModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceInstanceDeleteResponseAISearchModelCfGoogleGemma3_12bIt                  NamespaceInstanceDeleteResponseAISearchModel = "@cf/google/gemma-3-12b-it"
-	NamespaceInstanceDeleteResponseAISearchModelCfGoogleGemma4_26bA4bIt               NamespaceInstanceDeleteResponseAISearchModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceInstanceDeleteResponseAISearchModelCfMoonshotaiKimiK2_5                  NamespaceInstanceDeleteResponseAISearchModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceInstanceDeleteResponseAISearchModelAnthropicClaude3_7Sonnet              NamespaceInstanceDeleteResponseAISearchModel = "anthropic/claude-3-7-sonnet"
-	NamespaceInstanceDeleteResponseAISearchModelAnthropicClaudeSonnet4                NamespaceInstanceDeleteResponseAISearchModel = "anthropic/claude-sonnet-4"
-	NamespaceInstanceDeleteResponseAISearchModelAnthropicClaudeOpus4                  NamespaceInstanceDeleteResponseAISearchModel = "anthropic/claude-opus-4"
-	NamespaceInstanceDeleteResponseAISearchModelAnthropicClaude3_5Haiku               NamespaceInstanceDeleteResponseAISearchModel = "anthropic/claude-3-5-haiku"
-	NamespaceInstanceDeleteResponseAISearchModelCerebrasQwen3_235bA22bInstruct        NamespaceInstanceDeleteResponseAISearchModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceInstanceDeleteResponseAISearchModelCerebrasQwen3_235bA22bThinking        NamespaceInstanceDeleteResponseAISearchModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceInstanceDeleteResponseAISearchModelCerebrasLlama3_3_70b                  NamespaceInstanceDeleteResponseAISearchModel = "cerebras/llama-3.3-70b"
-	NamespaceInstanceDeleteResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct NamespaceInstanceDeleteResponseAISearchModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceInstanceDeleteResponseAISearchModelCerebrasLlama4Scout17b16eInstruct     NamespaceInstanceDeleteResponseAISearchModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceDeleteResponseAISearchModelCerebrasGptOSs120b                    NamespaceInstanceDeleteResponseAISearchModel = "cerebras/gpt-oss-120b"
-	NamespaceInstanceDeleteResponseAISearchModelGoogleAIStudioGemini2_5Flash          NamespaceInstanceDeleteResponseAISearchModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceInstanceDeleteResponseAISearchModelGoogleAIStudioGemini2_5Pro            NamespaceInstanceDeleteResponseAISearchModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceInstanceDeleteResponseAISearchModelGrokGrok4                             NamespaceInstanceDeleteResponseAISearchModel = "grok/grok-4"
-	NamespaceInstanceDeleteResponseAISearchModelGroqLlama3_3_70bVersatile             NamespaceInstanceDeleteResponseAISearchModel = "groq/llama-3.3-70b-versatile"
-	NamespaceInstanceDeleteResponseAISearchModelGroqLlama3_1_8bInstant                NamespaceInstanceDeleteResponseAISearchModel = "groq/llama-3.1-8b-instant"
-	NamespaceInstanceDeleteResponseAISearchModelOpenAIGpt5                            NamespaceInstanceDeleteResponseAISearchModel = "openai/gpt-5"
-	NamespaceInstanceDeleteResponseAISearchModelOpenAIGpt5Mini                        NamespaceInstanceDeleteResponseAISearchModel = "openai/gpt-5-mini"
-	NamespaceInstanceDeleteResponseAISearchModelOpenAIGpt5Nano                        NamespaceInstanceDeleteResponseAISearchModel = "openai/gpt-5-nano"
-	NamespaceInstanceDeleteResponseAISearchModelEmpty                                 NamespaceInstanceDeleteResponseAISearchModel = ""
-)
-
-func (r NamespaceInstanceDeleteResponseAISearchModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceDeleteResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceInstanceDeleteResponseAISearchModelCfZaiOrgGlm4_7Flash, NamespaceInstanceDeleteResponseAISearchModelCfMetaLlama3_1_8bInstructFast, NamespaceInstanceDeleteResponseAISearchModelCfMetaLlama3_1_8bInstructFp8, NamespaceInstanceDeleteResponseAISearchModelCfMetaLlama4Scout17b16eInstruct, NamespaceInstanceDeleteResponseAISearchModelCfQwenQwen3_30bA3bFp8, NamespaceInstanceDeleteResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceInstanceDeleteResponseAISearchModelCfMoonshotaiKimiK2Instruct, NamespaceInstanceDeleteResponseAISearchModelCfGoogleGemma3_12bIt, NamespaceInstanceDeleteResponseAISearchModelCfGoogleGemma4_26bA4bIt, NamespaceInstanceDeleteResponseAISearchModelCfMoonshotaiKimiK2_5, NamespaceInstanceDeleteResponseAISearchModelAnthropicClaude3_7Sonnet, NamespaceInstanceDeleteResponseAISearchModelAnthropicClaudeSonnet4, NamespaceInstanceDeleteResponseAISearchModelAnthropicClaudeOpus4, NamespaceInstanceDeleteResponseAISearchModelAnthropicClaude3_5Haiku, NamespaceInstanceDeleteResponseAISearchModelCerebrasQwen3_235bA22bInstruct, NamespaceInstanceDeleteResponseAISearchModelCerebrasQwen3_235bA22bThinking, NamespaceInstanceDeleteResponseAISearchModelCerebrasLlama3_3_70b, NamespaceInstanceDeleteResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct, NamespaceInstanceDeleteResponseAISearchModelCerebrasLlama4Scout17b16eInstruct, NamespaceInstanceDeleteResponseAISearchModelCerebrasGptOSs120b, NamespaceInstanceDeleteResponseAISearchModelGoogleAIStudioGemini2_5Flash, NamespaceInstanceDeleteResponseAISearchModelGoogleAIStudioGemini2_5Pro, NamespaceInstanceDeleteResponseAISearchModelGrokGrok4, NamespaceInstanceDeleteResponseAISearchModelGroqLlama3_3_70bVersatile, NamespaceInstanceDeleteResponseAISearchModelGroqLlama3_1_8bInstant, NamespaceInstanceDeleteResponseAISearchModelOpenAIGpt5, NamespaceInstanceDeleteResponseAISearchModelOpenAIGpt5Mini, NamespaceInstanceDeleteResponseAISearchModelOpenAIGpt5Nano, NamespaceInstanceDeleteResponseAISearchModelEmpty:
-		return true
-	}
-	return false
 }
 
 type NamespaceInstanceDeleteResponseCacheThreshold string
@@ -3090,30 +2809,6 @@ const (
 func (r NamespaceInstanceDeleteResponseCustomMetadataDataType) IsKnown() bool {
 	switch r {
 	case NamespaceInstanceDeleteResponseCustomMetadataDataTypeText, NamespaceInstanceDeleteResponseCustomMetadataDataTypeNumber, NamespaceInstanceDeleteResponseCustomMetadataDataTypeBoolean, NamespaceInstanceDeleteResponseCustomMetadataDataTypeDatetime:
-		return true
-	}
-	return false
-}
-
-type NamespaceInstanceDeleteResponseEmbeddingModel string
-
-const (
-	NamespaceInstanceDeleteResponseEmbeddingModelCfQwenQwen3Embedding0_6b              NamespaceInstanceDeleteResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
-	NamespaceInstanceDeleteResponseEmbeddingModelCfQwenQwen3VlEmbedding2b              NamespaceInstanceDeleteResponseEmbeddingModel = "@cf/qwen/qwen3-vl-embedding-2b"
-	NamespaceInstanceDeleteResponseEmbeddingModelCfBaaiBgeM3                           NamespaceInstanceDeleteResponseEmbeddingModel = "@cf/baai/bge-m3"
-	NamespaceInstanceDeleteResponseEmbeddingModelCfBaaiBgeLargeEnV1_5                  NamespaceInstanceDeleteResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
-	NamespaceInstanceDeleteResponseEmbeddingModelCfGoogleEmbeddinggemma300m            NamespaceInstanceDeleteResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	NamespaceInstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      NamespaceInstanceDeleteResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
-	NamespaceInstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview NamespaceInstanceDeleteResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
-	NamespaceInstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2        NamespaceInstanceDeleteResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2"
-	NamespaceInstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Small             NamespaceInstanceDeleteResponseEmbeddingModel = "openai/text-embedding-3-small"
-	NamespaceInstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Large             NamespaceInstanceDeleteResponseEmbeddingModel = "openai/text-embedding-3-large"
-	NamespaceInstanceDeleteResponseEmbeddingModelEmpty                                 NamespaceInstanceDeleteResponseEmbeddingModel = ""
-)
-
-func (r NamespaceInstanceDeleteResponseEmbeddingModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceDeleteResponseEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceDeleteResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceDeleteResponseEmbeddingModelCfBaaiBgeM3, NamespaceInstanceDeleteResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceDeleteResponseEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceDeleteResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2, NamespaceInstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceDeleteResponseEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceDeleteResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -3383,21 +3078,6 @@ func (r namespaceInstanceDeleteResponsePublicEndpointParamsSearchEndpointJSON) R
 	return r.raw
 }
 
-type NamespaceInstanceDeleteResponseRerankingModel string
-
-const (
-	NamespaceInstanceDeleteResponseRerankingModelCfBaaiBgeRerankerBase NamespaceInstanceDeleteResponseRerankingModel = "@cf/baai/bge-reranker-base"
-	NamespaceInstanceDeleteResponseRerankingModelEmpty                 NamespaceInstanceDeleteResponseRerankingModel = ""
-)
-
-func (r NamespaceInstanceDeleteResponseRerankingModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceDeleteResponseRerankingModelCfBaaiBgeRerankerBase, NamespaceInstanceDeleteResponseRerankingModelEmpty:
-		return true
-	}
-	return false
-}
-
 type NamespaceInstanceDeleteResponseRetrievalOptions struct {
 	// Metadata fields to boost search results by. Each entry specifies a metadata
 	// field and an optional direction. Direction defaults to 'asc' for
@@ -3497,49 +3177,6 @@ const (
 func (r NamespaceInstanceDeleteResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
 	case NamespaceInstanceDeleteResponseRetrievalOptionsKeywordMatchModeAnd, NamespaceInstanceDeleteResponseRetrievalOptionsKeywordMatchModeOr:
-		return true
-	}
-	return false
-}
-
-type NamespaceInstanceDeleteResponseRewriteModel string
-
-const (
-	NamespaceInstanceDeleteResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceInstanceDeleteResponseRewriteModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceInstanceDeleteResponseRewriteModelCfZaiOrgGlm4_7Flash                   NamespaceInstanceDeleteResponseRewriteModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceInstanceDeleteResponseRewriteModelCfMetaLlama3_1_8bInstructFast         NamespaceInstanceDeleteResponseRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceInstanceDeleteResponseRewriteModelCfMetaLlama3_1_8bInstructFp8          NamespaceInstanceDeleteResponseRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceInstanceDeleteResponseRewriteModelCfMetaLlama4Scout17b16eInstruct       NamespaceInstanceDeleteResponseRewriteModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceDeleteResponseRewriteModelCfQwenQwen3_30bA3bFp8                 NamespaceInstanceDeleteResponseRewriteModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceInstanceDeleteResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceInstanceDeleteResponseRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceInstanceDeleteResponseRewriteModelCfMoonshotaiKimiK2Instruct            NamespaceInstanceDeleteResponseRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceInstanceDeleteResponseRewriteModelCfGoogleGemma3_12bIt                  NamespaceInstanceDeleteResponseRewriteModel = "@cf/google/gemma-3-12b-it"
-	NamespaceInstanceDeleteResponseRewriteModelCfGoogleGemma4_26bA4bIt               NamespaceInstanceDeleteResponseRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceInstanceDeleteResponseRewriteModelCfMoonshotaiKimiK2_5                  NamespaceInstanceDeleteResponseRewriteModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceInstanceDeleteResponseRewriteModelAnthropicClaude3_7Sonnet              NamespaceInstanceDeleteResponseRewriteModel = "anthropic/claude-3-7-sonnet"
-	NamespaceInstanceDeleteResponseRewriteModelAnthropicClaudeSonnet4                NamespaceInstanceDeleteResponseRewriteModel = "anthropic/claude-sonnet-4"
-	NamespaceInstanceDeleteResponseRewriteModelAnthropicClaudeOpus4                  NamespaceInstanceDeleteResponseRewriteModel = "anthropic/claude-opus-4"
-	NamespaceInstanceDeleteResponseRewriteModelAnthropicClaude3_5Haiku               NamespaceInstanceDeleteResponseRewriteModel = "anthropic/claude-3-5-haiku"
-	NamespaceInstanceDeleteResponseRewriteModelCerebrasQwen3_235bA22bInstruct        NamespaceInstanceDeleteResponseRewriteModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceInstanceDeleteResponseRewriteModelCerebrasQwen3_235bA22bThinking        NamespaceInstanceDeleteResponseRewriteModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceInstanceDeleteResponseRewriteModelCerebrasLlama3_3_70b                  NamespaceInstanceDeleteResponseRewriteModel = "cerebras/llama-3.3-70b"
-	NamespaceInstanceDeleteResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct NamespaceInstanceDeleteResponseRewriteModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceInstanceDeleteResponseRewriteModelCerebrasLlama4Scout17b16eInstruct     NamespaceInstanceDeleteResponseRewriteModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceDeleteResponseRewriteModelCerebrasGptOSs120b                    NamespaceInstanceDeleteResponseRewriteModel = "cerebras/gpt-oss-120b"
-	NamespaceInstanceDeleteResponseRewriteModelGoogleAIStudioGemini2_5Flash          NamespaceInstanceDeleteResponseRewriteModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceInstanceDeleteResponseRewriteModelGoogleAIStudioGemini2_5Pro            NamespaceInstanceDeleteResponseRewriteModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceInstanceDeleteResponseRewriteModelGrokGrok4                             NamespaceInstanceDeleteResponseRewriteModel = "grok/grok-4"
-	NamespaceInstanceDeleteResponseRewriteModelGroqLlama3_3_70bVersatile             NamespaceInstanceDeleteResponseRewriteModel = "groq/llama-3.3-70b-versatile"
-	NamespaceInstanceDeleteResponseRewriteModelGroqLlama3_1_8bInstant                NamespaceInstanceDeleteResponseRewriteModel = "groq/llama-3.1-8b-instant"
-	NamespaceInstanceDeleteResponseRewriteModelOpenAIGpt5                            NamespaceInstanceDeleteResponseRewriteModel = "openai/gpt-5"
-	NamespaceInstanceDeleteResponseRewriteModelOpenAIGpt5Mini                        NamespaceInstanceDeleteResponseRewriteModel = "openai/gpt-5-mini"
-	NamespaceInstanceDeleteResponseRewriteModelOpenAIGpt5Nano                        NamespaceInstanceDeleteResponseRewriteModel = "openai/gpt-5-nano"
-	NamespaceInstanceDeleteResponseRewriteModelEmpty                                 NamespaceInstanceDeleteResponseRewriteModel = ""
-)
-
-func (r NamespaceInstanceDeleteResponseRewriteModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceDeleteResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceInstanceDeleteResponseRewriteModelCfZaiOrgGlm4_7Flash, NamespaceInstanceDeleteResponseRewriteModelCfMetaLlama3_1_8bInstructFast, NamespaceInstanceDeleteResponseRewriteModelCfMetaLlama3_1_8bInstructFp8, NamespaceInstanceDeleteResponseRewriteModelCfMetaLlama4Scout17b16eInstruct, NamespaceInstanceDeleteResponseRewriteModelCfQwenQwen3_30bA3bFp8, NamespaceInstanceDeleteResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceInstanceDeleteResponseRewriteModelCfMoonshotaiKimiK2Instruct, NamespaceInstanceDeleteResponseRewriteModelCfGoogleGemma3_12bIt, NamespaceInstanceDeleteResponseRewriteModelCfGoogleGemma4_26bA4bIt, NamespaceInstanceDeleteResponseRewriteModelCfMoonshotaiKimiK2_5, NamespaceInstanceDeleteResponseRewriteModelAnthropicClaude3_7Sonnet, NamespaceInstanceDeleteResponseRewriteModelAnthropicClaudeSonnet4, NamespaceInstanceDeleteResponseRewriteModelAnthropicClaudeOpus4, NamespaceInstanceDeleteResponseRewriteModelAnthropicClaude3_5Haiku, NamespaceInstanceDeleteResponseRewriteModelCerebrasQwen3_235bA22bInstruct, NamespaceInstanceDeleteResponseRewriteModelCerebrasQwen3_235bA22bThinking, NamespaceInstanceDeleteResponseRewriteModelCerebrasLlama3_3_70b, NamespaceInstanceDeleteResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct, NamespaceInstanceDeleteResponseRewriteModelCerebrasLlama4Scout17b16eInstruct, NamespaceInstanceDeleteResponseRewriteModelCerebrasGptOSs120b, NamespaceInstanceDeleteResponseRewriteModelGoogleAIStudioGemini2_5Flash, NamespaceInstanceDeleteResponseRewriteModelGoogleAIStudioGemini2_5Pro, NamespaceInstanceDeleteResponseRewriteModelGrokGrok4, NamespaceInstanceDeleteResponseRewriteModelGroqLlama3_3_70bVersatile, NamespaceInstanceDeleteResponseRewriteModelGroqLlama3_1_8bInstant, NamespaceInstanceDeleteResponseRewriteModelOpenAIGpt5, NamespaceInstanceDeleteResponseRewriteModelOpenAIGpt5Mini, NamespaceInstanceDeleteResponseRewriteModelOpenAIGpt5Nano, NamespaceInstanceDeleteResponseRewriteModelEmpty:
 		return true
 	}
 	return false
@@ -3848,7 +3485,7 @@ func (r namespaceInstanceChatCompletionsResponseChoiceJSON) RawJSON() string {
 }
 
 type NamespaceInstanceChatCompletionsResponseChoicesMessage struct {
-	Content     NamespaceInstanceChatCompletionsResponseChoicesMessageContentUnion `json:"content" api:"required,nullable"`
+	Content     NamespaceInstanceChatCompletionsResponseChoicesMessageContentUnion `json:"content" api:"required"`
 	Role        NamespaceInstanceChatCompletionsResponseChoicesMessageRole         `json:"role" api:"required"`
 	ExtraFields map[string]interface{}                                             `json:"-" api:"extrafields"`
 	JSON        namespaceInstanceChatCompletionsResponseChoicesMessageJSON         `json:"-"`
@@ -3871,8 +3508,9 @@ func (r namespaceInstanceChatCompletionsResponseChoicesMessageJSON) RawJSON() st
 	return r.raw
 }
 
-// Union satisfied by [shared.UnionString] or
-// [NamespaceInstanceChatCompletionsResponseChoicesMessageContentArray].
+// Union satisfied by [shared.UnionString],
+// [NamespaceInstanceChatCompletionsResponseChoicesMessageContentArray] or
+// [shared.UnionString].
 type NamespaceInstanceChatCompletionsResponseChoicesMessageContentUnion interface {
 	ImplementsNamespaceInstanceChatCompletionsResponseChoicesMessageContentUnion()
 }
@@ -3888,6 +3526,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(NamespaceInstanceChatCompletionsResponseChoicesMessageContentArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
 }
@@ -4154,11 +3796,13 @@ func (r NamespaceInstanceChatCompletionsResponseChunksScoringDetailsFusionMethod
 
 type NamespaceInstanceReadResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID             string                                      `json:"id" api:"required"`
-	CreatedAt      time.Time                                   `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt     time.Time                                   `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID    string                                      `json:"ai_gateway_id" api:"nullable"`
-	AISearchModel  NamespaceInstanceReadResponseAISearchModel  `json:"ai_search_model" api:"nullable"`
+	ID          string    `json:"id" api:"required"`
+	CreatedAt   time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt  time.Time `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID string    `json:"ai_gateway_id" api:"nullable"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	AISearchModel  string                                      `json:"ai_search_model" api:"nullable"`
 	Cache          bool                                        `json:"cache"`
 	CacheThreshold NamespaceInstanceReadResponseCacheThreshold `json:"cache_threshold"`
 	// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
@@ -4169,7 +3813,7 @@ type NamespaceInstanceReadResponse struct {
 	ChunkSize      int64                                         `json:"chunk_size"`
 	CreatedBy      string                                        `json:"created_by" api:"nullable"`
 	CustomMetadata []NamespaceInstanceReadResponseCustomMetadata `json:"custom_metadata"`
-	EmbeddingModel NamespaceInstanceReadResponseEmbeddingModel   `json:"embedding_model" api:"nullable"`
+	EmbeddingModel string                                        `json:"embedding_model" api:"nullable"`
 	Enable         bool                                          `json:"enable"`
 	EngineVersion  float64                                       `json:"engine_version"`
 	FusionMethod   NamespaceInstanceReadResponseFusionMethod     `json:"fusion_method"`
@@ -4190,14 +3834,16 @@ type NamespaceInstanceReadResponse struct {
 	PublicEndpointID     string                                            `json:"public_endpoint_id" api:"nullable"`
 	PublicEndpointParams NamespaceInstanceReadResponsePublicEndpointParams `json:"public_endpoint_params"`
 	Reranking            bool                                              `json:"reranking"`
-	RerankingModel       NamespaceInstanceReadResponseRerankingModel       `json:"reranking_model" api:"nullable"`
+	RerankingModel       string                                            `json:"reranking_model" api:"nullable"`
 	RetrievalOptions     NamespaceInstanceReadResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
-	RewriteModel         NamespaceInstanceReadResponseRewriteModel         `json:"rewrite_model" api:"nullable"`
-	RewriteQuery         bool                                              `json:"rewrite_query"`
-	ScoreThreshold       float64                                           `json:"score_threshold"`
-	Source               string                                            `json:"source" api:"nullable"`
-	SourceParams         NamespaceInstanceReadResponseSourceParams         `json:"source_params" api:"nullable"`
-	Status               string                                            `json:"status"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	RewriteModel   string                                    `json:"rewrite_model" api:"nullable"`
+	RewriteQuery   bool                                      `json:"rewrite_query"`
+	ScoreThreshold float64                                   `json:"score_threshold"`
+	Source         string                                    `json:"source" api:"nullable"`
+	SourceParams   NamespaceInstanceReadResponseSourceParams `json:"source_params" api:"nullable"`
+	Status         string                                    `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval NamespaceInstanceReadResponseSyncInterval `json:"sync_interval"`
@@ -4258,49 +3904,6 @@ func (r *NamespaceInstanceReadResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r namespaceInstanceReadResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type NamespaceInstanceReadResponseAISearchModel string
-
-const (
-	NamespaceInstanceReadResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceInstanceReadResponseAISearchModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceInstanceReadResponseAISearchModelCfZaiOrgGlm4_7Flash                   NamespaceInstanceReadResponseAISearchModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceInstanceReadResponseAISearchModelCfMetaLlama3_1_8bInstructFast         NamespaceInstanceReadResponseAISearchModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceInstanceReadResponseAISearchModelCfMetaLlama3_1_8bInstructFp8          NamespaceInstanceReadResponseAISearchModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceInstanceReadResponseAISearchModelCfMetaLlama4Scout17b16eInstruct       NamespaceInstanceReadResponseAISearchModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceReadResponseAISearchModelCfQwenQwen3_30bA3bFp8                 NamespaceInstanceReadResponseAISearchModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceInstanceReadResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceInstanceReadResponseAISearchModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceInstanceReadResponseAISearchModelCfMoonshotaiKimiK2Instruct            NamespaceInstanceReadResponseAISearchModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceInstanceReadResponseAISearchModelCfGoogleGemma3_12bIt                  NamespaceInstanceReadResponseAISearchModel = "@cf/google/gemma-3-12b-it"
-	NamespaceInstanceReadResponseAISearchModelCfGoogleGemma4_26bA4bIt               NamespaceInstanceReadResponseAISearchModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceInstanceReadResponseAISearchModelCfMoonshotaiKimiK2_5                  NamespaceInstanceReadResponseAISearchModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceInstanceReadResponseAISearchModelAnthropicClaude3_7Sonnet              NamespaceInstanceReadResponseAISearchModel = "anthropic/claude-3-7-sonnet"
-	NamespaceInstanceReadResponseAISearchModelAnthropicClaudeSonnet4                NamespaceInstanceReadResponseAISearchModel = "anthropic/claude-sonnet-4"
-	NamespaceInstanceReadResponseAISearchModelAnthropicClaudeOpus4                  NamespaceInstanceReadResponseAISearchModel = "anthropic/claude-opus-4"
-	NamespaceInstanceReadResponseAISearchModelAnthropicClaude3_5Haiku               NamespaceInstanceReadResponseAISearchModel = "anthropic/claude-3-5-haiku"
-	NamespaceInstanceReadResponseAISearchModelCerebrasQwen3_235bA22bInstruct        NamespaceInstanceReadResponseAISearchModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceInstanceReadResponseAISearchModelCerebrasQwen3_235bA22bThinking        NamespaceInstanceReadResponseAISearchModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceInstanceReadResponseAISearchModelCerebrasLlama3_3_70b                  NamespaceInstanceReadResponseAISearchModel = "cerebras/llama-3.3-70b"
-	NamespaceInstanceReadResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct NamespaceInstanceReadResponseAISearchModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceInstanceReadResponseAISearchModelCerebrasLlama4Scout17b16eInstruct     NamespaceInstanceReadResponseAISearchModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceReadResponseAISearchModelCerebrasGptOSs120b                    NamespaceInstanceReadResponseAISearchModel = "cerebras/gpt-oss-120b"
-	NamespaceInstanceReadResponseAISearchModelGoogleAIStudioGemini2_5Flash          NamespaceInstanceReadResponseAISearchModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceInstanceReadResponseAISearchModelGoogleAIStudioGemini2_5Pro            NamespaceInstanceReadResponseAISearchModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceInstanceReadResponseAISearchModelGrokGrok4                             NamespaceInstanceReadResponseAISearchModel = "grok/grok-4"
-	NamespaceInstanceReadResponseAISearchModelGroqLlama3_3_70bVersatile             NamespaceInstanceReadResponseAISearchModel = "groq/llama-3.3-70b-versatile"
-	NamespaceInstanceReadResponseAISearchModelGroqLlama3_1_8bInstant                NamespaceInstanceReadResponseAISearchModel = "groq/llama-3.1-8b-instant"
-	NamespaceInstanceReadResponseAISearchModelOpenAIGpt5                            NamespaceInstanceReadResponseAISearchModel = "openai/gpt-5"
-	NamespaceInstanceReadResponseAISearchModelOpenAIGpt5Mini                        NamespaceInstanceReadResponseAISearchModel = "openai/gpt-5-mini"
-	NamespaceInstanceReadResponseAISearchModelOpenAIGpt5Nano                        NamespaceInstanceReadResponseAISearchModel = "openai/gpt-5-nano"
-	NamespaceInstanceReadResponseAISearchModelEmpty                                 NamespaceInstanceReadResponseAISearchModel = ""
-)
-
-func (r NamespaceInstanceReadResponseAISearchModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceReadResponseAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceInstanceReadResponseAISearchModelCfZaiOrgGlm4_7Flash, NamespaceInstanceReadResponseAISearchModelCfMetaLlama3_1_8bInstructFast, NamespaceInstanceReadResponseAISearchModelCfMetaLlama3_1_8bInstructFp8, NamespaceInstanceReadResponseAISearchModelCfMetaLlama4Scout17b16eInstruct, NamespaceInstanceReadResponseAISearchModelCfQwenQwen3_30bA3bFp8, NamespaceInstanceReadResponseAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceInstanceReadResponseAISearchModelCfMoonshotaiKimiK2Instruct, NamespaceInstanceReadResponseAISearchModelCfGoogleGemma3_12bIt, NamespaceInstanceReadResponseAISearchModelCfGoogleGemma4_26bA4bIt, NamespaceInstanceReadResponseAISearchModelCfMoonshotaiKimiK2_5, NamespaceInstanceReadResponseAISearchModelAnthropicClaude3_7Sonnet, NamespaceInstanceReadResponseAISearchModelAnthropicClaudeSonnet4, NamespaceInstanceReadResponseAISearchModelAnthropicClaudeOpus4, NamespaceInstanceReadResponseAISearchModelAnthropicClaude3_5Haiku, NamespaceInstanceReadResponseAISearchModelCerebrasQwen3_235bA22bInstruct, NamespaceInstanceReadResponseAISearchModelCerebrasQwen3_235bA22bThinking, NamespaceInstanceReadResponseAISearchModelCerebrasLlama3_3_70b, NamespaceInstanceReadResponseAISearchModelCerebrasLlama4Maverick17b128eInstruct, NamespaceInstanceReadResponseAISearchModelCerebrasLlama4Scout17b16eInstruct, NamespaceInstanceReadResponseAISearchModelCerebrasGptOSs120b, NamespaceInstanceReadResponseAISearchModelGoogleAIStudioGemini2_5Flash, NamespaceInstanceReadResponseAISearchModelGoogleAIStudioGemini2_5Pro, NamespaceInstanceReadResponseAISearchModelGrokGrok4, NamespaceInstanceReadResponseAISearchModelGroqLlama3_3_70bVersatile, NamespaceInstanceReadResponseAISearchModelGroqLlama3_1_8bInstant, NamespaceInstanceReadResponseAISearchModelOpenAIGpt5, NamespaceInstanceReadResponseAISearchModelOpenAIGpt5Mini, NamespaceInstanceReadResponseAISearchModelOpenAIGpt5Nano, NamespaceInstanceReadResponseAISearchModelEmpty:
-		return true
-	}
-	return false
 }
 
 type NamespaceInstanceReadResponseCacheThreshold string
@@ -4381,30 +3984,6 @@ const (
 func (r NamespaceInstanceReadResponseCustomMetadataDataType) IsKnown() bool {
 	switch r {
 	case NamespaceInstanceReadResponseCustomMetadataDataTypeText, NamespaceInstanceReadResponseCustomMetadataDataTypeNumber, NamespaceInstanceReadResponseCustomMetadataDataTypeBoolean, NamespaceInstanceReadResponseCustomMetadataDataTypeDatetime:
-		return true
-	}
-	return false
-}
-
-type NamespaceInstanceReadResponseEmbeddingModel string
-
-const (
-	NamespaceInstanceReadResponseEmbeddingModelCfQwenQwen3Embedding0_6b              NamespaceInstanceReadResponseEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
-	NamespaceInstanceReadResponseEmbeddingModelCfQwenQwen3VlEmbedding2b              NamespaceInstanceReadResponseEmbeddingModel = "@cf/qwen/qwen3-vl-embedding-2b"
-	NamespaceInstanceReadResponseEmbeddingModelCfBaaiBgeM3                           NamespaceInstanceReadResponseEmbeddingModel = "@cf/baai/bge-m3"
-	NamespaceInstanceReadResponseEmbeddingModelCfBaaiBgeLargeEnV1_5                  NamespaceInstanceReadResponseEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
-	NamespaceInstanceReadResponseEmbeddingModelCfGoogleEmbeddinggemma300m            NamespaceInstanceReadResponseEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	NamespaceInstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001      NamespaceInstanceReadResponseEmbeddingModel = "google-ai-studio/gemini-embedding-001"
-	NamespaceInstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview NamespaceInstanceReadResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
-	NamespaceInstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2        NamespaceInstanceReadResponseEmbeddingModel = "google-ai-studio/gemini-embedding-2"
-	NamespaceInstanceReadResponseEmbeddingModelOpenAITextEmbedding3Small             NamespaceInstanceReadResponseEmbeddingModel = "openai/text-embedding-3-small"
-	NamespaceInstanceReadResponseEmbeddingModelOpenAITextEmbedding3Large             NamespaceInstanceReadResponseEmbeddingModel = "openai/text-embedding-3-large"
-	NamespaceInstanceReadResponseEmbeddingModelEmpty                                 NamespaceInstanceReadResponseEmbeddingModel = ""
-)
-
-func (r NamespaceInstanceReadResponseEmbeddingModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceReadResponseEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceReadResponseEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceReadResponseEmbeddingModelCfBaaiBgeM3, NamespaceInstanceReadResponseEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceReadResponseEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceReadResponseEmbeddingModelGoogleAIStudioGeminiEmbedding2, NamespaceInstanceReadResponseEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceReadResponseEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceReadResponseEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -4674,21 +4253,6 @@ func (r namespaceInstanceReadResponsePublicEndpointParamsSearchEndpointJSON) Raw
 	return r.raw
 }
 
-type NamespaceInstanceReadResponseRerankingModel string
-
-const (
-	NamespaceInstanceReadResponseRerankingModelCfBaaiBgeRerankerBase NamespaceInstanceReadResponseRerankingModel = "@cf/baai/bge-reranker-base"
-	NamespaceInstanceReadResponseRerankingModelEmpty                 NamespaceInstanceReadResponseRerankingModel = ""
-)
-
-func (r NamespaceInstanceReadResponseRerankingModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceReadResponseRerankingModelCfBaaiBgeRerankerBase, NamespaceInstanceReadResponseRerankingModelEmpty:
-		return true
-	}
-	return false
-}
-
 type NamespaceInstanceReadResponseRetrievalOptions struct {
 	// Metadata fields to boost search results by. Each entry specifies a metadata
 	// field and an optional direction. Direction defaults to 'asc' for
@@ -4788,49 +4352,6 @@ const (
 func (r NamespaceInstanceReadResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
 	case NamespaceInstanceReadResponseRetrievalOptionsKeywordMatchModeAnd, NamespaceInstanceReadResponseRetrievalOptionsKeywordMatchModeOr:
-		return true
-	}
-	return false
-}
-
-type NamespaceInstanceReadResponseRewriteModel string
-
-const (
-	NamespaceInstanceReadResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceInstanceReadResponseRewriteModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceInstanceReadResponseRewriteModelCfZaiOrgGlm4_7Flash                   NamespaceInstanceReadResponseRewriteModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceInstanceReadResponseRewriteModelCfMetaLlama3_1_8bInstructFast         NamespaceInstanceReadResponseRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceInstanceReadResponseRewriteModelCfMetaLlama3_1_8bInstructFp8          NamespaceInstanceReadResponseRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceInstanceReadResponseRewriteModelCfMetaLlama4Scout17b16eInstruct       NamespaceInstanceReadResponseRewriteModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceReadResponseRewriteModelCfQwenQwen3_30bA3bFp8                 NamespaceInstanceReadResponseRewriteModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceInstanceReadResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceInstanceReadResponseRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceInstanceReadResponseRewriteModelCfMoonshotaiKimiK2Instruct            NamespaceInstanceReadResponseRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceInstanceReadResponseRewriteModelCfGoogleGemma3_12bIt                  NamespaceInstanceReadResponseRewriteModel = "@cf/google/gemma-3-12b-it"
-	NamespaceInstanceReadResponseRewriteModelCfGoogleGemma4_26bA4bIt               NamespaceInstanceReadResponseRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceInstanceReadResponseRewriteModelCfMoonshotaiKimiK2_5                  NamespaceInstanceReadResponseRewriteModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceInstanceReadResponseRewriteModelAnthropicClaude3_7Sonnet              NamespaceInstanceReadResponseRewriteModel = "anthropic/claude-3-7-sonnet"
-	NamespaceInstanceReadResponseRewriteModelAnthropicClaudeSonnet4                NamespaceInstanceReadResponseRewriteModel = "anthropic/claude-sonnet-4"
-	NamespaceInstanceReadResponseRewriteModelAnthropicClaudeOpus4                  NamespaceInstanceReadResponseRewriteModel = "anthropic/claude-opus-4"
-	NamespaceInstanceReadResponseRewriteModelAnthropicClaude3_5Haiku               NamespaceInstanceReadResponseRewriteModel = "anthropic/claude-3-5-haiku"
-	NamespaceInstanceReadResponseRewriteModelCerebrasQwen3_235bA22bInstruct        NamespaceInstanceReadResponseRewriteModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceInstanceReadResponseRewriteModelCerebrasQwen3_235bA22bThinking        NamespaceInstanceReadResponseRewriteModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceInstanceReadResponseRewriteModelCerebrasLlama3_3_70b                  NamespaceInstanceReadResponseRewriteModel = "cerebras/llama-3.3-70b"
-	NamespaceInstanceReadResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct NamespaceInstanceReadResponseRewriteModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceInstanceReadResponseRewriteModelCerebrasLlama4Scout17b16eInstruct     NamespaceInstanceReadResponseRewriteModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceReadResponseRewriteModelCerebrasGptOSs120b                    NamespaceInstanceReadResponseRewriteModel = "cerebras/gpt-oss-120b"
-	NamespaceInstanceReadResponseRewriteModelGoogleAIStudioGemini2_5Flash          NamespaceInstanceReadResponseRewriteModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceInstanceReadResponseRewriteModelGoogleAIStudioGemini2_5Pro            NamespaceInstanceReadResponseRewriteModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceInstanceReadResponseRewriteModelGrokGrok4                             NamespaceInstanceReadResponseRewriteModel = "grok/grok-4"
-	NamespaceInstanceReadResponseRewriteModelGroqLlama3_3_70bVersatile             NamespaceInstanceReadResponseRewriteModel = "groq/llama-3.3-70b-versatile"
-	NamespaceInstanceReadResponseRewriteModelGroqLlama3_1_8bInstant                NamespaceInstanceReadResponseRewriteModel = "groq/llama-3.1-8b-instant"
-	NamespaceInstanceReadResponseRewriteModelOpenAIGpt5                            NamespaceInstanceReadResponseRewriteModel = "openai/gpt-5"
-	NamespaceInstanceReadResponseRewriteModelOpenAIGpt5Mini                        NamespaceInstanceReadResponseRewriteModel = "openai/gpt-5-mini"
-	NamespaceInstanceReadResponseRewriteModelOpenAIGpt5Nano                        NamespaceInstanceReadResponseRewriteModel = "openai/gpt-5-nano"
-	NamespaceInstanceReadResponseRewriteModelEmpty                                 NamespaceInstanceReadResponseRewriteModel = ""
-)
-
-func (r NamespaceInstanceReadResponseRewriteModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceReadResponseRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceInstanceReadResponseRewriteModelCfZaiOrgGlm4_7Flash, NamespaceInstanceReadResponseRewriteModelCfMetaLlama3_1_8bInstructFast, NamespaceInstanceReadResponseRewriteModelCfMetaLlama3_1_8bInstructFp8, NamespaceInstanceReadResponseRewriteModelCfMetaLlama4Scout17b16eInstruct, NamespaceInstanceReadResponseRewriteModelCfQwenQwen3_30bA3bFp8, NamespaceInstanceReadResponseRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceInstanceReadResponseRewriteModelCfMoonshotaiKimiK2Instruct, NamespaceInstanceReadResponseRewriteModelCfGoogleGemma3_12bIt, NamespaceInstanceReadResponseRewriteModelCfGoogleGemma4_26bA4bIt, NamespaceInstanceReadResponseRewriteModelCfMoonshotaiKimiK2_5, NamespaceInstanceReadResponseRewriteModelAnthropicClaude3_7Sonnet, NamespaceInstanceReadResponseRewriteModelAnthropicClaudeSonnet4, NamespaceInstanceReadResponseRewriteModelAnthropicClaudeOpus4, NamespaceInstanceReadResponseRewriteModelAnthropicClaude3_5Haiku, NamespaceInstanceReadResponseRewriteModelCerebrasQwen3_235bA22bInstruct, NamespaceInstanceReadResponseRewriteModelCerebrasQwen3_235bA22bThinking, NamespaceInstanceReadResponseRewriteModelCerebrasLlama3_3_70b, NamespaceInstanceReadResponseRewriteModelCerebrasLlama4Maverick17b128eInstruct, NamespaceInstanceReadResponseRewriteModelCerebrasLlama4Scout17b16eInstruct, NamespaceInstanceReadResponseRewriteModelCerebrasGptOSs120b, NamespaceInstanceReadResponseRewriteModelGoogleAIStudioGemini2_5Flash, NamespaceInstanceReadResponseRewriteModelGoogleAIStudioGemini2_5Pro, NamespaceInstanceReadResponseRewriteModelGrokGrok4, NamespaceInstanceReadResponseRewriteModelGroqLlama3_3_70bVersatile, NamespaceInstanceReadResponseRewriteModelGroqLlama3_1_8bInstant, NamespaceInstanceReadResponseRewriteModelOpenAIGpt5, NamespaceInstanceReadResponseRewriteModelOpenAIGpt5Mini, NamespaceInstanceReadResponseRewriteModelOpenAIGpt5Nano, NamespaceInstanceReadResponseRewriteModelEmpty:
 		return true
 	}
 	return false
@@ -5351,9 +4872,11 @@ func (r namespaceInstanceStatsResponseEngineVectorizeJSON) RawJSON() string {
 type NamespaceInstanceNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID             param.Field[string]                                   `json:"id" api:"required"`
-	AIGatewayID    param.Field[string]                                   `json:"ai_gateway_id"`
-	AISearchModel  param.Field[NamespaceInstanceNewParamsAISearchModel]  `json:"ai_search_model"`
+	ID          param.Field[string] `json:"id" api:"required"`
+	AIGatewayID param.Field[string] `json:"ai_gateway_id"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	AISearchModel  param.Field[string]                                   `json:"ai_search_model"`
 	Cache          param.Field[bool]                                     `json:"cache"`
 	CacheThreshold param.Field[NamespaceInstanceNewParamsCacheThreshold] `json:"cache_threshold"`
 	// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
@@ -5364,7 +4887,7 @@ type NamespaceInstanceNewParams struct {
 	ChunkOverlap   param.Field[int64]                                      `json:"chunk_overlap"`
 	ChunkSize      param.Field[int64]                                      `json:"chunk_size"`
 	CustomMetadata param.Field[[]NamespaceInstanceNewParamsCustomMetadata] `json:"custom_metadata"`
-	EmbeddingModel param.Field[NamespaceInstanceNewParamsEmbeddingModel]   `json:"embedding_model"`
+	EmbeddingModel param.Field[string]                                     `json:"embedding_model"`
 	FusionMethod   param.Field[NamespaceInstanceNewParamsFusionMethod]     `json:"fusion_method"`
 	// Deprecated — use index_method instead.
 	HybridSearchEnabled param.Field[bool] `json:"hybrid_search_enabled"`
@@ -5376,13 +4899,15 @@ type NamespaceInstanceNewParams struct {
 	Metadata             param.Field[NamespaceInstanceNewParamsMetadata]             `json:"metadata"`
 	PublicEndpointParams param.Field[NamespaceInstanceNewParamsPublicEndpointParams] `json:"public_endpoint_params"`
 	Reranking            param.Field[bool]                                           `json:"reranking"`
-	RerankingModel       param.Field[NamespaceInstanceNewParamsRerankingModel]       `json:"reranking_model"`
+	RerankingModel       param.Field[string]                                         `json:"reranking_model"`
 	RetrievalOptions     param.Field[NamespaceInstanceNewParamsRetrievalOptions]     `json:"retrieval_options"`
-	RewriteModel         param.Field[NamespaceInstanceNewParamsRewriteModel]         `json:"rewrite_model"`
-	RewriteQuery         param.Field[bool]                                           `json:"rewrite_query"`
-	ScoreThreshold       param.Field[float64]                                        `json:"score_threshold"`
-	Source               param.Field[string]                                         `json:"source"`
-	SourceParams         param.Field[NamespaceInstanceNewParamsSourceParams]         `json:"source_params"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	RewriteModel   param.Field[string]                                 `json:"rewrite_model"`
+	RewriteQuery   param.Field[bool]                                   `json:"rewrite_query"`
+	ScoreThreshold param.Field[float64]                                `json:"score_threshold"`
+	Source         param.Field[string]                                 `json:"source"`
+	SourceParams   param.Field[NamespaceInstanceNewParamsSourceParams] `json:"source_params"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval param.Field[NamespaceInstanceNewParamsSyncInterval] `json:"sync_interval"`
@@ -5392,49 +4917,6 @@ type NamespaceInstanceNewParams struct {
 
 func (r NamespaceInstanceNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type NamespaceInstanceNewParamsAISearchModel string
-
-const (
-	NamespaceInstanceNewParamsAISearchModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceInstanceNewParamsAISearchModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceInstanceNewParamsAISearchModelCfZaiOrgGlm4_7Flash                   NamespaceInstanceNewParamsAISearchModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceInstanceNewParamsAISearchModelCfMetaLlama3_1_8bInstructFast         NamespaceInstanceNewParamsAISearchModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceInstanceNewParamsAISearchModelCfMetaLlama3_1_8bInstructFp8          NamespaceInstanceNewParamsAISearchModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceInstanceNewParamsAISearchModelCfMetaLlama4Scout17b16eInstruct       NamespaceInstanceNewParamsAISearchModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceNewParamsAISearchModelCfQwenQwen3_30bA3bFp8                 NamespaceInstanceNewParamsAISearchModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceInstanceNewParamsAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceInstanceNewParamsAISearchModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceInstanceNewParamsAISearchModelCfMoonshotaiKimiK2Instruct            NamespaceInstanceNewParamsAISearchModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceInstanceNewParamsAISearchModelCfGoogleGemma3_12bIt                  NamespaceInstanceNewParamsAISearchModel = "@cf/google/gemma-3-12b-it"
-	NamespaceInstanceNewParamsAISearchModelCfGoogleGemma4_26bA4bIt               NamespaceInstanceNewParamsAISearchModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceInstanceNewParamsAISearchModelCfMoonshotaiKimiK2_5                  NamespaceInstanceNewParamsAISearchModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceInstanceNewParamsAISearchModelAnthropicClaude3_7Sonnet              NamespaceInstanceNewParamsAISearchModel = "anthropic/claude-3-7-sonnet"
-	NamespaceInstanceNewParamsAISearchModelAnthropicClaudeSonnet4                NamespaceInstanceNewParamsAISearchModel = "anthropic/claude-sonnet-4"
-	NamespaceInstanceNewParamsAISearchModelAnthropicClaudeOpus4                  NamespaceInstanceNewParamsAISearchModel = "anthropic/claude-opus-4"
-	NamespaceInstanceNewParamsAISearchModelAnthropicClaude3_5Haiku               NamespaceInstanceNewParamsAISearchModel = "anthropic/claude-3-5-haiku"
-	NamespaceInstanceNewParamsAISearchModelCerebrasQwen3_235bA22bInstruct        NamespaceInstanceNewParamsAISearchModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceInstanceNewParamsAISearchModelCerebrasQwen3_235bA22bThinking        NamespaceInstanceNewParamsAISearchModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceInstanceNewParamsAISearchModelCerebrasLlama3_3_70b                  NamespaceInstanceNewParamsAISearchModel = "cerebras/llama-3.3-70b"
-	NamespaceInstanceNewParamsAISearchModelCerebrasLlama4Maverick17b128eInstruct NamespaceInstanceNewParamsAISearchModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceInstanceNewParamsAISearchModelCerebrasLlama4Scout17b16eInstruct     NamespaceInstanceNewParamsAISearchModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceNewParamsAISearchModelCerebrasGptOSs120b                    NamespaceInstanceNewParamsAISearchModel = "cerebras/gpt-oss-120b"
-	NamespaceInstanceNewParamsAISearchModelGoogleAIStudioGemini2_5Flash          NamespaceInstanceNewParamsAISearchModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceInstanceNewParamsAISearchModelGoogleAIStudioGemini2_5Pro            NamespaceInstanceNewParamsAISearchModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceInstanceNewParamsAISearchModelGrokGrok4                             NamespaceInstanceNewParamsAISearchModel = "grok/grok-4"
-	NamespaceInstanceNewParamsAISearchModelGroqLlama3_3_70bVersatile             NamespaceInstanceNewParamsAISearchModel = "groq/llama-3.3-70b-versatile"
-	NamespaceInstanceNewParamsAISearchModelGroqLlama3_1_8bInstant                NamespaceInstanceNewParamsAISearchModel = "groq/llama-3.1-8b-instant"
-	NamespaceInstanceNewParamsAISearchModelOpenAIGpt5                            NamespaceInstanceNewParamsAISearchModel = "openai/gpt-5"
-	NamespaceInstanceNewParamsAISearchModelOpenAIGpt5Mini                        NamespaceInstanceNewParamsAISearchModel = "openai/gpt-5-mini"
-	NamespaceInstanceNewParamsAISearchModelOpenAIGpt5Nano                        NamespaceInstanceNewParamsAISearchModel = "openai/gpt-5-nano"
-	NamespaceInstanceNewParamsAISearchModelEmpty                                 NamespaceInstanceNewParamsAISearchModel = ""
-)
-
-func (r NamespaceInstanceNewParamsAISearchModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceNewParamsAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceInstanceNewParamsAISearchModelCfZaiOrgGlm4_7Flash, NamespaceInstanceNewParamsAISearchModelCfMetaLlama3_1_8bInstructFast, NamespaceInstanceNewParamsAISearchModelCfMetaLlama3_1_8bInstructFp8, NamespaceInstanceNewParamsAISearchModelCfMetaLlama4Scout17b16eInstruct, NamespaceInstanceNewParamsAISearchModelCfQwenQwen3_30bA3bFp8, NamespaceInstanceNewParamsAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceInstanceNewParamsAISearchModelCfMoonshotaiKimiK2Instruct, NamespaceInstanceNewParamsAISearchModelCfGoogleGemma3_12bIt, NamespaceInstanceNewParamsAISearchModelCfGoogleGemma4_26bA4bIt, NamespaceInstanceNewParamsAISearchModelCfMoonshotaiKimiK2_5, NamespaceInstanceNewParamsAISearchModelAnthropicClaude3_7Sonnet, NamespaceInstanceNewParamsAISearchModelAnthropicClaudeSonnet4, NamespaceInstanceNewParamsAISearchModelAnthropicClaudeOpus4, NamespaceInstanceNewParamsAISearchModelAnthropicClaude3_5Haiku, NamespaceInstanceNewParamsAISearchModelCerebrasQwen3_235bA22bInstruct, NamespaceInstanceNewParamsAISearchModelCerebrasQwen3_235bA22bThinking, NamespaceInstanceNewParamsAISearchModelCerebrasLlama3_3_70b, NamespaceInstanceNewParamsAISearchModelCerebrasLlama4Maverick17b128eInstruct, NamespaceInstanceNewParamsAISearchModelCerebrasLlama4Scout17b16eInstruct, NamespaceInstanceNewParamsAISearchModelCerebrasGptOSs120b, NamespaceInstanceNewParamsAISearchModelGoogleAIStudioGemini2_5Flash, NamespaceInstanceNewParamsAISearchModelGoogleAIStudioGemini2_5Pro, NamespaceInstanceNewParamsAISearchModelGrokGrok4, NamespaceInstanceNewParamsAISearchModelGroqLlama3_3_70bVersatile, NamespaceInstanceNewParamsAISearchModelGroqLlama3_1_8bInstant, NamespaceInstanceNewParamsAISearchModelOpenAIGpt5, NamespaceInstanceNewParamsAISearchModelOpenAIGpt5Mini, NamespaceInstanceNewParamsAISearchModelOpenAIGpt5Nano, NamespaceInstanceNewParamsAISearchModelEmpty:
-		return true
-	}
-	return false
 }
 
 type NamespaceInstanceNewParamsCacheThreshold string
@@ -5501,30 +4983,6 @@ const (
 func (r NamespaceInstanceNewParamsCustomMetadataDataType) IsKnown() bool {
 	switch r {
 	case NamespaceInstanceNewParamsCustomMetadataDataTypeText, NamespaceInstanceNewParamsCustomMetadataDataTypeNumber, NamespaceInstanceNewParamsCustomMetadataDataTypeBoolean, NamespaceInstanceNewParamsCustomMetadataDataTypeDatetime:
-		return true
-	}
-	return false
-}
-
-type NamespaceInstanceNewParamsEmbeddingModel string
-
-const (
-	NamespaceInstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b              NamespaceInstanceNewParamsEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
-	NamespaceInstanceNewParamsEmbeddingModelCfQwenQwen3VlEmbedding2b              NamespaceInstanceNewParamsEmbeddingModel = "@cf/qwen/qwen3-vl-embedding-2b"
-	NamespaceInstanceNewParamsEmbeddingModelCfBaaiBgeM3                           NamespaceInstanceNewParamsEmbeddingModel = "@cf/baai/bge-m3"
-	NamespaceInstanceNewParamsEmbeddingModelCfBaaiBgeLargeEnV1_5                  NamespaceInstanceNewParamsEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
-	NamespaceInstanceNewParamsEmbeddingModelCfGoogleEmbeddinggemma300m            NamespaceInstanceNewParamsEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	NamespaceInstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001      NamespaceInstanceNewParamsEmbeddingModel = "google-ai-studio/gemini-embedding-001"
-	NamespaceInstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview NamespaceInstanceNewParamsEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
-	NamespaceInstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2        NamespaceInstanceNewParamsEmbeddingModel = "google-ai-studio/gemini-embedding-2"
-	NamespaceInstanceNewParamsEmbeddingModelOpenAITextEmbedding3Small             NamespaceInstanceNewParamsEmbeddingModel = "openai/text-embedding-3-small"
-	NamespaceInstanceNewParamsEmbeddingModelOpenAITextEmbedding3Large             NamespaceInstanceNewParamsEmbeddingModel = "openai/text-embedding-3-large"
-	NamespaceInstanceNewParamsEmbeddingModelEmpty                                 NamespaceInstanceNewParamsEmbeddingModel = ""
-)
-
-func (r NamespaceInstanceNewParamsEmbeddingModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceNewParamsEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceNewParamsEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceNewParamsEmbeddingModelCfBaaiBgeM3, NamespaceInstanceNewParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceNewParamsEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceNewParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2, NamespaceInstanceNewParamsEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceNewParamsEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceNewParamsEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -5675,21 +5133,6 @@ func (r NamespaceInstanceNewParamsPublicEndpointParamsSearchEndpoint) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-type NamespaceInstanceNewParamsRerankingModel string
-
-const (
-	NamespaceInstanceNewParamsRerankingModelCfBaaiBgeRerankerBase NamespaceInstanceNewParamsRerankingModel = "@cf/baai/bge-reranker-base"
-	NamespaceInstanceNewParamsRerankingModelEmpty                 NamespaceInstanceNewParamsRerankingModel = ""
-)
-
-func (r NamespaceInstanceNewParamsRerankingModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceNewParamsRerankingModelCfBaaiBgeRerankerBase, NamespaceInstanceNewParamsRerankingModelEmpty:
-		return true
-	}
-	return false
-}
-
 type NamespaceInstanceNewParamsRetrievalOptions struct {
 	// Metadata fields to boost search results by. Each entry specifies a metadata
 	// field and an optional direction. Direction defaults to 'asc' for
@@ -5761,49 +5204,6 @@ const (
 func (r NamespaceInstanceNewParamsRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
 	case NamespaceInstanceNewParamsRetrievalOptionsKeywordMatchModeAnd, NamespaceInstanceNewParamsRetrievalOptionsKeywordMatchModeOr:
-		return true
-	}
-	return false
-}
-
-type NamespaceInstanceNewParamsRewriteModel string
-
-const (
-	NamespaceInstanceNewParamsRewriteModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceInstanceNewParamsRewriteModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceInstanceNewParamsRewriteModelCfZaiOrgGlm4_7Flash                   NamespaceInstanceNewParamsRewriteModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceInstanceNewParamsRewriteModelCfMetaLlama3_1_8bInstructFast         NamespaceInstanceNewParamsRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceInstanceNewParamsRewriteModelCfMetaLlama3_1_8bInstructFp8          NamespaceInstanceNewParamsRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceInstanceNewParamsRewriteModelCfMetaLlama4Scout17b16eInstruct       NamespaceInstanceNewParamsRewriteModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceNewParamsRewriteModelCfQwenQwen3_30bA3bFp8                 NamespaceInstanceNewParamsRewriteModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceInstanceNewParamsRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceInstanceNewParamsRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceInstanceNewParamsRewriteModelCfMoonshotaiKimiK2Instruct            NamespaceInstanceNewParamsRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceInstanceNewParamsRewriteModelCfGoogleGemma3_12bIt                  NamespaceInstanceNewParamsRewriteModel = "@cf/google/gemma-3-12b-it"
-	NamespaceInstanceNewParamsRewriteModelCfGoogleGemma4_26bA4bIt               NamespaceInstanceNewParamsRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceInstanceNewParamsRewriteModelCfMoonshotaiKimiK2_5                  NamespaceInstanceNewParamsRewriteModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceInstanceNewParamsRewriteModelAnthropicClaude3_7Sonnet              NamespaceInstanceNewParamsRewriteModel = "anthropic/claude-3-7-sonnet"
-	NamespaceInstanceNewParamsRewriteModelAnthropicClaudeSonnet4                NamespaceInstanceNewParamsRewriteModel = "anthropic/claude-sonnet-4"
-	NamespaceInstanceNewParamsRewriteModelAnthropicClaudeOpus4                  NamespaceInstanceNewParamsRewriteModel = "anthropic/claude-opus-4"
-	NamespaceInstanceNewParamsRewriteModelAnthropicClaude3_5Haiku               NamespaceInstanceNewParamsRewriteModel = "anthropic/claude-3-5-haiku"
-	NamespaceInstanceNewParamsRewriteModelCerebrasQwen3_235bA22bInstruct        NamespaceInstanceNewParamsRewriteModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceInstanceNewParamsRewriteModelCerebrasQwen3_235bA22bThinking        NamespaceInstanceNewParamsRewriteModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceInstanceNewParamsRewriteModelCerebrasLlama3_3_70b                  NamespaceInstanceNewParamsRewriteModel = "cerebras/llama-3.3-70b"
-	NamespaceInstanceNewParamsRewriteModelCerebrasLlama4Maverick17b128eInstruct NamespaceInstanceNewParamsRewriteModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceInstanceNewParamsRewriteModelCerebrasLlama4Scout17b16eInstruct     NamespaceInstanceNewParamsRewriteModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceNewParamsRewriteModelCerebrasGptOSs120b                    NamespaceInstanceNewParamsRewriteModel = "cerebras/gpt-oss-120b"
-	NamespaceInstanceNewParamsRewriteModelGoogleAIStudioGemini2_5Flash          NamespaceInstanceNewParamsRewriteModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceInstanceNewParamsRewriteModelGoogleAIStudioGemini2_5Pro            NamespaceInstanceNewParamsRewriteModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceInstanceNewParamsRewriteModelGrokGrok4                             NamespaceInstanceNewParamsRewriteModel = "grok/grok-4"
-	NamespaceInstanceNewParamsRewriteModelGroqLlama3_3_70bVersatile             NamespaceInstanceNewParamsRewriteModel = "groq/llama-3.3-70b-versatile"
-	NamespaceInstanceNewParamsRewriteModelGroqLlama3_1_8bInstant                NamespaceInstanceNewParamsRewriteModel = "groq/llama-3.1-8b-instant"
-	NamespaceInstanceNewParamsRewriteModelOpenAIGpt5                            NamespaceInstanceNewParamsRewriteModel = "openai/gpt-5"
-	NamespaceInstanceNewParamsRewriteModelOpenAIGpt5Mini                        NamespaceInstanceNewParamsRewriteModel = "openai/gpt-5-mini"
-	NamespaceInstanceNewParamsRewriteModelOpenAIGpt5Nano                        NamespaceInstanceNewParamsRewriteModel = "openai/gpt-5-nano"
-	NamespaceInstanceNewParamsRewriteModelEmpty                                 NamespaceInstanceNewParamsRewriteModel = ""
-)
-
-func (r NamespaceInstanceNewParamsRewriteModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceNewParamsRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceInstanceNewParamsRewriteModelCfZaiOrgGlm4_7Flash, NamespaceInstanceNewParamsRewriteModelCfMetaLlama3_1_8bInstructFast, NamespaceInstanceNewParamsRewriteModelCfMetaLlama3_1_8bInstructFp8, NamespaceInstanceNewParamsRewriteModelCfMetaLlama4Scout17b16eInstruct, NamespaceInstanceNewParamsRewriteModelCfQwenQwen3_30bA3bFp8, NamespaceInstanceNewParamsRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceInstanceNewParamsRewriteModelCfMoonshotaiKimiK2Instruct, NamespaceInstanceNewParamsRewriteModelCfGoogleGemma3_12bIt, NamespaceInstanceNewParamsRewriteModelCfGoogleGemma4_26bA4bIt, NamespaceInstanceNewParamsRewriteModelCfMoonshotaiKimiK2_5, NamespaceInstanceNewParamsRewriteModelAnthropicClaude3_7Sonnet, NamespaceInstanceNewParamsRewriteModelAnthropicClaudeSonnet4, NamespaceInstanceNewParamsRewriteModelAnthropicClaudeOpus4, NamespaceInstanceNewParamsRewriteModelAnthropicClaude3_5Haiku, NamespaceInstanceNewParamsRewriteModelCerebrasQwen3_235bA22bInstruct, NamespaceInstanceNewParamsRewriteModelCerebrasQwen3_235bA22bThinking, NamespaceInstanceNewParamsRewriteModelCerebrasLlama3_3_70b, NamespaceInstanceNewParamsRewriteModelCerebrasLlama4Maverick17b128eInstruct, NamespaceInstanceNewParamsRewriteModelCerebrasLlama4Scout17b16eInstruct, NamespaceInstanceNewParamsRewriteModelCerebrasGptOSs120b, NamespaceInstanceNewParamsRewriteModelGoogleAIStudioGemini2_5Flash, NamespaceInstanceNewParamsRewriteModelGoogleAIStudioGemini2_5Pro, NamespaceInstanceNewParamsRewriteModelGrokGrok4, NamespaceInstanceNewParamsRewriteModelGroqLlama3_3_70bVersatile, NamespaceInstanceNewParamsRewriteModelGroqLlama3_1_8bInstant, NamespaceInstanceNewParamsRewriteModelOpenAIGpt5, NamespaceInstanceNewParamsRewriteModelOpenAIGpt5Mini, NamespaceInstanceNewParamsRewriteModelOpenAIGpt5Nano, NamespaceInstanceNewParamsRewriteModelEmpty:
 		return true
 	}
 	return false
@@ -5998,9 +5398,11 @@ func (r namespaceInstanceNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type NamespaceInstanceUpdateParams struct {
-	AccountID      param.Field[string]                                      `path:"account_id" api:"required"`
-	AIGatewayID    param.Field[string]                                      `json:"ai_gateway_id"`
-	AISearchModel  param.Field[NamespaceInstanceUpdateParamsAISearchModel]  `json:"ai_search_model"`
+	AccountID   param.Field[string] `path:"account_id" api:"required"`
+	AIGatewayID param.Field[string] `json:"ai_gateway_id"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	AISearchModel  param.Field[string]                                      `json:"ai_search_model"`
 	Cache          param.Field[bool]                                        `json:"cache"`
 	CacheThreshold param.Field[NamespaceInstanceUpdateParamsCacheThreshold] `json:"cache_threshold"`
 	// Cache entry TTL in seconds. Allowed values: 600 (10min), 1800 (30min), 3600
@@ -6011,7 +5413,7 @@ type NamespaceInstanceUpdateParams struct {
 	ChunkOverlap   param.Field[int64]                                         `json:"chunk_overlap"`
 	ChunkSize      param.Field[int64]                                         `json:"chunk_size"`
 	CustomMetadata param.Field[[]NamespaceInstanceUpdateParamsCustomMetadata] `json:"custom_metadata"`
-	EmbeddingModel param.Field[NamespaceInstanceUpdateParamsEmbeddingModel]   `json:"embedding_model"`
+	EmbeddingModel param.Field[string]                                        `json:"embedding_model"`
 	FusionMethod   param.Field[NamespaceInstanceUpdateParamsFusionMethod]     `json:"fusion_method"`
 	// Controls which storage backends are used during indexing. Defaults to
 	// vector-only.
@@ -6022,15 +5424,17 @@ type NamespaceInstanceUpdateParams struct {
 	Paused               param.Field[bool]                                              `json:"paused"`
 	PublicEndpointParams param.Field[NamespaceInstanceUpdateParamsPublicEndpointParams] `json:"public_endpoint_params"`
 	Reranking            param.Field[bool]                                              `json:"reranking"`
-	RerankingModel       param.Field[NamespaceInstanceUpdateParamsRerankingModel]       `json:"reranking_model"`
+	RerankingModel       param.Field[string]                                            `json:"reranking_model"`
 	RetrievalOptions     param.Field[NamespaceInstanceUpdateParamsRetrievalOptions]     `json:"retrieval_options"`
-	RewriteModel         param.Field[NamespaceInstanceUpdateParamsRewriteModel]         `json:"rewrite_model"`
-	RewriteQuery         param.Field[bool]                                              `json:"rewrite_query"`
-	ScoreThreshold       param.Field[float64]                                           `json:"score_threshold"`
-	Source               param.Field[string]                                            `json:"source"`
-	SourceParams         param.Field[NamespaceInstanceUpdateParamsSourceParams]         `json:"source_params"`
-	Summarization        param.Field[bool]                                              `json:"summarization"`
-	SummarizationModel   param.Field[NamespaceInstanceUpdateParamsSummarizationModel]   `json:"summarization_model"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	RewriteModel       param.Field[string]                                    `json:"rewrite_model"`
+	RewriteQuery       param.Field[bool]                                      `json:"rewrite_query"`
+	ScoreThreshold     param.Field[float64]                                   `json:"score_threshold"`
+	Source             param.Field[string]                                    `json:"source"`
+	SourceParams       param.Field[NamespaceInstanceUpdateParamsSourceParams] `json:"source_params"`
+	Summarization      param.Field[bool]                                      `json:"summarization"`
+	SummarizationModel param.Field[string]                                    `json:"summarization_model"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval                   param.Field[NamespaceInstanceUpdateParamsSyncInterval] `json:"sync_interval"`
@@ -6042,49 +5446,6 @@ type NamespaceInstanceUpdateParams struct {
 
 func (r NamespaceInstanceUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type NamespaceInstanceUpdateParamsAISearchModel string
-
-const (
-	NamespaceInstanceUpdateParamsAISearchModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceInstanceUpdateParamsAISearchModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceInstanceUpdateParamsAISearchModelCfZaiOrgGlm4_7Flash                   NamespaceInstanceUpdateParamsAISearchModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceInstanceUpdateParamsAISearchModelCfMetaLlama3_1_8bInstructFast         NamespaceInstanceUpdateParamsAISearchModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceInstanceUpdateParamsAISearchModelCfMetaLlama3_1_8bInstructFp8          NamespaceInstanceUpdateParamsAISearchModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceInstanceUpdateParamsAISearchModelCfMetaLlama4Scout17b16eInstruct       NamespaceInstanceUpdateParamsAISearchModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceUpdateParamsAISearchModelCfQwenQwen3_30bA3bFp8                 NamespaceInstanceUpdateParamsAISearchModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceInstanceUpdateParamsAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceInstanceUpdateParamsAISearchModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceInstanceUpdateParamsAISearchModelCfMoonshotaiKimiK2Instruct            NamespaceInstanceUpdateParamsAISearchModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceInstanceUpdateParamsAISearchModelCfGoogleGemma3_12bIt                  NamespaceInstanceUpdateParamsAISearchModel = "@cf/google/gemma-3-12b-it"
-	NamespaceInstanceUpdateParamsAISearchModelCfGoogleGemma4_26bA4bIt               NamespaceInstanceUpdateParamsAISearchModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceInstanceUpdateParamsAISearchModelCfMoonshotaiKimiK2_5                  NamespaceInstanceUpdateParamsAISearchModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceInstanceUpdateParamsAISearchModelAnthropicClaude3_7Sonnet              NamespaceInstanceUpdateParamsAISearchModel = "anthropic/claude-3-7-sonnet"
-	NamespaceInstanceUpdateParamsAISearchModelAnthropicClaudeSonnet4                NamespaceInstanceUpdateParamsAISearchModel = "anthropic/claude-sonnet-4"
-	NamespaceInstanceUpdateParamsAISearchModelAnthropicClaudeOpus4                  NamespaceInstanceUpdateParamsAISearchModel = "anthropic/claude-opus-4"
-	NamespaceInstanceUpdateParamsAISearchModelAnthropicClaude3_5Haiku               NamespaceInstanceUpdateParamsAISearchModel = "anthropic/claude-3-5-haiku"
-	NamespaceInstanceUpdateParamsAISearchModelCerebrasQwen3_235bA22bInstruct        NamespaceInstanceUpdateParamsAISearchModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceInstanceUpdateParamsAISearchModelCerebrasQwen3_235bA22bThinking        NamespaceInstanceUpdateParamsAISearchModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceInstanceUpdateParamsAISearchModelCerebrasLlama3_3_70b                  NamespaceInstanceUpdateParamsAISearchModel = "cerebras/llama-3.3-70b"
-	NamespaceInstanceUpdateParamsAISearchModelCerebrasLlama4Maverick17b128eInstruct NamespaceInstanceUpdateParamsAISearchModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceInstanceUpdateParamsAISearchModelCerebrasLlama4Scout17b16eInstruct     NamespaceInstanceUpdateParamsAISearchModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceUpdateParamsAISearchModelCerebrasGptOSs120b                    NamespaceInstanceUpdateParamsAISearchModel = "cerebras/gpt-oss-120b"
-	NamespaceInstanceUpdateParamsAISearchModelGoogleAIStudioGemini2_5Flash          NamespaceInstanceUpdateParamsAISearchModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceInstanceUpdateParamsAISearchModelGoogleAIStudioGemini2_5Pro            NamespaceInstanceUpdateParamsAISearchModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceInstanceUpdateParamsAISearchModelGrokGrok4                             NamespaceInstanceUpdateParamsAISearchModel = "grok/grok-4"
-	NamespaceInstanceUpdateParamsAISearchModelGroqLlama3_3_70bVersatile             NamespaceInstanceUpdateParamsAISearchModel = "groq/llama-3.3-70b-versatile"
-	NamespaceInstanceUpdateParamsAISearchModelGroqLlama3_1_8bInstant                NamespaceInstanceUpdateParamsAISearchModel = "groq/llama-3.1-8b-instant"
-	NamespaceInstanceUpdateParamsAISearchModelOpenAIGpt5                            NamespaceInstanceUpdateParamsAISearchModel = "openai/gpt-5"
-	NamespaceInstanceUpdateParamsAISearchModelOpenAIGpt5Mini                        NamespaceInstanceUpdateParamsAISearchModel = "openai/gpt-5-mini"
-	NamespaceInstanceUpdateParamsAISearchModelOpenAIGpt5Nano                        NamespaceInstanceUpdateParamsAISearchModel = "openai/gpt-5-nano"
-	NamespaceInstanceUpdateParamsAISearchModelEmpty                                 NamespaceInstanceUpdateParamsAISearchModel = ""
-)
-
-func (r NamespaceInstanceUpdateParamsAISearchModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceUpdateParamsAISearchModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceInstanceUpdateParamsAISearchModelCfZaiOrgGlm4_7Flash, NamespaceInstanceUpdateParamsAISearchModelCfMetaLlama3_1_8bInstructFast, NamespaceInstanceUpdateParamsAISearchModelCfMetaLlama3_1_8bInstructFp8, NamespaceInstanceUpdateParamsAISearchModelCfMetaLlama4Scout17b16eInstruct, NamespaceInstanceUpdateParamsAISearchModelCfQwenQwen3_30bA3bFp8, NamespaceInstanceUpdateParamsAISearchModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceInstanceUpdateParamsAISearchModelCfMoonshotaiKimiK2Instruct, NamespaceInstanceUpdateParamsAISearchModelCfGoogleGemma3_12bIt, NamespaceInstanceUpdateParamsAISearchModelCfGoogleGemma4_26bA4bIt, NamespaceInstanceUpdateParamsAISearchModelCfMoonshotaiKimiK2_5, NamespaceInstanceUpdateParamsAISearchModelAnthropicClaude3_7Sonnet, NamespaceInstanceUpdateParamsAISearchModelAnthropicClaudeSonnet4, NamespaceInstanceUpdateParamsAISearchModelAnthropicClaudeOpus4, NamespaceInstanceUpdateParamsAISearchModelAnthropicClaude3_5Haiku, NamespaceInstanceUpdateParamsAISearchModelCerebrasQwen3_235bA22bInstruct, NamespaceInstanceUpdateParamsAISearchModelCerebrasQwen3_235bA22bThinking, NamespaceInstanceUpdateParamsAISearchModelCerebrasLlama3_3_70b, NamespaceInstanceUpdateParamsAISearchModelCerebrasLlama4Maverick17b128eInstruct, NamespaceInstanceUpdateParamsAISearchModelCerebrasLlama4Scout17b16eInstruct, NamespaceInstanceUpdateParamsAISearchModelCerebrasGptOSs120b, NamespaceInstanceUpdateParamsAISearchModelGoogleAIStudioGemini2_5Flash, NamespaceInstanceUpdateParamsAISearchModelGoogleAIStudioGemini2_5Pro, NamespaceInstanceUpdateParamsAISearchModelGrokGrok4, NamespaceInstanceUpdateParamsAISearchModelGroqLlama3_3_70bVersatile, NamespaceInstanceUpdateParamsAISearchModelGroqLlama3_1_8bInstant, NamespaceInstanceUpdateParamsAISearchModelOpenAIGpt5, NamespaceInstanceUpdateParamsAISearchModelOpenAIGpt5Mini, NamespaceInstanceUpdateParamsAISearchModelOpenAIGpt5Nano, NamespaceInstanceUpdateParamsAISearchModelEmpty:
-		return true
-	}
-	return false
 }
 
 type NamespaceInstanceUpdateParamsCacheThreshold string
@@ -6151,30 +5512,6 @@ const (
 func (r NamespaceInstanceUpdateParamsCustomMetadataDataType) IsKnown() bool {
 	switch r {
 	case NamespaceInstanceUpdateParamsCustomMetadataDataTypeText, NamespaceInstanceUpdateParamsCustomMetadataDataTypeNumber, NamespaceInstanceUpdateParamsCustomMetadataDataTypeBoolean, NamespaceInstanceUpdateParamsCustomMetadataDataTypeDatetime:
-		return true
-	}
-	return false
-}
-
-type NamespaceInstanceUpdateParamsEmbeddingModel string
-
-const (
-	NamespaceInstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b              NamespaceInstanceUpdateParamsEmbeddingModel = "@cf/qwen/qwen3-embedding-0.6b"
-	NamespaceInstanceUpdateParamsEmbeddingModelCfQwenQwen3VlEmbedding2b              NamespaceInstanceUpdateParamsEmbeddingModel = "@cf/qwen/qwen3-vl-embedding-2b"
-	NamespaceInstanceUpdateParamsEmbeddingModelCfBaaiBgeM3                           NamespaceInstanceUpdateParamsEmbeddingModel = "@cf/baai/bge-m3"
-	NamespaceInstanceUpdateParamsEmbeddingModelCfBaaiBgeLargeEnV1_5                  NamespaceInstanceUpdateParamsEmbeddingModel = "@cf/baai/bge-large-en-v1.5"
-	NamespaceInstanceUpdateParamsEmbeddingModelCfGoogleEmbeddinggemma300m            NamespaceInstanceUpdateParamsEmbeddingModel = "@cf/google/embeddinggemma-300m"
-	NamespaceInstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001      NamespaceInstanceUpdateParamsEmbeddingModel = "google-ai-studio/gemini-embedding-001"
-	NamespaceInstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview NamespaceInstanceUpdateParamsEmbeddingModel = "google-ai-studio/gemini-embedding-2-preview"
-	NamespaceInstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2        NamespaceInstanceUpdateParamsEmbeddingModel = "google-ai-studio/gemini-embedding-2"
-	NamespaceInstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Small             NamespaceInstanceUpdateParamsEmbeddingModel = "openai/text-embedding-3-small"
-	NamespaceInstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Large             NamespaceInstanceUpdateParamsEmbeddingModel = "openai/text-embedding-3-large"
-	NamespaceInstanceUpdateParamsEmbeddingModelEmpty                                 NamespaceInstanceUpdateParamsEmbeddingModel = ""
-)
-
-func (r NamespaceInstanceUpdateParamsEmbeddingModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceUpdateParamsEmbeddingModelCfQwenQwen3Embedding0_6b, NamespaceInstanceUpdateParamsEmbeddingModelCfQwenQwen3VlEmbedding2b, NamespaceInstanceUpdateParamsEmbeddingModelCfBaaiBgeM3, NamespaceInstanceUpdateParamsEmbeddingModelCfBaaiBgeLargeEnV1_5, NamespaceInstanceUpdateParamsEmbeddingModelCfGoogleEmbeddinggemma300m, NamespaceInstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding001, NamespaceInstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2Preview, NamespaceInstanceUpdateParamsEmbeddingModelGoogleAIStudioGeminiEmbedding2, NamespaceInstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Small, NamespaceInstanceUpdateParamsEmbeddingModelOpenAITextEmbedding3Large, NamespaceInstanceUpdateParamsEmbeddingModelEmpty:
 		return true
 	}
 	return false
@@ -6325,21 +5662,6 @@ func (r NamespaceInstanceUpdateParamsPublicEndpointParamsSearchEndpoint) Marshal
 	return apijson.MarshalRoot(r)
 }
 
-type NamespaceInstanceUpdateParamsRerankingModel string
-
-const (
-	NamespaceInstanceUpdateParamsRerankingModelCfBaaiBgeRerankerBase NamespaceInstanceUpdateParamsRerankingModel = "@cf/baai/bge-reranker-base"
-	NamespaceInstanceUpdateParamsRerankingModelEmpty                 NamespaceInstanceUpdateParamsRerankingModel = ""
-)
-
-func (r NamespaceInstanceUpdateParamsRerankingModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceUpdateParamsRerankingModelCfBaaiBgeRerankerBase, NamespaceInstanceUpdateParamsRerankingModelEmpty:
-		return true
-	}
-	return false
-}
-
 type NamespaceInstanceUpdateParamsRetrievalOptions struct {
 	// Metadata fields to boost search results by. Each entry specifies a metadata
 	// field and an optional direction. Direction defaults to 'asc' for
@@ -6411,49 +5733,6 @@ const (
 func (r NamespaceInstanceUpdateParamsRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 	switch r {
 	case NamespaceInstanceUpdateParamsRetrievalOptionsKeywordMatchModeAnd, NamespaceInstanceUpdateParamsRetrievalOptionsKeywordMatchModeOr:
-		return true
-	}
-	return false
-}
-
-type NamespaceInstanceUpdateParamsRewriteModel string
-
-const (
-	NamespaceInstanceUpdateParamsRewriteModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceInstanceUpdateParamsRewriteModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceInstanceUpdateParamsRewriteModelCfZaiOrgGlm4_7Flash                   NamespaceInstanceUpdateParamsRewriteModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceInstanceUpdateParamsRewriteModelCfMetaLlama3_1_8bInstructFast         NamespaceInstanceUpdateParamsRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceInstanceUpdateParamsRewriteModelCfMetaLlama3_1_8bInstructFp8          NamespaceInstanceUpdateParamsRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceInstanceUpdateParamsRewriteModelCfMetaLlama4Scout17b16eInstruct       NamespaceInstanceUpdateParamsRewriteModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceUpdateParamsRewriteModelCfQwenQwen3_30bA3bFp8                 NamespaceInstanceUpdateParamsRewriteModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceInstanceUpdateParamsRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceInstanceUpdateParamsRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceInstanceUpdateParamsRewriteModelCfMoonshotaiKimiK2Instruct            NamespaceInstanceUpdateParamsRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceInstanceUpdateParamsRewriteModelCfGoogleGemma3_12bIt                  NamespaceInstanceUpdateParamsRewriteModel = "@cf/google/gemma-3-12b-it"
-	NamespaceInstanceUpdateParamsRewriteModelCfGoogleGemma4_26bA4bIt               NamespaceInstanceUpdateParamsRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceInstanceUpdateParamsRewriteModelCfMoonshotaiKimiK2_5                  NamespaceInstanceUpdateParamsRewriteModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceInstanceUpdateParamsRewriteModelAnthropicClaude3_7Sonnet              NamespaceInstanceUpdateParamsRewriteModel = "anthropic/claude-3-7-sonnet"
-	NamespaceInstanceUpdateParamsRewriteModelAnthropicClaudeSonnet4                NamespaceInstanceUpdateParamsRewriteModel = "anthropic/claude-sonnet-4"
-	NamespaceInstanceUpdateParamsRewriteModelAnthropicClaudeOpus4                  NamespaceInstanceUpdateParamsRewriteModel = "anthropic/claude-opus-4"
-	NamespaceInstanceUpdateParamsRewriteModelAnthropicClaude3_5Haiku               NamespaceInstanceUpdateParamsRewriteModel = "anthropic/claude-3-5-haiku"
-	NamespaceInstanceUpdateParamsRewriteModelCerebrasQwen3_235bA22bInstruct        NamespaceInstanceUpdateParamsRewriteModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceInstanceUpdateParamsRewriteModelCerebrasQwen3_235bA22bThinking        NamespaceInstanceUpdateParamsRewriteModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceInstanceUpdateParamsRewriteModelCerebrasLlama3_3_70b                  NamespaceInstanceUpdateParamsRewriteModel = "cerebras/llama-3.3-70b"
-	NamespaceInstanceUpdateParamsRewriteModelCerebrasLlama4Maverick17b128eInstruct NamespaceInstanceUpdateParamsRewriteModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceInstanceUpdateParamsRewriteModelCerebrasLlama4Scout17b16eInstruct     NamespaceInstanceUpdateParamsRewriteModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceUpdateParamsRewriteModelCerebrasGptOSs120b                    NamespaceInstanceUpdateParamsRewriteModel = "cerebras/gpt-oss-120b"
-	NamespaceInstanceUpdateParamsRewriteModelGoogleAIStudioGemini2_5Flash          NamespaceInstanceUpdateParamsRewriteModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceInstanceUpdateParamsRewriteModelGoogleAIStudioGemini2_5Pro            NamespaceInstanceUpdateParamsRewriteModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceInstanceUpdateParamsRewriteModelGrokGrok4                             NamespaceInstanceUpdateParamsRewriteModel = "grok/grok-4"
-	NamespaceInstanceUpdateParamsRewriteModelGroqLlama3_3_70bVersatile             NamespaceInstanceUpdateParamsRewriteModel = "groq/llama-3.3-70b-versatile"
-	NamespaceInstanceUpdateParamsRewriteModelGroqLlama3_1_8bInstant                NamespaceInstanceUpdateParamsRewriteModel = "groq/llama-3.1-8b-instant"
-	NamespaceInstanceUpdateParamsRewriteModelOpenAIGpt5                            NamespaceInstanceUpdateParamsRewriteModel = "openai/gpt-5"
-	NamespaceInstanceUpdateParamsRewriteModelOpenAIGpt5Mini                        NamespaceInstanceUpdateParamsRewriteModel = "openai/gpt-5-mini"
-	NamespaceInstanceUpdateParamsRewriteModelOpenAIGpt5Nano                        NamespaceInstanceUpdateParamsRewriteModel = "openai/gpt-5-nano"
-	NamespaceInstanceUpdateParamsRewriteModelEmpty                                 NamespaceInstanceUpdateParamsRewriteModel = ""
-)
-
-func (r NamespaceInstanceUpdateParamsRewriteModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceUpdateParamsRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceInstanceUpdateParamsRewriteModelCfZaiOrgGlm4_7Flash, NamespaceInstanceUpdateParamsRewriteModelCfMetaLlama3_1_8bInstructFast, NamespaceInstanceUpdateParamsRewriteModelCfMetaLlama3_1_8bInstructFp8, NamespaceInstanceUpdateParamsRewriteModelCfMetaLlama4Scout17b16eInstruct, NamespaceInstanceUpdateParamsRewriteModelCfQwenQwen3_30bA3bFp8, NamespaceInstanceUpdateParamsRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceInstanceUpdateParamsRewriteModelCfMoonshotaiKimiK2Instruct, NamespaceInstanceUpdateParamsRewriteModelCfGoogleGemma3_12bIt, NamespaceInstanceUpdateParamsRewriteModelCfGoogleGemma4_26bA4bIt, NamespaceInstanceUpdateParamsRewriteModelCfMoonshotaiKimiK2_5, NamespaceInstanceUpdateParamsRewriteModelAnthropicClaude3_7Sonnet, NamespaceInstanceUpdateParamsRewriteModelAnthropicClaudeSonnet4, NamespaceInstanceUpdateParamsRewriteModelAnthropicClaudeOpus4, NamespaceInstanceUpdateParamsRewriteModelAnthropicClaude3_5Haiku, NamespaceInstanceUpdateParamsRewriteModelCerebrasQwen3_235bA22bInstruct, NamespaceInstanceUpdateParamsRewriteModelCerebrasQwen3_235bA22bThinking, NamespaceInstanceUpdateParamsRewriteModelCerebrasLlama3_3_70b, NamespaceInstanceUpdateParamsRewriteModelCerebrasLlama4Maverick17b128eInstruct, NamespaceInstanceUpdateParamsRewriteModelCerebrasLlama4Scout17b16eInstruct, NamespaceInstanceUpdateParamsRewriteModelCerebrasGptOSs120b, NamespaceInstanceUpdateParamsRewriteModelGoogleAIStudioGemini2_5Flash, NamespaceInstanceUpdateParamsRewriteModelGoogleAIStudioGemini2_5Pro, NamespaceInstanceUpdateParamsRewriteModelGrokGrok4, NamespaceInstanceUpdateParamsRewriteModelGroqLlama3_3_70bVersatile, NamespaceInstanceUpdateParamsRewriteModelGroqLlama3_1_8bInstant, NamespaceInstanceUpdateParamsRewriteModelOpenAIGpt5, NamespaceInstanceUpdateParamsRewriteModelOpenAIGpt5Mini, NamespaceInstanceUpdateParamsRewriteModelOpenAIGpt5Nano, NamespaceInstanceUpdateParamsRewriteModelEmpty:
 		return true
 	}
 	return false
@@ -6581,49 +5860,6 @@ const (
 func (r NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseType) IsKnown() bool {
 	switch r {
 	case NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeSitemap, NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseTypeDiscover:
-		return true
-	}
-	return false
-}
-
-type NamespaceInstanceUpdateParamsSummarizationModel string
-
-const (
-	NamespaceInstanceUpdateParamsSummarizationModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceInstanceUpdateParamsSummarizationModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceInstanceUpdateParamsSummarizationModelCfZaiOrgGlm4_7Flash                   NamespaceInstanceUpdateParamsSummarizationModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceInstanceUpdateParamsSummarizationModelCfMetaLlama3_1_8bInstructFast         NamespaceInstanceUpdateParamsSummarizationModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceInstanceUpdateParamsSummarizationModelCfMetaLlama3_1_8bInstructFp8          NamespaceInstanceUpdateParamsSummarizationModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceInstanceUpdateParamsSummarizationModelCfMetaLlama4Scout17b16eInstruct       NamespaceInstanceUpdateParamsSummarizationModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceUpdateParamsSummarizationModelCfQwenQwen3_30bA3bFp8                 NamespaceInstanceUpdateParamsSummarizationModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceInstanceUpdateParamsSummarizationModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceInstanceUpdateParamsSummarizationModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceInstanceUpdateParamsSummarizationModelCfMoonshotaiKimiK2Instruct            NamespaceInstanceUpdateParamsSummarizationModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceInstanceUpdateParamsSummarizationModelCfGoogleGemma3_12bIt                  NamespaceInstanceUpdateParamsSummarizationModel = "@cf/google/gemma-3-12b-it"
-	NamespaceInstanceUpdateParamsSummarizationModelCfGoogleGemma4_26bA4bIt               NamespaceInstanceUpdateParamsSummarizationModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceInstanceUpdateParamsSummarizationModelCfMoonshotaiKimiK2_5                  NamespaceInstanceUpdateParamsSummarizationModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceInstanceUpdateParamsSummarizationModelAnthropicClaude3_7Sonnet              NamespaceInstanceUpdateParamsSummarizationModel = "anthropic/claude-3-7-sonnet"
-	NamespaceInstanceUpdateParamsSummarizationModelAnthropicClaudeSonnet4                NamespaceInstanceUpdateParamsSummarizationModel = "anthropic/claude-sonnet-4"
-	NamespaceInstanceUpdateParamsSummarizationModelAnthropicClaudeOpus4                  NamespaceInstanceUpdateParamsSummarizationModel = "anthropic/claude-opus-4"
-	NamespaceInstanceUpdateParamsSummarizationModelAnthropicClaude3_5Haiku               NamespaceInstanceUpdateParamsSummarizationModel = "anthropic/claude-3-5-haiku"
-	NamespaceInstanceUpdateParamsSummarizationModelCerebrasQwen3_235bA22bInstruct        NamespaceInstanceUpdateParamsSummarizationModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceInstanceUpdateParamsSummarizationModelCerebrasQwen3_235bA22bThinking        NamespaceInstanceUpdateParamsSummarizationModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceInstanceUpdateParamsSummarizationModelCerebrasLlama3_3_70b                  NamespaceInstanceUpdateParamsSummarizationModel = "cerebras/llama-3.3-70b"
-	NamespaceInstanceUpdateParamsSummarizationModelCerebrasLlama4Maverick17b128eInstruct NamespaceInstanceUpdateParamsSummarizationModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceInstanceUpdateParamsSummarizationModelCerebrasLlama4Scout17b16eInstruct     NamespaceInstanceUpdateParamsSummarizationModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceUpdateParamsSummarizationModelCerebrasGptOSs120b                    NamespaceInstanceUpdateParamsSummarizationModel = "cerebras/gpt-oss-120b"
-	NamespaceInstanceUpdateParamsSummarizationModelGoogleAIStudioGemini2_5Flash          NamespaceInstanceUpdateParamsSummarizationModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceInstanceUpdateParamsSummarizationModelGoogleAIStudioGemini2_5Pro            NamespaceInstanceUpdateParamsSummarizationModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceInstanceUpdateParamsSummarizationModelGrokGrok4                             NamespaceInstanceUpdateParamsSummarizationModel = "grok/grok-4"
-	NamespaceInstanceUpdateParamsSummarizationModelGroqLlama3_3_70bVersatile             NamespaceInstanceUpdateParamsSummarizationModel = "groq/llama-3.3-70b-versatile"
-	NamespaceInstanceUpdateParamsSummarizationModelGroqLlama3_1_8bInstant                NamespaceInstanceUpdateParamsSummarizationModel = "groq/llama-3.1-8b-instant"
-	NamespaceInstanceUpdateParamsSummarizationModelOpenAIGpt5                            NamespaceInstanceUpdateParamsSummarizationModel = "openai/gpt-5"
-	NamespaceInstanceUpdateParamsSummarizationModelOpenAIGpt5Mini                        NamespaceInstanceUpdateParamsSummarizationModel = "openai/gpt-5-mini"
-	NamespaceInstanceUpdateParamsSummarizationModelOpenAIGpt5Nano                        NamespaceInstanceUpdateParamsSummarizationModel = "openai/gpt-5-nano"
-	NamespaceInstanceUpdateParamsSummarizationModelEmpty                                 NamespaceInstanceUpdateParamsSummarizationModel = ""
-)
-
-func (r NamespaceInstanceUpdateParamsSummarizationModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceUpdateParamsSummarizationModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceInstanceUpdateParamsSummarizationModelCfZaiOrgGlm4_7Flash, NamespaceInstanceUpdateParamsSummarizationModelCfMetaLlama3_1_8bInstructFast, NamespaceInstanceUpdateParamsSummarizationModelCfMetaLlama3_1_8bInstructFp8, NamespaceInstanceUpdateParamsSummarizationModelCfMetaLlama4Scout17b16eInstruct, NamespaceInstanceUpdateParamsSummarizationModelCfQwenQwen3_30bA3bFp8, NamespaceInstanceUpdateParamsSummarizationModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceInstanceUpdateParamsSummarizationModelCfMoonshotaiKimiK2Instruct, NamespaceInstanceUpdateParamsSummarizationModelCfGoogleGemma3_12bIt, NamespaceInstanceUpdateParamsSummarizationModelCfGoogleGemma4_26bA4bIt, NamespaceInstanceUpdateParamsSummarizationModelCfMoonshotaiKimiK2_5, NamespaceInstanceUpdateParamsSummarizationModelAnthropicClaude3_7Sonnet, NamespaceInstanceUpdateParamsSummarizationModelAnthropicClaudeSonnet4, NamespaceInstanceUpdateParamsSummarizationModelAnthropicClaudeOpus4, NamespaceInstanceUpdateParamsSummarizationModelAnthropicClaude3_5Haiku, NamespaceInstanceUpdateParamsSummarizationModelCerebrasQwen3_235bA22bInstruct, NamespaceInstanceUpdateParamsSummarizationModelCerebrasQwen3_235bA22bThinking, NamespaceInstanceUpdateParamsSummarizationModelCerebrasLlama3_3_70b, NamespaceInstanceUpdateParamsSummarizationModelCerebrasLlama4Maverick17b128eInstruct, NamespaceInstanceUpdateParamsSummarizationModelCerebrasLlama4Scout17b16eInstruct, NamespaceInstanceUpdateParamsSummarizationModelCerebrasGptOSs120b, NamespaceInstanceUpdateParamsSummarizationModelGoogleAIStudioGemini2_5Flash, NamespaceInstanceUpdateParamsSummarizationModelGoogleAIStudioGemini2_5Pro, NamespaceInstanceUpdateParamsSummarizationModelGrokGrok4, NamespaceInstanceUpdateParamsSummarizationModelGroqLlama3_3_70bVersatile, NamespaceInstanceUpdateParamsSummarizationModelGroqLlama3_1_8bInstant, NamespaceInstanceUpdateParamsSummarizationModelOpenAIGpt5, NamespaceInstanceUpdateParamsSummarizationModelOpenAIGpt5Mini, NamespaceInstanceUpdateParamsSummarizationModelOpenAIGpt5Nano, NamespaceInstanceUpdateParamsSummarizationModelEmpty:
 		return true
 	}
 	return false
@@ -6762,8 +5998,10 @@ type NamespaceInstanceChatCompletionsParams struct {
 	AccountID       param.Field[string]                                                `path:"account_id" api:"required"`
 	Messages        param.Field[[]NamespaceInstanceChatCompletionsParamsMessage]       `json:"messages" api:"required"`
 	AISearchOptions param.Field[NamespaceInstanceChatCompletionsParamsAISearchOptions] `json:"ai_search_options"`
-	Model           param.Field[NamespaceInstanceChatCompletionsParamsModel]           `json:"model"`
-	Stream          param.Field[bool]                                                  `json:"stream"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	Model  param.Field[string] `json:"model"`
+	Stream param.Field[bool]   `json:"stream"`
 }
 
 func (r NamespaceInstanceChatCompletionsParams) MarshalJSON() (data []byte, err error) {
@@ -6781,7 +6019,8 @@ func (r NamespaceInstanceChatCompletionsParamsMessage) MarshalJSON() (data []byt
 }
 
 // Satisfied by [shared.UnionString],
-// [ai_search.NamespaceInstanceChatCompletionsParamsMessagesContentArray].
+// [ai_search.NamespaceInstanceChatCompletionsParamsMessagesContentArray],
+// [shared.UnionString].
 type NamespaceInstanceChatCompletionsParamsMessagesContentUnion interface {
 	ImplementsNamespaceInstanceChatCompletionsParamsMessagesContentUnion()
 }
@@ -6912,81 +6151,25 @@ func (r NamespaceInstanceChatCompletionsParamsAISearchOptionsCacheCacheThreshold
 }
 
 type NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewrite struct {
-	Enabled       param.Field[bool]                                                                   `json:"enabled"`
-	Model         param.Field[NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel] `json:"model"`
-	RewritePrompt param.Field[string]                                                                 `json:"rewrite_prompt"`
+	Enabled param.Field[bool] `json:"enabled"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	Model         param.Field[string] `json:"model"`
+	RewritePrompt param.Field[string] `json:"rewrite_prompt"`
 }
 
 func (r NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewrite) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel string
-
-const (
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfZaiOrgGlm4_7Flash                   NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFast         NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFp8          NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama4Scout17b16eInstruct       NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfQwenQwen3_30bA3bFp8                 NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2Instruct            NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfGoogleGemma3_12bIt                  NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/google/gemma-3-12b-it"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfGoogleGemma4_26bA4bIt               NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2_5                  NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_7Sonnet              NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-3-7-sonnet"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaudeSonnet4                NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-sonnet-4"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaudeOpus4                  NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-opus-4"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_5Haiku               NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-3-5-haiku"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bInstruct        NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bThinking        NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama3_3_70b                  NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "cerebras/llama-3.3-70b"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Maverick17b128eInstruct NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Scout17b16eInstruct     NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasGptOSs120b                    NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "cerebras/gpt-oss-120b"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Flash          NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Pro            NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGrokGrok4                             NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "grok/grok-4"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGroqLlama3_3_70bVersatile             NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "groq/llama-3.3-70b-versatile"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGroqLlama3_1_8bInstant                NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "groq/llama-3.1-8b-instant"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5                            NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "openai/gpt-5"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Mini                        NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "openai/gpt-5-mini"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Nano                        NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = "openai/gpt-5-nano"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelEmpty                                 NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel = ""
-)
-
-func (r NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfZaiOrgGlm4_7Flash, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFast, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFp8, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMetaLlama4Scout17b16eInstruct, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfQwenQwen3_30bA3bFp8, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2Instruct, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfGoogleGemma3_12bIt, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfGoogleGemma4_26bA4bIt, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2_5, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_7Sonnet, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaudeSonnet4, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaudeOpus4, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_5Haiku, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bInstruct, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bThinking, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama3_3_70b, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Maverick17b128eInstruct, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Scout17b16eInstruct, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelCerebrasGptOSs120b, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Flash, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Pro, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGrokGrok4, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGroqLlama3_3_70bVersatile, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelGroqLlama3_1_8bInstant, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Mini, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Nano, NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewriteModelEmpty:
-		return true
-	}
-	return false
-}
-
 type NamespaceInstanceChatCompletionsParamsAISearchOptionsReranking struct {
-	Enabled        param.Field[bool]                                                                `json:"enabled"`
-	MatchThreshold param.Field[float64]                                                             `json:"match_threshold"`
-	Model          param.Field[NamespaceInstanceChatCompletionsParamsAISearchOptionsRerankingModel] `json:"model"`
+	Enabled        param.Field[bool]    `json:"enabled"`
+	MatchThreshold param.Field[float64] `json:"match_threshold"`
+	Model          param.Field[string]  `json:"model"`
 }
 
 func (r NamespaceInstanceChatCompletionsParamsAISearchOptionsReranking) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type NamespaceInstanceChatCompletionsParamsAISearchOptionsRerankingModel string
-
-const (
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsRerankingModelCfBaaiBgeRerankerBase NamespaceInstanceChatCompletionsParamsAISearchOptionsRerankingModel = "@cf/baai/bge-reranker-base"
-	NamespaceInstanceChatCompletionsParamsAISearchOptionsRerankingModelEmpty                 NamespaceInstanceChatCompletionsParamsAISearchOptionsRerankingModel = ""
-)
-
-func (r NamespaceInstanceChatCompletionsParamsAISearchOptionsRerankingModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceChatCompletionsParamsAISearchOptionsRerankingModelCfBaaiBgeRerankerBase, NamespaceInstanceChatCompletionsParamsAISearchOptionsRerankingModelEmpty:
-		return true
-	}
-	return false
 }
 
 type NamespaceInstanceChatCompletionsParamsAISearchOptionsRetrieval struct {
@@ -7101,49 +6284,6 @@ func (r NamespaceInstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalT
 	return false
 }
 
-type NamespaceInstanceChatCompletionsParamsModel string
-
-const (
-	NamespaceInstanceChatCompletionsParamsModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceInstanceChatCompletionsParamsModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceInstanceChatCompletionsParamsModelCfZaiOrgGlm4_7Flash                   NamespaceInstanceChatCompletionsParamsModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceInstanceChatCompletionsParamsModelCfMetaLlama3_1_8bInstructFast         NamespaceInstanceChatCompletionsParamsModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceInstanceChatCompletionsParamsModelCfMetaLlama3_1_8bInstructFp8          NamespaceInstanceChatCompletionsParamsModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceInstanceChatCompletionsParamsModelCfMetaLlama4Scout17b16eInstruct       NamespaceInstanceChatCompletionsParamsModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceChatCompletionsParamsModelCfQwenQwen3_30bA3bFp8                 NamespaceInstanceChatCompletionsParamsModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceInstanceChatCompletionsParamsModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceInstanceChatCompletionsParamsModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceInstanceChatCompletionsParamsModelCfMoonshotaiKimiK2Instruct            NamespaceInstanceChatCompletionsParamsModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceInstanceChatCompletionsParamsModelCfGoogleGemma3_12bIt                  NamespaceInstanceChatCompletionsParamsModel = "@cf/google/gemma-3-12b-it"
-	NamespaceInstanceChatCompletionsParamsModelCfGoogleGemma4_26bA4bIt               NamespaceInstanceChatCompletionsParamsModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceInstanceChatCompletionsParamsModelCfMoonshotaiKimiK2_5                  NamespaceInstanceChatCompletionsParamsModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceInstanceChatCompletionsParamsModelAnthropicClaude3_7Sonnet              NamespaceInstanceChatCompletionsParamsModel = "anthropic/claude-3-7-sonnet"
-	NamespaceInstanceChatCompletionsParamsModelAnthropicClaudeSonnet4                NamespaceInstanceChatCompletionsParamsModel = "anthropic/claude-sonnet-4"
-	NamespaceInstanceChatCompletionsParamsModelAnthropicClaudeOpus4                  NamespaceInstanceChatCompletionsParamsModel = "anthropic/claude-opus-4"
-	NamespaceInstanceChatCompletionsParamsModelAnthropicClaude3_5Haiku               NamespaceInstanceChatCompletionsParamsModel = "anthropic/claude-3-5-haiku"
-	NamespaceInstanceChatCompletionsParamsModelCerebrasQwen3_235bA22bInstruct        NamespaceInstanceChatCompletionsParamsModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceInstanceChatCompletionsParamsModelCerebrasQwen3_235bA22bThinking        NamespaceInstanceChatCompletionsParamsModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceInstanceChatCompletionsParamsModelCerebrasLlama3_3_70b                  NamespaceInstanceChatCompletionsParamsModel = "cerebras/llama-3.3-70b"
-	NamespaceInstanceChatCompletionsParamsModelCerebrasLlama4Maverick17b128eInstruct NamespaceInstanceChatCompletionsParamsModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceInstanceChatCompletionsParamsModelCerebrasLlama4Scout17b16eInstruct     NamespaceInstanceChatCompletionsParamsModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceChatCompletionsParamsModelCerebrasGptOSs120b                    NamespaceInstanceChatCompletionsParamsModel = "cerebras/gpt-oss-120b"
-	NamespaceInstanceChatCompletionsParamsModelGoogleAIStudioGemini2_5Flash          NamespaceInstanceChatCompletionsParamsModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceInstanceChatCompletionsParamsModelGoogleAIStudioGemini2_5Pro            NamespaceInstanceChatCompletionsParamsModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceInstanceChatCompletionsParamsModelGrokGrok4                             NamespaceInstanceChatCompletionsParamsModel = "grok/grok-4"
-	NamespaceInstanceChatCompletionsParamsModelGroqLlama3_3_70bVersatile             NamespaceInstanceChatCompletionsParamsModel = "groq/llama-3.3-70b-versatile"
-	NamespaceInstanceChatCompletionsParamsModelGroqLlama3_1_8bInstant                NamespaceInstanceChatCompletionsParamsModel = "groq/llama-3.1-8b-instant"
-	NamespaceInstanceChatCompletionsParamsModelOpenAIGpt5                            NamespaceInstanceChatCompletionsParamsModel = "openai/gpt-5"
-	NamespaceInstanceChatCompletionsParamsModelOpenAIGpt5Mini                        NamespaceInstanceChatCompletionsParamsModel = "openai/gpt-5-mini"
-	NamespaceInstanceChatCompletionsParamsModelOpenAIGpt5Nano                        NamespaceInstanceChatCompletionsParamsModel = "openai/gpt-5-nano"
-	NamespaceInstanceChatCompletionsParamsModelEmpty                                 NamespaceInstanceChatCompletionsParamsModel = ""
-)
-
-func (r NamespaceInstanceChatCompletionsParamsModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceChatCompletionsParamsModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceInstanceChatCompletionsParamsModelCfZaiOrgGlm4_7Flash, NamespaceInstanceChatCompletionsParamsModelCfMetaLlama3_1_8bInstructFast, NamespaceInstanceChatCompletionsParamsModelCfMetaLlama3_1_8bInstructFp8, NamespaceInstanceChatCompletionsParamsModelCfMetaLlama4Scout17b16eInstruct, NamespaceInstanceChatCompletionsParamsModelCfQwenQwen3_30bA3bFp8, NamespaceInstanceChatCompletionsParamsModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceInstanceChatCompletionsParamsModelCfMoonshotaiKimiK2Instruct, NamespaceInstanceChatCompletionsParamsModelCfGoogleGemma3_12bIt, NamespaceInstanceChatCompletionsParamsModelCfGoogleGemma4_26bA4bIt, NamespaceInstanceChatCompletionsParamsModelCfMoonshotaiKimiK2_5, NamespaceInstanceChatCompletionsParamsModelAnthropicClaude3_7Sonnet, NamespaceInstanceChatCompletionsParamsModelAnthropicClaudeSonnet4, NamespaceInstanceChatCompletionsParamsModelAnthropicClaudeOpus4, NamespaceInstanceChatCompletionsParamsModelAnthropicClaude3_5Haiku, NamespaceInstanceChatCompletionsParamsModelCerebrasQwen3_235bA22bInstruct, NamespaceInstanceChatCompletionsParamsModelCerebrasQwen3_235bA22bThinking, NamespaceInstanceChatCompletionsParamsModelCerebrasLlama3_3_70b, NamespaceInstanceChatCompletionsParamsModelCerebrasLlama4Maverick17b128eInstruct, NamespaceInstanceChatCompletionsParamsModelCerebrasLlama4Scout17b16eInstruct, NamespaceInstanceChatCompletionsParamsModelCerebrasGptOSs120b, NamespaceInstanceChatCompletionsParamsModelGoogleAIStudioGemini2_5Flash, NamespaceInstanceChatCompletionsParamsModelGoogleAIStudioGemini2_5Pro, NamespaceInstanceChatCompletionsParamsModelGrokGrok4, NamespaceInstanceChatCompletionsParamsModelGroqLlama3_3_70bVersatile, NamespaceInstanceChatCompletionsParamsModelGroqLlama3_1_8bInstant, NamespaceInstanceChatCompletionsParamsModelOpenAIGpt5, NamespaceInstanceChatCompletionsParamsModelOpenAIGpt5Mini, NamespaceInstanceChatCompletionsParamsModelOpenAIGpt5Nano, NamespaceInstanceChatCompletionsParamsModelEmpty:
-		return true
-	}
-	return false
-}
-
 type NamespaceInstanceReadParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
@@ -7227,81 +6367,25 @@ func (r NamespaceInstanceSearchParamsAISearchOptionsCacheCacheThreshold) IsKnown
 }
 
 type NamespaceInstanceSearchParamsAISearchOptionsQueryRewrite struct {
-	Enabled       param.Field[bool]                                                          `json:"enabled"`
-	Model         param.Field[NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel] `json:"model"`
-	RewritePrompt param.Field[string]                                                        `json:"rewrite_prompt"`
+	Enabled param.Field[bool] `json:"enabled"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	Model         param.Field[string] `json:"model"`
+	RewritePrompt param.Field[string] `json:"rewrite_prompt"`
 }
 
 func (r NamespaceInstanceSearchParamsAISearchOptionsQueryRewrite) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel string
-
-const (
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast     NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfZaiOrgGlm4_7Flash                   NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/zai-org/glm-4.7-flash"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFast         NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fast"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFp8          NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-3.1-8b-instruct-fp8"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama4Scout17b16eInstruct       NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/meta/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfQwenQwen3_30bA3bFp8                 NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/qwen/qwen3-30b-a3b-fp8"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b  NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2Instruct            NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/moonshotai/kimi-k2-instruct"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfGoogleGemma3_12bIt                  NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/google/gemma-3-12b-it"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfGoogleGemma4_26bA4bIt               NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/google/gemma-4-26b-a4b-it"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2_5                  NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "@cf/moonshotai/kimi-k2.5"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_7Sonnet              NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-3-7-sonnet"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaudeSonnet4                NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-sonnet-4"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaudeOpus4                  NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-opus-4"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_5Haiku               NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "anthropic/claude-3-5-haiku"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bInstruct        NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "cerebras/qwen-3-235b-a22b-instruct"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bThinking        NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "cerebras/qwen-3-235b-a22b-thinking"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama3_3_70b                  NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "cerebras/llama-3.3-70b"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Maverick17b128eInstruct NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "cerebras/llama-4-maverick-17b-128e-instruct"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Scout17b16eInstruct     NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "cerebras/llama-4-scout-17b-16e-instruct"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasGptOSs120b                    NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "cerebras/gpt-oss-120b"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Flash          NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "google-ai-studio/gemini-2.5-flash"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Pro            NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "google-ai-studio/gemini-2.5-pro"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelGrokGrok4                             NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "grok/grok-4"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelGroqLlama3_3_70bVersatile             NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "groq/llama-3.3-70b-versatile"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelGroqLlama3_1_8bInstant                NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "groq/llama-3.1-8b-instant"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5                            NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "openai/gpt-5"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Mini                        NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "openai/gpt-5-mini"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Nano                        NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = "openai/gpt-5-nano"
-	NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelEmpty                                 NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel = ""
-)
-
-func (r NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_3_70bInstructFp8Fast, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfZaiOrgGlm4_7Flash, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFast, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama3_1_8bInstructFp8, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfMetaLlama4Scout17b16eInstruct, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfQwenQwen3_30bA3bFp8, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfDeepseekAIDeepseekR1DistillQwen32b, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2Instruct, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfGoogleGemma3_12bIt, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfGoogleGemma4_26bA4bIt, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCfMoonshotaiKimiK2_5, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_7Sonnet, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaudeSonnet4, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaudeOpus4, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelAnthropicClaude3_5Haiku, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bInstruct, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasQwen3_235bA22bThinking, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama3_3_70b, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Maverick17b128eInstruct, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasLlama4Scout17b16eInstruct, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelCerebrasGptOSs120b, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Flash, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelGoogleAIStudioGemini2_5Pro, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelGrokGrok4, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelGroqLlama3_3_70bVersatile, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelGroqLlama3_1_8bInstant, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Mini, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelOpenAIGpt5Nano, NamespaceInstanceSearchParamsAISearchOptionsQueryRewriteModelEmpty:
-		return true
-	}
-	return false
-}
-
 type NamespaceInstanceSearchParamsAISearchOptionsReranking struct {
-	Enabled        param.Field[bool]                                                       `json:"enabled"`
-	MatchThreshold param.Field[float64]                                                    `json:"match_threshold"`
-	Model          param.Field[NamespaceInstanceSearchParamsAISearchOptionsRerankingModel] `json:"model"`
+	Enabled        param.Field[bool]    `json:"enabled"`
+	MatchThreshold param.Field[float64] `json:"match_threshold"`
+	Model          param.Field[string]  `json:"model"`
 }
 
 func (r NamespaceInstanceSearchParamsAISearchOptionsReranking) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type NamespaceInstanceSearchParamsAISearchOptionsRerankingModel string
-
-const (
-	NamespaceInstanceSearchParamsAISearchOptionsRerankingModelCfBaaiBgeRerankerBase NamespaceInstanceSearchParamsAISearchOptionsRerankingModel = "@cf/baai/bge-reranker-base"
-	NamespaceInstanceSearchParamsAISearchOptionsRerankingModelEmpty                 NamespaceInstanceSearchParamsAISearchOptionsRerankingModel = ""
-)
-
-func (r NamespaceInstanceSearchParamsAISearchOptionsRerankingModel) IsKnown() bool {
-	switch r {
-	case NamespaceInstanceSearchParamsAISearchOptionsRerankingModelCfBaaiBgeRerankerBase, NamespaceInstanceSearchParamsAISearchOptionsRerankingModelEmpty:
-		return true
-	}
-	return false
 }
 
 type NamespaceInstanceSearchParamsAISearchOptionsRetrieval struct {
@@ -7427,7 +6511,8 @@ func (r NamespaceInstanceSearchParamsMessage) MarshalJSON() (data []byte, err er
 }
 
 // Satisfied by [shared.UnionString],
-// [ai_search.NamespaceInstanceSearchParamsMessagesContentArray].
+// [ai_search.NamespaceInstanceSearchParamsMessagesContentArray],
+// [shared.UnionString].
 type NamespaceInstanceSearchParamsMessagesContentUnion interface {
 	ImplementsNamespaceInstanceSearchParamsMessagesContentUnion()
 }

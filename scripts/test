@@ -9,8 +9,10 @@ GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 NC='\033[0m' # No Color
 
+MOCK_PORT="${STAINLESS_MOCK_PORT:-4010}"
+
 function prism_is_running() {
-  curl --silent "http://localhost:4010" >/dev/null 2>&1
+  curl --silent "http://localhost:$MOCK_PORT" >/dev/null 2>&1
 }
 
 kill_server_on_port() {
@@ -27,7 +29,7 @@ function is_overriding_api_base_url() {
 
 if ! is_overriding_api_base_url && ! prism_is_running ; then
   # When we exit this script, make sure to kill the background mock server process
-  trap 'kill_server_on_port 4010' EXIT
+  trap 'kill_server_on_port "$MOCK_PORT"' EXIT
 
   # Start the dev server
   ./scripts/mock --daemon
@@ -43,13 +45,17 @@ elif ! prism_is_running ; then
   echo -e "To run the server, pass in the path or url of your OpenAPI"
   echo -e "spec to the prism command:"
   echo
-  echo -e "  \$ ${YELLOW}npm exec --package=@stainless-api/prism-cli@5.15.0 -- prism mock path/to/your.openapi.yml${NC}"
+  echo -e "  \$ ${YELLOW}npm exec --package=@stainless-api/prism-cli@5.15.0 -- prism mock -p $MOCK_PORT path/to/your.openapi.yml${NC}"
   echo
 
   exit 1
 else
   echo -e "${GREEN}✔ Mock prism server is running with your OpenAPI spec${NC}"
   echo
+fi
+
+if [ -n "${STAINLESS_MOCK_PORT:-}" ] && ! is_overriding_api_base_url ; then
+  export TEST_API_BASE_URL="http://127.0.0.1:$MOCK_PORT"
 fi
 
 echo "==> Running tests"

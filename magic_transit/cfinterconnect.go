@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 	"slices"
 	"time"
 
@@ -15,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/shared"
+	"github.com/tidwall/gjson"
 )
 
 // CfInterconnectService contains methods and other services that help with
@@ -165,14 +167,14 @@ type CfInterconnectUpdateResponseModifiedInterconnect struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the interconnect.
 	Description string `json:"description"`
-	// The configuration specific to GRE interconnects.
-	GRE         CfInterconnectUpdateResponseModifiedInterconnectGRE `json:"gre"`
-	HealthCheck HealthCheck                                         `json:"health_check"`
+	// Omitted in responses for version 1.5 interconnects.
+	GRE         CfInterconnectUpdateResponseModifiedInterconnectGRE         `json:"gre"`
+	HealthCheck CfInterconnectUpdateResponseModifiedInterconnectHealthCheck `json:"health_check"`
 	// The IPv4 interface address for the interconnect. For MPLS Interconnects, use a
-	// /30 or /31 prefix. For GRE Interconnects, a /29, /30, or /31 prefix may be used.
-	// A /29 prefix is only allowed for v1.5 interconnects, and the address must be the
-	// .3 host of the subnet (the fourth address overall; the network address is not
-	// usable). Select the subnet from RFC 1918 or the approved link-local ranges.
+	// /30 or /31 prefix. For GRE Interconnects, a /30 or /31 prefix may be used.
+	// Version 1.5 interconnects require a /31 prefix and may also use a prefix from
+	// the account's authorized prefixes; otherwise, select the subnet from RFC 1918 or
+	// the approved link-local ranges.
 	InterfaceAddress string `json:"interface_address"`
 	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
 	// address being the first IP of the subnet and not same as the address of
@@ -295,7 +297,7 @@ func (r cfInterconnectUpdateResponseModifiedInterconnectBGPJSON) RawJSON() strin
 	return r.raw
 }
 
-// The configuration specific to GRE interconnects.
+// Omitted in responses for version 1.5 interconnects.
 type CfInterconnectUpdateResponseModifiedInterconnectGRE struct {
 	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
 	// of the Interconnect.
@@ -317,6 +319,143 @@ func (r *CfInterconnectUpdateResponseModifiedInterconnectGRE) UnmarshalJSON(data
 
 func (r cfInterconnectUpdateResponseModifiedInterconnectGREJSON) RawJSON() string {
 	return r.raw
+}
+
+type CfInterconnectUpdateResponseModifiedInterconnectHealthCheck struct {
+	// The direction of the flow of the healthcheck. Either unidirectional, where the
+	// probe comes to you via the interconnect and the result comes back to Cloudflare
+	// via the open Internet, or bidirectional where both the probe and result come and
+	// go via the interconnect.
+	Direction CfInterconnectUpdateResponseModifiedInterconnectHealthCheckDirection `json:"direction"`
+	// Determines whether to run healthchecks for a tunnel.
+	Enabled bool `json:"enabled"`
+	// How frequent the health check is run. The default value is `mid`.
+	Rate HealthCheckRate `json:"rate"`
+	// The source IPv4 address used for bidirectional health checks. Supported only for
+	// version 1.5 interconnects. It is required when `direction` is `bidirectional`
+	// and must be omitted (and is cleared) when `direction` is `unidirectional`. The
+	// address must be within RFC1918 space, the approved link-local range
+	// 169.254.240.0/20, or the Cloudflare reserved range 198.41.199.224/27.
+	Source string `json:"source"`
+	// The destination address in a request type health check. After the healthcheck is
+	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+	// to this address. This field defaults to `customer_gre_endpoint address`. This
+	// field is ignored for bidirectional healthchecks as the interface_address (not
+	// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
+	// object form if the x-magic-new-hc-target header is set to true and string form
+	// if x-magic-new-hc-target is absent or set to false.
+	Target CfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetUnion `json:"target"`
+	// The type of healthcheck to run, reply or request. The default value is `reply`.
+	Type HealthCheckType                                                 `json:"type"`
+	JSON cfInterconnectUpdateResponseModifiedInterconnectHealthCheckJSON `json:"-"`
+}
+
+// cfInterconnectUpdateResponseModifiedInterconnectHealthCheckJSON contains the
+// JSON metadata for the struct
+// [CfInterconnectUpdateResponseModifiedInterconnectHealthCheck]
+type cfInterconnectUpdateResponseModifiedInterconnectHealthCheckJSON struct {
+	Direction   apijson.Field
+	Enabled     apijson.Field
+	Rate        apijson.Field
+	Source      apijson.Field
+	Target      apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CfInterconnectUpdateResponseModifiedInterconnectHealthCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectUpdateResponseModifiedInterconnectHealthCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// The direction of the flow of the healthcheck. Either unidirectional, where the
+// probe comes to you via the interconnect and the result comes back to Cloudflare
+// via the open Internet, or bidirectional where both the probe and result come and
+// go via the interconnect.
+type CfInterconnectUpdateResponseModifiedInterconnectHealthCheckDirection string
+
+const (
+	CfInterconnectUpdateResponseModifiedInterconnectHealthCheckDirectionUnidirectional CfInterconnectUpdateResponseModifiedInterconnectHealthCheckDirection = "unidirectional"
+	CfInterconnectUpdateResponseModifiedInterconnectHealthCheckDirectionBidirectional  CfInterconnectUpdateResponseModifiedInterconnectHealthCheckDirection = "bidirectional"
+)
+
+func (r CfInterconnectUpdateResponseModifiedInterconnectHealthCheckDirection) IsKnown() bool {
+	switch r {
+	case CfInterconnectUpdateResponseModifiedInterconnectHealthCheckDirectionUnidirectional, CfInterconnectUpdateResponseModifiedInterconnectHealthCheckDirectionBidirectional:
+		return true
+	}
+	return false
+}
+
+// The destination address in a request type health check. After the healthcheck is
+// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+// to this address. This field defaults to `customer_gre_endpoint address`. This
+// field is ignored for bidirectional healthchecks as the interface_address (not
+// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
+// object form if the x-magic-new-hc-target header is set to true and string form
+// if x-magic-new-hc-target is absent or set to false.
+//
+// Union satisfied by
+// [CfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetMagicHealthCheckTarget]
+// or [shared.UnionString].
+type CfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetUnion interface {
+	ImplementsCfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*CfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(CfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetMagicHealthCheckTarget{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// The destination address in a request type health check. After the healthcheck is
+// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+// to this address. This field defaults to `customer_gre_endpoint address`. This
+// field is ignored for bidirectional healthchecks as the interface_address (not
+// assigned to the Cloudflare side of the tunnel) is used as the target.
+type CfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetMagicHealthCheckTarget struct {
+	// The effective health check target. If 'saved' is empty, then this field will be
+	// populated with the calculated default value on GET requests. Ignored in POST,
+	// PUT, and PATCH requests.
+	Effective string `json:"effective"`
+	// The saved health check target. Setting the value to the empty string indicates
+	// that the calculated default value will be used.
+	Saved string                                                                                      `json:"saved"`
+	JSON  cfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetMagicHealthCheckTargetJSON `json:"-"`
+}
+
+// cfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetMagicHealthCheckTargetJSON
+// contains the JSON metadata for the struct
+// [CfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetMagicHealthCheckTarget]
+type cfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetMagicHealthCheckTargetJSON struct {
+	Effective   apijson.Field
+	Saved       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetMagicHealthCheckTarget) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetMagicHealthCheckTargetJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r CfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetMagicHealthCheckTarget) ImplementsCfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetUnion() {
 }
 
 type CfInterconnectListResponse struct {
@@ -354,14 +493,14 @@ type CfInterconnectListResponseInterconnect struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the interconnect.
 	Description string `json:"description"`
-	// The configuration specific to GRE interconnects.
-	GRE         CfInterconnectListResponseInterconnectsGRE `json:"gre"`
-	HealthCheck HealthCheck                                `json:"health_check"`
+	// Omitted in responses for version 1.5 interconnects.
+	GRE         CfInterconnectListResponseInterconnectsGRE         `json:"gre"`
+	HealthCheck CfInterconnectListResponseInterconnectsHealthCheck `json:"health_check"`
 	// The IPv4 interface address for the interconnect. For MPLS Interconnects, use a
-	// /30 or /31 prefix. For GRE Interconnects, a /29, /30, or /31 prefix may be used.
-	// A /29 prefix is only allowed for v1.5 interconnects, and the address must be the
-	// .3 host of the subnet (the fourth address overall; the network address is not
-	// usable). Select the subnet from RFC 1918 or the approved link-local ranges.
+	// /30 or /31 prefix. For GRE Interconnects, a /30 or /31 prefix may be used.
+	// Version 1.5 interconnects require a /31 prefix and may also use a prefix from
+	// the account's authorized prefixes; otherwise, select the subnet from RFC 1918 or
+	// the approved link-local ranges.
 	InterfaceAddress string `json:"interface_address"`
 	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
 	// address being the first IP of the subnet and not same as the address of
@@ -484,7 +623,7 @@ func (r cfInterconnectListResponseInterconnectsBGPJSON) RawJSON() string {
 	return r.raw
 }
 
-// The configuration specific to GRE interconnects.
+// Omitted in responses for version 1.5 interconnects.
 type CfInterconnectListResponseInterconnectsGRE struct {
 	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
 	// of the Interconnect.
@@ -506,6 +645,142 @@ func (r *CfInterconnectListResponseInterconnectsGRE) UnmarshalJSON(data []byte) 
 
 func (r cfInterconnectListResponseInterconnectsGREJSON) RawJSON() string {
 	return r.raw
+}
+
+type CfInterconnectListResponseInterconnectsHealthCheck struct {
+	// The direction of the flow of the healthcheck. Either unidirectional, where the
+	// probe comes to you via the interconnect and the result comes back to Cloudflare
+	// via the open Internet, or bidirectional where both the probe and result come and
+	// go via the interconnect.
+	Direction CfInterconnectListResponseInterconnectsHealthCheckDirection `json:"direction"`
+	// Determines whether to run healthchecks for a tunnel.
+	Enabled bool `json:"enabled"`
+	// How frequent the health check is run. The default value is `mid`.
+	Rate HealthCheckRate `json:"rate"`
+	// The source IPv4 address used for bidirectional health checks. Supported only for
+	// version 1.5 interconnects. It is required when `direction` is `bidirectional`
+	// and must be omitted (and is cleared) when `direction` is `unidirectional`. The
+	// address must be within RFC1918 space, the approved link-local range
+	// 169.254.240.0/20, or the Cloudflare reserved range 198.41.199.224/27.
+	Source string `json:"source"`
+	// The destination address in a request type health check. After the healthcheck is
+	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+	// to this address. This field defaults to `customer_gre_endpoint address`. This
+	// field is ignored for bidirectional healthchecks as the interface_address (not
+	// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
+	// object form if the x-magic-new-hc-target header is set to true and string form
+	// if x-magic-new-hc-target is absent or set to false.
+	Target CfInterconnectListResponseInterconnectsHealthCheckTargetUnion `json:"target"`
+	// The type of healthcheck to run, reply or request. The default value is `reply`.
+	Type HealthCheckType                                        `json:"type"`
+	JSON cfInterconnectListResponseInterconnectsHealthCheckJSON `json:"-"`
+}
+
+// cfInterconnectListResponseInterconnectsHealthCheckJSON contains the JSON
+// metadata for the struct [CfInterconnectListResponseInterconnectsHealthCheck]
+type cfInterconnectListResponseInterconnectsHealthCheckJSON struct {
+	Direction   apijson.Field
+	Enabled     apijson.Field
+	Rate        apijson.Field
+	Source      apijson.Field
+	Target      apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CfInterconnectListResponseInterconnectsHealthCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectListResponseInterconnectsHealthCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// The direction of the flow of the healthcheck. Either unidirectional, where the
+// probe comes to you via the interconnect and the result comes back to Cloudflare
+// via the open Internet, or bidirectional where both the probe and result come and
+// go via the interconnect.
+type CfInterconnectListResponseInterconnectsHealthCheckDirection string
+
+const (
+	CfInterconnectListResponseInterconnectsHealthCheckDirectionUnidirectional CfInterconnectListResponseInterconnectsHealthCheckDirection = "unidirectional"
+	CfInterconnectListResponseInterconnectsHealthCheckDirectionBidirectional  CfInterconnectListResponseInterconnectsHealthCheckDirection = "bidirectional"
+)
+
+func (r CfInterconnectListResponseInterconnectsHealthCheckDirection) IsKnown() bool {
+	switch r {
+	case CfInterconnectListResponseInterconnectsHealthCheckDirectionUnidirectional, CfInterconnectListResponseInterconnectsHealthCheckDirectionBidirectional:
+		return true
+	}
+	return false
+}
+
+// The destination address in a request type health check. After the healthcheck is
+// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+// to this address. This field defaults to `customer_gre_endpoint address`. This
+// field is ignored for bidirectional healthchecks as the interface_address (not
+// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
+// object form if the x-magic-new-hc-target header is set to true and string form
+// if x-magic-new-hc-target is absent or set to false.
+//
+// Union satisfied by
+// [CfInterconnectListResponseInterconnectsHealthCheckTargetMagicHealthCheckTarget]
+// or [shared.UnionString].
+type CfInterconnectListResponseInterconnectsHealthCheckTargetUnion interface {
+	ImplementsCfInterconnectListResponseInterconnectsHealthCheckTargetUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*CfInterconnectListResponseInterconnectsHealthCheckTargetUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(CfInterconnectListResponseInterconnectsHealthCheckTargetMagicHealthCheckTarget{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// The destination address in a request type health check. After the healthcheck is
+// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+// to this address. This field defaults to `customer_gre_endpoint address`. This
+// field is ignored for bidirectional healthchecks as the interface_address (not
+// assigned to the Cloudflare side of the tunnel) is used as the target.
+type CfInterconnectListResponseInterconnectsHealthCheckTargetMagicHealthCheckTarget struct {
+	// The effective health check target. If 'saved' is empty, then this field will be
+	// populated with the calculated default value on GET requests. Ignored in POST,
+	// PUT, and PATCH requests.
+	Effective string `json:"effective"`
+	// The saved health check target. Setting the value to the empty string indicates
+	// that the calculated default value will be used.
+	Saved string                                                                             `json:"saved"`
+	JSON  cfInterconnectListResponseInterconnectsHealthCheckTargetMagicHealthCheckTargetJSON `json:"-"`
+}
+
+// cfInterconnectListResponseInterconnectsHealthCheckTargetMagicHealthCheckTargetJSON
+// contains the JSON metadata for the struct
+// [CfInterconnectListResponseInterconnectsHealthCheckTargetMagicHealthCheckTarget]
+type cfInterconnectListResponseInterconnectsHealthCheckTargetMagicHealthCheckTargetJSON struct {
+	Effective   apijson.Field
+	Saved       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CfInterconnectListResponseInterconnectsHealthCheckTargetMagicHealthCheckTarget) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectListResponseInterconnectsHealthCheckTargetMagicHealthCheckTargetJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r CfInterconnectListResponseInterconnectsHealthCheckTargetMagicHealthCheckTarget) ImplementsCfInterconnectListResponseInterconnectsHealthCheckTargetUnion() {
 }
 
 type CfInterconnectBulkUpdateResponse struct {
@@ -545,14 +820,14 @@ type CfInterconnectBulkUpdateResponseModifiedInterconnect struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the interconnect.
 	Description string `json:"description"`
-	// The configuration specific to GRE interconnects.
-	GRE         CfInterconnectBulkUpdateResponseModifiedInterconnectsGRE `json:"gre"`
-	HealthCheck HealthCheck                                              `json:"health_check"`
+	// Omitted in responses for version 1.5 interconnects.
+	GRE         CfInterconnectBulkUpdateResponseModifiedInterconnectsGRE         `json:"gre"`
+	HealthCheck CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheck `json:"health_check"`
 	// The IPv4 interface address for the interconnect. For MPLS Interconnects, use a
-	// /30 or /31 prefix. For GRE Interconnects, a /29, /30, or /31 prefix may be used.
-	// A /29 prefix is only allowed for v1.5 interconnects, and the address must be the
-	// .3 host of the subnet (the fourth address overall; the network address is not
-	// usable). Select the subnet from RFC 1918 or the approved link-local ranges.
+	// /30 or /31 prefix. For GRE Interconnects, a /30 or /31 prefix may be used.
+	// Version 1.5 interconnects require a /31 prefix and may also use a prefix from
+	// the account's authorized prefixes; otherwise, select the subnet from RFC 1918 or
+	// the approved link-local ranges.
 	InterfaceAddress string `json:"interface_address"`
 	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
 	// address being the first IP of the subnet and not same as the address of
@@ -676,7 +951,7 @@ func (r cfInterconnectBulkUpdateResponseModifiedInterconnectsBGPJSON) RawJSON() 
 	return r.raw
 }
 
-// The configuration specific to GRE interconnects.
+// Omitted in responses for version 1.5 interconnects.
 type CfInterconnectBulkUpdateResponseModifiedInterconnectsGRE struct {
 	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
 	// of the Interconnect.
@@ -699,6 +974,143 @@ func (r *CfInterconnectBulkUpdateResponseModifiedInterconnectsGRE) UnmarshalJSON
 
 func (r cfInterconnectBulkUpdateResponseModifiedInterconnectsGREJSON) RawJSON() string {
 	return r.raw
+}
+
+type CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheck struct {
+	// The direction of the flow of the healthcheck. Either unidirectional, where the
+	// probe comes to you via the interconnect and the result comes back to Cloudflare
+	// via the open Internet, or bidirectional where both the probe and result come and
+	// go via the interconnect.
+	Direction CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckDirection `json:"direction"`
+	// Determines whether to run healthchecks for a tunnel.
+	Enabled bool `json:"enabled"`
+	// How frequent the health check is run. The default value is `mid`.
+	Rate HealthCheckRate `json:"rate"`
+	// The source IPv4 address used for bidirectional health checks. Supported only for
+	// version 1.5 interconnects. It is required when `direction` is `bidirectional`
+	// and must be omitted (and is cleared) when `direction` is `unidirectional`. The
+	// address must be within RFC1918 space, the approved link-local range
+	// 169.254.240.0/20, or the Cloudflare reserved range 198.41.199.224/27.
+	Source string `json:"source"`
+	// The destination address in a request type health check. After the healthcheck is
+	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+	// to this address. This field defaults to `customer_gre_endpoint address`. This
+	// field is ignored for bidirectional healthchecks as the interface_address (not
+	// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
+	// object form if the x-magic-new-hc-target header is set to true and string form
+	// if x-magic-new-hc-target is absent or set to false.
+	Target CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckTargetUnion `json:"target"`
+	// The type of healthcheck to run, reply or request. The default value is `reply`.
+	Type HealthCheckType                                                      `json:"type"`
+	JSON cfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckJSON `json:"-"`
+}
+
+// cfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckJSON contains
+// the JSON metadata for the struct
+// [CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheck]
+type cfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckJSON struct {
+	Direction   apijson.Field
+	Enabled     apijson.Field
+	Rate        apijson.Field
+	Source      apijson.Field
+	Target      apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// The direction of the flow of the healthcheck. Either unidirectional, where the
+// probe comes to you via the interconnect and the result comes back to Cloudflare
+// via the open Internet, or bidirectional where both the probe and result come and
+// go via the interconnect.
+type CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckDirection string
+
+const (
+	CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckDirectionUnidirectional CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckDirection = "unidirectional"
+	CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckDirectionBidirectional  CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckDirection = "bidirectional"
+)
+
+func (r CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckDirection) IsKnown() bool {
+	switch r {
+	case CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckDirectionUnidirectional, CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckDirectionBidirectional:
+		return true
+	}
+	return false
+}
+
+// The destination address in a request type health check. After the healthcheck is
+// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+// to this address. This field defaults to `customer_gre_endpoint address`. This
+// field is ignored for bidirectional healthchecks as the interface_address (not
+// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
+// object form if the x-magic-new-hc-target header is set to true and string form
+// if x-magic-new-hc-target is absent or set to false.
+//
+// Union satisfied by
+// [CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckTargetMagicHealthCheckTarget]
+// or [shared.UnionString].
+type CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckTargetUnion interface {
+	ImplementsCfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckTargetUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckTargetUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckTargetMagicHealthCheckTarget{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// The destination address in a request type health check. After the healthcheck is
+// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+// to this address. This field defaults to `customer_gre_endpoint address`. This
+// field is ignored for bidirectional healthchecks as the interface_address (not
+// assigned to the Cloudflare side of the tunnel) is used as the target.
+type CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckTargetMagicHealthCheckTarget struct {
+	// The effective health check target. If 'saved' is empty, then this field will be
+	// populated with the calculated default value on GET requests. Ignored in POST,
+	// PUT, and PATCH requests.
+	Effective string `json:"effective"`
+	// The saved health check target. Setting the value to the empty string indicates
+	// that the calculated default value will be used.
+	Saved string                                                                                           `json:"saved"`
+	JSON  cfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckTargetMagicHealthCheckTargetJSON `json:"-"`
+}
+
+// cfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckTargetMagicHealthCheckTargetJSON
+// contains the JSON metadata for the struct
+// [CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckTargetMagicHealthCheckTarget]
+type cfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckTargetMagicHealthCheckTargetJSON struct {
+	Effective   apijson.Field
+	Saved       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckTargetMagicHealthCheckTarget) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckTargetMagicHealthCheckTargetJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r CfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckTargetMagicHealthCheckTarget) ImplementsCfInterconnectBulkUpdateResponseModifiedInterconnectsHealthCheckTargetUnion() {
 }
 
 type CfInterconnectGetResponse struct {
@@ -736,14 +1148,14 @@ type CfInterconnectGetResponseInterconnect struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the interconnect.
 	Description string `json:"description"`
-	// The configuration specific to GRE interconnects.
-	GRE         CfInterconnectGetResponseInterconnectGRE `json:"gre"`
-	HealthCheck HealthCheck                              `json:"health_check"`
+	// Omitted in responses for version 1.5 interconnects.
+	GRE         CfInterconnectGetResponseInterconnectGRE         `json:"gre"`
+	HealthCheck CfInterconnectGetResponseInterconnectHealthCheck `json:"health_check"`
 	// The IPv4 interface address for the interconnect. For MPLS Interconnects, use a
-	// /30 or /31 prefix. For GRE Interconnects, a /29, /30, or /31 prefix may be used.
-	// A /29 prefix is only allowed for v1.5 interconnects, and the address must be the
-	// .3 host of the subnet (the fourth address overall; the network address is not
-	// usable). Select the subnet from RFC 1918 or the approved link-local ranges.
+	// /30 or /31 prefix. For GRE Interconnects, a /30 or /31 prefix may be used.
+	// Version 1.5 interconnects require a /31 prefix and may also use a prefix from
+	// the account's authorized prefixes; otherwise, select the subnet from RFC 1918 or
+	// the approved link-local ranges.
 	InterfaceAddress string `json:"interface_address"`
 	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
 	// address being the first IP of the subnet and not same as the address of
@@ -866,7 +1278,7 @@ func (r cfInterconnectGetResponseInterconnectBGPJSON) RawJSON() string {
 	return r.raw
 }
 
-// The configuration specific to GRE interconnects.
+// Omitted in responses for version 1.5 interconnects.
 type CfInterconnectGetResponseInterconnectGRE struct {
 	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
 	// of the Interconnect.
@@ -890,6 +1302,142 @@ func (r cfInterconnectGetResponseInterconnectGREJSON) RawJSON() string {
 	return r.raw
 }
 
+type CfInterconnectGetResponseInterconnectHealthCheck struct {
+	// The direction of the flow of the healthcheck. Either unidirectional, where the
+	// probe comes to you via the interconnect and the result comes back to Cloudflare
+	// via the open Internet, or bidirectional where both the probe and result come and
+	// go via the interconnect.
+	Direction CfInterconnectGetResponseInterconnectHealthCheckDirection `json:"direction"`
+	// Determines whether to run healthchecks for a tunnel.
+	Enabled bool `json:"enabled"`
+	// How frequent the health check is run. The default value is `mid`.
+	Rate HealthCheckRate `json:"rate"`
+	// The source IPv4 address used for bidirectional health checks. Supported only for
+	// version 1.5 interconnects. It is required when `direction` is `bidirectional`
+	// and must be omitted (and is cleared) when `direction` is `unidirectional`. The
+	// address must be within RFC1918 space, the approved link-local range
+	// 169.254.240.0/20, or the Cloudflare reserved range 198.41.199.224/27.
+	Source string `json:"source"`
+	// The destination address in a request type health check. After the healthcheck is
+	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+	// to this address. This field defaults to `customer_gre_endpoint address`. This
+	// field is ignored for bidirectional healthchecks as the interface_address (not
+	// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
+	// object form if the x-magic-new-hc-target header is set to true and string form
+	// if x-magic-new-hc-target is absent or set to false.
+	Target CfInterconnectGetResponseInterconnectHealthCheckTargetUnion `json:"target"`
+	// The type of healthcheck to run, reply or request. The default value is `reply`.
+	Type HealthCheckType                                      `json:"type"`
+	JSON cfInterconnectGetResponseInterconnectHealthCheckJSON `json:"-"`
+}
+
+// cfInterconnectGetResponseInterconnectHealthCheckJSON contains the JSON metadata
+// for the struct [CfInterconnectGetResponseInterconnectHealthCheck]
+type cfInterconnectGetResponseInterconnectHealthCheckJSON struct {
+	Direction   apijson.Field
+	Enabled     apijson.Field
+	Rate        apijson.Field
+	Source      apijson.Field
+	Target      apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CfInterconnectGetResponseInterconnectHealthCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectGetResponseInterconnectHealthCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// The direction of the flow of the healthcheck. Either unidirectional, where the
+// probe comes to you via the interconnect and the result comes back to Cloudflare
+// via the open Internet, or bidirectional where both the probe and result come and
+// go via the interconnect.
+type CfInterconnectGetResponseInterconnectHealthCheckDirection string
+
+const (
+	CfInterconnectGetResponseInterconnectHealthCheckDirectionUnidirectional CfInterconnectGetResponseInterconnectHealthCheckDirection = "unidirectional"
+	CfInterconnectGetResponseInterconnectHealthCheckDirectionBidirectional  CfInterconnectGetResponseInterconnectHealthCheckDirection = "bidirectional"
+)
+
+func (r CfInterconnectGetResponseInterconnectHealthCheckDirection) IsKnown() bool {
+	switch r {
+	case CfInterconnectGetResponseInterconnectHealthCheckDirectionUnidirectional, CfInterconnectGetResponseInterconnectHealthCheckDirectionBidirectional:
+		return true
+	}
+	return false
+}
+
+// The destination address in a request type health check. After the healthcheck is
+// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+// to this address. This field defaults to `customer_gre_endpoint address`. This
+// field is ignored for bidirectional healthchecks as the interface_address (not
+// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
+// object form if the x-magic-new-hc-target header is set to true and string form
+// if x-magic-new-hc-target is absent or set to false.
+//
+// Union satisfied by
+// [CfInterconnectGetResponseInterconnectHealthCheckTargetMagicHealthCheckTarget]
+// or [shared.UnionString].
+type CfInterconnectGetResponseInterconnectHealthCheckTargetUnion interface {
+	ImplementsCfInterconnectGetResponseInterconnectHealthCheckTargetUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*CfInterconnectGetResponseInterconnectHealthCheckTargetUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(CfInterconnectGetResponseInterconnectHealthCheckTargetMagicHealthCheckTarget{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// The destination address in a request type health check. After the healthcheck is
+// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+// to this address. This field defaults to `customer_gre_endpoint address`. This
+// field is ignored for bidirectional healthchecks as the interface_address (not
+// assigned to the Cloudflare side of the tunnel) is used as the target.
+type CfInterconnectGetResponseInterconnectHealthCheckTargetMagicHealthCheckTarget struct {
+	// The effective health check target. If 'saved' is empty, then this field will be
+	// populated with the calculated default value on GET requests. Ignored in POST,
+	// PUT, and PATCH requests.
+	Effective string `json:"effective"`
+	// The saved health check target. Setting the value to the empty string indicates
+	// that the calculated default value will be used.
+	Saved string                                                                           `json:"saved"`
+	JSON  cfInterconnectGetResponseInterconnectHealthCheckTargetMagicHealthCheckTargetJSON `json:"-"`
+}
+
+// cfInterconnectGetResponseInterconnectHealthCheckTargetMagicHealthCheckTargetJSON
+// contains the JSON metadata for the struct
+// [CfInterconnectGetResponseInterconnectHealthCheckTargetMagicHealthCheckTarget]
+type cfInterconnectGetResponseInterconnectHealthCheckTargetMagicHealthCheckTargetJSON struct {
+	Effective   apijson.Field
+	Saved       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CfInterconnectGetResponseInterconnectHealthCheckTargetMagicHealthCheckTarget) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectGetResponseInterconnectHealthCheckTargetMagicHealthCheckTargetJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r CfInterconnectGetResponseInterconnectHealthCheckTargetMagicHealthCheckTarget) ImplementsCfInterconnectGetResponseInterconnectHealthCheckTargetUnion() {
+}
+
 type CfInterconnectUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -900,14 +1448,14 @@ type CfInterconnectUpdateParams struct {
 	BGP                    param.Field[CfInterconnectUpdateParamsBGP] `json:"bgp"`
 	// An optional description of the interconnect.
 	Description param.Field[string] `json:"description"`
-	// The configuration specific to GRE interconnects.
-	GRE         param.Field[CfInterconnectUpdateParamsGRE] `json:"gre"`
-	HealthCheck param.Field[HealthCheckParam]              `json:"health_check"`
+	// Not configurable for version 1.5 interconnects; supplying it returns an error.
+	GRE         param.Field[CfInterconnectUpdateParamsGRE]         `json:"gre"`
+	HealthCheck param.Field[CfInterconnectUpdateParamsHealthCheck] `json:"health_check"`
 	// The IPv4 interface address for the interconnect. For MPLS Interconnects, use a
-	// /30 or /31 prefix. For GRE Interconnects, a /29, /30, or /31 prefix may be used.
-	// A /29 prefix is only allowed for v1.5 interconnects, and the address must be the
-	// .3 host of the subnet (the fourth address overall; the network address is not
-	// usable). Select the subnet from RFC 1918 or the approved link-local ranges.
+	// /30 or /31 prefix. For GRE Interconnects, a /30 or /31 prefix may be used.
+	// Version 1.5 interconnects require a /31 prefix and may also use a prefix from
+	// the account's authorized prefixes; otherwise, select the subnet from RFC 1918 or
+	// the approved link-local ranges.
 	InterfaceAddress param.Field[string] `json:"interface_address"`
 	// A 127 bit IPV6 prefix from within the virtual_subnet6 prefix space with the
 	// address being the first IP of the subnet and not same as the address of
@@ -973,7 +1521,7 @@ func (r CfInterconnectUpdateParamsBGP) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The configuration specific to GRE interconnects.
+// Not configurable for version 1.5 interconnects; supplying it returns an error.
 type CfInterconnectUpdateParamsGRE struct {
 	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
 	// of the Interconnect.
@@ -982,6 +1530,90 @@ type CfInterconnectUpdateParamsGRE struct {
 
 func (r CfInterconnectUpdateParamsGRE) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type CfInterconnectUpdateParamsHealthCheck struct {
+	// The direction of the flow of the healthcheck. Either unidirectional, where the
+	// probe comes to you via the interconnect and the result comes back to Cloudflare
+	// via the open Internet, or bidirectional where both the probe and result come and
+	// go via the interconnect.
+	Direction param.Field[CfInterconnectUpdateParamsHealthCheckDirection] `json:"direction"`
+	// Determines whether to run healthchecks for a tunnel.
+	Enabled param.Field[bool] `json:"enabled"`
+	// How frequent the health check is run. The default value is `mid`.
+	Rate param.Field[HealthCheckRate] `json:"rate"`
+	// The source IPv4 address used for bidirectional health checks. Supported only for
+	// version 1.5 interconnects. It is required when `direction` is `bidirectional`
+	// and must be omitted (and is cleared) when `direction` is `unidirectional`. The
+	// address must be within RFC1918 space, the approved link-local range
+	// 169.254.240.0/20, or the Cloudflare reserved range 198.41.199.224/27.
+	Source param.Field[string] `json:"source"`
+	// The destination address in a request type health check. After the healthcheck is
+	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+	// to this address. This field defaults to `customer_gre_endpoint address`. This
+	// field is ignored for bidirectional healthchecks as the interface_address (not
+	// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
+	// object form if the x-magic-new-hc-target header is set to true and string form
+	// if x-magic-new-hc-target is absent or set to false.
+	Target param.Field[CfInterconnectUpdateParamsHealthCheckTargetUnion] `json:"target"`
+	// The type of healthcheck to run, reply or request. The default value is `reply`.
+	Type param.Field[HealthCheckType] `json:"type"`
+}
+
+func (r CfInterconnectUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The direction of the flow of the healthcheck. Either unidirectional, where the
+// probe comes to you via the interconnect and the result comes back to Cloudflare
+// via the open Internet, or bidirectional where both the probe and result come and
+// go via the interconnect.
+type CfInterconnectUpdateParamsHealthCheckDirection string
+
+const (
+	CfInterconnectUpdateParamsHealthCheckDirectionUnidirectional CfInterconnectUpdateParamsHealthCheckDirection = "unidirectional"
+	CfInterconnectUpdateParamsHealthCheckDirectionBidirectional  CfInterconnectUpdateParamsHealthCheckDirection = "bidirectional"
+)
+
+func (r CfInterconnectUpdateParamsHealthCheckDirection) IsKnown() bool {
+	switch r {
+	case CfInterconnectUpdateParamsHealthCheckDirectionUnidirectional, CfInterconnectUpdateParamsHealthCheckDirectionBidirectional:
+		return true
+	}
+	return false
+}
+
+// The destination address in a request type health check. After the healthcheck is
+// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+// to this address. This field defaults to `customer_gre_endpoint address`. This
+// field is ignored for bidirectional healthchecks as the interface_address (not
+// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
+// object form if the x-magic-new-hc-target header is set to true and string form
+// if x-magic-new-hc-target is absent or set to false.
+//
+// Satisfied by
+// [magic_transit.CfInterconnectUpdateParamsHealthCheckTargetMagicHealthCheckTarget],
+// [shared.UnionString].
+type CfInterconnectUpdateParamsHealthCheckTargetUnion interface {
+	ImplementsCfInterconnectUpdateParamsHealthCheckTargetUnion()
+}
+
+// The destination address in a request type health check. After the healthcheck is
+// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+// to this address. This field defaults to `customer_gre_endpoint address`. This
+// field is ignored for bidirectional healthchecks as the interface_address (not
+// assigned to the Cloudflare side of the tunnel) is used as the target.
+type CfInterconnectUpdateParamsHealthCheckTargetMagicHealthCheckTarget struct {
+	// The saved health check target. Setting the value to the empty string indicates
+	// that the calculated default value will be used.
+	Saved param.Field[string] `json:"saved"`
+}
+
+func (r CfInterconnectUpdateParamsHealthCheckTargetMagicHealthCheckTarget) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CfInterconnectUpdateParamsHealthCheckTargetMagicHealthCheckTarget) ImplementsCfInterconnectUpdateParamsHealthCheckTargetUnion() {
 }
 
 type CfInterconnectUpdateResponseEnvelope struct {

@@ -13,12 +13,13 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewLogpushService] method instead.
 type LogpushService struct {
-	Options   []option.RequestOption
-	Datasets  *DatasetService
-	Edge      *EdgeService
-	Jobs      *JobService
-	Ownership *OwnershipService
-	Validate  *ValidateService
+	Options      []option.RequestOption
+	Datasets     *DatasetService
+	Edge         *EdgeService
+	Jobs         *JobService
+	Ownership    *OwnershipService
+	Transformers *TransformerService
+	Validate     *ValidateService
 }
 
 // NewLogpushService generates a new service that applies the given options to each
@@ -31,6 +32,7 @@ func NewLogpushService(opts ...option.RequestOption) (r *LogpushService) {
 	r.Edge = NewEdgeService(opts...)
 	r.Jobs = NewJobService(opts...)
 	r.Ownership = NewOwnershipService(opts...)
+	r.Transformers = NewTransformerService(opts...)
 	r.Validate = NewValidateService(opts...)
 	return
 }

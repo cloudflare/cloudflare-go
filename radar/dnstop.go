@@ -226,7 +226,6 @@ func (r DNSTopAsesResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() boo
 type DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventType string
 
 const (
-	DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventTypeEvent             DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
 	DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
 	DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventTypeOutage            DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
 	DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
@@ -236,7 +235,7 @@ const (
 
 func (r DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
 	switch r {
-	case DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventTypeEvent, DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventTypeOutage, DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventTypePipeline, DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+	case DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventTypeOutage, DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventTypePipeline, DNSTopAsesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
 		return true
 	}
 	return false
@@ -503,7 +502,6 @@ func (r DNSTopLocationsResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown(
 type DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventType string
 
 const (
-	DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypeEvent             DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
 	DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
 	DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypeOutage            DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
 	DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
@@ -513,7 +511,7 @@ const (
 
 func (r DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
 	switch r {
-	case DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypeEvent, DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypeOutage, DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypePipeline, DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+	case DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypeOutage, DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypePipeline, DNSTopLocationsResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
 		return true
 	}
 	return false

@@ -32,6 +32,7 @@ type ZoneService struct {
 	Settings                      *SettingService
 	TransformationsAllowedOrigins *TransformationsAllowedOriginService
 	TransformationsC2pa           *TransformationsC2paService
+	NEL                           *NELService
 	Environments                  *EnvironmentService
 	// Deprecated: Use DNS settings API instead.
 	CustomNameservers *CustomNameserverService
@@ -52,6 +53,7 @@ func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 	r.Settings = NewSettingService(opts...)
 	r.TransformationsAllowedOrigins = NewTransformationsAllowedOriginService(opts...)
 	r.TransformationsC2pa = NewTransformationsC2paService(opts...)
+	r.NEL = NewNELService(opts...)
 	r.Environments = NewEnvironmentService(opts...)
 	r.CustomNameservers = NewCustomNameserverService(opts...)
 	r.Holds = NewHoldService(opts...)

@@ -100,11 +100,11 @@ func (r finetunePublicListResponseJSON) RawJSON() string {
 
 type FinetunePublicListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Pagination Limit
+	// Pagination Limit.
 	Limit param.Field[float64] `query:"limit"`
-	// Pagination Offset
+	// Pagination Offset.
 	Offset param.Field[float64] `query:"offset"`
-	// Order By Column Name
+	// Order By Column Name.
 	OrderBy param.Field[string] `query:"orderBy"`
 }
 

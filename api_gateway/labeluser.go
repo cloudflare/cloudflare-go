@@ -40,7 +40,7 @@ func NewLabelUserService(opts ...option.RequestOption) (r *LabelUserService) {
 	return
 }
 
-// Update all fields on a label
+// Replaces all editable fields on a user-defined label.
 func (r *LabelUserService) Update(ctx context.Context, name string, params LabelUserUpdateParams, opts ...option.RequestOption) (res *LabelUserUpdateResponse, err error) {
 	var env LabelUserUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -61,7 +61,8 @@ func (r *LabelUserService) Update(ctx context.Context, name string, params Label
 	return res, nil
 }
 
-// Delete user label
+// Deletes a user-defined label and removes its associations with web and API
+// operations.
 func (r *LabelUserService) Delete(ctx context.Context, name string, body LabelUserDeleteParams, opts ...option.RequestOption) (res *LabelUserDeleteResponse, err error) {
 	var env LabelUserDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -82,7 +83,7 @@ func (r *LabelUserService) Delete(ctx context.Context, name string, body LabelUs
 	return res, nil
 }
 
-// Create user labels
+// Creates one or more user-defined labels for classifying web and API operations.
 func (r *LabelUserService) BulkNew(ctx context.Context, params LabelUserBulkNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[LabelUserBulkNewResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -104,12 +105,13 @@ func (r *LabelUserService) BulkNew(ctx context.Context, params LabelUserBulkNewP
 	return res, nil
 }
 
-// Create user labels
+// Creates one or more user-defined labels for classifying web and API operations.
 func (r *LabelUserService) BulkNewAutoPaging(ctx context.Context, params LabelUserBulkNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LabelUserBulkNewResponse] {
 	return pagination.NewSinglePageAutoPager(r.BulkNew(ctx, params, opts...))
 }
 
-// Delete user labels
+// Deletes one or more user-defined labels and removes their associations with web
+// and API operations.
 func (r *LabelUserService) BulkDelete(ctx context.Context, body LabelUserBulkDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[LabelUserBulkDeleteResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -131,12 +133,13 @@ func (r *LabelUserService) BulkDelete(ctx context.Context, body LabelUserBulkDel
 	return res, nil
 }
 
-// Delete user labels
+// Deletes one or more user-defined labels and removes their associations with web
+// and API operations.
 func (r *LabelUserService) BulkDeleteAutoPaging(ctx context.Context, body LabelUserBulkDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LabelUserBulkDeleteResponse] {
 	return pagination.NewSinglePageAutoPager(r.BulkDelete(ctx, body, opts...))
 }
 
-// Update certain fields on a label
+// Updates only the supplied fields on a user-defined label.
 func (r *LabelUserService) Edit(ctx context.Context, name string, params LabelUserEditParams, opts ...option.RequestOption) (res *LabelUserEditResponse, err error) {
 	var env LabelUserEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -157,7 +160,7 @@ func (r *LabelUserService) Edit(ctx context.Context, name string, params LabelUs
 	return res, nil
 }
 
-// Retrieve user label
+// Returns a user-defined label and the web and API operations associated with it.
 func (r *LabelUserService) Get(ctx context.Context, name string, params LabelUserGetParams, opts ...option.RequestOption) (res *LabelUserGetResponse, err error) {
 	var env LabelUserGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

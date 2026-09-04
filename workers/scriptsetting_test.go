@@ -45,6 +45,7 @@ func TestScriptSettingEditWithOptionalParams(t *testing.T) {
 						HeadSamplingRate: cloudflare.F(0.100000),
 						Persist:          cloudflare.F(true),
 					}),
+					RedactQueryString: cloudflare.F(false),
 					Traces: cloudflare.F(workers.ScriptSettingObservabilityTracesParam{
 						Destinations:      cloudflare.F([]string{"cloudflare"}),
 						Enabled:           cloudflare.F(true),

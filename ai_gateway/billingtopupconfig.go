@@ -112,10 +112,10 @@ type BillingTopupConfigDeleteResponse = interface{}
 
 type BillingTopupConfigGetResponse struct {
 	Amount         float64                           `json:"amount" api:"required,nullable"`
-	DisabledReason string                            `json:"disabledReason" api:"required,nullable"`
-	Error          string                            `json:"error" api:"required,nullable"`
-	LastFailedAt   float64                           `json:"lastFailedAt" api:"required,nullable"`
 	Threshold      float64                           `json:"threshold" api:"required,nullable"`
+	DisabledReason string                            `json:"disabledReason" api:"nullable"`
+	Error          string                            `json:"error" api:"nullable"`
+	LastFailedAt   float64                           `json:"lastFailedAt" api:"nullable"`
 	JSON           billingTopupConfigGetResponseJSON `json:"-"`
 }
 
@@ -123,10 +123,10 @@ type BillingTopupConfigGetResponse struct {
 // [BillingTopupConfigGetResponse]
 type billingTopupConfigGetResponseJSON struct {
 	Amount         apijson.Field
+	Threshold      apijson.Field
 	DisabledReason apijson.Field
 	Error          apijson.Field
 	LastFailedAt   apijson.Field
-	Threshold      apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }

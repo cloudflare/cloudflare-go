@@ -317,8 +317,9 @@ func (r AdaptiveRoutingParam) MarshalJSON() (data []byte, err error) {
 // WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
 // EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, SAS:
-// Southern Asia, SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all
-// regions (ENTERPRISE customers only).
+// Southern Asia, SEAS: South East Asia, NEAS: North East Asia, CHINA: China
+// (ENTERPRISE customers only), ALL_REGIONS: all regions (ENTERPRISE customers
+// only).
 type CheckRegion string
 
 const (
@@ -335,12 +336,13 @@ const (
 	CheckRegionSas        CheckRegion = "SAS"
 	CheckRegionSeas       CheckRegion = "SEAS"
 	CheckRegionNeas       CheckRegion = "NEAS"
+	CheckRegionChina      CheckRegion = "CHINA"
 	CheckRegionAllRegions CheckRegion = "ALL_REGIONS"
 )
 
 func (r CheckRegion) IsKnown() bool {
 	switch r {
-	case CheckRegionWnam, CheckRegionEnam, CheckRegionWeu, CheckRegionEeu, CheckRegionNsam, CheckRegionSsam, CheckRegionOc, CheckRegionMe, CheckRegionNaf, CheckRegionSaf, CheckRegionSas, CheckRegionSeas, CheckRegionNeas, CheckRegionAllRegions:
+	case CheckRegionWnam, CheckRegionEnam, CheckRegionWeu, CheckRegionEeu, CheckRegionNsam, CheckRegionSsam, CheckRegionOc, CheckRegionMe, CheckRegionNaf, CheckRegionSaf, CheckRegionSas, CheckRegionSeas, CheckRegionNeas, CheckRegionChina, CheckRegionAllRegions:
 		return true
 	}
 	return false
@@ -481,12 +483,12 @@ type LoadBalancer struct {
 	Proxied bool `json:"proxied"`
 	// Configures pool weights.
 	//
-	//   - `steering_policy="random"`: A random pool is selected with probability
-	//     proportional to pool weights.
-	//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-	//     pool's outstanding requests.
-	//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-	//     open connections.
+	// - `steering_policy="random"`: A random pool is selected with probability
+	//   proportional to pool weights.
+	// - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
+	//   pool's outstanding requests.
+	// - `steering_policy="least_connections"`: Use pool weights to scale each pool's
+	//   open connections.
 	RandomSteering RandomSteering `json:"random_steering"`
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
@@ -530,26 +532,26 @@ type LoadBalancer struct {
 	SessionAffinityTTL float64 `json:"session_affinity_ttl"`
 	// Steering Policy for this load balancer.
 	//
-	//   - `"off"`: Use `default_pools`.
-	//   - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
-	//     requests, the country for `country_pools` is determined by
-	//     `location_strategy`.
-	//   - `"random"`: Select a pool randomly.
-	//   - `"dynamic_latency"`: Use round trip time to select the closest pool in
-	//     default_pools (requires pool health checks).
-	//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
-	//     pool using the Cloudflare PoP location for proxied requests or the location
-	//     determined by `location_strategy` for non-proxied requests.
-	//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of outstanding
-	//     requests. Pools with more pending requests are weighted proportionately less
-	//     relative to others.
-	//   - `"least_connections"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of open connections.
-	//     Pools with more open connections are weighted proportionately less relative to
-	//     others. Supported for HTTP/1 and HTTP/2 connections.
-	//   - `""`: Will map to `"geo"` if you use
-	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
+	// - `"off"`: Use `default_pools`.
+	// - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
+	//   requests, the country for `country_pools` is determined by
+	//   `location_strategy`.
+	// - `"random"`: Select a pool randomly.
+	// - `"dynamic_latency"`: Use round trip time to select the closest pool in
+	//   default_pools (requires pool health checks).
+	// - `"proximity"`: Use the pools' latitude and longitude to select the closest
+	//   pool using the Cloudflare PoP location for proxied requests or the location
+	//   determined by `location_strategy` for non-proxied requests.
+	// - `"least_outstanding_requests"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of outstanding
+	//   requests. Pools with more pending requests are weighted proportionately less
+	//   relative to others.
+	// - `"least_connections"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of open connections.
+	//   Pools with more open connections are weighted proportionately less relative to
+	//   others. Supported for HTTP/1 and HTTP/2 connections.
+	// - `""`: Will map to `"geo"` if you use
+	//   `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 	SteeringPolicy SteeringPolicy `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
@@ -758,26 +760,26 @@ type LoadBalancerPoolSetsOverrides struct {
 	Pools []string `json:"pools"`
 	// Steering Policy for this load balancer.
 	//
-	//   - `"off"`: Use `default_pools`.
-	//   - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
-	//     requests, the country for `country_pools` is determined by
-	//     `location_strategy`.
-	//   - `"random"`: Select a pool randomly.
-	//   - `"dynamic_latency"`: Use round trip time to select the closest pool in
-	//     default_pools (requires pool health checks).
-	//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
-	//     pool using the Cloudflare PoP location for proxied requests or the location
-	//     determined by `location_strategy` for non-proxied requests.
-	//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of outstanding
-	//     requests. Pools with more pending requests are weighted proportionately less
-	//     relative to others.
-	//   - `"least_connections"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of open connections.
-	//     Pools with more open connections are weighted proportionately less relative to
-	//     others. Supported for HTTP/1 and HTTP/2 connections.
-	//   - `""`: Will map to `"geo"` if you use
-	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
+	// - `"off"`: Use `default_pools`.
+	// - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
+	//   requests, the country for `country_pools` is determined by
+	//   `location_strategy`.
+	// - `"random"`: Select a pool randomly.
+	// - `"dynamic_latency"`: Use round trip time to select the closest pool in
+	//   default_pools (requires pool health checks).
+	// - `"proximity"`: Use the pools' latitude and longitude to select the closest
+	//   pool using the Cloudflare PoP location for proxied requests or the location
+	//   determined by `location_strategy` for non-proxied requests.
+	// - `"least_outstanding_requests"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of outstanding
+	//   requests. Pools with more pending requests are weighted proportionately less
+	//   relative to others.
+	// - `"least_connections"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of open connections.
+	//   Pools with more open connections are weighted proportionately less relative to
+	//   others. Supported for HTTP/1 and HTTP/2 connections.
+	// - `""`: Will map to `"geo"` if you use
+	//   `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 	SteeringPolicy SteeringPolicy                    `json:"steering_policy"`
 	JSON           loadBalancerPoolSetsOverridesJSON `json:"-"`
 }
@@ -902,9 +904,9 @@ type LocationStrategy struct {
 	// Determines the authoritative location when ECS is not preferred, does not exist
 	// in the request, or its GeoIP lookup is unsuccessful.
 	//
-	//   - `"pop"`: Use the Cloudflare PoP location.
-	//   - `"resolver_ip"`: Use the DNS resolver GeoIP location. If the GeoIP lookup is
-	//     unsuccessful, use the Cloudflare PoP location.
+	// - `"pop"`: Use the Cloudflare PoP location.
+	// - `"resolver_ip"`: Use the DNS resolver GeoIP location. If the GeoIP lookup is
+	//   unsuccessful, use the Cloudflare PoP location.
 	Mode LocationStrategyMode `json:"mode"`
 	// Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
 	// authoritative location.
@@ -985,9 +987,9 @@ type LocationStrategyParam struct {
 	// Determines the authoritative location when ECS is not preferred, does not exist
 	// in the request, or its GeoIP lookup is unsuccessful.
 	//
-	//   - `"pop"`: Use the Cloudflare PoP location.
-	//   - `"resolver_ip"`: Use the DNS resolver GeoIP location. If the GeoIP lookup is
-	//     unsuccessful, use the Cloudflare PoP location.
+	// - `"pop"`: Use the Cloudflare PoP location.
+	// - `"resolver_ip"`: Use the DNS resolver GeoIP location. If the GeoIP lookup is
+	//   unsuccessful, use the Cloudflare PoP location.
 	Mode param.Field[LocationStrategyMode] `json:"mode"`
 	// Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
 	// authoritative location.
@@ -1081,10 +1083,10 @@ type Origin struct {
 	// configured weight the total traffic is distributed among origins within the
 	// pool.
 	//
-	//   - `origin_steering.policy="least_outstanding_requests"`: Use weight to scale the
-	//     origin's outstanding requests.
-	//   - `origin_steering.policy="least_connections"`: Use weight to scale the origin's
-	//     open connections.
+	// - `origin_steering.policy="least_outstanding_requests"`: Use weight to scale the
+	//   origin's outstanding requests.
+	// - `origin_steering.policy="least_connections"`: Use weight to scale the origin's
+	//   open connections.
 	Weight float64    `json:"weight"`
 	JSON   originJSON `json:"-"`
 }
@@ -1143,10 +1145,10 @@ type OriginParam struct {
 	// configured weight the total traffic is distributed among origins within the
 	// pool.
 	//
-	//   - `origin_steering.policy="least_outstanding_requests"`: Use weight to scale the
-	//     origin's outstanding requests.
-	//   - `origin_steering.policy="least_connections"`: Use weight to scale the origin's
-	//     open connections.
+	// - `origin_steering.policy="least_outstanding_requests"`: Use weight to scale the
+	//   origin's outstanding requests.
+	// - `origin_steering.policy="least_connections"`: Use weight to scale the origin's
+	//   open connections.
 	Weight param.Field[float64] `json:"weight"`
 }
 
@@ -1159,17 +1161,17 @@ func (r OriginParam) MarshalJSON() (data []byte, err error) {
 type OriginSteering struct {
 	// The type of origin steering policy to use.
 	//
-	//   - `"random"`: Select an origin randomly.
-	//   - `"hash"`: Select an origin by computing a hash over the CF-Connecting-IP
-	//     address.
-	//   - `"least_outstanding_requests"`: Select an origin by taking into consideration
-	//     origin weights, as well as each origin's number of outstanding requests.
-	//     Origins with more pending requests are weighted proportionately less relative
-	//     to others.
-	//   - `"least_connections"`: Select an origin by taking into consideration origin
-	//     weights, as well as each origin's number of open connections. Origins with
-	//     more open connections are weighted proportionately less relative to others.
-	//     Supported for HTTP/1 and HTTP/2 connections.
+	// - `"random"`: Select an origin randomly.
+	// - `"hash"`: Select an origin by computing a hash over the CF-Connecting-IP
+	//   address.
+	// - `"least_outstanding_requests"`: Select an origin by taking into consideration
+	//   origin weights, as well as each origin's number of outstanding requests.
+	//   Origins with more pending requests are weighted proportionately less relative
+	//   to others.
+	// - `"least_connections"`: Select an origin by taking into consideration origin
+	//   weights, as well as each origin's number of open connections. Origins with
+	//   more open connections are weighted proportionately less relative to others.
+	//   Supported for HTTP/1 and HTTP/2 connections.
 	Policy OriginSteeringPolicy `json:"policy"`
 	JSON   originSteeringJSON   `json:"-"`
 }
@@ -1224,17 +1226,17 @@ func (r OriginSteeringPolicy) IsKnown() bool {
 type OriginSteeringParam struct {
 	// The type of origin steering policy to use.
 	//
-	//   - `"random"`: Select an origin randomly.
-	//   - `"hash"`: Select an origin by computing a hash over the CF-Connecting-IP
-	//     address.
-	//   - `"least_outstanding_requests"`: Select an origin by taking into consideration
-	//     origin weights, as well as each origin's number of outstanding requests.
-	//     Origins with more pending requests are weighted proportionately less relative
-	//     to others.
-	//   - `"least_connections"`: Select an origin by taking into consideration origin
-	//     weights, as well as each origin's number of open connections. Origins with
-	//     more open connections are weighted proportionately less relative to others.
-	//     Supported for HTTP/1 and HTTP/2 connections.
+	// - `"random"`: Select an origin randomly.
+	// - `"hash"`: Select an origin by computing a hash over the CF-Connecting-IP
+	//   address.
+	// - `"least_outstanding_requests"`: Select an origin by taking into consideration
+	//   origin weights, as well as each origin's number of outstanding requests.
+	//   Origins with more pending requests are weighted proportionately less relative
+	//   to others.
+	// - `"least_connections"`: Select an origin by taking into consideration origin
+	//   weights, as well as each origin's number of open connections. Origins with
+	//   more open connections are weighted proportionately less relative to others.
+	//   Supported for HTTP/1 and HTTP/2 connections.
 	Policy param.Field[OriginSteeringPolicy] `json:"policy"`
 }
 
@@ -1423,12 +1425,12 @@ type RulesOverrides struct {
 	POPPools map[string][]string `json:"pop_pools"`
 	// Configures pool weights.
 	//
-	//   - `steering_policy="random"`: A random pool is selected with probability
-	//     proportional to pool weights.
-	//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-	//     pool's outstanding requests.
-	//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-	//     open connections.
+	// - `steering_policy="random"`: A random pool is selected with probability
+	//   proportional to pool weights.
+	// - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
+	//   pool's outstanding requests.
+	// - `steering_policy="least_connections"`: Use pool weights to scale each pool's
+	//   open connections.
 	RandomSteering RandomSteering `json:"random_steering"`
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
@@ -1469,26 +1471,26 @@ type RulesOverrides struct {
 	SessionAffinityTTL float64 `json:"session_affinity_ttl"`
 	// Steering Policy for this load balancer.
 	//
-	//   - `"off"`: Use `default_pools`.
-	//   - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
-	//     requests, the country for `country_pools` is determined by
-	//     `location_strategy`.
-	//   - `"random"`: Select a pool randomly.
-	//   - `"dynamic_latency"`: Use round trip time to select the closest pool in
-	//     default_pools (requires pool health checks).
-	//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
-	//     pool using the Cloudflare PoP location for proxied requests or the location
-	//     determined by `location_strategy` for non-proxied requests.
-	//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of outstanding
-	//     requests. Pools with more pending requests are weighted proportionately less
-	//     relative to others.
-	//   - `"least_connections"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of open connections.
-	//     Pools with more open connections are weighted proportionately less relative to
-	//     others. Supported for HTTP/1 and HTTP/2 connections.
-	//   - `""`: Will map to `"geo"` if you use
-	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
+	// - `"off"`: Use `default_pools`.
+	// - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
+	//   requests, the country for `country_pools` is determined by
+	//   `location_strategy`.
+	// - `"random"`: Select a pool randomly.
+	// - `"dynamic_latency"`: Use round trip time to select the closest pool in
+	//   default_pools (requires pool health checks).
+	// - `"proximity"`: Use the pools' latitude and longitude to select the closest
+	//   pool using the Cloudflare PoP location for proxied requests or the location
+	//   determined by `location_strategy` for non-proxied requests.
+	// - `"least_outstanding_requests"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of outstanding
+	//   requests. Pools with more pending requests are weighted proportionately less
+	//   relative to others.
+	// - `"least_connections"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of open connections.
+	//   Pools with more open connections are weighted proportionately less relative to
+	//   others. Supported for HTTP/1 and HTTP/2 connections.
+	// - `""`: Will map to `"geo"` if you use
+	//   `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 	SteeringPolicy SteeringPolicy `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
@@ -1618,12 +1620,12 @@ type RulesOverridesParam struct {
 	POPPools param.Field[map[string][]string] `json:"pop_pools"`
 	// Configures pool weights.
 	//
-	//   - `steering_policy="random"`: A random pool is selected with probability
-	//     proportional to pool weights.
-	//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-	//     pool's outstanding requests.
-	//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-	//     open connections.
+	// - `steering_policy="random"`: A random pool is selected with probability
+	//   proportional to pool weights.
+	// - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
+	//   pool's outstanding requests.
+	// - `steering_policy="least_connections"`: Use pool weights to scale each pool's
+	//   open connections.
 	RandomSteering param.Field[RandomSteeringParam] `json:"random_steering"`
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
@@ -1664,26 +1666,26 @@ type RulesOverridesParam struct {
 	SessionAffinityTTL param.Field[float64] `json:"session_affinity_ttl"`
 	// Steering Policy for this load balancer.
 	//
-	//   - `"off"`: Use `default_pools`.
-	//   - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
-	//     requests, the country for `country_pools` is determined by
-	//     `location_strategy`.
-	//   - `"random"`: Select a pool randomly.
-	//   - `"dynamic_latency"`: Use round trip time to select the closest pool in
-	//     default_pools (requires pool health checks).
-	//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
-	//     pool using the Cloudflare PoP location for proxied requests or the location
-	//     determined by `location_strategy` for non-proxied requests.
-	//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of outstanding
-	//     requests. Pools with more pending requests are weighted proportionately less
-	//     relative to others.
-	//   - `"least_connections"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of open connections.
-	//     Pools with more open connections are weighted proportionately less relative to
-	//     others. Supported for HTTP/1 and HTTP/2 connections.
-	//   - `""`: Will map to `"geo"` if you use
-	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
+	// - `"off"`: Use `default_pools`.
+	// - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
+	//   requests, the country for `country_pools` is determined by
+	//   `location_strategy`.
+	// - `"random"`: Select a pool randomly.
+	// - `"dynamic_latency"`: Use round trip time to select the closest pool in
+	//   default_pools (requires pool health checks).
+	// - `"proximity"`: Use the pools' latitude and longitude to select the closest
+	//   pool using the Cloudflare PoP location for proxied requests or the location
+	//   determined by `location_strategy` for non-proxied requests.
+	// - `"least_outstanding_requests"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of outstanding
+	//   requests. Pools with more pending requests are weighted proportionately less
+	//   relative to others.
+	// - `"least_connections"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of open connections.
+	//   Pools with more open connections are weighted proportionately less relative to
+	//   others. Supported for HTTP/1 and HTTP/2 connections.
+	// - `""`: Will map to `"geo"` if you use
+	//   `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 	SteeringPolicy param.Field[SteeringPolicy] `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
@@ -2016,12 +2018,12 @@ type LoadBalancerNewParams struct {
 	Proxied param.Field[bool] `json:"proxied"`
 	// Configures pool weights.
 	//
-	//   - `steering_policy="random"`: A random pool is selected with probability
-	//     proportional to pool weights.
-	//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-	//     pool's outstanding requests.
-	//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-	//     open connections.
+	// - `steering_policy="random"`: A random pool is selected with probability
+	//   proportional to pool weights.
+	// - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
+	//   pool's outstanding requests.
+	// - `steering_policy="least_connections"`: Use pool weights to scale each pool's
+	//   open connections.
 	RandomSteering param.Field[RandomSteeringParam] `json:"random_steering"`
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
@@ -2065,26 +2067,26 @@ type LoadBalancerNewParams struct {
 	SessionAffinityTTL param.Field[float64] `json:"session_affinity_ttl"`
 	// Steering Policy for this load balancer.
 	//
-	//   - `"off"`: Use `default_pools`.
-	//   - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
-	//     requests, the country for `country_pools` is determined by
-	//     `location_strategy`.
-	//   - `"random"`: Select a pool randomly.
-	//   - `"dynamic_latency"`: Use round trip time to select the closest pool in
-	//     default_pools (requires pool health checks).
-	//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
-	//     pool using the Cloudflare PoP location for proxied requests or the location
-	//     determined by `location_strategy` for non-proxied requests.
-	//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of outstanding
-	//     requests. Pools with more pending requests are weighted proportionately less
-	//     relative to others.
-	//   - `"least_connections"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of open connections.
-	//     Pools with more open connections are weighted proportionately less relative to
-	//     others. Supported for HTTP/1 and HTTP/2 connections.
-	//   - `""`: Will map to `"geo"` if you use
-	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
+	// - `"off"`: Use `default_pools`.
+	// - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
+	//   requests, the country for `country_pools` is determined by
+	//   `location_strategy`.
+	// - `"random"`: Select a pool randomly.
+	// - `"dynamic_latency"`: Use round trip time to select the closest pool in
+	//   default_pools (requires pool health checks).
+	// - `"proximity"`: Use the pools' latitude and longitude to select the closest
+	//   pool using the Cloudflare PoP location for proxied requests or the location
+	//   determined by `location_strategy` for non-proxied requests.
+	// - `"least_outstanding_requests"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of outstanding
+	//   requests. Pools with more pending requests are weighted proportionately less
+	//   relative to others.
+	// - `"least_connections"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of open connections.
+	//   Pools with more open connections are weighted proportionately less relative to
+	//   others. Supported for HTTP/1 and HTTP/2 connections.
+	// - `""`: Will map to `"geo"` if you use
+	//   `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 	SteeringPolicy param.Field[SteeringPolicy] `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
@@ -2182,12 +2184,12 @@ type LoadBalancerUpdateParams struct {
 	Proxied param.Field[bool] `json:"proxied"`
 	// Configures pool weights.
 	//
-	//   - `steering_policy="random"`: A random pool is selected with probability
-	//     proportional to pool weights.
-	//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-	//     pool's outstanding requests.
-	//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-	//     open connections.
+	// - `steering_policy="random"`: A random pool is selected with probability
+	//   proportional to pool weights.
+	// - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
+	//   pool's outstanding requests.
+	// - `steering_policy="least_connections"`: Use pool weights to scale each pool's
+	//   open connections.
 	RandomSteering param.Field[RandomSteeringParam] `json:"random_steering"`
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
@@ -2231,26 +2233,26 @@ type LoadBalancerUpdateParams struct {
 	SessionAffinityTTL param.Field[float64] `json:"session_affinity_ttl"`
 	// Steering Policy for this load balancer.
 	//
-	//   - `"off"`: Use `default_pools`.
-	//   - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
-	//     requests, the country for `country_pools` is determined by
-	//     `location_strategy`.
-	//   - `"random"`: Select a pool randomly.
-	//   - `"dynamic_latency"`: Use round trip time to select the closest pool in
-	//     default_pools (requires pool health checks).
-	//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
-	//     pool using the Cloudflare PoP location for proxied requests or the location
-	//     determined by `location_strategy` for non-proxied requests.
-	//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of outstanding
-	//     requests. Pools with more pending requests are weighted proportionately less
-	//     relative to others.
-	//   - `"least_connections"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of open connections.
-	//     Pools with more open connections are weighted proportionately less relative to
-	//     others. Supported for HTTP/1 and HTTP/2 connections.
-	//   - `""`: Will map to `"geo"` if you use
-	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
+	// - `"off"`: Use `default_pools`.
+	// - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
+	//   requests, the country for `country_pools` is determined by
+	//   `location_strategy`.
+	// - `"random"`: Select a pool randomly.
+	// - `"dynamic_latency"`: Use round trip time to select the closest pool in
+	//   default_pools (requires pool health checks).
+	// - `"proximity"`: Use the pools' latitude and longitude to select the closest
+	//   pool using the Cloudflare PoP location for proxied requests or the location
+	//   determined by `location_strategy` for non-proxied requests.
+	// - `"least_outstanding_requests"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of outstanding
+	//   requests. Pools with more pending requests are weighted proportionately less
+	//   relative to others.
+	// - `"least_connections"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of open connections.
+	//   Pools with more open connections are weighted proportionately less relative to
+	//   others. Supported for HTTP/1 and HTTP/2 connections.
+	// - `""`: Will map to `"geo"` if you use
+	//   `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 	SteeringPolicy param.Field[SteeringPolicy] `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
@@ -2405,12 +2407,12 @@ type LoadBalancerEditParams struct {
 	Proxied param.Field[bool] `json:"proxied"`
 	// Configures pool weights.
 	//
-	//   - `steering_policy="random"`: A random pool is selected with probability
-	//     proportional to pool weights.
-	//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-	//     pool's outstanding requests.
-	//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-	//     open connections.
+	// - `steering_policy="random"`: A random pool is selected with probability
+	//   proportional to pool weights.
+	// - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
+	//   pool's outstanding requests.
+	// - `steering_policy="least_connections"`: Use pool weights to scale each pool's
+	//   open connections.
 	RandomSteering param.Field[RandomSteeringParam] `json:"random_steering"`
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
@@ -2454,26 +2456,26 @@ type LoadBalancerEditParams struct {
 	SessionAffinityTTL param.Field[float64] `json:"session_affinity_ttl"`
 	// Steering Policy for this load balancer.
 	//
-	//   - `"off"`: Use `default_pools`.
-	//   - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
-	//     requests, the country for `country_pools` is determined by
-	//     `location_strategy`.
-	//   - `"random"`: Select a pool randomly.
-	//   - `"dynamic_latency"`: Use round trip time to select the closest pool in
-	//     default_pools (requires pool health checks).
-	//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
-	//     pool using the Cloudflare PoP location for proxied requests or the location
-	//     determined by `location_strategy` for non-proxied requests.
-	//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of outstanding
-	//     requests. Pools with more pending requests are weighted proportionately less
-	//     relative to others.
-	//   - `"least_connections"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of open connections.
-	//     Pools with more open connections are weighted proportionately less relative to
-	//     others. Supported for HTTP/1 and HTTP/2 connections.
-	//   - `""`: Will map to `"geo"` if you use
-	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
+	// - `"off"`: Use `default_pools`.
+	// - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
+	//   requests, the country for `country_pools` is determined by
+	//   `location_strategy`.
+	// - `"random"`: Select a pool randomly.
+	// - `"dynamic_latency"`: Use round trip time to select the closest pool in
+	//   default_pools (requires pool health checks).
+	// - `"proximity"`: Use the pools' latitude and longitude to select the closest
+	//   pool using the Cloudflare PoP location for proxied requests or the location
+	//   determined by `location_strategy` for non-proxied requests.
+	// - `"least_outstanding_requests"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of outstanding
+	//   requests. Pools with more pending requests are weighted proportionately less
+	//   relative to others.
+	// - `"least_connections"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of open connections.
+	//   Pools with more open connections are weighted proportionately less relative to
+	//   others. Supported for HTTP/1 and HTTP/2 connections.
+	// - `""`: Will map to `"geo"` if you use
+	//   `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 	SteeringPolicy param.Field[SteeringPolicy] `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.

@@ -15,7 +15,7 @@ import (
 )
 
 func TestAppGetWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -46,7 +46,7 @@ func TestAppGetWithOptionalParams(t *testing.T) {
 }
 
 func TestAppPost(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

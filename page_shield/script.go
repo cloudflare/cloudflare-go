@@ -39,8 +39,8 @@ func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 	return
 }
 
-// Lists all scripts detected by Page Shield.
-func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Script], err error) {
+// Lists scripts detected on webpages in the zone, with filtering and pagination.
+func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ScriptListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -61,12 +61,12 @@ func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts 
 	return res, nil
 }
 
-// Lists all scripts detected by Page Shield.
-func (r *ScriptService) ListAutoPaging(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Script] {
+// Lists scripts detected on webpages in the zone, with filtering and pagination.
+func (r *ScriptService) ListAutoPaging(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ScriptListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
-// Fetches a script detected by Page Shield by script ID.
+// Returns a script detected on the zone by script ID.
 func (r *ScriptService) Get(ctx context.Context, scriptID string, query ScriptGetParams, opts ...option.RequestOption) (res *ScriptGetResponse, err error) {
 	var env ScriptGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -87,7 +87,7 @@ func (r *ScriptService) Get(ctx context.Context, scriptID string, query ScriptGe
 	return res, nil
 }
 
-type Script struct {
+type ScriptListResponse struct {
 	// Identifier
 	ID                    string    `json:"id" api:"required"`
 	AddedAt               time.Time `json:"added_at" api:"required" format:"date-time"`
@@ -121,14 +121,15 @@ type Script struct {
 	// in favour of js_integrity_score.
 	//
 	// Deprecated: deprecated
-	ObfuscationScore     int64      `json:"obfuscation_score" api:"nullable"`
-	PageURLs             []string   `json:"page_urls"`
-	URLReportedMalicious bool       `json:"url_reported_malicious"`
-	JSON                 scriptJSON `json:"-"`
+	ObfuscationScore     int64                  `json:"obfuscation_score" api:"nullable"`
+	PageURLs             []string               `json:"page_urls"`
+	URLReportedMalicious bool                   `json:"url_reported_malicious"`
+	JSON                 scriptListResponseJSON `json:"-"`
 }
 
-// scriptJSON contains the JSON metadata for the struct [Script]
-type scriptJSON struct {
+// scriptListResponseJSON contains the JSON metadata for the struct
+// [ScriptListResponse]
+type scriptListResponseJSON struct {
 	ID                        apijson.Field
 	AddedAt                   apijson.Field
 	FirstSeenAt               apijson.Field
@@ -154,11 +155,11 @@ type scriptJSON struct {
 	ExtraFields               map[string]apijson.Field
 }
 
-func (r *Script) UnmarshalJSON(data []byte) (err error) {
+func (r *ScriptListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptJSON) RawJSON() string {
+func (r scriptListResponseJSON) RawJSON() string {
 	return r.raw
 }
 

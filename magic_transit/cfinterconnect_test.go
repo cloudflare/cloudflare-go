@@ -49,15 +49,17 @@ func TestCfInterconnectUpdateWithOptionalParams(t *testing.T) {
 			GRE: cloudflare.F(magic_transit.CfInterconnectUpdateParamsGRE{
 				CloudflareEndpoint: cloudflare.F("203.0.113.1"),
 			}),
-			HealthCheck: cloudflare.F(magic_transit.HealthCheckParam{
-				Enabled: cloudflare.F(true),
-				Rate:    cloudflare.F(magic_transit.HealthCheckRateLow),
-				Target: cloudflare.F[magic_transit.HealthCheckTargetUnionParam](magic_transit.HealthCheckTargetMagicHealthCheckTargetParam{
+			HealthCheck: cloudflare.F(magic_transit.CfInterconnectUpdateParamsHealthCheck{
+				Direction: cloudflare.F(magic_transit.CfInterconnectUpdateParamsHealthCheckDirectionBidirectional),
+				Enabled:   cloudflare.F(true),
+				Rate:      cloudflare.F(magic_transit.HealthCheckRateLow),
+				Source:    cloudflare.F("198.41.199.225"),
+				Target: cloudflare.F[magic_transit.CfInterconnectUpdateParamsHealthCheckTargetUnion](magic_transit.CfInterconnectUpdateParamsHealthCheckTargetMagicHealthCheckTarget{
 					Saved: cloudflare.F("203.0.113.1"),
 				}),
 				Type: cloudflare.F(magic_transit.HealthCheckTypeRequest),
 			}),
-			InterfaceAddress:  cloudflare.F("192.0.2.3/29"),
+			InterfaceAddress:  cloudflare.F("192.0.2.0/31"),
 			InterfaceAddress6: cloudflare.F("2606:54c1:7:0:a9fe:12d2:1:200/127"),
 			Mtu:               cloudflare.F(int64(0)),
 			Name:              cloudflare.F("pni_ord"),

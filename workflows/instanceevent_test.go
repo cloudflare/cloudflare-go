@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/workflows"
 )
 
-func TestInstanceEventNewWithOptionalParams(t *testing.T) {
+func TestInstanceEventNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

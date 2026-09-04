@@ -34,8 +34,12 @@ func NewExpressionTemplateFallthroughService(opts ...option.RequestOption) (r *E
 	return
 }
 
-// Creates an expression template fallthrough rule for API Shield. Used for
-// configuring default behavior when no other expression templates match.
+// Generates a WAF expression template that matches fallthrough traffic for the
+// supplied API hosts. This operation is deprecated and should not be used for new
+// integrations.
+//
+// Deprecated: Use the cf.api_gateway.fallthrough_detected field in custom rule for
+// a more customized logic check.
 func (r *ExpressionTemplateFallthroughService) New(ctx context.Context, params ExpressionTemplateFallthroughNewParams, opts ...option.RequestOption) (res *ExpressionTemplateFallthroughNewResponse, err error) {
 	var env ExpressionTemplateFallthroughNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

@@ -158,12 +158,13 @@ type BucketDomainManagedUpdateParamsCfR2Jurisdiction string
 const (
 	BucketDomainManagedUpdateParamsCfR2JurisdictionDefault BucketDomainManagedUpdateParamsCfR2Jurisdiction = "default"
 	BucketDomainManagedUpdateParamsCfR2JurisdictionEu      BucketDomainManagedUpdateParamsCfR2Jurisdiction = "eu"
+	BucketDomainManagedUpdateParamsCfR2JurisdictionUs      BucketDomainManagedUpdateParamsCfR2Jurisdiction = "us"
 	BucketDomainManagedUpdateParamsCfR2JurisdictionFedramp BucketDomainManagedUpdateParamsCfR2Jurisdiction = "fedramp"
 )
 
 func (r BucketDomainManagedUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketDomainManagedUpdateParamsCfR2JurisdictionDefault, BucketDomainManagedUpdateParamsCfR2JurisdictionEu, BucketDomainManagedUpdateParamsCfR2JurisdictionFedramp:
+	case BucketDomainManagedUpdateParamsCfR2JurisdictionDefault, BucketDomainManagedUpdateParamsCfR2JurisdictionEu, BucketDomainManagedUpdateParamsCfR2JurisdictionUs, BucketDomainManagedUpdateParamsCfR2JurisdictionFedramp:
 		return true
 	}
 	return false
@@ -225,12 +226,13 @@ type BucketDomainManagedListParamsCfR2Jurisdiction string
 const (
 	BucketDomainManagedListParamsCfR2JurisdictionDefault BucketDomainManagedListParamsCfR2Jurisdiction = "default"
 	BucketDomainManagedListParamsCfR2JurisdictionEu      BucketDomainManagedListParamsCfR2Jurisdiction = "eu"
+	BucketDomainManagedListParamsCfR2JurisdictionUs      BucketDomainManagedListParamsCfR2Jurisdiction = "us"
 	BucketDomainManagedListParamsCfR2JurisdictionFedramp BucketDomainManagedListParamsCfR2Jurisdiction = "fedramp"
 )
 
 func (r BucketDomainManagedListParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketDomainManagedListParamsCfR2JurisdictionDefault, BucketDomainManagedListParamsCfR2JurisdictionEu, BucketDomainManagedListParamsCfR2JurisdictionFedramp:
+	case BucketDomainManagedListParamsCfR2JurisdictionDefault, BucketDomainManagedListParamsCfR2JurisdictionEu, BucketDomainManagedListParamsCfR2JurisdictionUs, BucketDomainManagedListParamsCfR2JurisdictionFedramp:
 		return true
 	}
 	return false

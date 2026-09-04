@@ -15,7 +15,7 @@ import (
 )
 
 func TestPresetNewWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -172,7 +172,7 @@ func TestPresetNewWithOptionalParams(t *testing.T) {
 }
 
 func TestPresetUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -330,7 +330,7 @@ func TestPresetUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestPresetDelete(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -362,7 +362,7 @@ func TestPresetDelete(t *testing.T) {
 }
 
 func TestPresetGetWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -396,7 +396,7 @@ func TestPresetGetWithOptionalParams(t *testing.T) {
 }
 
 func TestPresetGetPresetByID(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -416,6 +416,164 @@ func TestPresetGetPresetByID(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.PresetGetPresetByIDParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestPresetReplacePresetByIDWithOptionalParams(t *testing.T) {
+	t.Skip("TODO: auth not handled well")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.RealtimeKit.Presets.ReplacePresetByID(
+		context.TODO(),
+		"app_id",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		realtime_kit.PresetReplacePresetByIDParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Config: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsConfig{
+				MaxScreenshareCount: cloudflare.F(0.000000),
+				MaxVideoStreams: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsConfigMaxVideoStreams{
+					Desktop: cloudflare.F(0.000000),
+					Mobile:  cloudflare.F(0.000000),
+				}),
+				Media: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsConfigMedia{
+					Screenshare: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsConfigMediaScreenshare{
+						FrameRate: cloudflare.F(0.000000),
+						Quality:   cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsConfigMediaScreenshareQualityHD),
+					}),
+					Video: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsConfigMediaVideo{
+						FrameRate: cloudflare.F(30.000000),
+						Quality:   cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsConfigMediaVideoQualityHD),
+						Simulcast: cloudflare.F(true),
+					}),
+					Audio: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsConfigMediaAudio{
+						EnableHighBitrate: cloudflare.F(true),
+						EnableStereo:      cloudflare.F(true),
+					}),
+				}),
+				ViewType:                  cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsConfigViewTypeGroupCall),
+				LivestreamViewerQualities: cloudflare.F([]int64{int64(0)}),
+			}),
+			Name: cloudflare.F("name"),
+			Permissions: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsPermissions{
+				AcceptWaitingRequests:           cloudflare.F(true),
+				CanAcceptProductionRequests:     cloudflare.F(true),
+				CanChangeParticipantPermissions: cloudflare.F(true),
+				CanEditDisplayName:              cloudflare.F(true),
+				CanLivestream:                   cloudflare.F(true),
+				CanRecord:                       cloudflare.F(true),
+				CanSpotlight:                    cloudflare.F(true),
+				Chat: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsPermissionsChat{
+					Private: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsPermissionsChatPrivate{
+						CanReceive: cloudflare.F(true),
+						CanSend:    cloudflare.F(true),
+						Files:      cloudflare.F(true),
+						Text:       cloudflare.F(true),
+					}),
+					Public: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsPermissionsChatPublic{
+						CanSend: cloudflare.F(true),
+						Files:   cloudflare.F(true),
+						Text:    cloudflare.F(true),
+					}),
+				}),
+				ConnectedMeetings: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsPermissionsConnectedMeetings{
+					CanAlterConnectedMeetings:  cloudflare.F(true),
+					CanSwitchConnectedMeetings: cloudflare.F(true),
+					CanSwitchToParentMeeting:   cloudflare.F(true),
+				}),
+				DisableParticipantAudio:         cloudflare.F(true),
+				DisableParticipantScreensharing: cloudflare.F(true),
+				DisableParticipantVideo:         cloudflare.F(true),
+				HiddenParticipant:               cloudflare.F(true),
+				KickParticipant:                 cloudflare.F(true),
+				Media: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsPermissionsMedia{
+					Audio: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsPermissionsMediaAudio{
+						CanProduce: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsPermissionsMediaAudioCanProduceAllowed),
+					}),
+					Screenshare: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsPermissionsMediaScreenshare{
+						CanProduce: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsPermissionsMediaScreenshareCanProduceAllowed),
+					}),
+					Video: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsPermissionsMediaVideo{
+						CanProduce: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsPermissionsMediaVideoCanProduceAllowed),
+					}),
+				}),
+				PinParticipant: cloudflare.F(true),
+				Plugins: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsPermissionsPlugins{
+					CanClose:      cloudflare.F(true),
+					CanEditConfig: cloudflare.F(true),
+					CanStart:      cloudflare.F(true),
+					Config: cloudflare.F(map[string]realtime_kit.PresetReplacePresetByIDParamsPermissionsPluginsConfig{
+						"foo": {
+							AccessControl:   cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsPermissionsPluginsConfigAccessControlFullAccess),
+							HandlesViewOnly: cloudflare.F(true),
+						},
+					}),
+				}),
+				Polls: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsPermissionsPolls{
+					CanCreate: cloudflare.F(true),
+					CanView:   cloudflare.F(true),
+					CanVote:   cloudflare.F(true),
+				}),
+				RecorderType:         cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsPermissionsRecorderTypeRecorder),
+				ShowParticipantList:  cloudflare.F(true),
+				WaitingRoomType:      cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsPermissionsWaitingRoomTypeSkip),
+				AcceptStageRequests:  cloudflare.F(true),
+				IsRecorder:           cloudflare.F(true),
+				StageAccess:          cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsPermissionsStageAccessAllowed),
+				StageEnabled:         cloudflare.F(true),
+				TranscriptionEnabled: cloudflare.F(true),
+			}),
+			UI: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsUI{
+				DesignTokens: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsUIDesignTokens{
+					BorderRadius: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsUIDesignTokensBorderRadiusSharp),
+					BorderWidth:  cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsUIDesignTokensBorderWidthNone),
+					Colors: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsUIDesignTokensColors{
+						Background: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsUIDesignTokensColorsBackground{
+							Number600:  cloudflare.F("600"),
+							Number700:  cloudflare.F("700"),
+							Number800:  cloudflare.F("800"),
+							Number900:  cloudflare.F("900"),
+							Number1000: cloudflare.F("1000"),
+						}),
+						Brand: cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsUIDesignTokensColorsBrand{
+							Number300: cloudflare.F("300"),
+							Number400: cloudflare.F("400"),
+							Number500: cloudflare.F("500"),
+							Number600: cloudflare.F("600"),
+							Number700: cloudflare.F("700"),
+						}),
+						Danger:      cloudflare.F("danger"),
+						Success:     cloudflare.F("success"),
+						Text:        cloudflare.F("text"),
+						TextOnBrand: cloudflare.F("text_on_brand"),
+						VideoBg:     cloudflare.F("video_bg"),
+						Warning:     cloudflare.F("warning"),
+					}),
+					SpacingBase: cloudflare.F(1.000000),
+					Theme:       cloudflare.F(realtime_kit.PresetReplacePresetByIDParamsUIDesignTokensThemeDarkest),
+					FontFamily:  cloudflare.F("font_family"),
+					GoogleFont:  cloudflare.F("google_font"),
+					Logo:        cloudflare.F("https://example.com"),
+				}),
+			}),
 		},
 	)
 	if err != nil {

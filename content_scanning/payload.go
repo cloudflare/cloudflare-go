@@ -35,7 +35,10 @@ func NewPayloadService(opts ...option.RequestOption) (r *PayloadService) {
 	return
 }
 
-// Add custom scan expressions for Content Scanning.
+// Create one or more Content Scanning custom expressions, appending them to the
+// existing list of the zone, and return the updated list. Each expression reaches
+// content objects the scanner cannot find automatically, for example
+// `lookup_json_string(http.request.body.raw, "file")`.
 func (r *PayloadService) New(ctx context.Context, params PayloadNewParams, opts ...option.RequestOption) (res *pagination.SinglePage[PayloadNewResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -57,12 +60,51 @@ func (r *PayloadService) New(ctx context.Context, params PayloadNewParams, opts 
 	return res, nil
 }
 
-// Add custom scan expressions for Content Scanning.
+// Create one or more Content Scanning custom expressions, appending them to the
+// existing list of the zone, and return the updated list. Each expression reaches
+// content objects the scanner cannot find automatically, for example
+// `lookup_json_string(http.request.body.raw, "file")`.
 func (r *PayloadService) NewAutoPaging(ctx context.Context, params PayloadNewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PayloadNewResponse] {
 	return pagination.NewSinglePageAutoPager(r.New(ctx, params, opts...))
 }
 
-// Get a list of existing custom scan expressions for Content Scanning.
+// Update the Content Scanning custom expression with the given identifier and
+// return the updated list of expressions.
+func (r *PayloadService) Update(ctx context.Context, expressionID string, params PayloadUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[PayloadUpdateResponse], err error) {
+	var raw *http.Response
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return nil, err
+	}
+	if expressionID == "" {
+		err = errors.New("missing required expression_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("zones/%s/content-upload-scan/payloads/%s", params.ZoneID, expressionID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPatch, path, params, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Update the Content Scanning custom expression with the given identifier and
+// return the updated list of expressions.
+func (r *PayloadService) UpdateAutoPaging(ctx context.Context, expressionID string, params PayloadUpdateParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PayloadUpdateResponse] {
+	return pagination.NewSinglePageAutoPager(r.Update(ctx, expressionID, params, opts...))
+}
+
+// List the Content Scanning custom expressions configured for the zone, each with
+// its own identifier. A custom expression tells the scanner how to reach content
+// objects in a request it cannot parse on its own, such as files Base64-encoded
+// inside a JSON body.
 func (r *PayloadService) List(ctx context.Context, query PayloadListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PayloadListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -84,12 +126,17 @@ func (r *PayloadService) List(ctx context.Context, query PayloadListParams, opts
 	return res, nil
 }
 
-// Get a list of existing custom scan expressions for Content Scanning.
+// List the Content Scanning custom expressions configured for the zone, each with
+// its own identifier. A custom expression tells the scanner how to reach content
+// objects in a request it cannot parse on its own, such as files Base64-encoded
+// inside a JSON body.
 func (r *PayloadService) ListAutoPaging(ctx context.Context, query PayloadListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PayloadListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Delete a Content Scan Custom Expression.
+// Delete the Content Scanning custom expression with the given identifier and
+// return the expressions that remain. Content objects reached only by the deleted
+// expression are no longer scanned.
 func (r *PayloadService) Delete(ctx context.Context, expressionID string, body PayloadDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[PayloadDeleteResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -115,16 +162,19 @@ func (r *PayloadService) Delete(ctx context.Context, expressionID string, body P
 	return res, nil
 }
 
-// Delete a Content Scan Custom Expression.
+// Delete the Content Scanning custom expression with the given identifier and
+// return the expressions that remain. Content objects reached only by the deleted
+// expression are no longer scanned.
 func (r *PayloadService) DeleteAutoPaging(ctx context.Context, expressionID string, body PayloadDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PayloadDeleteResponse] {
 	return pagination.NewSinglePageAutoPager(r.Delete(ctx, expressionID, body, opts...))
 }
 
-// Defines a custom scan expression to match Content Scanning on.
+// Defines a Content Scanning custom expression.
 type PayloadNewResponse struct {
-	// defines the unique ID for this custom scan expression.
+	// Defines the unique ID for this Content Scanning custom expression.
 	ID string `json:"id"`
-	// Defines the ruleset expression to use in matching content objects.
+	// Defines the custom content extraction expression used to reach content objects
+	// in the request.
 	Payload string                 `json:"payload"`
 	JSON    payloadNewResponseJSON `json:"-"`
 }
@@ -146,11 +196,39 @@ func (r payloadNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Defines a custom scan expression to match Content Scanning on.
-type PayloadListResponse struct {
-	// defines the unique ID for this custom scan expression.
+// Defines a Content Scanning custom expression.
+type PayloadUpdateResponse struct {
+	// Defines the unique ID for this Content Scanning custom expression.
 	ID string `json:"id"`
-	// Defines the ruleset expression to use in matching content objects.
+	// Defines the custom content extraction expression used to reach content objects
+	// in the request.
+	Payload string                    `json:"payload"`
+	JSON    payloadUpdateResponseJSON `json:"-"`
+}
+
+// payloadUpdateResponseJSON contains the JSON metadata for the struct
+// [PayloadUpdateResponse]
+type payloadUpdateResponseJSON struct {
+	ID          apijson.Field
+	Payload     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PayloadUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r payloadUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Defines a Content Scanning custom expression.
+type PayloadListResponse struct {
+	// Defines the unique ID for this Content Scanning custom expression.
+	ID string `json:"id"`
+	// Defines the custom content extraction expression used to reach content objects
+	// in the request.
 	Payload string                  `json:"payload"`
 	JSON    payloadListResponseJSON `json:"-"`
 }
@@ -172,11 +250,12 @@ func (r payloadListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Defines a custom scan expression to match Content Scanning on.
+// Defines a Content Scanning custom expression.
 type PayloadDeleteResponse struct {
-	// defines the unique ID for this custom scan expression.
+	// Defines the unique ID for this Content Scanning custom expression.
 	ID string `json:"id"`
-	// Defines the ruleset expression to use in matching content objects.
+	// Defines the custom content extraction expression used to reach content objects
+	// in the request.
 	Payload string                    `json:"payload"`
 	JSON    payloadDeleteResponseJSON `json:"-"`
 }
@@ -209,11 +288,24 @@ func (r PayloadNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PayloadNewParamsBody struct {
-	// Defines the ruleset expression to use in matching content objects.
+	// Defines the custom content extraction expression used to reach content objects
+	// in the request.
 	Payload param.Field[string] `json:"payload" api:"required"`
 }
 
 func (r PayloadNewParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type PayloadUpdateParams struct {
+	// Defines an identifier.
+	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	// Defines the custom content extraction expression used to reach content objects
+	// in the request.
+	Payload param.Field[string] `json:"payload" api:"required"`
+}
+
+func (r PayloadUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

@@ -109,7 +109,7 @@ func (r InstanceStatusEditResponseStatus) IsKnown() bool {
 
 type InstanceStatusEditParams struct {
 	AccountID param.Field[string]               `path:"account_id" api:"required"`
-	Body      InstanceStatusEditParamsBodyUnion `json:"body"`
+	Body      InstanceStatusEditParamsBodyUnion `json:"body" api:"required"`
 }
 
 func (r InstanceStatusEditParams) MarshalJSON() (data []byte, err error) {

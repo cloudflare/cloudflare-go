@@ -175,14 +175,14 @@ type RecipientNewResponse struct {
 	// state set by the API; the background reconciliation workflow drives
 	// `current_association_status` toward it.
 	//
-	//   - `associating` — The recipient was recently added; the workflow is pushing
-	//     shared resources into the recipient account.
-	//   - `associated` — Shared resources have been successfully applied to the
-	//     recipient account.
-	//   - `disassociating` — The recipient was removed (via DELETE or PUT replacement);
-	//     the workflow is removing shared resources from the recipient account.
-	//   - `disassociated` — Shared resources have been removed from the recipient
-	//     account. The recipient record remains in the database.
+	// - `associating` — The recipient was recently added; the workflow is pushing
+	//   shared resources into the recipient account.
+	// - `associated` — Shared resources have been successfully applied to the
+	//   recipient account.
+	// - `disassociating` — The recipient was removed (via DELETE or PUT replacement);
+	//   the workflow is removing shared resources from the recipient account.
+	// - `disassociated` — Shared resources have been removed from the recipient
+	//   account. The recipient record remains in the database.
 	AssociationStatus RecipientNewResponseAssociationStatus `json:"association_status" api:"required"`
 	// When the share was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
@@ -288,14 +288,14 @@ type RecipientListResponse struct {
 	// state set by the API; the background reconciliation workflow drives
 	// `current_association_status` toward it.
 	//
-	//   - `associating` — The recipient was recently added; the workflow is pushing
-	//     shared resources into the recipient account.
-	//   - `associated` — Shared resources have been successfully applied to the
-	//     recipient account.
-	//   - `disassociating` — The recipient was removed (via DELETE or PUT replacement);
-	//     the workflow is removing shared resources from the recipient account.
-	//   - `disassociated` — Shared resources have been removed from the recipient
-	//     account. The recipient record remains in the database.
+	// - `associating` — The recipient was recently added; the workflow is pushing
+	//   shared resources into the recipient account.
+	// - `associated` — Shared resources have been successfully applied to the
+	//   recipient account.
+	// - `disassociating` — The recipient was removed (via DELETE or PUT replacement);
+	//   the workflow is removing shared resources from the recipient account.
+	// - `disassociated` — Shared resources have been removed from the recipient
+	//   account. The recipient record remains in the database.
 	AssociationStatus RecipientListResponseAssociationStatus `json:"association_status" api:"required"`
 	// When the share was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
@@ -401,14 +401,14 @@ type RecipientDeleteResponse struct {
 	// state set by the API; the background reconciliation workflow drives
 	// `current_association_status` toward it.
 	//
-	//   - `associating` — The recipient was recently added; the workflow is pushing
-	//     shared resources into the recipient account.
-	//   - `associated` — Shared resources have been successfully applied to the
-	//     recipient account.
-	//   - `disassociating` — The recipient was removed (via DELETE or PUT replacement);
-	//     the workflow is removing shared resources from the recipient account.
-	//   - `disassociated` — Shared resources have been removed from the recipient
-	//     account. The recipient record remains in the database.
+	// - `associating` — The recipient was recently added; the workflow is pushing
+	//   shared resources into the recipient account.
+	// - `associated` — Shared resources have been successfully applied to the
+	//   recipient account.
+	// - `disassociating` — The recipient was removed (via DELETE or PUT replacement);
+	//   the workflow is removing shared resources from the recipient account.
+	// - `disassociated` — Shared resources have been removed from the recipient
+	//   account. The recipient record remains in the database.
 	AssociationStatus RecipientDeleteResponseAssociationStatus `json:"association_status" api:"required"`
 	// When the share was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
@@ -514,14 +514,14 @@ type RecipientGetResponse struct {
 	// state set by the API; the background reconciliation workflow drives
 	// `current_association_status` toward it.
 	//
-	//   - `associating` — The recipient was recently added; the workflow is pushing
-	//     shared resources into the recipient account.
-	//   - `associated` — Shared resources have been successfully applied to the
-	//     recipient account.
-	//   - `disassociating` — The recipient was removed (via DELETE or PUT replacement);
-	//     the workflow is removing shared resources from the recipient account.
-	//   - `disassociated` — Shared resources have been removed from the recipient
-	//     account. The recipient record remains in the database.
+	// - `associating` — The recipient was recently added; the workflow is pushing
+	//   shared resources into the recipient account.
+	// - `associated` — Shared resources have been successfully applied to the
+	//   recipient account.
+	// - `disassociating` — The recipient was removed (via DELETE or PUT replacement);
+	//   the workflow is removing shared resources from the recipient account.
+	// - `disassociated` — Shared resources have been removed from the recipient
+	//   account. The recipient record remains in the database.
 	AssociationStatus RecipientGetResponseAssociationStatus `json:"association_status" api:"required"`
 	// When the share was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`

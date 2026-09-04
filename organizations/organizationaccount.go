@@ -62,7 +62,10 @@ type OrganizationAccountGetParams struct {
 	// Sort direction for the order_by field. Valid values: `asc`, `desc`. Defaults to
 	// `asc` when order_by is specified.
 	Direction param.Field[OrganizationAccountGetParamsDirection] `query:"direction"`
-	Name      param.Field[OrganizationAccountGetParamsName]      `query:"name"`
+	// Include Account tags from the resource tag mirror. Omit this parameter to
+	// preserve the existing Account response shape.
+	IncludeTags param.Field[bool]                             `query:"include_tags"`
+	Name        param.Field[OrganizationAccountGetParamsName] `query:"name"`
 	// Field to order results by. Currently supported values: `account_name`. When not
 	// specified, results are ordered by internal account ID.
 	OrderBy param.Field[OrganizationAccountGetParamsOrderBy] `query:"order_by"`

@@ -996,6 +996,8 @@ type DispatchNamespaceScriptUpdateResponseObservability struct {
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
 	// Log settings for the Worker.
 	Logs DispatchNamespaceScriptUpdateResponseObservabilityLogs `json:"logs" api:"nullable"`
+	// Whether query strings are removed from request URLs in logs and traces.
+	RedactQueryString bool `json:"redact_query_string"`
 	// Trace settings for the Worker.
 	Traces DispatchNamespaceScriptUpdateResponseObservabilityTraces `json:"traces" api:"nullable"`
 	JSON   dispatchNamespaceScriptUpdateResponseObservabilityJSON   `json:"-"`
@@ -1004,12 +1006,13 @@ type DispatchNamespaceScriptUpdateResponseObservability struct {
 // dispatchNamespaceScriptUpdateResponseObservabilityJSON contains the JSON
 // metadata for the struct [DispatchNamespaceScriptUpdateResponseObservability]
 type dispatchNamespaceScriptUpdateResponseObservabilityJSON struct {
-	Enabled          apijson.Field
-	HeadSamplingRate apijson.Field
-	Logs             apijson.Field
-	Traces           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Enabled           apijson.Field
+	HeadSamplingRate  apijson.Field
+	Logs              apijson.Field
+	RedactQueryString apijson.Field
+	Traces            apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *DispatchNamespaceScriptUpdateResponseObservability) UnmarshalJSON(data []byte) (err error) {
@@ -1068,11 +1071,11 @@ type DispatchNamespaceScriptUpdateResponseObservabilityTraces struct {
 	// Whether trace persistence is enabled for the Worker.
 	Persist bool `json:"persist"`
 	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
-	// requests are handled. "authenticated" (default) honors inbound trace context
-	// only when accompanied by a valid trace auth token. "accept" unconditionally
-	// accepts inbound trace context. Requires the trace propagation feature to be
-	// enabled.
-	PropagationPolicy DispatchNamespaceScriptUpdateResponseObservabilityTracesPropagationPolicy `json:"propagation_policy"`
+	// requests are handled. "authenticated" honors inbound trace context only when
+	// accompanied by a valid trace auth token. "accept" unconditionally accepts
+	// inbound trace context. Requires the trace propagation feature to be enabled.
+	// Returns null when the trace propagation feature is not enabled for the account.
+	PropagationPolicy DispatchNamespaceScriptUpdateResponseObservabilityTracesPropagationPolicy `json:"propagation_policy" api:"nullable"`
 	JSON              dispatchNamespaceScriptUpdateResponseObservabilityTracesJSON              `json:"-"`
 }
 
@@ -1098,10 +1101,10 @@ func (r dispatchNamespaceScriptUpdateResponseObservabilityTracesJSON) RawJSON() 
 }
 
 // Controls how inbound trace context (traceparent/tracestate) headers on incoming
-// requests are handled. "authenticated" (default) honors inbound trace context
-// only when accompanied by a valid trace auth token. "accept" unconditionally
-// accepts inbound trace context. Requires the trace propagation feature to be
-// enabled.
+// requests are handled. "authenticated" honors inbound trace context only when
+// accompanied by a valid trace auth token. "accept" unconditionally accepts
+// inbound trace context. Requires the trace propagation feature to be enabled.
+// Returns null when the trace propagation feature is not enabled for the account.
 type DispatchNamespaceScriptUpdateResponseObservabilityTracesPropagationPolicy string
 
 const (
@@ -1598,6 +1601,9 @@ type DispatchNamespaceScriptUpdateParamsMetadataBinding struct {
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsFormat] `json:"format"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsIdentity] `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName param.Field[string] `json:"index_name"`
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
@@ -2508,11 +2514,12 @@ const (
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionEu          DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedramp     DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp-high"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionUs          DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction = "us"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionEu, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedramp, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionEu, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedramp, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh, DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionUs:
 		return true
 	}
 	return false
@@ -2968,6 +2975,9 @@ type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNet
 	Name param.Field[string] `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
 	Type param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkType] `json:"type" api:"required"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkIdentity] `json:"identity"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID param.Field[string] `json:"network_id"`
@@ -2992,6 +3002,22 @@ const (
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkType) IsKnown() bool {
 	switch r {
 	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkTypeVPCNetwork:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkIdentity string
+
+const (
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkIdentity = "runtime-email-alpha"
+)
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkIdentity) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -3066,6 +3092,22 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsFormat) IsKnown() boo
 	return false
 }
 
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsIdentity string
+
+const (
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsIdentityRuntimeEmailAlpha DispatchNamespaceScriptUpdateParamsMetadataBindingsIdentity = "runtime-email-alpha"
+)
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsIdentity) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsIdentityRuntimeEmailAlpha:
+		return true
+	}
+	return false
+}
+
 // The
 // [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
 // of the R2 bucket.
@@ -3075,11 +3117,12 @@ const (
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsJurisdictionEu          DispatchNamespaceScriptUpdateParamsMetadataBindingsJurisdiction = "eu"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsJurisdictionFedramp     DispatchNamespaceScriptUpdateParamsMetadataBindingsJurisdiction = "fedramp"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsJurisdictionFedrampHigh DispatchNamespaceScriptUpdateParamsMetadataBindingsJurisdiction = "fedramp-high"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsJurisdictionUs          DispatchNamespaceScriptUpdateParamsMetadataBindingsJurisdiction = "us"
 )
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsJurisdiction) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsJurisdictionEu, DispatchNamespaceScriptUpdateParamsMetadataBindingsJurisdictionFedramp, DispatchNamespaceScriptUpdateParamsMetadataBindingsJurisdictionFedrampHigh:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsJurisdictionEu, DispatchNamespaceScriptUpdateParamsMetadataBindingsJurisdictionFedramp, DispatchNamespaceScriptUpdateParamsMetadataBindingsJurisdictionFedrampHigh, DispatchNamespaceScriptUpdateParamsMetadataBindingsJurisdictionUs:
 		return true
 	}
 	return false
@@ -3893,6 +3936,8 @@ type DispatchNamespaceScriptUpdateParamsMetadataObservability struct {
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
 	// Log settings for the Worker.
 	Logs param.Field[DispatchNamespaceScriptUpdateParamsMetadataObservabilityLogs] `json:"logs"`
+	// Whether query strings are removed from request URLs in logs and traces.
+	RedactQueryString param.Field[bool] `json:"redact_query_string"`
 	// Trace settings for the Worker.
 	Traces param.Field[DispatchNamespaceScriptUpdateParamsMetadataObservabilityTraces] `json:"traces"`
 }
@@ -3932,10 +3977,10 @@ type DispatchNamespaceScriptUpdateParamsMetadataObservabilityTraces struct {
 	// Whether trace persistence is enabled for the Worker.
 	Persist param.Field[bool] `json:"persist"`
 	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
-	// requests are handled. "authenticated" (default) honors inbound trace context
-	// only when accompanied by a valid trace auth token. "accept" unconditionally
-	// accepts inbound trace context. Requires the trace propagation feature to be
-	// enabled.
+	// requests are handled. "authenticated" honors inbound trace context only when
+	// accompanied by a valid trace auth token. "accept" unconditionally accepts
+	// inbound trace context. Requires the trace propagation feature to be enabled.
+	// Returns null when the trace propagation feature is not enabled for the account.
 	PropagationPolicy param.Field[DispatchNamespaceScriptUpdateParamsMetadataObservabilityTracesPropagationPolicy] `json:"propagation_policy"`
 }
 
@@ -3944,10 +3989,10 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataObservabilityTraces) MarshalJ
 }
 
 // Controls how inbound trace context (traceparent/tracestate) headers on incoming
-// requests are handled. "authenticated" (default) honors inbound trace context
-// only when accompanied by a valid trace auth token. "accept" unconditionally
-// accepts inbound trace context. Requires the trace propagation feature to be
-// enabled.
+// requests are handled. "authenticated" honors inbound trace context only when
+// accompanied by a valid trace auth token. "accept" unconditionally accepts
+// inbound trace context. Requires the trace propagation feature to be enabled.
+// Returns null when the trace propagation feature is not enabled for the account.
 type DispatchNamespaceScriptUpdateParamsMetadataObservabilityTracesPropagationPolicy string
 
 const (

@@ -35,7 +35,8 @@ func NewLabelManagedResourceOperationService(opts ...option.RequestOption) (r *L
 	return
 }
 
-// Replace all operations(s) attached to a managed label
+// Replaces the complete set of web and API operations attached to the managed
+// label.
 func (r *LabelManagedResourceOperationService) Update(ctx context.Context, name string, params LabelManagedResourceOperationUpdateParams, opts ...option.RequestOption) (res *LabelManagedResourceOperationUpdateResponse, err error) {
 	var env LabelManagedResourceOperationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

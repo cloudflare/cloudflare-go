@@ -15,40 +15,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/realtime_kit"
 )
 
-func TestLivestreamNewIndependentLivestreamWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.RealtimeKit.Livestreams.NewIndependentLivestream(
-		context.TODO(),
-		"app_id",
-		realtime_kit.LivestreamNewIndependentLivestreamParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Name:      cloudflare.F("prdmmp-xhycsl"),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
 func TestLivestreamGetActiveLivestreamsForLivestreamID(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -80,7 +48,7 @@ func TestLivestreamGetActiveLivestreamsForLivestreamID(t *testing.T) {
 }
 
 func TestLivestreamGetAllLivestreamsWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -118,7 +86,7 @@ func TestLivestreamGetAllLivestreamsWithOptionalParams(t *testing.T) {
 }
 
 func TestLivestreamGetLivestreamAnalyticsCompleteWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -152,7 +120,7 @@ func TestLivestreamGetLivestreamAnalyticsCompleteWithOptionalParams(t *testing.T
 }
 
 func TestLivestreamGetLivestreamAnalyticsDaywiseWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -186,7 +154,7 @@ func TestLivestreamGetLivestreamAnalyticsDaywiseWithOptionalParams(t *testing.T)
 }
 
 func TestLivestreamGetLivestreamSessionDetailsForSessionID(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -218,7 +186,7 @@ func TestLivestreamGetLivestreamSessionDetailsForSessionID(t *testing.T) {
 }
 
 func TestLivestreamGetLivestreamSessionForLivestreamIDWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -252,7 +220,7 @@ func TestLivestreamGetLivestreamSessionForLivestreamIDWithOptionalParams(t *test
 }
 
 func TestLivestreamGetMeetingActiveLivestreams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -284,7 +252,7 @@ func TestLivestreamGetMeetingActiveLivestreams(t *testing.T) {
 }
 
 func TestLivestreamGetOrgAnalyticsWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -303,8 +271,8 @@ func TestLivestreamGetOrgAnalyticsWithOptionalParams(t *testing.T) {
 		"app_id",
 		realtime_kit.LivestreamGetOrgAnalyticsParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			EndDate:   cloudflare.F("2022-09-22"),
-			StartDate: cloudflare.F("2022-09-01"),
+			EndDate:   cloudflare.F("2022-09-22T00:00:00Z"),
+			StartDate: cloudflare.F("2022-09-01T00:00:00Z"),
 		},
 	)
 	if err != nil {
@@ -317,7 +285,7 @@ func TestLivestreamGetOrgAnalyticsWithOptionalParams(t *testing.T) {
 }
 
 func TestLivestreamStartLivestreamingAMeetingWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -354,7 +322,7 @@ func TestLivestreamStartLivestreamingAMeetingWithOptionalParams(t *testing.T) {
 }
 
 func TestLivestreamStopLivestreamingAMeeting(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

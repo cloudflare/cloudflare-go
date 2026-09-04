@@ -2098,8 +2098,9 @@ func (r pipelineListV1ResponseJSON) RawJSON() string {
 type PipelineValidateSqlResponse struct {
 	// Indicates tables involved in the processing.
 	Tables map[string]PipelineValidateSqlResponseTable `json:"tables" api:"required"`
-	Graph  PipelineValidateSqlResponseGraph            `json:"graph"`
-	JSON   pipelineValidateSqlResponseJSON             `json:"-"`
+	// Indicates the processing flow to implement the SQL.
+	Graph PipelineValidateSqlResponseGraph `json:"graph"`
+	JSON  pipelineValidateSqlResponseJSON  `json:"-"`
 }
 
 // pipelineValidateSqlResponseJSON contains the JSON metadata for the struct
@@ -2146,6 +2147,7 @@ func (r pipelineValidateSqlResponseTableJSON) RawJSON() string {
 	return r.raw
 }
 
+// Indicates the processing flow to implement the SQL.
 type PipelineValidateSqlResponseGraph struct {
 	Edges []PipelineValidateSqlResponseGraphEdge `json:"edges" api:"required"`
 	Nodes []PipelineValidateSqlResponseGraphNode `json:"nodes" api:"required"`

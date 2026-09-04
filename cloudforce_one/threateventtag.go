@@ -101,84 +101,100 @@ func (r *ThreatEventTagService) Edit(ctx context.Context, tagUUID string, params
 }
 
 type ThreatEventTagNewResponse struct {
-	UUID           string `json:"uuid" api:"required"`
-	Value          string `json:"value" api:"required"`
-	ActiveDuration string `json:"activeDuration"`
-	ActorCategory  string `json:"actorCategory"`
-	// Confidence (1-10) in the actor variety (actorCategory). CFONE-only: stripped
-	// from responses to non-CFONE accounts.
-	ActorCategoryConfidence int64 `json:"actorCategoryConfidence"`
-	// Structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: stripped from
-	// responses to non-CFONE accounts.
-	Aliases                    []ThreatEventTagNewResponseAlias `json:"aliases"`
-	AliasGroupNames            []string                         `json:"aliasGroupNames"`
-	AliasGroupNamesInternal    []string                         `json:"aliasGroupNamesInternal"`
-	AnalyticPriority           float64                          `json:"analyticPriority"`
-	AttributionConfidence      string                           `json:"attributionConfidence"`
-	AttributionConfidenceScore int64                            `json:"attributionConfidenceScore"`
-	AttributionOrganization    string                           `json:"attributionOrganization"`
-	CategoryName               string                           `json:"categoryName"`
-	CategoryUUID               string                           `json:"categoryUuid"`
-	DateOfDiscovery            string                           `json:"dateOfDiscovery"`
-	ExternalReferenceLinks     []string                         `json:"externalReferenceLinks"`
+	UUID                    string                                           `json:"uuid" api:"required"`
+	Value                   string                                           `json:"value" api:"required"`
+	ActiveDuration          string                                           `json:"activeDuration"`
+	ActiveDurationAnnotated ThreatEventTagNewResponseActiveDurationAnnotated `json:"activeDuration_annotated" api:"nullable"`
+	ActorCategory           string                                           `json:"actorCategory"`
+	ActorCategoryAnnotated  ThreatEventTagNewResponseActorCategoryAnnotated  `json:"actorCategory_annotated" api:"nullable"`
+	// Structured aliases ({ value, confidence 1-10, tlp }). Public: returned to all
+	// accounts with per-entry TLP filtering (entries with tlp: purple are removed for
+	// non-CFONE accounts).
+	Aliases                          []ThreatEventTagNewResponseAlias                          `json:"aliases"`
+	AliasGroupNames                  []string                                                  `json:"aliasGroupNames"`
+	AliasGroupNamesInternal          []string                                                  `json:"aliasGroupNamesInternal"`
+	AttributionOrganization          string                                                    `json:"attributionOrganization"`
+	AttributionOrganizationAnnotated ThreatEventTagNewResponseAttributionOrganizationAnnotated `json:"attributionOrganization_annotated" api:"nullable"`
+	CategoryName                     string                                                    `json:"categoryName"`
+	CategoryUUID                     string                                                    `json:"categoryUuid"`
+	// Overall tag confidence (1-10).
+	Confidence             int64    `json:"confidence" api:"nullable"`
+	CreatedAt              string   `json:"createdAt"`
+	DateOfDiscovery        string   `json:"dateOfDiscovery"`
+	Description            string   `json:"description"`
+	ExternalReferenceLinks []string `json:"externalReferenceLinks"`
 	// Structured external references ({ url, description }). Public: returned to all
 	// accounts.
-	ExternalReferences []ThreatEventTagNewResponseExternalReference `json:"externalReferences"`
+	ExternalReferences          []ThreatEventTagNewResponseExternalReference           `json:"externalReferences"`
+	ExternalReferencesAnnotated []ThreatEventTagNewResponseExternalReferencesAnnotated `json:"externalReferences_annotated" api:"nullable"`
 	// Internal structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: never
 	// returned to non-CFONE accounts.
-	InternalAliases     []ThreatEventTagNewResponseInternalAlias `json:"internalAliases"`
-	InternalDescription string                                   `json:"internalDescription"`
-	Motive              string                                   `json:"motive"`
-	// Confidence (1-10) in the actor motive. CFONE-only: stripped from responses to
-	// non-CFONE accounts.
-	MotiveConfidence int64  `json:"motiveConfidence"`
-	OpsecLevel       string `json:"opsecLevel"`
-	// Confidence (1-10) in the origin-country attribution. CFONE-only: stripped from
-	// responses to non-CFONE accounts.
-	OriginCountryConfidence int64  `json:"originCountryConfidence"`
-	OriginCountryISO        string `json:"originCountryISO"`
-	OriginCountryISOAlpha3  string `json:"originCountryISOAlpha3"`
-	// TLP marking for the origin-country attribution. CFONE-only: stripped from
-	// responses to non-CFONE accounts.
-	OriginCountryTLP    ThreatEventTagNewResponseOriginCountryTLP `json:"originCountryTlp"`
-	Priority            float64                                   `json:"priority"`
-	SophisticationLevel string                                    `json:"sophisticationLevel"`
-	JSON                threatEventTagNewResponseJSON             `json:"-"`
+	InternalAliases     []ThreatEventTagNewResponseInternalAlias     `json:"internalAliases"`
+	InternalDescription string                                       `json:"internalDescription"`
+	LastSeen            string                                       `json:"lastSeen"`
+	Motive              string                                       `json:"motive"`
+	MotiveAnnotated     ThreatEventTagNewResponseMotiveAnnotated     `json:"motive_annotated" api:"nullable"`
+	OpsecLevel          string                                       `json:"opsecLevel"`
+	OpsecLevelAnnotated ThreatEventTagNewResponseOpsecLevelAnnotated `json:"opsecLevel_annotated" api:"nullable"`
+	// ISO country code (alpha-2 or alpha-3). Normalized to uppercase on read. Null
+	// when stored value is blank/whitespace.
+	OriginCountryISO          string                                             `json:"originCountryISO" api:"nullable"`
+	OriginCountryISOAnnotated ThreatEventTagNewResponseOriginCountryISOAnnotated `json:"originCountryISO_annotated" api:"nullable"`
+	Priority                  float64                                            `json:"priority"`
+	PriorityAnnotated         ThreatEventTagNewResponsePriorityAnnotated         `json:"priority_annotated" api:"nullable"`
+	// Parsed custom field values. Null when the tag has no custom fields.
+	Properties                   map[string]interface{}                                `json:"properties" api:"nullable"`
+	SophisticationLevel          string                                                `json:"sophisticationLevel"`
+	SophisticationLevelAnnotated ThreatEventTagNewResponseSophisticationLevelAnnotated `json:"sophisticationLevel_annotated" api:"nullable"`
+	// Tag-level TLP handling marking.
+	TLP       ThreatEventTagNewResponseTLP  `json:"tlp" api:"nullable"`
+	UpdatedAt string                        `json:"updatedAt"`
+	Version   float64                       `json:"version"`
+	JSON      threatEventTagNewResponseJSON `json:"-"`
 }
 
 // threatEventTagNewResponseJSON contains the JSON metadata for the struct
 // [ThreatEventTagNewResponse]
 type threatEventTagNewResponseJSON struct {
-	UUID                       apijson.Field
-	Value                      apijson.Field
-	ActiveDuration             apijson.Field
-	ActorCategory              apijson.Field
-	ActorCategoryConfidence    apijson.Field
-	Aliases                    apijson.Field
-	AliasGroupNames            apijson.Field
-	AliasGroupNamesInternal    apijson.Field
-	AnalyticPriority           apijson.Field
-	AttributionConfidence      apijson.Field
-	AttributionConfidenceScore apijson.Field
-	AttributionOrganization    apijson.Field
-	CategoryName               apijson.Field
-	CategoryUUID               apijson.Field
-	DateOfDiscovery            apijson.Field
-	ExternalReferenceLinks     apijson.Field
-	ExternalReferences         apijson.Field
-	InternalAliases            apijson.Field
-	InternalDescription        apijson.Field
-	Motive                     apijson.Field
-	MotiveConfidence           apijson.Field
-	OpsecLevel                 apijson.Field
-	OriginCountryConfidence    apijson.Field
-	OriginCountryISO           apijson.Field
-	OriginCountryISOAlpha3     apijson.Field
-	OriginCountryTLP           apijson.Field
-	Priority                   apijson.Field
-	SophisticationLevel        apijson.Field
-	raw                        string
-	ExtraFields                map[string]apijson.Field
+	UUID                             apijson.Field
+	Value                            apijson.Field
+	ActiveDuration                   apijson.Field
+	ActiveDurationAnnotated          apijson.Field
+	ActorCategory                    apijson.Field
+	ActorCategoryAnnotated           apijson.Field
+	Aliases                          apijson.Field
+	AliasGroupNames                  apijson.Field
+	AliasGroupNamesInternal          apijson.Field
+	AttributionOrganization          apijson.Field
+	AttributionOrganizationAnnotated apijson.Field
+	CategoryName                     apijson.Field
+	CategoryUUID                     apijson.Field
+	Confidence                       apijson.Field
+	CreatedAt                        apijson.Field
+	DateOfDiscovery                  apijson.Field
+	Description                      apijson.Field
+	ExternalReferenceLinks           apijson.Field
+	ExternalReferences               apijson.Field
+	ExternalReferencesAnnotated      apijson.Field
+	InternalAliases                  apijson.Field
+	InternalDescription              apijson.Field
+	LastSeen                         apijson.Field
+	Motive                           apijson.Field
+	MotiveAnnotated                  apijson.Field
+	OpsecLevel                       apijson.Field
+	OpsecLevelAnnotated              apijson.Field
+	OriginCountryISO                 apijson.Field
+	OriginCountryISOAnnotated        apijson.Field
+	Priority                         apijson.Field
+	PriorityAnnotated                apijson.Field
+	Properties                       apijson.Field
+	SophisticationLevel              apijson.Field
+	SophisticationLevelAnnotated     apijson.Field
+	TLP                              apijson.Field
+	UpdatedAt                        apijson.Field
+	Version                          apijson.Field
+	raw                              string
+	ExtraFields                      map[string]apijson.Field
 }
 
 func (r *ThreatEventTagNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -187,6 +203,94 @@ func (r *ThreatEventTagNewResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r threatEventTagNewResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type ThreatEventTagNewResponseActiveDurationAnnotated struct {
+	Value string                                               `json:"value" api:"required"`
+	TLP   ThreatEventTagNewResponseActiveDurationAnnotatedTLP  `json:"tlp"`
+	JSON  threatEventTagNewResponseActiveDurationAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagNewResponseActiveDurationAnnotatedJSON contains the JSON metadata
+// for the struct [ThreatEventTagNewResponseActiveDurationAnnotated]
+type threatEventTagNewResponseActiveDurationAnnotatedJSON struct {
+	Value       apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagNewResponseActiveDurationAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagNewResponseActiveDurationAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagNewResponseActiveDurationAnnotatedTLP string
+
+const (
+	ThreatEventTagNewResponseActiveDurationAnnotatedTLPRed                  ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "red"
+	ThreatEventTagNewResponseActiveDurationAnnotatedTLPAmber                ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "amber"
+	ThreatEventTagNewResponseActiveDurationAnnotatedTLPAmberStrict          ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "amber-strict"
+	ThreatEventTagNewResponseActiveDurationAnnotatedTLPGreen                ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "green"
+	ThreatEventTagNewResponseActiveDurationAnnotatedTLPClear                ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "clear"
+	ThreatEventTagNewResponseActiveDurationAnnotatedTLPPurple               ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseActiveDurationAnnotatedTLPAmberStrictLowercase ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagNewResponseActiveDurationAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagNewResponseActiveDurationAnnotatedTLPRed, ThreatEventTagNewResponseActiveDurationAnnotatedTLPAmber, ThreatEventTagNewResponseActiveDurationAnnotatedTLPAmberStrict, ThreatEventTagNewResponseActiveDurationAnnotatedTLPGreen, ThreatEventTagNewResponseActiveDurationAnnotatedTLPClear, ThreatEventTagNewResponseActiveDurationAnnotatedTLPPurple, ThreatEventTagNewResponseActiveDurationAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+type ThreatEventTagNewResponseActorCategoryAnnotated struct {
+	Value      string                                              `json:"value" api:"required"`
+	Confidence float64                                             `json:"confidence"`
+	TLP        ThreatEventTagNewResponseActorCategoryAnnotatedTLP  `json:"tlp"`
+	JSON       threatEventTagNewResponseActorCategoryAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagNewResponseActorCategoryAnnotatedJSON contains the JSON metadata
+// for the struct [ThreatEventTagNewResponseActorCategoryAnnotated]
+type threatEventTagNewResponseActorCategoryAnnotatedJSON struct {
+	Value       apijson.Field
+	Confidence  apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagNewResponseActorCategoryAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagNewResponseActorCategoryAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagNewResponseActorCategoryAnnotatedTLP string
+
+const (
+	ThreatEventTagNewResponseActorCategoryAnnotatedTLPRed                  ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "red"
+	ThreatEventTagNewResponseActorCategoryAnnotatedTLPAmber                ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "amber"
+	ThreatEventTagNewResponseActorCategoryAnnotatedTLPAmberStrict          ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "amber-strict"
+	ThreatEventTagNewResponseActorCategoryAnnotatedTLPGreen                ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "green"
+	ThreatEventTagNewResponseActorCategoryAnnotatedTLPClear                ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "clear"
+	ThreatEventTagNewResponseActorCategoryAnnotatedTLPPurple               ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseActorCategoryAnnotatedTLPAmberStrictLowercase ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagNewResponseActorCategoryAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagNewResponseActorCategoryAnnotatedTLPRed, ThreatEventTagNewResponseActorCategoryAnnotatedTLPAmber, ThreatEventTagNewResponseActorCategoryAnnotatedTLPAmberStrict, ThreatEventTagNewResponseActorCategoryAnnotatedTLPGreen, ThreatEventTagNewResponseActorCategoryAnnotatedTLPClear, ThreatEventTagNewResponseActorCategoryAnnotatedTLPPurple, ThreatEventTagNewResponseActorCategoryAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
 }
 
 type ThreatEventTagNewResponseAlias struct {
@@ -217,15 +321,64 @@ func (r threatEventTagNewResponseAliasJSON) RawJSON() string {
 type ThreatEventTagNewResponseAliasesTLP string
 
 const (
-	ThreatEventTagNewResponseAliasesTLPRed   ThreatEventTagNewResponseAliasesTLP = "red"
-	ThreatEventTagNewResponseAliasesTLPAmber ThreatEventTagNewResponseAliasesTLP = "amber"
-	ThreatEventTagNewResponseAliasesTLPGreen ThreatEventTagNewResponseAliasesTLP = "green"
-	ThreatEventTagNewResponseAliasesTLPWhite ThreatEventTagNewResponseAliasesTLP = "white"
+	ThreatEventTagNewResponseAliasesTLPRed                  ThreatEventTagNewResponseAliasesTLP = "red"
+	ThreatEventTagNewResponseAliasesTLPAmber                ThreatEventTagNewResponseAliasesTLP = "amber"
+	ThreatEventTagNewResponseAliasesTLPAmberStrict          ThreatEventTagNewResponseAliasesTLP = "amber-strict"
+	ThreatEventTagNewResponseAliasesTLPGreen                ThreatEventTagNewResponseAliasesTLP = "green"
+	ThreatEventTagNewResponseAliasesTLPClear                ThreatEventTagNewResponseAliasesTLP = "clear"
+	ThreatEventTagNewResponseAliasesTLPPurple               ThreatEventTagNewResponseAliasesTLP = "purple"
+	ThreatEventTagNewResponseAliasesTLPAmberStrictLowercase ThreatEventTagNewResponseAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewResponseAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewResponseAliasesTLPRed, ThreatEventTagNewResponseAliasesTLPAmber, ThreatEventTagNewResponseAliasesTLPGreen, ThreatEventTagNewResponseAliasesTLPWhite:
+	case ThreatEventTagNewResponseAliasesTLPRed, ThreatEventTagNewResponseAliasesTLPAmber, ThreatEventTagNewResponseAliasesTLPAmberStrict, ThreatEventTagNewResponseAliasesTLPGreen, ThreatEventTagNewResponseAliasesTLPClear, ThreatEventTagNewResponseAliasesTLPPurple, ThreatEventTagNewResponseAliasesTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+type ThreatEventTagNewResponseAttributionOrganizationAnnotated struct {
+	Value      string                                                        `json:"value" api:"required"`
+	Confidence float64                                                       `json:"confidence"`
+	TLP        ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP  `json:"tlp"`
+	JSON       threatEventTagNewResponseAttributionOrganizationAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagNewResponseAttributionOrganizationAnnotatedJSON contains the JSON
+// metadata for the struct
+// [ThreatEventTagNewResponseAttributionOrganizationAnnotated]
+type threatEventTagNewResponseAttributionOrganizationAnnotatedJSON struct {
+	Value       apijson.Field
+	Confidence  apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagNewResponseAttributionOrganizationAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagNewResponseAttributionOrganizationAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP string
+
+const (
+	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPRed                  ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "red"
+	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPAmber                ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "amber"
+	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPAmberStrict          ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "amber-strict"
+	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPGreen                ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "green"
+	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPClear                ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "clear"
+	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPPurple               ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPAmberStrictLowercase ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPRed, ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPAmber, ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPAmberStrict, ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPGreen, ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPClear, ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPPurple, ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -252,6 +405,49 @@ func (r *ThreatEventTagNewResponseExternalReference) UnmarshalJSON(data []byte) 
 
 func (r threatEventTagNewResponseExternalReferenceJSON) RawJSON() string {
 	return r.raw
+}
+
+type ThreatEventTagNewResponseExternalReferencesAnnotated struct {
+	Value string                                                   `json:"value" api:"required"`
+	TLP   ThreatEventTagNewResponseExternalReferencesAnnotatedTLP  `json:"tlp"`
+	JSON  threatEventTagNewResponseExternalReferencesAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagNewResponseExternalReferencesAnnotatedJSON contains the JSON
+// metadata for the struct [ThreatEventTagNewResponseExternalReferencesAnnotated]
+type threatEventTagNewResponseExternalReferencesAnnotatedJSON struct {
+	Value       apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagNewResponseExternalReferencesAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagNewResponseExternalReferencesAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagNewResponseExternalReferencesAnnotatedTLP string
+
+const (
+	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPRed                  ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "red"
+	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPAmber                ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "amber"
+	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPAmberStrict          ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "amber-strict"
+	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPGreen                ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "green"
+	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPClear                ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "clear"
+	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPPurple               ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPAmberStrictLowercase ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagNewResponseExternalReferencesAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagNewResponseExternalReferencesAnnotatedTLPRed, ThreatEventTagNewResponseExternalReferencesAnnotatedTLPAmber, ThreatEventTagNewResponseExternalReferencesAnnotatedTLPAmberStrict, ThreatEventTagNewResponseExternalReferencesAnnotatedTLPGreen, ThreatEventTagNewResponseExternalReferencesAnnotatedTLPClear, ThreatEventTagNewResponseExternalReferencesAnnotatedTLPPurple, ThreatEventTagNewResponseExternalReferencesAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
 }
 
 type ThreatEventTagNewResponseInternalAlias struct {
@@ -282,34 +478,262 @@ func (r threatEventTagNewResponseInternalAliasJSON) RawJSON() string {
 type ThreatEventTagNewResponseInternalAliasesTLP string
 
 const (
-	ThreatEventTagNewResponseInternalAliasesTLPRed   ThreatEventTagNewResponseInternalAliasesTLP = "red"
-	ThreatEventTagNewResponseInternalAliasesTLPAmber ThreatEventTagNewResponseInternalAliasesTLP = "amber"
-	ThreatEventTagNewResponseInternalAliasesTLPGreen ThreatEventTagNewResponseInternalAliasesTLP = "green"
-	ThreatEventTagNewResponseInternalAliasesTLPWhite ThreatEventTagNewResponseInternalAliasesTLP = "white"
+	ThreatEventTagNewResponseInternalAliasesTLPRed                  ThreatEventTagNewResponseInternalAliasesTLP = "red"
+	ThreatEventTagNewResponseInternalAliasesTLPAmber                ThreatEventTagNewResponseInternalAliasesTLP = "amber"
+	ThreatEventTagNewResponseInternalAliasesTLPAmberStrict          ThreatEventTagNewResponseInternalAliasesTLP = "amber-strict"
+	ThreatEventTagNewResponseInternalAliasesTLPGreen                ThreatEventTagNewResponseInternalAliasesTLP = "green"
+	ThreatEventTagNewResponseInternalAliasesTLPClear                ThreatEventTagNewResponseInternalAliasesTLP = "clear"
+	ThreatEventTagNewResponseInternalAliasesTLPPurple               ThreatEventTagNewResponseInternalAliasesTLP = "purple"
+	ThreatEventTagNewResponseInternalAliasesTLPAmberStrictLowercase ThreatEventTagNewResponseInternalAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewResponseInternalAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewResponseInternalAliasesTLPRed, ThreatEventTagNewResponseInternalAliasesTLPAmber, ThreatEventTagNewResponseInternalAliasesTLPGreen, ThreatEventTagNewResponseInternalAliasesTLPWhite:
+	case ThreatEventTagNewResponseInternalAliasesTLPRed, ThreatEventTagNewResponseInternalAliasesTLPAmber, ThreatEventTagNewResponseInternalAliasesTLPAmberStrict, ThreatEventTagNewResponseInternalAliasesTLPGreen, ThreatEventTagNewResponseInternalAliasesTLPClear, ThreatEventTagNewResponseInternalAliasesTLPPurple, ThreatEventTagNewResponseInternalAliasesTLPAmberStrictLowercase:
 		return true
 	}
 	return false
 }
 
-// TLP marking for the origin-country attribution. CFONE-only: stripped from
-// responses to non-CFONE accounts.
-type ThreatEventTagNewResponseOriginCountryTLP string
+type ThreatEventTagNewResponseMotiveAnnotated struct {
+	Value      string                                       `json:"value" api:"required"`
+	Confidence float64                                      `json:"confidence"`
+	TLP        ThreatEventTagNewResponseMotiveAnnotatedTLP  `json:"tlp"`
+	JSON       threatEventTagNewResponseMotiveAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagNewResponseMotiveAnnotatedJSON contains the JSON metadata for the
+// struct [ThreatEventTagNewResponseMotiveAnnotated]
+type threatEventTagNewResponseMotiveAnnotatedJSON struct {
+	Value       apijson.Field
+	Confidence  apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagNewResponseMotiveAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagNewResponseMotiveAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagNewResponseMotiveAnnotatedTLP string
 
 const (
-	ThreatEventTagNewResponseOriginCountryTLPRed   ThreatEventTagNewResponseOriginCountryTLP = "red"
-	ThreatEventTagNewResponseOriginCountryTLPAmber ThreatEventTagNewResponseOriginCountryTLP = "amber"
-	ThreatEventTagNewResponseOriginCountryTLPGreen ThreatEventTagNewResponseOriginCountryTLP = "green"
-	ThreatEventTagNewResponseOriginCountryTLPWhite ThreatEventTagNewResponseOriginCountryTLP = "white"
+	ThreatEventTagNewResponseMotiveAnnotatedTLPRed                  ThreatEventTagNewResponseMotiveAnnotatedTLP = "red"
+	ThreatEventTagNewResponseMotiveAnnotatedTLPAmber                ThreatEventTagNewResponseMotiveAnnotatedTLP = "amber"
+	ThreatEventTagNewResponseMotiveAnnotatedTLPAmberStrict          ThreatEventTagNewResponseMotiveAnnotatedTLP = "amber-strict"
+	ThreatEventTagNewResponseMotiveAnnotatedTLPGreen                ThreatEventTagNewResponseMotiveAnnotatedTLP = "green"
+	ThreatEventTagNewResponseMotiveAnnotatedTLPClear                ThreatEventTagNewResponseMotiveAnnotatedTLP = "clear"
+	ThreatEventTagNewResponseMotiveAnnotatedTLPPurple               ThreatEventTagNewResponseMotiveAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseMotiveAnnotatedTLPAmberStrictLowercase ThreatEventTagNewResponseMotiveAnnotatedTLP = "amber+strict"
 )
 
-func (r ThreatEventTagNewResponseOriginCountryTLP) IsKnown() bool {
+func (r ThreatEventTagNewResponseMotiveAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewResponseOriginCountryTLPRed, ThreatEventTagNewResponseOriginCountryTLPAmber, ThreatEventTagNewResponseOriginCountryTLPGreen, ThreatEventTagNewResponseOriginCountryTLPWhite:
+	case ThreatEventTagNewResponseMotiveAnnotatedTLPRed, ThreatEventTagNewResponseMotiveAnnotatedTLPAmber, ThreatEventTagNewResponseMotiveAnnotatedTLPAmberStrict, ThreatEventTagNewResponseMotiveAnnotatedTLPGreen, ThreatEventTagNewResponseMotiveAnnotatedTLPClear, ThreatEventTagNewResponseMotiveAnnotatedTLPPurple, ThreatEventTagNewResponseMotiveAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+type ThreatEventTagNewResponseOpsecLevelAnnotated struct {
+	Value      string                                           `json:"value" api:"required"`
+	Confidence float64                                          `json:"confidence"`
+	TLP        ThreatEventTagNewResponseOpsecLevelAnnotatedTLP  `json:"tlp"`
+	JSON       threatEventTagNewResponseOpsecLevelAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagNewResponseOpsecLevelAnnotatedJSON contains the JSON metadata for
+// the struct [ThreatEventTagNewResponseOpsecLevelAnnotated]
+type threatEventTagNewResponseOpsecLevelAnnotatedJSON struct {
+	Value       apijson.Field
+	Confidence  apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagNewResponseOpsecLevelAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagNewResponseOpsecLevelAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagNewResponseOpsecLevelAnnotatedTLP string
+
+const (
+	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPRed                  ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "red"
+	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPAmber                ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "amber"
+	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPAmberStrict          ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "amber-strict"
+	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPGreen                ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "green"
+	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPClear                ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "clear"
+	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPPurple               ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPAmberStrictLowercase ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagNewResponseOpsecLevelAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagNewResponseOpsecLevelAnnotatedTLPRed, ThreatEventTagNewResponseOpsecLevelAnnotatedTLPAmber, ThreatEventTagNewResponseOpsecLevelAnnotatedTLPAmberStrict, ThreatEventTagNewResponseOpsecLevelAnnotatedTLPGreen, ThreatEventTagNewResponseOpsecLevelAnnotatedTLPClear, ThreatEventTagNewResponseOpsecLevelAnnotatedTLPPurple, ThreatEventTagNewResponseOpsecLevelAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+type ThreatEventTagNewResponseOriginCountryISOAnnotated struct {
+	Value      string                                                 `json:"value" api:"required,nullable"`
+	Confidence float64                                                `json:"confidence"`
+	TLP        ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP  `json:"tlp"`
+	JSON       threatEventTagNewResponseOriginCountryISOAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagNewResponseOriginCountryISOAnnotatedJSON contains the JSON
+// metadata for the struct [ThreatEventTagNewResponseOriginCountryISOAnnotated]
+type threatEventTagNewResponseOriginCountryISOAnnotatedJSON struct {
+	Value       apijson.Field
+	Confidence  apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagNewResponseOriginCountryISOAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagNewResponseOriginCountryISOAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP string
+
+const (
+	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPRed                  ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "red"
+	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPAmber                ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "amber"
+	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPAmberStrict          ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "amber-strict"
+	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPGreen                ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "green"
+	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPClear                ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "clear"
+	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPPurple               ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPAmberStrictLowercase ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPRed, ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPAmber, ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPAmberStrict, ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPGreen, ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPClear, ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPPurple, ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+type ThreatEventTagNewResponsePriorityAnnotated struct {
+	Value float64                                        `json:"value" api:"required"`
+	TLP   ThreatEventTagNewResponsePriorityAnnotatedTLP  `json:"tlp"`
+	JSON  threatEventTagNewResponsePriorityAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagNewResponsePriorityAnnotatedJSON contains the JSON metadata for
+// the struct [ThreatEventTagNewResponsePriorityAnnotated]
+type threatEventTagNewResponsePriorityAnnotatedJSON struct {
+	Value       apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagNewResponsePriorityAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagNewResponsePriorityAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagNewResponsePriorityAnnotatedTLP string
+
+const (
+	ThreatEventTagNewResponsePriorityAnnotatedTLPRed                  ThreatEventTagNewResponsePriorityAnnotatedTLP = "red"
+	ThreatEventTagNewResponsePriorityAnnotatedTLPAmber                ThreatEventTagNewResponsePriorityAnnotatedTLP = "amber"
+	ThreatEventTagNewResponsePriorityAnnotatedTLPAmberStrict          ThreatEventTagNewResponsePriorityAnnotatedTLP = "amber-strict"
+	ThreatEventTagNewResponsePriorityAnnotatedTLPGreen                ThreatEventTagNewResponsePriorityAnnotatedTLP = "green"
+	ThreatEventTagNewResponsePriorityAnnotatedTLPClear                ThreatEventTagNewResponsePriorityAnnotatedTLP = "clear"
+	ThreatEventTagNewResponsePriorityAnnotatedTLPPurple               ThreatEventTagNewResponsePriorityAnnotatedTLP = "purple"
+	ThreatEventTagNewResponsePriorityAnnotatedTLPAmberStrictLowercase ThreatEventTagNewResponsePriorityAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagNewResponsePriorityAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagNewResponsePriorityAnnotatedTLPRed, ThreatEventTagNewResponsePriorityAnnotatedTLPAmber, ThreatEventTagNewResponsePriorityAnnotatedTLPAmberStrict, ThreatEventTagNewResponsePriorityAnnotatedTLPGreen, ThreatEventTagNewResponsePriorityAnnotatedTLPClear, ThreatEventTagNewResponsePriorityAnnotatedTLPPurple, ThreatEventTagNewResponsePriorityAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+type ThreatEventTagNewResponseSophisticationLevelAnnotated struct {
+	Value      string                                                    `json:"value" api:"required"`
+	Confidence float64                                                   `json:"confidence"`
+	TLP        ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP  `json:"tlp"`
+	JSON       threatEventTagNewResponseSophisticationLevelAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagNewResponseSophisticationLevelAnnotatedJSON contains the JSON
+// metadata for the struct [ThreatEventTagNewResponseSophisticationLevelAnnotated]
+type threatEventTagNewResponseSophisticationLevelAnnotatedJSON struct {
+	Value       apijson.Field
+	Confidence  apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagNewResponseSophisticationLevelAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagNewResponseSophisticationLevelAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP string
+
+const (
+	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPRed                  ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "red"
+	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPAmber                ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "amber"
+	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPAmberStrict          ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "amber-strict"
+	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPGreen                ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "green"
+	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPClear                ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "clear"
+	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPPurple               ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPAmberStrictLowercase ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPRed, ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPAmber, ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPAmberStrict, ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPGreen, ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPClear, ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPPurple, ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+// Tag-level TLP handling marking.
+type ThreatEventTagNewResponseTLP string
+
+const (
+	ThreatEventTagNewResponseTLPRed                  ThreatEventTagNewResponseTLP = "red"
+	ThreatEventTagNewResponseTLPAmber                ThreatEventTagNewResponseTLP = "amber"
+	ThreatEventTagNewResponseTLPAmberStrict          ThreatEventTagNewResponseTLP = "amber-strict"
+	ThreatEventTagNewResponseTLPGreen                ThreatEventTagNewResponseTLP = "green"
+	ThreatEventTagNewResponseTLPClear                ThreatEventTagNewResponseTLP = "clear"
+	ThreatEventTagNewResponseTLPPurple               ThreatEventTagNewResponseTLP = "purple"
+	ThreatEventTagNewResponseTLPAmberStrictLowercase ThreatEventTagNewResponseTLP = "amber+strict"
+)
+
+func (r ThreatEventTagNewResponseTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagNewResponseTLPRed, ThreatEventTagNewResponseTLPAmber, ThreatEventTagNewResponseTLPAmberStrict, ThreatEventTagNewResponseTLPGreen, ThreatEventTagNewResponseTLPClear, ThreatEventTagNewResponseTLPPurple, ThreatEventTagNewResponseTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -366,84 +790,100 @@ func (r threatEventTagListResponsePaginationJSON) RawJSON() string {
 }
 
 type ThreatEventTagListResponseTag struct {
-	UUID           string `json:"uuid" api:"required"`
-	Value          string `json:"value" api:"required"`
-	ActiveDuration string `json:"activeDuration"`
-	ActorCategory  string `json:"actorCategory"`
-	// Confidence (1-10) in the actor variety (actorCategory). CFONE-only: stripped
-	// from responses to non-CFONE accounts.
-	ActorCategoryConfidence int64 `json:"actorCategoryConfidence"`
-	// Structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: stripped from
-	// responses to non-CFONE accounts.
-	Aliases                    []ThreatEventTagListResponseTagsAlias `json:"aliases"`
-	AliasGroupNames            []string                              `json:"aliasGroupNames"`
-	AliasGroupNamesInternal    []string                              `json:"aliasGroupNamesInternal"`
-	AnalyticPriority           float64                               `json:"analyticPriority"`
-	AttributionConfidence      string                                `json:"attributionConfidence"`
-	AttributionConfidenceScore int64                                 `json:"attributionConfidenceScore"`
-	AttributionOrganization    string                                `json:"attributionOrganization"`
-	CategoryName               string                                `json:"categoryName"`
-	CategoryUUID               string                                `json:"categoryUuid"`
-	DateOfDiscovery            string                                `json:"dateOfDiscovery"`
-	ExternalReferenceLinks     []string                              `json:"externalReferenceLinks"`
+	UUID                    string                                                `json:"uuid" api:"required"`
+	Value                   string                                                `json:"value" api:"required"`
+	ActiveDuration          string                                                `json:"activeDuration"`
+	ActiveDurationAnnotated ThreatEventTagListResponseTagsActiveDurationAnnotated `json:"activeDuration_annotated" api:"nullable"`
+	ActorCategory           string                                                `json:"actorCategory"`
+	ActorCategoryAnnotated  ThreatEventTagListResponseTagsActorCategoryAnnotated  `json:"actorCategory_annotated" api:"nullable"`
+	// Structured aliases ({ value, confidence 1-10, tlp }). Public: returned to all
+	// accounts with per-entry TLP filtering (entries with tlp: purple are removed for
+	// non-CFONE accounts).
+	Aliases                          []ThreatEventTagListResponseTagsAlias                          `json:"aliases"`
+	AliasGroupNames                  []string                                                       `json:"aliasGroupNames"`
+	AliasGroupNamesInternal          []string                                                       `json:"aliasGroupNamesInternal"`
+	AttributionOrganization          string                                                         `json:"attributionOrganization"`
+	AttributionOrganizationAnnotated ThreatEventTagListResponseTagsAttributionOrganizationAnnotated `json:"attributionOrganization_annotated" api:"nullable"`
+	CategoryName                     string                                                         `json:"categoryName"`
+	CategoryUUID                     string                                                         `json:"categoryUuid"`
+	// Overall tag confidence (1-10).
+	Confidence             int64    `json:"confidence" api:"nullable"`
+	CreatedAt              string   `json:"createdAt"`
+	DateOfDiscovery        string   `json:"dateOfDiscovery"`
+	Description            string   `json:"description"`
+	ExternalReferenceLinks []string `json:"externalReferenceLinks"`
 	// Structured external references ({ url, description }). Public: returned to all
 	// accounts.
-	ExternalReferences []ThreatEventTagListResponseTagsExternalReference `json:"externalReferences"`
+	ExternalReferences          []ThreatEventTagListResponseTagsExternalReference           `json:"externalReferences"`
+	ExternalReferencesAnnotated []ThreatEventTagListResponseTagsExternalReferencesAnnotated `json:"externalReferences_annotated" api:"nullable"`
 	// Internal structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: never
 	// returned to non-CFONE accounts.
-	InternalAliases     []ThreatEventTagListResponseTagsInternalAlias `json:"internalAliases"`
-	InternalDescription string                                        `json:"internalDescription"`
-	Motive              string                                        `json:"motive"`
-	// Confidence (1-10) in the actor motive. CFONE-only: stripped from responses to
-	// non-CFONE accounts.
-	MotiveConfidence int64  `json:"motiveConfidence"`
-	OpsecLevel       string `json:"opsecLevel"`
-	// Confidence (1-10) in the origin-country attribution. CFONE-only: stripped from
-	// responses to non-CFONE accounts.
-	OriginCountryConfidence int64  `json:"originCountryConfidence"`
-	OriginCountryISO        string `json:"originCountryISO"`
-	OriginCountryISOAlpha3  string `json:"originCountryISOAlpha3"`
-	// TLP marking for the origin-country attribution. CFONE-only: stripped from
-	// responses to non-CFONE accounts.
-	OriginCountryTLP    ThreatEventTagListResponseTagsOriginCountryTLP `json:"originCountryTlp"`
-	Priority            float64                                        `json:"priority"`
-	SophisticationLevel string                                         `json:"sophisticationLevel"`
-	JSON                threatEventTagListResponseTagJSON              `json:"-"`
+	InternalAliases     []ThreatEventTagListResponseTagsInternalAlias     `json:"internalAliases"`
+	InternalDescription string                                            `json:"internalDescription"`
+	LastSeen            string                                            `json:"lastSeen"`
+	Motive              string                                            `json:"motive"`
+	MotiveAnnotated     ThreatEventTagListResponseTagsMotiveAnnotated     `json:"motive_annotated" api:"nullable"`
+	OpsecLevel          string                                            `json:"opsecLevel"`
+	OpsecLevelAnnotated ThreatEventTagListResponseTagsOpsecLevelAnnotated `json:"opsecLevel_annotated" api:"nullable"`
+	// ISO country code (alpha-2 or alpha-3). Normalized to uppercase on read. Null
+	// when stored value is blank/whitespace.
+	OriginCountryISO          string                                                  `json:"originCountryISO" api:"nullable"`
+	OriginCountryISOAnnotated ThreatEventTagListResponseTagsOriginCountryISOAnnotated `json:"originCountryISO_annotated" api:"nullable"`
+	Priority                  float64                                                 `json:"priority"`
+	PriorityAnnotated         ThreatEventTagListResponseTagsPriorityAnnotated         `json:"priority_annotated" api:"nullable"`
+	// Parsed custom field values. Null when the tag has no custom fields.
+	Properties                   map[string]interface{}                                     `json:"properties" api:"nullable"`
+	SophisticationLevel          string                                                     `json:"sophisticationLevel"`
+	SophisticationLevelAnnotated ThreatEventTagListResponseTagsSophisticationLevelAnnotated `json:"sophisticationLevel_annotated" api:"nullable"`
+	// Tag-level TLP handling marking.
+	TLP       ThreatEventTagListResponseTagsTLP `json:"tlp" api:"nullable"`
+	UpdatedAt string                            `json:"updatedAt"`
+	Version   float64                           `json:"version"`
+	JSON      threatEventTagListResponseTagJSON `json:"-"`
 }
 
 // threatEventTagListResponseTagJSON contains the JSON metadata for the struct
 // [ThreatEventTagListResponseTag]
 type threatEventTagListResponseTagJSON struct {
-	UUID                       apijson.Field
-	Value                      apijson.Field
-	ActiveDuration             apijson.Field
-	ActorCategory              apijson.Field
-	ActorCategoryConfidence    apijson.Field
-	Aliases                    apijson.Field
-	AliasGroupNames            apijson.Field
-	AliasGroupNamesInternal    apijson.Field
-	AnalyticPriority           apijson.Field
-	AttributionConfidence      apijson.Field
-	AttributionConfidenceScore apijson.Field
-	AttributionOrganization    apijson.Field
-	CategoryName               apijson.Field
-	CategoryUUID               apijson.Field
-	DateOfDiscovery            apijson.Field
-	ExternalReferenceLinks     apijson.Field
-	ExternalReferences         apijson.Field
-	InternalAliases            apijson.Field
-	InternalDescription        apijson.Field
-	Motive                     apijson.Field
-	MotiveConfidence           apijson.Field
-	OpsecLevel                 apijson.Field
-	OriginCountryConfidence    apijson.Field
-	OriginCountryISO           apijson.Field
-	OriginCountryISOAlpha3     apijson.Field
-	OriginCountryTLP           apijson.Field
-	Priority                   apijson.Field
-	SophisticationLevel        apijson.Field
-	raw                        string
-	ExtraFields                map[string]apijson.Field
+	UUID                             apijson.Field
+	Value                            apijson.Field
+	ActiveDuration                   apijson.Field
+	ActiveDurationAnnotated          apijson.Field
+	ActorCategory                    apijson.Field
+	ActorCategoryAnnotated           apijson.Field
+	Aliases                          apijson.Field
+	AliasGroupNames                  apijson.Field
+	AliasGroupNamesInternal          apijson.Field
+	AttributionOrganization          apijson.Field
+	AttributionOrganizationAnnotated apijson.Field
+	CategoryName                     apijson.Field
+	CategoryUUID                     apijson.Field
+	Confidence                       apijson.Field
+	CreatedAt                        apijson.Field
+	DateOfDiscovery                  apijson.Field
+	Description                      apijson.Field
+	ExternalReferenceLinks           apijson.Field
+	ExternalReferences               apijson.Field
+	ExternalReferencesAnnotated      apijson.Field
+	InternalAliases                  apijson.Field
+	InternalDescription              apijson.Field
+	LastSeen                         apijson.Field
+	Motive                           apijson.Field
+	MotiveAnnotated                  apijson.Field
+	OpsecLevel                       apijson.Field
+	OpsecLevelAnnotated              apijson.Field
+	OriginCountryISO                 apijson.Field
+	OriginCountryISOAnnotated        apijson.Field
+	Priority                         apijson.Field
+	PriorityAnnotated                apijson.Field
+	Properties                       apijson.Field
+	SophisticationLevel              apijson.Field
+	SophisticationLevelAnnotated     apijson.Field
+	TLP                              apijson.Field
+	UpdatedAt                        apijson.Field
+	Version                          apijson.Field
+	raw                              string
+	ExtraFields                      map[string]apijson.Field
 }
 
 func (r *ThreatEventTagListResponseTag) UnmarshalJSON(data []byte) (err error) {
@@ -452,6 +892,94 @@ func (r *ThreatEventTagListResponseTag) UnmarshalJSON(data []byte) (err error) {
 
 func (r threatEventTagListResponseTagJSON) RawJSON() string {
 	return r.raw
+}
+
+type ThreatEventTagListResponseTagsActiveDurationAnnotated struct {
+	Value string                                                    `json:"value" api:"required"`
+	TLP   ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP  `json:"tlp"`
+	JSON  threatEventTagListResponseTagsActiveDurationAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagListResponseTagsActiveDurationAnnotatedJSON contains the JSON
+// metadata for the struct [ThreatEventTagListResponseTagsActiveDurationAnnotated]
+type threatEventTagListResponseTagsActiveDurationAnnotatedJSON struct {
+	Value       apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagListResponseTagsActiveDurationAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagListResponseTagsActiveDurationAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP string
+
+const (
+	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPRed                  ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "red"
+	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPAmber                ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "amber"
+	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPAmberStrict          ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "amber-strict"
+	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPGreen                ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "green"
+	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPClear                ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "clear"
+	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPPurple               ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPAmberStrictLowercase ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPRed, ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPAmber, ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPGreen, ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPClear, ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPPurple, ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+type ThreatEventTagListResponseTagsActorCategoryAnnotated struct {
+	Value      string                                                   `json:"value" api:"required"`
+	Confidence float64                                                  `json:"confidence"`
+	TLP        ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP  `json:"tlp"`
+	JSON       threatEventTagListResponseTagsActorCategoryAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagListResponseTagsActorCategoryAnnotatedJSON contains the JSON
+// metadata for the struct [ThreatEventTagListResponseTagsActorCategoryAnnotated]
+type threatEventTagListResponseTagsActorCategoryAnnotatedJSON struct {
+	Value       apijson.Field
+	Confidence  apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagListResponseTagsActorCategoryAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagListResponseTagsActorCategoryAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP string
+
+const (
+	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPRed                  ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "red"
+	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPAmber                ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "amber"
+	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPAmberStrict          ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "amber-strict"
+	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPGreen                ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "green"
+	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPClear                ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "clear"
+	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPPurple               ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPAmberStrictLowercase ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPRed, ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPAmber, ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPGreen, ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPClear, ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPPurple, ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
 }
 
 type ThreatEventTagListResponseTagsAlias struct {
@@ -482,15 +1010,64 @@ func (r threatEventTagListResponseTagsAliasJSON) RawJSON() string {
 type ThreatEventTagListResponseTagsAliasesTLP string
 
 const (
-	ThreatEventTagListResponseTagsAliasesTLPRed   ThreatEventTagListResponseTagsAliasesTLP = "red"
-	ThreatEventTagListResponseTagsAliasesTLPAmber ThreatEventTagListResponseTagsAliasesTLP = "amber"
-	ThreatEventTagListResponseTagsAliasesTLPGreen ThreatEventTagListResponseTagsAliasesTLP = "green"
-	ThreatEventTagListResponseTagsAliasesTLPWhite ThreatEventTagListResponseTagsAliasesTLP = "white"
+	ThreatEventTagListResponseTagsAliasesTLPRed                  ThreatEventTagListResponseTagsAliasesTLP = "red"
+	ThreatEventTagListResponseTagsAliasesTLPAmber                ThreatEventTagListResponseTagsAliasesTLP = "amber"
+	ThreatEventTagListResponseTagsAliasesTLPAmberStrict          ThreatEventTagListResponseTagsAliasesTLP = "amber-strict"
+	ThreatEventTagListResponseTagsAliasesTLPGreen                ThreatEventTagListResponseTagsAliasesTLP = "green"
+	ThreatEventTagListResponseTagsAliasesTLPClear                ThreatEventTagListResponseTagsAliasesTLP = "clear"
+	ThreatEventTagListResponseTagsAliasesTLPPurple               ThreatEventTagListResponseTagsAliasesTLP = "purple"
+	ThreatEventTagListResponseTagsAliasesTLPAmberStrictLowercase ThreatEventTagListResponseTagsAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagListResponseTagsAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagListResponseTagsAliasesTLPRed, ThreatEventTagListResponseTagsAliasesTLPAmber, ThreatEventTagListResponseTagsAliasesTLPGreen, ThreatEventTagListResponseTagsAliasesTLPWhite:
+	case ThreatEventTagListResponseTagsAliasesTLPRed, ThreatEventTagListResponseTagsAliasesTLPAmber, ThreatEventTagListResponseTagsAliasesTLPAmberStrict, ThreatEventTagListResponseTagsAliasesTLPGreen, ThreatEventTagListResponseTagsAliasesTLPClear, ThreatEventTagListResponseTagsAliasesTLPPurple, ThreatEventTagListResponseTagsAliasesTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+type ThreatEventTagListResponseTagsAttributionOrganizationAnnotated struct {
+	Value      string                                                             `json:"value" api:"required"`
+	Confidence float64                                                            `json:"confidence"`
+	TLP        ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP  `json:"tlp"`
+	JSON       threatEventTagListResponseTagsAttributionOrganizationAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagListResponseTagsAttributionOrganizationAnnotatedJSON contains the
+// JSON metadata for the struct
+// [ThreatEventTagListResponseTagsAttributionOrganizationAnnotated]
+type threatEventTagListResponseTagsAttributionOrganizationAnnotatedJSON struct {
+	Value       apijson.Field
+	Confidence  apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagListResponseTagsAttributionOrganizationAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagListResponseTagsAttributionOrganizationAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP string
+
+const (
+	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPRed                  ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "red"
+	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPAmber                ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "amber"
+	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPAmberStrict          ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "amber-strict"
+	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPGreen                ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "green"
+	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPClear                ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "clear"
+	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPPurple               ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPAmberStrictLowercase ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPRed, ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPAmber, ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPGreen, ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPClear, ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPPurple, ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -517,6 +1094,50 @@ func (r *ThreatEventTagListResponseTagsExternalReference) UnmarshalJSON(data []b
 
 func (r threatEventTagListResponseTagsExternalReferenceJSON) RawJSON() string {
 	return r.raw
+}
+
+type ThreatEventTagListResponseTagsExternalReferencesAnnotated struct {
+	Value string                                                        `json:"value" api:"required"`
+	TLP   ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP  `json:"tlp"`
+	JSON  threatEventTagListResponseTagsExternalReferencesAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagListResponseTagsExternalReferencesAnnotatedJSON contains the JSON
+// metadata for the struct
+// [ThreatEventTagListResponseTagsExternalReferencesAnnotated]
+type threatEventTagListResponseTagsExternalReferencesAnnotatedJSON struct {
+	Value       apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagListResponseTagsExternalReferencesAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagListResponseTagsExternalReferencesAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP string
+
+const (
+	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPRed                  ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "red"
+	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPAmber                ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "amber"
+	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPAmberStrict          ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "amber-strict"
+	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPGreen                ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "green"
+	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPClear                ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "clear"
+	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPPurple               ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPAmberStrictLowercase ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPRed, ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPAmber, ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPGreen, ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPClear, ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPPurple, ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
 }
 
 type ThreatEventTagListResponseTagsInternalAlias struct {
@@ -547,34 +1168,264 @@ func (r threatEventTagListResponseTagsInternalAliasJSON) RawJSON() string {
 type ThreatEventTagListResponseTagsInternalAliasesTLP string
 
 const (
-	ThreatEventTagListResponseTagsInternalAliasesTLPRed   ThreatEventTagListResponseTagsInternalAliasesTLP = "red"
-	ThreatEventTagListResponseTagsInternalAliasesTLPAmber ThreatEventTagListResponseTagsInternalAliasesTLP = "amber"
-	ThreatEventTagListResponseTagsInternalAliasesTLPGreen ThreatEventTagListResponseTagsInternalAliasesTLP = "green"
-	ThreatEventTagListResponseTagsInternalAliasesTLPWhite ThreatEventTagListResponseTagsInternalAliasesTLP = "white"
+	ThreatEventTagListResponseTagsInternalAliasesTLPRed                  ThreatEventTagListResponseTagsInternalAliasesTLP = "red"
+	ThreatEventTagListResponseTagsInternalAliasesTLPAmber                ThreatEventTagListResponseTagsInternalAliasesTLP = "amber"
+	ThreatEventTagListResponseTagsInternalAliasesTLPAmberStrict          ThreatEventTagListResponseTagsInternalAliasesTLP = "amber-strict"
+	ThreatEventTagListResponseTagsInternalAliasesTLPGreen                ThreatEventTagListResponseTagsInternalAliasesTLP = "green"
+	ThreatEventTagListResponseTagsInternalAliasesTLPClear                ThreatEventTagListResponseTagsInternalAliasesTLP = "clear"
+	ThreatEventTagListResponseTagsInternalAliasesTLPPurple               ThreatEventTagListResponseTagsInternalAliasesTLP = "purple"
+	ThreatEventTagListResponseTagsInternalAliasesTLPAmberStrictLowercase ThreatEventTagListResponseTagsInternalAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagListResponseTagsInternalAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagListResponseTagsInternalAliasesTLPRed, ThreatEventTagListResponseTagsInternalAliasesTLPAmber, ThreatEventTagListResponseTagsInternalAliasesTLPGreen, ThreatEventTagListResponseTagsInternalAliasesTLPWhite:
+	case ThreatEventTagListResponseTagsInternalAliasesTLPRed, ThreatEventTagListResponseTagsInternalAliasesTLPAmber, ThreatEventTagListResponseTagsInternalAliasesTLPAmberStrict, ThreatEventTagListResponseTagsInternalAliasesTLPGreen, ThreatEventTagListResponseTagsInternalAliasesTLPClear, ThreatEventTagListResponseTagsInternalAliasesTLPPurple, ThreatEventTagListResponseTagsInternalAliasesTLPAmberStrictLowercase:
 		return true
 	}
 	return false
 }
 
-// TLP marking for the origin-country attribution. CFONE-only: stripped from
-// responses to non-CFONE accounts.
-type ThreatEventTagListResponseTagsOriginCountryTLP string
+type ThreatEventTagListResponseTagsMotiveAnnotated struct {
+	Value      string                                            `json:"value" api:"required"`
+	Confidence float64                                           `json:"confidence"`
+	TLP        ThreatEventTagListResponseTagsMotiveAnnotatedTLP  `json:"tlp"`
+	JSON       threatEventTagListResponseTagsMotiveAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagListResponseTagsMotiveAnnotatedJSON contains the JSON metadata for
+// the struct [ThreatEventTagListResponseTagsMotiveAnnotated]
+type threatEventTagListResponseTagsMotiveAnnotatedJSON struct {
+	Value       apijson.Field
+	Confidence  apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagListResponseTagsMotiveAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagListResponseTagsMotiveAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagListResponseTagsMotiveAnnotatedTLP string
 
 const (
-	ThreatEventTagListResponseTagsOriginCountryTLPRed   ThreatEventTagListResponseTagsOriginCountryTLP = "red"
-	ThreatEventTagListResponseTagsOriginCountryTLPAmber ThreatEventTagListResponseTagsOriginCountryTLP = "amber"
-	ThreatEventTagListResponseTagsOriginCountryTLPGreen ThreatEventTagListResponseTagsOriginCountryTLP = "green"
-	ThreatEventTagListResponseTagsOriginCountryTLPWhite ThreatEventTagListResponseTagsOriginCountryTLP = "white"
+	ThreatEventTagListResponseTagsMotiveAnnotatedTLPRed                  ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "red"
+	ThreatEventTagListResponseTagsMotiveAnnotatedTLPAmber                ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "amber"
+	ThreatEventTagListResponseTagsMotiveAnnotatedTLPAmberStrict          ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "amber-strict"
+	ThreatEventTagListResponseTagsMotiveAnnotatedTLPGreen                ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "green"
+	ThreatEventTagListResponseTagsMotiveAnnotatedTLPClear                ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "clear"
+	ThreatEventTagListResponseTagsMotiveAnnotatedTLPPurple               ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsMotiveAnnotatedTLPAmberStrictLowercase ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "amber+strict"
 )
 
-func (r ThreatEventTagListResponseTagsOriginCountryTLP) IsKnown() bool {
+func (r ThreatEventTagListResponseTagsMotiveAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagListResponseTagsOriginCountryTLPRed, ThreatEventTagListResponseTagsOriginCountryTLPAmber, ThreatEventTagListResponseTagsOriginCountryTLPGreen, ThreatEventTagListResponseTagsOriginCountryTLPWhite:
+	case ThreatEventTagListResponseTagsMotiveAnnotatedTLPRed, ThreatEventTagListResponseTagsMotiveAnnotatedTLPAmber, ThreatEventTagListResponseTagsMotiveAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsMotiveAnnotatedTLPGreen, ThreatEventTagListResponseTagsMotiveAnnotatedTLPClear, ThreatEventTagListResponseTagsMotiveAnnotatedTLPPurple, ThreatEventTagListResponseTagsMotiveAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+type ThreatEventTagListResponseTagsOpsecLevelAnnotated struct {
+	Value      string                                                `json:"value" api:"required"`
+	Confidence float64                                               `json:"confidence"`
+	TLP        ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP  `json:"tlp"`
+	JSON       threatEventTagListResponseTagsOpsecLevelAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagListResponseTagsOpsecLevelAnnotatedJSON contains the JSON metadata
+// for the struct [ThreatEventTagListResponseTagsOpsecLevelAnnotated]
+type threatEventTagListResponseTagsOpsecLevelAnnotatedJSON struct {
+	Value       apijson.Field
+	Confidence  apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagListResponseTagsOpsecLevelAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagListResponseTagsOpsecLevelAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP string
+
+const (
+	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPRed                  ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "red"
+	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPAmber                ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "amber"
+	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPAmberStrict          ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "amber-strict"
+	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPGreen                ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "green"
+	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPClear                ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "clear"
+	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPPurple               ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPAmberStrictLowercase ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPRed, ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPAmber, ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPGreen, ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPClear, ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPPurple, ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+type ThreatEventTagListResponseTagsOriginCountryISOAnnotated struct {
+	Value      string                                                      `json:"value" api:"required,nullable"`
+	Confidence float64                                                     `json:"confidence"`
+	TLP        ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP  `json:"tlp"`
+	JSON       threatEventTagListResponseTagsOriginCountryISOAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagListResponseTagsOriginCountryISOAnnotatedJSON contains the JSON
+// metadata for the struct
+// [ThreatEventTagListResponseTagsOriginCountryISOAnnotated]
+type threatEventTagListResponseTagsOriginCountryISOAnnotatedJSON struct {
+	Value       apijson.Field
+	Confidence  apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagListResponseTagsOriginCountryISOAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagListResponseTagsOriginCountryISOAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP string
+
+const (
+	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPRed                  ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "red"
+	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPAmber                ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "amber"
+	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPAmberStrict          ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "amber-strict"
+	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPGreen                ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "green"
+	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPClear                ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "clear"
+	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPPurple               ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPAmberStrictLowercase ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPRed, ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPAmber, ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPGreen, ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPClear, ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPPurple, ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+type ThreatEventTagListResponseTagsPriorityAnnotated struct {
+	Value float64                                             `json:"value" api:"required"`
+	TLP   ThreatEventTagListResponseTagsPriorityAnnotatedTLP  `json:"tlp"`
+	JSON  threatEventTagListResponseTagsPriorityAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagListResponseTagsPriorityAnnotatedJSON contains the JSON metadata
+// for the struct [ThreatEventTagListResponseTagsPriorityAnnotated]
+type threatEventTagListResponseTagsPriorityAnnotatedJSON struct {
+	Value       apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagListResponseTagsPriorityAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagListResponseTagsPriorityAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagListResponseTagsPriorityAnnotatedTLP string
+
+const (
+	ThreatEventTagListResponseTagsPriorityAnnotatedTLPRed                  ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "red"
+	ThreatEventTagListResponseTagsPriorityAnnotatedTLPAmber                ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "amber"
+	ThreatEventTagListResponseTagsPriorityAnnotatedTLPAmberStrict          ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "amber-strict"
+	ThreatEventTagListResponseTagsPriorityAnnotatedTLPGreen                ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "green"
+	ThreatEventTagListResponseTagsPriorityAnnotatedTLPClear                ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "clear"
+	ThreatEventTagListResponseTagsPriorityAnnotatedTLPPurple               ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsPriorityAnnotatedTLPAmberStrictLowercase ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagListResponseTagsPriorityAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagListResponseTagsPriorityAnnotatedTLPRed, ThreatEventTagListResponseTagsPriorityAnnotatedTLPAmber, ThreatEventTagListResponseTagsPriorityAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsPriorityAnnotatedTLPGreen, ThreatEventTagListResponseTagsPriorityAnnotatedTLPClear, ThreatEventTagListResponseTagsPriorityAnnotatedTLPPurple, ThreatEventTagListResponseTagsPriorityAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+type ThreatEventTagListResponseTagsSophisticationLevelAnnotated struct {
+	Value      string                                                         `json:"value" api:"required"`
+	Confidence float64                                                        `json:"confidence"`
+	TLP        ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP  `json:"tlp"`
+	JSON       threatEventTagListResponseTagsSophisticationLevelAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagListResponseTagsSophisticationLevelAnnotatedJSON contains the JSON
+// metadata for the struct
+// [ThreatEventTagListResponseTagsSophisticationLevelAnnotated]
+type threatEventTagListResponseTagsSophisticationLevelAnnotatedJSON struct {
+	Value       apijson.Field
+	Confidence  apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagListResponseTagsSophisticationLevelAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagListResponseTagsSophisticationLevelAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP string
+
+const (
+	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPRed                  ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "red"
+	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPAmber                ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "amber"
+	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPAmberStrict          ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "amber-strict"
+	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPGreen                ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "green"
+	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPClear                ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "clear"
+	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPPurple               ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPAmberStrictLowercase ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPRed, ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPAmber, ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPGreen, ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPClear, ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPPurple, ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+// Tag-level TLP handling marking.
+type ThreatEventTagListResponseTagsTLP string
+
+const (
+	ThreatEventTagListResponseTagsTLPRed                  ThreatEventTagListResponseTagsTLP = "red"
+	ThreatEventTagListResponseTagsTLPAmber                ThreatEventTagListResponseTagsTLP = "amber"
+	ThreatEventTagListResponseTagsTLPAmberStrict          ThreatEventTagListResponseTagsTLP = "amber-strict"
+	ThreatEventTagListResponseTagsTLPGreen                ThreatEventTagListResponseTagsTLP = "green"
+	ThreatEventTagListResponseTagsTLPClear                ThreatEventTagListResponseTagsTLP = "clear"
+	ThreatEventTagListResponseTagsTLPPurple               ThreatEventTagListResponseTagsTLP = "purple"
+	ThreatEventTagListResponseTagsTLPAmberStrictLowercase ThreatEventTagListResponseTagsTLP = "amber+strict"
+)
+
+func (r ThreatEventTagListResponseTagsTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagListResponseTagsTLPRed, ThreatEventTagListResponseTagsTLPAmber, ThreatEventTagListResponseTagsTLPAmberStrict, ThreatEventTagListResponseTagsTLPGreen, ThreatEventTagListResponseTagsTLPClear, ThreatEventTagListResponseTagsTLPPurple, ThreatEventTagListResponseTagsTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -602,84 +1453,100 @@ func (r threatEventTagDeleteResponseJSON) RawJSON() string {
 }
 
 type ThreatEventTagEditResponse struct {
-	UUID           string `json:"uuid" api:"required"`
-	Value          string `json:"value" api:"required"`
-	ActiveDuration string `json:"activeDuration"`
-	ActorCategory  string `json:"actorCategory"`
-	// Confidence (1-10) in the actor variety (actorCategory). CFONE-only: stripped
-	// from responses to non-CFONE accounts.
-	ActorCategoryConfidence int64 `json:"actorCategoryConfidence"`
-	// Structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: stripped from
-	// responses to non-CFONE accounts.
-	Aliases                    []ThreatEventTagEditResponseAlias `json:"aliases"`
-	AliasGroupNames            []string                          `json:"aliasGroupNames"`
-	AliasGroupNamesInternal    []string                          `json:"aliasGroupNamesInternal"`
-	AnalyticPriority           float64                           `json:"analyticPriority"`
-	AttributionConfidence      string                            `json:"attributionConfidence"`
-	AttributionConfidenceScore int64                             `json:"attributionConfidenceScore"`
-	AttributionOrganization    string                            `json:"attributionOrganization"`
-	CategoryName               string                            `json:"categoryName"`
-	CategoryUUID               string                            `json:"categoryUuid"`
-	DateOfDiscovery            string                            `json:"dateOfDiscovery"`
-	ExternalReferenceLinks     []string                          `json:"externalReferenceLinks"`
+	UUID                    string                                            `json:"uuid" api:"required"`
+	Value                   string                                            `json:"value" api:"required"`
+	ActiveDuration          string                                            `json:"activeDuration"`
+	ActiveDurationAnnotated ThreatEventTagEditResponseActiveDurationAnnotated `json:"activeDuration_annotated" api:"nullable"`
+	ActorCategory           string                                            `json:"actorCategory"`
+	ActorCategoryAnnotated  ThreatEventTagEditResponseActorCategoryAnnotated  `json:"actorCategory_annotated" api:"nullable"`
+	// Structured aliases ({ value, confidence 1-10, tlp }). Public: returned to all
+	// accounts with per-entry TLP filtering (entries with tlp: purple are removed for
+	// non-CFONE accounts).
+	Aliases                          []ThreatEventTagEditResponseAlias                          `json:"aliases"`
+	AliasGroupNames                  []string                                                   `json:"aliasGroupNames"`
+	AliasGroupNamesInternal          []string                                                   `json:"aliasGroupNamesInternal"`
+	AttributionOrganization          string                                                     `json:"attributionOrganization"`
+	AttributionOrganizationAnnotated ThreatEventTagEditResponseAttributionOrganizationAnnotated `json:"attributionOrganization_annotated" api:"nullable"`
+	CategoryName                     string                                                     `json:"categoryName"`
+	CategoryUUID                     string                                                     `json:"categoryUuid"`
+	// Overall tag confidence (1-10).
+	Confidence             int64    `json:"confidence" api:"nullable"`
+	CreatedAt              string   `json:"createdAt"`
+	DateOfDiscovery        string   `json:"dateOfDiscovery"`
+	Description            string   `json:"description"`
+	ExternalReferenceLinks []string `json:"externalReferenceLinks"`
 	// Structured external references ({ url, description }). Public: returned to all
 	// accounts.
-	ExternalReferences []ThreatEventTagEditResponseExternalReference `json:"externalReferences"`
+	ExternalReferences          []ThreatEventTagEditResponseExternalReference           `json:"externalReferences"`
+	ExternalReferencesAnnotated []ThreatEventTagEditResponseExternalReferencesAnnotated `json:"externalReferences_annotated" api:"nullable"`
 	// Internal structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: never
 	// returned to non-CFONE accounts.
-	InternalAliases     []ThreatEventTagEditResponseInternalAlias `json:"internalAliases"`
-	InternalDescription string                                    `json:"internalDescription"`
-	Motive              string                                    `json:"motive"`
-	// Confidence (1-10) in the actor motive. CFONE-only: stripped from responses to
-	// non-CFONE accounts.
-	MotiveConfidence int64  `json:"motiveConfidence"`
-	OpsecLevel       string `json:"opsecLevel"`
-	// Confidence (1-10) in the origin-country attribution. CFONE-only: stripped from
-	// responses to non-CFONE accounts.
-	OriginCountryConfidence int64  `json:"originCountryConfidence"`
-	OriginCountryISO        string `json:"originCountryISO"`
-	OriginCountryISOAlpha3  string `json:"originCountryISOAlpha3"`
-	// TLP marking for the origin-country attribution. CFONE-only: stripped from
-	// responses to non-CFONE accounts.
-	OriginCountryTLP    ThreatEventTagEditResponseOriginCountryTLP `json:"originCountryTlp"`
-	Priority            float64                                    `json:"priority"`
-	SophisticationLevel string                                     `json:"sophisticationLevel"`
-	JSON                threatEventTagEditResponseJSON             `json:"-"`
+	InternalAliases     []ThreatEventTagEditResponseInternalAlias     `json:"internalAliases"`
+	InternalDescription string                                        `json:"internalDescription"`
+	LastSeen            string                                        `json:"lastSeen"`
+	Motive              string                                        `json:"motive"`
+	MotiveAnnotated     ThreatEventTagEditResponseMotiveAnnotated     `json:"motive_annotated" api:"nullable"`
+	OpsecLevel          string                                        `json:"opsecLevel"`
+	OpsecLevelAnnotated ThreatEventTagEditResponseOpsecLevelAnnotated `json:"opsecLevel_annotated" api:"nullable"`
+	// ISO country code (alpha-2 or alpha-3). Normalized to uppercase on read. Null
+	// when stored value is blank/whitespace.
+	OriginCountryISO          string                                              `json:"originCountryISO" api:"nullable"`
+	OriginCountryISOAnnotated ThreatEventTagEditResponseOriginCountryISOAnnotated `json:"originCountryISO_annotated" api:"nullable"`
+	Priority                  float64                                             `json:"priority"`
+	PriorityAnnotated         ThreatEventTagEditResponsePriorityAnnotated         `json:"priority_annotated" api:"nullable"`
+	// Parsed custom field values. Null when the tag has no custom fields.
+	Properties                   map[string]interface{}                                 `json:"properties" api:"nullable"`
+	SophisticationLevel          string                                                 `json:"sophisticationLevel"`
+	SophisticationLevelAnnotated ThreatEventTagEditResponseSophisticationLevelAnnotated `json:"sophisticationLevel_annotated" api:"nullable"`
+	// Tag-level TLP handling marking.
+	TLP       ThreatEventTagEditResponseTLP  `json:"tlp" api:"nullable"`
+	UpdatedAt string                         `json:"updatedAt"`
+	Version   float64                        `json:"version"`
+	JSON      threatEventTagEditResponseJSON `json:"-"`
 }
 
 // threatEventTagEditResponseJSON contains the JSON metadata for the struct
 // [ThreatEventTagEditResponse]
 type threatEventTagEditResponseJSON struct {
-	UUID                       apijson.Field
-	Value                      apijson.Field
-	ActiveDuration             apijson.Field
-	ActorCategory              apijson.Field
-	ActorCategoryConfidence    apijson.Field
-	Aliases                    apijson.Field
-	AliasGroupNames            apijson.Field
-	AliasGroupNamesInternal    apijson.Field
-	AnalyticPriority           apijson.Field
-	AttributionConfidence      apijson.Field
-	AttributionConfidenceScore apijson.Field
-	AttributionOrganization    apijson.Field
-	CategoryName               apijson.Field
-	CategoryUUID               apijson.Field
-	DateOfDiscovery            apijson.Field
-	ExternalReferenceLinks     apijson.Field
-	ExternalReferences         apijson.Field
-	InternalAliases            apijson.Field
-	InternalDescription        apijson.Field
-	Motive                     apijson.Field
-	MotiveConfidence           apijson.Field
-	OpsecLevel                 apijson.Field
-	OriginCountryConfidence    apijson.Field
-	OriginCountryISO           apijson.Field
-	OriginCountryISOAlpha3     apijson.Field
-	OriginCountryTLP           apijson.Field
-	Priority                   apijson.Field
-	SophisticationLevel        apijson.Field
-	raw                        string
-	ExtraFields                map[string]apijson.Field
+	UUID                             apijson.Field
+	Value                            apijson.Field
+	ActiveDuration                   apijson.Field
+	ActiveDurationAnnotated          apijson.Field
+	ActorCategory                    apijson.Field
+	ActorCategoryAnnotated           apijson.Field
+	Aliases                          apijson.Field
+	AliasGroupNames                  apijson.Field
+	AliasGroupNamesInternal          apijson.Field
+	AttributionOrganization          apijson.Field
+	AttributionOrganizationAnnotated apijson.Field
+	CategoryName                     apijson.Field
+	CategoryUUID                     apijson.Field
+	Confidence                       apijson.Field
+	CreatedAt                        apijson.Field
+	DateOfDiscovery                  apijson.Field
+	Description                      apijson.Field
+	ExternalReferenceLinks           apijson.Field
+	ExternalReferences               apijson.Field
+	ExternalReferencesAnnotated      apijson.Field
+	InternalAliases                  apijson.Field
+	InternalDescription              apijson.Field
+	LastSeen                         apijson.Field
+	Motive                           apijson.Field
+	MotiveAnnotated                  apijson.Field
+	OpsecLevel                       apijson.Field
+	OpsecLevelAnnotated              apijson.Field
+	OriginCountryISO                 apijson.Field
+	OriginCountryISOAnnotated        apijson.Field
+	Priority                         apijson.Field
+	PriorityAnnotated                apijson.Field
+	Properties                       apijson.Field
+	SophisticationLevel              apijson.Field
+	SophisticationLevelAnnotated     apijson.Field
+	TLP                              apijson.Field
+	UpdatedAt                        apijson.Field
+	Version                          apijson.Field
+	raw                              string
+	ExtraFields                      map[string]apijson.Field
 }
 
 func (r *ThreatEventTagEditResponse) UnmarshalJSON(data []byte) (err error) {
@@ -688,6 +1555,94 @@ func (r *ThreatEventTagEditResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r threatEventTagEditResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type ThreatEventTagEditResponseActiveDurationAnnotated struct {
+	Value string                                                `json:"value" api:"required"`
+	TLP   ThreatEventTagEditResponseActiveDurationAnnotatedTLP  `json:"tlp"`
+	JSON  threatEventTagEditResponseActiveDurationAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagEditResponseActiveDurationAnnotatedJSON contains the JSON metadata
+// for the struct [ThreatEventTagEditResponseActiveDurationAnnotated]
+type threatEventTagEditResponseActiveDurationAnnotatedJSON struct {
+	Value       apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagEditResponseActiveDurationAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagEditResponseActiveDurationAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagEditResponseActiveDurationAnnotatedTLP string
+
+const (
+	ThreatEventTagEditResponseActiveDurationAnnotatedTLPRed                  ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "red"
+	ThreatEventTagEditResponseActiveDurationAnnotatedTLPAmber                ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "amber"
+	ThreatEventTagEditResponseActiveDurationAnnotatedTLPAmberStrict          ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "amber-strict"
+	ThreatEventTagEditResponseActiveDurationAnnotatedTLPGreen                ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "green"
+	ThreatEventTagEditResponseActiveDurationAnnotatedTLPClear                ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "clear"
+	ThreatEventTagEditResponseActiveDurationAnnotatedTLPPurple               ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseActiveDurationAnnotatedTLPAmberStrictLowercase ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagEditResponseActiveDurationAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagEditResponseActiveDurationAnnotatedTLPRed, ThreatEventTagEditResponseActiveDurationAnnotatedTLPAmber, ThreatEventTagEditResponseActiveDurationAnnotatedTLPAmberStrict, ThreatEventTagEditResponseActiveDurationAnnotatedTLPGreen, ThreatEventTagEditResponseActiveDurationAnnotatedTLPClear, ThreatEventTagEditResponseActiveDurationAnnotatedTLPPurple, ThreatEventTagEditResponseActiveDurationAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+type ThreatEventTagEditResponseActorCategoryAnnotated struct {
+	Value      string                                               `json:"value" api:"required"`
+	Confidence float64                                              `json:"confidence"`
+	TLP        ThreatEventTagEditResponseActorCategoryAnnotatedTLP  `json:"tlp"`
+	JSON       threatEventTagEditResponseActorCategoryAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagEditResponseActorCategoryAnnotatedJSON contains the JSON metadata
+// for the struct [ThreatEventTagEditResponseActorCategoryAnnotated]
+type threatEventTagEditResponseActorCategoryAnnotatedJSON struct {
+	Value       apijson.Field
+	Confidence  apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagEditResponseActorCategoryAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagEditResponseActorCategoryAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagEditResponseActorCategoryAnnotatedTLP string
+
+const (
+	ThreatEventTagEditResponseActorCategoryAnnotatedTLPRed                  ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "red"
+	ThreatEventTagEditResponseActorCategoryAnnotatedTLPAmber                ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "amber"
+	ThreatEventTagEditResponseActorCategoryAnnotatedTLPAmberStrict          ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "amber-strict"
+	ThreatEventTagEditResponseActorCategoryAnnotatedTLPGreen                ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "green"
+	ThreatEventTagEditResponseActorCategoryAnnotatedTLPClear                ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "clear"
+	ThreatEventTagEditResponseActorCategoryAnnotatedTLPPurple               ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseActorCategoryAnnotatedTLPAmberStrictLowercase ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagEditResponseActorCategoryAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagEditResponseActorCategoryAnnotatedTLPRed, ThreatEventTagEditResponseActorCategoryAnnotatedTLPAmber, ThreatEventTagEditResponseActorCategoryAnnotatedTLPAmberStrict, ThreatEventTagEditResponseActorCategoryAnnotatedTLPGreen, ThreatEventTagEditResponseActorCategoryAnnotatedTLPClear, ThreatEventTagEditResponseActorCategoryAnnotatedTLPPurple, ThreatEventTagEditResponseActorCategoryAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
 }
 
 type ThreatEventTagEditResponseAlias struct {
@@ -718,15 +1673,64 @@ func (r threatEventTagEditResponseAliasJSON) RawJSON() string {
 type ThreatEventTagEditResponseAliasesTLP string
 
 const (
-	ThreatEventTagEditResponseAliasesTLPRed   ThreatEventTagEditResponseAliasesTLP = "red"
-	ThreatEventTagEditResponseAliasesTLPAmber ThreatEventTagEditResponseAliasesTLP = "amber"
-	ThreatEventTagEditResponseAliasesTLPGreen ThreatEventTagEditResponseAliasesTLP = "green"
-	ThreatEventTagEditResponseAliasesTLPWhite ThreatEventTagEditResponseAliasesTLP = "white"
+	ThreatEventTagEditResponseAliasesTLPRed                  ThreatEventTagEditResponseAliasesTLP = "red"
+	ThreatEventTagEditResponseAliasesTLPAmber                ThreatEventTagEditResponseAliasesTLP = "amber"
+	ThreatEventTagEditResponseAliasesTLPAmberStrict          ThreatEventTagEditResponseAliasesTLP = "amber-strict"
+	ThreatEventTagEditResponseAliasesTLPGreen                ThreatEventTagEditResponseAliasesTLP = "green"
+	ThreatEventTagEditResponseAliasesTLPClear                ThreatEventTagEditResponseAliasesTLP = "clear"
+	ThreatEventTagEditResponseAliasesTLPPurple               ThreatEventTagEditResponseAliasesTLP = "purple"
+	ThreatEventTagEditResponseAliasesTLPAmberStrictLowercase ThreatEventTagEditResponseAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditResponseAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditResponseAliasesTLPRed, ThreatEventTagEditResponseAliasesTLPAmber, ThreatEventTagEditResponseAliasesTLPGreen, ThreatEventTagEditResponseAliasesTLPWhite:
+	case ThreatEventTagEditResponseAliasesTLPRed, ThreatEventTagEditResponseAliasesTLPAmber, ThreatEventTagEditResponseAliasesTLPAmberStrict, ThreatEventTagEditResponseAliasesTLPGreen, ThreatEventTagEditResponseAliasesTLPClear, ThreatEventTagEditResponseAliasesTLPPurple, ThreatEventTagEditResponseAliasesTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+type ThreatEventTagEditResponseAttributionOrganizationAnnotated struct {
+	Value      string                                                         `json:"value" api:"required"`
+	Confidence float64                                                        `json:"confidence"`
+	TLP        ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP  `json:"tlp"`
+	JSON       threatEventTagEditResponseAttributionOrganizationAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagEditResponseAttributionOrganizationAnnotatedJSON contains the JSON
+// metadata for the struct
+// [ThreatEventTagEditResponseAttributionOrganizationAnnotated]
+type threatEventTagEditResponseAttributionOrganizationAnnotatedJSON struct {
+	Value       apijson.Field
+	Confidence  apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagEditResponseAttributionOrganizationAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagEditResponseAttributionOrganizationAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP string
+
+const (
+	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPRed                  ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "red"
+	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPAmber                ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "amber"
+	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPAmberStrict          ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "amber-strict"
+	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPGreen                ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "green"
+	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPClear                ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "clear"
+	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPPurple               ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPAmberStrictLowercase ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPRed, ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPAmber, ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPAmberStrict, ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPGreen, ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPClear, ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPPurple, ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -753,6 +1757,49 @@ func (r *ThreatEventTagEditResponseExternalReference) UnmarshalJSON(data []byte)
 
 func (r threatEventTagEditResponseExternalReferenceJSON) RawJSON() string {
 	return r.raw
+}
+
+type ThreatEventTagEditResponseExternalReferencesAnnotated struct {
+	Value string                                                    `json:"value" api:"required"`
+	TLP   ThreatEventTagEditResponseExternalReferencesAnnotatedTLP  `json:"tlp"`
+	JSON  threatEventTagEditResponseExternalReferencesAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagEditResponseExternalReferencesAnnotatedJSON contains the JSON
+// metadata for the struct [ThreatEventTagEditResponseExternalReferencesAnnotated]
+type threatEventTagEditResponseExternalReferencesAnnotatedJSON struct {
+	Value       apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagEditResponseExternalReferencesAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagEditResponseExternalReferencesAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagEditResponseExternalReferencesAnnotatedTLP string
+
+const (
+	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPRed                  ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "red"
+	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPAmber                ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "amber"
+	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPAmberStrict          ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "amber-strict"
+	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPGreen                ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "green"
+	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPClear                ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "clear"
+	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPPurple               ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPAmberStrictLowercase ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagEditResponseExternalReferencesAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagEditResponseExternalReferencesAnnotatedTLPRed, ThreatEventTagEditResponseExternalReferencesAnnotatedTLPAmber, ThreatEventTagEditResponseExternalReferencesAnnotatedTLPAmberStrict, ThreatEventTagEditResponseExternalReferencesAnnotatedTLPGreen, ThreatEventTagEditResponseExternalReferencesAnnotatedTLPClear, ThreatEventTagEditResponseExternalReferencesAnnotatedTLPPurple, ThreatEventTagEditResponseExternalReferencesAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
 }
 
 type ThreatEventTagEditResponseInternalAlias struct {
@@ -783,34 +1830,262 @@ func (r threatEventTagEditResponseInternalAliasJSON) RawJSON() string {
 type ThreatEventTagEditResponseInternalAliasesTLP string
 
 const (
-	ThreatEventTagEditResponseInternalAliasesTLPRed   ThreatEventTagEditResponseInternalAliasesTLP = "red"
-	ThreatEventTagEditResponseInternalAliasesTLPAmber ThreatEventTagEditResponseInternalAliasesTLP = "amber"
-	ThreatEventTagEditResponseInternalAliasesTLPGreen ThreatEventTagEditResponseInternalAliasesTLP = "green"
-	ThreatEventTagEditResponseInternalAliasesTLPWhite ThreatEventTagEditResponseInternalAliasesTLP = "white"
+	ThreatEventTagEditResponseInternalAliasesTLPRed                  ThreatEventTagEditResponseInternalAliasesTLP = "red"
+	ThreatEventTagEditResponseInternalAliasesTLPAmber                ThreatEventTagEditResponseInternalAliasesTLP = "amber"
+	ThreatEventTagEditResponseInternalAliasesTLPAmberStrict          ThreatEventTagEditResponseInternalAliasesTLP = "amber-strict"
+	ThreatEventTagEditResponseInternalAliasesTLPGreen                ThreatEventTagEditResponseInternalAliasesTLP = "green"
+	ThreatEventTagEditResponseInternalAliasesTLPClear                ThreatEventTagEditResponseInternalAliasesTLP = "clear"
+	ThreatEventTagEditResponseInternalAliasesTLPPurple               ThreatEventTagEditResponseInternalAliasesTLP = "purple"
+	ThreatEventTagEditResponseInternalAliasesTLPAmberStrictLowercase ThreatEventTagEditResponseInternalAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditResponseInternalAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditResponseInternalAliasesTLPRed, ThreatEventTagEditResponseInternalAliasesTLPAmber, ThreatEventTagEditResponseInternalAliasesTLPGreen, ThreatEventTagEditResponseInternalAliasesTLPWhite:
+	case ThreatEventTagEditResponseInternalAliasesTLPRed, ThreatEventTagEditResponseInternalAliasesTLPAmber, ThreatEventTagEditResponseInternalAliasesTLPAmberStrict, ThreatEventTagEditResponseInternalAliasesTLPGreen, ThreatEventTagEditResponseInternalAliasesTLPClear, ThreatEventTagEditResponseInternalAliasesTLPPurple, ThreatEventTagEditResponseInternalAliasesTLPAmberStrictLowercase:
 		return true
 	}
 	return false
 }
 
-// TLP marking for the origin-country attribution. CFONE-only: stripped from
-// responses to non-CFONE accounts.
-type ThreatEventTagEditResponseOriginCountryTLP string
+type ThreatEventTagEditResponseMotiveAnnotated struct {
+	Value      string                                        `json:"value" api:"required"`
+	Confidence float64                                       `json:"confidence"`
+	TLP        ThreatEventTagEditResponseMotiveAnnotatedTLP  `json:"tlp"`
+	JSON       threatEventTagEditResponseMotiveAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagEditResponseMotiveAnnotatedJSON contains the JSON metadata for the
+// struct [ThreatEventTagEditResponseMotiveAnnotated]
+type threatEventTagEditResponseMotiveAnnotatedJSON struct {
+	Value       apijson.Field
+	Confidence  apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagEditResponseMotiveAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagEditResponseMotiveAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagEditResponseMotiveAnnotatedTLP string
 
 const (
-	ThreatEventTagEditResponseOriginCountryTLPRed   ThreatEventTagEditResponseOriginCountryTLP = "red"
-	ThreatEventTagEditResponseOriginCountryTLPAmber ThreatEventTagEditResponseOriginCountryTLP = "amber"
-	ThreatEventTagEditResponseOriginCountryTLPGreen ThreatEventTagEditResponseOriginCountryTLP = "green"
-	ThreatEventTagEditResponseOriginCountryTLPWhite ThreatEventTagEditResponseOriginCountryTLP = "white"
+	ThreatEventTagEditResponseMotiveAnnotatedTLPRed                  ThreatEventTagEditResponseMotiveAnnotatedTLP = "red"
+	ThreatEventTagEditResponseMotiveAnnotatedTLPAmber                ThreatEventTagEditResponseMotiveAnnotatedTLP = "amber"
+	ThreatEventTagEditResponseMotiveAnnotatedTLPAmberStrict          ThreatEventTagEditResponseMotiveAnnotatedTLP = "amber-strict"
+	ThreatEventTagEditResponseMotiveAnnotatedTLPGreen                ThreatEventTagEditResponseMotiveAnnotatedTLP = "green"
+	ThreatEventTagEditResponseMotiveAnnotatedTLPClear                ThreatEventTagEditResponseMotiveAnnotatedTLP = "clear"
+	ThreatEventTagEditResponseMotiveAnnotatedTLPPurple               ThreatEventTagEditResponseMotiveAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseMotiveAnnotatedTLPAmberStrictLowercase ThreatEventTagEditResponseMotiveAnnotatedTLP = "amber+strict"
 )
 
-func (r ThreatEventTagEditResponseOriginCountryTLP) IsKnown() bool {
+func (r ThreatEventTagEditResponseMotiveAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditResponseOriginCountryTLPRed, ThreatEventTagEditResponseOriginCountryTLPAmber, ThreatEventTagEditResponseOriginCountryTLPGreen, ThreatEventTagEditResponseOriginCountryTLPWhite:
+	case ThreatEventTagEditResponseMotiveAnnotatedTLPRed, ThreatEventTagEditResponseMotiveAnnotatedTLPAmber, ThreatEventTagEditResponseMotiveAnnotatedTLPAmberStrict, ThreatEventTagEditResponseMotiveAnnotatedTLPGreen, ThreatEventTagEditResponseMotiveAnnotatedTLPClear, ThreatEventTagEditResponseMotiveAnnotatedTLPPurple, ThreatEventTagEditResponseMotiveAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+type ThreatEventTagEditResponseOpsecLevelAnnotated struct {
+	Value      string                                            `json:"value" api:"required"`
+	Confidence float64                                           `json:"confidence"`
+	TLP        ThreatEventTagEditResponseOpsecLevelAnnotatedTLP  `json:"tlp"`
+	JSON       threatEventTagEditResponseOpsecLevelAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagEditResponseOpsecLevelAnnotatedJSON contains the JSON metadata for
+// the struct [ThreatEventTagEditResponseOpsecLevelAnnotated]
+type threatEventTagEditResponseOpsecLevelAnnotatedJSON struct {
+	Value       apijson.Field
+	Confidence  apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagEditResponseOpsecLevelAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagEditResponseOpsecLevelAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagEditResponseOpsecLevelAnnotatedTLP string
+
+const (
+	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPRed                  ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "red"
+	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPAmber                ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "amber"
+	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPAmberStrict          ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "amber-strict"
+	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPGreen                ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "green"
+	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPClear                ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "clear"
+	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPPurple               ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPAmberStrictLowercase ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagEditResponseOpsecLevelAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagEditResponseOpsecLevelAnnotatedTLPRed, ThreatEventTagEditResponseOpsecLevelAnnotatedTLPAmber, ThreatEventTagEditResponseOpsecLevelAnnotatedTLPAmberStrict, ThreatEventTagEditResponseOpsecLevelAnnotatedTLPGreen, ThreatEventTagEditResponseOpsecLevelAnnotatedTLPClear, ThreatEventTagEditResponseOpsecLevelAnnotatedTLPPurple, ThreatEventTagEditResponseOpsecLevelAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+type ThreatEventTagEditResponseOriginCountryISOAnnotated struct {
+	Value      string                                                  `json:"value" api:"required,nullable"`
+	Confidence float64                                                 `json:"confidence"`
+	TLP        ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP  `json:"tlp"`
+	JSON       threatEventTagEditResponseOriginCountryISOAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagEditResponseOriginCountryISOAnnotatedJSON contains the JSON
+// metadata for the struct [ThreatEventTagEditResponseOriginCountryISOAnnotated]
+type threatEventTagEditResponseOriginCountryISOAnnotatedJSON struct {
+	Value       apijson.Field
+	Confidence  apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagEditResponseOriginCountryISOAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagEditResponseOriginCountryISOAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP string
+
+const (
+	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPRed                  ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "red"
+	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPAmber                ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "amber"
+	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPAmberStrict          ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "amber-strict"
+	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPGreen                ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "green"
+	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPClear                ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "clear"
+	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPPurple               ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPAmberStrictLowercase ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPRed, ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPAmber, ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPAmberStrict, ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPGreen, ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPClear, ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPPurple, ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+type ThreatEventTagEditResponsePriorityAnnotated struct {
+	Value float64                                         `json:"value" api:"required"`
+	TLP   ThreatEventTagEditResponsePriorityAnnotatedTLP  `json:"tlp"`
+	JSON  threatEventTagEditResponsePriorityAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagEditResponsePriorityAnnotatedJSON contains the JSON metadata for
+// the struct [ThreatEventTagEditResponsePriorityAnnotated]
+type threatEventTagEditResponsePriorityAnnotatedJSON struct {
+	Value       apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagEditResponsePriorityAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagEditResponsePriorityAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagEditResponsePriorityAnnotatedTLP string
+
+const (
+	ThreatEventTagEditResponsePriorityAnnotatedTLPRed                  ThreatEventTagEditResponsePriorityAnnotatedTLP = "red"
+	ThreatEventTagEditResponsePriorityAnnotatedTLPAmber                ThreatEventTagEditResponsePriorityAnnotatedTLP = "amber"
+	ThreatEventTagEditResponsePriorityAnnotatedTLPAmberStrict          ThreatEventTagEditResponsePriorityAnnotatedTLP = "amber-strict"
+	ThreatEventTagEditResponsePriorityAnnotatedTLPGreen                ThreatEventTagEditResponsePriorityAnnotatedTLP = "green"
+	ThreatEventTagEditResponsePriorityAnnotatedTLPClear                ThreatEventTagEditResponsePriorityAnnotatedTLP = "clear"
+	ThreatEventTagEditResponsePriorityAnnotatedTLPPurple               ThreatEventTagEditResponsePriorityAnnotatedTLP = "purple"
+	ThreatEventTagEditResponsePriorityAnnotatedTLPAmberStrictLowercase ThreatEventTagEditResponsePriorityAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagEditResponsePriorityAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagEditResponsePriorityAnnotatedTLPRed, ThreatEventTagEditResponsePriorityAnnotatedTLPAmber, ThreatEventTagEditResponsePriorityAnnotatedTLPAmberStrict, ThreatEventTagEditResponsePriorityAnnotatedTLPGreen, ThreatEventTagEditResponsePriorityAnnotatedTLPClear, ThreatEventTagEditResponsePriorityAnnotatedTLPPurple, ThreatEventTagEditResponsePriorityAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+type ThreatEventTagEditResponseSophisticationLevelAnnotated struct {
+	Value      string                                                     `json:"value" api:"required"`
+	Confidence float64                                                    `json:"confidence"`
+	TLP        ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP  `json:"tlp"`
+	JSON       threatEventTagEditResponseSophisticationLevelAnnotatedJSON `json:"-"`
+}
+
+// threatEventTagEditResponseSophisticationLevelAnnotatedJSON contains the JSON
+// metadata for the struct [ThreatEventTagEditResponseSophisticationLevelAnnotated]
+type threatEventTagEditResponseSophisticationLevelAnnotatedJSON struct {
+	Value       apijson.Field
+	Confidence  apijson.Field
+	TLP         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatEventTagEditResponseSophisticationLevelAnnotated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventTagEditResponseSophisticationLevelAnnotatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP string
+
+const (
+	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPRed                  ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "red"
+	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPAmber                ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "amber"
+	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPAmberStrict          ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "amber-strict"
+	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPGreen                ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "green"
+	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPClear                ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "clear"
+	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPPurple               ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPAmberStrictLowercase ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "amber+strict"
+)
+
+func (r ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPRed, ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPAmber, ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPAmberStrict, ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPGreen, ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPClear, ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPPurple, ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+// Tag-level TLP handling marking.
+type ThreatEventTagEditResponseTLP string
+
+const (
+	ThreatEventTagEditResponseTLPRed                  ThreatEventTagEditResponseTLP = "red"
+	ThreatEventTagEditResponseTLPAmber                ThreatEventTagEditResponseTLP = "amber"
+	ThreatEventTagEditResponseTLPAmberStrict          ThreatEventTagEditResponseTLP = "amber-strict"
+	ThreatEventTagEditResponseTLPGreen                ThreatEventTagEditResponseTLP = "green"
+	ThreatEventTagEditResponseTLPClear                ThreatEventTagEditResponseTLP = "clear"
+	ThreatEventTagEditResponseTLPPurple               ThreatEventTagEditResponseTLP = "purple"
+	ThreatEventTagEditResponseTLPAmberStrictLowercase ThreatEventTagEditResponseTLP = "amber+strict"
+)
+
+func (r ThreatEventTagEditResponseTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagEditResponseTLPRed, ThreatEventTagEditResponseTLPAmber, ThreatEventTagEditResponseTLPAmberStrict, ThreatEventTagEditResponseTLPGreen, ThreatEventTagEditResponseTLPClear, ThreatEventTagEditResponseTLPPurple, ThreatEventTagEditResponseTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -818,56 +2093,129 @@ func (r ThreatEventTagEditResponseOriginCountryTLP) IsKnown() bool {
 
 type ThreatEventTagNewParams struct {
 	// Account ID.
-	AccountID      param.Field[string] `path:"account_id" api:"required"`
-	Value          param.Field[string] `json:"value" api:"required"`
-	ActiveDuration param.Field[string] `json:"activeDuration"`
-	// Actor variety. Allowed values: Activist, Competitor, Customer, Crime Syndicate,
-	// Former Employee, Nation State, Organized Crime, Nation State Affiliated,
-	// Terrorist, Unaffiliated.
-	ActorCategory param.Field[string] `json:"actorCategory"`
-	// Confidence (1-10) in the actor variety (actorCategory). CFONE-only: stripped
-	// from responses to non-CFONE accounts.
-	ActorCategoryConfidence param.Field[int64] `json:"actorCategoryConfidence"`
-	// Structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: stripped from
-	// responses to non-CFONE accounts.
-	Aliases                    param.Field[[]ThreatEventTagNewParamsAlias] `json:"aliases"`
-	AliasGroupNames            param.Field[[]string]                       `json:"aliasGroupNames"`
-	AliasGroupNamesInternal    param.Field[[]string]                       `json:"aliasGroupNamesInternal"`
-	AnalyticPriority           param.Field[float64]                        `json:"analyticPriority"`
-	AttributionConfidence      param.Field[string]                         `json:"attributionConfidence"`
-	AttributionConfidenceScore param.Field[int64]                          `json:"attributionConfidenceScore"`
-	AttributionOrganization    param.Field[string]                         `json:"attributionOrganization"`
-	CategoryUUID               param.Field[string]                         `json:"categoryUuid"`
-	// Date the actor was discovered (ISO YYYY-MM-DD).
+	AccountID      param.Field[string]                                     `path:"account_id" api:"required"`
+	Value          param.Field[string]                                     `json:"value" api:"required"`
+	ActiveDuration param.Field[ThreatEventTagNewParamsActiveDurationUnion] `json:"activeDuration"`
+	ActorCategory  param.Field[ThreatEventTagNewParamsActorCategoryUnion]  `json:"actorCategory"`
+	// Structured aliases ({ value, confidence 1-10, tlp }). Public: returned to all
+	// accounts with per-entry TLP filtering (entries with tlp: purple are removed for
+	// non-CFONE accounts).
+	Aliases                 param.Field[[]ThreatEventTagNewParamsAlias]                      `json:"aliases"`
+	AliasGroupNames         param.Field[[]string]                                            `json:"aliasGroupNames"`
+	AliasGroupNamesInternal param.Field[[]string]                                            `json:"aliasGroupNamesInternal"`
+	AttributionOrganization param.Field[ThreatEventTagNewParamsAttributionOrganizationUnion] `json:"attributionOrganization"`
+	// Tag type (category) UUID. Optional — when present, `properties` is validated
+	// against this category's schema. When absent, the tag is typeless and properties
+	// are accepted free-form.
+	CategoryUUID param.Field[string] `json:"categoryUuid"`
+	// Overall tag confidence (1-10). Optional.
+	Confidence param.Field[int64] `json:"confidence"`
+	// Date of discovery (ISO YYYY-MM-DD). Optional.
 	DateOfDiscovery        param.Field[string]   `json:"dateOfDiscovery"`
+	Description            param.Field[string]   `json:"description"`
 	ExternalReferenceLinks param.Field[[]string] `json:"externalReferenceLinks"`
 	// Structured external references ({ url, description }). Public: returned to all
 	// accounts.
 	ExternalReferences param.Field[[]ThreatEventTagNewParamsExternalReference] `json:"externalReferences"`
 	// Internal structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: never
 	// returned to non-CFONE accounts.
-	InternalAliases     param.Field[[]ThreatEventTagNewParamsInternalAlias] `json:"internalAliases"`
-	InternalDescription param.Field[string]                                 `json:"internalDescription"`
-	// Actor motive. Allowed values: Convenience, Fear, Fun, Financial, Grudge,
-	// Ideology, Espionage.
-	Motive param.Field[string] `json:"motive"`
-	// Confidence (1-10) in the actor motive. CFONE-only: stripped from responses to
-	// non-CFONE accounts.
-	MotiveConfidence param.Field[int64]  `json:"motiveConfidence"`
-	OpsecLevel       param.Field[string] `json:"opsecLevel"`
-	// Confidence (1-10) in the origin-country attribution. CFONE-only: stripped from
-	// responses to non-CFONE accounts.
-	OriginCountryConfidence param.Field[int64]  `json:"originCountryConfidence"`
-	OriginCountryISO        param.Field[string] `json:"originCountryISO"`
-	// TLP marking for the origin-country attribution. CFONE-only: stripped from
-	// responses to non-CFONE accounts.
-	OriginCountryTLP    param.Field[ThreatEventTagNewParamsOriginCountryTLP] `json:"originCountryTlp"`
-	Priority            param.Field[float64]                                 `json:"priority"`
-	SophisticationLevel param.Field[string]                                  `json:"sophisticationLevel"`
+	InternalAliases     param.Field[[]ThreatEventTagNewParamsInternalAlias]       `json:"internalAliases"`
+	InternalDescription param.Field[string]                                       `json:"internalDescription"`
+	LastSeen            param.Field[string]                                       `json:"lastSeen"`
+	Motive              param.Field[ThreatEventTagNewParamsMotiveUnion]           `json:"motive"`
+	OpsecLevel          param.Field[ThreatEventTagNewParamsOpsecLevelUnion]       `json:"opsecLevel"`
+	OriginCountryISO    param.Field[ThreatEventTagNewParamsOriginCountryISOUnion] `json:"originCountryISO"`
+	Priority            param.Field[ThreatEventTagNewParamsPriorityUnion]         `json:"priority"`
+	// Structured metadata blob. Optional. When `categoryUuid` is given, validated
+	// against this category's schema on write. When typeless, accepted free-form. Use
+	// `{}` for a tag with no custom data.
+	Properties          param.Field[map[string]interface{}]                          `json:"properties"`
+	SophisticationLevel param.Field[ThreatEventTagNewParamsSophisticationLevelUnion] `json:"sophisticationLevel"`
+	// Tag-level TLP handling marking. Optional. Allowed values: red, amber,
+	// amber-strict, green, clear, purple, amber+strict.
+	TLP param.Field[ThreatEventTagNewParamsTLP] `json:"tlp"`
 }
 
 func (r ThreatEventTagNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Satisfied by [shared.UnionString],
+// [cloudforce_one.ThreatEventTagNewParamsActiveDurationObject].
+type ThreatEventTagNewParamsActiveDurationUnion interface {
+	ImplementsThreatEventTagNewParamsActiveDurationUnion()
+}
+
+type ThreatEventTagNewParamsActiveDurationObject struct {
+	Value      param.Field[string]                                         `json:"value" api:"required"`
+	Confidence param.Field[int64]                                          `json:"confidence"`
+	TLP        param.Field[ThreatEventTagNewParamsActiveDurationObjectTLP] `json:"tlp"`
+}
+
+func (r ThreatEventTagNewParamsActiveDurationObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ThreatEventTagNewParamsActiveDurationObject) ImplementsThreatEventTagNewParamsActiveDurationUnion() {
+}
+
+type ThreatEventTagNewParamsActiveDurationObjectTLP string
+
+const (
+	ThreatEventTagNewParamsActiveDurationObjectTLPRed                  ThreatEventTagNewParamsActiveDurationObjectTLP = "red"
+	ThreatEventTagNewParamsActiveDurationObjectTLPAmber                ThreatEventTagNewParamsActiveDurationObjectTLP = "amber"
+	ThreatEventTagNewParamsActiveDurationObjectTLPAmberStrict          ThreatEventTagNewParamsActiveDurationObjectTLP = "amber-strict"
+	ThreatEventTagNewParamsActiveDurationObjectTLPGreen                ThreatEventTagNewParamsActiveDurationObjectTLP = "green"
+	ThreatEventTagNewParamsActiveDurationObjectTLPClear                ThreatEventTagNewParamsActiveDurationObjectTLP = "clear"
+	ThreatEventTagNewParamsActiveDurationObjectTLPPurple               ThreatEventTagNewParamsActiveDurationObjectTLP = "purple"
+	ThreatEventTagNewParamsActiveDurationObjectTLPAmberStrictLowercase ThreatEventTagNewParamsActiveDurationObjectTLP = "amber+strict"
+)
+
+func (r ThreatEventTagNewParamsActiveDurationObjectTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagNewParamsActiveDurationObjectTLPRed, ThreatEventTagNewParamsActiveDurationObjectTLPAmber, ThreatEventTagNewParamsActiveDurationObjectTLPAmberStrict, ThreatEventTagNewParamsActiveDurationObjectTLPGreen, ThreatEventTagNewParamsActiveDurationObjectTLPClear, ThreatEventTagNewParamsActiveDurationObjectTLPPurple, ThreatEventTagNewParamsActiveDurationObjectTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+// Satisfied by [shared.UnionString],
+// [cloudforce_one.ThreatEventTagNewParamsActorCategoryObject].
+type ThreatEventTagNewParamsActorCategoryUnion interface {
+	ImplementsThreatEventTagNewParamsActorCategoryUnion()
+}
+
+type ThreatEventTagNewParamsActorCategoryObject struct {
+	Value      param.Field[string]                                        `json:"value" api:"required"`
+	Confidence param.Field[int64]                                         `json:"confidence"`
+	TLP        param.Field[ThreatEventTagNewParamsActorCategoryObjectTLP] `json:"tlp"`
+}
+
+func (r ThreatEventTagNewParamsActorCategoryObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ThreatEventTagNewParamsActorCategoryObject) ImplementsThreatEventTagNewParamsActorCategoryUnion() {
+}
+
+type ThreatEventTagNewParamsActorCategoryObjectTLP string
+
+const (
+	ThreatEventTagNewParamsActorCategoryObjectTLPRed                  ThreatEventTagNewParamsActorCategoryObjectTLP = "red"
+	ThreatEventTagNewParamsActorCategoryObjectTLPAmber                ThreatEventTagNewParamsActorCategoryObjectTLP = "amber"
+	ThreatEventTagNewParamsActorCategoryObjectTLPAmberStrict          ThreatEventTagNewParamsActorCategoryObjectTLP = "amber-strict"
+	ThreatEventTagNewParamsActorCategoryObjectTLPGreen                ThreatEventTagNewParamsActorCategoryObjectTLP = "green"
+	ThreatEventTagNewParamsActorCategoryObjectTLPClear                ThreatEventTagNewParamsActorCategoryObjectTLP = "clear"
+	ThreatEventTagNewParamsActorCategoryObjectTLPPurple               ThreatEventTagNewParamsActorCategoryObjectTLP = "purple"
+	ThreatEventTagNewParamsActorCategoryObjectTLPAmberStrictLowercase ThreatEventTagNewParamsActorCategoryObjectTLP = "amber+strict"
+)
+
+func (r ThreatEventTagNewParamsActorCategoryObjectTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagNewParamsActorCategoryObjectTLPRed, ThreatEventTagNewParamsActorCategoryObjectTLPAmber, ThreatEventTagNewParamsActorCategoryObjectTLPAmberStrict, ThreatEventTagNewParamsActorCategoryObjectTLPGreen, ThreatEventTagNewParamsActorCategoryObjectTLPClear, ThreatEventTagNewParamsActorCategoryObjectTLPPurple, ThreatEventTagNewParamsActorCategoryObjectTLPAmberStrictLowercase:
+		return true
+	}
+	return false
 }
 
 type ThreatEventTagNewParamsAlias struct {
@@ -883,15 +2231,57 @@ func (r ThreatEventTagNewParamsAlias) MarshalJSON() (data []byte, err error) {
 type ThreatEventTagNewParamsAliasesTLP string
 
 const (
-	ThreatEventTagNewParamsAliasesTLPRed   ThreatEventTagNewParamsAliasesTLP = "red"
-	ThreatEventTagNewParamsAliasesTLPAmber ThreatEventTagNewParamsAliasesTLP = "amber"
-	ThreatEventTagNewParamsAliasesTLPGreen ThreatEventTagNewParamsAliasesTLP = "green"
-	ThreatEventTagNewParamsAliasesTLPWhite ThreatEventTagNewParamsAliasesTLP = "white"
+	ThreatEventTagNewParamsAliasesTLPRed                  ThreatEventTagNewParamsAliasesTLP = "red"
+	ThreatEventTagNewParamsAliasesTLPAmber                ThreatEventTagNewParamsAliasesTLP = "amber"
+	ThreatEventTagNewParamsAliasesTLPAmberStrict          ThreatEventTagNewParamsAliasesTLP = "amber-strict"
+	ThreatEventTagNewParamsAliasesTLPGreen                ThreatEventTagNewParamsAliasesTLP = "green"
+	ThreatEventTagNewParamsAliasesTLPClear                ThreatEventTagNewParamsAliasesTLP = "clear"
+	ThreatEventTagNewParamsAliasesTLPPurple               ThreatEventTagNewParamsAliasesTLP = "purple"
+	ThreatEventTagNewParamsAliasesTLPAmberStrictLowercase ThreatEventTagNewParamsAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewParamsAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewParamsAliasesTLPRed, ThreatEventTagNewParamsAliasesTLPAmber, ThreatEventTagNewParamsAliasesTLPGreen, ThreatEventTagNewParamsAliasesTLPWhite:
+	case ThreatEventTagNewParamsAliasesTLPRed, ThreatEventTagNewParamsAliasesTLPAmber, ThreatEventTagNewParamsAliasesTLPAmberStrict, ThreatEventTagNewParamsAliasesTLPGreen, ThreatEventTagNewParamsAliasesTLPClear, ThreatEventTagNewParamsAliasesTLPPurple, ThreatEventTagNewParamsAliasesTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+// Satisfied by [shared.UnionString],
+// [cloudforce_one.ThreatEventTagNewParamsAttributionOrganizationObject].
+type ThreatEventTagNewParamsAttributionOrganizationUnion interface {
+	ImplementsThreatEventTagNewParamsAttributionOrganizationUnion()
+}
+
+type ThreatEventTagNewParamsAttributionOrganizationObject struct {
+	Value      param.Field[string]                                                  `json:"value" api:"required"`
+	Confidence param.Field[int64]                                                   `json:"confidence"`
+	TLP        param.Field[ThreatEventTagNewParamsAttributionOrganizationObjectTLP] `json:"tlp"`
+}
+
+func (r ThreatEventTagNewParamsAttributionOrganizationObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ThreatEventTagNewParamsAttributionOrganizationObject) ImplementsThreatEventTagNewParamsAttributionOrganizationUnion() {
+}
+
+type ThreatEventTagNewParamsAttributionOrganizationObjectTLP string
+
+const (
+	ThreatEventTagNewParamsAttributionOrganizationObjectTLPRed                  ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "red"
+	ThreatEventTagNewParamsAttributionOrganizationObjectTLPAmber                ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "amber"
+	ThreatEventTagNewParamsAttributionOrganizationObjectTLPAmberStrict          ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "amber-strict"
+	ThreatEventTagNewParamsAttributionOrganizationObjectTLPGreen                ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "green"
+	ThreatEventTagNewParamsAttributionOrganizationObjectTLPClear                ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "clear"
+	ThreatEventTagNewParamsAttributionOrganizationObjectTLPPurple               ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "purple"
+	ThreatEventTagNewParamsAttributionOrganizationObjectTLPAmberStrictLowercase ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "amber+strict"
+)
+
+func (r ThreatEventTagNewParamsAttributionOrganizationObjectTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagNewParamsAttributionOrganizationObjectTLPRed, ThreatEventTagNewParamsAttributionOrganizationObjectTLPAmber, ThreatEventTagNewParamsAttributionOrganizationObjectTLPAmberStrict, ThreatEventTagNewParamsAttributionOrganizationObjectTLPGreen, ThreatEventTagNewParamsAttributionOrganizationObjectTLPClear, ThreatEventTagNewParamsAttributionOrganizationObjectTLPPurple, ThreatEventTagNewParamsAttributionOrganizationObjectTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -919,34 +2309,232 @@ func (r ThreatEventTagNewParamsInternalAlias) MarshalJSON() (data []byte, err er
 type ThreatEventTagNewParamsInternalAliasesTLP string
 
 const (
-	ThreatEventTagNewParamsInternalAliasesTLPRed   ThreatEventTagNewParamsInternalAliasesTLP = "red"
-	ThreatEventTagNewParamsInternalAliasesTLPAmber ThreatEventTagNewParamsInternalAliasesTLP = "amber"
-	ThreatEventTagNewParamsInternalAliasesTLPGreen ThreatEventTagNewParamsInternalAliasesTLP = "green"
-	ThreatEventTagNewParamsInternalAliasesTLPWhite ThreatEventTagNewParamsInternalAliasesTLP = "white"
+	ThreatEventTagNewParamsInternalAliasesTLPRed                  ThreatEventTagNewParamsInternalAliasesTLP = "red"
+	ThreatEventTagNewParamsInternalAliasesTLPAmber                ThreatEventTagNewParamsInternalAliasesTLP = "amber"
+	ThreatEventTagNewParamsInternalAliasesTLPAmberStrict          ThreatEventTagNewParamsInternalAliasesTLP = "amber-strict"
+	ThreatEventTagNewParamsInternalAliasesTLPGreen                ThreatEventTagNewParamsInternalAliasesTLP = "green"
+	ThreatEventTagNewParamsInternalAliasesTLPClear                ThreatEventTagNewParamsInternalAliasesTLP = "clear"
+	ThreatEventTagNewParamsInternalAliasesTLPPurple               ThreatEventTagNewParamsInternalAliasesTLP = "purple"
+	ThreatEventTagNewParamsInternalAliasesTLPAmberStrictLowercase ThreatEventTagNewParamsInternalAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewParamsInternalAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewParamsInternalAliasesTLPRed, ThreatEventTagNewParamsInternalAliasesTLPAmber, ThreatEventTagNewParamsInternalAliasesTLPGreen, ThreatEventTagNewParamsInternalAliasesTLPWhite:
+	case ThreatEventTagNewParamsInternalAliasesTLPRed, ThreatEventTagNewParamsInternalAliasesTLPAmber, ThreatEventTagNewParamsInternalAliasesTLPAmberStrict, ThreatEventTagNewParamsInternalAliasesTLPGreen, ThreatEventTagNewParamsInternalAliasesTLPClear, ThreatEventTagNewParamsInternalAliasesTLPPurple, ThreatEventTagNewParamsInternalAliasesTLPAmberStrictLowercase:
 		return true
 	}
 	return false
 }
 
-// TLP marking for the origin-country attribution. CFONE-only: stripped from
-// responses to non-CFONE accounts.
-type ThreatEventTagNewParamsOriginCountryTLP string
+// Satisfied by [shared.UnionString],
+// [cloudforce_one.ThreatEventTagNewParamsMotiveObject].
+type ThreatEventTagNewParamsMotiveUnion interface {
+	ImplementsThreatEventTagNewParamsMotiveUnion()
+}
+
+type ThreatEventTagNewParamsMotiveObject struct {
+	Value      param.Field[string]                                 `json:"value" api:"required"`
+	Confidence param.Field[int64]                                  `json:"confidence"`
+	TLP        param.Field[ThreatEventTagNewParamsMotiveObjectTLP] `json:"tlp"`
+}
+
+func (r ThreatEventTagNewParamsMotiveObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ThreatEventTagNewParamsMotiveObject) ImplementsThreatEventTagNewParamsMotiveUnion() {}
+
+type ThreatEventTagNewParamsMotiveObjectTLP string
 
 const (
-	ThreatEventTagNewParamsOriginCountryTLPRed   ThreatEventTagNewParamsOriginCountryTLP = "red"
-	ThreatEventTagNewParamsOriginCountryTLPAmber ThreatEventTagNewParamsOriginCountryTLP = "amber"
-	ThreatEventTagNewParamsOriginCountryTLPGreen ThreatEventTagNewParamsOriginCountryTLP = "green"
-	ThreatEventTagNewParamsOriginCountryTLPWhite ThreatEventTagNewParamsOriginCountryTLP = "white"
+	ThreatEventTagNewParamsMotiveObjectTLPRed                  ThreatEventTagNewParamsMotiveObjectTLP = "red"
+	ThreatEventTagNewParamsMotiveObjectTLPAmber                ThreatEventTagNewParamsMotiveObjectTLP = "amber"
+	ThreatEventTagNewParamsMotiveObjectTLPAmberStrict          ThreatEventTagNewParamsMotiveObjectTLP = "amber-strict"
+	ThreatEventTagNewParamsMotiveObjectTLPGreen                ThreatEventTagNewParamsMotiveObjectTLP = "green"
+	ThreatEventTagNewParamsMotiveObjectTLPClear                ThreatEventTagNewParamsMotiveObjectTLP = "clear"
+	ThreatEventTagNewParamsMotiveObjectTLPPurple               ThreatEventTagNewParamsMotiveObjectTLP = "purple"
+	ThreatEventTagNewParamsMotiveObjectTLPAmberStrictLowercase ThreatEventTagNewParamsMotiveObjectTLP = "amber+strict"
 )
 
-func (r ThreatEventTagNewParamsOriginCountryTLP) IsKnown() bool {
+func (r ThreatEventTagNewParamsMotiveObjectTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewParamsOriginCountryTLPRed, ThreatEventTagNewParamsOriginCountryTLPAmber, ThreatEventTagNewParamsOriginCountryTLPGreen, ThreatEventTagNewParamsOriginCountryTLPWhite:
+	case ThreatEventTagNewParamsMotiveObjectTLPRed, ThreatEventTagNewParamsMotiveObjectTLPAmber, ThreatEventTagNewParamsMotiveObjectTLPAmberStrict, ThreatEventTagNewParamsMotiveObjectTLPGreen, ThreatEventTagNewParamsMotiveObjectTLPClear, ThreatEventTagNewParamsMotiveObjectTLPPurple, ThreatEventTagNewParamsMotiveObjectTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+// Satisfied by [shared.UnionString],
+// [cloudforce_one.ThreatEventTagNewParamsOpsecLevelObject].
+type ThreatEventTagNewParamsOpsecLevelUnion interface {
+	ImplementsThreatEventTagNewParamsOpsecLevelUnion()
+}
+
+type ThreatEventTagNewParamsOpsecLevelObject struct {
+	Value      param.Field[string]                                     `json:"value" api:"required"`
+	Confidence param.Field[int64]                                      `json:"confidence"`
+	TLP        param.Field[ThreatEventTagNewParamsOpsecLevelObjectTLP] `json:"tlp"`
+}
+
+func (r ThreatEventTagNewParamsOpsecLevelObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ThreatEventTagNewParamsOpsecLevelObject) ImplementsThreatEventTagNewParamsOpsecLevelUnion() {}
+
+type ThreatEventTagNewParamsOpsecLevelObjectTLP string
+
+const (
+	ThreatEventTagNewParamsOpsecLevelObjectTLPRed                  ThreatEventTagNewParamsOpsecLevelObjectTLP = "red"
+	ThreatEventTagNewParamsOpsecLevelObjectTLPAmber                ThreatEventTagNewParamsOpsecLevelObjectTLP = "amber"
+	ThreatEventTagNewParamsOpsecLevelObjectTLPAmberStrict          ThreatEventTagNewParamsOpsecLevelObjectTLP = "amber-strict"
+	ThreatEventTagNewParamsOpsecLevelObjectTLPGreen                ThreatEventTagNewParamsOpsecLevelObjectTLP = "green"
+	ThreatEventTagNewParamsOpsecLevelObjectTLPClear                ThreatEventTagNewParamsOpsecLevelObjectTLP = "clear"
+	ThreatEventTagNewParamsOpsecLevelObjectTLPPurple               ThreatEventTagNewParamsOpsecLevelObjectTLP = "purple"
+	ThreatEventTagNewParamsOpsecLevelObjectTLPAmberStrictLowercase ThreatEventTagNewParamsOpsecLevelObjectTLP = "amber+strict"
+)
+
+func (r ThreatEventTagNewParamsOpsecLevelObjectTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagNewParamsOpsecLevelObjectTLPRed, ThreatEventTagNewParamsOpsecLevelObjectTLPAmber, ThreatEventTagNewParamsOpsecLevelObjectTLPAmberStrict, ThreatEventTagNewParamsOpsecLevelObjectTLPGreen, ThreatEventTagNewParamsOpsecLevelObjectTLPClear, ThreatEventTagNewParamsOpsecLevelObjectTLPPurple, ThreatEventTagNewParamsOpsecLevelObjectTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+// Satisfied by [shared.UnionString],
+// [cloudforce_one.ThreatEventTagNewParamsOriginCountryISOObject].
+type ThreatEventTagNewParamsOriginCountryISOUnion interface {
+	ImplementsThreatEventTagNewParamsOriginCountryISOUnion()
+}
+
+type ThreatEventTagNewParamsOriginCountryISOObject struct {
+	Value      param.Field[string]                                           `json:"value" api:"required"`
+	Confidence param.Field[int64]                                            `json:"confidence"`
+	TLP        param.Field[ThreatEventTagNewParamsOriginCountryISOObjectTLP] `json:"tlp"`
+}
+
+func (r ThreatEventTagNewParamsOriginCountryISOObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ThreatEventTagNewParamsOriginCountryISOObject) ImplementsThreatEventTagNewParamsOriginCountryISOUnion() {
+}
+
+type ThreatEventTagNewParamsOriginCountryISOObjectTLP string
+
+const (
+	ThreatEventTagNewParamsOriginCountryISOObjectTLPRed                  ThreatEventTagNewParamsOriginCountryISOObjectTLP = "red"
+	ThreatEventTagNewParamsOriginCountryISOObjectTLPAmber                ThreatEventTagNewParamsOriginCountryISOObjectTLP = "amber"
+	ThreatEventTagNewParamsOriginCountryISOObjectTLPAmberStrict          ThreatEventTagNewParamsOriginCountryISOObjectTLP = "amber-strict"
+	ThreatEventTagNewParamsOriginCountryISOObjectTLPGreen                ThreatEventTagNewParamsOriginCountryISOObjectTLP = "green"
+	ThreatEventTagNewParamsOriginCountryISOObjectTLPClear                ThreatEventTagNewParamsOriginCountryISOObjectTLP = "clear"
+	ThreatEventTagNewParamsOriginCountryISOObjectTLPPurple               ThreatEventTagNewParamsOriginCountryISOObjectTLP = "purple"
+	ThreatEventTagNewParamsOriginCountryISOObjectTLPAmberStrictLowercase ThreatEventTagNewParamsOriginCountryISOObjectTLP = "amber+strict"
+)
+
+func (r ThreatEventTagNewParamsOriginCountryISOObjectTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagNewParamsOriginCountryISOObjectTLPRed, ThreatEventTagNewParamsOriginCountryISOObjectTLPAmber, ThreatEventTagNewParamsOriginCountryISOObjectTLPAmberStrict, ThreatEventTagNewParamsOriginCountryISOObjectTLPGreen, ThreatEventTagNewParamsOriginCountryISOObjectTLPClear, ThreatEventTagNewParamsOriginCountryISOObjectTLPPurple, ThreatEventTagNewParamsOriginCountryISOObjectTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+// Satisfied by [shared.UnionFloat],
+// [cloudforce_one.ThreatEventTagNewParamsPriorityObject].
+type ThreatEventTagNewParamsPriorityUnion interface {
+	ImplementsThreatEventTagNewParamsPriorityUnion()
+}
+
+type ThreatEventTagNewParamsPriorityObject struct {
+	Value      param.Field[float64]                                  `json:"value" api:"required"`
+	Confidence param.Field[int64]                                    `json:"confidence"`
+	TLP        param.Field[ThreatEventTagNewParamsPriorityObjectTLP] `json:"tlp"`
+}
+
+func (r ThreatEventTagNewParamsPriorityObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ThreatEventTagNewParamsPriorityObject) ImplementsThreatEventTagNewParamsPriorityUnion() {}
+
+type ThreatEventTagNewParamsPriorityObjectTLP string
+
+const (
+	ThreatEventTagNewParamsPriorityObjectTLPRed                  ThreatEventTagNewParamsPriorityObjectTLP = "red"
+	ThreatEventTagNewParamsPriorityObjectTLPAmber                ThreatEventTagNewParamsPriorityObjectTLP = "amber"
+	ThreatEventTagNewParamsPriorityObjectTLPAmberStrict          ThreatEventTagNewParamsPriorityObjectTLP = "amber-strict"
+	ThreatEventTagNewParamsPriorityObjectTLPGreen                ThreatEventTagNewParamsPriorityObjectTLP = "green"
+	ThreatEventTagNewParamsPriorityObjectTLPClear                ThreatEventTagNewParamsPriorityObjectTLP = "clear"
+	ThreatEventTagNewParamsPriorityObjectTLPPurple               ThreatEventTagNewParamsPriorityObjectTLP = "purple"
+	ThreatEventTagNewParamsPriorityObjectTLPAmberStrictLowercase ThreatEventTagNewParamsPriorityObjectTLP = "amber+strict"
+)
+
+func (r ThreatEventTagNewParamsPriorityObjectTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagNewParamsPriorityObjectTLPRed, ThreatEventTagNewParamsPriorityObjectTLPAmber, ThreatEventTagNewParamsPriorityObjectTLPAmberStrict, ThreatEventTagNewParamsPriorityObjectTLPGreen, ThreatEventTagNewParamsPriorityObjectTLPClear, ThreatEventTagNewParamsPriorityObjectTLPPurple, ThreatEventTagNewParamsPriorityObjectTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+// Satisfied by [shared.UnionString],
+// [cloudforce_one.ThreatEventTagNewParamsSophisticationLevelObject].
+type ThreatEventTagNewParamsSophisticationLevelUnion interface {
+	ImplementsThreatEventTagNewParamsSophisticationLevelUnion()
+}
+
+type ThreatEventTagNewParamsSophisticationLevelObject struct {
+	Value      param.Field[string]                                              `json:"value" api:"required"`
+	Confidence param.Field[int64]                                               `json:"confidence"`
+	TLP        param.Field[ThreatEventTagNewParamsSophisticationLevelObjectTLP] `json:"tlp"`
+}
+
+func (r ThreatEventTagNewParamsSophisticationLevelObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ThreatEventTagNewParamsSophisticationLevelObject) ImplementsThreatEventTagNewParamsSophisticationLevelUnion() {
+}
+
+type ThreatEventTagNewParamsSophisticationLevelObjectTLP string
+
+const (
+	ThreatEventTagNewParamsSophisticationLevelObjectTLPRed                  ThreatEventTagNewParamsSophisticationLevelObjectTLP = "red"
+	ThreatEventTagNewParamsSophisticationLevelObjectTLPAmber                ThreatEventTagNewParamsSophisticationLevelObjectTLP = "amber"
+	ThreatEventTagNewParamsSophisticationLevelObjectTLPAmberStrict          ThreatEventTagNewParamsSophisticationLevelObjectTLP = "amber-strict"
+	ThreatEventTagNewParamsSophisticationLevelObjectTLPGreen                ThreatEventTagNewParamsSophisticationLevelObjectTLP = "green"
+	ThreatEventTagNewParamsSophisticationLevelObjectTLPClear                ThreatEventTagNewParamsSophisticationLevelObjectTLP = "clear"
+	ThreatEventTagNewParamsSophisticationLevelObjectTLPPurple               ThreatEventTagNewParamsSophisticationLevelObjectTLP = "purple"
+	ThreatEventTagNewParamsSophisticationLevelObjectTLPAmberStrictLowercase ThreatEventTagNewParamsSophisticationLevelObjectTLP = "amber+strict"
+)
+
+func (r ThreatEventTagNewParamsSophisticationLevelObjectTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagNewParamsSophisticationLevelObjectTLPRed, ThreatEventTagNewParamsSophisticationLevelObjectTLPAmber, ThreatEventTagNewParamsSophisticationLevelObjectTLPAmberStrict, ThreatEventTagNewParamsSophisticationLevelObjectTLPGreen, ThreatEventTagNewParamsSophisticationLevelObjectTLPClear, ThreatEventTagNewParamsSophisticationLevelObjectTLPPurple, ThreatEventTagNewParamsSophisticationLevelObjectTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+// Tag-level TLP handling marking. Optional. Allowed values: red, amber,
+// amber-strict, green, clear, purple, amber+strict.
+type ThreatEventTagNewParamsTLP string
+
+const (
+	ThreatEventTagNewParamsTLPRed                  ThreatEventTagNewParamsTLP = "red"
+	ThreatEventTagNewParamsTLPAmber                ThreatEventTagNewParamsTLP = "amber"
+	ThreatEventTagNewParamsTLPAmberStrict          ThreatEventTagNewParamsTLP = "amber-strict"
+	ThreatEventTagNewParamsTLPGreen                ThreatEventTagNewParamsTLP = "green"
+	ThreatEventTagNewParamsTLPClear                ThreatEventTagNewParamsTLP = "clear"
+	ThreatEventTagNewParamsTLPPurple               ThreatEventTagNewParamsTLP = "purple"
+	ThreatEventTagNewParamsTLPAmberStrictLowercase ThreatEventTagNewParamsTLP = "amber+strict"
+)
+
+func (r ThreatEventTagNewParamsTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagNewParamsTLPRed, ThreatEventTagNewParamsTLPAmber, ThreatEventTagNewParamsTLPAmberStrict, ThreatEventTagNewParamsTLPGreen, ThreatEventTagNewParamsTLPClear, ThreatEventTagNewParamsTLPPurple, ThreatEventTagNewParamsTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -960,12 +2548,12 @@ type ThreatEventTagListParams struct {
 	Cache        param.Field[ThreatEventTagListParamsCache] `query:"cache"`
 	CategoryUUID param.Field[string]                        `query:"categoryUuid"`
 	// Structured filters as a JSON array of {field, op, value} objects. Searchable
-	// fields: uuid, value, actorCategory, actorCategoryConfidence, aliasGroupNames,
-	// attributionConfidence, attributionConfidenceScore, attributionOrganization,
-	// categoryName, motive, motiveConfidence, opsecLevel, originCountryISO,
-	// originCountryConfidence, sophisticationLevel, priority, analyticPriority.
-	// Operators: equals, not, contains, startsWith, endsWith, gt, lt, gte, lte, like,
-	// in, find. Use 'in' for bulk OR within a single field, e.g.
+	// fields: uuid, value, categoryName, description, dateOfDiscovery, tlp,
+	// confidence, actorCategory, motive, attributionOrganization, originCountryISO,
+	// aliases, externalReferences, opsecLevel, sophisticationLevel, activeDuration,
+	// priority, lastSeen, aliasGroupNames. Operators: equals, not, contains,
+	// startsWith, endsWith, gt, lt, gte, lte, like, in, find. Use 'in' for bulk OR
+	// within a single field, e.g.
 	// filters=[{"field":"originCountryISO","op":"in","value":["IR","CN"]}]. Multiple
 	// entries are AND-joined. Max 10 entries per request, max 100 values per 'in'.
 	// Per-field notes: `uuid` accepts only 'equals' and 'in' (other operators throw
@@ -982,7 +2570,11 @@ type ThreatEventTagListParams struct {
 	Filters  param.Field[[]ThreatEventTagListParamsFilter] `query:"filters"`
 	Page     param.Field[float64]                          `query:"page"`
 	PageSize param.Field[float64]                          `query:"pageSize"`
-	// Legacy free-text substring match on tag value.
+	// Free-text substring match on tag value AND custom-field properties. Searches
+	// case-insensitively inside both `Tag.value` and the serialized `Tag.properties`
+	// JSON blob (keys, values, and annotation metadata like confidence/tlp are all
+	// searchable). Same serialized-text tradeoff as `aliasGroupNames` — substrings can
+	// cross JSON boundaries.
 	Search param.Field[string] `query:"search"`
 }
 
@@ -1012,18 +2604,19 @@ func (r ThreatEventTagListParamsCache) IsKnown() bool {
 }
 
 type ThreatEventTagListParamsFilter struct {
-	// Tag field to search on. Allowed: uuid, value, actorCategory,
-	// actorCategoryConfidence, aliasGroupNames, attributionConfidence,
-	// attributionConfidenceScore, attributionOrganization, categoryName, motive,
-	// motiveConfidence, opsecLevel, originCountryISO, originCountryConfidence,
-	// sophisticationLevel, priority, analyticPriority.
-	Field param.Field[ThreatEventTagListParamsFiltersField] `query:"field" api:"required"`
-	// Search operator. Use 'in' for bulk OR within a single field, e.g.
-	// {field:"originCountryISO", op:"in", value:["IR","CN"]}.
+	// Tag field to search on. Allowed first-class fields: uuid, value, categoryName,
+	// description, dateOfDiscovery, tlp, confidence, actorCategory, motive,
+	// attributionOrganization, originCountryISO, aliases, externalReferences,
+	// opsecLevel, sophisticationLevel, activeDuration, priority, lastSeen,
+	// aliasGroupNames. Also supports properties.<key> to filter on custom field values
+	// (matches both raw values and annotated {value,confidence,tlp} shapes via
+	// COALESCE), and properties.<key>.tlp / properties.<key>.confidence to filter
+	// directly on annotation sub-fields.
+	Field param.Field[string] `query:"field" api:"required"`
+	// Search operator. Use 'in' for bulk OR within a single field.
 	Op param.Field[ThreatEventTagListParamsFiltersOp] `query:"op" api:"required"`
 	// Search value. String or number for most operators. Array for 'in' (max 100
-	// items). Country values may be passed as alpha-2, alpha-3, name, or common alias
-	// (e.g. 'iran', 'IR', 'IRN') and are normalized to alpha-2 server-side.
+	// items).
 	Value param.Field[ThreatEventTagListParamsFiltersValueUnion] `query:"value"`
 }
 
@@ -1036,43 +2629,7 @@ func (r ThreatEventTagListParamsFilter) URLQuery() (v url.Values) {
 	})
 }
 
-// Tag field to search on. Allowed: uuid, value, actorCategory,
-// actorCategoryConfidence, aliasGroupNames, attributionConfidence,
-// attributionConfidenceScore, attributionOrganization, categoryName, motive,
-// motiveConfidence, opsecLevel, originCountryISO, originCountryConfidence,
-// sophisticationLevel, priority, analyticPriority.
-type ThreatEventTagListParamsFiltersField string
-
-const (
-	ThreatEventTagListParamsFiltersFieldUUID                       ThreatEventTagListParamsFiltersField = "uuid"
-	ThreatEventTagListParamsFiltersFieldValue                      ThreatEventTagListParamsFiltersField = "value"
-	ThreatEventTagListParamsFiltersFieldActorCategory              ThreatEventTagListParamsFiltersField = "actorCategory"
-	ThreatEventTagListParamsFiltersFieldActorCategoryConfidence    ThreatEventTagListParamsFiltersField = "actorCategoryConfidence"
-	ThreatEventTagListParamsFiltersFieldAliasGroupNames            ThreatEventTagListParamsFiltersField = "aliasGroupNames"
-	ThreatEventTagListParamsFiltersFieldAttributionConfidence      ThreatEventTagListParamsFiltersField = "attributionConfidence"
-	ThreatEventTagListParamsFiltersFieldAttributionConfidenceScore ThreatEventTagListParamsFiltersField = "attributionConfidenceScore"
-	ThreatEventTagListParamsFiltersFieldAttributionOrganization    ThreatEventTagListParamsFiltersField = "attributionOrganization"
-	ThreatEventTagListParamsFiltersFieldCategoryName               ThreatEventTagListParamsFiltersField = "categoryName"
-	ThreatEventTagListParamsFiltersFieldMotive                     ThreatEventTagListParamsFiltersField = "motive"
-	ThreatEventTagListParamsFiltersFieldMotiveConfidence           ThreatEventTagListParamsFiltersField = "motiveConfidence"
-	ThreatEventTagListParamsFiltersFieldOpsecLevel                 ThreatEventTagListParamsFiltersField = "opsecLevel"
-	ThreatEventTagListParamsFiltersFieldOriginCountryISO           ThreatEventTagListParamsFiltersField = "originCountryISO"
-	ThreatEventTagListParamsFiltersFieldOriginCountryConfidence    ThreatEventTagListParamsFiltersField = "originCountryConfidence"
-	ThreatEventTagListParamsFiltersFieldSophisticationLevel        ThreatEventTagListParamsFiltersField = "sophisticationLevel"
-	ThreatEventTagListParamsFiltersFieldPriority                   ThreatEventTagListParamsFiltersField = "priority"
-	ThreatEventTagListParamsFiltersFieldAnalyticPriority           ThreatEventTagListParamsFiltersField = "analyticPriority"
-)
-
-func (r ThreatEventTagListParamsFiltersField) IsKnown() bool {
-	switch r {
-	case ThreatEventTagListParamsFiltersFieldUUID, ThreatEventTagListParamsFiltersFieldValue, ThreatEventTagListParamsFiltersFieldActorCategory, ThreatEventTagListParamsFiltersFieldActorCategoryConfidence, ThreatEventTagListParamsFiltersFieldAliasGroupNames, ThreatEventTagListParamsFiltersFieldAttributionConfidence, ThreatEventTagListParamsFiltersFieldAttributionConfidenceScore, ThreatEventTagListParamsFiltersFieldAttributionOrganization, ThreatEventTagListParamsFiltersFieldCategoryName, ThreatEventTagListParamsFiltersFieldMotive, ThreatEventTagListParamsFiltersFieldMotiveConfidence, ThreatEventTagListParamsFiltersFieldOpsecLevel, ThreatEventTagListParamsFiltersFieldOriginCountryISO, ThreatEventTagListParamsFiltersFieldOriginCountryConfidence, ThreatEventTagListParamsFiltersFieldSophisticationLevel, ThreatEventTagListParamsFiltersFieldPriority, ThreatEventTagListParamsFiltersFieldAnalyticPriority:
-		return true
-	}
-	return false
-}
-
-// Search operator. Use 'in' for bulk OR within a single field, e.g.
-// {field:"originCountryISO", op:"in", value:["IR","CN"]}.
+// Search operator. Use 'in' for bulk OR within a single field.
 type ThreatEventTagListParamsFiltersOp string
 
 const (
@@ -1099,8 +2656,7 @@ func (r ThreatEventTagListParamsFiltersOp) IsKnown() bool {
 }
 
 // Search value. String or number for most operators. Array for 'in' (max 100
-// items). Country values may be passed as alpha-2, alpha-3, name, or common alias
-// (e.g. 'iran', 'IR', 'IRN') and are normalized to alpha-2 server-side.
+// items).
 //
 // Satisfied by [shared.UnionString], [shared.UnionFloat],
 // [cloudforce_one.ThreatEventTagListParamsFiltersValueArray].
@@ -1125,56 +2681,130 @@ type ThreatEventTagDeleteParams struct {
 
 type ThreatEventTagEditParams struct {
 	// Account ID.
-	AccountID      param.Field[string] `path:"account_id" api:"required"`
-	ActiveDuration param.Field[string] `json:"activeDuration"`
-	// Actor variety. Allowed values: Activist, Competitor, Customer, Crime Syndicate,
-	// Former Employee, Nation State, Organized Crime, Nation State Affiliated,
-	// Terrorist, Unaffiliated.
-	ActorCategory param.Field[string] `json:"actorCategory"`
-	// Confidence (1-10) in the actor variety (actorCategory). CFONE-only: stripped
-	// from responses to non-CFONE accounts.
-	ActorCategoryConfidence param.Field[int64] `json:"actorCategoryConfidence"`
-	// Structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: stripped from
-	// responses to non-CFONE accounts.
-	Aliases                    param.Field[[]ThreatEventTagEditParamsAlias] `json:"aliases"`
-	AliasGroupNames            param.Field[[]string]                        `json:"aliasGroupNames"`
-	AliasGroupNamesInternal    param.Field[[]string]                        `json:"aliasGroupNamesInternal"`
-	AnalyticPriority           param.Field[float64]                         `json:"analyticPriority"`
-	AttributionConfidence      param.Field[string]                          `json:"attributionConfidence"`
-	AttributionConfidenceScore param.Field[int64]                           `json:"attributionConfidenceScore"`
-	AttributionOrganization    param.Field[string]                          `json:"attributionOrganization"`
-	CategoryUUID               param.Field[string]                          `json:"categoryUuid"`
-	// Date the actor was discovered (ISO YYYY-MM-DD).
+	AccountID      param.Field[string]                                      `path:"account_id" api:"required"`
+	ActiveDuration param.Field[ThreatEventTagEditParamsActiveDurationUnion] `json:"activeDuration"`
+	ActorCategory  param.Field[ThreatEventTagEditParamsActorCategoryUnion]  `json:"actorCategory"`
+	// Structured aliases ({ value, confidence 1-10, tlp }). Public: returned to all
+	// accounts with per-entry TLP filtering (entries with tlp: purple are removed for
+	// non-CFONE accounts).
+	Aliases                 param.Field[[]ThreatEventTagEditParamsAlias]                      `json:"aliases"`
+	AliasGroupNames         param.Field[[]string]                                             `json:"aliasGroupNames"`
+	AliasGroupNamesInternal param.Field[[]string]                                             `json:"aliasGroupNamesInternal"`
+	AttributionOrganization param.Field[ThreatEventTagEditParamsAttributionOrganizationUnion] `json:"attributionOrganization"`
+	// Tag type (category) UUID. When changed, existing `properties` are re-validated
+	// against the new category's schema (400 on mismatch). Set to null to unlink
+	// (typeless; properties stop being validated).
+	CategoryUUID param.Field[string] `json:"categoryUuid"`
+	// Overall tag confidence (1-10). Omit to preserve existing.
+	Confidence param.Field[int64] `json:"confidence"`
+	// Date of discovery (ISO YYYY-MM-DD). Omit to preserve existing.
 	DateOfDiscovery        param.Field[string]   `json:"dateOfDiscovery"`
+	Description            param.Field[string]   `json:"description"`
 	ExternalReferenceLinks param.Field[[]string] `json:"externalReferenceLinks"`
 	// Structured external references ({ url, description }). Public: returned to all
 	// accounts.
 	ExternalReferences param.Field[[]ThreatEventTagEditParamsExternalReference] `json:"externalReferences"`
 	// Internal structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: never
 	// returned to non-CFONE accounts.
-	InternalAliases     param.Field[[]ThreatEventTagEditParamsInternalAlias] `json:"internalAliases"`
-	InternalDescription param.Field[string]                                  `json:"internalDescription"`
-	// Actor motive. Allowed values: Convenience, Fear, Fun, Financial, Grudge,
-	// Ideology, Espionage.
-	Motive param.Field[string] `json:"motive"`
-	// Confidence (1-10) in the actor motive. CFONE-only: stripped from responses to
-	// non-CFONE accounts.
-	MotiveConfidence param.Field[int64]  `json:"motiveConfidence"`
-	OpsecLevel       param.Field[string] `json:"opsecLevel"`
-	// Confidence (1-10) in the origin-country attribution. CFONE-only: stripped from
-	// responses to non-CFONE accounts.
-	OriginCountryConfidence param.Field[int64]  `json:"originCountryConfidence"`
-	OriginCountryISO        param.Field[string] `json:"originCountryISO"`
-	// TLP marking for the origin-country attribution. CFONE-only: stripped from
-	// responses to non-CFONE accounts.
-	OriginCountryTLP    param.Field[ThreatEventTagEditParamsOriginCountryTLP] `json:"originCountryTlp"`
-	Priority            param.Field[float64]                                  `json:"priority"`
-	SophisticationLevel param.Field[string]                                   `json:"sophisticationLevel"`
-	Value               param.Field[string]                                   `json:"value"`
+	InternalAliases     param.Field[[]ThreatEventTagEditParamsInternalAlias]       `json:"internalAliases"`
+	InternalDescription param.Field[string]                                        `json:"internalDescription"`
+	LastSeen            param.Field[string]                                        `json:"lastSeen"`
+	Motive              param.Field[ThreatEventTagEditParamsMotiveUnion]           `json:"motive"`
+	OpsecLevel          param.Field[ThreatEventTagEditParamsOpsecLevelUnion]       `json:"opsecLevel"`
+	OriginCountryISO    param.Field[ThreatEventTagEditParamsOriginCountryISOUnion] `json:"originCountryISO"`
+	Priority            param.Field[ThreatEventTagEditParamsPriorityUnion]         `json:"priority"`
+	// Custom field values blob. When omitted, the existing value is preserved. When
+	// provided, performs a shallow per-key merge over the stored value (unmentioned
+	// keys are retained). Setting an individual key to null deletes that key.
+	// Validation runs against the merged result, so a partial update may omit a
+	// schema-required key if the stored value supplies it.
+	Properties          param.Field[map[string]interface{}]                           `json:"properties"`
+	SophisticationLevel param.Field[ThreatEventTagEditParamsSophisticationLevelUnion] `json:"sophisticationLevel"`
+	// Tag-level TLP marking. Omit to preserve existing. Cannot be cleared to null.
+	TLP   param.Field[ThreatEventTagEditParamsTLP] `json:"tlp"`
+	Value param.Field[string]                      `json:"value"`
 }
 
 func (r ThreatEventTagEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Satisfied by [shared.UnionString],
+// [cloudforce_one.ThreatEventTagEditParamsActiveDurationObject].
+type ThreatEventTagEditParamsActiveDurationUnion interface {
+	ImplementsThreatEventTagEditParamsActiveDurationUnion()
+}
+
+type ThreatEventTagEditParamsActiveDurationObject struct {
+	Value      param.Field[string]                                          `json:"value" api:"required"`
+	Confidence param.Field[int64]                                           `json:"confidence"`
+	TLP        param.Field[ThreatEventTagEditParamsActiveDurationObjectTLP] `json:"tlp"`
+}
+
+func (r ThreatEventTagEditParamsActiveDurationObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ThreatEventTagEditParamsActiveDurationObject) ImplementsThreatEventTagEditParamsActiveDurationUnion() {
+}
+
+type ThreatEventTagEditParamsActiveDurationObjectTLP string
+
+const (
+	ThreatEventTagEditParamsActiveDurationObjectTLPRed                  ThreatEventTagEditParamsActiveDurationObjectTLP = "red"
+	ThreatEventTagEditParamsActiveDurationObjectTLPAmber                ThreatEventTagEditParamsActiveDurationObjectTLP = "amber"
+	ThreatEventTagEditParamsActiveDurationObjectTLPAmberStrict          ThreatEventTagEditParamsActiveDurationObjectTLP = "amber-strict"
+	ThreatEventTagEditParamsActiveDurationObjectTLPGreen                ThreatEventTagEditParamsActiveDurationObjectTLP = "green"
+	ThreatEventTagEditParamsActiveDurationObjectTLPClear                ThreatEventTagEditParamsActiveDurationObjectTLP = "clear"
+	ThreatEventTagEditParamsActiveDurationObjectTLPPurple               ThreatEventTagEditParamsActiveDurationObjectTLP = "purple"
+	ThreatEventTagEditParamsActiveDurationObjectTLPAmberStrictLowercase ThreatEventTagEditParamsActiveDurationObjectTLP = "amber+strict"
+)
+
+func (r ThreatEventTagEditParamsActiveDurationObjectTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagEditParamsActiveDurationObjectTLPRed, ThreatEventTagEditParamsActiveDurationObjectTLPAmber, ThreatEventTagEditParamsActiveDurationObjectTLPAmberStrict, ThreatEventTagEditParamsActiveDurationObjectTLPGreen, ThreatEventTagEditParamsActiveDurationObjectTLPClear, ThreatEventTagEditParamsActiveDurationObjectTLPPurple, ThreatEventTagEditParamsActiveDurationObjectTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+// Satisfied by [shared.UnionString],
+// [cloudforce_one.ThreatEventTagEditParamsActorCategoryObject].
+type ThreatEventTagEditParamsActorCategoryUnion interface {
+	ImplementsThreatEventTagEditParamsActorCategoryUnion()
+}
+
+type ThreatEventTagEditParamsActorCategoryObject struct {
+	Value      param.Field[string]                                         `json:"value" api:"required"`
+	Confidence param.Field[int64]                                          `json:"confidence"`
+	TLP        param.Field[ThreatEventTagEditParamsActorCategoryObjectTLP] `json:"tlp"`
+}
+
+func (r ThreatEventTagEditParamsActorCategoryObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ThreatEventTagEditParamsActorCategoryObject) ImplementsThreatEventTagEditParamsActorCategoryUnion() {
+}
+
+type ThreatEventTagEditParamsActorCategoryObjectTLP string
+
+const (
+	ThreatEventTagEditParamsActorCategoryObjectTLPRed                  ThreatEventTagEditParamsActorCategoryObjectTLP = "red"
+	ThreatEventTagEditParamsActorCategoryObjectTLPAmber                ThreatEventTagEditParamsActorCategoryObjectTLP = "amber"
+	ThreatEventTagEditParamsActorCategoryObjectTLPAmberStrict          ThreatEventTagEditParamsActorCategoryObjectTLP = "amber-strict"
+	ThreatEventTagEditParamsActorCategoryObjectTLPGreen                ThreatEventTagEditParamsActorCategoryObjectTLP = "green"
+	ThreatEventTagEditParamsActorCategoryObjectTLPClear                ThreatEventTagEditParamsActorCategoryObjectTLP = "clear"
+	ThreatEventTagEditParamsActorCategoryObjectTLPPurple               ThreatEventTagEditParamsActorCategoryObjectTLP = "purple"
+	ThreatEventTagEditParamsActorCategoryObjectTLPAmberStrictLowercase ThreatEventTagEditParamsActorCategoryObjectTLP = "amber+strict"
+)
+
+func (r ThreatEventTagEditParamsActorCategoryObjectTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagEditParamsActorCategoryObjectTLPRed, ThreatEventTagEditParamsActorCategoryObjectTLPAmber, ThreatEventTagEditParamsActorCategoryObjectTLPAmberStrict, ThreatEventTagEditParamsActorCategoryObjectTLPGreen, ThreatEventTagEditParamsActorCategoryObjectTLPClear, ThreatEventTagEditParamsActorCategoryObjectTLPPurple, ThreatEventTagEditParamsActorCategoryObjectTLPAmberStrictLowercase:
+		return true
+	}
+	return false
 }
 
 type ThreatEventTagEditParamsAlias struct {
@@ -1190,15 +2820,57 @@ func (r ThreatEventTagEditParamsAlias) MarshalJSON() (data []byte, err error) {
 type ThreatEventTagEditParamsAliasesTLP string
 
 const (
-	ThreatEventTagEditParamsAliasesTLPRed   ThreatEventTagEditParamsAliasesTLP = "red"
-	ThreatEventTagEditParamsAliasesTLPAmber ThreatEventTagEditParamsAliasesTLP = "amber"
-	ThreatEventTagEditParamsAliasesTLPGreen ThreatEventTagEditParamsAliasesTLP = "green"
-	ThreatEventTagEditParamsAliasesTLPWhite ThreatEventTagEditParamsAliasesTLP = "white"
+	ThreatEventTagEditParamsAliasesTLPRed                  ThreatEventTagEditParamsAliasesTLP = "red"
+	ThreatEventTagEditParamsAliasesTLPAmber                ThreatEventTagEditParamsAliasesTLP = "amber"
+	ThreatEventTagEditParamsAliasesTLPAmberStrict          ThreatEventTagEditParamsAliasesTLP = "amber-strict"
+	ThreatEventTagEditParamsAliasesTLPGreen                ThreatEventTagEditParamsAliasesTLP = "green"
+	ThreatEventTagEditParamsAliasesTLPClear                ThreatEventTagEditParamsAliasesTLP = "clear"
+	ThreatEventTagEditParamsAliasesTLPPurple               ThreatEventTagEditParamsAliasesTLP = "purple"
+	ThreatEventTagEditParamsAliasesTLPAmberStrictLowercase ThreatEventTagEditParamsAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditParamsAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditParamsAliasesTLPRed, ThreatEventTagEditParamsAliasesTLPAmber, ThreatEventTagEditParamsAliasesTLPGreen, ThreatEventTagEditParamsAliasesTLPWhite:
+	case ThreatEventTagEditParamsAliasesTLPRed, ThreatEventTagEditParamsAliasesTLPAmber, ThreatEventTagEditParamsAliasesTLPAmberStrict, ThreatEventTagEditParamsAliasesTLPGreen, ThreatEventTagEditParamsAliasesTLPClear, ThreatEventTagEditParamsAliasesTLPPurple, ThreatEventTagEditParamsAliasesTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+// Satisfied by [shared.UnionString],
+// [cloudforce_one.ThreatEventTagEditParamsAttributionOrganizationObject].
+type ThreatEventTagEditParamsAttributionOrganizationUnion interface {
+	ImplementsThreatEventTagEditParamsAttributionOrganizationUnion()
+}
+
+type ThreatEventTagEditParamsAttributionOrganizationObject struct {
+	Value      param.Field[string]                                                   `json:"value" api:"required"`
+	Confidence param.Field[int64]                                                    `json:"confidence"`
+	TLP        param.Field[ThreatEventTagEditParamsAttributionOrganizationObjectTLP] `json:"tlp"`
+}
+
+func (r ThreatEventTagEditParamsAttributionOrganizationObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ThreatEventTagEditParamsAttributionOrganizationObject) ImplementsThreatEventTagEditParamsAttributionOrganizationUnion() {
+}
+
+type ThreatEventTagEditParamsAttributionOrganizationObjectTLP string
+
+const (
+	ThreatEventTagEditParamsAttributionOrganizationObjectTLPRed                  ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "red"
+	ThreatEventTagEditParamsAttributionOrganizationObjectTLPAmber                ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "amber"
+	ThreatEventTagEditParamsAttributionOrganizationObjectTLPAmberStrict          ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "amber-strict"
+	ThreatEventTagEditParamsAttributionOrganizationObjectTLPGreen                ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "green"
+	ThreatEventTagEditParamsAttributionOrganizationObjectTLPClear                ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "clear"
+	ThreatEventTagEditParamsAttributionOrganizationObjectTLPPurple               ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "purple"
+	ThreatEventTagEditParamsAttributionOrganizationObjectTLPAmberStrictLowercase ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "amber+strict"
+)
+
+func (r ThreatEventTagEditParamsAttributionOrganizationObjectTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagEditParamsAttributionOrganizationObjectTLPRed, ThreatEventTagEditParamsAttributionOrganizationObjectTLPAmber, ThreatEventTagEditParamsAttributionOrganizationObjectTLPAmberStrict, ThreatEventTagEditParamsAttributionOrganizationObjectTLPGreen, ThreatEventTagEditParamsAttributionOrganizationObjectTLPClear, ThreatEventTagEditParamsAttributionOrganizationObjectTLPPurple, ThreatEventTagEditParamsAttributionOrganizationObjectTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1226,34 +2898,232 @@ func (r ThreatEventTagEditParamsInternalAlias) MarshalJSON() (data []byte, err e
 type ThreatEventTagEditParamsInternalAliasesTLP string
 
 const (
-	ThreatEventTagEditParamsInternalAliasesTLPRed   ThreatEventTagEditParamsInternalAliasesTLP = "red"
-	ThreatEventTagEditParamsInternalAliasesTLPAmber ThreatEventTagEditParamsInternalAliasesTLP = "amber"
-	ThreatEventTagEditParamsInternalAliasesTLPGreen ThreatEventTagEditParamsInternalAliasesTLP = "green"
-	ThreatEventTagEditParamsInternalAliasesTLPWhite ThreatEventTagEditParamsInternalAliasesTLP = "white"
+	ThreatEventTagEditParamsInternalAliasesTLPRed                  ThreatEventTagEditParamsInternalAliasesTLP = "red"
+	ThreatEventTagEditParamsInternalAliasesTLPAmber                ThreatEventTagEditParamsInternalAliasesTLP = "amber"
+	ThreatEventTagEditParamsInternalAliasesTLPAmberStrict          ThreatEventTagEditParamsInternalAliasesTLP = "amber-strict"
+	ThreatEventTagEditParamsInternalAliasesTLPGreen                ThreatEventTagEditParamsInternalAliasesTLP = "green"
+	ThreatEventTagEditParamsInternalAliasesTLPClear                ThreatEventTagEditParamsInternalAliasesTLP = "clear"
+	ThreatEventTagEditParamsInternalAliasesTLPPurple               ThreatEventTagEditParamsInternalAliasesTLP = "purple"
+	ThreatEventTagEditParamsInternalAliasesTLPAmberStrictLowercase ThreatEventTagEditParamsInternalAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditParamsInternalAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditParamsInternalAliasesTLPRed, ThreatEventTagEditParamsInternalAliasesTLPAmber, ThreatEventTagEditParamsInternalAliasesTLPGreen, ThreatEventTagEditParamsInternalAliasesTLPWhite:
+	case ThreatEventTagEditParamsInternalAliasesTLPRed, ThreatEventTagEditParamsInternalAliasesTLPAmber, ThreatEventTagEditParamsInternalAliasesTLPAmberStrict, ThreatEventTagEditParamsInternalAliasesTLPGreen, ThreatEventTagEditParamsInternalAliasesTLPClear, ThreatEventTagEditParamsInternalAliasesTLPPurple, ThreatEventTagEditParamsInternalAliasesTLPAmberStrictLowercase:
 		return true
 	}
 	return false
 }
 
-// TLP marking for the origin-country attribution. CFONE-only: stripped from
-// responses to non-CFONE accounts.
-type ThreatEventTagEditParamsOriginCountryTLP string
+// Satisfied by [shared.UnionString],
+// [cloudforce_one.ThreatEventTagEditParamsMotiveObject].
+type ThreatEventTagEditParamsMotiveUnion interface {
+	ImplementsThreatEventTagEditParamsMotiveUnion()
+}
+
+type ThreatEventTagEditParamsMotiveObject struct {
+	Value      param.Field[string]                                  `json:"value" api:"required"`
+	Confidence param.Field[int64]                                   `json:"confidence"`
+	TLP        param.Field[ThreatEventTagEditParamsMotiveObjectTLP] `json:"tlp"`
+}
+
+func (r ThreatEventTagEditParamsMotiveObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ThreatEventTagEditParamsMotiveObject) ImplementsThreatEventTagEditParamsMotiveUnion() {}
+
+type ThreatEventTagEditParamsMotiveObjectTLP string
 
 const (
-	ThreatEventTagEditParamsOriginCountryTLPRed   ThreatEventTagEditParamsOriginCountryTLP = "red"
-	ThreatEventTagEditParamsOriginCountryTLPAmber ThreatEventTagEditParamsOriginCountryTLP = "amber"
-	ThreatEventTagEditParamsOriginCountryTLPGreen ThreatEventTagEditParamsOriginCountryTLP = "green"
-	ThreatEventTagEditParamsOriginCountryTLPWhite ThreatEventTagEditParamsOriginCountryTLP = "white"
+	ThreatEventTagEditParamsMotiveObjectTLPRed                  ThreatEventTagEditParamsMotiveObjectTLP = "red"
+	ThreatEventTagEditParamsMotiveObjectTLPAmber                ThreatEventTagEditParamsMotiveObjectTLP = "amber"
+	ThreatEventTagEditParamsMotiveObjectTLPAmberStrict          ThreatEventTagEditParamsMotiveObjectTLP = "amber-strict"
+	ThreatEventTagEditParamsMotiveObjectTLPGreen                ThreatEventTagEditParamsMotiveObjectTLP = "green"
+	ThreatEventTagEditParamsMotiveObjectTLPClear                ThreatEventTagEditParamsMotiveObjectTLP = "clear"
+	ThreatEventTagEditParamsMotiveObjectTLPPurple               ThreatEventTagEditParamsMotiveObjectTLP = "purple"
+	ThreatEventTagEditParamsMotiveObjectTLPAmberStrictLowercase ThreatEventTagEditParamsMotiveObjectTLP = "amber+strict"
 )
 
-func (r ThreatEventTagEditParamsOriginCountryTLP) IsKnown() bool {
+func (r ThreatEventTagEditParamsMotiveObjectTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditParamsOriginCountryTLPRed, ThreatEventTagEditParamsOriginCountryTLPAmber, ThreatEventTagEditParamsOriginCountryTLPGreen, ThreatEventTagEditParamsOriginCountryTLPWhite:
+	case ThreatEventTagEditParamsMotiveObjectTLPRed, ThreatEventTagEditParamsMotiveObjectTLPAmber, ThreatEventTagEditParamsMotiveObjectTLPAmberStrict, ThreatEventTagEditParamsMotiveObjectTLPGreen, ThreatEventTagEditParamsMotiveObjectTLPClear, ThreatEventTagEditParamsMotiveObjectTLPPurple, ThreatEventTagEditParamsMotiveObjectTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+// Satisfied by [shared.UnionString],
+// [cloudforce_one.ThreatEventTagEditParamsOpsecLevelObject].
+type ThreatEventTagEditParamsOpsecLevelUnion interface {
+	ImplementsThreatEventTagEditParamsOpsecLevelUnion()
+}
+
+type ThreatEventTagEditParamsOpsecLevelObject struct {
+	Value      param.Field[string]                                      `json:"value" api:"required"`
+	Confidence param.Field[int64]                                       `json:"confidence"`
+	TLP        param.Field[ThreatEventTagEditParamsOpsecLevelObjectTLP] `json:"tlp"`
+}
+
+func (r ThreatEventTagEditParamsOpsecLevelObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ThreatEventTagEditParamsOpsecLevelObject) ImplementsThreatEventTagEditParamsOpsecLevelUnion() {
+}
+
+type ThreatEventTagEditParamsOpsecLevelObjectTLP string
+
+const (
+	ThreatEventTagEditParamsOpsecLevelObjectTLPRed                  ThreatEventTagEditParamsOpsecLevelObjectTLP = "red"
+	ThreatEventTagEditParamsOpsecLevelObjectTLPAmber                ThreatEventTagEditParamsOpsecLevelObjectTLP = "amber"
+	ThreatEventTagEditParamsOpsecLevelObjectTLPAmberStrict          ThreatEventTagEditParamsOpsecLevelObjectTLP = "amber-strict"
+	ThreatEventTagEditParamsOpsecLevelObjectTLPGreen                ThreatEventTagEditParamsOpsecLevelObjectTLP = "green"
+	ThreatEventTagEditParamsOpsecLevelObjectTLPClear                ThreatEventTagEditParamsOpsecLevelObjectTLP = "clear"
+	ThreatEventTagEditParamsOpsecLevelObjectTLPPurple               ThreatEventTagEditParamsOpsecLevelObjectTLP = "purple"
+	ThreatEventTagEditParamsOpsecLevelObjectTLPAmberStrictLowercase ThreatEventTagEditParamsOpsecLevelObjectTLP = "amber+strict"
+)
+
+func (r ThreatEventTagEditParamsOpsecLevelObjectTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagEditParamsOpsecLevelObjectTLPRed, ThreatEventTagEditParamsOpsecLevelObjectTLPAmber, ThreatEventTagEditParamsOpsecLevelObjectTLPAmberStrict, ThreatEventTagEditParamsOpsecLevelObjectTLPGreen, ThreatEventTagEditParamsOpsecLevelObjectTLPClear, ThreatEventTagEditParamsOpsecLevelObjectTLPPurple, ThreatEventTagEditParamsOpsecLevelObjectTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+// Satisfied by [shared.UnionString],
+// [cloudforce_one.ThreatEventTagEditParamsOriginCountryISOObject].
+type ThreatEventTagEditParamsOriginCountryISOUnion interface {
+	ImplementsThreatEventTagEditParamsOriginCountryISOUnion()
+}
+
+type ThreatEventTagEditParamsOriginCountryISOObject struct {
+	Value      param.Field[string]                                            `json:"value" api:"required"`
+	Confidence param.Field[int64]                                             `json:"confidence"`
+	TLP        param.Field[ThreatEventTagEditParamsOriginCountryISOObjectTLP] `json:"tlp"`
+}
+
+func (r ThreatEventTagEditParamsOriginCountryISOObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ThreatEventTagEditParamsOriginCountryISOObject) ImplementsThreatEventTagEditParamsOriginCountryISOUnion() {
+}
+
+type ThreatEventTagEditParamsOriginCountryISOObjectTLP string
+
+const (
+	ThreatEventTagEditParamsOriginCountryISOObjectTLPRed                  ThreatEventTagEditParamsOriginCountryISOObjectTLP = "red"
+	ThreatEventTagEditParamsOriginCountryISOObjectTLPAmber                ThreatEventTagEditParamsOriginCountryISOObjectTLP = "amber"
+	ThreatEventTagEditParamsOriginCountryISOObjectTLPAmberStrict          ThreatEventTagEditParamsOriginCountryISOObjectTLP = "amber-strict"
+	ThreatEventTagEditParamsOriginCountryISOObjectTLPGreen                ThreatEventTagEditParamsOriginCountryISOObjectTLP = "green"
+	ThreatEventTagEditParamsOriginCountryISOObjectTLPClear                ThreatEventTagEditParamsOriginCountryISOObjectTLP = "clear"
+	ThreatEventTagEditParamsOriginCountryISOObjectTLPPurple               ThreatEventTagEditParamsOriginCountryISOObjectTLP = "purple"
+	ThreatEventTagEditParamsOriginCountryISOObjectTLPAmberStrictLowercase ThreatEventTagEditParamsOriginCountryISOObjectTLP = "amber+strict"
+)
+
+func (r ThreatEventTagEditParamsOriginCountryISOObjectTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagEditParamsOriginCountryISOObjectTLPRed, ThreatEventTagEditParamsOriginCountryISOObjectTLPAmber, ThreatEventTagEditParamsOriginCountryISOObjectTLPAmberStrict, ThreatEventTagEditParamsOriginCountryISOObjectTLPGreen, ThreatEventTagEditParamsOriginCountryISOObjectTLPClear, ThreatEventTagEditParamsOriginCountryISOObjectTLPPurple, ThreatEventTagEditParamsOriginCountryISOObjectTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+// Satisfied by [shared.UnionFloat],
+// [cloudforce_one.ThreatEventTagEditParamsPriorityObject].
+type ThreatEventTagEditParamsPriorityUnion interface {
+	ImplementsThreatEventTagEditParamsPriorityUnion()
+}
+
+type ThreatEventTagEditParamsPriorityObject struct {
+	Value      param.Field[float64]                                   `json:"value" api:"required"`
+	Confidence param.Field[int64]                                     `json:"confidence"`
+	TLP        param.Field[ThreatEventTagEditParamsPriorityObjectTLP] `json:"tlp"`
+}
+
+func (r ThreatEventTagEditParamsPriorityObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ThreatEventTagEditParamsPriorityObject) ImplementsThreatEventTagEditParamsPriorityUnion() {}
+
+type ThreatEventTagEditParamsPriorityObjectTLP string
+
+const (
+	ThreatEventTagEditParamsPriorityObjectTLPRed                  ThreatEventTagEditParamsPriorityObjectTLP = "red"
+	ThreatEventTagEditParamsPriorityObjectTLPAmber                ThreatEventTagEditParamsPriorityObjectTLP = "amber"
+	ThreatEventTagEditParamsPriorityObjectTLPAmberStrict          ThreatEventTagEditParamsPriorityObjectTLP = "amber-strict"
+	ThreatEventTagEditParamsPriorityObjectTLPGreen                ThreatEventTagEditParamsPriorityObjectTLP = "green"
+	ThreatEventTagEditParamsPriorityObjectTLPClear                ThreatEventTagEditParamsPriorityObjectTLP = "clear"
+	ThreatEventTagEditParamsPriorityObjectTLPPurple               ThreatEventTagEditParamsPriorityObjectTLP = "purple"
+	ThreatEventTagEditParamsPriorityObjectTLPAmberStrictLowercase ThreatEventTagEditParamsPriorityObjectTLP = "amber+strict"
+)
+
+func (r ThreatEventTagEditParamsPriorityObjectTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagEditParamsPriorityObjectTLPRed, ThreatEventTagEditParamsPriorityObjectTLPAmber, ThreatEventTagEditParamsPriorityObjectTLPAmberStrict, ThreatEventTagEditParamsPriorityObjectTLPGreen, ThreatEventTagEditParamsPriorityObjectTLPClear, ThreatEventTagEditParamsPriorityObjectTLPPurple, ThreatEventTagEditParamsPriorityObjectTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+// Satisfied by [shared.UnionString],
+// [cloudforce_one.ThreatEventTagEditParamsSophisticationLevelObject].
+type ThreatEventTagEditParamsSophisticationLevelUnion interface {
+	ImplementsThreatEventTagEditParamsSophisticationLevelUnion()
+}
+
+type ThreatEventTagEditParamsSophisticationLevelObject struct {
+	Value      param.Field[string]                                               `json:"value" api:"required"`
+	Confidence param.Field[int64]                                                `json:"confidence"`
+	TLP        param.Field[ThreatEventTagEditParamsSophisticationLevelObjectTLP] `json:"tlp"`
+}
+
+func (r ThreatEventTagEditParamsSophisticationLevelObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ThreatEventTagEditParamsSophisticationLevelObject) ImplementsThreatEventTagEditParamsSophisticationLevelUnion() {
+}
+
+type ThreatEventTagEditParamsSophisticationLevelObjectTLP string
+
+const (
+	ThreatEventTagEditParamsSophisticationLevelObjectTLPRed                  ThreatEventTagEditParamsSophisticationLevelObjectTLP = "red"
+	ThreatEventTagEditParamsSophisticationLevelObjectTLPAmber                ThreatEventTagEditParamsSophisticationLevelObjectTLP = "amber"
+	ThreatEventTagEditParamsSophisticationLevelObjectTLPAmberStrict          ThreatEventTagEditParamsSophisticationLevelObjectTLP = "amber-strict"
+	ThreatEventTagEditParamsSophisticationLevelObjectTLPGreen                ThreatEventTagEditParamsSophisticationLevelObjectTLP = "green"
+	ThreatEventTagEditParamsSophisticationLevelObjectTLPClear                ThreatEventTagEditParamsSophisticationLevelObjectTLP = "clear"
+	ThreatEventTagEditParamsSophisticationLevelObjectTLPPurple               ThreatEventTagEditParamsSophisticationLevelObjectTLP = "purple"
+	ThreatEventTagEditParamsSophisticationLevelObjectTLPAmberStrictLowercase ThreatEventTagEditParamsSophisticationLevelObjectTLP = "amber+strict"
+)
+
+func (r ThreatEventTagEditParamsSophisticationLevelObjectTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagEditParamsSophisticationLevelObjectTLPRed, ThreatEventTagEditParamsSophisticationLevelObjectTLPAmber, ThreatEventTagEditParamsSophisticationLevelObjectTLPAmberStrict, ThreatEventTagEditParamsSophisticationLevelObjectTLPGreen, ThreatEventTagEditParamsSophisticationLevelObjectTLPClear, ThreatEventTagEditParamsSophisticationLevelObjectTLPPurple, ThreatEventTagEditParamsSophisticationLevelObjectTLPAmberStrictLowercase:
+		return true
+	}
+	return false
+}
+
+// Tag-level TLP marking. Omit to preserve existing. Cannot be cleared to null.
+type ThreatEventTagEditParamsTLP string
+
+const (
+	ThreatEventTagEditParamsTLPRed                  ThreatEventTagEditParamsTLP = "red"
+	ThreatEventTagEditParamsTLPAmber                ThreatEventTagEditParamsTLP = "amber"
+	ThreatEventTagEditParamsTLPAmberStrict          ThreatEventTagEditParamsTLP = "amber-strict"
+	ThreatEventTagEditParamsTLPGreen                ThreatEventTagEditParamsTLP = "green"
+	ThreatEventTagEditParamsTLPClear                ThreatEventTagEditParamsTLP = "clear"
+	ThreatEventTagEditParamsTLPPurple               ThreatEventTagEditParamsTLP = "purple"
+	ThreatEventTagEditParamsTLPAmberStrictLowercase ThreatEventTagEditParamsTLP = "amber+strict"
+)
+
+func (r ThreatEventTagEditParamsTLP) IsKnown() bool {
+	switch r {
+	case ThreatEventTagEditParamsTLPRed, ThreatEventTagEditParamsTLPAmber, ThreatEventTagEditParamsTLPAmberStrict, ThreatEventTagEditParamsTLPGreen, ThreatEventTagEditParamsTLPClear, ThreatEventTagEditParamsTLPPurple, ThreatEventTagEditParamsTLPAmberStrictLowercase:
 		return true
 	}
 	return false

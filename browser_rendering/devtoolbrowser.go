@@ -24,9 +24,10 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDevtoolBrowserService] method instead.
 type DevtoolBrowserService struct {
-	Options []option.RequestOption
-	Page    *DevtoolBrowserPageService
-	Targets *DevtoolBrowserTargetService
+	Options  []option.RequestOption
+	LiveView *DevtoolBrowserLiveViewService
+	Page     *DevtoolBrowserPageService
+	Targets  *DevtoolBrowserTargetService
 }
 
 // NewDevtoolBrowserService generates a new service that applies the given options
@@ -35,6 +36,7 @@ type DevtoolBrowserService struct {
 func NewDevtoolBrowserService(opts ...option.RequestOption) (r *DevtoolBrowserService) {
 	r = &DevtoolBrowserService{}
 	r.Options = opts
+	r.LiveView = NewDevtoolBrowserLiveViewService(opts...)
 	r.Page = NewDevtoolBrowserPageService(opts...)
 	r.Targets = NewDevtoolBrowserTargetService(opts...)
 	return
@@ -71,6 +73,9 @@ func (r *DevtoolBrowserService) Delete(ctx context.Context, sessionID string, bo
 
 // Establishes a WebSocket connection to an existing browser session.
 func (r *DevtoolBrowserService) Connect(ctx context.Context, sessionID string, params DevtoolBrowserConnectParams, opts ...option.RequestOption) (err error) {
+	if params.CfBrapiGuardrails.Present {
+		opts = append(opts, option.WithHeader("cf-brapi-guardrails", fmt.Sprintf("%v", params.CfBrapiGuardrails)))
+	}
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.AccountID.Value == "" {
@@ -380,6 +385,8 @@ type DevtoolBrowserConnectParams struct {
 	// Use experimental browser.
 	Lab       param.Field[bool] `query:"lab"`
 	Recording param.Field[bool] `query:"recording"`
+	// Optional base64url-encoded JSON connection guardrails (mode)
+	CfBrapiGuardrails param.Field[string] `header:"cf-brapi-guardrails"`
 }
 
 // URLQuery serializes [DevtoolBrowserConnectParams]'s query parameters as

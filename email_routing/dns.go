@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
@@ -16,8 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
-	"github.com/tidwall/gjson"
 )
 
 // DNSService contains methods and other services that help with interacting with
@@ -58,31 +55,20 @@ func (r *DNSService) New(ctx context.Context, params DNSNewParams, opts ...optio
 
 // Disable your Email Routing zone. Also removes additional MX records previously
 // required for Email Routing to work.
-func (r *DNSService) Delete(ctx context.Context, body DNSDeleteParams, opts ...option.RequestOption) (res *pagination.SinglePage[DNSRecord], err error) {
-	var raw *http.Response
+func (r *DNSService) Delete(ctx context.Context, body DNSDeleteParams, opts ...option.RequestOption) (res *Settings, err error) {
+	var env DNSDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/routing/dns", body.ZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodDelete, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
+	res = &env.Result
 	return res, nil
-}
-
-// Disable your Email Routing zone. Also removes additional MX records previously
-// required for Email Routing to work.
-func (r *DNSService) DeleteAutoPaging(ctx context.Context, body DNSDeleteParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DNSRecord] {
-	return pagination.NewSinglePageAutoPager(r.Delete(ctx, body, opts...))
 }
 
 // Unlock MX Records previously locked by Email Routing.
@@ -103,15 +89,20 @@ func (r *DNSService) Edit(ctx context.Context, params DNSEditParams, opts ...opt
 }
 
 // Show the DNS records needed to configure your Email Routing zone.
-func (r *DNSService) Get(ctx context.Context, params DNSGetParams, opts ...option.RequestOption) (res *DNSGetResponse, err error) {
+func (r *DNSService) Get(ctx context.Context, params DNSGetParams, opts ...option.RequestOption) (res *[]DNSRecord, err error) {
+	var env DNSGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/email/routing/dns", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return res, err
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
 }
 
 // List of records needed to enable an Email Routing zone.
@@ -193,507 +184,6 @@ const (
 func (r DNSRecordType) IsKnown() bool {
 	switch r {
 	case DNSRecordTypeA, DNSRecordTypeAAAA, DNSRecordTypeCNAME, DNSRecordTypeHTTPS, DNSRecordTypeTXT, DNSRecordTypeSRV, DNSRecordTypeLOC, DNSRecordTypeMX, DNSRecordTypeNS, DNSRecordTypeCERT, DNSRecordTypeDNSKEY, DNSRecordTypeDS, DNSRecordTypeNAPTR, DNSRecordTypeSMIMEA, DNSRecordTypeSSHFP, DNSRecordTypeSVCB, DNSRecordTypeTLSA, DNSRecordTypeURI:
-		return true
-	}
-	return false
-}
-
-type DNSGetResponse struct {
-	// This field can have the runtime type of
-	// [[]DNSGetResponseEmailEmailRoutingDNSQueryResponseError],
-	// [[]DNSGetResponseEmailDNSSettingsResponseCollectionError].
-	Errors interface{} `json:"errors" api:"required"`
-	// This field can have the runtime type of
-	// [[]DNSGetResponseEmailEmailRoutingDNSQueryResponseMessage],
-	// [[]DNSGetResponseEmailDNSSettingsResponseCollectionMessage].
-	Messages interface{} `json:"messages" api:"required"`
-	// Whether the API call was successful.
-	Success DNSGetResponseSuccess `json:"success" api:"required"`
-	// This field can have the runtime type of
-	// [DNSGetResponseEmailEmailRoutingDNSQueryResponseResult], [[]DNSRecord].
-	Result interface{} `json:"result"`
-	// This field can have the runtime type of
-	// [DNSGetResponseEmailEmailRoutingDNSQueryResponseResultInfo],
-	// [DNSGetResponseEmailDNSSettingsResponseCollectionResultInfo].
-	ResultInfo interface{}        `json:"result_info"`
-	JSON       dnsGetResponseJSON `json:"-"`
-	union      DNSGetResponseUnion
-}
-
-// dnsGetResponseJSON contains the JSON metadata for the struct [DNSGetResponse]
-type dnsGetResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r dnsGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *DNSGetResponse) UnmarshalJSON(data []byte) (err error) {
-	*r = DNSGetResponse{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [DNSGetResponseUnion] interface which you can cast to the
-// specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [DNSGetResponseEmailEmailRoutingDNSQueryResponse],
-// [DNSGetResponseEmailDNSSettingsResponseCollection].
-func (r DNSGetResponse) AsUnion() DNSGetResponseUnion {
-	return r.union
-}
-
-// Union satisfied by [DNSGetResponseEmailEmailRoutingDNSQueryResponse] or
-// [DNSGetResponseEmailDNSSettingsResponseCollection].
-type DNSGetResponseUnion interface {
-	implementsDNSGetResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DNSGetResponseEmailEmailRoutingDNSQueryResponse{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DNSGetResponseEmailDNSSettingsResponseCollection{}),
-		},
-	)
-}
-
-type DNSGetResponseEmailEmailRoutingDNSQueryResponse struct {
-	Errors   []DNSGetResponseEmailEmailRoutingDNSQueryResponseError   `json:"errors" api:"required"`
-	Messages []DNSGetResponseEmailEmailRoutingDNSQueryResponseMessage `json:"messages" api:"required"`
-	// Whether the API call was successful.
-	Success    DNSGetResponseEmailEmailRoutingDNSQueryResponseSuccess    `json:"success" api:"required"`
-	Result     DNSGetResponseEmailEmailRoutingDNSQueryResponseResult     `json:"result"`
-	ResultInfo DNSGetResponseEmailEmailRoutingDNSQueryResponseResultInfo `json:"result_info"`
-	JSON       dnsGetResponseEmailEmailRoutingDNSQueryResponseJSON       `json:"-"`
-}
-
-// dnsGetResponseEmailEmailRoutingDNSQueryResponseJSON contains the JSON metadata
-// for the struct [DNSGetResponseEmailEmailRoutingDNSQueryResponse]
-type dnsGetResponseEmailEmailRoutingDNSQueryResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEmailEmailRoutingDNSQueryResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEmailEmailRoutingDNSQueryResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DNSGetResponseEmailEmailRoutingDNSQueryResponse) implementsDNSGetResponse() {}
-
-type DNSGetResponseEmailEmailRoutingDNSQueryResponseError struct {
-	Code             int64                                                       `json:"code" api:"required"`
-	Message          string                                                      `json:"message" api:"required"`
-	DocumentationURL string                                                      `json:"documentation_url"`
-	Source           DNSGetResponseEmailEmailRoutingDNSQueryResponseErrorsSource `json:"source"`
-	JSON             dnsGetResponseEmailEmailRoutingDNSQueryResponseErrorJSON    `json:"-"`
-}
-
-// dnsGetResponseEmailEmailRoutingDNSQueryResponseErrorJSON contains the JSON
-// metadata for the struct [DNSGetResponseEmailEmailRoutingDNSQueryResponseError]
-type dnsGetResponseEmailEmailRoutingDNSQueryResponseErrorJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEmailEmailRoutingDNSQueryResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEmailEmailRoutingDNSQueryResponseErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSGetResponseEmailEmailRoutingDNSQueryResponseErrorsSource struct {
-	Pointer string                                                          `json:"pointer"`
-	JSON    dnsGetResponseEmailEmailRoutingDNSQueryResponseErrorsSourceJSON `json:"-"`
-}
-
-// dnsGetResponseEmailEmailRoutingDNSQueryResponseErrorsSourceJSON contains the
-// JSON metadata for the struct
-// [DNSGetResponseEmailEmailRoutingDNSQueryResponseErrorsSource]
-type dnsGetResponseEmailEmailRoutingDNSQueryResponseErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEmailEmailRoutingDNSQueryResponseErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEmailEmailRoutingDNSQueryResponseErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSGetResponseEmailEmailRoutingDNSQueryResponseMessage struct {
-	Code             int64                                                         `json:"code" api:"required"`
-	Message          string                                                        `json:"message" api:"required"`
-	DocumentationURL string                                                        `json:"documentation_url"`
-	Source           DNSGetResponseEmailEmailRoutingDNSQueryResponseMessagesSource `json:"source"`
-	JSON             dnsGetResponseEmailEmailRoutingDNSQueryResponseMessageJSON    `json:"-"`
-}
-
-// dnsGetResponseEmailEmailRoutingDNSQueryResponseMessageJSON contains the JSON
-// metadata for the struct [DNSGetResponseEmailEmailRoutingDNSQueryResponseMessage]
-type dnsGetResponseEmailEmailRoutingDNSQueryResponseMessageJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEmailEmailRoutingDNSQueryResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEmailEmailRoutingDNSQueryResponseMessageJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSGetResponseEmailEmailRoutingDNSQueryResponseMessagesSource struct {
-	Pointer string                                                            `json:"pointer"`
-	JSON    dnsGetResponseEmailEmailRoutingDNSQueryResponseMessagesSourceJSON `json:"-"`
-}
-
-// dnsGetResponseEmailEmailRoutingDNSQueryResponseMessagesSourceJSON contains the
-// JSON metadata for the struct
-// [DNSGetResponseEmailEmailRoutingDNSQueryResponseMessagesSource]
-type dnsGetResponseEmailEmailRoutingDNSQueryResponseMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEmailEmailRoutingDNSQueryResponseMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEmailEmailRoutingDNSQueryResponseMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type DNSGetResponseEmailEmailRoutingDNSQueryResponseSuccess bool
-
-const (
-	DNSGetResponseEmailEmailRoutingDNSQueryResponseSuccessTrue DNSGetResponseEmailEmailRoutingDNSQueryResponseSuccess = true
-)
-
-func (r DNSGetResponseEmailEmailRoutingDNSQueryResponseSuccess) IsKnown() bool {
-	switch r {
-	case DNSGetResponseEmailEmailRoutingDNSQueryResponseSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DNSGetResponseEmailEmailRoutingDNSQueryResponseResult struct {
-	Errors []DNSGetResponseEmailEmailRoutingDNSQueryResponseResultError `json:"errors"`
-	Record []DNSRecord                                                  `json:"record"`
-	JSON   dnsGetResponseEmailEmailRoutingDNSQueryResponseResultJSON    `json:"-"`
-}
-
-// dnsGetResponseEmailEmailRoutingDNSQueryResponseResultJSON contains the JSON
-// metadata for the struct [DNSGetResponseEmailEmailRoutingDNSQueryResponseResult]
-type dnsGetResponseEmailEmailRoutingDNSQueryResponseResultJSON struct {
-	Errors      apijson.Field
-	Record      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEmailEmailRoutingDNSQueryResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEmailEmailRoutingDNSQueryResponseResultJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSGetResponseEmailEmailRoutingDNSQueryResponseResultError struct {
-	Code string `json:"code"`
-	// List of records needed to enable an Email Routing zone.
-	Missing DNSRecord                                                      `json:"missing"`
-	JSON    dnsGetResponseEmailEmailRoutingDNSQueryResponseResultErrorJSON `json:"-"`
-}
-
-// dnsGetResponseEmailEmailRoutingDNSQueryResponseResultErrorJSON contains the JSON
-// metadata for the struct
-// [DNSGetResponseEmailEmailRoutingDNSQueryResponseResultError]
-type dnsGetResponseEmailEmailRoutingDNSQueryResponseResultErrorJSON struct {
-	Code        apijson.Field
-	Missing     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEmailEmailRoutingDNSQueryResponseResultError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEmailEmailRoutingDNSQueryResponseResultErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSGetResponseEmailEmailRoutingDNSQueryResponseResultInfo struct {
-	// Total number of results for the requested service.
-	Count float64 `json:"count"`
-	// Current page within paginated list of results.
-	Page float64 `json:"page"`
-	// Number of results per page of results.
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters.
-	TotalCount float64 `json:"total_count"`
-	// The number of total pages in the entire result set.
-	TotalPages float64                                                       `json:"total_pages"`
-	JSON       dnsGetResponseEmailEmailRoutingDNSQueryResponseResultInfoJSON `json:"-"`
-}
-
-// dnsGetResponseEmailEmailRoutingDNSQueryResponseResultInfoJSON contains the JSON
-// metadata for the struct
-// [DNSGetResponseEmailEmailRoutingDNSQueryResponseResultInfo]
-type dnsGetResponseEmailEmailRoutingDNSQueryResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	TotalPages  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEmailEmailRoutingDNSQueryResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEmailEmailRoutingDNSQueryResponseResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSGetResponseEmailDNSSettingsResponseCollection struct {
-	Errors   []DNSGetResponseEmailDNSSettingsResponseCollectionError   `json:"errors" api:"required"`
-	Messages []DNSGetResponseEmailDNSSettingsResponseCollectionMessage `json:"messages" api:"required"`
-	// Whether the API call was successful.
-	Success    DNSGetResponseEmailDNSSettingsResponseCollectionSuccess    `json:"success" api:"required"`
-	Result     []DNSRecord                                                `json:"result"`
-	ResultInfo DNSGetResponseEmailDNSSettingsResponseCollectionResultInfo `json:"result_info"`
-	JSON       dnsGetResponseEmailDNSSettingsResponseCollectionJSON       `json:"-"`
-}
-
-// dnsGetResponseEmailDNSSettingsResponseCollectionJSON contains the JSON metadata
-// for the struct [DNSGetResponseEmailDNSSettingsResponseCollection]
-type dnsGetResponseEmailDNSSettingsResponseCollectionJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEmailDNSSettingsResponseCollection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEmailDNSSettingsResponseCollectionJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DNSGetResponseEmailDNSSettingsResponseCollection) implementsDNSGetResponse() {}
-
-type DNSGetResponseEmailDNSSettingsResponseCollectionError struct {
-	Code             int64                                                        `json:"code" api:"required"`
-	Message          string                                                       `json:"message" api:"required"`
-	DocumentationURL string                                                       `json:"documentation_url"`
-	Source           DNSGetResponseEmailDNSSettingsResponseCollectionErrorsSource `json:"source"`
-	JSON             dnsGetResponseEmailDNSSettingsResponseCollectionErrorJSON    `json:"-"`
-}
-
-// dnsGetResponseEmailDNSSettingsResponseCollectionErrorJSON contains the JSON
-// metadata for the struct [DNSGetResponseEmailDNSSettingsResponseCollectionError]
-type dnsGetResponseEmailDNSSettingsResponseCollectionErrorJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEmailDNSSettingsResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEmailDNSSettingsResponseCollectionErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSGetResponseEmailDNSSettingsResponseCollectionErrorsSource struct {
-	Pointer string                                                           `json:"pointer"`
-	JSON    dnsGetResponseEmailDNSSettingsResponseCollectionErrorsSourceJSON `json:"-"`
-}
-
-// dnsGetResponseEmailDNSSettingsResponseCollectionErrorsSourceJSON contains the
-// JSON metadata for the struct
-// [DNSGetResponseEmailDNSSettingsResponseCollectionErrorsSource]
-type dnsGetResponseEmailDNSSettingsResponseCollectionErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEmailDNSSettingsResponseCollectionErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEmailDNSSettingsResponseCollectionErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSGetResponseEmailDNSSettingsResponseCollectionMessage struct {
-	Code             int64                                                          `json:"code" api:"required"`
-	Message          string                                                         `json:"message" api:"required"`
-	DocumentationURL string                                                         `json:"documentation_url"`
-	Source           DNSGetResponseEmailDNSSettingsResponseCollectionMessagesSource `json:"source"`
-	JSON             dnsGetResponseEmailDNSSettingsResponseCollectionMessageJSON    `json:"-"`
-}
-
-// dnsGetResponseEmailDNSSettingsResponseCollectionMessageJSON contains the JSON
-// metadata for the struct
-// [DNSGetResponseEmailDNSSettingsResponseCollectionMessage]
-type dnsGetResponseEmailDNSSettingsResponseCollectionMessageJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEmailDNSSettingsResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEmailDNSSettingsResponseCollectionMessageJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSGetResponseEmailDNSSettingsResponseCollectionMessagesSource struct {
-	Pointer string                                                             `json:"pointer"`
-	JSON    dnsGetResponseEmailDNSSettingsResponseCollectionMessagesSourceJSON `json:"-"`
-}
-
-// dnsGetResponseEmailDNSSettingsResponseCollectionMessagesSourceJSON contains the
-// JSON metadata for the struct
-// [DNSGetResponseEmailDNSSettingsResponseCollectionMessagesSource]
-type dnsGetResponseEmailDNSSettingsResponseCollectionMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEmailDNSSettingsResponseCollectionMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEmailDNSSettingsResponseCollectionMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type DNSGetResponseEmailDNSSettingsResponseCollectionSuccess bool
-
-const (
-	DNSGetResponseEmailDNSSettingsResponseCollectionSuccessTrue DNSGetResponseEmailDNSSettingsResponseCollectionSuccess = true
-)
-
-func (r DNSGetResponseEmailDNSSettingsResponseCollectionSuccess) IsKnown() bool {
-	switch r {
-	case DNSGetResponseEmailDNSSettingsResponseCollectionSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DNSGetResponseEmailDNSSettingsResponseCollectionResultInfo struct {
-	// Total number of results for the requested service.
-	Count float64 `json:"count"`
-	// Current page within paginated list of results.
-	Page float64 `json:"page"`
-	// Number of results per page of results.
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters.
-	TotalCount float64 `json:"total_count"`
-	// The number of total pages in the entire result set.
-	TotalPages float64                                                        `json:"total_pages"`
-	JSON       dnsGetResponseEmailDNSSettingsResponseCollectionResultInfoJSON `json:"-"`
-}
-
-// dnsGetResponseEmailDNSSettingsResponseCollectionResultInfoJSON contains the JSON
-// metadata for the struct
-// [DNSGetResponseEmailDNSSettingsResponseCollectionResultInfo]
-type dnsGetResponseEmailDNSSettingsResponseCollectionResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	TotalPages  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEmailDNSSettingsResponseCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEmailDNSSettingsResponseCollectionResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type DNSGetResponseSuccess bool
-
-const (
-	DNSGetResponseSuccessTrue DNSGetResponseSuccess = true
-)
-
-func (r DNSGetResponseSuccess) IsKnown() bool {
-	switch r {
-	case DNSGetResponseSuccessTrue:
 		return true
 	}
 	return false
@@ -854,6 +344,145 @@ type DNSDeleteParams struct {
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
+type DNSDeleteResponseEnvelope struct {
+	Errors   []DNSDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DNSDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Whether the API call was successful.
+	Success DNSDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  Settings                         `json:"result"`
+	JSON    dnsDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// dnsDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DNSDeleteResponseEnvelope]
+type dnsDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSDeleteResponseEnvelopeErrors struct {
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
+	DocumentationURL string                                `json:"documentation_url"`
+	Source           DNSDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dnsDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dnsDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [DNSDeleteResponseEnvelopeErrors]
+type dnsDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DNSDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                    `json:"pointer"`
+	JSON    dnsDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dnsDeleteResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [DNSDeleteResponseEnvelopeErrorsSource]
+type dnsDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSDeleteResponseEnvelopeMessages struct {
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           DNSDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dnsDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dnsDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [DNSDeleteResponseEnvelopeMessages]
+type dnsDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DNSDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    dnsDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dnsDeleteResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [DNSDeleteResponseEnvelopeMessagesSource]
+type dnsDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type DNSDeleteResponseEnvelopeSuccess bool
+
+const (
+	DNSDeleteResponseEnvelopeSuccessTrue DNSDeleteResponseEnvelopeSuccess = true
+)
+
+func (r DNSDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DNSDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DNSEditParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
@@ -1007,7 +636,8 @@ func (r DNSEditResponseEnvelopeSuccess) IsKnown() bool {
 type DNSGetParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-	// Domain of your zone.
+	// Deprecated. When supplied, the response shape differs from the documented
+	// default and is not modeled in generated SDKs. Do not rely on this parameter.
 	Subdomain param.Field[string] `query:"subdomain"`
 }
 
@@ -1017,4 +647,179 @@ func (r DNSGetParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type DNSGetResponseEnvelope struct {
+	Errors   []DNSGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DNSGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Whether the API call was successful.
+	Success    DNSGetResponseEnvelopeSuccess    `json:"success" api:"required"`
+	Result     []DNSRecord                      `json:"result"`
+	ResultInfo DNSGetResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       dnsGetResponseEnvelopeJSON       `json:"-"`
+}
+
+// dnsGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DNSGetResponseEnvelope]
+type dnsGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSGetResponseEnvelopeErrors struct {
+	Code             int64                              `json:"code" api:"required"`
+	Message          string                             `json:"message" api:"required"`
+	DocumentationURL string                             `json:"documentation_url"`
+	Source           DNSGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             dnsGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// dnsGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [DNSGetResponseEnvelopeErrors]
+type dnsGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DNSGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                 `json:"pointer"`
+	JSON    dnsGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// dnsGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the struct
+// [DNSGetResponseEnvelopeErrorsSource]
+type dnsGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSGetResponseEnvelopeMessages struct {
+	Code             int64                                `json:"code" api:"required"`
+	Message          string                               `json:"message" api:"required"`
+	DocumentationURL string                               `json:"documentation_url"`
+	Source           DNSGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             dnsGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// dnsGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [DNSGetResponseEnvelopeMessages]
+type dnsGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DNSGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DNSGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                   `json:"pointer"`
+	JSON    dnsGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// dnsGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [DNSGetResponseEnvelopeMessagesSource]
+type dnsGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type DNSGetResponseEnvelopeSuccess bool
+
+const (
+	DNSGetResponseEnvelopeSuccessTrue DNSGetResponseEnvelopeSuccess = true
+)
+
+func (r DNSGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DNSGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DNSGetResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service.
+	Count float64 `json:"count"`
+	// Current page within paginated list of results.
+	Page float64 `json:"page"`
+	// Number of results per page of results.
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters.
+	TotalCount float64 `json:"total_count"`
+	// The number of total pages in the entire result set.
+	TotalPages float64                              `json:"total_pages"`
+	JSON       dnsGetResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// dnsGetResponseEnvelopeResultInfoJSON contains the JSON metadata for the struct
+// [DNSGetResponseEnvelopeResultInfo]
+type dnsGetResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	TotalPages  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

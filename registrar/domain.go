@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // DomainService contains methods and other services that help with interacting
@@ -37,7 +36,7 @@ func NewDomainService(opts ...option.RequestOption) (r *DomainService) {
 	return
 }
 
-// Update individual domain.
+// Updates an individual domain.
 //
 // Deprecated: This operation is deprecated and will reach end of life on September
 // 27, 2026. Use the new Registrar API endpoints (domain-search, domain-check,
@@ -64,7 +63,7 @@ func (r *DomainService) Update(ctx context.Context, domainName string, params Do
 	return res, nil
 }
 
-// List domains handled by Registrar.
+// Lists domains handled by Registrar.
 //
 // Deprecated: This operation is deprecated and will reach end of life on September
 // 27, 2026. Use the new Registrar API endpoints (domain-search, domain-check,
@@ -92,7 +91,7 @@ func (r *DomainService) List(ctx context.Context, query DomainListParams, opts .
 	return res, nil
 }
 
-// List domains handled by Registrar.
+// Lists domains handled by Registrar.
 //
 // Deprecated: This operation is deprecated and will reach end of life on September
 // 27, 2026. Use the new Registrar API endpoints (domain-search, domain-check,
@@ -135,7 +134,7 @@ type Domain struct {
 	ID string `json:"id"`
 	// Shows if a domain is available for transferring into Cloudflare Registrar.
 	Available bool `json:"available"`
-	// Indicates if the domain can be registered as a new domain.
+	// Indicates eligibility to register the domain as a new domain.
 	CanRegister bool `json:"can_register"`
 	// Shows time of creation.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -147,12 +146,12 @@ type Domain struct {
 	Locked bool `json:"locked"`
 	// Shows contact information for domain registrant.
 	RegistrantContact DomainRegistrantContact `json:"registrant_contact"`
-	// A comma-separated list of registry status codes. A full list of status codes can
-	// be found at
-	// [EPP Status Codes](https://www.icann.org/resources/pages/epp-status-codes-2014-06-16-en).
+	// A comma-separated list of registry status codes. Refer to
+	// [EPP Status Codes](https://www.icann.org/resources/pages/epp-status-codes-2014-06-16-en)
+	// for the full list.
 	RegistryStatuses string `json:"registry_statuses"`
-	// Whether a particular TLD is currently supported by Cloudflare Registrar. Refer
-	// to [TLD Policies](https://www.cloudflare.com/tld-policies/) for a list of
+	// Indicates whether Cloudflare Registrar currently supports a particular TLD.
+	// Refer to [TLD Policies](https://www.cloudflare.com/tld-policies/) for a list of
 	// supported TLDs.
 	SupportedTLD bool `json:"supported_tld"`
 	// Statuses for domain transfers into Cloudflare Registrar.
@@ -196,13 +195,13 @@ type DomainRegistrantContact struct {
 	City string `json:"city" api:"required"`
 	// The country in which the user lives.
 	Country string `json:"country" api:"required,nullable"`
-	// User's first name
+	// User's first name.
 	FirstName string `json:"first_name" api:"required,nullable"`
-	// User's last name
+	// User's last name.
 	LastName string `json:"last_name" api:"required,nullable"`
 	// Name of organization.
 	Organization string `json:"organization" api:"required"`
-	// User's telephone number
+	// User's telephone number.
 	Phone string `json:"phone" api:"required,nullable"`
 	// State.
 	State string `json:"state" api:"required"`
@@ -249,17 +248,17 @@ func (r domainRegistrantContactJSON) RawJSON() string {
 
 // Statuses for domain transfers into Cloudflare Registrar.
 type DomainTransferIn struct {
-	// Form of authorization has been accepted by the registrant.
+	// Status of the registrant authorization step.
 	AcceptFoa DomainTransferInAcceptFoa `json:"accept_foa"`
-	// Shows transfer status with the registry.
+	// Status of the registry transfer-approval step.
 	ApproveTransfer DomainTransferInApproveTransfer `json:"approve_transfer"`
 	// Indicates if cancellation is still possible.
 	CanCancelTransfer bool `json:"can_cancel_transfer"`
-	// Privacy guards are disabled at the foreign registrar.
+	// Status of the privacy-guard disabling step at the foreign registrar.
 	DisablePrivacy DomainTransferInDisablePrivacy `json:"disable_privacy"`
-	// Auth code has been entered and verified.
+	// Status of the auth-code entry and verification step.
 	EnterAuthCode DomainTransferInEnterAuthCode `json:"enter_auth_code"`
-	// Domain is unlocked at the foreign registrar.
+	// Status of the domain-unlock step at the foreign registrar.
 	UnlockDomain DomainTransferInUnlockDomain `json:"unlock_domain"`
 	JSON         domainTransferInJSON         `json:"-"`
 }
@@ -285,7 +284,7 @@ func (r domainTransferInJSON) RawJSON() string {
 	return r.raw
 }
 
-// Form of authorization has been accepted by the registrant.
+// Status of the registrant authorization step.
 type DomainTransferInAcceptFoa string
 
 const (
@@ -301,7 +300,7 @@ func (r DomainTransferInAcceptFoa) IsKnown() bool {
 	return false
 }
 
-// Shows transfer status with the registry.
+// Status of the registry transfer-approval step.
 type DomainTransferInApproveTransfer string
 
 const (
@@ -321,7 +320,7 @@ func (r DomainTransferInApproveTransfer) IsKnown() bool {
 	return false
 }
 
-// Privacy guards are disabled at the foreign registrar.
+// Status of the privacy-guard disabling step at the foreign registrar.
 type DomainTransferInDisablePrivacy string
 
 const (
@@ -338,7 +337,7 @@ func (r DomainTransferInDisablePrivacy) IsKnown() bool {
 	return false
 }
 
-// Auth code has been entered and verified.
+// Status of the auth-code entry and verification step.
 type DomainTransferInEnterAuthCode string
 
 const (
@@ -357,7 +356,7 @@ func (r DomainTransferInEnterAuthCode) IsKnown() bool {
 	return false
 }
 
-// Domain is unlocked at the foreign registrar.
+// Status of the domain-unlock step at the foreign registrar.
 type DomainTransferInUnlockDomain string
 
 const (
@@ -381,7 +380,7 @@ type DomainUpdateResponse = interface{}
 type DomainGetResponse = interface{}
 
 type DomainUpdateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Auto-renew controls whether subscription is automatically renewed upon domain
 	// expiration.
@@ -397,10 +396,10 @@ func (r DomainUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DomainUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	Result   DomainUpdateResponse  `json:"result" api:"required,nullable"`
-	// Whether the API call was successful
+	Errors   []DomainUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DomainUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   DomainUpdateResponse                   `json:"result" api:"required,nullable"`
+	// Whether the API call was successful.
 	Success DomainUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    domainUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -424,7 +423,105 @@ func (r domainUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type DomainUpdateResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source DomainUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON   domainUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// domainUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [DomainUpdateResponseEnvelopeErrors]
+type domainUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DomainUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r domainUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type DomainUpdateResponseEnvelopeErrorsSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                       `json:"pointer" api:"required"`
+	JSON    domainUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// domainUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [DomainUpdateResponseEnvelopeErrorsSource]
+type domainUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DomainUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r domainUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DomainUpdateResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source DomainUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON   domainUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// domainUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DomainUpdateResponseEnvelopeMessages]
+type domainUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DomainUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r domainUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type DomainUpdateResponseEnvelopeMessagesSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                         `json:"pointer" api:"required"`
+	JSON    domainUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// domainUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [DomainUpdateResponseEnvelopeMessagesSource]
+type domainUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DomainUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r domainUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type DomainUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -440,20 +537,20 @@ func (r DomainUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DomainListParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DomainGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type DomainGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	Result   DomainGetResponse     `json:"result" api:"required,nullable"`
-	// Whether the API call was successful
+	Errors   []DomainGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []DomainGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   DomainGetResponse                   `json:"result" api:"required,nullable"`
+	// Whether the API call was successful.
 	Success DomainGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    domainGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -477,7 +574,105 @@ func (r domainGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type DomainGetResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source DomainGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON   domainGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// domainGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [DomainGetResponseEnvelopeErrors]
+type domainGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DomainGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r domainGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type DomainGetResponseEnvelopeErrorsSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                    `json:"pointer" api:"required"`
+	JSON    domainGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// domainGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [DomainGetResponseEnvelopeErrorsSource]
+type domainGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DomainGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r domainGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type DomainGetResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source DomainGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON   domainGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// domainGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [DomainGetResponseEnvelopeMessages]
+type domainGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DomainGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r domainGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type DomainGetResponseEnvelopeMessagesSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                      `json:"pointer" api:"required"`
+	JSON    domainGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// domainGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [DomainGetResponseEnvelopeMessagesSource]
+type domainGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DomainGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r domainGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type DomainGetResponseEnvelopeSuccess bool
 
 const (

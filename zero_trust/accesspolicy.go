@@ -190,6 +190,8 @@ func (r ApprovalGroupParam) MarshalJSON() (data []byte, err error) {
 type AccessPolicyNewResponse struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Number of access applications currently using this policy.
 	AppCount int64 `json:"app_count"`
 	// Administrators who can approve a temporary authentication request.
@@ -238,6 +240,7 @@ type AccessPolicyNewResponse struct {
 // [AccessPolicyNewResponse]
 type accessPolicyNewResponseJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	AppCount                     apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
@@ -413,6 +416,8 @@ func (r AccessPolicyNewResponseReusable) IsKnown() bool {
 type AccessPolicyUpdateResponse struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Number of access applications currently using this policy.
 	AppCount int64 `json:"app_count"`
 	// Administrators who can approve a temporary authentication request.
@@ -461,6 +466,7 @@ type AccessPolicyUpdateResponse struct {
 // [AccessPolicyUpdateResponse]
 type accessPolicyUpdateResponseJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	AppCount                     apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
@@ -636,6 +642,8 @@ func (r AccessPolicyUpdateResponseReusable) IsKnown() bool {
 type AccessPolicyListResponse struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Number of access applications currently using this policy.
 	AppCount int64 `json:"app_count"`
 	// Administrators who can approve a temporary authentication request.
@@ -684,6 +692,7 @@ type AccessPolicyListResponse struct {
 // [AccessPolicyListResponse]
 type accessPolicyListResponseJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	AppCount                     apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
@@ -881,6 +890,8 @@ func (r accessPolicyDeleteResponseJSON) RawJSON() string {
 type AccessPolicyGetResponse struct {
 	// The UUID of the policy
 	ID string `json:"id"`
+	// Identifier.
+	AccountID string `json:"account_id"`
 	// Number of access applications currently using this policy.
 	AppCount int64 `json:"app_count"`
 	// Administrators who can approve a temporary authentication request.
@@ -929,6 +940,7 @@ type AccessPolicyGetResponse struct {
 // [AccessPolicyGetResponse]
 type accessPolicyGetResponseJSON struct {
 	ID                           apijson.Field
+	AccountID                    apijson.Field
 	AppCount                     apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field

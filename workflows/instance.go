@@ -783,8 +783,8 @@ func (r instanceGetResponseStepsObjectConfigJSON) RawJSON() string {
 }
 
 type InstanceGetResponseStepsObjectConfigRetries struct {
-	// Specifies the delay duration. '[dynamic]' indicates the delay is computed by a
-	// user-supplied function.
+	// Specifies the delay duration. The value '[dynamic]' means that a user-supplied
+	// function computes the delay.
 	Delay   InstanceGetResponseStepsObjectConfigRetriesDelayUnion `json:"delay" api:"required"`
 	Limit   float64                                               `json:"limit" api:"required"`
 	Backoff InstanceGetResponseStepsObjectConfigRetriesBackoff    `json:"backoff"`
@@ -809,8 +809,8 @@ func (r instanceGetResponseStepsObjectConfigRetriesJSON) RawJSON() string {
 	return r.raw
 }
 
-// Specifies the delay duration. '[dynamic]' indicates the delay is computed by a
-// user-supplied function.
+// Specifies the delay duration. The value '[dynamic]' means that a user-supplied
+// function computes the delay.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionFloat].
 type InstanceGetResponseStepsObjectConfigRetriesDelayUnion interface {
@@ -988,10 +988,10 @@ type InstanceStepResponse struct {
 	// The event type the step is waiting on, as supplied to step.waitForEvent. Only
 	// present when type='waitForEvent'.
 	EventType string `json:"event_type"`
-	// Full step output or waitForEvent payload without truncation. Sensitive outputs
-	// are returned as '[REDACTED]'. Populated when status='complete'. May be a
-	// ReadableStream when the step returned one from step.do; stream outputs are
-	// served as application/octet-stream rather than JSON.
+	// Contains the full step output or waitForEvent payload without truncation. Uses
+	// '[REDACTED]' for sensitive outputs. Contains a value when status='complete'. May
+	// contain a ReadableStream when step.do returns one; the response serves stream
+	// outputs as application/octet-stream rather than JSON.
 	Output interface{}              `json:"output"`
 	JSON   instanceStepResponseJSON `json:"-"`
 }
@@ -1063,8 +1063,8 @@ func (r InstanceStepResponseStatus) IsKnown() bool {
 
 type InstanceNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// An id of exactly `cf_` followed by 64 lowercase hex characters is reserved for
-	// system-generated instances.
+	// The system reserves IDs that consist of the `cf_` prefix and exactly 64
+	// lowercase hexadecimal characters.
 	InstanceID        param.Field[string]                             `json:"instance_id"`
 	InstanceRetention param.Field[InstanceNewParamsInstanceRetention] `json:"instance_retention"`
 	LocationHint      param.Field[InstanceNewParamsLocationHint]      `json:"location_hint"`
@@ -1104,20 +1104,22 @@ type InstanceNewParamsInstanceRetentionSuccessRetentionUnion interface {
 type InstanceNewParamsLocationHint string
 
 const (
-	InstanceNewParamsLocationHintWnam InstanceNewParamsLocationHint = "wnam"
-	InstanceNewParamsLocationHintWeur InstanceNewParamsLocationHint = "weur"
-	InstanceNewParamsLocationHintEnam InstanceNewParamsLocationHint = "enam"
-	InstanceNewParamsLocationHintEeur InstanceNewParamsLocationHint = "eeur"
-	InstanceNewParamsLocationHintApac InstanceNewParamsLocationHint = "apac"
-	InstanceNewParamsLocationHintOc   InstanceNewParamsLocationHint = "oc"
-	InstanceNewParamsLocationHintSam  InstanceNewParamsLocationHint = "sam"
-	InstanceNewParamsLocationHintAfr  InstanceNewParamsLocationHint = "afr"
-	InstanceNewParamsLocationHintMe   InstanceNewParamsLocationHint = "me"
+	InstanceNewParamsLocationHintWnam   InstanceNewParamsLocationHint = "wnam"
+	InstanceNewParamsLocationHintWeur   InstanceNewParamsLocationHint = "weur"
+	InstanceNewParamsLocationHintEnam   InstanceNewParamsLocationHint = "enam"
+	InstanceNewParamsLocationHintEeur   InstanceNewParamsLocationHint = "eeur"
+	InstanceNewParamsLocationHintApac   InstanceNewParamsLocationHint = "apac"
+	InstanceNewParamsLocationHintApacNe InstanceNewParamsLocationHint = "apac-ne"
+	InstanceNewParamsLocationHintApacSe InstanceNewParamsLocationHint = "apac-se"
+	InstanceNewParamsLocationHintOc     InstanceNewParamsLocationHint = "oc"
+	InstanceNewParamsLocationHintSam    InstanceNewParamsLocationHint = "sam"
+	InstanceNewParamsLocationHintAfr    InstanceNewParamsLocationHint = "afr"
+	InstanceNewParamsLocationHintMe     InstanceNewParamsLocationHint = "me"
 )
 
 func (r InstanceNewParamsLocationHint) IsKnown() bool {
 	switch r {
-	case InstanceNewParamsLocationHintWnam, InstanceNewParamsLocationHintWeur, InstanceNewParamsLocationHintEnam, InstanceNewParamsLocationHintEeur, InstanceNewParamsLocationHintApac, InstanceNewParamsLocationHintOc, InstanceNewParamsLocationHintSam, InstanceNewParamsLocationHintAfr, InstanceNewParamsLocationHintMe:
+	case InstanceNewParamsLocationHintWnam, InstanceNewParamsLocationHintWeur, InstanceNewParamsLocationHintEnam, InstanceNewParamsLocationHintEeur, InstanceNewParamsLocationHintApac, InstanceNewParamsLocationHintApacNe, InstanceNewParamsLocationHintApacSe, InstanceNewParamsLocationHintOc, InstanceNewParamsLocationHintSam, InstanceNewParamsLocationHintAfr, InstanceNewParamsLocationHintMe:
 		return true
 	}
 	return false
@@ -1307,7 +1309,7 @@ func (r InstanceListParamsStatus) IsKnown() bool {
 
 type InstanceBulkParams struct {
 	AccountID param.Field[string]      `path:"account_id" api:"required"`
-	Body      []InstanceBulkParamsBody `json:"body"`
+	Body      []InstanceBulkParamsBody `json:"body" api:"required"`
 }
 
 func (r InstanceBulkParams) MarshalJSON() (data []byte, err error) {
@@ -1315,8 +1317,8 @@ func (r InstanceBulkParams) MarshalJSON() (data []byte, err error) {
 }
 
 type InstanceBulkParamsBody struct {
-	// An id of exactly `cf_` followed by 64 lowercase hex characters is reserved for
-	// system-generated instances.
+	// The system reserves IDs that consist of the `cf_` prefix and exactly 64
+	// lowercase hexadecimal characters.
 	InstanceID        param.Field[string]                                  `json:"instance_id"`
 	InstanceRetention param.Field[InstanceBulkParamsBodyInstanceRetention] `json:"instance_retention"`
 	LocationHint      param.Field[InstanceBulkParamsBodyLocationHint]      `json:"location_hint"`
@@ -1356,20 +1358,22 @@ type InstanceBulkParamsBodyInstanceRetentionSuccessRetentionUnion interface {
 type InstanceBulkParamsBodyLocationHint string
 
 const (
-	InstanceBulkParamsBodyLocationHintWnam InstanceBulkParamsBodyLocationHint = "wnam"
-	InstanceBulkParamsBodyLocationHintWeur InstanceBulkParamsBodyLocationHint = "weur"
-	InstanceBulkParamsBodyLocationHintEnam InstanceBulkParamsBodyLocationHint = "enam"
-	InstanceBulkParamsBodyLocationHintEeur InstanceBulkParamsBodyLocationHint = "eeur"
-	InstanceBulkParamsBodyLocationHintApac InstanceBulkParamsBodyLocationHint = "apac"
-	InstanceBulkParamsBodyLocationHintOc   InstanceBulkParamsBodyLocationHint = "oc"
-	InstanceBulkParamsBodyLocationHintSam  InstanceBulkParamsBodyLocationHint = "sam"
-	InstanceBulkParamsBodyLocationHintAfr  InstanceBulkParamsBodyLocationHint = "afr"
-	InstanceBulkParamsBodyLocationHintMe   InstanceBulkParamsBodyLocationHint = "me"
+	InstanceBulkParamsBodyLocationHintWnam   InstanceBulkParamsBodyLocationHint = "wnam"
+	InstanceBulkParamsBodyLocationHintWeur   InstanceBulkParamsBodyLocationHint = "weur"
+	InstanceBulkParamsBodyLocationHintEnam   InstanceBulkParamsBodyLocationHint = "enam"
+	InstanceBulkParamsBodyLocationHintEeur   InstanceBulkParamsBodyLocationHint = "eeur"
+	InstanceBulkParamsBodyLocationHintApac   InstanceBulkParamsBodyLocationHint = "apac"
+	InstanceBulkParamsBodyLocationHintApacNe InstanceBulkParamsBodyLocationHint = "apac-ne"
+	InstanceBulkParamsBodyLocationHintApacSe InstanceBulkParamsBodyLocationHint = "apac-se"
+	InstanceBulkParamsBodyLocationHintOc     InstanceBulkParamsBodyLocationHint = "oc"
+	InstanceBulkParamsBodyLocationHintSam    InstanceBulkParamsBodyLocationHint = "sam"
+	InstanceBulkParamsBodyLocationHintAfr    InstanceBulkParamsBodyLocationHint = "afr"
+	InstanceBulkParamsBodyLocationHintMe     InstanceBulkParamsBodyLocationHint = "me"
 )
 
 func (r InstanceBulkParamsBodyLocationHint) IsKnown() bool {
 	switch r {
-	case InstanceBulkParamsBodyLocationHintWnam, InstanceBulkParamsBodyLocationHintWeur, InstanceBulkParamsBodyLocationHintEnam, InstanceBulkParamsBodyLocationHintEeur, InstanceBulkParamsBodyLocationHintApac, InstanceBulkParamsBodyLocationHintOc, InstanceBulkParamsBodyLocationHintSam, InstanceBulkParamsBodyLocationHintAfr, InstanceBulkParamsBodyLocationHintMe:
+	case InstanceBulkParamsBodyLocationHintWnam, InstanceBulkParamsBodyLocationHintWeur, InstanceBulkParamsBodyLocationHintEnam, InstanceBulkParamsBodyLocationHintEeur, InstanceBulkParamsBodyLocationHintApac, InstanceBulkParamsBodyLocationHintApacNe, InstanceBulkParamsBodyLocationHintApacSe, InstanceBulkParamsBodyLocationHintOc, InstanceBulkParamsBodyLocationHintSam, InstanceBulkParamsBodyLocationHintAfr, InstanceBulkParamsBodyLocationHintMe:
 		return true
 	}
 	return false

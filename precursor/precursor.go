@@ -48,6 +48,8 @@ func NewPrecursorService(opts ...option.RequestOption) (r *PrecursorService) {
 //   - Rule `id` is read-only (assigned by Cloudflare) and ignored on input.
 //   - Rule `mode` must be `min-friction` or `max-security` (`off` is not a valid
 //     rule mode; use `default_mode` to disable enforcement).
+//   - Rule `expression` is limited to 4000 characters. The limit applies to each
+//     rule individually, not to the combined size of all rules.
 func (r *PrecursorService) Update(ctx context.Context, params PrecursorUpdateParams, opts ...option.RequestOption) (res *PrecursorConfig, err error) {
 	var env PrecursorUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -152,8 +154,12 @@ func (r EnforcementRuleParam) MarshalJSON() (data []byte, err error) {
 type PrecursorConfig struct {
 	// The zone-level Precursor enforcement mode applied to requests that do not match
 	// a more specific enforcement rule.
+	//
+	// Deprecated: deprecated
 	DefaultMode PrecursorConfigDefaultMode `json:"default_mode"`
 	// The ordered list of enforcement rules for the zone.
+	//
+	// Deprecated: deprecated
 	EnforcementRules []EnforcementRule   `json:"enforcement_rules"`
 	JSON             precursorConfigJSON `json:"-"`
 }
@@ -195,8 +201,12 @@ func (r PrecursorConfigDefaultMode) IsKnown() bool {
 type PrecursorConfigParam struct {
 	// The zone-level Precursor enforcement mode applied to requests that do not match
 	// a more specific enforcement rule.
+	//
+	// Deprecated: deprecated
 	DefaultMode param.Field[PrecursorConfigDefaultMode] `json:"default_mode"`
 	// The ordered list of enforcement rules for the zone.
+	//
+	// Deprecated: deprecated
 	EnforcementRules param.Field[[]EnforcementRuleParam] `json:"enforcement_rules"`
 }
 

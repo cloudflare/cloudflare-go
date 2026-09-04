@@ -163,17 +163,19 @@ func (r InvestigateDetectionGetResponseAttachmentsDetection) IsKnown() bool {
 	return false
 }
 
+// A single detection finding for a message.
 type InvestigateDetectionGetResponseFinding struct {
-	Attachment string                                           `json:"attachment" api:"nullable"`
-	Detail     string                                           `json:"detail" api:"nullable"`
-	Detection  InvestigateDetectionGetResponseFindingsDetection `json:"detection"`
-	Field      string                                           `json:"field" api:"nullable"`
-	Name       string                                           `json:"name" api:"nullable"`
-	Portion    string                                           `json:"portion" api:"nullable"`
-	Reason     string                                           `json:"reason" api:"nullable"`
-	Score      float64                                          `json:"score" api:"nullable"`
-	Value      string                                           `json:"value" api:"nullable"`
-	JSON       investigateDetectionGetResponseFindingJSON       `json:"-"`
+	Attachment string `json:"attachment" api:"nullable"`
+	Detail     string `json:"detail" api:"nullable"`
+	// Detection result associated with this finding.
+	Detection InvestigateDetectionGetResponseFindingsDetection `json:"detection" api:"nullable"`
+	Field     string                                           `json:"field" api:"nullable"`
+	Name      string                                           `json:"name" api:"nullable"`
+	Portion   string                                           `json:"portion" api:"nullable"`
+	Reason    string                                           `json:"reason" api:"nullable"`
+	Score     float64                                          `json:"score" api:"nullable"`
+	Value     string                                           `json:"value" api:"nullable"`
+	JSON      investigateDetectionGetResponseFindingJSON       `json:"-"`
 }
 
 // investigateDetectionGetResponseFindingJSON contains the JSON metadata for the
@@ -200,6 +202,7 @@ func (r investigateDetectionGetResponseFindingJSON) RawJSON() string {
 	return r.raw
 }
 
+// Detection result associated with this finding.
 type InvestigateDetectionGetResponseFindingsDetection string
 
 const (

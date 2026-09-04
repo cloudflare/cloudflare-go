@@ -16,7 +16,7 @@ import (
 )
 
 func TestRecordingGetActiveRecordings(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -48,7 +48,7 @@ func TestRecordingGetActiveRecordings(t *testing.T) {
 }
 
 func TestRecordingGetOneRecording(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -80,7 +80,7 @@ func TestRecordingGetOneRecording(t *testing.T) {
 }
 
 func TestRecordingGetRecordingsWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -121,7 +121,7 @@ func TestRecordingGetRecordingsWithOptionalParams(t *testing.T) {
 }
 
 func TestRecordingPauseResumeStopRecording(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -154,7 +154,7 @@ func TestRecordingPauseResumeStopRecording(t *testing.T) {
 }
 
 func TestRecordingStartRecordingsWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -191,10 +191,9 @@ func TestRecordingStartRecordingsWithOptionalParams(t *testing.T) {
 			RtmpOutConfig: cloudflare.F(realtime_kit.RecordingStartRecordingsParamsRtmpOutConfig{
 				RtmpURL: cloudflare.F("rtmp://a.rtmp.youtube.com/live2"),
 			}),
-			StorageConfig: cloudflare.F(realtime_kit.RecordingStartRecordingsParamsStorageConfig{
-				Type:       cloudflare.F(realtime_kit.RecordingStartRecordingsParamsStorageConfigTypeAws),
+			StorageConfig: cloudflare.F[realtime_kit.RecordingStartRecordingsParamsStorageConfigUnion](realtime_kit.RecordingStartRecordingsParamsStorageConfigObject{
 				AccessKey:  cloudflare.F("access_key"),
-				AuthMethod: cloudflare.F(realtime_kit.RecordingStartRecordingsParamsStorageConfigAuthMethodKey),
+				AuthMethod: cloudflare.F(realtime_kit.RecordingStartRecordingsParamsStorageConfigObjectAuthMethodKey),
 				Bucket:     cloudflare.F("bucket"),
 				Host:       cloudflare.F("host"),
 				Password:   cloudflare.F("password"),
@@ -203,6 +202,7 @@ func TestRecordingStartRecordingsWithOptionalParams(t *testing.T) {
 				PrivateKey: cloudflare.F("private_key"),
 				Region:     cloudflare.F("us-east-1"),
 				Secret:     cloudflare.F("secret"),
+				Type:       cloudflare.F(realtime_kit.RecordingStartRecordingsParamsStorageConfigObjectTypeGcs),
 				Username:   cloudflare.F("username"),
 			}),
 			URL: cloudflare.F("https://example.com"),
@@ -232,7 +232,7 @@ func TestRecordingStartRecordingsWithOptionalParams(t *testing.T) {
 }
 
 func TestRecordingStartTrackRecordingWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: HTTP 401 from prism, support api tokens")
+	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

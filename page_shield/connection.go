@@ -39,8 +39,8 @@ func NewConnectionService(opts ...option.RequestOption) (r *ConnectionService) {
 	return
 }
 
-// Lists all connections detected by Page Shield.
-func (r *ConnectionService) List(ctx context.Context, params ConnectionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Connection], err error) {
+// Lists outbound connections made by webpages in the zone.
+func (r *ConnectionService) List(ctx context.Context, params ConnectionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ConnectionListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -61,13 +61,13 @@ func (r *ConnectionService) List(ctx context.Context, params ConnectionListParam
 	return res, nil
 }
 
-// Lists all connections detected by Page Shield.
-func (r *ConnectionService) ListAutoPaging(ctx context.Context, params ConnectionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Connection] {
+// Lists outbound connections made by webpages in the zone.
+func (r *ConnectionService) ListAutoPaging(ctx context.Context, params ConnectionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ConnectionListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
-// Fetches a connection detected by Page Shield by connection ID.
-func (r *ConnectionService) Get(ctx context.Context, connectionID string, query ConnectionGetParams, opts ...option.RequestOption) (res *Connection, err error) {
+// Returns a webpage connection detected on the zone by connection ID.
+func (r *ConnectionService) Get(ctx context.Context, connectionID string, query ConnectionGetParams, opts ...option.RequestOption) (res *ConnectionGetResponse, err error) {
 	var env ConnectionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
@@ -87,26 +87,27 @@ func (r *ConnectionService) Get(ctx context.Context, connectionID string, query 
 	return res, nil
 }
 
-type Connection struct {
+type ConnectionListResponse struct {
 	// Identifier
-	ID                        string         `json:"id" api:"required"`
-	AddedAt                   time.Time      `json:"added_at" api:"required" format:"date-time"`
-	FirstSeenAt               time.Time      `json:"first_seen_at" api:"required" format:"date-time"`
-	Host                      string         `json:"host" api:"required"`
-	LastSeenAt                time.Time      `json:"last_seen_at" api:"required" format:"date-time"`
-	URL                       string         `json:"url" api:"required"`
-	URLContainsCDNCGIPath     bool           `json:"url_contains_cdn_cgi_path" api:"required"`
-	DomainReportedMalicious   bool           `json:"domain_reported_malicious"`
-	FirstPageURL              string         `json:"first_page_url"`
-	MaliciousDomainCategories []string       `json:"malicious_domain_categories"`
-	MaliciousURLCategories    []string       `json:"malicious_url_categories"`
-	PageURLs                  []string       `json:"page_urls"`
-	URLReportedMalicious      bool           `json:"url_reported_malicious"`
-	JSON                      connectionJSON `json:"-"`
+	ID                        string                     `json:"id" api:"required"`
+	AddedAt                   time.Time                  `json:"added_at" api:"required" format:"date-time"`
+	FirstSeenAt               time.Time                  `json:"first_seen_at" api:"required" format:"date-time"`
+	Host                      string                     `json:"host" api:"required"`
+	LastSeenAt                time.Time                  `json:"last_seen_at" api:"required" format:"date-time"`
+	URL                       string                     `json:"url" api:"required"`
+	URLContainsCDNCGIPath     bool                       `json:"url_contains_cdn_cgi_path" api:"required"`
+	DomainReportedMalicious   bool                       `json:"domain_reported_malicious"`
+	FirstPageURL              string                     `json:"first_page_url"`
+	MaliciousDomainCategories []string                   `json:"malicious_domain_categories"`
+	MaliciousURLCategories    []string                   `json:"malicious_url_categories"`
+	PageURLs                  []string                   `json:"page_urls"`
+	URLReportedMalicious      bool                       `json:"url_reported_malicious"`
+	JSON                      connectionListResponseJSON `json:"-"`
 }
 
-// connectionJSON contains the JSON metadata for the struct [Connection]
-type connectionJSON struct {
+// connectionListResponseJSON contains the JSON metadata for the struct
+// [ConnectionListResponse]
+type connectionListResponseJSON struct {
 	ID                        apijson.Field
 	AddedAt                   apijson.Field
 	FirstSeenAt               apijson.Field
@@ -124,11 +125,57 @@ type connectionJSON struct {
 	ExtraFields               map[string]apijson.Field
 }
 
-func (r *Connection) UnmarshalJSON(data []byte) (err error) {
+func (r *ConnectionListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r connectionJSON) RawJSON() string {
+func (r connectionListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectionGetResponse struct {
+	// Identifier
+	ID                        string                    `json:"id" api:"required"`
+	AddedAt                   time.Time                 `json:"added_at" api:"required" format:"date-time"`
+	FirstSeenAt               time.Time                 `json:"first_seen_at" api:"required" format:"date-time"`
+	Host                      string                    `json:"host" api:"required"`
+	LastSeenAt                time.Time                 `json:"last_seen_at" api:"required" format:"date-time"`
+	URL                       string                    `json:"url" api:"required"`
+	URLContainsCDNCGIPath     bool                      `json:"url_contains_cdn_cgi_path" api:"required"`
+	DomainReportedMalicious   bool                      `json:"domain_reported_malicious"`
+	FirstPageURL              string                    `json:"first_page_url"`
+	MaliciousDomainCategories []string                  `json:"malicious_domain_categories"`
+	MaliciousURLCategories    []string                  `json:"malicious_url_categories"`
+	PageURLs                  []string                  `json:"page_urls"`
+	URLReportedMalicious      bool                      `json:"url_reported_malicious"`
+	JSON                      connectionGetResponseJSON `json:"-"`
+}
+
+// connectionGetResponseJSON contains the JSON metadata for the struct
+// [ConnectionGetResponse]
+type connectionGetResponseJSON struct {
+	ID                        apijson.Field
+	AddedAt                   apijson.Field
+	FirstSeenAt               apijson.Field
+	Host                      apijson.Field
+	LastSeenAt                apijson.Field
+	URL                       apijson.Field
+	URLContainsCDNCGIPath     apijson.Field
+	DomainReportedMalicious   apijson.Field
+	FirstPageURL              apijson.Field
+	MaliciousDomainCategories apijson.Field
+	MaliciousURLCategories    apijson.Field
+	PageURLs                  apijson.Field
+	URLReportedMalicious      apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
+}
+
+func (r *ConnectionGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectionGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -242,7 +289,7 @@ type ConnectionGetParams struct {
 }
 
 type ConnectionGetResponseEnvelope struct {
-	Result Connection `json:"result" api:"required,nullable"`
+	Result ConnectionGetResponse `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
 	Success  ConnectionGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	Errors   []shared.ResponseInfo                `json:"errors"`

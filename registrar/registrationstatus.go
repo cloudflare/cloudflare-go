@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // RegistrationStatusService contains methods and other services that help with
@@ -99,16 +98,16 @@ func (r *RegistrationStatusService) Get(ctx context.Context, domainName string, 
 }
 
 type RegistrationStatusGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RegistrationStatusGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Errors   []RegistrationStatusGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RegistrationStatusGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Status of an async registration workflow.
 	Result WorkflowStatus `json:"result" api:"required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success RegistrationStatusGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    registrationStatusGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -132,7 +131,105 @@ func (r registrationStatusGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RegistrationStatusGetResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source RegistrationStatusGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON   registrationStatusGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// registrationStatusGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [RegistrationStatusGetResponseEnvelopeErrors]
+type registrationStatusGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationStatusGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationStatusGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type RegistrationStatusGetResponseEnvelopeErrorsSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                                `json:"pointer" api:"required"`
+	JSON    registrationStatusGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// registrationStatusGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [RegistrationStatusGetResponseEnvelopeErrorsSource]
+type registrationStatusGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationStatusGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationStatusGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RegistrationStatusGetResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source RegistrationStatusGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON   registrationStatusGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// registrationStatusGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [RegistrationStatusGetResponseEnvelopeMessages]
+type registrationStatusGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationStatusGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationStatusGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type RegistrationStatusGetResponseEnvelopeMessagesSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                                  `json:"pointer" api:"required"`
+	JSON    registrationStatusGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// registrationStatusGetResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [RegistrationStatusGetResponseEnvelopeMessagesSource]
+type registrationStatusGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationStatusGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationStatusGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RegistrationStatusGetResponseEnvelopeSuccess bool
 
 const (

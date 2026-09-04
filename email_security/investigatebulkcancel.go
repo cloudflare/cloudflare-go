@@ -383,6 +383,8 @@ type InvestigateBulkCancelNewResponseSearchParams struct {
 	Query            string                                                       `json:"query" api:"nullable"`
 	Recipient        string                                                       `json:"recipient" api:"nullable"`
 	Sender           string                                                       `json:"sender" api:"nullable"`
+	// Matches messages whose SMTP HELO server IP address equals this value.
+	SmtpHeloIP string `json:"smtp_helo_ip" api:"nullable"`
 	// Beginning of search date range.
 	Start       time.Time                                        `json:"start" format:"date-time"`
 	Subject     string                                           `json:"subject" api:"nullable"`
@@ -407,6 +409,7 @@ type investigateBulkCancelNewResponseSearchParamsJSON struct {
 	Query            apijson.Field
 	Recipient        apijson.Field
 	Sender           apijson.Field
+	SmtpHeloIP       apijson.Field
 	Start            apijson.Field
 	Subject          apijson.Field
 	Submissions      apijson.Field
@@ -433,11 +436,12 @@ const (
 	InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusDeferred    InvestigateBulkCancelNewResponseSearchParamsDeliveryStatus = "deferred"
 	InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusBounced     InvestigateBulkCancelNewResponseSearchParamsDeliveryStatus = "bounced"
 	InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusQueued      InvestigateBulkCancelNewResponseSearchParamsDeliveryStatus = "queued"
+	InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusMoveFailed  InvestigateBulkCancelNewResponseSearchParamsDeliveryStatus = "move_failed"
 )
 
 func (r InvestigateBulkCancelNewResponseSearchParamsDeliveryStatus) IsKnown() bool {
 	switch r {
-	case InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusDelivered, InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusMoved, InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusQuarantined, InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusRejected, InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusDeferred, InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusBounced, InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusQueued:
+	case InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusDelivered, InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusMoved, InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusQuarantined, InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusRejected, InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusDeferred, InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusBounced, InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusQueued, InvestigateBulkCancelNewResponseSearchParamsDeliveryStatusMoveFailed:
 		return true
 	}
 	return false

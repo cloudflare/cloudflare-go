@@ -59,8 +59,8 @@ func (r *SinkholeIngressService) New(ctx context.Context, sinkholeID string, par
 	return res, nil
 }
 
-// Update the specified ingress rule. The sinkhole must belong to the same account
-// as the zone.
+// Replaces the specified ingress rule. The sinkhole must belong to the same
+// account as the zone.
 func (r *SinkholeIngressService) Update(ctx context.Context, sinkholeID string, ingressID string, params SinkholeIngressUpdateParams, opts ...option.RequestOption) (res *SinkholeIngressUpdateResponse, err error) {
 	var env SinkholeIngressUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -216,10 +216,10 @@ func (r sinkholeIngressGetResponseJSON) RawJSON() string {
 }
 
 type SinkholeIngressNewParams struct {
-	// Identifier.
+	// An identifier for the resource.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The CIDR block for the ingress rule in IPv4 or IPv6 notation (e.g.,
-	// 192.0.2.0/24). Must be a Cloudflare BYOIP associated with your account.
+	// 192.0.2.0/24). Provide a Cloudflare BYOIP CIDR that your account owns.
 	CIDR param.Field[string] `json:"cidr" api:"required"`
 }
 
@@ -367,10 +367,10 @@ func (r SinkholeIngressNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SinkholeIngressUpdateParams struct {
-	// Identifier.
+	// An identifier for the resource.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The CIDR block for the ingress rule in IPv4 or IPv6 notation (e.g.,
-	// 192.0.2.0/24). Must be a Cloudflare BYOIP associated with your account.
+	// 192.0.2.0/24). Provide a Cloudflare BYOIP CIDR that your account owns.
 	CIDR param.Field[string] `json:"cidr" api:"required"`
 }
 
@@ -518,7 +518,7 @@ func (r SinkholeIngressUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SinkholeIngressDeleteParams struct {
-	// Identifier.
+	// An identifier for the resource.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
@@ -662,7 +662,7 @@ func (r SinkholeIngressDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SinkholeIngressGetParams struct {
-	// Identifier.
+	// An identifier for the resource.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 

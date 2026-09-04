@@ -113,6 +113,9 @@ type DispatchNamespaceScriptBindingGetResponse struct {
 	// Data format of the key.
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format DispatchNamespaceScriptBindingGetResponseFormat `json:"format"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity DispatchNamespaceScriptBindingGetResponseIdentity `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
 	// The user-chosen instance name. Must exist at deploy time. The worker can search,
@@ -199,6 +202,7 @@ type dispatchNamespaceScriptBindingGetResponseJSON struct {
 	Entrypoint                  apijson.Field
 	Environment                 apijson.Field
 	Format                      apijson.Field
+	Identity                    apijson.Field
 	IndexName                   apijson.Field
 	InstanceName                apijson.Field
 	Json                        apijson.Field
@@ -1749,11 +1753,12 @@ const (
 	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdictionEu          DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdiction = "eu"
 	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdictionFedramp     DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdiction = "fedramp"
 	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdictionFedrampHigh DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdiction = "fedramp-high"
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdictionUs          DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdiction = "us"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdiction) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdictionEu, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdictionFedramp, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdictionFedrampHigh:
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdictionEu, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdictionFedramp, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdictionFedrampHigh, DispatchNamespaceScriptBindingGetResponseWorkersBindingKindR2BucketJurisdictionUs:
 		return true
 	}
 	return false
@@ -2400,6 +2405,9 @@ type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetwork struc
 	Name string `json:"name" api:"required"`
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetworkType `json:"type" api:"required"`
+	// Enables Gateway identity for the binding. Requires network_id to be
+	// "cf1:network" and cannot be combined with tunnel_id.
+	Identity DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetworkIdentity `json:"identity"`
 	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
 	// Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
@@ -2414,6 +2422,7 @@ type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetwork struc
 type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetworkJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
+	Identity    apijson.Field
 	NetworkID   apijson.Field
 	TunnelID    apijson.Field
 	raw         string
@@ -2441,6 +2450,22 @@ const (
 func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetworkType) IsKnown() bool {
 	switch r {
 	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetworkTypeVPCNetwork:
+		return true
+	}
+	return false
+}
+
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetworkIdentity string
+
+const (
+	DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetworkIdentity = "runtime-email-alpha"
+)
+
+func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetworkIdentity) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetworkIdentityRuntimeEmailAlpha:
 		return true
 	}
 	return false
@@ -2515,6 +2540,22 @@ func (r DispatchNamespaceScriptBindingGetResponseFormat) IsKnown() bool {
 	return false
 }
 
+// Enables Gateway identity for the binding. Requires network_id to be
+// "cf1:network" and cannot be combined with tunnel_id.
+type DispatchNamespaceScriptBindingGetResponseIdentity string
+
+const (
+	DispatchNamespaceScriptBindingGetResponseIdentityRuntimeEmailAlpha DispatchNamespaceScriptBindingGetResponseIdentity = "runtime-email-alpha"
+)
+
+func (r DispatchNamespaceScriptBindingGetResponseIdentity) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptBindingGetResponseIdentityRuntimeEmailAlpha:
+		return true
+	}
+	return false
+}
+
 // The
 // [jurisdiction](https://developers.cloudflare.com/r2/reference/data-location/#jurisdictional-restrictions)
 // of the R2 bucket.
@@ -2524,11 +2565,12 @@ const (
 	DispatchNamespaceScriptBindingGetResponseJurisdictionEu          DispatchNamespaceScriptBindingGetResponseJurisdiction = "eu"
 	DispatchNamespaceScriptBindingGetResponseJurisdictionFedramp     DispatchNamespaceScriptBindingGetResponseJurisdiction = "fedramp"
 	DispatchNamespaceScriptBindingGetResponseJurisdictionFedrampHigh DispatchNamespaceScriptBindingGetResponseJurisdiction = "fedramp-high"
+	DispatchNamespaceScriptBindingGetResponseJurisdictionUs          DispatchNamespaceScriptBindingGetResponseJurisdiction = "us"
 )
 
 func (r DispatchNamespaceScriptBindingGetResponseJurisdiction) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptBindingGetResponseJurisdictionEu, DispatchNamespaceScriptBindingGetResponseJurisdictionFedramp, DispatchNamespaceScriptBindingGetResponseJurisdictionFedrampHigh:
+	case DispatchNamespaceScriptBindingGetResponseJurisdictionEu, DispatchNamespaceScriptBindingGetResponseJurisdictionFedramp, DispatchNamespaceScriptBindingGetResponseJurisdictionFedrampHigh, DispatchNamespaceScriptBindingGetResponseJurisdictionUs:
 		return true
 	}
 	return false
