@@ -735,8 +735,6 @@ func (r UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperat
 type UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo struct {
 	// Schema active on endpoint.
 	ActiveSchema UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema `json:"active_schema"`
-	// Deprecated. Always false.
-	LearnedAvailable bool `json:"learned_available"`
 	// Action taken on requests failing validation.
 	MitigationAction UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction `json:"mitigation_action" api:"nullable"`
 	JSON             userSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoJSON             `json:"-"`
@@ -747,7 +745,6 @@ type UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperation
 // [UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo]
 type userSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoJSON struct {
 	ActiveSchema     apijson.Field
-	LearnedAvailable apijson.Field
 	MitigationAction apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
@@ -766,10 +763,6 @@ type UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperation
 	// UUID.
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Deprecated. Always false.
-	//
-	// Deprecated: deprecated
-	IsLearned bool `json:"is_learned"`
 	// Schema file name.
 	Name string                                                                                                                 `json:"name"`
 	JSON userSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchemaJSON `json:"-"`
@@ -781,7 +774,6 @@ type UserSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperation
 type userSchemaOperationListResponseAPIShieldOperationFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchemaJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
-	IsLearned   apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -928,14 +920,15 @@ func (r UserSchemaOperationListParams) URLQuery() (v url.Values) {
 type UserSchemaOperationListParamsFeature string
 
 const (
-	UserSchemaOperationListParamsFeatureThresholds       UserSchemaOperationListParamsFeature = "thresholds"
-	UserSchemaOperationListParamsFeatureParameterSchemas UserSchemaOperationListParamsFeature = "parameter_schemas"
-	UserSchemaOperationListParamsFeatureSchemaInfo       UserSchemaOperationListParamsFeature = "schema_info"
+	UserSchemaOperationListParamsFeatureThresholds          UserSchemaOperationListParamsFeature = "thresholds"
+	UserSchemaOperationListParamsFeatureParameterSchemas    UserSchemaOperationListParamsFeature = "parameter_schemas"
+	UserSchemaOperationListParamsFeatureSchemaInfo          UserSchemaOperationListParamsFeature = "schema_info"
+	UserSchemaOperationListParamsFeatureConfidenceIntervals UserSchemaOperationListParamsFeature = "confidence_intervals"
 )
 
 func (r UserSchemaOperationListParamsFeature) IsKnown() bool {
 	switch r {
-	case UserSchemaOperationListParamsFeatureThresholds, UserSchemaOperationListParamsFeatureParameterSchemas, UserSchemaOperationListParamsFeatureSchemaInfo:
+	case UserSchemaOperationListParamsFeatureThresholds, UserSchemaOperationListParamsFeatureParameterSchemas, UserSchemaOperationListParamsFeatureSchemaInfo, UserSchemaOperationListParamsFeatureConfidenceIntervals:
 		return true
 	}
 	return false

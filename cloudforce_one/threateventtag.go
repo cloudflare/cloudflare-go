@@ -107,8 +107,9 @@ type ThreatEventTagNewResponse struct {
 	ActiveDurationAnnotated ThreatEventTagNewResponseActiveDurationAnnotated `json:"activeDuration_annotated" api:"nullable"`
 	ActorCategory           string                                           `json:"actorCategory"`
 	ActorCategoryAnnotated  ThreatEventTagNewResponseActorCategoryAnnotated  `json:"actorCategory_annotated" api:"nullable"`
-	// Structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: stripped from
-	// responses to non-CFONE accounts.
+	// Structured aliases ({ value, confidence 1-10, tlp }). Public: returned to all
+	// accounts with per-entry TLP filtering (entries with tlp: purple are removed for
+	// non-CFONE accounts).
 	Aliases                          []ThreatEventTagNewResponseAlias                          `json:"aliases"`
 	AliasGroupNames                  []string                                                  `json:"aliasGroupNames"`
 	AliasGroupNamesInternal          []string                                                  `json:"aliasGroupNamesInternal"`
@@ -230,17 +231,18 @@ func (r threatEventTagNewResponseActiveDurationAnnotatedJSON) RawJSON() string {
 type ThreatEventTagNewResponseActiveDurationAnnotatedTLP string
 
 const (
-	ThreatEventTagNewResponseActiveDurationAnnotatedTLPRed         ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "red"
-	ThreatEventTagNewResponseActiveDurationAnnotatedTLPAmber       ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "amber"
-	ThreatEventTagNewResponseActiveDurationAnnotatedTLPAmberStrict ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "amber+strict"
-	ThreatEventTagNewResponseActiveDurationAnnotatedTLPGreen       ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "green"
-	ThreatEventTagNewResponseActiveDurationAnnotatedTLPClear       ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "clear"
-	ThreatEventTagNewResponseActiveDurationAnnotatedTLPPurple      ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseActiveDurationAnnotatedTLPRed                  ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "red"
+	ThreatEventTagNewResponseActiveDurationAnnotatedTLPAmber                ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "amber"
+	ThreatEventTagNewResponseActiveDurationAnnotatedTLPAmberStrict          ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "amber-strict"
+	ThreatEventTagNewResponseActiveDurationAnnotatedTLPGreen                ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "green"
+	ThreatEventTagNewResponseActiveDurationAnnotatedTLPClear                ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "clear"
+	ThreatEventTagNewResponseActiveDurationAnnotatedTLPPurple               ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseActiveDurationAnnotatedTLPAmberStrictLowercase ThreatEventTagNewResponseActiveDurationAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewResponseActiveDurationAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewResponseActiveDurationAnnotatedTLPRed, ThreatEventTagNewResponseActiveDurationAnnotatedTLPAmber, ThreatEventTagNewResponseActiveDurationAnnotatedTLPAmberStrict, ThreatEventTagNewResponseActiveDurationAnnotatedTLPGreen, ThreatEventTagNewResponseActiveDurationAnnotatedTLPClear, ThreatEventTagNewResponseActiveDurationAnnotatedTLPPurple:
+	case ThreatEventTagNewResponseActiveDurationAnnotatedTLPRed, ThreatEventTagNewResponseActiveDurationAnnotatedTLPAmber, ThreatEventTagNewResponseActiveDurationAnnotatedTLPAmberStrict, ThreatEventTagNewResponseActiveDurationAnnotatedTLPGreen, ThreatEventTagNewResponseActiveDurationAnnotatedTLPClear, ThreatEventTagNewResponseActiveDurationAnnotatedTLPPurple, ThreatEventTagNewResponseActiveDurationAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -274,17 +276,18 @@ func (r threatEventTagNewResponseActorCategoryAnnotatedJSON) RawJSON() string {
 type ThreatEventTagNewResponseActorCategoryAnnotatedTLP string
 
 const (
-	ThreatEventTagNewResponseActorCategoryAnnotatedTLPRed         ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "red"
-	ThreatEventTagNewResponseActorCategoryAnnotatedTLPAmber       ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "amber"
-	ThreatEventTagNewResponseActorCategoryAnnotatedTLPAmberStrict ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "amber+strict"
-	ThreatEventTagNewResponseActorCategoryAnnotatedTLPGreen       ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "green"
-	ThreatEventTagNewResponseActorCategoryAnnotatedTLPClear       ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "clear"
-	ThreatEventTagNewResponseActorCategoryAnnotatedTLPPurple      ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseActorCategoryAnnotatedTLPRed                  ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "red"
+	ThreatEventTagNewResponseActorCategoryAnnotatedTLPAmber                ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "amber"
+	ThreatEventTagNewResponseActorCategoryAnnotatedTLPAmberStrict          ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "amber-strict"
+	ThreatEventTagNewResponseActorCategoryAnnotatedTLPGreen                ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "green"
+	ThreatEventTagNewResponseActorCategoryAnnotatedTLPClear                ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "clear"
+	ThreatEventTagNewResponseActorCategoryAnnotatedTLPPurple               ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseActorCategoryAnnotatedTLPAmberStrictLowercase ThreatEventTagNewResponseActorCategoryAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewResponseActorCategoryAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewResponseActorCategoryAnnotatedTLPRed, ThreatEventTagNewResponseActorCategoryAnnotatedTLPAmber, ThreatEventTagNewResponseActorCategoryAnnotatedTLPAmberStrict, ThreatEventTagNewResponseActorCategoryAnnotatedTLPGreen, ThreatEventTagNewResponseActorCategoryAnnotatedTLPClear, ThreatEventTagNewResponseActorCategoryAnnotatedTLPPurple:
+	case ThreatEventTagNewResponseActorCategoryAnnotatedTLPRed, ThreatEventTagNewResponseActorCategoryAnnotatedTLPAmber, ThreatEventTagNewResponseActorCategoryAnnotatedTLPAmberStrict, ThreatEventTagNewResponseActorCategoryAnnotatedTLPGreen, ThreatEventTagNewResponseActorCategoryAnnotatedTLPClear, ThreatEventTagNewResponseActorCategoryAnnotatedTLPPurple, ThreatEventTagNewResponseActorCategoryAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -318,17 +321,18 @@ func (r threatEventTagNewResponseAliasJSON) RawJSON() string {
 type ThreatEventTagNewResponseAliasesTLP string
 
 const (
-	ThreatEventTagNewResponseAliasesTLPRed         ThreatEventTagNewResponseAliasesTLP = "red"
-	ThreatEventTagNewResponseAliasesTLPAmber       ThreatEventTagNewResponseAliasesTLP = "amber"
-	ThreatEventTagNewResponseAliasesTLPAmberStrict ThreatEventTagNewResponseAliasesTLP = "amber+strict"
-	ThreatEventTagNewResponseAliasesTLPGreen       ThreatEventTagNewResponseAliasesTLP = "green"
-	ThreatEventTagNewResponseAliasesTLPClear       ThreatEventTagNewResponseAliasesTLP = "clear"
-	ThreatEventTagNewResponseAliasesTLPPurple      ThreatEventTagNewResponseAliasesTLP = "purple"
+	ThreatEventTagNewResponseAliasesTLPRed                  ThreatEventTagNewResponseAliasesTLP = "red"
+	ThreatEventTagNewResponseAliasesTLPAmber                ThreatEventTagNewResponseAliasesTLP = "amber"
+	ThreatEventTagNewResponseAliasesTLPAmberStrict          ThreatEventTagNewResponseAliasesTLP = "amber-strict"
+	ThreatEventTagNewResponseAliasesTLPGreen                ThreatEventTagNewResponseAliasesTLP = "green"
+	ThreatEventTagNewResponseAliasesTLPClear                ThreatEventTagNewResponseAliasesTLP = "clear"
+	ThreatEventTagNewResponseAliasesTLPPurple               ThreatEventTagNewResponseAliasesTLP = "purple"
+	ThreatEventTagNewResponseAliasesTLPAmberStrictLowercase ThreatEventTagNewResponseAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewResponseAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewResponseAliasesTLPRed, ThreatEventTagNewResponseAliasesTLPAmber, ThreatEventTagNewResponseAliasesTLPAmberStrict, ThreatEventTagNewResponseAliasesTLPGreen, ThreatEventTagNewResponseAliasesTLPClear, ThreatEventTagNewResponseAliasesTLPPurple:
+	case ThreatEventTagNewResponseAliasesTLPRed, ThreatEventTagNewResponseAliasesTLPAmber, ThreatEventTagNewResponseAliasesTLPAmberStrict, ThreatEventTagNewResponseAliasesTLPGreen, ThreatEventTagNewResponseAliasesTLPClear, ThreatEventTagNewResponseAliasesTLPPurple, ThreatEventTagNewResponseAliasesTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -363,17 +367,18 @@ func (r threatEventTagNewResponseAttributionOrganizationAnnotatedJSON) RawJSON()
 type ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP string
 
 const (
-	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPRed         ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "red"
-	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPAmber       ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "amber"
-	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPAmberStrict ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "amber+strict"
-	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPGreen       ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "green"
-	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPClear       ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "clear"
-	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPPurple      ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPRed                  ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "red"
+	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPAmber                ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "amber"
+	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPAmberStrict          ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "amber-strict"
+	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPGreen                ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "green"
+	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPClear                ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "clear"
+	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPPurple               ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPAmberStrictLowercase ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPRed, ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPAmber, ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPAmberStrict, ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPGreen, ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPClear, ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPPurple:
+	case ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPRed, ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPAmber, ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPAmberStrict, ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPGreen, ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPClear, ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPPurple, ThreatEventTagNewResponseAttributionOrganizationAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -428,17 +433,18 @@ func (r threatEventTagNewResponseExternalReferencesAnnotatedJSON) RawJSON() stri
 type ThreatEventTagNewResponseExternalReferencesAnnotatedTLP string
 
 const (
-	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPRed         ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "red"
-	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPAmber       ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "amber"
-	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPAmberStrict ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "amber+strict"
-	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPGreen       ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "green"
-	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPClear       ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "clear"
-	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPPurple      ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPRed                  ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "red"
+	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPAmber                ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "amber"
+	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPAmberStrict          ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "amber-strict"
+	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPGreen                ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "green"
+	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPClear                ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "clear"
+	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPPurple               ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseExternalReferencesAnnotatedTLPAmberStrictLowercase ThreatEventTagNewResponseExternalReferencesAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewResponseExternalReferencesAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewResponseExternalReferencesAnnotatedTLPRed, ThreatEventTagNewResponseExternalReferencesAnnotatedTLPAmber, ThreatEventTagNewResponseExternalReferencesAnnotatedTLPAmberStrict, ThreatEventTagNewResponseExternalReferencesAnnotatedTLPGreen, ThreatEventTagNewResponseExternalReferencesAnnotatedTLPClear, ThreatEventTagNewResponseExternalReferencesAnnotatedTLPPurple:
+	case ThreatEventTagNewResponseExternalReferencesAnnotatedTLPRed, ThreatEventTagNewResponseExternalReferencesAnnotatedTLPAmber, ThreatEventTagNewResponseExternalReferencesAnnotatedTLPAmberStrict, ThreatEventTagNewResponseExternalReferencesAnnotatedTLPGreen, ThreatEventTagNewResponseExternalReferencesAnnotatedTLPClear, ThreatEventTagNewResponseExternalReferencesAnnotatedTLPPurple, ThreatEventTagNewResponseExternalReferencesAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -472,17 +478,18 @@ func (r threatEventTagNewResponseInternalAliasJSON) RawJSON() string {
 type ThreatEventTagNewResponseInternalAliasesTLP string
 
 const (
-	ThreatEventTagNewResponseInternalAliasesTLPRed         ThreatEventTagNewResponseInternalAliasesTLP = "red"
-	ThreatEventTagNewResponseInternalAliasesTLPAmber       ThreatEventTagNewResponseInternalAliasesTLP = "amber"
-	ThreatEventTagNewResponseInternalAliasesTLPAmberStrict ThreatEventTagNewResponseInternalAliasesTLP = "amber+strict"
-	ThreatEventTagNewResponseInternalAliasesTLPGreen       ThreatEventTagNewResponseInternalAliasesTLP = "green"
-	ThreatEventTagNewResponseInternalAliasesTLPClear       ThreatEventTagNewResponseInternalAliasesTLP = "clear"
-	ThreatEventTagNewResponseInternalAliasesTLPPurple      ThreatEventTagNewResponseInternalAliasesTLP = "purple"
+	ThreatEventTagNewResponseInternalAliasesTLPRed                  ThreatEventTagNewResponseInternalAliasesTLP = "red"
+	ThreatEventTagNewResponseInternalAliasesTLPAmber                ThreatEventTagNewResponseInternalAliasesTLP = "amber"
+	ThreatEventTagNewResponseInternalAliasesTLPAmberStrict          ThreatEventTagNewResponseInternalAliasesTLP = "amber-strict"
+	ThreatEventTagNewResponseInternalAliasesTLPGreen                ThreatEventTagNewResponseInternalAliasesTLP = "green"
+	ThreatEventTagNewResponseInternalAliasesTLPClear                ThreatEventTagNewResponseInternalAliasesTLP = "clear"
+	ThreatEventTagNewResponseInternalAliasesTLPPurple               ThreatEventTagNewResponseInternalAliasesTLP = "purple"
+	ThreatEventTagNewResponseInternalAliasesTLPAmberStrictLowercase ThreatEventTagNewResponseInternalAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewResponseInternalAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewResponseInternalAliasesTLPRed, ThreatEventTagNewResponseInternalAliasesTLPAmber, ThreatEventTagNewResponseInternalAliasesTLPAmberStrict, ThreatEventTagNewResponseInternalAliasesTLPGreen, ThreatEventTagNewResponseInternalAliasesTLPClear, ThreatEventTagNewResponseInternalAliasesTLPPurple:
+	case ThreatEventTagNewResponseInternalAliasesTLPRed, ThreatEventTagNewResponseInternalAliasesTLPAmber, ThreatEventTagNewResponseInternalAliasesTLPAmberStrict, ThreatEventTagNewResponseInternalAliasesTLPGreen, ThreatEventTagNewResponseInternalAliasesTLPClear, ThreatEventTagNewResponseInternalAliasesTLPPurple, ThreatEventTagNewResponseInternalAliasesTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -516,17 +523,18 @@ func (r threatEventTagNewResponseMotiveAnnotatedJSON) RawJSON() string {
 type ThreatEventTagNewResponseMotiveAnnotatedTLP string
 
 const (
-	ThreatEventTagNewResponseMotiveAnnotatedTLPRed         ThreatEventTagNewResponseMotiveAnnotatedTLP = "red"
-	ThreatEventTagNewResponseMotiveAnnotatedTLPAmber       ThreatEventTagNewResponseMotiveAnnotatedTLP = "amber"
-	ThreatEventTagNewResponseMotiveAnnotatedTLPAmberStrict ThreatEventTagNewResponseMotiveAnnotatedTLP = "amber+strict"
-	ThreatEventTagNewResponseMotiveAnnotatedTLPGreen       ThreatEventTagNewResponseMotiveAnnotatedTLP = "green"
-	ThreatEventTagNewResponseMotiveAnnotatedTLPClear       ThreatEventTagNewResponseMotiveAnnotatedTLP = "clear"
-	ThreatEventTagNewResponseMotiveAnnotatedTLPPurple      ThreatEventTagNewResponseMotiveAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseMotiveAnnotatedTLPRed                  ThreatEventTagNewResponseMotiveAnnotatedTLP = "red"
+	ThreatEventTagNewResponseMotiveAnnotatedTLPAmber                ThreatEventTagNewResponseMotiveAnnotatedTLP = "amber"
+	ThreatEventTagNewResponseMotiveAnnotatedTLPAmberStrict          ThreatEventTagNewResponseMotiveAnnotatedTLP = "amber-strict"
+	ThreatEventTagNewResponseMotiveAnnotatedTLPGreen                ThreatEventTagNewResponseMotiveAnnotatedTLP = "green"
+	ThreatEventTagNewResponseMotiveAnnotatedTLPClear                ThreatEventTagNewResponseMotiveAnnotatedTLP = "clear"
+	ThreatEventTagNewResponseMotiveAnnotatedTLPPurple               ThreatEventTagNewResponseMotiveAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseMotiveAnnotatedTLPAmberStrictLowercase ThreatEventTagNewResponseMotiveAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewResponseMotiveAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewResponseMotiveAnnotatedTLPRed, ThreatEventTagNewResponseMotiveAnnotatedTLPAmber, ThreatEventTagNewResponseMotiveAnnotatedTLPAmberStrict, ThreatEventTagNewResponseMotiveAnnotatedTLPGreen, ThreatEventTagNewResponseMotiveAnnotatedTLPClear, ThreatEventTagNewResponseMotiveAnnotatedTLPPurple:
+	case ThreatEventTagNewResponseMotiveAnnotatedTLPRed, ThreatEventTagNewResponseMotiveAnnotatedTLPAmber, ThreatEventTagNewResponseMotiveAnnotatedTLPAmberStrict, ThreatEventTagNewResponseMotiveAnnotatedTLPGreen, ThreatEventTagNewResponseMotiveAnnotatedTLPClear, ThreatEventTagNewResponseMotiveAnnotatedTLPPurple, ThreatEventTagNewResponseMotiveAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -560,17 +568,18 @@ func (r threatEventTagNewResponseOpsecLevelAnnotatedJSON) RawJSON() string {
 type ThreatEventTagNewResponseOpsecLevelAnnotatedTLP string
 
 const (
-	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPRed         ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "red"
-	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPAmber       ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "amber"
-	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPAmberStrict ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "amber+strict"
-	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPGreen       ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "green"
-	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPClear       ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "clear"
-	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPPurple      ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPRed                  ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "red"
+	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPAmber                ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "amber"
+	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPAmberStrict          ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "amber-strict"
+	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPGreen                ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "green"
+	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPClear                ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "clear"
+	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPPurple               ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseOpsecLevelAnnotatedTLPAmberStrictLowercase ThreatEventTagNewResponseOpsecLevelAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewResponseOpsecLevelAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewResponseOpsecLevelAnnotatedTLPRed, ThreatEventTagNewResponseOpsecLevelAnnotatedTLPAmber, ThreatEventTagNewResponseOpsecLevelAnnotatedTLPAmberStrict, ThreatEventTagNewResponseOpsecLevelAnnotatedTLPGreen, ThreatEventTagNewResponseOpsecLevelAnnotatedTLPClear, ThreatEventTagNewResponseOpsecLevelAnnotatedTLPPurple:
+	case ThreatEventTagNewResponseOpsecLevelAnnotatedTLPRed, ThreatEventTagNewResponseOpsecLevelAnnotatedTLPAmber, ThreatEventTagNewResponseOpsecLevelAnnotatedTLPAmberStrict, ThreatEventTagNewResponseOpsecLevelAnnotatedTLPGreen, ThreatEventTagNewResponseOpsecLevelAnnotatedTLPClear, ThreatEventTagNewResponseOpsecLevelAnnotatedTLPPurple, ThreatEventTagNewResponseOpsecLevelAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -604,17 +613,18 @@ func (r threatEventTagNewResponseOriginCountryISOAnnotatedJSON) RawJSON() string
 type ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP string
 
 const (
-	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPRed         ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "red"
-	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPAmber       ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "amber"
-	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPAmberStrict ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "amber+strict"
-	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPGreen       ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "green"
-	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPClear       ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "clear"
-	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPPurple      ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPRed                  ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "red"
+	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPAmber                ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "amber"
+	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPAmberStrict          ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "amber-strict"
+	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPGreen                ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "green"
+	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPClear                ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "clear"
+	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPPurple               ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPAmberStrictLowercase ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewResponseOriginCountryISOAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPRed, ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPAmber, ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPAmberStrict, ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPGreen, ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPClear, ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPPurple:
+	case ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPRed, ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPAmber, ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPAmberStrict, ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPGreen, ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPClear, ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPPurple, ThreatEventTagNewResponseOriginCountryISOAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -646,17 +656,18 @@ func (r threatEventTagNewResponsePriorityAnnotatedJSON) RawJSON() string {
 type ThreatEventTagNewResponsePriorityAnnotatedTLP string
 
 const (
-	ThreatEventTagNewResponsePriorityAnnotatedTLPRed         ThreatEventTagNewResponsePriorityAnnotatedTLP = "red"
-	ThreatEventTagNewResponsePriorityAnnotatedTLPAmber       ThreatEventTagNewResponsePriorityAnnotatedTLP = "amber"
-	ThreatEventTagNewResponsePriorityAnnotatedTLPAmberStrict ThreatEventTagNewResponsePriorityAnnotatedTLP = "amber+strict"
-	ThreatEventTagNewResponsePriorityAnnotatedTLPGreen       ThreatEventTagNewResponsePriorityAnnotatedTLP = "green"
-	ThreatEventTagNewResponsePriorityAnnotatedTLPClear       ThreatEventTagNewResponsePriorityAnnotatedTLP = "clear"
-	ThreatEventTagNewResponsePriorityAnnotatedTLPPurple      ThreatEventTagNewResponsePriorityAnnotatedTLP = "purple"
+	ThreatEventTagNewResponsePriorityAnnotatedTLPRed                  ThreatEventTagNewResponsePriorityAnnotatedTLP = "red"
+	ThreatEventTagNewResponsePriorityAnnotatedTLPAmber                ThreatEventTagNewResponsePriorityAnnotatedTLP = "amber"
+	ThreatEventTagNewResponsePriorityAnnotatedTLPAmberStrict          ThreatEventTagNewResponsePriorityAnnotatedTLP = "amber-strict"
+	ThreatEventTagNewResponsePriorityAnnotatedTLPGreen                ThreatEventTagNewResponsePriorityAnnotatedTLP = "green"
+	ThreatEventTagNewResponsePriorityAnnotatedTLPClear                ThreatEventTagNewResponsePriorityAnnotatedTLP = "clear"
+	ThreatEventTagNewResponsePriorityAnnotatedTLPPurple               ThreatEventTagNewResponsePriorityAnnotatedTLP = "purple"
+	ThreatEventTagNewResponsePriorityAnnotatedTLPAmberStrictLowercase ThreatEventTagNewResponsePriorityAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewResponsePriorityAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewResponsePriorityAnnotatedTLPRed, ThreatEventTagNewResponsePriorityAnnotatedTLPAmber, ThreatEventTagNewResponsePriorityAnnotatedTLPAmberStrict, ThreatEventTagNewResponsePriorityAnnotatedTLPGreen, ThreatEventTagNewResponsePriorityAnnotatedTLPClear, ThreatEventTagNewResponsePriorityAnnotatedTLPPurple:
+	case ThreatEventTagNewResponsePriorityAnnotatedTLPRed, ThreatEventTagNewResponsePriorityAnnotatedTLPAmber, ThreatEventTagNewResponsePriorityAnnotatedTLPAmberStrict, ThreatEventTagNewResponsePriorityAnnotatedTLPGreen, ThreatEventTagNewResponsePriorityAnnotatedTLPClear, ThreatEventTagNewResponsePriorityAnnotatedTLPPurple, ThreatEventTagNewResponsePriorityAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -690,17 +701,18 @@ func (r threatEventTagNewResponseSophisticationLevelAnnotatedJSON) RawJSON() str
 type ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP string
 
 const (
-	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPRed         ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "red"
-	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPAmber       ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "amber"
-	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPAmberStrict ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "amber+strict"
-	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPGreen       ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "green"
-	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPClear       ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "clear"
-	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPPurple      ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPRed                  ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "red"
+	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPAmber                ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "amber"
+	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPAmberStrict          ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "amber-strict"
+	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPGreen                ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "green"
+	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPClear                ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "clear"
+	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPPurple               ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "purple"
+	ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPAmberStrictLowercase ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPRed, ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPAmber, ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPAmberStrict, ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPGreen, ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPClear, ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPPurple:
+	case ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPRed, ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPAmber, ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPAmberStrict, ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPGreen, ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPClear, ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPPurple, ThreatEventTagNewResponseSophisticationLevelAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -710,17 +722,18 @@ func (r ThreatEventTagNewResponseSophisticationLevelAnnotatedTLP) IsKnown() bool
 type ThreatEventTagNewResponseTLP string
 
 const (
-	ThreatEventTagNewResponseTLPRed         ThreatEventTagNewResponseTLP = "red"
-	ThreatEventTagNewResponseTLPAmber       ThreatEventTagNewResponseTLP = "amber"
-	ThreatEventTagNewResponseTLPAmberStrict ThreatEventTagNewResponseTLP = "amber+strict"
-	ThreatEventTagNewResponseTLPGreen       ThreatEventTagNewResponseTLP = "green"
-	ThreatEventTagNewResponseTLPClear       ThreatEventTagNewResponseTLP = "clear"
-	ThreatEventTagNewResponseTLPPurple      ThreatEventTagNewResponseTLP = "purple"
+	ThreatEventTagNewResponseTLPRed                  ThreatEventTagNewResponseTLP = "red"
+	ThreatEventTagNewResponseTLPAmber                ThreatEventTagNewResponseTLP = "amber"
+	ThreatEventTagNewResponseTLPAmberStrict          ThreatEventTagNewResponseTLP = "amber-strict"
+	ThreatEventTagNewResponseTLPGreen                ThreatEventTagNewResponseTLP = "green"
+	ThreatEventTagNewResponseTLPClear                ThreatEventTagNewResponseTLP = "clear"
+	ThreatEventTagNewResponseTLPPurple               ThreatEventTagNewResponseTLP = "purple"
+	ThreatEventTagNewResponseTLPAmberStrictLowercase ThreatEventTagNewResponseTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewResponseTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewResponseTLPRed, ThreatEventTagNewResponseTLPAmber, ThreatEventTagNewResponseTLPAmberStrict, ThreatEventTagNewResponseTLPGreen, ThreatEventTagNewResponseTLPClear, ThreatEventTagNewResponseTLPPurple:
+	case ThreatEventTagNewResponseTLPRed, ThreatEventTagNewResponseTLPAmber, ThreatEventTagNewResponseTLPAmberStrict, ThreatEventTagNewResponseTLPGreen, ThreatEventTagNewResponseTLPClear, ThreatEventTagNewResponseTLPPurple, ThreatEventTagNewResponseTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -783,8 +796,9 @@ type ThreatEventTagListResponseTag struct {
 	ActiveDurationAnnotated ThreatEventTagListResponseTagsActiveDurationAnnotated `json:"activeDuration_annotated" api:"nullable"`
 	ActorCategory           string                                                `json:"actorCategory"`
 	ActorCategoryAnnotated  ThreatEventTagListResponseTagsActorCategoryAnnotated  `json:"actorCategory_annotated" api:"nullable"`
-	// Structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: stripped from
-	// responses to non-CFONE accounts.
+	// Structured aliases ({ value, confidence 1-10, tlp }). Public: returned to all
+	// accounts with per-entry TLP filtering (entries with tlp: purple are removed for
+	// non-CFONE accounts).
 	Aliases                          []ThreatEventTagListResponseTagsAlias                          `json:"aliases"`
 	AliasGroupNames                  []string                                                       `json:"aliasGroupNames"`
 	AliasGroupNamesInternal          []string                                                       `json:"aliasGroupNamesInternal"`
@@ -906,17 +920,18 @@ func (r threatEventTagListResponseTagsActiveDurationAnnotatedJSON) RawJSON() str
 type ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP string
 
 const (
-	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPRed         ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "red"
-	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPAmber       ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "amber"
-	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPAmberStrict ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "amber+strict"
-	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPGreen       ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "green"
-	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPClear       ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "clear"
-	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPPurple      ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPRed                  ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "red"
+	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPAmber                ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "amber"
+	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPAmberStrict          ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "amber-strict"
+	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPGreen                ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "green"
+	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPClear                ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "clear"
+	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPPurple               ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPAmberStrictLowercase ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagListResponseTagsActiveDurationAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPRed, ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPAmber, ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPGreen, ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPClear, ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPPurple:
+	case ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPRed, ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPAmber, ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPGreen, ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPClear, ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPPurple, ThreatEventTagListResponseTagsActiveDurationAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -950,17 +965,18 @@ func (r threatEventTagListResponseTagsActorCategoryAnnotatedJSON) RawJSON() stri
 type ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP string
 
 const (
-	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPRed         ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "red"
-	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPAmber       ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "amber"
-	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPAmberStrict ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "amber+strict"
-	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPGreen       ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "green"
-	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPClear       ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "clear"
-	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPPurple      ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPRed                  ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "red"
+	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPAmber                ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "amber"
+	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPAmberStrict          ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "amber-strict"
+	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPGreen                ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "green"
+	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPClear                ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "clear"
+	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPPurple               ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPAmberStrictLowercase ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagListResponseTagsActorCategoryAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPRed, ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPAmber, ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPGreen, ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPClear, ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPPurple:
+	case ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPRed, ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPAmber, ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPGreen, ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPClear, ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPPurple, ThreatEventTagListResponseTagsActorCategoryAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -994,17 +1010,18 @@ func (r threatEventTagListResponseTagsAliasJSON) RawJSON() string {
 type ThreatEventTagListResponseTagsAliasesTLP string
 
 const (
-	ThreatEventTagListResponseTagsAliasesTLPRed         ThreatEventTagListResponseTagsAliasesTLP = "red"
-	ThreatEventTagListResponseTagsAliasesTLPAmber       ThreatEventTagListResponseTagsAliasesTLP = "amber"
-	ThreatEventTagListResponseTagsAliasesTLPAmberStrict ThreatEventTagListResponseTagsAliasesTLP = "amber+strict"
-	ThreatEventTagListResponseTagsAliasesTLPGreen       ThreatEventTagListResponseTagsAliasesTLP = "green"
-	ThreatEventTagListResponseTagsAliasesTLPClear       ThreatEventTagListResponseTagsAliasesTLP = "clear"
-	ThreatEventTagListResponseTagsAliasesTLPPurple      ThreatEventTagListResponseTagsAliasesTLP = "purple"
+	ThreatEventTagListResponseTagsAliasesTLPRed                  ThreatEventTagListResponseTagsAliasesTLP = "red"
+	ThreatEventTagListResponseTagsAliasesTLPAmber                ThreatEventTagListResponseTagsAliasesTLP = "amber"
+	ThreatEventTagListResponseTagsAliasesTLPAmberStrict          ThreatEventTagListResponseTagsAliasesTLP = "amber-strict"
+	ThreatEventTagListResponseTagsAliasesTLPGreen                ThreatEventTagListResponseTagsAliasesTLP = "green"
+	ThreatEventTagListResponseTagsAliasesTLPClear                ThreatEventTagListResponseTagsAliasesTLP = "clear"
+	ThreatEventTagListResponseTagsAliasesTLPPurple               ThreatEventTagListResponseTagsAliasesTLP = "purple"
+	ThreatEventTagListResponseTagsAliasesTLPAmberStrictLowercase ThreatEventTagListResponseTagsAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagListResponseTagsAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagListResponseTagsAliasesTLPRed, ThreatEventTagListResponseTagsAliasesTLPAmber, ThreatEventTagListResponseTagsAliasesTLPAmberStrict, ThreatEventTagListResponseTagsAliasesTLPGreen, ThreatEventTagListResponseTagsAliasesTLPClear, ThreatEventTagListResponseTagsAliasesTLPPurple:
+	case ThreatEventTagListResponseTagsAliasesTLPRed, ThreatEventTagListResponseTagsAliasesTLPAmber, ThreatEventTagListResponseTagsAliasesTLPAmberStrict, ThreatEventTagListResponseTagsAliasesTLPGreen, ThreatEventTagListResponseTagsAliasesTLPClear, ThreatEventTagListResponseTagsAliasesTLPPurple, ThreatEventTagListResponseTagsAliasesTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1039,17 +1056,18 @@ func (r threatEventTagListResponseTagsAttributionOrganizationAnnotatedJSON) RawJ
 type ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP string
 
 const (
-	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPRed         ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "red"
-	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPAmber       ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "amber"
-	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPAmberStrict ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "amber+strict"
-	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPGreen       ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "green"
-	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPClear       ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "clear"
-	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPPurple      ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPRed                  ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "red"
+	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPAmber                ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "amber"
+	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPAmberStrict          ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "amber-strict"
+	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPGreen                ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "green"
+	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPClear                ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "clear"
+	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPPurple               ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPAmberStrictLowercase ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPRed, ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPAmber, ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPGreen, ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPClear, ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPPurple:
+	case ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPRed, ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPAmber, ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPGreen, ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPClear, ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPPurple, ThreatEventTagListResponseTagsAttributionOrganizationAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1105,17 +1123,18 @@ func (r threatEventTagListResponseTagsExternalReferencesAnnotatedJSON) RawJSON()
 type ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP string
 
 const (
-	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPRed         ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "red"
-	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPAmber       ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "amber"
-	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPAmberStrict ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "amber+strict"
-	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPGreen       ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "green"
-	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPClear       ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "clear"
-	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPPurple      ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPRed                  ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "red"
+	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPAmber                ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "amber"
+	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPAmberStrict          ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "amber-strict"
+	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPGreen                ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "green"
+	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPClear                ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "clear"
+	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPPurple               ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPAmberStrictLowercase ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPRed, ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPAmber, ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPGreen, ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPClear, ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPPurple:
+	case ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPRed, ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPAmber, ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPGreen, ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPClear, ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPPurple, ThreatEventTagListResponseTagsExternalReferencesAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1149,17 +1168,18 @@ func (r threatEventTagListResponseTagsInternalAliasJSON) RawJSON() string {
 type ThreatEventTagListResponseTagsInternalAliasesTLP string
 
 const (
-	ThreatEventTagListResponseTagsInternalAliasesTLPRed         ThreatEventTagListResponseTagsInternalAliasesTLP = "red"
-	ThreatEventTagListResponseTagsInternalAliasesTLPAmber       ThreatEventTagListResponseTagsInternalAliasesTLP = "amber"
-	ThreatEventTagListResponseTagsInternalAliasesTLPAmberStrict ThreatEventTagListResponseTagsInternalAliasesTLP = "amber+strict"
-	ThreatEventTagListResponseTagsInternalAliasesTLPGreen       ThreatEventTagListResponseTagsInternalAliasesTLP = "green"
-	ThreatEventTagListResponseTagsInternalAliasesTLPClear       ThreatEventTagListResponseTagsInternalAliasesTLP = "clear"
-	ThreatEventTagListResponseTagsInternalAliasesTLPPurple      ThreatEventTagListResponseTagsInternalAliasesTLP = "purple"
+	ThreatEventTagListResponseTagsInternalAliasesTLPRed                  ThreatEventTagListResponseTagsInternalAliasesTLP = "red"
+	ThreatEventTagListResponseTagsInternalAliasesTLPAmber                ThreatEventTagListResponseTagsInternalAliasesTLP = "amber"
+	ThreatEventTagListResponseTagsInternalAliasesTLPAmberStrict          ThreatEventTagListResponseTagsInternalAliasesTLP = "amber-strict"
+	ThreatEventTagListResponseTagsInternalAliasesTLPGreen                ThreatEventTagListResponseTagsInternalAliasesTLP = "green"
+	ThreatEventTagListResponseTagsInternalAliasesTLPClear                ThreatEventTagListResponseTagsInternalAliasesTLP = "clear"
+	ThreatEventTagListResponseTagsInternalAliasesTLPPurple               ThreatEventTagListResponseTagsInternalAliasesTLP = "purple"
+	ThreatEventTagListResponseTagsInternalAliasesTLPAmberStrictLowercase ThreatEventTagListResponseTagsInternalAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagListResponseTagsInternalAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagListResponseTagsInternalAliasesTLPRed, ThreatEventTagListResponseTagsInternalAliasesTLPAmber, ThreatEventTagListResponseTagsInternalAliasesTLPAmberStrict, ThreatEventTagListResponseTagsInternalAliasesTLPGreen, ThreatEventTagListResponseTagsInternalAliasesTLPClear, ThreatEventTagListResponseTagsInternalAliasesTLPPurple:
+	case ThreatEventTagListResponseTagsInternalAliasesTLPRed, ThreatEventTagListResponseTagsInternalAliasesTLPAmber, ThreatEventTagListResponseTagsInternalAliasesTLPAmberStrict, ThreatEventTagListResponseTagsInternalAliasesTLPGreen, ThreatEventTagListResponseTagsInternalAliasesTLPClear, ThreatEventTagListResponseTagsInternalAliasesTLPPurple, ThreatEventTagListResponseTagsInternalAliasesTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1193,17 +1213,18 @@ func (r threatEventTagListResponseTagsMotiveAnnotatedJSON) RawJSON() string {
 type ThreatEventTagListResponseTagsMotiveAnnotatedTLP string
 
 const (
-	ThreatEventTagListResponseTagsMotiveAnnotatedTLPRed         ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "red"
-	ThreatEventTagListResponseTagsMotiveAnnotatedTLPAmber       ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "amber"
-	ThreatEventTagListResponseTagsMotiveAnnotatedTLPAmberStrict ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "amber+strict"
-	ThreatEventTagListResponseTagsMotiveAnnotatedTLPGreen       ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "green"
-	ThreatEventTagListResponseTagsMotiveAnnotatedTLPClear       ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "clear"
-	ThreatEventTagListResponseTagsMotiveAnnotatedTLPPurple      ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsMotiveAnnotatedTLPRed                  ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "red"
+	ThreatEventTagListResponseTagsMotiveAnnotatedTLPAmber                ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "amber"
+	ThreatEventTagListResponseTagsMotiveAnnotatedTLPAmberStrict          ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "amber-strict"
+	ThreatEventTagListResponseTagsMotiveAnnotatedTLPGreen                ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "green"
+	ThreatEventTagListResponseTagsMotiveAnnotatedTLPClear                ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "clear"
+	ThreatEventTagListResponseTagsMotiveAnnotatedTLPPurple               ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsMotiveAnnotatedTLPAmberStrictLowercase ThreatEventTagListResponseTagsMotiveAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagListResponseTagsMotiveAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagListResponseTagsMotiveAnnotatedTLPRed, ThreatEventTagListResponseTagsMotiveAnnotatedTLPAmber, ThreatEventTagListResponseTagsMotiveAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsMotiveAnnotatedTLPGreen, ThreatEventTagListResponseTagsMotiveAnnotatedTLPClear, ThreatEventTagListResponseTagsMotiveAnnotatedTLPPurple:
+	case ThreatEventTagListResponseTagsMotiveAnnotatedTLPRed, ThreatEventTagListResponseTagsMotiveAnnotatedTLPAmber, ThreatEventTagListResponseTagsMotiveAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsMotiveAnnotatedTLPGreen, ThreatEventTagListResponseTagsMotiveAnnotatedTLPClear, ThreatEventTagListResponseTagsMotiveAnnotatedTLPPurple, ThreatEventTagListResponseTagsMotiveAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1237,17 +1258,18 @@ func (r threatEventTagListResponseTagsOpsecLevelAnnotatedJSON) RawJSON() string 
 type ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP string
 
 const (
-	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPRed         ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "red"
-	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPAmber       ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "amber"
-	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPAmberStrict ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "amber+strict"
-	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPGreen       ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "green"
-	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPClear       ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "clear"
-	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPPurple      ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPRed                  ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "red"
+	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPAmber                ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "amber"
+	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPAmberStrict          ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "amber-strict"
+	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPGreen                ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "green"
+	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPClear                ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "clear"
+	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPPurple               ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPAmberStrictLowercase ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPRed, ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPAmber, ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPGreen, ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPClear, ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPPurple:
+	case ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPRed, ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPAmber, ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPGreen, ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPClear, ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPPurple, ThreatEventTagListResponseTagsOpsecLevelAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1282,17 +1304,18 @@ func (r threatEventTagListResponseTagsOriginCountryISOAnnotatedJSON) RawJSON() s
 type ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP string
 
 const (
-	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPRed         ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "red"
-	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPAmber       ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "amber"
-	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPAmberStrict ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "amber+strict"
-	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPGreen       ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "green"
-	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPClear       ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "clear"
-	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPPurple      ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPRed                  ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "red"
+	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPAmber                ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "amber"
+	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPAmberStrict          ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "amber-strict"
+	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPGreen                ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "green"
+	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPClear                ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "clear"
+	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPPurple               ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPAmberStrictLowercase ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPRed, ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPAmber, ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPGreen, ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPClear, ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPPurple:
+	case ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPRed, ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPAmber, ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPGreen, ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPClear, ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPPurple, ThreatEventTagListResponseTagsOriginCountryISOAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1324,17 +1347,18 @@ func (r threatEventTagListResponseTagsPriorityAnnotatedJSON) RawJSON() string {
 type ThreatEventTagListResponseTagsPriorityAnnotatedTLP string
 
 const (
-	ThreatEventTagListResponseTagsPriorityAnnotatedTLPRed         ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "red"
-	ThreatEventTagListResponseTagsPriorityAnnotatedTLPAmber       ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "amber"
-	ThreatEventTagListResponseTagsPriorityAnnotatedTLPAmberStrict ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "amber+strict"
-	ThreatEventTagListResponseTagsPriorityAnnotatedTLPGreen       ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "green"
-	ThreatEventTagListResponseTagsPriorityAnnotatedTLPClear       ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "clear"
-	ThreatEventTagListResponseTagsPriorityAnnotatedTLPPurple      ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsPriorityAnnotatedTLPRed                  ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "red"
+	ThreatEventTagListResponseTagsPriorityAnnotatedTLPAmber                ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "amber"
+	ThreatEventTagListResponseTagsPriorityAnnotatedTLPAmberStrict          ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "amber-strict"
+	ThreatEventTagListResponseTagsPriorityAnnotatedTLPGreen                ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "green"
+	ThreatEventTagListResponseTagsPriorityAnnotatedTLPClear                ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "clear"
+	ThreatEventTagListResponseTagsPriorityAnnotatedTLPPurple               ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsPriorityAnnotatedTLPAmberStrictLowercase ThreatEventTagListResponseTagsPriorityAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagListResponseTagsPriorityAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagListResponseTagsPriorityAnnotatedTLPRed, ThreatEventTagListResponseTagsPriorityAnnotatedTLPAmber, ThreatEventTagListResponseTagsPriorityAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsPriorityAnnotatedTLPGreen, ThreatEventTagListResponseTagsPriorityAnnotatedTLPClear, ThreatEventTagListResponseTagsPriorityAnnotatedTLPPurple:
+	case ThreatEventTagListResponseTagsPriorityAnnotatedTLPRed, ThreatEventTagListResponseTagsPriorityAnnotatedTLPAmber, ThreatEventTagListResponseTagsPriorityAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsPriorityAnnotatedTLPGreen, ThreatEventTagListResponseTagsPriorityAnnotatedTLPClear, ThreatEventTagListResponseTagsPriorityAnnotatedTLPPurple, ThreatEventTagListResponseTagsPriorityAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1369,17 +1393,18 @@ func (r threatEventTagListResponseTagsSophisticationLevelAnnotatedJSON) RawJSON(
 type ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP string
 
 const (
-	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPRed         ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "red"
-	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPAmber       ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "amber"
-	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPAmberStrict ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "amber+strict"
-	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPGreen       ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "green"
-	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPClear       ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "clear"
-	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPPurple      ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPRed                  ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "red"
+	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPAmber                ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "amber"
+	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPAmberStrict          ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "amber-strict"
+	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPGreen                ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "green"
+	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPClear                ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "clear"
+	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPPurple               ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "purple"
+	ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPAmberStrictLowercase ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPRed, ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPAmber, ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPGreen, ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPClear, ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPPurple:
+	case ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPRed, ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPAmber, ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPAmberStrict, ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPGreen, ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPClear, ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPPurple, ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1389,17 +1414,18 @@ func (r ThreatEventTagListResponseTagsSophisticationLevelAnnotatedTLP) IsKnown()
 type ThreatEventTagListResponseTagsTLP string
 
 const (
-	ThreatEventTagListResponseTagsTLPRed         ThreatEventTagListResponseTagsTLP = "red"
-	ThreatEventTagListResponseTagsTLPAmber       ThreatEventTagListResponseTagsTLP = "amber"
-	ThreatEventTagListResponseTagsTLPAmberStrict ThreatEventTagListResponseTagsTLP = "amber+strict"
-	ThreatEventTagListResponseTagsTLPGreen       ThreatEventTagListResponseTagsTLP = "green"
-	ThreatEventTagListResponseTagsTLPClear       ThreatEventTagListResponseTagsTLP = "clear"
-	ThreatEventTagListResponseTagsTLPPurple      ThreatEventTagListResponseTagsTLP = "purple"
+	ThreatEventTagListResponseTagsTLPRed                  ThreatEventTagListResponseTagsTLP = "red"
+	ThreatEventTagListResponseTagsTLPAmber                ThreatEventTagListResponseTagsTLP = "amber"
+	ThreatEventTagListResponseTagsTLPAmberStrict          ThreatEventTagListResponseTagsTLP = "amber-strict"
+	ThreatEventTagListResponseTagsTLPGreen                ThreatEventTagListResponseTagsTLP = "green"
+	ThreatEventTagListResponseTagsTLPClear                ThreatEventTagListResponseTagsTLP = "clear"
+	ThreatEventTagListResponseTagsTLPPurple               ThreatEventTagListResponseTagsTLP = "purple"
+	ThreatEventTagListResponseTagsTLPAmberStrictLowercase ThreatEventTagListResponseTagsTLP = "amber+strict"
 )
 
 func (r ThreatEventTagListResponseTagsTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagListResponseTagsTLPRed, ThreatEventTagListResponseTagsTLPAmber, ThreatEventTagListResponseTagsTLPAmberStrict, ThreatEventTagListResponseTagsTLPGreen, ThreatEventTagListResponseTagsTLPClear, ThreatEventTagListResponseTagsTLPPurple:
+	case ThreatEventTagListResponseTagsTLPRed, ThreatEventTagListResponseTagsTLPAmber, ThreatEventTagListResponseTagsTLPAmberStrict, ThreatEventTagListResponseTagsTLPGreen, ThreatEventTagListResponseTagsTLPClear, ThreatEventTagListResponseTagsTLPPurple, ThreatEventTagListResponseTagsTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1433,8 +1459,9 @@ type ThreatEventTagEditResponse struct {
 	ActiveDurationAnnotated ThreatEventTagEditResponseActiveDurationAnnotated `json:"activeDuration_annotated" api:"nullable"`
 	ActorCategory           string                                            `json:"actorCategory"`
 	ActorCategoryAnnotated  ThreatEventTagEditResponseActorCategoryAnnotated  `json:"actorCategory_annotated" api:"nullable"`
-	// Structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: stripped from
-	// responses to non-CFONE accounts.
+	// Structured aliases ({ value, confidence 1-10, tlp }). Public: returned to all
+	// accounts with per-entry TLP filtering (entries with tlp: purple are removed for
+	// non-CFONE accounts).
 	Aliases                          []ThreatEventTagEditResponseAlias                          `json:"aliases"`
 	AliasGroupNames                  []string                                                   `json:"aliasGroupNames"`
 	AliasGroupNamesInternal          []string                                                   `json:"aliasGroupNamesInternal"`
@@ -1556,17 +1583,18 @@ func (r threatEventTagEditResponseActiveDurationAnnotatedJSON) RawJSON() string 
 type ThreatEventTagEditResponseActiveDurationAnnotatedTLP string
 
 const (
-	ThreatEventTagEditResponseActiveDurationAnnotatedTLPRed         ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "red"
-	ThreatEventTagEditResponseActiveDurationAnnotatedTLPAmber       ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "amber"
-	ThreatEventTagEditResponseActiveDurationAnnotatedTLPAmberStrict ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "amber+strict"
-	ThreatEventTagEditResponseActiveDurationAnnotatedTLPGreen       ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "green"
-	ThreatEventTagEditResponseActiveDurationAnnotatedTLPClear       ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "clear"
-	ThreatEventTagEditResponseActiveDurationAnnotatedTLPPurple      ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseActiveDurationAnnotatedTLPRed                  ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "red"
+	ThreatEventTagEditResponseActiveDurationAnnotatedTLPAmber                ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "amber"
+	ThreatEventTagEditResponseActiveDurationAnnotatedTLPAmberStrict          ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "amber-strict"
+	ThreatEventTagEditResponseActiveDurationAnnotatedTLPGreen                ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "green"
+	ThreatEventTagEditResponseActiveDurationAnnotatedTLPClear                ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "clear"
+	ThreatEventTagEditResponseActiveDurationAnnotatedTLPPurple               ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseActiveDurationAnnotatedTLPAmberStrictLowercase ThreatEventTagEditResponseActiveDurationAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditResponseActiveDurationAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditResponseActiveDurationAnnotatedTLPRed, ThreatEventTagEditResponseActiveDurationAnnotatedTLPAmber, ThreatEventTagEditResponseActiveDurationAnnotatedTLPAmberStrict, ThreatEventTagEditResponseActiveDurationAnnotatedTLPGreen, ThreatEventTagEditResponseActiveDurationAnnotatedTLPClear, ThreatEventTagEditResponseActiveDurationAnnotatedTLPPurple:
+	case ThreatEventTagEditResponseActiveDurationAnnotatedTLPRed, ThreatEventTagEditResponseActiveDurationAnnotatedTLPAmber, ThreatEventTagEditResponseActiveDurationAnnotatedTLPAmberStrict, ThreatEventTagEditResponseActiveDurationAnnotatedTLPGreen, ThreatEventTagEditResponseActiveDurationAnnotatedTLPClear, ThreatEventTagEditResponseActiveDurationAnnotatedTLPPurple, ThreatEventTagEditResponseActiveDurationAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1600,17 +1628,18 @@ func (r threatEventTagEditResponseActorCategoryAnnotatedJSON) RawJSON() string {
 type ThreatEventTagEditResponseActorCategoryAnnotatedTLP string
 
 const (
-	ThreatEventTagEditResponseActorCategoryAnnotatedTLPRed         ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "red"
-	ThreatEventTagEditResponseActorCategoryAnnotatedTLPAmber       ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "amber"
-	ThreatEventTagEditResponseActorCategoryAnnotatedTLPAmberStrict ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "amber+strict"
-	ThreatEventTagEditResponseActorCategoryAnnotatedTLPGreen       ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "green"
-	ThreatEventTagEditResponseActorCategoryAnnotatedTLPClear       ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "clear"
-	ThreatEventTagEditResponseActorCategoryAnnotatedTLPPurple      ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseActorCategoryAnnotatedTLPRed                  ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "red"
+	ThreatEventTagEditResponseActorCategoryAnnotatedTLPAmber                ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "amber"
+	ThreatEventTagEditResponseActorCategoryAnnotatedTLPAmberStrict          ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "amber-strict"
+	ThreatEventTagEditResponseActorCategoryAnnotatedTLPGreen                ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "green"
+	ThreatEventTagEditResponseActorCategoryAnnotatedTLPClear                ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "clear"
+	ThreatEventTagEditResponseActorCategoryAnnotatedTLPPurple               ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseActorCategoryAnnotatedTLPAmberStrictLowercase ThreatEventTagEditResponseActorCategoryAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditResponseActorCategoryAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditResponseActorCategoryAnnotatedTLPRed, ThreatEventTagEditResponseActorCategoryAnnotatedTLPAmber, ThreatEventTagEditResponseActorCategoryAnnotatedTLPAmberStrict, ThreatEventTagEditResponseActorCategoryAnnotatedTLPGreen, ThreatEventTagEditResponseActorCategoryAnnotatedTLPClear, ThreatEventTagEditResponseActorCategoryAnnotatedTLPPurple:
+	case ThreatEventTagEditResponseActorCategoryAnnotatedTLPRed, ThreatEventTagEditResponseActorCategoryAnnotatedTLPAmber, ThreatEventTagEditResponseActorCategoryAnnotatedTLPAmberStrict, ThreatEventTagEditResponseActorCategoryAnnotatedTLPGreen, ThreatEventTagEditResponseActorCategoryAnnotatedTLPClear, ThreatEventTagEditResponseActorCategoryAnnotatedTLPPurple, ThreatEventTagEditResponseActorCategoryAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1644,17 +1673,18 @@ func (r threatEventTagEditResponseAliasJSON) RawJSON() string {
 type ThreatEventTagEditResponseAliasesTLP string
 
 const (
-	ThreatEventTagEditResponseAliasesTLPRed         ThreatEventTagEditResponseAliasesTLP = "red"
-	ThreatEventTagEditResponseAliasesTLPAmber       ThreatEventTagEditResponseAliasesTLP = "amber"
-	ThreatEventTagEditResponseAliasesTLPAmberStrict ThreatEventTagEditResponseAliasesTLP = "amber+strict"
-	ThreatEventTagEditResponseAliasesTLPGreen       ThreatEventTagEditResponseAliasesTLP = "green"
-	ThreatEventTagEditResponseAliasesTLPClear       ThreatEventTagEditResponseAliasesTLP = "clear"
-	ThreatEventTagEditResponseAliasesTLPPurple      ThreatEventTagEditResponseAliasesTLP = "purple"
+	ThreatEventTagEditResponseAliasesTLPRed                  ThreatEventTagEditResponseAliasesTLP = "red"
+	ThreatEventTagEditResponseAliasesTLPAmber                ThreatEventTagEditResponseAliasesTLP = "amber"
+	ThreatEventTagEditResponseAliasesTLPAmberStrict          ThreatEventTagEditResponseAliasesTLP = "amber-strict"
+	ThreatEventTagEditResponseAliasesTLPGreen                ThreatEventTagEditResponseAliasesTLP = "green"
+	ThreatEventTagEditResponseAliasesTLPClear                ThreatEventTagEditResponseAliasesTLP = "clear"
+	ThreatEventTagEditResponseAliasesTLPPurple               ThreatEventTagEditResponseAliasesTLP = "purple"
+	ThreatEventTagEditResponseAliasesTLPAmberStrictLowercase ThreatEventTagEditResponseAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditResponseAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditResponseAliasesTLPRed, ThreatEventTagEditResponseAliasesTLPAmber, ThreatEventTagEditResponseAliasesTLPAmberStrict, ThreatEventTagEditResponseAliasesTLPGreen, ThreatEventTagEditResponseAliasesTLPClear, ThreatEventTagEditResponseAliasesTLPPurple:
+	case ThreatEventTagEditResponseAliasesTLPRed, ThreatEventTagEditResponseAliasesTLPAmber, ThreatEventTagEditResponseAliasesTLPAmberStrict, ThreatEventTagEditResponseAliasesTLPGreen, ThreatEventTagEditResponseAliasesTLPClear, ThreatEventTagEditResponseAliasesTLPPurple, ThreatEventTagEditResponseAliasesTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1689,17 +1719,18 @@ func (r threatEventTagEditResponseAttributionOrganizationAnnotatedJSON) RawJSON(
 type ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP string
 
 const (
-	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPRed         ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "red"
-	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPAmber       ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "amber"
-	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPAmberStrict ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "amber+strict"
-	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPGreen       ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "green"
-	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPClear       ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "clear"
-	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPPurple      ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPRed                  ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "red"
+	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPAmber                ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "amber"
+	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPAmberStrict          ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "amber-strict"
+	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPGreen                ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "green"
+	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPClear                ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "clear"
+	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPPurple               ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPAmberStrictLowercase ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPRed, ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPAmber, ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPAmberStrict, ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPGreen, ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPClear, ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPPurple:
+	case ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPRed, ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPAmber, ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPAmberStrict, ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPGreen, ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPClear, ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPPurple, ThreatEventTagEditResponseAttributionOrganizationAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1754,17 +1785,18 @@ func (r threatEventTagEditResponseExternalReferencesAnnotatedJSON) RawJSON() str
 type ThreatEventTagEditResponseExternalReferencesAnnotatedTLP string
 
 const (
-	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPRed         ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "red"
-	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPAmber       ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "amber"
-	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPAmberStrict ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "amber+strict"
-	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPGreen       ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "green"
-	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPClear       ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "clear"
-	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPPurple      ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPRed                  ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "red"
+	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPAmber                ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "amber"
+	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPAmberStrict          ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "amber-strict"
+	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPGreen                ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "green"
+	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPClear                ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "clear"
+	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPPurple               ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseExternalReferencesAnnotatedTLPAmberStrictLowercase ThreatEventTagEditResponseExternalReferencesAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditResponseExternalReferencesAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditResponseExternalReferencesAnnotatedTLPRed, ThreatEventTagEditResponseExternalReferencesAnnotatedTLPAmber, ThreatEventTagEditResponseExternalReferencesAnnotatedTLPAmberStrict, ThreatEventTagEditResponseExternalReferencesAnnotatedTLPGreen, ThreatEventTagEditResponseExternalReferencesAnnotatedTLPClear, ThreatEventTagEditResponseExternalReferencesAnnotatedTLPPurple:
+	case ThreatEventTagEditResponseExternalReferencesAnnotatedTLPRed, ThreatEventTagEditResponseExternalReferencesAnnotatedTLPAmber, ThreatEventTagEditResponseExternalReferencesAnnotatedTLPAmberStrict, ThreatEventTagEditResponseExternalReferencesAnnotatedTLPGreen, ThreatEventTagEditResponseExternalReferencesAnnotatedTLPClear, ThreatEventTagEditResponseExternalReferencesAnnotatedTLPPurple, ThreatEventTagEditResponseExternalReferencesAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1798,17 +1830,18 @@ func (r threatEventTagEditResponseInternalAliasJSON) RawJSON() string {
 type ThreatEventTagEditResponseInternalAliasesTLP string
 
 const (
-	ThreatEventTagEditResponseInternalAliasesTLPRed         ThreatEventTagEditResponseInternalAliasesTLP = "red"
-	ThreatEventTagEditResponseInternalAliasesTLPAmber       ThreatEventTagEditResponseInternalAliasesTLP = "amber"
-	ThreatEventTagEditResponseInternalAliasesTLPAmberStrict ThreatEventTagEditResponseInternalAliasesTLP = "amber+strict"
-	ThreatEventTagEditResponseInternalAliasesTLPGreen       ThreatEventTagEditResponseInternalAliasesTLP = "green"
-	ThreatEventTagEditResponseInternalAliasesTLPClear       ThreatEventTagEditResponseInternalAliasesTLP = "clear"
-	ThreatEventTagEditResponseInternalAliasesTLPPurple      ThreatEventTagEditResponseInternalAliasesTLP = "purple"
+	ThreatEventTagEditResponseInternalAliasesTLPRed                  ThreatEventTagEditResponseInternalAliasesTLP = "red"
+	ThreatEventTagEditResponseInternalAliasesTLPAmber                ThreatEventTagEditResponseInternalAliasesTLP = "amber"
+	ThreatEventTagEditResponseInternalAliasesTLPAmberStrict          ThreatEventTagEditResponseInternalAliasesTLP = "amber-strict"
+	ThreatEventTagEditResponseInternalAliasesTLPGreen                ThreatEventTagEditResponseInternalAliasesTLP = "green"
+	ThreatEventTagEditResponseInternalAliasesTLPClear                ThreatEventTagEditResponseInternalAliasesTLP = "clear"
+	ThreatEventTagEditResponseInternalAliasesTLPPurple               ThreatEventTagEditResponseInternalAliasesTLP = "purple"
+	ThreatEventTagEditResponseInternalAliasesTLPAmberStrictLowercase ThreatEventTagEditResponseInternalAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditResponseInternalAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditResponseInternalAliasesTLPRed, ThreatEventTagEditResponseInternalAliasesTLPAmber, ThreatEventTagEditResponseInternalAliasesTLPAmberStrict, ThreatEventTagEditResponseInternalAliasesTLPGreen, ThreatEventTagEditResponseInternalAliasesTLPClear, ThreatEventTagEditResponseInternalAliasesTLPPurple:
+	case ThreatEventTagEditResponseInternalAliasesTLPRed, ThreatEventTagEditResponseInternalAliasesTLPAmber, ThreatEventTagEditResponseInternalAliasesTLPAmberStrict, ThreatEventTagEditResponseInternalAliasesTLPGreen, ThreatEventTagEditResponseInternalAliasesTLPClear, ThreatEventTagEditResponseInternalAliasesTLPPurple, ThreatEventTagEditResponseInternalAliasesTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1842,17 +1875,18 @@ func (r threatEventTagEditResponseMotiveAnnotatedJSON) RawJSON() string {
 type ThreatEventTagEditResponseMotiveAnnotatedTLP string
 
 const (
-	ThreatEventTagEditResponseMotiveAnnotatedTLPRed         ThreatEventTagEditResponseMotiveAnnotatedTLP = "red"
-	ThreatEventTagEditResponseMotiveAnnotatedTLPAmber       ThreatEventTagEditResponseMotiveAnnotatedTLP = "amber"
-	ThreatEventTagEditResponseMotiveAnnotatedTLPAmberStrict ThreatEventTagEditResponseMotiveAnnotatedTLP = "amber+strict"
-	ThreatEventTagEditResponseMotiveAnnotatedTLPGreen       ThreatEventTagEditResponseMotiveAnnotatedTLP = "green"
-	ThreatEventTagEditResponseMotiveAnnotatedTLPClear       ThreatEventTagEditResponseMotiveAnnotatedTLP = "clear"
-	ThreatEventTagEditResponseMotiveAnnotatedTLPPurple      ThreatEventTagEditResponseMotiveAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseMotiveAnnotatedTLPRed                  ThreatEventTagEditResponseMotiveAnnotatedTLP = "red"
+	ThreatEventTagEditResponseMotiveAnnotatedTLPAmber                ThreatEventTagEditResponseMotiveAnnotatedTLP = "amber"
+	ThreatEventTagEditResponseMotiveAnnotatedTLPAmberStrict          ThreatEventTagEditResponseMotiveAnnotatedTLP = "amber-strict"
+	ThreatEventTagEditResponseMotiveAnnotatedTLPGreen                ThreatEventTagEditResponseMotiveAnnotatedTLP = "green"
+	ThreatEventTagEditResponseMotiveAnnotatedTLPClear                ThreatEventTagEditResponseMotiveAnnotatedTLP = "clear"
+	ThreatEventTagEditResponseMotiveAnnotatedTLPPurple               ThreatEventTagEditResponseMotiveAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseMotiveAnnotatedTLPAmberStrictLowercase ThreatEventTagEditResponseMotiveAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditResponseMotiveAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditResponseMotiveAnnotatedTLPRed, ThreatEventTagEditResponseMotiveAnnotatedTLPAmber, ThreatEventTagEditResponseMotiveAnnotatedTLPAmberStrict, ThreatEventTagEditResponseMotiveAnnotatedTLPGreen, ThreatEventTagEditResponseMotiveAnnotatedTLPClear, ThreatEventTagEditResponseMotiveAnnotatedTLPPurple:
+	case ThreatEventTagEditResponseMotiveAnnotatedTLPRed, ThreatEventTagEditResponseMotiveAnnotatedTLPAmber, ThreatEventTagEditResponseMotiveAnnotatedTLPAmberStrict, ThreatEventTagEditResponseMotiveAnnotatedTLPGreen, ThreatEventTagEditResponseMotiveAnnotatedTLPClear, ThreatEventTagEditResponseMotiveAnnotatedTLPPurple, ThreatEventTagEditResponseMotiveAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1886,17 +1920,18 @@ func (r threatEventTagEditResponseOpsecLevelAnnotatedJSON) RawJSON() string {
 type ThreatEventTagEditResponseOpsecLevelAnnotatedTLP string
 
 const (
-	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPRed         ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "red"
-	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPAmber       ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "amber"
-	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPAmberStrict ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "amber+strict"
-	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPGreen       ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "green"
-	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPClear       ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "clear"
-	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPPurple      ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPRed                  ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "red"
+	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPAmber                ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "amber"
+	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPAmberStrict          ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "amber-strict"
+	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPGreen                ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "green"
+	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPClear                ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "clear"
+	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPPurple               ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseOpsecLevelAnnotatedTLPAmberStrictLowercase ThreatEventTagEditResponseOpsecLevelAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditResponseOpsecLevelAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditResponseOpsecLevelAnnotatedTLPRed, ThreatEventTagEditResponseOpsecLevelAnnotatedTLPAmber, ThreatEventTagEditResponseOpsecLevelAnnotatedTLPAmberStrict, ThreatEventTagEditResponseOpsecLevelAnnotatedTLPGreen, ThreatEventTagEditResponseOpsecLevelAnnotatedTLPClear, ThreatEventTagEditResponseOpsecLevelAnnotatedTLPPurple:
+	case ThreatEventTagEditResponseOpsecLevelAnnotatedTLPRed, ThreatEventTagEditResponseOpsecLevelAnnotatedTLPAmber, ThreatEventTagEditResponseOpsecLevelAnnotatedTLPAmberStrict, ThreatEventTagEditResponseOpsecLevelAnnotatedTLPGreen, ThreatEventTagEditResponseOpsecLevelAnnotatedTLPClear, ThreatEventTagEditResponseOpsecLevelAnnotatedTLPPurple, ThreatEventTagEditResponseOpsecLevelAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1930,17 +1965,18 @@ func (r threatEventTagEditResponseOriginCountryISOAnnotatedJSON) RawJSON() strin
 type ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP string
 
 const (
-	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPRed         ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "red"
-	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPAmber       ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "amber"
-	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPAmberStrict ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "amber+strict"
-	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPGreen       ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "green"
-	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPClear       ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "clear"
-	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPPurple      ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPRed                  ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "red"
+	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPAmber                ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "amber"
+	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPAmberStrict          ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "amber-strict"
+	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPGreen                ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "green"
+	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPClear                ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "clear"
+	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPPurple               ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPAmberStrictLowercase ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditResponseOriginCountryISOAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPRed, ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPAmber, ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPAmberStrict, ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPGreen, ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPClear, ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPPurple:
+	case ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPRed, ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPAmber, ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPAmberStrict, ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPGreen, ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPClear, ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPPurple, ThreatEventTagEditResponseOriginCountryISOAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -1972,17 +2008,18 @@ func (r threatEventTagEditResponsePriorityAnnotatedJSON) RawJSON() string {
 type ThreatEventTagEditResponsePriorityAnnotatedTLP string
 
 const (
-	ThreatEventTagEditResponsePriorityAnnotatedTLPRed         ThreatEventTagEditResponsePriorityAnnotatedTLP = "red"
-	ThreatEventTagEditResponsePriorityAnnotatedTLPAmber       ThreatEventTagEditResponsePriorityAnnotatedTLP = "amber"
-	ThreatEventTagEditResponsePriorityAnnotatedTLPAmberStrict ThreatEventTagEditResponsePriorityAnnotatedTLP = "amber+strict"
-	ThreatEventTagEditResponsePriorityAnnotatedTLPGreen       ThreatEventTagEditResponsePriorityAnnotatedTLP = "green"
-	ThreatEventTagEditResponsePriorityAnnotatedTLPClear       ThreatEventTagEditResponsePriorityAnnotatedTLP = "clear"
-	ThreatEventTagEditResponsePriorityAnnotatedTLPPurple      ThreatEventTagEditResponsePriorityAnnotatedTLP = "purple"
+	ThreatEventTagEditResponsePriorityAnnotatedTLPRed                  ThreatEventTagEditResponsePriorityAnnotatedTLP = "red"
+	ThreatEventTagEditResponsePriorityAnnotatedTLPAmber                ThreatEventTagEditResponsePriorityAnnotatedTLP = "amber"
+	ThreatEventTagEditResponsePriorityAnnotatedTLPAmberStrict          ThreatEventTagEditResponsePriorityAnnotatedTLP = "amber-strict"
+	ThreatEventTagEditResponsePriorityAnnotatedTLPGreen                ThreatEventTagEditResponsePriorityAnnotatedTLP = "green"
+	ThreatEventTagEditResponsePriorityAnnotatedTLPClear                ThreatEventTagEditResponsePriorityAnnotatedTLP = "clear"
+	ThreatEventTagEditResponsePriorityAnnotatedTLPPurple               ThreatEventTagEditResponsePriorityAnnotatedTLP = "purple"
+	ThreatEventTagEditResponsePriorityAnnotatedTLPAmberStrictLowercase ThreatEventTagEditResponsePriorityAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditResponsePriorityAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditResponsePriorityAnnotatedTLPRed, ThreatEventTagEditResponsePriorityAnnotatedTLPAmber, ThreatEventTagEditResponsePriorityAnnotatedTLPAmberStrict, ThreatEventTagEditResponsePriorityAnnotatedTLPGreen, ThreatEventTagEditResponsePriorityAnnotatedTLPClear, ThreatEventTagEditResponsePriorityAnnotatedTLPPurple:
+	case ThreatEventTagEditResponsePriorityAnnotatedTLPRed, ThreatEventTagEditResponsePriorityAnnotatedTLPAmber, ThreatEventTagEditResponsePriorityAnnotatedTLPAmberStrict, ThreatEventTagEditResponsePriorityAnnotatedTLPGreen, ThreatEventTagEditResponsePriorityAnnotatedTLPClear, ThreatEventTagEditResponsePriorityAnnotatedTLPPurple, ThreatEventTagEditResponsePriorityAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2016,17 +2053,18 @@ func (r threatEventTagEditResponseSophisticationLevelAnnotatedJSON) RawJSON() st
 type ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP string
 
 const (
-	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPRed         ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "red"
-	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPAmber       ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "amber"
-	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPAmberStrict ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "amber+strict"
-	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPGreen       ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "green"
-	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPClear       ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "clear"
-	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPPurple      ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPRed                  ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "red"
+	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPAmber                ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "amber"
+	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPAmberStrict          ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "amber-strict"
+	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPGreen                ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "green"
+	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPClear                ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "clear"
+	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPPurple               ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "purple"
+	ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPAmberStrictLowercase ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPRed, ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPAmber, ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPAmberStrict, ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPGreen, ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPClear, ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPPurple:
+	case ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPRed, ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPAmber, ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPAmberStrict, ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPGreen, ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPClear, ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPPurple, ThreatEventTagEditResponseSophisticationLevelAnnotatedTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2036,17 +2074,18 @@ func (r ThreatEventTagEditResponseSophisticationLevelAnnotatedTLP) IsKnown() boo
 type ThreatEventTagEditResponseTLP string
 
 const (
-	ThreatEventTagEditResponseTLPRed         ThreatEventTagEditResponseTLP = "red"
-	ThreatEventTagEditResponseTLPAmber       ThreatEventTagEditResponseTLP = "amber"
-	ThreatEventTagEditResponseTLPAmberStrict ThreatEventTagEditResponseTLP = "amber+strict"
-	ThreatEventTagEditResponseTLPGreen       ThreatEventTagEditResponseTLP = "green"
-	ThreatEventTagEditResponseTLPClear       ThreatEventTagEditResponseTLP = "clear"
-	ThreatEventTagEditResponseTLPPurple      ThreatEventTagEditResponseTLP = "purple"
+	ThreatEventTagEditResponseTLPRed                  ThreatEventTagEditResponseTLP = "red"
+	ThreatEventTagEditResponseTLPAmber                ThreatEventTagEditResponseTLP = "amber"
+	ThreatEventTagEditResponseTLPAmberStrict          ThreatEventTagEditResponseTLP = "amber-strict"
+	ThreatEventTagEditResponseTLPGreen                ThreatEventTagEditResponseTLP = "green"
+	ThreatEventTagEditResponseTLPClear                ThreatEventTagEditResponseTLP = "clear"
+	ThreatEventTagEditResponseTLPPurple               ThreatEventTagEditResponseTLP = "purple"
+	ThreatEventTagEditResponseTLPAmberStrictLowercase ThreatEventTagEditResponseTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditResponseTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditResponseTLPRed, ThreatEventTagEditResponseTLPAmber, ThreatEventTagEditResponseTLPAmberStrict, ThreatEventTagEditResponseTLPGreen, ThreatEventTagEditResponseTLPClear, ThreatEventTagEditResponseTLPPurple:
+	case ThreatEventTagEditResponseTLPRed, ThreatEventTagEditResponseTLPAmber, ThreatEventTagEditResponseTLPAmberStrict, ThreatEventTagEditResponseTLPGreen, ThreatEventTagEditResponseTLPClear, ThreatEventTagEditResponseTLPPurple, ThreatEventTagEditResponseTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2058,8 +2097,9 @@ type ThreatEventTagNewParams struct {
 	Value          param.Field[string]                                     `json:"value" api:"required"`
 	ActiveDuration param.Field[ThreatEventTagNewParamsActiveDurationUnion] `json:"activeDuration"`
 	ActorCategory  param.Field[ThreatEventTagNewParamsActorCategoryUnion]  `json:"actorCategory"`
-	// Structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: stripped from
-	// responses to non-CFONE accounts.
+	// Structured aliases ({ value, confidence 1-10, tlp }). Public: returned to all
+	// accounts with per-entry TLP filtering (entries with tlp: purple are removed for
+	// non-CFONE accounts).
 	Aliases                 param.Field[[]ThreatEventTagNewParamsAlias]                      `json:"aliases"`
 	AliasGroupNames         param.Field[[]string]                                            `json:"aliasGroupNames"`
 	AliasGroupNamesInternal param.Field[[]string]                                            `json:"aliasGroupNamesInternal"`
@@ -2092,7 +2132,7 @@ type ThreatEventTagNewParams struct {
 	Properties          param.Field[map[string]interface{}]                          `json:"properties"`
 	SophisticationLevel param.Field[ThreatEventTagNewParamsSophisticationLevelUnion] `json:"sophisticationLevel"`
 	// Tag-level TLP handling marking. Optional. Allowed values: red, amber,
-	// amber+strict, green, clear, purple.
+	// amber-strict, green, clear, purple, amber+strict.
 	TLP param.Field[ThreatEventTagNewParamsTLP] `json:"tlp"`
 }
 
@@ -2122,17 +2162,18 @@ func (r ThreatEventTagNewParamsActiveDurationObject) ImplementsThreatEventTagNew
 type ThreatEventTagNewParamsActiveDurationObjectTLP string
 
 const (
-	ThreatEventTagNewParamsActiveDurationObjectTLPRed         ThreatEventTagNewParamsActiveDurationObjectTLP = "red"
-	ThreatEventTagNewParamsActiveDurationObjectTLPAmber       ThreatEventTagNewParamsActiveDurationObjectTLP = "amber"
-	ThreatEventTagNewParamsActiveDurationObjectTLPAmberStrict ThreatEventTagNewParamsActiveDurationObjectTLP = "amber+strict"
-	ThreatEventTagNewParamsActiveDurationObjectTLPGreen       ThreatEventTagNewParamsActiveDurationObjectTLP = "green"
-	ThreatEventTagNewParamsActiveDurationObjectTLPClear       ThreatEventTagNewParamsActiveDurationObjectTLP = "clear"
-	ThreatEventTagNewParamsActiveDurationObjectTLPPurple      ThreatEventTagNewParamsActiveDurationObjectTLP = "purple"
+	ThreatEventTagNewParamsActiveDurationObjectTLPRed                  ThreatEventTagNewParamsActiveDurationObjectTLP = "red"
+	ThreatEventTagNewParamsActiveDurationObjectTLPAmber                ThreatEventTagNewParamsActiveDurationObjectTLP = "amber"
+	ThreatEventTagNewParamsActiveDurationObjectTLPAmberStrict          ThreatEventTagNewParamsActiveDurationObjectTLP = "amber-strict"
+	ThreatEventTagNewParamsActiveDurationObjectTLPGreen                ThreatEventTagNewParamsActiveDurationObjectTLP = "green"
+	ThreatEventTagNewParamsActiveDurationObjectTLPClear                ThreatEventTagNewParamsActiveDurationObjectTLP = "clear"
+	ThreatEventTagNewParamsActiveDurationObjectTLPPurple               ThreatEventTagNewParamsActiveDurationObjectTLP = "purple"
+	ThreatEventTagNewParamsActiveDurationObjectTLPAmberStrictLowercase ThreatEventTagNewParamsActiveDurationObjectTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewParamsActiveDurationObjectTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewParamsActiveDurationObjectTLPRed, ThreatEventTagNewParamsActiveDurationObjectTLPAmber, ThreatEventTagNewParamsActiveDurationObjectTLPAmberStrict, ThreatEventTagNewParamsActiveDurationObjectTLPGreen, ThreatEventTagNewParamsActiveDurationObjectTLPClear, ThreatEventTagNewParamsActiveDurationObjectTLPPurple:
+	case ThreatEventTagNewParamsActiveDurationObjectTLPRed, ThreatEventTagNewParamsActiveDurationObjectTLPAmber, ThreatEventTagNewParamsActiveDurationObjectTLPAmberStrict, ThreatEventTagNewParamsActiveDurationObjectTLPGreen, ThreatEventTagNewParamsActiveDurationObjectTLPClear, ThreatEventTagNewParamsActiveDurationObjectTLPPurple, ThreatEventTagNewParamsActiveDurationObjectTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2160,17 +2201,18 @@ func (r ThreatEventTagNewParamsActorCategoryObject) ImplementsThreatEventTagNewP
 type ThreatEventTagNewParamsActorCategoryObjectTLP string
 
 const (
-	ThreatEventTagNewParamsActorCategoryObjectTLPRed         ThreatEventTagNewParamsActorCategoryObjectTLP = "red"
-	ThreatEventTagNewParamsActorCategoryObjectTLPAmber       ThreatEventTagNewParamsActorCategoryObjectTLP = "amber"
-	ThreatEventTagNewParamsActorCategoryObjectTLPAmberStrict ThreatEventTagNewParamsActorCategoryObjectTLP = "amber+strict"
-	ThreatEventTagNewParamsActorCategoryObjectTLPGreen       ThreatEventTagNewParamsActorCategoryObjectTLP = "green"
-	ThreatEventTagNewParamsActorCategoryObjectTLPClear       ThreatEventTagNewParamsActorCategoryObjectTLP = "clear"
-	ThreatEventTagNewParamsActorCategoryObjectTLPPurple      ThreatEventTagNewParamsActorCategoryObjectTLP = "purple"
+	ThreatEventTagNewParamsActorCategoryObjectTLPRed                  ThreatEventTagNewParamsActorCategoryObjectTLP = "red"
+	ThreatEventTagNewParamsActorCategoryObjectTLPAmber                ThreatEventTagNewParamsActorCategoryObjectTLP = "amber"
+	ThreatEventTagNewParamsActorCategoryObjectTLPAmberStrict          ThreatEventTagNewParamsActorCategoryObjectTLP = "amber-strict"
+	ThreatEventTagNewParamsActorCategoryObjectTLPGreen                ThreatEventTagNewParamsActorCategoryObjectTLP = "green"
+	ThreatEventTagNewParamsActorCategoryObjectTLPClear                ThreatEventTagNewParamsActorCategoryObjectTLP = "clear"
+	ThreatEventTagNewParamsActorCategoryObjectTLPPurple               ThreatEventTagNewParamsActorCategoryObjectTLP = "purple"
+	ThreatEventTagNewParamsActorCategoryObjectTLPAmberStrictLowercase ThreatEventTagNewParamsActorCategoryObjectTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewParamsActorCategoryObjectTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewParamsActorCategoryObjectTLPRed, ThreatEventTagNewParamsActorCategoryObjectTLPAmber, ThreatEventTagNewParamsActorCategoryObjectTLPAmberStrict, ThreatEventTagNewParamsActorCategoryObjectTLPGreen, ThreatEventTagNewParamsActorCategoryObjectTLPClear, ThreatEventTagNewParamsActorCategoryObjectTLPPurple:
+	case ThreatEventTagNewParamsActorCategoryObjectTLPRed, ThreatEventTagNewParamsActorCategoryObjectTLPAmber, ThreatEventTagNewParamsActorCategoryObjectTLPAmberStrict, ThreatEventTagNewParamsActorCategoryObjectTLPGreen, ThreatEventTagNewParamsActorCategoryObjectTLPClear, ThreatEventTagNewParamsActorCategoryObjectTLPPurple, ThreatEventTagNewParamsActorCategoryObjectTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2189,17 +2231,18 @@ func (r ThreatEventTagNewParamsAlias) MarshalJSON() (data []byte, err error) {
 type ThreatEventTagNewParamsAliasesTLP string
 
 const (
-	ThreatEventTagNewParamsAliasesTLPRed         ThreatEventTagNewParamsAliasesTLP = "red"
-	ThreatEventTagNewParamsAliasesTLPAmber       ThreatEventTagNewParamsAliasesTLP = "amber"
-	ThreatEventTagNewParamsAliasesTLPAmberStrict ThreatEventTagNewParamsAliasesTLP = "amber+strict"
-	ThreatEventTagNewParamsAliasesTLPGreen       ThreatEventTagNewParamsAliasesTLP = "green"
-	ThreatEventTagNewParamsAliasesTLPClear       ThreatEventTagNewParamsAliasesTLP = "clear"
-	ThreatEventTagNewParamsAliasesTLPPurple      ThreatEventTagNewParamsAliasesTLP = "purple"
+	ThreatEventTagNewParamsAliasesTLPRed                  ThreatEventTagNewParamsAliasesTLP = "red"
+	ThreatEventTagNewParamsAliasesTLPAmber                ThreatEventTagNewParamsAliasesTLP = "amber"
+	ThreatEventTagNewParamsAliasesTLPAmberStrict          ThreatEventTagNewParamsAliasesTLP = "amber-strict"
+	ThreatEventTagNewParamsAliasesTLPGreen                ThreatEventTagNewParamsAliasesTLP = "green"
+	ThreatEventTagNewParamsAliasesTLPClear                ThreatEventTagNewParamsAliasesTLP = "clear"
+	ThreatEventTagNewParamsAliasesTLPPurple               ThreatEventTagNewParamsAliasesTLP = "purple"
+	ThreatEventTagNewParamsAliasesTLPAmberStrictLowercase ThreatEventTagNewParamsAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewParamsAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewParamsAliasesTLPRed, ThreatEventTagNewParamsAliasesTLPAmber, ThreatEventTagNewParamsAliasesTLPAmberStrict, ThreatEventTagNewParamsAliasesTLPGreen, ThreatEventTagNewParamsAliasesTLPClear, ThreatEventTagNewParamsAliasesTLPPurple:
+	case ThreatEventTagNewParamsAliasesTLPRed, ThreatEventTagNewParamsAliasesTLPAmber, ThreatEventTagNewParamsAliasesTLPAmberStrict, ThreatEventTagNewParamsAliasesTLPGreen, ThreatEventTagNewParamsAliasesTLPClear, ThreatEventTagNewParamsAliasesTLPPurple, ThreatEventTagNewParamsAliasesTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2227,17 +2270,18 @@ func (r ThreatEventTagNewParamsAttributionOrganizationObject) ImplementsThreatEv
 type ThreatEventTagNewParamsAttributionOrganizationObjectTLP string
 
 const (
-	ThreatEventTagNewParamsAttributionOrganizationObjectTLPRed         ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "red"
-	ThreatEventTagNewParamsAttributionOrganizationObjectTLPAmber       ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "amber"
-	ThreatEventTagNewParamsAttributionOrganizationObjectTLPAmberStrict ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "amber+strict"
-	ThreatEventTagNewParamsAttributionOrganizationObjectTLPGreen       ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "green"
-	ThreatEventTagNewParamsAttributionOrganizationObjectTLPClear       ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "clear"
-	ThreatEventTagNewParamsAttributionOrganizationObjectTLPPurple      ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "purple"
+	ThreatEventTagNewParamsAttributionOrganizationObjectTLPRed                  ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "red"
+	ThreatEventTagNewParamsAttributionOrganizationObjectTLPAmber                ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "amber"
+	ThreatEventTagNewParamsAttributionOrganizationObjectTLPAmberStrict          ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "amber-strict"
+	ThreatEventTagNewParamsAttributionOrganizationObjectTLPGreen                ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "green"
+	ThreatEventTagNewParamsAttributionOrganizationObjectTLPClear                ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "clear"
+	ThreatEventTagNewParamsAttributionOrganizationObjectTLPPurple               ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "purple"
+	ThreatEventTagNewParamsAttributionOrganizationObjectTLPAmberStrictLowercase ThreatEventTagNewParamsAttributionOrganizationObjectTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewParamsAttributionOrganizationObjectTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewParamsAttributionOrganizationObjectTLPRed, ThreatEventTagNewParamsAttributionOrganizationObjectTLPAmber, ThreatEventTagNewParamsAttributionOrganizationObjectTLPAmberStrict, ThreatEventTagNewParamsAttributionOrganizationObjectTLPGreen, ThreatEventTagNewParamsAttributionOrganizationObjectTLPClear, ThreatEventTagNewParamsAttributionOrganizationObjectTLPPurple:
+	case ThreatEventTagNewParamsAttributionOrganizationObjectTLPRed, ThreatEventTagNewParamsAttributionOrganizationObjectTLPAmber, ThreatEventTagNewParamsAttributionOrganizationObjectTLPAmberStrict, ThreatEventTagNewParamsAttributionOrganizationObjectTLPGreen, ThreatEventTagNewParamsAttributionOrganizationObjectTLPClear, ThreatEventTagNewParamsAttributionOrganizationObjectTLPPurple, ThreatEventTagNewParamsAttributionOrganizationObjectTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2265,17 +2309,18 @@ func (r ThreatEventTagNewParamsInternalAlias) MarshalJSON() (data []byte, err er
 type ThreatEventTagNewParamsInternalAliasesTLP string
 
 const (
-	ThreatEventTagNewParamsInternalAliasesTLPRed         ThreatEventTagNewParamsInternalAliasesTLP = "red"
-	ThreatEventTagNewParamsInternalAliasesTLPAmber       ThreatEventTagNewParamsInternalAliasesTLP = "amber"
-	ThreatEventTagNewParamsInternalAliasesTLPAmberStrict ThreatEventTagNewParamsInternalAliasesTLP = "amber+strict"
-	ThreatEventTagNewParamsInternalAliasesTLPGreen       ThreatEventTagNewParamsInternalAliasesTLP = "green"
-	ThreatEventTagNewParamsInternalAliasesTLPClear       ThreatEventTagNewParamsInternalAliasesTLP = "clear"
-	ThreatEventTagNewParamsInternalAliasesTLPPurple      ThreatEventTagNewParamsInternalAliasesTLP = "purple"
+	ThreatEventTagNewParamsInternalAliasesTLPRed                  ThreatEventTagNewParamsInternalAliasesTLP = "red"
+	ThreatEventTagNewParamsInternalAliasesTLPAmber                ThreatEventTagNewParamsInternalAliasesTLP = "amber"
+	ThreatEventTagNewParamsInternalAliasesTLPAmberStrict          ThreatEventTagNewParamsInternalAliasesTLP = "amber-strict"
+	ThreatEventTagNewParamsInternalAliasesTLPGreen                ThreatEventTagNewParamsInternalAliasesTLP = "green"
+	ThreatEventTagNewParamsInternalAliasesTLPClear                ThreatEventTagNewParamsInternalAliasesTLP = "clear"
+	ThreatEventTagNewParamsInternalAliasesTLPPurple               ThreatEventTagNewParamsInternalAliasesTLP = "purple"
+	ThreatEventTagNewParamsInternalAliasesTLPAmberStrictLowercase ThreatEventTagNewParamsInternalAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewParamsInternalAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewParamsInternalAliasesTLPRed, ThreatEventTagNewParamsInternalAliasesTLPAmber, ThreatEventTagNewParamsInternalAliasesTLPAmberStrict, ThreatEventTagNewParamsInternalAliasesTLPGreen, ThreatEventTagNewParamsInternalAliasesTLPClear, ThreatEventTagNewParamsInternalAliasesTLPPurple:
+	case ThreatEventTagNewParamsInternalAliasesTLPRed, ThreatEventTagNewParamsInternalAliasesTLPAmber, ThreatEventTagNewParamsInternalAliasesTLPAmberStrict, ThreatEventTagNewParamsInternalAliasesTLPGreen, ThreatEventTagNewParamsInternalAliasesTLPClear, ThreatEventTagNewParamsInternalAliasesTLPPurple, ThreatEventTagNewParamsInternalAliasesTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2302,17 +2347,18 @@ func (r ThreatEventTagNewParamsMotiveObject) ImplementsThreatEventTagNewParamsMo
 type ThreatEventTagNewParamsMotiveObjectTLP string
 
 const (
-	ThreatEventTagNewParamsMotiveObjectTLPRed         ThreatEventTagNewParamsMotiveObjectTLP = "red"
-	ThreatEventTagNewParamsMotiveObjectTLPAmber       ThreatEventTagNewParamsMotiveObjectTLP = "amber"
-	ThreatEventTagNewParamsMotiveObjectTLPAmberStrict ThreatEventTagNewParamsMotiveObjectTLP = "amber+strict"
-	ThreatEventTagNewParamsMotiveObjectTLPGreen       ThreatEventTagNewParamsMotiveObjectTLP = "green"
-	ThreatEventTagNewParamsMotiveObjectTLPClear       ThreatEventTagNewParamsMotiveObjectTLP = "clear"
-	ThreatEventTagNewParamsMotiveObjectTLPPurple      ThreatEventTagNewParamsMotiveObjectTLP = "purple"
+	ThreatEventTagNewParamsMotiveObjectTLPRed                  ThreatEventTagNewParamsMotiveObjectTLP = "red"
+	ThreatEventTagNewParamsMotiveObjectTLPAmber                ThreatEventTagNewParamsMotiveObjectTLP = "amber"
+	ThreatEventTagNewParamsMotiveObjectTLPAmberStrict          ThreatEventTagNewParamsMotiveObjectTLP = "amber-strict"
+	ThreatEventTagNewParamsMotiveObjectTLPGreen                ThreatEventTagNewParamsMotiveObjectTLP = "green"
+	ThreatEventTagNewParamsMotiveObjectTLPClear                ThreatEventTagNewParamsMotiveObjectTLP = "clear"
+	ThreatEventTagNewParamsMotiveObjectTLPPurple               ThreatEventTagNewParamsMotiveObjectTLP = "purple"
+	ThreatEventTagNewParamsMotiveObjectTLPAmberStrictLowercase ThreatEventTagNewParamsMotiveObjectTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewParamsMotiveObjectTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewParamsMotiveObjectTLPRed, ThreatEventTagNewParamsMotiveObjectTLPAmber, ThreatEventTagNewParamsMotiveObjectTLPAmberStrict, ThreatEventTagNewParamsMotiveObjectTLPGreen, ThreatEventTagNewParamsMotiveObjectTLPClear, ThreatEventTagNewParamsMotiveObjectTLPPurple:
+	case ThreatEventTagNewParamsMotiveObjectTLPRed, ThreatEventTagNewParamsMotiveObjectTLPAmber, ThreatEventTagNewParamsMotiveObjectTLPAmberStrict, ThreatEventTagNewParamsMotiveObjectTLPGreen, ThreatEventTagNewParamsMotiveObjectTLPClear, ThreatEventTagNewParamsMotiveObjectTLPPurple, ThreatEventTagNewParamsMotiveObjectTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2339,17 +2385,18 @@ func (r ThreatEventTagNewParamsOpsecLevelObject) ImplementsThreatEventTagNewPara
 type ThreatEventTagNewParamsOpsecLevelObjectTLP string
 
 const (
-	ThreatEventTagNewParamsOpsecLevelObjectTLPRed         ThreatEventTagNewParamsOpsecLevelObjectTLP = "red"
-	ThreatEventTagNewParamsOpsecLevelObjectTLPAmber       ThreatEventTagNewParamsOpsecLevelObjectTLP = "amber"
-	ThreatEventTagNewParamsOpsecLevelObjectTLPAmberStrict ThreatEventTagNewParamsOpsecLevelObjectTLP = "amber+strict"
-	ThreatEventTagNewParamsOpsecLevelObjectTLPGreen       ThreatEventTagNewParamsOpsecLevelObjectTLP = "green"
-	ThreatEventTagNewParamsOpsecLevelObjectTLPClear       ThreatEventTagNewParamsOpsecLevelObjectTLP = "clear"
-	ThreatEventTagNewParamsOpsecLevelObjectTLPPurple      ThreatEventTagNewParamsOpsecLevelObjectTLP = "purple"
+	ThreatEventTagNewParamsOpsecLevelObjectTLPRed                  ThreatEventTagNewParamsOpsecLevelObjectTLP = "red"
+	ThreatEventTagNewParamsOpsecLevelObjectTLPAmber                ThreatEventTagNewParamsOpsecLevelObjectTLP = "amber"
+	ThreatEventTagNewParamsOpsecLevelObjectTLPAmberStrict          ThreatEventTagNewParamsOpsecLevelObjectTLP = "amber-strict"
+	ThreatEventTagNewParamsOpsecLevelObjectTLPGreen                ThreatEventTagNewParamsOpsecLevelObjectTLP = "green"
+	ThreatEventTagNewParamsOpsecLevelObjectTLPClear                ThreatEventTagNewParamsOpsecLevelObjectTLP = "clear"
+	ThreatEventTagNewParamsOpsecLevelObjectTLPPurple               ThreatEventTagNewParamsOpsecLevelObjectTLP = "purple"
+	ThreatEventTagNewParamsOpsecLevelObjectTLPAmberStrictLowercase ThreatEventTagNewParamsOpsecLevelObjectTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewParamsOpsecLevelObjectTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewParamsOpsecLevelObjectTLPRed, ThreatEventTagNewParamsOpsecLevelObjectTLPAmber, ThreatEventTagNewParamsOpsecLevelObjectTLPAmberStrict, ThreatEventTagNewParamsOpsecLevelObjectTLPGreen, ThreatEventTagNewParamsOpsecLevelObjectTLPClear, ThreatEventTagNewParamsOpsecLevelObjectTLPPurple:
+	case ThreatEventTagNewParamsOpsecLevelObjectTLPRed, ThreatEventTagNewParamsOpsecLevelObjectTLPAmber, ThreatEventTagNewParamsOpsecLevelObjectTLPAmberStrict, ThreatEventTagNewParamsOpsecLevelObjectTLPGreen, ThreatEventTagNewParamsOpsecLevelObjectTLPClear, ThreatEventTagNewParamsOpsecLevelObjectTLPPurple, ThreatEventTagNewParamsOpsecLevelObjectTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2377,17 +2424,18 @@ func (r ThreatEventTagNewParamsOriginCountryISOObject) ImplementsThreatEventTagN
 type ThreatEventTagNewParamsOriginCountryISOObjectTLP string
 
 const (
-	ThreatEventTagNewParamsOriginCountryISOObjectTLPRed         ThreatEventTagNewParamsOriginCountryISOObjectTLP = "red"
-	ThreatEventTagNewParamsOriginCountryISOObjectTLPAmber       ThreatEventTagNewParamsOriginCountryISOObjectTLP = "amber"
-	ThreatEventTagNewParamsOriginCountryISOObjectTLPAmberStrict ThreatEventTagNewParamsOriginCountryISOObjectTLP = "amber+strict"
-	ThreatEventTagNewParamsOriginCountryISOObjectTLPGreen       ThreatEventTagNewParamsOriginCountryISOObjectTLP = "green"
-	ThreatEventTagNewParamsOriginCountryISOObjectTLPClear       ThreatEventTagNewParamsOriginCountryISOObjectTLP = "clear"
-	ThreatEventTagNewParamsOriginCountryISOObjectTLPPurple      ThreatEventTagNewParamsOriginCountryISOObjectTLP = "purple"
+	ThreatEventTagNewParamsOriginCountryISOObjectTLPRed                  ThreatEventTagNewParamsOriginCountryISOObjectTLP = "red"
+	ThreatEventTagNewParamsOriginCountryISOObjectTLPAmber                ThreatEventTagNewParamsOriginCountryISOObjectTLP = "amber"
+	ThreatEventTagNewParamsOriginCountryISOObjectTLPAmberStrict          ThreatEventTagNewParamsOriginCountryISOObjectTLP = "amber-strict"
+	ThreatEventTagNewParamsOriginCountryISOObjectTLPGreen                ThreatEventTagNewParamsOriginCountryISOObjectTLP = "green"
+	ThreatEventTagNewParamsOriginCountryISOObjectTLPClear                ThreatEventTagNewParamsOriginCountryISOObjectTLP = "clear"
+	ThreatEventTagNewParamsOriginCountryISOObjectTLPPurple               ThreatEventTagNewParamsOriginCountryISOObjectTLP = "purple"
+	ThreatEventTagNewParamsOriginCountryISOObjectTLPAmberStrictLowercase ThreatEventTagNewParamsOriginCountryISOObjectTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewParamsOriginCountryISOObjectTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewParamsOriginCountryISOObjectTLPRed, ThreatEventTagNewParamsOriginCountryISOObjectTLPAmber, ThreatEventTagNewParamsOriginCountryISOObjectTLPAmberStrict, ThreatEventTagNewParamsOriginCountryISOObjectTLPGreen, ThreatEventTagNewParamsOriginCountryISOObjectTLPClear, ThreatEventTagNewParamsOriginCountryISOObjectTLPPurple:
+	case ThreatEventTagNewParamsOriginCountryISOObjectTLPRed, ThreatEventTagNewParamsOriginCountryISOObjectTLPAmber, ThreatEventTagNewParamsOriginCountryISOObjectTLPAmberStrict, ThreatEventTagNewParamsOriginCountryISOObjectTLPGreen, ThreatEventTagNewParamsOriginCountryISOObjectTLPClear, ThreatEventTagNewParamsOriginCountryISOObjectTLPPurple, ThreatEventTagNewParamsOriginCountryISOObjectTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2414,17 +2462,18 @@ func (r ThreatEventTagNewParamsPriorityObject) ImplementsThreatEventTagNewParams
 type ThreatEventTagNewParamsPriorityObjectTLP string
 
 const (
-	ThreatEventTagNewParamsPriorityObjectTLPRed         ThreatEventTagNewParamsPriorityObjectTLP = "red"
-	ThreatEventTagNewParamsPriorityObjectTLPAmber       ThreatEventTagNewParamsPriorityObjectTLP = "amber"
-	ThreatEventTagNewParamsPriorityObjectTLPAmberStrict ThreatEventTagNewParamsPriorityObjectTLP = "amber+strict"
-	ThreatEventTagNewParamsPriorityObjectTLPGreen       ThreatEventTagNewParamsPriorityObjectTLP = "green"
-	ThreatEventTagNewParamsPriorityObjectTLPClear       ThreatEventTagNewParamsPriorityObjectTLP = "clear"
-	ThreatEventTagNewParamsPriorityObjectTLPPurple      ThreatEventTagNewParamsPriorityObjectTLP = "purple"
+	ThreatEventTagNewParamsPriorityObjectTLPRed                  ThreatEventTagNewParamsPriorityObjectTLP = "red"
+	ThreatEventTagNewParamsPriorityObjectTLPAmber                ThreatEventTagNewParamsPriorityObjectTLP = "amber"
+	ThreatEventTagNewParamsPriorityObjectTLPAmberStrict          ThreatEventTagNewParamsPriorityObjectTLP = "amber-strict"
+	ThreatEventTagNewParamsPriorityObjectTLPGreen                ThreatEventTagNewParamsPriorityObjectTLP = "green"
+	ThreatEventTagNewParamsPriorityObjectTLPClear                ThreatEventTagNewParamsPriorityObjectTLP = "clear"
+	ThreatEventTagNewParamsPriorityObjectTLPPurple               ThreatEventTagNewParamsPriorityObjectTLP = "purple"
+	ThreatEventTagNewParamsPriorityObjectTLPAmberStrictLowercase ThreatEventTagNewParamsPriorityObjectTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewParamsPriorityObjectTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewParamsPriorityObjectTLPRed, ThreatEventTagNewParamsPriorityObjectTLPAmber, ThreatEventTagNewParamsPriorityObjectTLPAmberStrict, ThreatEventTagNewParamsPriorityObjectTLPGreen, ThreatEventTagNewParamsPriorityObjectTLPClear, ThreatEventTagNewParamsPriorityObjectTLPPurple:
+	case ThreatEventTagNewParamsPriorityObjectTLPRed, ThreatEventTagNewParamsPriorityObjectTLPAmber, ThreatEventTagNewParamsPriorityObjectTLPAmberStrict, ThreatEventTagNewParamsPriorityObjectTLPGreen, ThreatEventTagNewParamsPriorityObjectTLPClear, ThreatEventTagNewParamsPriorityObjectTLPPurple, ThreatEventTagNewParamsPriorityObjectTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2452,38 +2501,40 @@ func (r ThreatEventTagNewParamsSophisticationLevelObject) ImplementsThreatEventT
 type ThreatEventTagNewParamsSophisticationLevelObjectTLP string
 
 const (
-	ThreatEventTagNewParamsSophisticationLevelObjectTLPRed         ThreatEventTagNewParamsSophisticationLevelObjectTLP = "red"
-	ThreatEventTagNewParamsSophisticationLevelObjectTLPAmber       ThreatEventTagNewParamsSophisticationLevelObjectTLP = "amber"
-	ThreatEventTagNewParamsSophisticationLevelObjectTLPAmberStrict ThreatEventTagNewParamsSophisticationLevelObjectTLP = "amber+strict"
-	ThreatEventTagNewParamsSophisticationLevelObjectTLPGreen       ThreatEventTagNewParamsSophisticationLevelObjectTLP = "green"
-	ThreatEventTagNewParamsSophisticationLevelObjectTLPClear       ThreatEventTagNewParamsSophisticationLevelObjectTLP = "clear"
-	ThreatEventTagNewParamsSophisticationLevelObjectTLPPurple      ThreatEventTagNewParamsSophisticationLevelObjectTLP = "purple"
+	ThreatEventTagNewParamsSophisticationLevelObjectTLPRed                  ThreatEventTagNewParamsSophisticationLevelObjectTLP = "red"
+	ThreatEventTagNewParamsSophisticationLevelObjectTLPAmber                ThreatEventTagNewParamsSophisticationLevelObjectTLP = "amber"
+	ThreatEventTagNewParamsSophisticationLevelObjectTLPAmberStrict          ThreatEventTagNewParamsSophisticationLevelObjectTLP = "amber-strict"
+	ThreatEventTagNewParamsSophisticationLevelObjectTLPGreen                ThreatEventTagNewParamsSophisticationLevelObjectTLP = "green"
+	ThreatEventTagNewParamsSophisticationLevelObjectTLPClear                ThreatEventTagNewParamsSophisticationLevelObjectTLP = "clear"
+	ThreatEventTagNewParamsSophisticationLevelObjectTLPPurple               ThreatEventTagNewParamsSophisticationLevelObjectTLP = "purple"
+	ThreatEventTagNewParamsSophisticationLevelObjectTLPAmberStrictLowercase ThreatEventTagNewParamsSophisticationLevelObjectTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewParamsSophisticationLevelObjectTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewParamsSophisticationLevelObjectTLPRed, ThreatEventTagNewParamsSophisticationLevelObjectTLPAmber, ThreatEventTagNewParamsSophisticationLevelObjectTLPAmberStrict, ThreatEventTagNewParamsSophisticationLevelObjectTLPGreen, ThreatEventTagNewParamsSophisticationLevelObjectTLPClear, ThreatEventTagNewParamsSophisticationLevelObjectTLPPurple:
+	case ThreatEventTagNewParamsSophisticationLevelObjectTLPRed, ThreatEventTagNewParamsSophisticationLevelObjectTLPAmber, ThreatEventTagNewParamsSophisticationLevelObjectTLPAmberStrict, ThreatEventTagNewParamsSophisticationLevelObjectTLPGreen, ThreatEventTagNewParamsSophisticationLevelObjectTLPClear, ThreatEventTagNewParamsSophisticationLevelObjectTLPPurple, ThreatEventTagNewParamsSophisticationLevelObjectTLPAmberStrictLowercase:
 		return true
 	}
 	return false
 }
 
 // Tag-level TLP handling marking. Optional. Allowed values: red, amber,
-// amber+strict, green, clear, purple.
+// amber-strict, green, clear, purple, amber+strict.
 type ThreatEventTagNewParamsTLP string
 
 const (
-	ThreatEventTagNewParamsTLPRed         ThreatEventTagNewParamsTLP = "red"
-	ThreatEventTagNewParamsTLPAmber       ThreatEventTagNewParamsTLP = "amber"
-	ThreatEventTagNewParamsTLPAmberStrict ThreatEventTagNewParamsTLP = "amber+strict"
-	ThreatEventTagNewParamsTLPGreen       ThreatEventTagNewParamsTLP = "green"
-	ThreatEventTagNewParamsTLPClear       ThreatEventTagNewParamsTLP = "clear"
-	ThreatEventTagNewParamsTLPPurple      ThreatEventTagNewParamsTLP = "purple"
+	ThreatEventTagNewParamsTLPRed                  ThreatEventTagNewParamsTLP = "red"
+	ThreatEventTagNewParamsTLPAmber                ThreatEventTagNewParamsTLP = "amber"
+	ThreatEventTagNewParamsTLPAmberStrict          ThreatEventTagNewParamsTLP = "amber-strict"
+	ThreatEventTagNewParamsTLPGreen                ThreatEventTagNewParamsTLP = "green"
+	ThreatEventTagNewParamsTLPClear                ThreatEventTagNewParamsTLP = "clear"
+	ThreatEventTagNewParamsTLPPurple               ThreatEventTagNewParamsTLP = "purple"
+	ThreatEventTagNewParamsTLPAmberStrictLowercase ThreatEventTagNewParamsTLP = "amber+strict"
 )
 
 func (r ThreatEventTagNewParamsTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagNewParamsTLPRed, ThreatEventTagNewParamsTLPAmber, ThreatEventTagNewParamsTLPAmberStrict, ThreatEventTagNewParamsTLPGreen, ThreatEventTagNewParamsTLPClear, ThreatEventTagNewParamsTLPPurple:
+	case ThreatEventTagNewParamsTLPRed, ThreatEventTagNewParamsTLPAmber, ThreatEventTagNewParamsTLPAmberStrict, ThreatEventTagNewParamsTLPGreen, ThreatEventTagNewParamsTLPClear, ThreatEventTagNewParamsTLPPurple, ThreatEventTagNewParamsTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2633,8 +2684,9 @@ type ThreatEventTagEditParams struct {
 	AccountID      param.Field[string]                                      `path:"account_id" api:"required"`
 	ActiveDuration param.Field[ThreatEventTagEditParamsActiveDurationUnion] `json:"activeDuration"`
 	ActorCategory  param.Field[ThreatEventTagEditParamsActorCategoryUnion]  `json:"actorCategory"`
-	// Structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: stripped from
-	// responses to non-CFONE accounts.
+	// Structured aliases ({ value, confidence 1-10, tlp }). Public: returned to all
+	// accounts with per-entry TLP filtering (entries with tlp: purple are removed for
+	// non-CFONE accounts).
 	Aliases                 param.Field[[]ThreatEventTagEditParamsAlias]                      `json:"aliases"`
 	AliasGroupNames         param.Field[[]string]                                             `json:"aliasGroupNames"`
 	AliasGroupNamesInternal param.Field[[]string]                                             `json:"aliasGroupNamesInternal"`
@@ -2699,17 +2751,18 @@ func (r ThreatEventTagEditParamsActiveDurationObject) ImplementsThreatEventTagEd
 type ThreatEventTagEditParamsActiveDurationObjectTLP string
 
 const (
-	ThreatEventTagEditParamsActiveDurationObjectTLPRed         ThreatEventTagEditParamsActiveDurationObjectTLP = "red"
-	ThreatEventTagEditParamsActiveDurationObjectTLPAmber       ThreatEventTagEditParamsActiveDurationObjectTLP = "amber"
-	ThreatEventTagEditParamsActiveDurationObjectTLPAmberStrict ThreatEventTagEditParamsActiveDurationObjectTLP = "amber+strict"
-	ThreatEventTagEditParamsActiveDurationObjectTLPGreen       ThreatEventTagEditParamsActiveDurationObjectTLP = "green"
-	ThreatEventTagEditParamsActiveDurationObjectTLPClear       ThreatEventTagEditParamsActiveDurationObjectTLP = "clear"
-	ThreatEventTagEditParamsActiveDurationObjectTLPPurple      ThreatEventTagEditParamsActiveDurationObjectTLP = "purple"
+	ThreatEventTagEditParamsActiveDurationObjectTLPRed                  ThreatEventTagEditParamsActiveDurationObjectTLP = "red"
+	ThreatEventTagEditParamsActiveDurationObjectTLPAmber                ThreatEventTagEditParamsActiveDurationObjectTLP = "amber"
+	ThreatEventTagEditParamsActiveDurationObjectTLPAmberStrict          ThreatEventTagEditParamsActiveDurationObjectTLP = "amber-strict"
+	ThreatEventTagEditParamsActiveDurationObjectTLPGreen                ThreatEventTagEditParamsActiveDurationObjectTLP = "green"
+	ThreatEventTagEditParamsActiveDurationObjectTLPClear                ThreatEventTagEditParamsActiveDurationObjectTLP = "clear"
+	ThreatEventTagEditParamsActiveDurationObjectTLPPurple               ThreatEventTagEditParamsActiveDurationObjectTLP = "purple"
+	ThreatEventTagEditParamsActiveDurationObjectTLPAmberStrictLowercase ThreatEventTagEditParamsActiveDurationObjectTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditParamsActiveDurationObjectTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditParamsActiveDurationObjectTLPRed, ThreatEventTagEditParamsActiveDurationObjectTLPAmber, ThreatEventTagEditParamsActiveDurationObjectTLPAmberStrict, ThreatEventTagEditParamsActiveDurationObjectTLPGreen, ThreatEventTagEditParamsActiveDurationObjectTLPClear, ThreatEventTagEditParamsActiveDurationObjectTLPPurple:
+	case ThreatEventTagEditParamsActiveDurationObjectTLPRed, ThreatEventTagEditParamsActiveDurationObjectTLPAmber, ThreatEventTagEditParamsActiveDurationObjectTLPAmberStrict, ThreatEventTagEditParamsActiveDurationObjectTLPGreen, ThreatEventTagEditParamsActiveDurationObjectTLPClear, ThreatEventTagEditParamsActiveDurationObjectTLPPurple, ThreatEventTagEditParamsActiveDurationObjectTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2737,17 +2790,18 @@ func (r ThreatEventTagEditParamsActorCategoryObject) ImplementsThreatEventTagEdi
 type ThreatEventTagEditParamsActorCategoryObjectTLP string
 
 const (
-	ThreatEventTagEditParamsActorCategoryObjectTLPRed         ThreatEventTagEditParamsActorCategoryObjectTLP = "red"
-	ThreatEventTagEditParamsActorCategoryObjectTLPAmber       ThreatEventTagEditParamsActorCategoryObjectTLP = "amber"
-	ThreatEventTagEditParamsActorCategoryObjectTLPAmberStrict ThreatEventTagEditParamsActorCategoryObjectTLP = "amber+strict"
-	ThreatEventTagEditParamsActorCategoryObjectTLPGreen       ThreatEventTagEditParamsActorCategoryObjectTLP = "green"
-	ThreatEventTagEditParamsActorCategoryObjectTLPClear       ThreatEventTagEditParamsActorCategoryObjectTLP = "clear"
-	ThreatEventTagEditParamsActorCategoryObjectTLPPurple      ThreatEventTagEditParamsActorCategoryObjectTLP = "purple"
+	ThreatEventTagEditParamsActorCategoryObjectTLPRed                  ThreatEventTagEditParamsActorCategoryObjectTLP = "red"
+	ThreatEventTagEditParamsActorCategoryObjectTLPAmber                ThreatEventTagEditParamsActorCategoryObjectTLP = "amber"
+	ThreatEventTagEditParamsActorCategoryObjectTLPAmberStrict          ThreatEventTagEditParamsActorCategoryObjectTLP = "amber-strict"
+	ThreatEventTagEditParamsActorCategoryObjectTLPGreen                ThreatEventTagEditParamsActorCategoryObjectTLP = "green"
+	ThreatEventTagEditParamsActorCategoryObjectTLPClear                ThreatEventTagEditParamsActorCategoryObjectTLP = "clear"
+	ThreatEventTagEditParamsActorCategoryObjectTLPPurple               ThreatEventTagEditParamsActorCategoryObjectTLP = "purple"
+	ThreatEventTagEditParamsActorCategoryObjectTLPAmberStrictLowercase ThreatEventTagEditParamsActorCategoryObjectTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditParamsActorCategoryObjectTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditParamsActorCategoryObjectTLPRed, ThreatEventTagEditParamsActorCategoryObjectTLPAmber, ThreatEventTagEditParamsActorCategoryObjectTLPAmberStrict, ThreatEventTagEditParamsActorCategoryObjectTLPGreen, ThreatEventTagEditParamsActorCategoryObjectTLPClear, ThreatEventTagEditParamsActorCategoryObjectTLPPurple:
+	case ThreatEventTagEditParamsActorCategoryObjectTLPRed, ThreatEventTagEditParamsActorCategoryObjectTLPAmber, ThreatEventTagEditParamsActorCategoryObjectTLPAmberStrict, ThreatEventTagEditParamsActorCategoryObjectTLPGreen, ThreatEventTagEditParamsActorCategoryObjectTLPClear, ThreatEventTagEditParamsActorCategoryObjectTLPPurple, ThreatEventTagEditParamsActorCategoryObjectTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2766,17 +2820,18 @@ func (r ThreatEventTagEditParamsAlias) MarshalJSON() (data []byte, err error) {
 type ThreatEventTagEditParamsAliasesTLP string
 
 const (
-	ThreatEventTagEditParamsAliasesTLPRed         ThreatEventTagEditParamsAliasesTLP = "red"
-	ThreatEventTagEditParamsAliasesTLPAmber       ThreatEventTagEditParamsAliasesTLP = "amber"
-	ThreatEventTagEditParamsAliasesTLPAmberStrict ThreatEventTagEditParamsAliasesTLP = "amber+strict"
-	ThreatEventTagEditParamsAliasesTLPGreen       ThreatEventTagEditParamsAliasesTLP = "green"
-	ThreatEventTagEditParamsAliasesTLPClear       ThreatEventTagEditParamsAliasesTLP = "clear"
-	ThreatEventTagEditParamsAliasesTLPPurple      ThreatEventTagEditParamsAliasesTLP = "purple"
+	ThreatEventTagEditParamsAliasesTLPRed                  ThreatEventTagEditParamsAliasesTLP = "red"
+	ThreatEventTagEditParamsAliasesTLPAmber                ThreatEventTagEditParamsAliasesTLP = "amber"
+	ThreatEventTagEditParamsAliasesTLPAmberStrict          ThreatEventTagEditParamsAliasesTLP = "amber-strict"
+	ThreatEventTagEditParamsAliasesTLPGreen                ThreatEventTagEditParamsAliasesTLP = "green"
+	ThreatEventTagEditParamsAliasesTLPClear                ThreatEventTagEditParamsAliasesTLP = "clear"
+	ThreatEventTagEditParamsAliasesTLPPurple               ThreatEventTagEditParamsAliasesTLP = "purple"
+	ThreatEventTagEditParamsAliasesTLPAmberStrictLowercase ThreatEventTagEditParamsAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditParamsAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditParamsAliasesTLPRed, ThreatEventTagEditParamsAliasesTLPAmber, ThreatEventTagEditParamsAliasesTLPAmberStrict, ThreatEventTagEditParamsAliasesTLPGreen, ThreatEventTagEditParamsAliasesTLPClear, ThreatEventTagEditParamsAliasesTLPPurple:
+	case ThreatEventTagEditParamsAliasesTLPRed, ThreatEventTagEditParamsAliasesTLPAmber, ThreatEventTagEditParamsAliasesTLPAmberStrict, ThreatEventTagEditParamsAliasesTLPGreen, ThreatEventTagEditParamsAliasesTLPClear, ThreatEventTagEditParamsAliasesTLPPurple, ThreatEventTagEditParamsAliasesTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2804,17 +2859,18 @@ func (r ThreatEventTagEditParamsAttributionOrganizationObject) ImplementsThreatE
 type ThreatEventTagEditParamsAttributionOrganizationObjectTLP string
 
 const (
-	ThreatEventTagEditParamsAttributionOrganizationObjectTLPRed         ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "red"
-	ThreatEventTagEditParamsAttributionOrganizationObjectTLPAmber       ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "amber"
-	ThreatEventTagEditParamsAttributionOrganizationObjectTLPAmberStrict ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "amber+strict"
-	ThreatEventTagEditParamsAttributionOrganizationObjectTLPGreen       ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "green"
-	ThreatEventTagEditParamsAttributionOrganizationObjectTLPClear       ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "clear"
-	ThreatEventTagEditParamsAttributionOrganizationObjectTLPPurple      ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "purple"
+	ThreatEventTagEditParamsAttributionOrganizationObjectTLPRed                  ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "red"
+	ThreatEventTagEditParamsAttributionOrganizationObjectTLPAmber                ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "amber"
+	ThreatEventTagEditParamsAttributionOrganizationObjectTLPAmberStrict          ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "amber-strict"
+	ThreatEventTagEditParamsAttributionOrganizationObjectTLPGreen                ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "green"
+	ThreatEventTagEditParamsAttributionOrganizationObjectTLPClear                ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "clear"
+	ThreatEventTagEditParamsAttributionOrganizationObjectTLPPurple               ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "purple"
+	ThreatEventTagEditParamsAttributionOrganizationObjectTLPAmberStrictLowercase ThreatEventTagEditParamsAttributionOrganizationObjectTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditParamsAttributionOrganizationObjectTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditParamsAttributionOrganizationObjectTLPRed, ThreatEventTagEditParamsAttributionOrganizationObjectTLPAmber, ThreatEventTagEditParamsAttributionOrganizationObjectTLPAmberStrict, ThreatEventTagEditParamsAttributionOrganizationObjectTLPGreen, ThreatEventTagEditParamsAttributionOrganizationObjectTLPClear, ThreatEventTagEditParamsAttributionOrganizationObjectTLPPurple:
+	case ThreatEventTagEditParamsAttributionOrganizationObjectTLPRed, ThreatEventTagEditParamsAttributionOrganizationObjectTLPAmber, ThreatEventTagEditParamsAttributionOrganizationObjectTLPAmberStrict, ThreatEventTagEditParamsAttributionOrganizationObjectTLPGreen, ThreatEventTagEditParamsAttributionOrganizationObjectTLPClear, ThreatEventTagEditParamsAttributionOrganizationObjectTLPPurple, ThreatEventTagEditParamsAttributionOrganizationObjectTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2842,17 +2898,18 @@ func (r ThreatEventTagEditParamsInternalAlias) MarshalJSON() (data []byte, err e
 type ThreatEventTagEditParamsInternalAliasesTLP string
 
 const (
-	ThreatEventTagEditParamsInternalAliasesTLPRed         ThreatEventTagEditParamsInternalAliasesTLP = "red"
-	ThreatEventTagEditParamsInternalAliasesTLPAmber       ThreatEventTagEditParamsInternalAliasesTLP = "amber"
-	ThreatEventTagEditParamsInternalAliasesTLPAmberStrict ThreatEventTagEditParamsInternalAliasesTLP = "amber+strict"
-	ThreatEventTagEditParamsInternalAliasesTLPGreen       ThreatEventTagEditParamsInternalAliasesTLP = "green"
-	ThreatEventTagEditParamsInternalAliasesTLPClear       ThreatEventTagEditParamsInternalAliasesTLP = "clear"
-	ThreatEventTagEditParamsInternalAliasesTLPPurple      ThreatEventTagEditParamsInternalAliasesTLP = "purple"
+	ThreatEventTagEditParamsInternalAliasesTLPRed                  ThreatEventTagEditParamsInternalAliasesTLP = "red"
+	ThreatEventTagEditParamsInternalAliasesTLPAmber                ThreatEventTagEditParamsInternalAliasesTLP = "amber"
+	ThreatEventTagEditParamsInternalAliasesTLPAmberStrict          ThreatEventTagEditParamsInternalAliasesTLP = "amber-strict"
+	ThreatEventTagEditParamsInternalAliasesTLPGreen                ThreatEventTagEditParamsInternalAliasesTLP = "green"
+	ThreatEventTagEditParamsInternalAliasesTLPClear                ThreatEventTagEditParamsInternalAliasesTLP = "clear"
+	ThreatEventTagEditParamsInternalAliasesTLPPurple               ThreatEventTagEditParamsInternalAliasesTLP = "purple"
+	ThreatEventTagEditParamsInternalAliasesTLPAmberStrictLowercase ThreatEventTagEditParamsInternalAliasesTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditParamsInternalAliasesTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditParamsInternalAliasesTLPRed, ThreatEventTagEditParamsInternalAliasesTLPAmber, ThreatEventTagEditParamsInternalAliasesTLPAmberStrict, ThreatEventTagEditParamsInternalAliasesTLPGreen, ThreatEventTagEditParamsInternalAliasesTLPClear, ThreatEventTagEditParamsInternalAliasesTLPPurple:
+	case ThreatEventTagEditParamsInternalAliasesTLPRed, ThreatEventTagEditParamsInternalAliasesTLPAmber, ThreatEventTagEditParamsInternalAliasesTLPAmberStrict, ThreatEventTagEditParamsInternalAliasesTLPGreen, ThreatEventTagEditParamsInternalAliasesTLPClear, ThreatEventTagEditParamsInternalAliasesTLPPurple, ThreatEventTagEditParamsInternalAliasesTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2879,17 +2936,18 @@ func (r ThreatEventTagEditParamsMotiveObject) ImplementsThreatEventTagEditParams
 type ThreatEventTagEditParamsMotiveObjectTLP string
 
 const (
-	ThreatEventTagEditParamsMotiveObjectTLPRed         ThreatEventTagEditParamsMotiveObjectTLP = "red"
-	ThreatEventTagEditParamsMotiveObjectTLPAmber       ThreatEventTagEditParamsMotiveObjectTLP = "amber"
-	ThreatEventTagEditParamsMotiveObjectTLPAmberStrict ThreatEventTagEditParamsMotiveObjectTLP = "amber+strict"
-	ThreatEventTagEditParamsMotiveObjectTLPGreen       ThreatEventTagEditParamsMotiveObjectTLP = "green"
-	ThreatEventTagEditParamsMotiveObjectTLPClear       ThreatEventTagEditParamsMotiveObjectTLP = "clear"
-	ThreatEventTagEditParamsMotiveObjectTLPPurple      ThreatEventTagEditParamsMotiveObjectTLP = "purple"
+	ThreatEventTagEditParamsMotiveObjectTLPRed                  ThreatEventTagEditParamsMotiveObjectTLP = "red"
+	ThreatEventTagEditParamsMotiveObjectTLPAmber                ThreatEventTagEditParamsMotiveObjectTLP = "amber"
+	ThreatEventTagEditParamsMotiveObjectTLPAmberStrict          ThreatEventTagEditParamsMotiveObjectTLP = "amber-strict"
+	ThreatEventTagEditParamsMotiveObjectTLPGreen                ThreatEventTagEditParamsMotiveObjectTLP = "green"
+	ThreatEventTagEditParamsMotiveObjectTLPClear                ThreatEventTagEditParamsMotiveObjectTLP = "clear"
+	ThreatEventTagEditParamsMotiveObjectTLPPurple               ThreatEventTagEditParamsMotiveObjectTLP = "purple"
+	ThreatEventTagEditParamsMotiveObjectTLPAmberStrictLowercase ThreatEventTagEditParamsMotiveObjectTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditParamsMotiveObjectTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditParamsMotiveObjectTLPRed, ThreatEventTagEditParamsMotiveObjectTLPAmber, ThreatEventTagEditParamsMotiveObjectTLPAmberStrict, ThreatEventTagEditParamsMotiveObjectTLPGreen, ThreatEventTagEditParamsMotiveObjectTLPClear, ThreatEventTagEditParamsMotiveObjectTLPPurple:
+	case ThreatEventTagEditParamsMotiveObjectTLPRed, ThreatEventTagEditParamsMotiveObjectTLPAmber, ThreatEventTagEditParamsMotiveObjectTLPAmberStrict, ThreatEventTagEditParamsMotiveObjectTLPGreen, ThreatEventTagEditParamsMotiveObjectTLPClear, ThreatEventTagEditParamsMotiveObjectTLPPurple, ThreatEventTagEditParamsMotiveObjectTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2917,17 +2975,18 @@ func (r ThreatEventTagEditParamsOpsecLevelObject) ImplementsThreatEventTagEditPa
 type ThreatEventTagEditParamsOpsecLevelObjectTLP string
 
 const (
-	ThreatEventTagEditParamsOpsecLevelObjectTLPRed         ThreatEventTagEditParamsOpsecLevelObjectTLP = "red"
-	ThreatEventTagEditParamsOpsecLevelObjectTLPAmber       ThreatEventTagEditParamsOpsecLevelObjectTLP = "amber"
-	ThreatEventTagEditParamsOpsecLevelObjectTLPAmberStrict ThreatEventTagEditParamsOpsecLevelObjectTLP = "amber+strict"
-	ThreatEventTagEditParamsOpsecLevelObjectTLPGreen       ThreatEventTagEditParamsOpsecLevelObjectTLP = "green"
-	ThreatEventTagEditParamsOpsecLevelObjectTLPClear       ThreatEventTagEditParamsOpsecLevelObjectTLP = "clear"
-	ThreatEventTagEditParamsOpsecLevelObjectTLPPurple      ThreatEventTagEditParamsOpsecLevelObjectTLP = "purple"
+	ThreatEventTagEditParamsOpsecLevelObjectTLPRed                  ThreatEventTagEditParamsOpsecLevelObjectTLP = "red"
+	ThreatEventTagEditParamsOpsecLevelObjectTLPAmber                ThreatEventTagEditParamsOpsecLevelObjectTLP = "amber"
+	ThreatEventTagEditParamsOpsecLevelObjectTLPAmberStrict          ThreatEventTagEditParamsOpsecLevelObjectTLP = "amber-strict"
+	ThreatEventTagEditParamsOpsecLevelObjectTLPGreen                ThreatEventTagEditParamsOpsecLevelObjectTLP = "green"
+	ThreatEventTagEditParamsOpsecLevelObjectTLPClear                ThreatEventTagEditParamsOpsecLevelObjectTLP = "clear"
+	ThreatEventTagEditParamsOpsecLevelObjectTLPPurple               ThreatEventTagEditParamsOpsecLevelObjectTLP = "purple"
+	ThreatEventTagEditParamsOpsecLevelObjectTLPAmberStrictLowercase ThreatEventTagEditParamsOpsecLevelObjectTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditParamsOpsecLevelObjectTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditParamsOpsecLevelObjectTLPRed, ThreatEventTagEditParamsOpsecLevelObjectTLPAmber, ThreatEventTagEditParamsOpsecLevelObjectTLPAmberStrict, ThreatEventTagEditParamsOpsecLevelObjectTLPGreen, ThreatEventTagEditParamsOpsecLevelObjectTLPClear, ThreatEventTagEditParamsOpsecLevelObjectTLPPurple:
+	case ThreatEventTagEditParamsOpsecLevelObjectTLPRed, ThreatEventTagEditParamsOpsecLevelObjectTLPAmber, ThreatEventTagEditParamsOpsecLevelObjectTLPAmberStrict, ThreatEventTagEditParamsOpsecLevelObjectTLPGreen, ThreatEventTagEditParamsOpsecLevelObjectTLPClear, ThreatEventTagEditParamsOpsecLevelObjectTLPPurple, ThreatEventTagEditParamsOpsecLevelObjectTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2955,17 +3014,18 @@ func (r ThreatEventTagEditParamsOriginCountryISOObject) ImplementsThreatEventTag
 type ThreatEventTagEditParamsOriginCountryISOObjectTLP string
 
 const (
-	ThreatEventTagEditParamsOriginCountryISOObjectTLPRed         ThreatEventTagEditParamsOriginCountryISOObjectTLP = "red"
-	ThreatEventTagEditParamsOriginCountryISOObjectTLPAmber       ThreatEventTagEditParamsOriginCountryISOObjectTLP = "amber"
-	ThreatEventTagEditParamsOriginCountryISOObjectTLPAmberStrict ThreatEventTagEditParamsOriginCountryISOObjectTLP = "amber+strict"
-	ThreatEventTagEditParamsOriginCountryISOObjectTLPGreen       ThreatEventTagEditParamsOriginCountryISOObjectTLP = "green"
-	ThreatEventTagEditParamsOriginCountryISOObjectTLPClear       ThreatEventTagEditParamsOriginCountryISOObjectTLP = "clear"
-	ThreatEventTagEditParamsOriginCountryISOObjectTLPPurple      ThreatEventTagEditParamsOriginCountryISOObjectTLP = "purple"
+	ThreatEventTagEditParamsOriginCountryISOObjectTLPRed                  ThreatEventTagEditParamsOriginCountryISOObjectTLP = "red"
+	ThreatEventTagEditParamsOriginCountryISOObjectTLPAmber                ThreatEventTagEditParamsOriginCountryISOObjectTLP = "amber"
+	ThreatEventTagEditParamsOriginCountryISOObjectTLPAmberStrict          ThreatEventTagEditParamsOriginCountryISOObjectTLP = "amber-strict"
+	ThreatEventTagEditParamsOriginCountryISOObjectTLPGreen                ThreatEventTagEditParamsOriginCountryISOObjectTLP = "green"
+	ThreatEventTagEditParamsOriginCountryISOObjectTLPClear                ThreatEventTagEditParamsOriginCountryISOObjectTLP = "clear"
+	ThreatEventTagEditParamsOriginCountryISOObjectTLPPurple               ThreatEventTagEditParamsOriginCountryISOObjectTLP = "purple"
+	ThreatEventTagEditParamsOriginCountryISOObjectTLPAmberStrictLowercase ThreatEventTagEditParamsOriginCountryISOObjectTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditParamsOriginCountryISOObjectTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditParamsOriginCountryISOObjectTLPRed, ThreatEventTagEditParamsOriginCountryISOObjectTLPAmber, ThreatEventTagEditParamsOriginCountryISOObjectTLPAmberStrict, ThreatEventTagEditParamsOriginCountryISOObjectTLPGreen, ThreatEventTagEditParamsOriginCountryISOObjectTLPClear, ThreatEventTagEditParamsOriginCountryISOObjectTLPPurple:
+	case ThreatEventTagEditParamsOriginCountryISOObjectTLPRed, ThreatEventTagEditParamsOriginCountryISOObjectTLPAmber, ThreatEventTagEditParamsOriginCountryISOObjectTLPAmberStrict, ThreatEventTagEditParamsOriginCountryISOObjectTLPGreen, ThreatEventTagEditParamsOriginCountryISOObjectTLPClear, ThreatEventTagEditParamsOriginCountryISOObjectTLPPurple, ThreatEventTagEditParamsOriginCountryISOObjectTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -2992,17 +3052,18 @@ func (r ThreatEventTagEditParamsPriorityObject) ImplementsThreatEventTagEditPara
 type ThreatEventTagEditParamsPriorityObjectTLP string
 
 const (
-	ThreatEventTagEditParamsPriorityObjectTLPRed         ThreatEventTagEditParamsPriorityObjectTLP = "red"
-	ThreatEventTagEditParamsPriorityObjectTLPAmber       ThreatEventTagEditParamsPriorityObjectTLP = "amber"
-	ThreatEventTagEditParamsPriorityObjectTLPAmberStrict ThreatEventTagEditParamsPriorityObjectTLP = "amber+strict"
-	ThreatEventTagEditParamsPriorityObjectTLPGreen       ThreatEventTagEditParamsPriorityObjectTLP = "green"
-	ThreatEventTagEditParamsPriorityObjectTLPClear       ThreatEventTagEditParamsPriorityObjectTLP = "clear"
-	ThreatEventTagEditParamsPriorityObjectTLPPurple      ThreatEventTagEditParamsPriorityObjectTLP = "purple"
+	ThreatEventTagEditParamsPriorityObjectTLPRed                  ThreatEventTagEditParamsPriorityObjectTLP = "red"
+	ThreatEventTagEditParamsPriorityObjectTLPAmber                ThreatEventTagEditParamsPriorityObjectTLP = "amber"
+	ThreatEventTagEditParamsPriorityObjectTLPAmberStrict          ThreatEventTagEditParamsPriorityObjectTLP = "amber-strict"
+	ThreatEventTagEditParamsPriorityObjectTLPGreen                ThreatEventTagEditParamsPriorityObjectTLP = "green"
+	ThreatEventTagEditParamsPriorityObjectTLPClear                ThreatEventTagEditParamsPriorityObjectTLP = "clear"
+	ThreatEventTagEditParamsPriorityObjectTLPPurple               ThreatEventTagEditParamsPriorityObjectTLP = "purple"
+	ThreatEventTagEditParamsPriorityObjectTLPAmberStrictLowercase ThreatEventTagEditParamsPriorityObjectTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditParamsPriorityObjectTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditParamsPriorityObjectTLPRed, ThreatEventTagEditParamsPriorityObjectTLPAmber, ThreatEventTagEditParamsPriorityObjectTLPAmberStrict, ThreatEventTagEditParamsPriorityObjectTLPGreen, ThreatEventTagEditParamsPriorityObjectTLPClear, ThreatEventTagEditParamsPriorityObjectTLPPurple:
+	case ThreatEventTagEditParamsPriorityObjectTLPRed, ThreatEventTagEditParamsPriorityObjectTLPAmber, ThreatEventTagEditParamsPriorityObjectTLPAmberStrict, ThreatEventTagEditParamsPriorityObjectTLPGreen, ThreatEventTagEditParamsPriorityObjectTLPClear, ThreatEventTagEditParamsPriorityObjectTLPPurple, ThreatEventTagEditParamsPriorityObjectTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -3030,17 +3091,18 @@ func (r ThreatEventTagEditParamsSophisticationLevelObject) ImplementsThreatEvent
 type ThreatEventTagEditParamsSophisticationLevelObjectTLP string
 
 const (
-	ThreatEventTagEditParamsSophisticationLevelObjectTLPRed         ThreatEventTagEditParamsSophisticationLevelObjectTLP = "red"
-	ThreatEventTagEditParamsSophisticationLevelObjectTLPAmber       ThreatEventTagEditParamsSophisticationLevelObjectTLP = "amber"
-	ThreatEventTagEditParamsSophisticationLevelObjectTLPAmberStrict ThreatEventTagEditParamsSophisticationLevelObjectTLP = "amber+strict"
-	ThreatEventTagEditParamsSophisticationLevelObjectTLPGreen       ThreatEventTagEditParamsSophisticationLevelObjectTLP = "green"
-	ThreatEventTagEditParamsSophisticationLevelObjectTLPClear       ThreatEventTagEditParamsSophisticationLevelObjectTLP = "clear"
-	ThreatEventTagEditParamsSophisticationLevelObjectTLPPurple      ThreatEventTagEditParamsSophisticationLevelObjectTLP = "purple"
+	ThreatEventTagEditParamsSophisticationLevelObjectTLPRed                  ThreatEventTagEditParamsSophisticationLevelObjectTLP = "red"
+	ThreatEventTagEditParamsSophisticationLevelObjectTLPAmber                ThreatEventTagEditParamsSophisticationLevelObjectTLP = "amber"
+	ThreatEventTagEditParamsSophisticationLevelObjectTLPAmberStrict          ThreatEventTagEditParamsSophisticationLevelObjectTLP = "amber-strict"
+	ThreatEventTagEditParamsSophisticationLevelObjectTLPGreen                ThreatEventTagEditParamsSophisticationLevelObjectTLP = "green"
+	ThreatEventTagEditParamsSophisticationLevelObjectTLPClear                ThreatEventTagEditParamsSophisticationLevelObjectTLP = "clear"
+	ThreatEventTagEditParamsSophisticationLevelObjectTLPPurple               ThreatEventTagEditParamsSophisticationLevelObjectTLP = "purple"
+	ThreatEventTagEditParamsSophisticationLevelObjectTLPAmberStrictLowercase ThreatEventTagEditParamsSophisticationLevelObjectTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditParamsSophisticationLevelObjectTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditParamsSophisticationLevelObjectTLPRed, ThreatEventTagEditParamsSophisticationLevelObjectTLPAmber, ThreatEventTagEditParamsSophisticationLevelObjectTLPAmberStrict, ThreatEventTagEditParamsSophisticationLevelObjectTLPGreen, ThreatEventTagEditParamsSophisticationLevelObjectTLPClear, ThreatEventTagEditParamsSophisticationLevelObjectTLPPurple:
+	case ThreatEventTagEditParamsSophisticationLevelObjectTLPRed, ThreatEventTagEditParamsSophisticationLevelObjectTLPAmber, ThreatEventTagEditParamsSophisticationLevelObjectTLPAmberStrict, ThreatEventTagEditParamsSophisticationLevelObjectTLPGreen, ThreatEventTagEditParamsSophisticationLevelObjectTLPClear, ThreatEventTagEditParamsSophisticationLevelObjectTLPPurple, ThreatEventTagEditParamsSophisticationLevelObjectTLPAmberStrictLowercase:
 		return true
 	}
 	return false
@@ -3050,17 +3112,18 @@ func (r ThreatEventTagEditParamsSophisticationLevelObjectTLP) IsKnown() bool {
 type ThreatEventTagEditParamsTLP string
 
 const (
-	ThreatEventTagEditParamsTLPRed         ThreatEventTagEditParamsTLP = "red"
-	ThreatEventTagEditParamsTLPAmber       ThreatEventTagEditParamsTLP = "amber"
-	ThreatEventTagEditParamsTLPAmberStrict ThreatEventTagEditParamsTLP = "amber+strict"
-	ThreatEventTagEditParamsTLPGreen       ThreatEventTagEditParamsTLP = "green"
-	ThreatEventTagEditParamsTLPClear       ThreatEventTagEditParamsTLP = "clear"
-	ThreatEventTagEditParamsTLPPurple      ThreatEventTagEditParamsTLP = "purple"
+	ThreatEventTagEditParamsTLPRed                  ThreatEventTagEditParamsTLP = "red"
+	ThreatEventTagEditParamsTLPAmber                ThreatEventTagEditParamsTLP = "amber"
+	ThreatEventTagEditParamsTLPAmberStrict          ThreatEventTagEditParamsTLP = "amber-strict"
+	ThreatEventTagEditParamsTLPGreen                ThreatEventTagEditParamsTLP = "green"
+	ThreatEventTagEditParamsTLPClear                ThreatEventTagEditParamsTLP = "clear"
+	ThreatEventTagEditParamsTLPPurple               ThreatEventTagEditParamsTLP = "purple"
+	ThreatEventTagEditParamsTLPAmberStrictLowercase ThreatEventTagEditParamsTLP = "amber+strict"
 )
 
 func (r ThreatEventTagEditParamsTLP) IsKnown() bool {
 	switch r {
-	case ThreatEventTagEditParamsTLPRed, ThreatEventTagEditParamsTLPAmber, ThreatEventTagEditParamsTLPAmberStrict, ThreatEventTagEditParamsTLPGreen, ThreatEventTagEditParamsTLPClear, ThreatEventTagEditParamsTLPPurple:
+	case ThreatEventTagEditParamsTLPRed, ThreatEventTagEditParamsTLPAmber, ThreatEventTagEditParamsTLPAmberStrict, ThreatEventTagEditParamsTLPGreen, ThreatEventTagEditParamsTLPClear, ThreatEventTagEditParamsTLPPurple, ThreatEventTagEditParamsTLPAmberStrictLowercase:
 		return true
 	}
 	return false

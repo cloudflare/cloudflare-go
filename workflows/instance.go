@@ -1309,7 +1309,7 @@ func (r InstanceListParamsStatus) IsKnown() bool {
 
 type InstanceBulkParams struct {
 	AccountID param.Field[string]      `path:"account_id" api:"required"`
-	Body      []InstanceBulkParamsBody `json:"body"`
+	Body      []InstanceBulkParamsBody `json:"body" api:"required"`
 }
 
 func (r InstanceBulkParams) MarshalJSON() (data []byte, err error) {

@@ -20,14 +20,15 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewUserService] method instead.
 type UserService struct {
-	Options       []option.RequestOption
-	AuditLogs     *AuditLogService
-	Billing       *BillingService
-	Invites       *InviteService
-	Organizations *OrganizationService
-	Subscriptions *SubscriptionService
-	Tenants       *TenantService
-	Tokens        *TokenService
+	Options           []option.RequestOption
+	AuditLogs         *AuditLogService
+	Billing           *BillingService
+	Invites           *InviteService
+	Organizations     *OrganizationService
+	SpectrumAnalytics *SpectrumAnalyticsService
+	Subscriptions     *SubscriptionService
+	Tenants           *TenantService
+	Tokens            *TokenService
 }
 
 // NewUserService generates a new service that applies the given options to each
@@ -40,6 +41,7 @@ func NewUserService(opts ...option.RequestOption) (r *UserService) {
 	r.Billing = NewBillingService(opts...)
 	r.Invites = NewInviteService(opts...)
 	r.Organizations = NewOrganizationService(opts...)
+	r.SpectrumAnalytics = NewSpectrumAnalyticsService(opts...)
 	r.Subscriptions = NewSubscriptionService(opts...)
 	r.Tenants = NewTenantService(opts...)
 	r.Tokens = NewTokenService(opts...)

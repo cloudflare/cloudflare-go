@@ -52,12 +52,6 @@ func TestStreamNewWithOptionalParams(t *testing.T) {
 				Required:    cloudflare.F(true),
 				SqlName:     cloudflare.F("sql_name"),
 			}}),
-			Format: cloudflare.F[pipelines.StreamNewParamsSchemaFormatUnion](pipelines.StreamNewParamsSchemaFormatJson{
-				Type:            cloudflare.F(pipelines.StreamNewParamsSchemaFormatJsonTypeJson),
-				DecimalEncoding: cloudflare.F(pipelines.StreamNewParamsSchemaFormatJsonDecimalEncodingNumber),
-				TimestampFormat: cloudflare.F(pipelines.StreamNewParamsSchemaFormatJsonTimestampFormatRfc3339),
-				Unstructured:    cloudflare.F(true),
-			}),
 			Inferred: cloudflare.F(true),
 		}),
 		WorkerBinding: cloudflare.F(pipelines.StreamNewParamsWorkerBinding{

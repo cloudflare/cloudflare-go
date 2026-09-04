@@ -158,6 +158,9 @@ type ConnectorEventGetResponse struct {
 	// - `StartUpgrade`: Started upgrade
 	// - `FinishUpgradeSuccess`: Finished upgrade
 	// - `FinishUpgradeFailure`: Failed upgrade
+	// - `BlessSlotSuccess`: Blessed boot entry slot
+	// - `BlessSlotPending`: Boot entry slot is not yet blessed
+	// - `BlessSlotFailure`: Failed to bless boot entry slot
 	// - `Reconcile`: Reconciled
 	// - `ConfigureCloudflaredTunnel`: Configured Cloudflared tunnel
 	// - `RekeyInstallBoth`: Installed initial inbound and outbound keys
@@ -217,6 +220,9 @@ func (r connectorEventGetResponseJSON) RawJSON() string {
 // - `StartUpgrade`: Started upgrade
 // - `FinishUpgradeSuccess`: Finished upgrade
 // - `FinishUpgradeFailure`: Failed upgrade
+// - `BlessSlotSuccess`: Blessed boot entry slot
+// - `BlessSlotPending`: Boot entry slot is not yet blessed
+// - `BlessSlotFailure`: Failed to bless boot entry slot
 // - `Reconcile`: Reconciled
 // - `ConfigureCloudflaredTunnel`: Configured Cloudflared tunnel
 // - `RekeyInstallBoth`: Installed initial inbound and outbound keys
@@ -1284,6 +1290,9 @@ const (
 	ConnectorEventGetResponseEKStartUpgrade                ConnectorEventGetResponseEK = "StartUpgrade"
 	ConnectorEventGetResponseEKFinishUpgradeSuccess        ConnectorEventGetResponseEK = "FinishUpgradeSuccess"
 	ConnectorEventGetResponseEKFinishUpgradeFailure        ConnectorEventGetResponseEK = "FinishUpgradeFailure"
+	ConnectorEventGetResponseEKBlessSlotSuccess            ConnectorEventGetResponseEK = "BlessSlotSuccess"
+	ConnectorEventGetResponseEKBlessSlotPending            ConnectorEventGetResponseEK = "BlessSlotPending"
+	ConnectorEventGetResponseEKBlessSlotFailure            ConnectorEventGetResponseEK = "BlessSlotFailure"
 	ConnectorEventGetResponseEKReconcile                   ConnectorEventGetResponseEK = "Reconcile"
 	ConnectorEventGetResponseEKConfigureCloudflaredTunnel  ConnectorEventGetResponseEK = "ConfigureCloudflaredTunnel"
 	ConnectorEventGetResponseEKRekeyInstallBoth            ConnectorEventGetResponseEK = "RekeyInstallBoth"
@@ -1300,7 +1309,7 @@ const (
 
 func (r ConnectorEventGetResponseEK) IsKnown() bool {
 	switch r {
-	case ConnectorEventGetResponseEKInit, ConnectorEventGetResponseEKLeave, ConnectorEventGetResponseEKStartAttestation, ConnectorEventGetResponseEKFinishAttestationSuccess, ConnectorEventGetResponseEKFinishAttestationFailure, ConnectorEventGetResponseEKStartRotateCryptKey, ConnectorEventGetResponseEKFinishRotateCryptKeySuccess, ConnectorEventGetResponseEKFinishRotateCryptKeyFailure, ConnectorEventGetResponseEKStartRotatePki, ConnectorEventGetResponseEKFinishRotatePkiSuccess, ConnectorEventGetResponseEKFinishRotatePkiFailure, ConnectorEventGetResponseEKStartUpgrade, ConnectorEventGetResponseEKFinishUpgradeSuccess, ConnectorEventGetResponseEKFinishUpgradeFailure, ConnectorEventGetResponseEKReconcile, ConnectorEventGetResponseEKConfigureCloudflaredTunnel, ConnectorEventGetResponseEKRekeyInstallBoth, ConnectorEventGetResponseEKRekeyStart, ConnectorEventGetResponseEKRekeyRestart, ConnectorEventGetResponseEKRekeyAdvance, ConnectorEventGetResponseEKRekeyComplete, ConnectorEventGetResponseEKRekeyReset, ConnectorEventGetResponseEKHaTransition, ConnectorEventGetResponseEKHaError, ConnectorEventGetResponseEKHaInit, ConnectorEventGetResponseEKHaLeave:
+	case ConnectorEventGetResponseEKInit, ConnectorEventGetResponseEKLeave, ConnectorEventGetResponseEKStartAttestation, ConnectorEventGetResponseEKFinishAttestationSuccess, ConnectorEventGetResponseEKFinishAttestationFailure, ConnectorEventGetResponseEKStartRotateCryptKey, ConnectorEventGetResponseEKFinishRotateCryptKeySuccess, ConnectorEventGetResponseEKFinishRotateCryptKeyFailure, ConnectorEventGetResponseEKStartRotatePki, ConnectorEventGetResponseEKFinishRotatePkiSuccess, ConnectorEventGetResponseEKFinishRotatePkiFailure, ConnectorEventGetResponseEKStartUpgrade, ConnectorEventGetResponseEKFinishUpgradeSuccess, ConnectorEventGetResponseEKFinishUpgradeFailure, ConnectorEventGetResponseEKBlessSlotSuccess, ConnectorEventGetResponseEKBlessSlotPending, ConnectorEventGetResponseEKBlessSlotFailure, ConnectorEventGetResponseEKReconcile, ConnectorEventGetResponseEKConfigureCloudflaredTunnel, ConnectorEventGetResponseEKRekeyInstallBoth, ConnectorEventGetResponseEKRekeyStart, ConnectorEventGetResponseEKRekeyRestart, ConnectorEventGetResponseEKRekeyAdvance, ConnectorEventGetResponseEKRekeyComplete, ConnectorEventGetResponseEKRekeyReset, ConnectorEventGetResponseEKHaTransition, ConnectorEventGetResponseEKHaError, ConnectorEventGetResponseEKHaInit, ConnectorEventGetResponseEKHaLeave:
 		return true
 	}
 	return false

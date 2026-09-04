@@ -154,8 +154,12 @@ func (r EnforcementRuleParam) MarshalJSON() (data []byte, err error) {
 type PrecursorConfig struct {
 	// The zone-level Precursor enforcement mode applied to requests that do not match
 	// a more specific enforcement rule.
+	//
+	// Deprecated: deprecated
 	DefaultMode PrecursorConfigDefaultMode `json:"default_mode"`
 	// The ordered list of enforcement rules for the zone.
+	//
+	// Deprecated: deprecated
 	EnforcementRules []EnforcementRule   `json:"enforcement_rules"`
 	JSON             precursorConfigJSON `json:"-"`
 }
@@ -197,8 +201,12 @@ func (r PrecursorConfigDefaultMode) IsKnown() bool {
 type PrecursorConfigParam struct {
 	// The zone-level Precursor enforcement mode applied to requests that do not match
 	// a more specific enforcement rule.
+	//
+	// Deprecated: deprecated
 	DefaultMode param.Field[PrecursorConfigDefaultMode] `json:"default_mode"`
 	// The ordered list of enforcement rules for the zone.
+	//
+	// Deprecated: deprecated
 	EnforcementRules param.Field[[]EnforcementRuleParam] `json:"enforcement_rules"`
 }
 

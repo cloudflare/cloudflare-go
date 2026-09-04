@@ -90,7 +90,7 @@ func (r instanceEventNewResponseJSON) RawJSON() string {
 
 type InstanceEventNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Body      interface{}         `json:"body"`
+	Body      interface{}         `json:"body" api:"required"`
 }
 
 func (r InstanceEventNewParams) MarshalJSON() (data []byte, err error) {

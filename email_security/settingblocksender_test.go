@@ -107,6 +107,53 @@ func TestSettingBlockSenderDelete(t *testing.T) {
 	}
 }
 
+func TestSettingBlockSenderBatch(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.EmailSecurity.Settings.BlockSenders.Batch(context.TODO(), email_security.SettingBlockSenderBatchParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Deletes: cloudflare.F([]email_security.SettingBlockSenderBatchParamsDelete{{
+			ID: cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+		}}),
+		Patches: cloudflare.F([]email_security.SettingBlockSenderBatchParamsPatch{{
+			Comments:    cloudflare.F("Block sender with email test@example.com"),
+			IsRegex:     cloudflare.F(false),
+			Pattern:     cloudflare.F("test@example.com"),
+			PatternType: cloudflare.F(email_security.SettingBlockSenderBatchParamsPatchesPatternTypeEmail),
+		}}),
+		Posts: cloudflare.F([]email_security.SettingBlockSenderBatchParamsPost{{
+			IsRegex:     cloudflare.F(false),
+			Pattern:     cloudflare.F("test@example.com"),
+			PatternType: cloudflare.F(email_security.SettingBlockSenderBatchParamsPostsPatternTypeEmail),
+			Comments:    cloudflare.F("Block sender with email test@example.com"),
+		}}),
+		Puts: cloudflare.F([]email_security.SettingBlockSenderBatchParamsPut{{
+			IsRegex:     cloudflare.F(false),
+			Pattern:     cloudflare.F("test@example.com"),
+			PatternType: cloudflare.F(email_security.SettingBlockSenderBatchParamsPutsPatternTypeEmail),
+			Comments:    cloudflare.F("Block sender with email test@example.com"),
+		}}),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestSettingBlockSenderEditWithOptionalParams(t *testing.T) {
 	t.Skip("HTTP 422 error from prism")
 	baseURL := "http://localhost:4010"

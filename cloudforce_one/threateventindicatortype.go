@@ -95,8 +95,9 @@ func (r threatEventIndicatorTypeListResponseItemsJSON) RawJSON() string {
 type ThreatEventIndicatorTypeListParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Array of dataset IDs to query indicator types from. If not provided, queries all
-	// datasets for the account.
+	// Dataset UUIDs to query, or one standalone scope value: 'all'/'\*', 'analytics'
+	// for isAnalytics=true datasets, or 'operational' for isAnalytics=false datasets.
+	// If not provided, queries all accessible datasets.
 	DatasetIDs param.Field[[]string] `query:"datasetIds"`
 }
 

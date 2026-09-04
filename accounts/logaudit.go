@@ -236,13 +236,13 @@ type LogAuditListResponseActor struct {
 	ID string `json:"id"`
 	// The context in which the action was initiated.
 	//
-	//   - `api`: The action was performed through the API. The specific credential type
-	//     was not recorded.
-	//   - `api_key`: The action was authenticated with a Cloudflare Global API Key.
-	//   - `api_token`: The action was authenticated with an API token.
-	//   - `dash`: The action was performed through the Cloudflare dashboard.
-	//   - `oauth`: The action was authenticated with an OAuth token.
-	//   - `origin_ca_key`: The action was authenticated with an Origin CA key.
+	// - `api`: The action was performed through the API. The specific credential type
+	//   was not recorded.
+	// - `api_key`: The action was authenticated with a Cloudflare Global API Key.
+	// - `api_token`: The action was authenticated with an API token.
+	// - `dash`: The action was performed through the Cloudflare dashboard.
+	// - `oauth`: The action was authenticated with an OAuth token.
+	// - `origin_ca_key`: The action was authenticated with an Origin CA key.
 	Context LogAuditListResponseActorContext `json:"context"`
 	// The email of the actor who performed the action.
 	Email string `json:"email" format:"email"`
@@ -528,13 +528,13 @@ type LogAuditHistoryResponseActor struct {
 	ID string `json:"id"`
 	// The context in which the action was initiated.
 	//
-	//   - `api`: The action was performed through the API. The specific credential type
-	//     was not recorded.
-	//   - `api_key`: The action was authenticated with a Cloudflare Global API Key.
-	//   - `api_token`: The action was authenticated with an API token.
-	//   - `dash`: The action was performed through the Cloudflare dashboard.
-	//   - `oauth`: The action was authenticated with an OAuth token.
-	//   - `origin_ca_key`: The action was authenticated with an Origin CA key.
+	// - `api`: The action was performed through the API. The specific credential type
+	//   was not recorded.
+	// - `api_key`: The action was authenticated with a Cloudflare Global API Key.
+	// - `api_token`: The action was authenticated with an API token.
+	// - `dash`: The action was performed through the Cloudflare dashboard.
+	// - `oauth`: The action was authenticated with an OAuth token.
+	// - `origin_ca_key`: The action was authenticated with an Origin CA key.
 	Context LogAuditHistoryResponseActorContext `json:"context"`
 	// The email of the actor who performed the action.
 	Email string `json:"email" format:"email"`
@@ -919,13 +919,13 @@ func (r LogAuditListParamsActionTypeNot) IsKnown() bool {
 type LogAuditListParamsActorContext struct {
 	// Filters out audit logs by the actor context.
 	//
-	//   - `api`: The action was performed through the API. The specific credential type
-	//     was not recorded.
-	//   - `api_key`: The action was authenticated with a Cloudflare Global API Key.
-	//   - `api_token`: The action was authenticated with an API token.
-	//   - `dash`: The action was performed through the Cloudflare dashboard.
-	//   - `oauth`: The action was authenticated with an OAuth token.
-	//   - `origin_ca_key`: The action was authenticated with an Origin CA key.
+	// - `api`: The action was performed through the API. The specific credential type
+	//   was not recorded.
+	// - `api_key`: The action was authenticated with a Cloudflare Global API Key.
+	// - `api_token`: The action was authenticated with an API token.
+	// - `dash`: The action was performed through the Cloudflare dashboard.
+	// - `oauth`: The action was authenticated with an OAuth token.
+	// - `origin_ca_key`: The action was authenticated with an Origin CA key.
 	Not param.Field[[]LogAuditListParamsActorContextNot] `query:"not"`
 }
 
@@ -1363,10 +1363,10 @@ type LogAuditHistoryResponseEnvelopeResultInfo struct {
 	Count int64 `json:"count" api:"required"`
 	// Indicates the quality of the resource identification used to derive the history.
 	//
-	//   - `exact`: Resource was identified by the resource URI.
-	//   - `approximate`: Resource was identified without the resource URI.
-	//   - `unavailable`: The source audit log entry did not contain enough information
-	//     to identify the resource; result is empty.
+	// - `exact`: Resource was identified by the resource URI.
+	// - `approximate`: Resource was identified without the resource URI.
+	// - `unavailable`: The source audit log entry did not contain enough information
+	//   to identify the resource; result is empty.
 	HistoryStatus LogAuditHistoryResponseEnvelopeResultInfoHistoryStatus `json:"history_status" api:"required"`
 	// The cursor token used for pagination.
 	Cursor string                                        `json:"cursor"`

@@ -5175,11 +5175,12 @@ const (
 	ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionEu          ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
 	ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedramp     ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
 	ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp-high"
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionUs          ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction = "us"
 )
 
 func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdiction) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionEu, ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedramp, ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh:
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionEu, ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedramp, ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh, ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2BucketJurisdictionUs:
 		return true
 	}
 	return false
@@ -5777,11 +5778,12 @@ const (
 	ScriptUpdateParamsMetadataBindingsJurisdictionEu          ScriptUpdateParamsMetadataBindingsJurisdiction = "eu"
 	ScriptUpdateParamsMetadataBindingsJurisdictionFedramp     ScriptUpdateParamsMetadataBindingsJurisdiction = "fedramp"
 	ScriptUpdateParamsMetadataBindingsJurisdictionFedrampHigh ScriptUpdateParamsMetadataBindingsJurisdiction = "fedramp-high"
+	ScriptUpdateParamsMetadataBindingsJurisdictionUs          ScriptUpdateParamsMetadataBindingsJurisdiction = "us"
 )
 
 func (r ScriptUpdateParamsMetadataBindingsJurisdiction) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsJurisdictionEu, ScriptUpdateParamsMetadataBindingsJurisdictionFedramp, ScriptUpdateParamsMetadataBindingsJurisdictionFedrampHigh:
+	case ScriptUpdateParamsMetadataBindingsJurisdictionEu, ScriptUpdateParamsMetadataBindingsJurisdictionFedramp, ScriptUpdateParamsMetadataBindingsJurisdictionFedrampHigh, ScriptUpdateParamsMetadataBindingsJurisdictionUs:
 		return true
 	}
 	return false

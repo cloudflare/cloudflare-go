@@ -212,10 +212,12 @@ func (r *InstanceService) Stats(ctx context.Context, id string, query InstanceSt
 
 type InstanceNewResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID             string                            `json:"id" api:"required"`
-	CreatedAt      time.Time                         `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt     time.Time                         `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID    string                            `json:"ai_gateway_id" api:"nullable"`
+	ID          string    `json:"id" api:"required"`
+	CreatedAt   time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt  time.Time `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID string    `json:"ai_gateway_id" api:"nullable"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
 	AISearchModel  string                            `json:"ai_search_model" api:"nullable"`
 	Cache          bool                              `json:"cache"`
 	CacheThreshold InstanceNewResponseCacheThreshold `json:"cache_threshold"`
@@ -250,12 +252,14 @@ type InstanceNewResponse struct {
 	Reranking            bool                                    `json:"reranking"`
 	RerankingModel       string                                  `json:"reranking_model" api:"nullable"`
 	RetrievalOptions     InstanceNewResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
-	RewriteModel         string                                  `json:"rewrite_model" api:"nullable"`
-	RewriteQuery         bool                                    `json:"rewrite_query"`
-	ScoreThreshold       float64                                 `json:"score_threshold"`
-	Source               string                                  `json:"source" api:"nullable"`
-	SourceParams         InstanceNewResponseSourceParams         `json:"source_params" api:"nullable"`
-	Status               string                                  `json:"status"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	RewriteModel   string                          `json:"rewrite_model" api:"nullable"`
+	RewriteQuery   bool                            `json:"rewrite_query"`
+	ScoreThreshold float64                         `json:"score_threshold"`
+	Source         string                          `json:"source" api:"nullable"`
+	SourceParams   InstanceNewResponseSourceParams `json:"source_params" api:"nullable"`
+	Status         string                          `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval InstanceNewResponseSyncInterval `json:"sync_interval"`
@@ -1017,10 +1021,12 @@ func (r InstanceNewResponseType) IsKnown() bool {
 
 type InstanceUpdateResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID             string                               `json:"id" api:"required"`
-	CreatedAt      time.Time                            `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt     time.Time                            `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID    string                               `json:"ai_gateway_id" api:"nullable"`
+	ID          string    `json:"id" api:"required"`
+	CreatedAt   time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt  time.Time `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID string    `json:"ai_gateway_id" api:"nullable"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
 	AISearchModel  string                               `json:"ai_search_model" api:"nullable"`
 	Cache          bool                                 `json:"cache"`
 	CacheThreshold InstanceUpdateResponseCacheThreshold `json:"cache_threshold"`
@@ -1055,12 +1061,14 @@ type InstanceUpdateResponse struct {
 	Reranking            bool                                       `json:"reranking"`
 	RerankingModel       string                                     `json:"reranking_model" api:"nullable"`
 	RetrievalOptions     InstanceUpdateResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
-	RewriteModel         string                                     `json:"rewrite_model" api:"nullable"`
-	RewriteQuery         bool                                       `json:"rewrite_query"`
-	ScoreThreshold       float64                                    `json:"score_threshold"`
-	Source               string                                     `json:"source" api:"nullable"`
-	SourceParams         InstanceUpdateResponseSourceParams         `json:"source_params" api:"nullable"`
-	Status               string                                     `json:"status"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	RewriteModel   string                             `json:"rewrite_model" api:"nullable"`
+	RewriteQuery   bool                               `json:"rewrite_query"`
+	ScoreThreshold float64                            `json:"score_threshold"`
+	Source         string                             `json:"source" api:"nullable"`
+	SourceParams   InstanceUpdateResponseSourceParams `json:"source_params" api:"nullable"`
+	Status         string                             `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval InstanceUpdateResponseSyncInterval `json:"sync_interval"`
@@ -2572,10 +2580,12 @@ func (r InstanceListResponseType) IsKnown() bool {
 
 type InstanceDeleteResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID             string                               `json:"id" api:"required"`
-	CreatedAt      time.Time                            `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt     time.Time                            `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID    string                               `json:"ai_gateway_id" api:"nullable"`
+	ID          string    `json:"id" api:"required"`
+	CreatedAt   time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt  time.Time `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID string    `json:"ai_gateway_id" api:"nullable"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
 	AISearchModel  string                               `json:"ai_search_model" api:"nullable"`
 	Cache          bool                                 `json:"cache"`
 	CacheThreshold InstanceDeleteResponseCacheThreshold `json:"cache_threshold"`
@@ -2610,12 +2620,14 @@ type InstanceDeleteResponse struct {
 	Reranking            bool                                       `json:"reranking"`
 	RerankingModel       string                                     `json:"reranking_model" api:"nullable"`
 	RetrievalOptions     InstanceDeleteResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
-	RewriteModel         string                                     `json:"rewrite_model" api:"nullable"`
-	RewriteQuery         bool                                       `json:"rewrite_query"`
-	ScoreThreshold       float64                                    `json:"score_threshold"`
-	Source               string                                     `json:"source" api:"nullable"`
-	SourceParams         InstanceDeleteResponseSourceParams         `json:"source_params" api:"nullable"`
-	Status               string                                     `json:"status"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	RewriteModel   string                             `json:"rewrite_model" api:"nullable"`
+	RewriteQuery   bool                               `json:"rewrite_query"`
+	ScoreThreshold float64                            `json:"score_threshold"`
+	Source         string                             `json:"source" api:"nullable"`
+	SourceParams   InstanceDeleteResponseSourceParams `json:"source_params" api:"nullable"`
+	Status         string                             `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval InstanceDeleteResponseSyncInterval `json:"sync_interval"`
@@ -3741,10 +3753,12 @@ func (r InstanceChatCompletionsResponseChunksScoringDetailsFusionMethod) IsKnown
 
 type InstanceReadResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID             string                             `json:"id" api:"required"`
-	CreatedAt      time.Time                          `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt     time.Time                          `json:"modified_at" api:"required" format:"date-time"`
-	AIGatewayID    string                             `json:"ai_gateway_id" api:"nullable"`
+	ID          string    `json:"id" api:"required"`
+	CreatedAt   time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt  time.Time `json:"modified_at" api:"required" format:"date-time"`
+	AIGatewayID string    `json:"ai_gateway_id" api:"nullable"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
 	AISearchModel  string                             `json:"ai_search_model" api:"nullable"`
 	Cache          bool                               `json:"cache"`
 	CacheThreshold InstanceReadResponseCacheThreshold `json:"cache_threshold"`
@@ -3779,12 +3793,14 @@ type InstanceReadResponse struct {
 	Reranking            bool                                     `json:"reranking"`
 	RerankingModel       string                                   `json:"reranking_model" api:"nullable"`
 	RetrievalOptions     InstanceReadResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
-	RewriteModel         string                                   `json:"rewrite_model" api:"nullable"`
-	RewriteQuery         bool                                     `json:"rewrite_query"`
-	ScoreThreshold       float64                                  `json:"score_threshold"`
-	Source               string                                   `json:"source" api:"nullable"`
-	SourceParams         InstanceReadResponseSourceParams         `json:"source_params" api:"nullable"`
-	Status               string                                   `json:"status"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	RewriteModel   string                           `json:"rewrite_model" api:"nullable"`
+	RewriteQuery   bool                             `json:"rewrite_query"`
+	ScoreThreshold float64                          `json:"score_threshold"`
+	Source         string                           `json:"source" api:"nullable"`
+	SourceParams   InstanceReadResponseSourceParams `json:"source_params" api:"nullable"`
+	Status         string                           `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval InstanceReadResponseSyncInterval `json:"sync_interval"`
@@ -4810,8 +4826,10 @@ func (r instanceStatsResponseEngineVectorizeJSON) RawJSON() string {
 type InstanceNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
-	ID             param.Field[string]                          `json:"id" api:"required"`
-	AIGatewayID    param.Field[string]                          `json:"ai_gateway_id"`
+	ID          param.Field[string] `json:"id" api:"required"`
+	AIGatewayID param.Field[string] `json:"ai_gateway_id"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
 	AISearchModel  param.Field[string]                          `json:"ai_search_model"`
 	Cache          param.Field[bool]                            `json:"cache"`
 	CacheThreshold param.Field[InstanceNewParamsCacheThreshold] `json:"cache_threshold"`
@@ -4837,11 +4855,13 @@ type InstanceNewParams struct {
 	Reranking            param.Field[bool]                                  `json:"reranking"`
 	RerankingModel       param.Field[string]                                `json:"reranking_model"`
 	RetrievalOptions     param.Field[InstanceNewParamsRetrievalOptions]     `json:"retrieval_options"`
-	RewriteModel         param.Field[string]                                `json:"rewrite_model"`
-	RewriteQuery         param.Field[bool]                                  `json:"rewrite_query"`
-	ScoreThreshold       param.Field[float64]                               `json:"score_threshold"`
-	Source               param.Field[string]                                `json:"source"`
-	SourceParams         param.Field[InstanceNewParamsSourceParams]         `json:"source_params"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	RewriteModel   param.Field[string]                        `json:"rewrite_model"`
+	RewriteQuery   param.Field[bool]                          `json:"rewrite_query"`
+	ScoreThreshold param.Field[float64]                       `json:"score_threshold"`
+	Source         param.Field[string]                        `json:"source"`
+	SourceParams   param.Field[InstanceNewParamsSourceParams] `json:"source_params"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval param.Field[InstanceNewParamsSyncInterval] `json:"sync_interval"`
@@ -5332,8 +5352,10 @@ func (r instanceNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type InstanceUpdateParams struct {
-	AccountID      param.Field[string]                             `path:"account_id" api:"required"`
-	AIGatewayID    param.Field[string]                             `json:"ai_gateway_id"`
+	AccountID   param.Field[string] `path:"account_id" api:"required"`
+	AIGatewayID param.Field[string] `json:"ai_gateway_id"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
 	AISearchModel  param.Field[string]                             `json:"ai_search_model"`
 	Cache          param.Field[bool]                               `json:"cache"`
 	CacheThreshold param.Field[InstanceUpdateParamsCacheThreshold] `json:"cache_threshold"`
@@ -5358,13 +5380,15 @@ type InstanceUpdateParams struct {
 	Reranking            param.Field[bool]                                     `json:"reranking"`
 	RerankingModel       param.Field[string]                                   `json:"reranking_model"`
 	RetrievalOptions     param.Field[InstanceUpdateParamsRetrievalOptions]     `json:"retrieval_options"`
-	RewriteModel         param.Field[string]                                   `json:"rewrite_model"`
-	RewriteQuery         param.Field[bool]                                     `json:"rewrite_query"`
-	ScoreThreshold       param.Field[float64]                                  `json:"score_threshold"`
-	Source               param.Field[string]                                   `json:"source"`
-	SourceParams         param.Field[InstanceUpdateParamsSourceParams]         `json:"source_params"`
-	Summarization        param.Field[bool]                                     `json:"summarization"`
-	SummarizationModel   param.Field[string]                                   `json:"summarization_model"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	RewriteModel       param.Field[string]                           `json:"rewrite_model"`
+	RewriteQuery       param.Field[bool]                             `json:"rewrite_query"`
+	ScoreThreshold     param.Field[float64]                          `json:"score_threshold"`
+	Source             param.Field[string]                           `json:"source"`
+	SourceParams       param.Field[InstanceUpdateParamsSourceParams] `json:"source_params"`
+	Summarization      param.Field[bool]                             `json:"summarization"`
+	SummarizationModel param.Field[string]                           `json:"summarization_model"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval                   param.Field[InstanceUpdateParamsSyncInterval] `json:"sync_interval"`
@@ -5927,8 +5951,10 @@ type InstanceChatCompletionsParams struct {
 	AccountID       param.Field[string]                                       `path:"account_id" api:"required"`
 	Messages        param.Field[[]InstanceChatCompletionsParamsMessage]       `json:"messages" api:"required"`
 	AISearchOptions param.Field[InstanceChatCompletionsParamsAISearchOptions] `json:"ai_search_options"`
-	Model           param.Field[string]                                       `json:"model"`
-	Stream          param.Field[bool]                                         `json:"stream"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	Model  param.Field[string] `json:"model"`
+	Stream param.Field[bool]   `json:"stream"`
 }
 
 func (r InstanceChatCompletionsParams) MarshalJSON() (data []byte, err error) {
@@ -6078,7 +6104,9 @@ func (r InstanceChatCompletionsParamsAISearchOptionsCacheCacheThreshold) IsKnown
 }
 
 type InstanceChatCompletionsParamsAISearchOptionsQueryRewrite struct {
-	Enabled       param.Field[bool]   `json:"enabled"`
+	Enabled param.Field[bool] `json:"enabled"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
 	Model         param.Field[string] `json:"model"`
 	RewritePrompt param.Field[string] `json:"rewrite_prompt"`
 }
@@ -6292,7 +6320,9 @@ func (r InstanceSearchParamsAISearchOptionsCacheCacheThreshold) IsKnown() bool {
 }
 
 type InstanceSearchParamsAISearchOptionsQueryRewrite struct {
-	Enabled       param.Field[bool]   `json:"enabled"`
+	Enabled param.Field[bool] `json:"enabled"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
 	Model         param.Field[string] `json:"model"`
 	RewritePrompt param.Field[string] `json:"rewrite_prompt"`
 }

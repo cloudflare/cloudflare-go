@@ -161,14 +161,15 @@ func (r mitigationListResponseMitigationJSON) RawJSON() string {
 type MitigationListResponseMitigationsEntityType string
 
 const (
-	MitigationListResponseMitigationsEntityTypeURLPattern MitigationListResponseMitigationsEntityType = "url_pattern"
-	MitigationListResponseMitigationsEntityTypeAccount    MitigationListResponseMitigationsEntityType = "account"
-	MitigationListResponseMitigationsEntityTypeZone       MitigationListResponseMitigationsEntityType = "zone"
+	MitigationListResponseMitigationsEntityTypeURLPattern       MitigationListResponseMitigationsEntityType = "url_pattern"
+	MitigationListResponseMitigationsEntityTypeAccount          MitigationListResponseMitigationsEntityType = "account"
+	MitigationListResponseMitigationsEntityTypeZone             MitigationListResponseMitigationsEntityType = "zone"
+	MitigationListResponseMitigationsEntityTypeCustomExpression MitigationListResponseMitigationsEntityType = "custom_expression"
 )
 
 func (r MitigationListResponseMitigationsEntityType) IsKnown() bool {
 	switch r {
-	case MitigationListResponseMitigationsEntityTypeURLPattern, MitigationListResponseMitigationsEntityTypeAccount, MitigationListResponseMitigationsEntityTypeZone:
+	case MitigationListResponseMitigationsEntityTypeURLPattern, MitigationListResponseMitigationsEntityTypeAccount, MitigationListResponseMitigationsEntityTypeZone, MitigationListResponseMitigationsEntityTypeCustomExpression:
 		return true
 	}
 	return false
@@ -234,14 +235,15 @@ func (r mitigationReviewResponseJSON) RawJSON() string {
 type MitigationReviewResponseEntityType string
 
 const (
-	MitigationReviewResponseEntityTypeURLPattern MitigationReviewResponseEntityType = "url_pattern"
-	MitigationReviewResponseEntityTypeAccount    MitigationReviewResponseEntityType = "account"
-	MitigationReviewResponseEntityTypeZone       MitigationReviewResponseEntityType = "zone"
+	MitigationReviewResponseEntityTypeURLPattern       MitigationReviewResponseEntityType = "url_pattern"
+	MitigationReviewResponseEntityTypeAccount          MitigationReviewResponseEntityType = "account"
+	MitigationReviewResponseEntityTypeZone             MitigationReviewResponseEntityType = "zone"
+	MitigationReviewResponseEntityTypeCustomExpression MitigationReviewResponseEntityType = "custom_expression"
 )
 
 func (r MitigationReviewResponseEntityType) IsKnown() bool {
 	switch r {
-	case MitigationReviewResponseEntityTypeURLPattern, MitigationReviewResponseEntityTypeAccount, MitigationReviewResponseEntityTypeZone:
+	case MitigationReviewResponseEntityTypeURLPattern, MitigationReviewResponseEntityTypeAccount, MitigationReviewResponseEntityTypeZone, MitigationReviewResponseEntityTypeCustomExpression:
 		return true
 	}
 	return false
@@ -299,14 +301,15 @@ func (r MitigationListParams) URLQuery() (v url.Values) {
 type MitigationListParamsEntityType string
 
 const (
-	MitigationListParamsEntityTypeURLPattern MitigationListParamsEntityType = "url_pattern"
-	MitigationListParamsEntityTypeAccount    MitigationListParamsEntityType = "account"
-	MitigationListParamsEntityTypeZone       MitigationListParamsEntityType = "zone"
+	MitigationListParamsEntityTypeURLPattern       MitigationListParamsEntityType = "url_pattern"
+	MitigationListParamsEntityTypeAccount          MitigationListParamsEntityType = "account"
+	MitigationListParamsEntityTypeZone             MitigationListParamsEntityType = "zone"
+	MitigationListParamsEntityTypeCustomExpression MitigationListParamsEntityType = "custom_expression"
 )
 
 func (r MitigationListParamsEntityType) IsKnown() bool {
 	switch r {
-	case MitigationListParamsEntityTypeURLPattern, MitigationListParamsEntityTypeAccount, MitigationListParamsEntityTypeZone:
+	case MitigationListParamsEntityTypeURLPattern, MitigationListParamsEntityTypeAccount, MitigationListParamsEntityTypeZone, MitigationListParamsEntityTypeCustomExpression:
 		return true
 	}
 	return false

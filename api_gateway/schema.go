@@ -101,14 +101,15 @@ func (r SchemaListParams) URLQuery() (v url.Values) {
 type SchemaListParamsFeature string
 
 const (
-	SchemaListParamsFeatureThresholds       SchemaListParamsFeature = "thresholds"
-	SchemaListParamsFeatureParameterSchemas SchemaListParamsFeature = "parameter_schemas"
-	SchemaListParamsFeatureSchemaInfo       SchemaListParamsFeature = "schema_info"
+	SchemaListParamsFeatureThresholds          SchemaListParamsFeature = "thresholds"
+	SchemaListParamsFeatureParameterSchemas    SchemaListParamsFeature = "parameter_schemas"
+	SchemaListParamsFeatureSchemaInfo          SchemaListParamsFeature = "schema_info"
+	SchemaListParamsFeatureConfidenceIntervals SchemaListParamsFeature = "confidence_intervals"
 )
 
 func (r SchemaListParamsFeature) IsKnown() bool {
 	switch r {
-	case SchemaListParamsFeatureThresholds, SchemaListParamsFeatureParameterSchemas, SchemaListParamsFeatureSchemaInfo:
+	case SchemaListParamsFeatureThresholds, SchemaListParamsFeatureParameterSchemas, SchemaListParamsFeatureSchemaInfo, SchemaListParamsFeatureConfidenceIntervals:
 		return true
 	}
 	return false

@@ -41,7 +41,9 @@ func NewThreatEventTagIndicatorService(opts ...option.RequestOption) (r *ThreatE
 
 // Returns indicators associated with the provided tag UUID, with pagination. By
 // default fans out across every indicator dataset the account can read; pass
-// datasetIds to scope to specific datasets.
+// datasetIds to scope to UUIDs, analytics datasets, or operational datasets.
+// Analytics datasets do not expose tag associations, so the analytics scope
+// returns an empty result.
 func (r *ThreatEventTagIndicatorService) List(ctx context.Context, tagUUID string, params ThreatEventTagIndicatorListParams, opts ...option.RequestOption) (res *ThreatEventTagIndicatorListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -90,7 +92,10 @@ type ThreatEventTagIndicatorListResponseIndicator struct {
 	DatasetID     string                                                      `json:"datasetId"`
 	RelatedEvents []ThreatEventTagIndicatorListResponseIndicatorsRelatedEvent `json:"relatedEvents"`
 	Tags          []ThreatEventTagIndicatorListResponseIndicatorsTag          `json:"tags"`
-	JSON          threatEventTagIndicatorListResponseIndicatorJSON            `json:"-"`
+	// Traffic Light Protocol designation. UPPERCASE. Possible values: CLEAR, GREEN,
+	// AMBER, AMBER-STRICT, RED, PURPLE. Null when not set.
+	TLP  string                                           `json:"tlp" api:"nullable"`
+	JSON threatEventTagIndicatorListResponseIndicatorJSON `json:"-"`
 }
 
 // threatEventTagIndicatorListResponseIndicatorJSON contains the JSON metadata for
@@ -104,6 +109,7 @@ type threatEventTagIndicatorListResponseIndicatorJSON struct {
 	DatasetID     apijson.Field
 	RelatedEvents apijson.Field
 	Tags          apijson.Field
+	TLP           apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -145,6 +151,8 @@ func (r threatEventTagIndicatorListResponseIndicatorsRelatedEventJSON) RawJSON()
 }
 
 type ThreatEventTagIndicatorListResponseIndicatorsTag struct {
+	// The UUID of the tag category, or null when the tag is uncategorized.
+	CategoryID   string                                               `json:"categoryId" api:"nullable"`
 	CategoryName string                                               `json:"categoryName"`
 	UUID         string                                               `json:"uuid"`
 	Value        string                                               `json:"value"`
@@ -154,6 +162,7 @@ type ThreatEventTagIndicatorListResponseIndicatorsTag struct {
 // threatEventTagIndicatorListResponseIndicatorsTagJSON contains the JSON metadata
 // for the struct [ThreatEventTagIndicatorListResponseIndicatorsTag]
 type threatEventTagIndicatorListResponseIndicatorsTagJSON struct {
+	CategoryID   apijson.Field
 	CategoryName apijson.Field
 	UUID         apijson.Field
 	Value        apijson.Field
@@ -199,8 +208,11 @@ func (r threatEventTagIndicatorListResponsePaginationJSON) RawJSON() string {
 type ThreatEventTagIndicatorListParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Dataset UUIDs to scope to (repeat the param for multiple), or 'all' / '\*' for
-	// every readable indicator dataset. Omit to search all readable datasets.
+	// Dataset UUIDs to scope to (repeat the param for multiple), or one standalone
+	// scope: 'all'/'\*', 'analytics' for isAnalytics=true datasets, or 'operational'
+	// for isAnalytics=false datasets. Analytics datasets do not expose tag
+	// associations, so 'analytics' returns an empty result. Omit to search all
+	// readable datasets.
 	DatasetIDs    param.Field[[]string] `query:"datasetIds"`
 	IndicatorType param.Field[string]   `query:"indicatorType"`
 	Page          param.Field[float64]  `query:"page"`

@@ -199,8 +199,8 @@ type DLPPayloadLogUpdateParams struct {
 	//
 	// For customers with configurable payload masking feature rolled out:
 	//
-	//   - If the field is missing, the existing setting will be kept. Note that this is
-	//     different from setting to null or empty string.
+	// - If the field is missing, the existing setting will be kept. Note that this is
+	//   different from setting to null or empty string.
 	//
 	// For all other customers:
 	//

@@ -55,10 +55,11 @@ func TestSinkNewWithOptionalParams(t *testing.T) {
 				IntervalSeconds:   cloudflare.F(int64(1)),
 			}),
 		}),
-		Format: cloudflare.F[pipelines.SinkNewParamsFormatUnion](pipelines.SinkNewParamsFormatJson{
-			Type:            cloudflare.F(pipelines.SinkNewParamsFormatJsonTypeJson),
-			DecimalEncoding: cloudflare.F(pipelines.SinkNewParamsFormatJsonDecimalEncodingNumber),
-			TimestampFormat: cloudflare.F(pipelines.SinkNewParamsFormatJsonTimestampFormatRfc3339),
+		Format: cloudflare.F[pipelines.SinkNewParamsFormatUnion](pipelines.SinkNewParamsFormatCloudflarePipelinesSinkJsonFormat{
+			Type:            cloudflare.F(pipelines.SinkNewParamsFormatCloudflarePipelinesSinkJsonFormatTypeJson),
+			Compression:     cloudflare.F(pipelines.SinkNewParamsFormatCloudflarePipelinesSinkJsonFormatCompressionUncompressed),
+			DecimalEncoding: cloudflare.F(pipelines.SinkNewParamsFormatCloudflarePipelinesSinkJsonFormatDecimalEncodingNumber),
+			TimestampFormat: cloudflare.F(pipelines.SinkNewParamsFormatCloudflarePipelinesSinkJsonFormatTimestampFormatRfc3339),
 			Unstructured:    cloudflare.F(true),
 		}),
 		Schema: cloudflare.F(pipelines.SinkNewParamsSchema{
@@ -69,12 +70,6 @@ func TestSinkNewWithOptionalParams(t *testing.T) {
 				Required:    cloudflare.F(true),
 				SqlName:     cloudflare.F("sql_name"),
 			}}),
-			Format: cloudflare.F[pipelines.SinkNewParamsSchemaFormatUnion](pipelines.SinkNewParamsSchemaFormatJson{
-				Type:            cloudflare.F(pipelines.SinkNewParamsSchemaFormatJsonTypeJson),
-				DecimalEncoding: cloudflare.F(pipelines.SinkNewParamsSchemaFormatJsonDecimalEncodingNumber),
-				TimestampFormat: cloudflare.F(pipelines.SinkNewParamsSchemaFormatJsonTimestampFormatRfc3339),
-				Unstructured:    cloudflare.F(true),
-			}),
 			Inferred: cloudflare.F(true),
 		}),
 	})

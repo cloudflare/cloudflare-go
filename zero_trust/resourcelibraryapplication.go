@@ -871,21 +871,21 @@ type ResourceLibraryApplicationListParams struct {
 	Fields param.Field[string] `query:"fields"`
 	// Filter applications using key:value format. Supported filter keys:
 	//
-	//   - name: Filter by application name (e.g., name:HR)
-	//   - id: Filter by application ID (e.g., id:498)
-	//   - human_id: Filter by human-readable ID (e.g., human_id:HR)
-	//   - hostname: Filter by hostname or support domain (e.g.,
-	//     hostname:portal.example.com)
-	//   - source: Filter by application source name (e.g., source:cloudflare)
-	//   - ip_subnet: Filter by IP subnet using CIDR containment — returns applications
-	//     where any stored subnet contains the search value (e.g., ip_subnet:10.0.1.5/32
-	//     matches apps with 10.0.0.0/16)
-	//   - category_id: Filter by category ID (e.g., category_id:12).
-	//   - category_name: Filter by category name (e.g., category_name:HR).
-	//   - supported: Filter by supported Cloudflare product (e.g., supported:ACCESS).
-	//     Values: GATEWAY, ACCESS, CASB.
-	//   - review_status: Filter by the account's Gateway review status. Values:
-	//     approved, unapproved, in_review, unreviewed. .
+	// - name: Filter by application name (e.g., name:HR)
+	// - id: Filter by application ID (e.g., id:498)
+	// - human_id: Filter by human-readable ID (e.g., human_id:HR)
+	// - hostname: Filter by hostname or support domain (e.g.,
+	//   hostname:portal.example.com)
+	// - source: Filter by application source name (e.g., source:cloudflare)
+	// - ip_subnet: Filter by IP subnet using CIDR containment — returns applications
+	//   where any stored subnet contains the search value (e.g., ip_subnet:10.0.1.5/32
+	//   matches apps with 10.0.0.0/16)
+	// - category_id: Filter by category ID (e.g., category_id:12).
+	// - category_name: Filter by category name (e.g., category_name:HR).
+	// - supported: Filter by supported Cloudflare product (e.g., supported:ACCESS).
+	//   Values: GATEWAY, ACCESS, CASB.
+	// - review_status: Filter by the account's Gateway review status. Values:
+	//   approved, unapproved, in_review, unreviewed. .
 	Filter param.Field[string] `query:"filter"`
 	// Limit of number of results to return (max 250).
 	Limit param.Field[int64] `query:"limit"`

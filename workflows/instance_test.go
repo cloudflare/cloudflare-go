@@ -90,7 +90,7 @@ func TestInstanceListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestInstanceBulkWithOptionalParams(t *testing.T) {
+func TestInstanceBulk(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

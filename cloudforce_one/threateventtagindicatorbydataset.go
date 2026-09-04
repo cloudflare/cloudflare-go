@@ -96,7 +96,10 @@ type ThreatEventTagIndicatorByDatasetListResponseIndicator struct {
 	DatasetID     string                                                               `json:"datasetId"`
 	RelatedEvents []ThreatEventTagIndicatorByDatasetListResponseIndicatorsRelatedEvent `json:"relatedEvents"`
 	Tags          []ThreatEventTagIndicatorByDatasetListResponseIndicatorsTag          `json:"tags"`
-	JSON          threatEventTagIndicatorByDatasetListResponseIndicatorJSON            `json:"-"`
+	// Traffic Light Protocol designation. UPPERCASE. Possible values: CLEAR, GREEN,
+	// AMBER, AMBER-STRICT, RED, PURPLE. Null when not set.
+	TLP  string                                                    `json:"tlp" api:"nullable"`
+	JSON threatEventTagIndicatorByDatasetListResponseIndicatorJSON `json:"-"`
 }
 
 // threatEventTagIndicatorByDatasetListResponseIndicatorJSON contains the JSON
@@ -110,6 +113,7 @@ type threatEventTagIndicatorByDatasetListResponseIndicatorJSON struct {
 	DatasetID     apijson.Field
 	RelatedEvents apijson.Field
 	Tags          apijson.Field
+	TLP           apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -151,6 +155,8 @@ func (r threatEventTagIndicatorByDatasetListResponseIndicatorsRelatedEventJSON) 
 }
 
 type ThreatEventTagIndicatorByDatasetListResponseIndicatorsTag struct {
+	// The UUID of the tag category, or null when the tag is uncategorized.
+	CategoryID   string                                                        `json:"categoryId" api:"nullable"`
 	CategoryName string                                                        `json:"categoryName"`
 	UUID         string                                                        `json:"uuid"`
 	Value        string                                                        `json:"value"`
@@ -161,6 +167,7 @@ type ThreatEventTagIndicatorByDatasetListResponseIndicatorsTag struct {
 // metadata for the struct
 // [ThreatEventTagIndicatorByDatasetListResponseIndicatorsTag]
 type threatEventTagIndicatorByDatasetListResponseIndicatorsTagJSON struct {
+	CategoryID   apijson.Field
 	CategoryName apijson.Field
 	UUID         apijson.Field
 	Value        apijson.Field

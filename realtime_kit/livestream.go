@@ -37,25 +37,6 @@ func NewLivestreamService(opts ...option.RequestOption) (r *LivestreamService) {
 	return
 }
 
-// Creates a livestream for the given App ID and returns ingest server, stream key,
-// and playback URL. You can pass custom input to the ingest server and stream key,
-// and freely distribute the content using the playback URL on any player that
-// supports HLS/LHLS.
-func (r *LivestreamService) NewIndependentLivestream(ctx context.Context, appID string, params LivestreamNewIndependentLivestreamParams, opts ...option.RequestOption) (res *LivestreamNewIndependentLivestreamResponse, err error) {
-	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return nil, err
-	}
-	if appID == "" {
-		err = errors.New("missing required app_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/livestreams", params.AccountID, appID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return res, err
-}
-
 // Returns details of all active livestreams for the given livestream ID. Retreive
 // the livestream ID using the `Start livestreaming a meeting` API.
 func (r *LivestreamService) GetActiveLivestreamsForLivestreamID(ctx context.Context, appID string, livestreamID string, query LivestreamGetActiveLivestreamsForLivestreamIDParams, opts ...option.RequestOption) (res *LivestreamGetActiveLivestreamsForLivestreamIDResponse, err error) {
@@ -249,86 +230,6 @@ func (r *LivestreamService) StopLivestreamingAMeeting(ctx context.Context, appID
 	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s/active-livestream/stop", body.AccountID, appID, meetingID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
 	return res, err
-}
-
-type LivestreamNewIndependentLivestreamResponse struct {
-	Data    LivestreamNewIndependentLivestreamResponseData `json:"data"`
-	Success bool                                           `json:"success"`
-	JSON    livestreamNewIndependentLivestreamResponseJSON `json:"-"`
-}
-
-// livestreamNewIndependentLivestreamResponseJSON contains the JSON metadata for
-// the struct [LivestreamNewIndependentLivestreamResponse]
-type livestreamNewIndependentLivestreamResponseJSON struct {
-	Data        apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LivestreamNewIndependentLivestreamResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r livestreamNewIndependentLivestreamResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type LivestreamNewIndependentLivestreamResponseData struct {
-	// The livestream ID.
-	ID string `json:"id"`
-	// Specifies if the livestream was disabled.
-	Disabled bool `json:"disabled"`
-	// The server URL to which the RTMP encoder should send the video and audio data.
-	IngestServer string `json:"ingest_server"`
-	MeetingID    string `json:"meeting_id" api:"nullable"`
-	Name         string `json:"name"`
-	// The web address that viewers can use to watch the livestream.
-	PlaybackURL string                                               `json:"playback_url"`
-	Status      LivestreamNewIndependentLivestreamResponseDataStatus `json:"status"`
-	// Unique key for accessing each livestream.
-	StreamKey string                                             `json:"stream_key"`
-	JSON      livestreamNewIndependentLivestreamResponseDataJSON `json:"-"`
-}
-
-// livestreamNewIndependentLivestreamResponseDataJSON contains the JSON metadata
-// for the struct [LivestreamNewIndependentLivestreamResponseData]
-type livestreamNewIndependentLivestreamResponseDataJSON struct {
-	ID           apijson.Field
-	Disabled     apijson.Field
-	IngestServer apijson.Field
-	MeetingID    apijson.Field
-	Name         apijson.Field
-	PlaybackURL  apijson.Field
-	Status       apijson.Field
-	StreamKey    apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *LivestreamNewIndependentLivestreamResponseData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r livestreamNewIndependentLivestreamResponseDataJSON) RawJSON() string {
-	return r.raw
-}
-
-type LivestreamNewIndependentLivestreamResponseDataStatus string
-
-const (
-	LivestreamNewIndependentLivestreamResponseDataStatusLive    LivestreamNewIndependentLivestreamResponseDataStatus = "LIVE"
-	LivestreamNewIndependentLivestreamResponseDataStatusIdle    LivestreamNewIndependentLivestreamResponseDataStatus = "IDLE"
-	LivestreamNewIndependentLivestreamResponseDataStatusErrored LivestreamNewIndependentLivestreamResponseDataStatus = "ERRORED"
-	LivestreamNewIndependentLivestreamResponseDataStatusInvoked LivestreamNewIndependentLivestreamResponseDataStatus = "INVOKED"
-)
-
-func (r LivestreamNewIndependentLivestreamResponseDataStatus) IsKnown() bool {
-	switch r {
-	case LivestreamNewIndependentLivestreamResponseDataStatusLive, LivestreamNewIndependentLivestreamResponseDataStatusIdle, LivestreamNewIndependentLivestreamResponseDataStatusErrored, LivestreamNewIndependentLivestreamResponseDataStatusInvoked:
-		return true
-	}
-	return false
 }
 
 type LivestreamGetActiveLivestreamsForLivestreamIDResponse struct {
@@ -1333,17 +1234,6 @@ func (r *LivestreamStopLivestreamingAMeetingResponseData) UnmarshalJSON(data []b
 
 func (r livestreamStopLivestreamingAMeetingResponseDataJSON) RawJSON() string {
 	return r.raw
-}
-
-type LivestreamNewIndependentLivestreamParams struct {
-	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Name of the livestream
-	Name param.Field[string] `json:"name"`
-}
-
-func (r LivestreamNewIndependentLivestreamParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type LivestreamGetActiveLivestreamsForLivestreamIDParams struct {

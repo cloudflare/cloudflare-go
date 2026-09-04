@@ -35,7 +35,7 @@ func NewScanConfigService(opts ...option.RequestOption) (r *ScanConfigService) {
 	return
 }
 
-// Create a new Scan Config
+// Creates a new scan configuration for Cloudforce One's network scanning service.
 func (r *ScanConfigService) New(ctx context.Context, params ScanConfigNewParams, opts ...option.RequestOption) (res *ScanConfigNewResponse, err error) {
 	var env ScanConfigNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -52,7 +52,7 @@ func (r *ScanConfigService) New(ctx context.Context, params ScanConfigNewParams,
 	return res, nil
 }
 
-// List Scan Configs
+// Lists scan configurations for Cloudforce One's network scanning service.
 func (r *ScanConfigService) List(ctx context.Context, query ScanConfigListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ScanConfigListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -74,12 +74,12 @@ func (r *ScanConfigService) List(ctx context.Context, query ScanConfigListParams
 	return res, nil
 }
 
-// List Scan Configs
+// Lists scan configurations for Cloudforce One's network scanning service.
 func (r *ScanConfigService) ListAutoPaging(ctx context.Context, query ScanConfigListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ScanConfigListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Delete a Scan Config
+// Deletes a scan configuration from Cloudforce One's network scanning service.
 func (r *ScanConfigService) Delete(ctx context.Context, configID string, body ScanConfigDeleteParams, opts ...option.RequestOption) (res *ScanConfigDeleteResponse, err error) {
 	var env ScanConfigDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -100,7 +100,8 @@ func (r *ScanConfigService) Delete(ctx context.Context, configID string, body Sc
 	return res, nil
 }
 
-// Update an existing Scan Config
+// Updates an existing scan configuration in Cloudforce One's network scanning
+// service.
 func (r *ScanConfigService) Edit(ctx context.Context, configID string, params ScanConfigEditParams, opts ...option.RequestOption) (res *ScanConfigEditResponse, err error) {
 	var env ScanConfigEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

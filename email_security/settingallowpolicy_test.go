@@ -118,6 +118,74 @@ func TestSettingAllowPolicyDelete(t *testing.T) {
 	}
 }
 
+func TestSettingAllowPolicyBatch(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.EmailSecurity.Settings.AllowPolicies.Batch(context.TODO(), email_security.SettingAllowPolicyBatchParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Deletes: cloudflare.F([]email_security.SettingAllowPolicyBatchParamsDelete{{
+			ID: cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+		}}),
+		Patches: cloudflare.F([]email_security.SettingAllowPolicyBatchParamsPatch{{
+			Comments:           cloudflare.F("Trust all messages send from test@example.com"),
+			IsAcceptableSender: cloudflare.F(false),
+			IsExemptRecipient:  cloudflare.F(false),
+			IsRecipient:        cloudflare.F(false),
+			IsRegex:            cloudflare.F(false),
+			IsSender:           cloudflare.F(true),
+			IsSpoof:            cloudflare.F(false),
+			IsTrustedSender:    cloudflare.F(true),
+			Pattern:            cloudflare.F("test@example.com"),
+			PatternType:        cloudflare.F(email_security.SettingAllowPolicyBatchParamsPatchesPatternTypeEmail),
+			VerifySender:       cloudflare.F(true),
+		}}),
+		Posts: cloudflare.F([]email_security.SettingAllowPolicyBatchParamsPost{{
+			IsAcceptableSender: cloudflare.F(false),
+			IsExemptRecipient:  cloudflare.F(false),
+			IsRegex:            cloudflare.F(false),
+			IsTrustedSender:    cloudflare.F(true),
+			Pattern:            cloudflare.F("test@example.com"),
+			PatternType:        cloudflare.F(email_security.SettingAllowPolicyBatchParamsPostsPatternTypeEmail),
+			VerifySender:       cloudflare.F(true),
+			Comments:           cloudflare.F("Trust all messages send from test@example.com"),
+			IsRecipient:        cloudflare.F(false),
+			IsSender:           cloudflare.F(true),
+			IsSpoof:            cloudflare.F(false),
+		}}),
+		Puts: cloudflare.F([]email_security.SettingAllowPolicyBatchParamsPut{{
+			Comments:           cloudflare.F("Trust all messages send from test@example.com"),
+			IsAcceptableSender: cloudflare.F(false),
+			IsExemptRecipient:  cloudflare.F(false),
+			IsRecipient:        cloudflare.F(false),
+			IsRegex:            cloudflare.F(false),
+			IsSender:           cloudflare.F(true),
+			IsSpoof:            cloudflare.F(false),
+			IsTrustedSender:    cloudflare.F(true),
+			Pattern:            cloudflare.F("test@example.com"),
+			PatternType:        cloudflare.F(email_security.SettingAllowPolicyBatchParamsPutsPatternTypeEmail),
+			VerifySender:       cloudflare.F(true),
+		}}),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestSettingAllowPolicyEditWithOptionalParams(t *testing.T) {
 	t.Skip("HTTP 422 error from prism")
 	baseURL := "http://localhost:4010"

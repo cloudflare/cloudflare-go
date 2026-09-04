@@ -234,7 +234,6 @@ func (r BGPTimeseriesResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() 
 type BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventType string
 
 const (
-	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeEvent             BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
 	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
 	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeOutage            BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
 	BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
@@ -244,7 +243,7 @@ const (
 
 func (r BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
 	switch r {
-	case BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeEvent, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeOutage, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePipeline, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+	case BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeOutage, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypePipeline, BGPTimeseriesResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
 		return true
 	}
 	return false

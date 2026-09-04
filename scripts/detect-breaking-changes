@@ -14,11 +14,20 @@ TEST_PATHS=(
 	accounts/member_test.go
 	accounts/role_test.go
 	accounts/subscription_test.go
+	accounts/subscriptioncancelreason_test.go
+	accounts/subscriptionaction_test.go
+	accounts/subscriptionbulk_test.go
 	accounts/token_test.go
 	accounts/tokenpermissiongroup_test.go
 	accounts/tokenvalue_test.go
 	accounts/logaudit_test.go
 	accounts/speedsettingtransformation_test.go
+	accounts/paymentmethod_test.go
+	accounts/payinvoice_test.go
+	accounts/paybaddebt_test.go
+	accounts/receipt_test.go
+	accounts/invoice_test.go
+	accounts/clientsecret_test.go
 	organizations/organization_test.go
 	organizations/organizationaccount_test.go
 	organizations/organizationprofile_test.go
@@ -39,6 +48,7 @@ TEST_PATHS=(
 	user/billingprofile_test.go
 	user/invite_test.go
 	user/organization_test.go
+	user/spectrumanalyticszonereport_test.go
 	user/subscription_test.go
 	user/tenant_test.go
 	user/token_test.go
@@ -266,6 +276,7 @@ TEST_PATHS=(
 	spectrum/analyticseventbytime_test.go
 	spectrum/analyticseventsummary_test.go
 	spectrum/app_test.go
+	spectrum/protocol_test.go
 	addressing/regionalhostname_test.go
 	addressing/regionalhostnameregion_test.go
 	addressing/service_test.go
@@ -282,8 +293,15 @@ TEST_PATHS=(
 	dls/region_test.go
 	dls/regionalserviceprefixbinding_test.go
 	audit_logs/auditlog_test.go
+	billing/billing_test.go
 	billing/profile_test.go
+	billing/profilepaymentmethod_test.go
 	billing/usage_test.go
+	billing/credit_test.go
+	billing/history_test.go
+	billing/baddebt_test.go
+	billing/unpaidinvoice_test.go
+	billing/rateplan_test.go
 	brand_protection/brandprotection_test.go
 	brand_protection/query_test.go
 	brand_protection/match_test.go

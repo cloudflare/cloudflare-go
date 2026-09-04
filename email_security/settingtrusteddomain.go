@@ -110,6 +110,25 @@ func (r *SettingTrustedDomainService) Delete(ctx context.Context, trustedDomainI
 	return res, nil
 }
 
+// Executes multiple operations atomically. All four operation arrays (deletes,
+// patches, puts, posts) are required and executed in order. Send empty arrays for
+// unused operations.
+func (r *SettingTrustedDomainService) Batch(ctx context.Context, params SettingTrustedDomainBatchParams, opts ...option.RequestOption) (res *SettingTrustedDomainBatchResponse, err error) {
+	var env SettingTrustedDomainBatchResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/email-security/settings/trusted_domains/batch", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
 // Updates an existing trusted domain pattern. Only provided fields will be
 // modified. Changes take effect for new emails matching the pattern.
 func (r *SettingTrustedDomainService) Edit(ctx context.Context, trustedDomainID string, params SettingTrustedDomainEditParams, opts ...option.RequestOption) (res *SettingTrustedDomainEditResponse, err error) {
@@ -265,6 +284,193 @@ func (r *SettingTrustedDomainDeleteResponse) UnmarshalJSON(data []byte) (err err
 }
 
 func (r settingTrustedDomainDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingTrustedDomainBatchResponse struct {
+	Deletes []SettingTrustedDomainBatchResponseDelete `json:"deletes"`
+	Patches []SettingTrustedDomainBatchResponsePatch  `json:"patches"`
+	Posts   []SettingTrustedDomainBatchResponsePost   `json:"posts"`
+	Puts    []SettingTrustedDomainBatchResponsePut    `json:"puts"`
+	JSON    settingTrustedDomainBatchResponseJSON     `json:"-"`
+}
+
+// settingTrustedDomainBatchResponseJSON contains the JSON metadata for the struct
+// [SettingTrustedDomainBatchResponse]
+type settingTrustedDomainBatchResponseJSON struct {
+	Deletes     apijson.Field
+	Patches     apijson.Field
+	Posts       apijson.Field
+	Puts        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingTrustedDomainBatchResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingTrustedDomainBatchResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingTrustedDomainBatchResponseDelete struct {
+	// Trusted domain identifier.
+	ID   string                                      `json:"id" api:"required" format:"uuid"`
+	JSON settingTrustedDomainBatchResponseDeleteJSON `json:"-"`
+}
+
+// settingTrustedDomainBatchResponseDeleteJSON contains the JSON metadata for the
+// struct [SettingTrustedDomainBatchResponseDelete]
+type settingTrustedDomainBatchResponseDeleteJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingTrustedDomainBatchResponseDelete) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingTrustedDomainBatchResponseDeleteJSON) RawJSON() string {
+	return r.raw
+}
+
+// A trusted email domain.
+type SettingTrustedDomainBatchResponsePatch struct {
+	// Trusted domain identifier.
+	ID        string    `json:"id" format:"uuid"`
+	Comments  string    `json:"comments" api:"nullable"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Select to prevent recently registered domains from triggering a Suspicious or
+	// Malicious disposition.
+	IsRecent bool `json:"is_recent"`
+	IsRegex  bool `json:"is_regex"`
+	// Select for partner or other approved domains that have similar spelling to your
+	// connected domains. Prevents listed domains from triggering a Spoof disposition.
+	IsSimilarity bool `json:"is_similarity"`
+	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
+	//
+	// Deprecated: Use `modified_at` instead.
+	LastModified time.Time                                  `json:"last_modified" format:"date-time"`
+	ModifiedAt   time.Time                                  `json:"modified_at" format:"date-time"`
+	Pattern      string                                     `json:"pattern"`
+	JSON         settingTrustedDomainBatchResponsePatchJSON `json:"-"`
+}
+
+// settingTrustedDomainBatchResponsePatchJSON contains the JSON metadata for the
+// struct [SettingTrustedDomainBatchResponsePatch]
+type settingTrustedDomainBatchResponsePatchJSON struct {
+	ID           apijson.Field
+	Comments     apijson.Field
+	CreatedAt    apijson.Field
+	IsRecent     apijson.Field
+	IsRegex      apijson.Field
+	IsSimilarity apijson.Field
+	LastModified apijson.Field
+	ModifiedAt   apijson.Field
+	Pattern      apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *SettingTrustedDomainBatchResponsePatch) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingTrustedDomainBatchResponsePatchJSON) RawJSON() string {
+	return r.raw
+}
+
+// A trusted email domain.
+type SettingTrustedDomainBatchResponsePost struct {
+	// Trusted domain identifier.
+	ID        string    `json:"id" format:"uuid"`
+	Comments  string    `json:"comments" api:"nullable"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Select to prevent recently registered domains from triggering a Suspicious or
+	// Malicious disposition.
+	IsRecent bool `json:"is_recent"`
+	IsRegex  bool `json:"is_regex"`
+	// Select for partner or other approved domains that have similar spelling to your
+	// connected domains. Prevents listed domains from triggering a Spoof disposition.
+	IsSimilarity bool `json:"is_similarity"`
+	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
+	//
+	// Deprecated: Use `modified_at` instead.
+	LastModified time.Time                                 `json:"last_modified" format:"date-time"`
+	ModifiedAt   time.Time                                 `json:"modified_at" format:"date-time"`
+	Pattern      string                                    `json:"pattern"`
+	JSON         settingTrustedDomainBatchResponsePostJSON `json:"-"`
+}
+
+// settingTrustedDomainBatchResponsePostJSON contains the JSON metadata for the
+// struct [SettingTrustedDomainBatchResponsePost]
+type settingTrustedDomainBatchResponsePostJSON struct {
+	ID           apijson.Field
+	Comments     apijson.Field
+	CreatedAt    apijson.Field
+	IsRecent     apijson.Field
+	IsRegex      apijson.Field
+	IsSimilarity apijson.Field
+	LastModified apijson.Field
+	ModifiedAt   apijson.Field
+	Pattern      apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *SettingTrustedDomainBatchResponsePost) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingTrustedDomainBatchResponsePostJSON) RawJSON() string {
+	return r.raw
+}
+
+// A trusted email domain.
+type SettingTrustedDomainBatchResponsePut struct {
+	// Trusted domain identifier.
+	ID        string    `json:"id" format:"uuid"`
+	Comments  string    `json:"comments" api:"nullable"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Select to prevent recently registered domains from triggering a Suspicious or
+	// Malicious disposition.
+	IsRecent bool `json:"is_recent"`
+	IsRegex  bool `json:"is_regex"`
+	// Select for partner or other approved domains that have similar spelling to your
+	// connected domains. Prevents listed domains from triggering a Spoof disposition.
+	IsSimilarity bool `json:"is_similarity"`
+	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
+	//
+	// Deprecated: Use `modified_at` instead.
+	LastModified time.Time                                `json:"last_modified" format:"date-time"`
+	ModifiedAt   time.Time                                `json:"modified_at" format:"date-time"`
+	Pattern      string                                   `json:"pattern"`
+	JSON         settingTrustedDomainBatchResponsePutJSON `json:"-"`
+}
+
+// settingTrustedDomainBatchResponsePutJSON contains the JSON metadata for the
+// struct [SettingTrustedDomainBatchResponsePut]
+type settingTrustedDomainBatchResponsePutJSON struct {
+	ID           apijson.Field
+	Comments     apijson.Field
+	CreatedAt    apijson.Field
+	IsRecent     apijson.Field
+	IsRegex      apijson.Field
+	IsSimilarity apijson.Field
+	LastModified apijson.Field
+	ModifiedAt   apijson.Field
+	Pattern      apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *SettingTrustedDomainBatchResponsePut) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingTrustedDomainBatchResponsePutJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -721,6 +927,219 @@ const (
 func (r SettingTrustedDomainDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case SettingTrustedDomainDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SettingTrustedDomainBatchParams struct {
+	// Identifier.
+	AccountID param.Field[string]                                  `path:"account_id" api:"required"`
+	Deletes   param.Field[[]SettingTrustedDomainBatchParamsDelete] `json:"deletes" api:"required"`
+	Patches   param.Field[[]SettingTrustedDomainBatchParamsPatch]  `json:"patches" api:"required"`
+	Posts     param.Field[[]SettingTrustedDomainBatchParamsPost]   `json:"posts" api:"required"`
+	Puts      param.Field[[]SettingTrustedDomainBatchParamsPut]    `json:"puts" api:"required"`
+}
+
+func (r SettingTrustedDomainBatchParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SettingTrustedDomainBatchParamsDelete struct {
+	// Trusted domain identifier.
+	ID param.Field[string] `json:"id" api:"required" format:"uuid"`
+}
+
+func (r SettingTrustedDomainBatchParamsDelete) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A trusted email domain.
+type SettingTrustedDomainBatchParamsPatch struct {
+	Comments param.Field[string] `json:"comments"`
+	// Select to prevent recently registered domains from triggering a Suspicious or
+	// Malicious disposition.
+	IsRecent param.Field[bool] `json:"is_recent"`
+	IsRegex  param.Field[bool] `json:"is_regex"`
+	// Select for partner or other approved domains that have similar spelling to your
+	// connected domains. Prevents listed domains from triggering a Spoof disposition.
+	IsSimilarity param.Field[bool]   `json:"is_similarity"`
+	Pattern      param.Field[string] `json:"pattern"`
+}
+
+func (r SettingTrustedDomainBatchParamsPatch) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Create a trusted domain.
+type SettingTrustedDomainBatchParamsPost struct {
+	// Select to prevent recently registered domains from triggering a Suspicious or
+	// Malicious disposition.
+	IsRecent param.Field[bool] `json:"is_recent" api:"required"`
+	IsRegex  param.Field[bool] `json:"is_regex" api:"required"`
+	// Select for partner or other approved domains that have similar spelling to your
+	// connected domains. Prevents listed domains from triggering a Spoof disposition.
+	IsSimilarity param.Field[bool]   `json:"is_similarity" api:"required"`
+	Pattern      param.Field[string] `json:"pattern" api:"required"`
+	Comments     param.Field[string] `json:"comments"`
+}
+
+func (r SettingTrustedDomainBatchParamsPost) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A trusted email domain.
+type SettingTrustedDomainBatchParamsPut struct {
+	// Select to prevent recently registered domains from triggering a Suspicious or
+	// Malicious disposition.
+	IsRecent param.Field[bool] `json:"is_recent" api:"required"`
+	IsRegex  param.Field[bool] `json:"is_regex" api:"required"`
+	// Select for partner or other approved domains that have similar spelling to your
+	// connected domains. Prevents listed domains from triggering a Spoof disposition.
+	IsSimilarity param.Field[bool]   `json:"is_similarity" api:"required"`
+	Pattern      param.Field[string] `json:"pattern" api:"required"`
+	Comments     param.Field[string] `json:"comments"`
+}
+
+func (r SettingTrustedDomainBatchParamsPut) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SettingTrustedDomainBatchResponseEnvelope struct {
+	Errors   []SettingTrustedDomainBatchResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []SettingTrustedDomainBatchResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Whether the API call was successful.
+	Success SettingTrustedDomainBatchResponseEnvelopeSuccess `json:"success" api:"required"`
+	Result  SettingTrustedDomainBatchResponse                `json:"result"`
+	JSON    settingTrustedDomainBatchResponseEnvelopeJSON    `json:"-"`
+}
+
+// settingTrustedDomainBatchResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SettingTrustedDomainBatchResponseEnvelope]
+type settingTrustedDomainBatchResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingTrustedDomainBatchResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingTrustedDomainBatchResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingTrustedDomainBatchResponseEnvelopeErrors struct {
+	Code             int64                                                 `json:"code" api:"required"`
+	Message          string                                                `json:"message" api:"required"`
+	DocumentationURL string                                                `json:"documentation_url"`
+	Source           SettingTrustedDomainBatchResponseEnvelopeErrorsSource `json:"source"`
+	JSON             settingTrustedDomainBatchResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// settingTrustedDomainBatchResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [SettingTrustedDomainBatchResponseEnvelopeErrors]
+type settingTrustedDomainBatchResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingTrustedDomainBatchResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingTrustedDomainBatchResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingTrustedDomainBatchResponseEnvelopeErrorsSource struct {
+	Pointer string                                                    `json:"pointer"`
+	JSON    settingTrustedDomainBatchResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// settingTrustedDomainBatchResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [SettingTrustedDomainBatchResponseEnvelopeErrorsSource]
+type settingTrustedDomainBatchResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingTrustedDomainBatchResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingTrustedDomainBatchResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingTrustedDomainBatchResponseEnvelopeMessages struct {
+	Code             int64                                                   `json:"code" api:"required"`
+	Message          string                                                  `json:"message" api:"required"`
+	DocumentationURL string                                                  `json:"documentation_url"`
+	Source           SettingTrustedDomainBatchResponseEnvelopeMessagesSource `json:"source"`
+	JSON             settingTrustedDomainBatchResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// settingTrustedDomainBatchResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SettingTrustedDomainBatchResponseEnvelopeMessages]
+type settingTrustedDomainBatchResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SettingTrustedDomainBatchResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingTrustedDomainBatchResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingTrustedDomainBatchResponseEnvelopeMessagesSource struct {
+	Pointer string                                                      `json:"pointer"`
+	JSON    settingTrustedDomainBatchResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// settingTrustedDomainBatchResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct
+// [SettingTrustedDomainBatchResponseEnvelopeMessagesSource]
+type settingTrustedDomainBatchResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingTrustedDomainBatchResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingTrustedDomainBatchResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type SettingTrustedDomainBatchResponseEnvelopeSuccess bool
+
+const (
+	SettingTrustedDomainBatchResponseEnvelopeSuccessTrue SettingTrustedDomainBatchResponseEnvelopeSuccess = true
+)
+
+func (r SettingTrustedDomainBatchResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SettingTrustedDomainBatchResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

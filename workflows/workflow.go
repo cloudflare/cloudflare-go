@@ -176,7 +176,7 @@ type WorkflowListResponse struct {
 	ID          string                         `json:"id" api:"required" format:"uuid"`
 	ClassName   string                         `json:"class_name" api:"required"`
 	CreatedOn   time.Time                      `json:"created_on" api:"required" format:"date-time"`
-	Instances   WorkflowListResponseInstances  `json:"instances" api:"required"`
+	Instances   map[string]float64             `json:"instances" api:"required"`
 	ModifiedOn  time.Time                      `json:"modified_on" api:"required" format:"date-time"`
 	Name        string                         `json:"name" api:"required"`
 	ScriptName  string                         `json:"script_name" api:"required"`
@@ -206,43 +206,6 @@ func (r *WorkflowListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r workflowListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type WorkflowListResponseInstances struct {
-	Complete        float64                           `json:"complete"`
-	Errored         float64                           `json:"errored"`
-	Paused          float64                           `json:"paused"`
-	Queued          float64                           `json:"queued"`
-	RollingBack     float64                           `json:"rollingBack"`
-	Running         float64                           `json:"running"`
-	Terminated      float64                           `json:"terminated"`
-	Waiting         float64                           `json:"waiting"`
-	WaitingForPause float64                           `json:"waitingForPause"`
-	JSON            workflowListResponseInstancesJSON `json:"-"`
-}
-
-// workflowListResponseInstancesJSON contains the JSON metadata for the struct
-// [WorkflowListResponseInstances]
-type workflowListResponseInstancesJSON struct {
-	Complete        apijson.Field
-	Errored         apijson.Field
-	Paused          apijson.Field
-	Queued          apijson.Field
-	RollingBack     apijson.Field
-	Running         apijson.Field
-	Terminated      apijson.Field
-	Waiting         apijson.Field
-	WaitingForPause apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *WorkflowListResponseInstances) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r workflowListResponseInstancesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -310,7 +273,7 @@ type WorkflowGetResponse struct {
 	ID          string                        `json:"id" api:"required" format:"uuid"`
 	ClassName   string                        `json:"class_name" api:"required"`
 	CreatedOn   time.Time                     `json:"created_on" api:"required" format:"date-time"`
-	Instances   WorkflowGetResponseInstances  `json:"instances" api:"required"`
+	Instances   map[string]float64            `json:"instances" api:"required"`
 	ModifiedOn  time.Time                     `json:"modified_on" api:"required" format:"date-time"`
 	Name        string                        `json:"name" api:"required"`
 	ScriptName  string                        `json:"script_name" api:"required"`
@@ -340,43 +303,6 @@ func (r *WorkflowGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r workflowGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type WorkflowGetResponseInstances struct {
-	Complete        float64                          `json:"complete"`
-	Errored         float64                          `json:"errored"`
-	Paused          float64                          `json:"paused"`
-	Queued          float64                          `json:"queued"`
-	RollingBack     float64                          `json:"rollingBack"`
-	Running         float64                          `json:"running"`
-	Terminated      float64                          `json:"terminated"`
-	Waiting         float64                          `json:"waiting"`
-	WaitingForPause float64                          `json:"waitingForPause"`
-	JSON            workflowGetResponseInstancesJSON `json:"-"`
-}
-
-// workflowGetResponseInstancesJSON contains the JSON metadata for the struct
-// [WorkflowGetResponseInstances]
-type workflowGetResponseInstancesJSON struct {
-	Complete        apijson.Field
-	Errored         apijson.Field
-	Paused          apijson.Field
-	Queued          apijson.Field
-	RollingBack     apijson.Field
-	Running         apijson.Field
-	Terminated      apijson.Field
-	Waiting         apijson.Field
-	WaitingForPause apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *WorkflowGetResponseInstances) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r workflowGetResponseInstancesJSON) RawJSON() string {
 	return r.raw
 }
 

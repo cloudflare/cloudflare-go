@@ -19,6 +19,7 @@ func (UnionTime) ImplementsThreatEventIndicatorAggregateListParamsCreatedBeforeU
 
 type UnionString string
 
+func (UnionString) ImplementsBillingUsageGetResponseTagsUnion()                                    {}
 func (UnionString) ImplementsSettingEditParamsBodyValueValueUnion()                                {}
 func (UnionString) ImplementsAnalyticsQuerySummaryParamsFiltersValueUnion()                        {}
 func (UnionString) ImplementsAnalyticsQueryTimeseriesParamsFiltersValueUnion()                     {}
@@ -106,6 +107,8 @@ func (UnionString) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultVa
 func (UnionString) ImplementsNamespaceValueUpdateParamsValueUnion()                         {}
 func (UnionString) ImplementsOriginPortUnionParam()                                         {}
 func (UnionString) ImplementsOriginPortUnion()                                              {}
+func (UnionString) ImplementsUsageGetResponseTagsUnion()                                    {}
+func (UnionString) ImplementsUsageGetAccountUsageV2ResponseTagsUnion()                      {}
 func (UnionString) ImplementsV2QueryGetResponseEnvelopeErrorsCode()                         {}
 func (UnionString) ImplementsV2QueryGetResponseEnvelopeMessagesCode()                       {}
 func (UnionString) ImplementsCfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetUnion() {
@@ -186,8 +189,7 @@ func (UnionString) ImplementsConfigUpdateParamsToolsWorkerDefaultFieldsUnion()  
 func (UnionString) ImplementsConfigUpdateParamsToolsWorkerSettingsUnion()                       {}
 func (UnionString) ImplementsSessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataEventsMetadataUnion() {
 }
-func (UnionString) ImplementsThreatEventListParamsSearchValueUnion()                          {}
-func (UnionString) ImplementsThreatEventListParamsSearchValueArrayItemUnion()                 {}
+func (UnionString) ImplementsThreatEventListParamsSearchObjectValueUnion()                    {}
 func (UnionString) ImplementsThreatEventRelationshipListParamsRelationshipTypesUnion()        {}
 func (UnionString) ImplementsThreatEventIndicatorListParamsSearchValueUnion()                 {}
 func (UnionString) ImplementsThreatEventIndicatorListParamsTagSearchValueUnion()              {}
@@ -657,8 +659,7 @@ func (UnionFloat) ImplementsRankingTimeseriesGroupsResponseSerie0Union()        
 func (UnionFloat) ImplementsRankingInternetServiceTimeseriesGroupsResponseSerie0Union()        {}
 func (UnionFloat) ImplementsSessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataEventsMetadataUnion() {
 }
-func (UnionFloat) ImplementsThreatEventListParamsSearchValueUnion()                          {}
-func (UnionFloat) ImplementsThreatEventListParamsSearchValueArrayItemUnion()                 {}
+func (UnionFloat) ImplementsThreatEventListParamsSearchObjectValueUnion()                    {}
 func (UnionFloat) ImplementsThreatEventIndicatorListParamsTagSearchValueUnion()              {}
 func (UnionFloat) ImplementsThreatEventIndicatorListParamsTagSearchValueArrayItemUnion()     {}
 func (UnionFloat) ImplementsThreatEventTagNewParamsPriorityUnion()                           {}

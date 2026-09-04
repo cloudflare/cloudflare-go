@@ -228,7 +228,6 @@ func (r HTTPAseGetResponseMetaConfidenceInfoAnnotationsDataSource) IsKnown() boo
 type HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventType string
 
 const (
-	HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent             HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventType = "EVENT"
 	HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral           HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventType = "GENERAL"
 	HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage            HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventType = "OUTAGE"
 	HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventType = "PARTIAL_PROJECTION"
@@ -238,7 +237,7 @@ const (
 
 func (r HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventType) IsKnown() bool {
 	switch r {
-	case HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventTypeEvent, HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage, HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline, HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
+	case HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventTypeGeneral, HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventTypeOutage, HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventTypePartialProjection, HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventTypePipeline, HTTPAseGetResponseMetaConfidenceInfoAnnotationsEventTypeTrafficAnomaly:
 		return true
 	}
 	return false

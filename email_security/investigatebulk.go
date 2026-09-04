@@ -458,6 +458,8 @@ type InvestigateBulkNewResponseSearchParams struct {
 	Query            string                                                 `json:"query" api:"nullable"`
 	Recipient        string                                                 `json:"recipient" api:"nullable"`
 	Sender           string                                                 `json:"sender" api:"nullable"`
+	// Matches messages whose SMTP HELO server IP address equals this value.
+	SmtpHeloIP string `json:"smtp_helo_ip" api:"nullable"`
 	// Beginning of search date range.
 	Start       time.Time                                  `json:"start" format:"date-time"`
 	Subject     string                                     `json:"subject" api:"nullable"`
@@ -482,6 +484,7 @@ type investigateBulkNewResponseSearchParamsJSON struct {
 	Query            apijson.Field
 	Recipient        apijson.Field
 	Sender           apijson.Field
+	SmtpHeloIP       apijson.Field
 	Start            apijson.Field
 	Subject          apijson.Field
 	Submissions      apijson.Field
@@ -902,6 +905,8 @@ type InvestigateBulkListResponseSearchParams struct {
 	Query            string                                                  `json:"query" api:"nullable"`
 	Recipient        string                                                  `json:"recipient" api:"nullable"`
 	Sender           string                                                  `json:"sender" api:"nullable"`
+	// Matches messages whose SMTP HELO server IP address equals this value.
+	SmtpHeloIP string `json:"smtp_helo_ip" api:"nullable"`
 	// Beginning of search date range.
 	Start       time.Time                                   `json:"start" format:"date-time"`
 	Subject     string                                      `json:"subject" api:"nullable"`
@@ -926,6 +931,7 @@ type investigateBulkListResponseSearchParamsJSON struct {
 	Query            apijson.Field
 	Recipient        apijson.Field
 	Sender           apijson.Field
+	SmtpHeloIP       apijson.Field
 	Start            apijson.Field
 	Subject          apijson.Field
 	Submissions      apijson.Field
@@ -1367,6 +1373,8 @@ type InvestigateBulkGetResponseSearchParams struct {
 	Query            string                                                 `json:"query" api:"nullable"`
 	Recipient        string                                                 `json:"recipient" api:"nullable"`
 	Sender           string                                                 `json:"sender" api:"nullable"`
+	// Matches messages whose SMTP HELO server IP address equals this value.
+	SmtpHeloIP string `json:"smtp_helo_ip" api:"nullable"`
 	// Beginning of search date range.
 	Start       time.Time                                  `json:"start" format:"date-time"`
 	Subject     string                                     `json:"subject" api:"nullable"`
@@ -1391,6 +1399,7 @@ type investigateBulkGetResponseSearchParamsJSON struct {
 	Query            apijson.Field
 	Recipient        apijson.Field
 	Sender           apijson.Field
+	SmtpHeloIP       apijson.Field
 	Start            apijson.Field
 	Subject          apijson.Field
 	Submissions      apijson.Field
@@ -1537,6 +1546,8 @@ type InvestigateBulkNewParamsSearchParams struct {
 	Query            param.Field[string]                                               `json:"query"`
 	Recipient        param.Field[string]                                               `json:"recipient"`
 	Sender           param.Field[string]                                               `json:"sender"`
+	// Matches messages whose SMTP HELO server IP address equals this value.
+	SmtpHeloIP param.Field[string] `json:"smtp_helo_ip"`
 	// Beginning of search date range.
 	Start       param.Field[time.Time] `json:"start" format:"date-time"`
 	Subject     param.Field[string]    `json:"subject"`

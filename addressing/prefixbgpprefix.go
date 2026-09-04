@@ -96,6 +96,27 @@ func (r *PrefixBGPPrefixService) ListAutoPaging(ctx context.Context, prefixID st
 	return pagination.NewSinglePageAutoPager(r.List(ctx, prefixID, query, opts...))
 }
 
+// Delete a BGP Prefix associated with the specified IP Prefix. A BGP Prefix must
+// be withdrawn before it can be deleted.
+func (r *PrefixBGPPrefixService) Delete(ctx context.Context, prefixID string, bgpPrefixID string, body PrefixBGPPrefixDeleteParams, opts ...option.RequestOption) (res *PrefixBGPPrefixDeleteResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if prefixID == "" {
+		err = errors.New("missing required prefix_id parameter")
+		return nil, err
+	}
+	if bgpPrefixID == "" {
+		err = errors.New("missing required bgp_prefix_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes/%s", body.AccountID, prefixID, bgpPrefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	return res, err
+}
+
 // Update the properties of a BGP Prefix, such as the on demand advertisement
 // status (advertised or withdrawn).
 func (r *PrefixBGPPrefixService) Edit(ctx context.Context, prefixID string, bgpPrefixID string, params PrefixBGPPrefixEditParams, opts ...option.RequestOption) (res *BGPPrefix, err error) {
@@ -253,6 +274,143 @@ func (r bgpPrefixOnDemandJSON) RawJSON() string {
 	return r.raw
 }
 
+type PrefixBGPPrefixDeleteResponse struct {
+	Errors   []PrefixBGPPrefixDeleteResponseError   `json:"errors" api:"required"`
+	Messages []PrefixBGPPrefixDeleteResponseMessage `json:"messages" api:"required"`
+	// Whether the API call was successful.
+	Success PrefixBGPPrefixDeleteResponseSuccess `json:"success" api:"required"`
+	JSON    prefixBGPPrefixDeleteResponseJSON    `json:"-"`
+}
+
+// prefixBGPPrefixDeleteResponseJSON contains the JSON metadata for the struct
+// [PrefixBGPPrefixDeleteResponse]
+type prefixBGPPrefixDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixBGPPrefixDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixBGPPrefixDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixBGPPrefixDeleteResponseError struct {
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           PrefixBGPPrefixDeleteResponseErrorsSource `json:"source"`
+	JSON             prefixBGPPrefixDeleteResponseErrorJSON    `json:"-"`
+}
+
+// prefixBGPPrefixDeleteResponseErrorJSON contains the JSON metadata for the struct
+// [PrefixBGPPrefixDeleteResponseError]
+type prefixBGPPrefixDeleteResponseErrorJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PrefixBGPPrefixDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixBGPPrefixDeleteResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixBGPPrefixDeleteResponseErrorsSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    prefixBGPPrefixDeleteResponseErrorsSourceJSON `json:"-"`
+}
+
+// prefixBGPPrefixDeleteResponseErrorsSourceJSON contains the JSON metadata for the
+// struct [PrefixBGPPrefixDeleteResponseErrorsSource]
+type prefixBGPPrefixDeleteResponseErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixBGPPrefixDeleteResponseErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixBGPPrefixDeleteResponseErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixBGPPrefixDeleteResponseMessage struct {
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           PrefixBGPPrefixDeleteResponseMessagesSource `json:"source"`
+	JSON             prefixBGPPrefixDeleteResponseMessageJSON    `json:"-"`
+}
+
+// prefixBGPPrefixDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [PrefixBGPPrefixDeleteResponseMessage]
+type prefixBGPPrefixDeleteResponseMessageJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PrefixBGPPrefixDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixBGPPrefixDeleteResponseMessageJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixBGPPrefixDeleteResponseMessagesSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    prefixBGPPrefixDeleteResponseMessagesSourceJSON `json:"-"`
+}
+
+// prefixBGPPrefixDeleteResponseMessagesSourceJSON contains the JSON metadata for
+// the struct [PrefixBGPPrefixDeleteResponseMessagesSource]
+type prefixBGPPrefixDeleteResponseMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixBGPPrefixDeleteResponseMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixBGPPrefixDeleteResponseMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type PrefixBGPPrefixDeleteResponseSuccess bool
+
+const (
+	PrefixBGPPrefixDeleteResponseSuccessTrue PrefixBGPPrefixDeleteResponseSuccess = true
+)
+
+func (r PrefixBGPPrefixDeleteResponseSuccess) IsKnown() bool {
+	switch r {
+	case PrefixBGPPrefixDeleteResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PrefixBGPPrefixNewParams struct {
 	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -404,6 +562,11 @@ func (r PrefixBGPPrefixNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PrefixBGPPrefixListParams struct {
+	// Identifier of a Cloudflare account.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+}
+
+type PrefixBGPPrefixDeleteParams struct {
 	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

@@ -47,6 +47,7 @@ func TestInvestigateBulkNewWithOptionalParams(t *testing.T) {
 			Query:            cloudflare.F("query"),
 			Recipient:        cloudflare.F("recipient"),
 			Sender:           cloudflare.F("sender"),
+			SmtpHeloIP:       cloudflare.F("smtp_helo_ip"),
 			Start:            cloudflare.F(time.Now()),
 			Subject:          cloudflare.F("subject"),
 			Submissions:      cloudflare.F(true),

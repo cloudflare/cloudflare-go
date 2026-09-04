@@ -2058,11 +2058,12 @@ const (
 	VersionBindingsWorkersBindingKindR2BucketJurisdictionEu          VersionBindingsWorkersBindingKindR2BucketJurisdiction = "eu"
 	VersionBindingsWorkersBindingKindR2BucketJurisdictionFedramp     VersionBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp"
 	VersionBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh VersionBindingsWorkersBindingKindR2BucketJurisdiction = "fedramp-high"
+	VersionBindingsWorkersBindingKindR2BucketJurisdictionUs          VersionBindingsWorkersBindingKindR2BucketJurisdiction = "us"
 )
 
 func (r VersionBindingsWorkersBindingKindR2BucketJurisdiction) IsKnown() bool {
 	switch r {
-	case VersionBindingsWorkersBindingKindR2BucketJurisdictionEu, VersionBindingsWorkersBindingKindR2BucketJurisdictionFedramp, VersionBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh:
+	case VersionBindingsWorkersBindingKindR2BucketJurisdictionEu, VersionBindingsWorkersBindingKindR2BucketJurisdictionFedramp, VersionBindingsWorkersBindingKindR2BucketJurisdictionFedrampHigh, VersionBindingsWorkersBindingKindR2BucketJurisdictionUs:
 		return true
 	}
 	return false
@@ -2843,11 +2844,12 @@ const (
 	VersionBindingsJurisdictionEu          VersionBindingsJurisdiction = "eu"
 	VersionBindingsJurisdictionFedramp     VersionBindingsJurisdiction = "fedramp"
 	VersionBindingsJurisdictionFedrampHigh VersionBindingsJurisdiction = "fedramp-high"
+	VersionBindingsJurisdictionUs          VersionBindingsJurisdiction = "us"
 )
 
 func (r VersionBindingsJurisdiction) IsKnown() bool {
 	switch r {
-	case VersionBindingsJurisdictionEu, VersionBindingsJurisdictionFedramp, VersionBindingsJurisdictionFedrampHigh:
+	case VersionBindingsJurisdictionEu, VersionBindingsJurisdictionFedramp, VersionBindingsJurisdictionFedrampHigh, VersionBindingsJurisdictionUs:
 		return true
 	}
 	return false

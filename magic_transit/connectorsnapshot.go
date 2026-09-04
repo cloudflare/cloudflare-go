@@ -335,7 +335,8 @@ type ConnectorSnapshotGetResponse struct {
 	Mounts              []ConnectorSnapshotGetResponseMount  `json:"mounts"`
 	Netdevs             []ConnectorSnapshotGetResponseNetdev `json:"netdevs"`
 	// Platform identifier
-	Platform string `json:"platform"`
+	Platform string                              `json:"platform"`
+	Routes   []ConnectorSnapshotGetResponseRoute `json:"routes"`
 	// Site identifier
 	SiteID string `json:"site_id"`
 	// Number of ICMP Address Mask Reply messages received
@@ -590,6 +591,7 @@ type connectorSnapshotGetResponseJSON struct {
 	Mounts                         apijson.Field
 	Netdevs                        apijson.Field
 	Platform                       apijson.Field
+	Routes                         apijson.Field
 	SiteID                         apijson.Field
 	SnmpIcmpInAddrMaskReps         apijson.Field
 	SnmpIcmpInAddrMasks            apijson.Field
@@ -991,6 +993,44 @@ func (r *ConnectorSnapshotGetResponseNetdev) UnmarshalJSON(data []byte) (err err
 }
 
 func (r connectorSnapshotGetResponseNetdevJSON) RawJSON() string {
+	return r.raw
+}
+
+// Snapshot Route
+type ConnectorSnapshotGetResponseRoute struct {
+	// Route destination as default or an IPv4 CIDR
+	Destination string `json:"destination" api:"required"`
+	// Interface used by the next hop
+	InterfaceName string `json:"interface_name" api:"required"`
+	// Routing decision type: tunnel, breakout, or lan
+	Kind string `json:"kind" api:"required"`
+	// Route metric; lower metrics are preferred
+	Metric float64 `json:"metric" api:"required"`
+	// Gateway address for the next hop
+	Gateway string `json:"gateway"`
+	// Relative weight within an equal-cost route
+	Weight float64                               `json:"weight"`
+	JSON   connectorSnapshotGetResponseRouteJSON `json:"-"`
+}
+
+// connectorSnapshotGetResponseRouteJSON contains the JSON metadata for the struct
+// [ConnectorSnapshotGetResponseRoute]
+type connectorSnapshotGetResponseRouteJSON struct {
+	Destination   apijson.Field
+	InterfaceName apijson.Field
+	Kind          apijson.Field
+	Metric        apijson.Field
+	Gateway       apijson.Field
+	Weight        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ConnectorSnapshotGetResponseRoute) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectorSnapshotGetResponseRouteJSON) RawJSON() string {
 	return r.raw
 }
 

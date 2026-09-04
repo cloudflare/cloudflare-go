@@ -83,19 +83,24 @@ type EmailSendingSendResponse struct {
 	// Email addresses that permanently bounced.
 	PermanentBounces []string `json:"permanent_bounces" api:"required"`
 	// Email addresses for which delivery was queued for later.
-	Queued []string                     `json:"queued" api:"required"`
-	JSON   emailSendingSendResponseJSON `json:"-"`
+	Queued []string `json:"queued" api:"required"`
+	// Email addresses dropped because they are on the suppression list. Returned when
+	// suppressed-recipient dropping is enabled for the sending subdomain; otherwise
+	// the request fails instead.
+	SuppressedRecipients []string                     `json:"suppressed_recipients" api:"required"`
+	JSON                 emailSendingSendResponseJSON `json:"-"`
 }
 
 // emailSendingSendResponseJSON contains the JSON metadata for the struct
 // [EmailSendingSendResponse]
 type emailSendingSendResponseJSON struct {
-	Delivered        apijson.Field
-	MessageID        apijson.Field
-	PermanentBounces apijson.Field
-	Queued           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Delivered            apijson.Field
+	MessageID            apijson.Field
+	PermanentBounces     apijson.Field
+	Queued               apijson.Field
+	SuppressedRecipients apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *EmailSendingSendResponse) UnmarshalJSON(data []byte) (err error) {
@@ -114,19 +119,24 @@ type EmailSendingSendRawResponse struct {
 	// Email addresses that permanently bounced.
 	PermanentBounces []string `json:"permanent_bounces" api:"required"`
 	// Email addresses for which delivery was queued for later.
-	Queued []string                        `json:"queued" api:"required"`
-	JSON   emailSendingSendRawResponseJSON `json:"-"`
+	Queued []string `json:"queued" api:"required"`
+	// Email addresses dropped because they are on the suppression list. Returned when
+	// suppressed-recipient dropping is enabled for the sending subdomain; otherwise
+	// the request fails instead.
+	SuppressedRecipients []string                        `json:"suppressed_recipients" api:"required"`
+	JSON                 emailSendingSendRawResponseJSON `json:"-"`
 }
 
 // emailSendingSendRawResponseJSON contains the JSON metadata for the struct
 // [EmailSendingSendRawResponse]
 type emailSendingSendRawResponseJSON struct {
-	Delivered        apijson.Field
-	MessageID        apijson.Field
-	PermanentBounces apijson.Field
-	Queued           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Delivered            apijson.Field
+	MessageID            apijson.Field
+	PermanentBounces     apijson.Field
+	Queued               apijson.Field
+	SuppressedRecipients apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *EmailSendingSendRawResponse) UnmarshalJSON(data []byte) (err error) {

@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // RegistrationStatusService contains methods and other services that help with
@@ -101,42 +100,41 @@ func (r *RegistrationStatusService) Get(ctx context.Context, domainName string, 
 
 // Status of an async registration workflow.
 type RegistrationStatusGetResponse struct {
-	// Whether the workflow has reached a terminal state. `true` when `state` is
-	// `succeeded` or `failed`. `false` for `pending`, `in_progress`,
-	// `action_required`, and `blocked`.
+	// Indicates whether the workflow reached a terminal state. A `succeeded` or
+	// `failed` state returns `true`; `pending`, `in_progress`, `action_required`, and
+	// `blocked` return `false`.
 	Completed bool                               `json:"completed" api:"required"`
 	CreatedAt time.Time                          `json:"created_at" api:"required" format:"date-time"`
 	Links     RegistrationStatusGetResponseLinks `json:"links" api:"required"`
-	// Workflow lifecycle state.
+	// Describes the workflow lifecycle state.
 	//
-	//   - `pending`: Workflow has been created but not yet started processing.
-	//   - `in_progress`: Actively processing. Continue polling `links.self`. The
-	//     workflow has an internal deadline and will not remain in this state
-	//     indefinitely.
-	//   - `action_required`: Paused — requires action by the user (not the system). See
-	//     `context.action` for what is needed. An automated polling loop must break on
-	//     this state; it will not resolve on its own without user intervention.
-	//   - `blocked`: The workflow cannot make progress due to a third party such as the
-	//     domain extension's registry or a losing registrar. No user action will help.
-	//     Continue polling — the block may resolve when the third party responds.
-	//   - `succeeded`: Terminal. The operation completed successfully. `completed` will
-	//     be `true`. For registrations, `context.registration` contains the resulting
-	//     registration resource.
-	//   - `failed`: Terminal. The operation failed. `completed` will be `true`. See
-	//     `error.code` and `error.message` for the reason. Do not auto-retry without
-	//     user review.
+	// - `pending`: The workflow awaits processing.
+	// - `in_progress`: Processing started. Continue polling `links.self`. An internal
+	//   deadline limits the duration of this state.
+	// - `action_required`: The workflow pauses for user action. See `context.action`
+	//   for details. Stop automated polling until the user completes the required
+	//   action.
+	// - `blocked`: A third party, such as the domain extension's registry or a losing
+	//   registrar, prevents progress. Continue polling because the block may resolve
+	//   when the third party responds.
+	// - `succeeded`: Terminal state. The operation completed successfully. `completed`
+	//   equals `true`. For registrations, `context.registration` contains the
+	//   resulting registration resource.
+	// - `failed`: Terminal state. The operation failed. `completed` equals `true`. See
+	//   `error.code` and `error.message` for the reason. Require user review before
+	//   retrying.
 	State     RegistrationStatusGetResponseState `json:"state" api:"required"`
 	UpdatedAt time.Time                          `json:"updated_at" api:"required" format:"date-time"`
-	// Workflow-specific data for this workflow.
+	// Provides workflow-specific data.
 	//
-	// The workflow subject is identified by `context.domain_name` for domain-centric
-	// workflows.
+	// For domain-centric workflows, `context.domain_name` identifies the workflow
+	// subject.
 	Context map[string]interface{} `json:"context"`
-	// Error details when a workflow reaches the `failed` state. The specific error
-	// codes and messages depend on the workflow type (registration, update, etc.) and
-	// the underlying registry response. These workflow error codes are separate from
-	// immediate HTTP error `errors[].code` values returned by non-2xx responses.
-	// Surface `error.message` to the user for context.
+	// Provides error details when a workflow reaches the `failed` state. The workflow
+	// type (registration, update, etc.) and underlying registry response determine the
+	// specific codes and messages. Workflow error codes differ from immediate HTTP
+	// error `errors[].code` values in non-2xx responses. Surface `error.message` to
+	// the user for context.
 	Error RegistrationStatusGetResponseError `json:"error" api:"nullable"`
 	JSON  registrationStatusGetResponseJSON  `json:"-"`
 }
@@ -188,24 +186,23 @@ func (r registrationStatusGetResponseLinksJSON) RawJSON() string {
 	return r.raw
 }
 
-// Workflow lifecycle state.
+// Describes the workflow lifecycle state.
 //
-//   - `pending`: Workflow has been created but not yet started processing.
-//   - `in_progress`: Actively processing. Continue polling `links.self`. The
-//     workflow has an internal deadline and will not remain in this state
-//     indefinitely.
-//   - `action_required`: Paused — requires action by the user (not the system). See
-//     `context.action` for what is needed. An automated polling loop must break on
-//     this state; it will not resolve on its own without user intervention.
-//   - `blocked`: The workflow cannot make progress due to a third party such as the
-//     domain extension's registry or a losing registrar. No user action will help.
-//     Continue polling — the block may resolve when the third party responds.
-//   - `succeeded`: Terminal. The operation completed successfully. `completed` will
-//     be `true`. For registrations, `context.registration` contains the resulting
-//     registration resource.
-//   - `failed`: Terminal. The operation failed. `completed` will be `true`. See
-//     `error.code` and `error.message` for the reason. Do not auto-retry without
-//     user review.
+//   - `pending`: The workflow awaits processing.
+//   - `in_progress`: Processing started. Continue polling `links.self`. An internal
+//     deadline limits the duration of this state.
+//   - `action_required`: The workflow pauses for user action. See `context.action`
+//     for details. Stop automated polling until the user completes the required
+//     action.
+//   - `blocked`: A third party, such as the domain extension's registry or a losing
+//     registrar, prevents progress. Continue polling because the block may resolve
+//     when the third party responds.
+//   - `succeeded`: Terminal state. The operation completed successfully. `completed`
+//     equals `true`. For registrations, `context.registration` contains the
+//     resulting registration resource.
+//   - `failed`: Terminal state. The operation failed. `completed` equals `true`. See
+//     `error.code` and `error.message` for the reason. Require user review before
+//     retrying.
 type RegistrationStatusGetResponseState string
 
 const (
@@ -225,11 +222,11 @@ func (r RegistrationStatusGetResponseState) IsKnown() bool {
 	return false
 }
 
-// Error details when a workflow reaches the `failed` state. The specific error
-// codes and messages depend on the workflow type (registration, update, etc.) and
-// the underlying registry response. These workflow error codes are separate from
-// immediate HTTP error `errors[].code` values returned by non-2xx responses.
-// Surface `error.message` to the user for context.
+// Provides error details when a workflow reaches the `failed` state. The workflow
+// type (registration, update, etc.) and underlying registry response determine the
+// specific codes and messages. Workflow error codes differ from immediate HTTP
+// error `errors[].code` values in non-2xx responses. Surface `error.message` to
+// the user for context.
 type RegistrationStatusGetResponseError struct {
 	// Machine-readable error code identifying the failure reason.
 	Code string `json:"code" api:"required"`
@@ -257,16 +254,16 @@ func (r registrationStatusGetResponseErrorJSON) RawJSON() string {
 }
 
 type RegistrationStatusGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type RegistrationStatusGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Errors   []RegistrationStatusGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RegistrationStatusGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Status of an async registration workflow.
 	Result RegistrationStatusGetResponse `json:"result" api:"required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success RegistrationStatusGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    registrationStatusGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -290,7 +287,105 @@ func (r registrationStatusGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type RegistrationStatusGetResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source RegistrationStatusGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON   registrationStatusGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// registrationStatusGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [RegistrationStatusGetResponseEnvelopeErrors]
+type registrationStatusGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationStatusGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationStatusGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type RegistrationStatusGetResponseEnvelopeErrorsSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                                `json:"pointer" api:"required"`
+	JSON    registrationStatusGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// registrationStatusGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [RegistrationStatusGetResponseEnvelopeErrorsSource]
+type registrationStatusGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationStatusGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationStatusGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RegistrationStatusGetResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source RegistrationStatusGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON   registrationStatusGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// registrationStatusGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [RegistrationStatusGetResponseEnvelopeMessages]
+type registrationStatusGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationStatusGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationStatusGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type RegistrationStatusGetResponseEnvelopeMessagesSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                                  `json:"pointer" api:"required"`
+	JSON    registrationStatusGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// registrationStatusGetResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [RegistrationStatusGetResponseEnvelopeMessagesSource]
+type registrationStatusGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrationStatusGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrationStatusGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type RegistrationStatusGetResponseEnvelopeSuccess bool
 
 const (

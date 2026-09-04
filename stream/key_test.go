@@ -30,7 +30,6 @@ func TestKeyNew(t *testing.T) {
 	)
 	_, err := client.Stream.Keys.New(context.TODO(), stream.KeyNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body:      map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

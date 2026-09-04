@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/cloudforce_one"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 func TestThreatEventNewWithOptionalParams(t *testing.T) {
@@ -53,8 +52,13 @@ func TestThreatEventNewWithOptionalParams(t *testing.T) {
 			IndicatorType: cloudflare.F("domain"),
 			Value:         cloudflare.F("malicious.com"),
 		}}),
-		IndicatorType:  cloudflare.F("domain"),
-		Insight:        cloudflare.F("This domain was likely registered for phishing purposes"),
+		IndicatorType: cloudflare.F("domain"),
+		Insight:       cloudflare.F("This domain was likely registered for phishing purposes"),
+		Source: cloudflare.F(cloudforce_one.ThreatEventNewParamsSource{
+			ResourceID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+			ResourceType: cloudflare.F(cloudforce_one.ThreatEventNewParamsSourceResourceTypeArticle),
+			System:       cloudflare.F(cloudforce_one.ThreatEventNewParamsSourceSystemThreatSignals),
+		}),
 		Tags:           cloudflare.F([]string{"malware"}),
 		TargetCountry:  cloudflare.F("US"),
 		TargetIndustry: cloudflare.F("Agriculture"),
@@ -94,10 +98,10 @@ func TestThreatEventListWithOptionalParams(t *testing.T) {
 		OrderBy:      cloudflare.F("orderBy"),
 		Page:         cloudflare.F(0.000000),
 		PageSize:     cloudflare.F(0.000000),
-		Search: cloudflare.F([]cloudforce_one.ThreatEventListParamsSearch{{
-			Field: cloudflare.F("attackerCountry"),
-			Op:    cloudflare.F(cloudforce_one.ThreatEventListParamsSearchOpEquals),
-			Value: cloudflare.F[cloudforce_one.ThreatEventListParamsSearchValueUnion](shared.UnionString("usa")),
+		Search: cloudflare.F([]cloudforce_one.ThreatEventListParamsSearchUnion{cloudforce_one.ThreatEventListParamsSearchObject{
+			Field: cloudflare.F(cloudforce_one.ThreatEventListParamsSearchObjectFieldAttacker),
+			Op:    cloudflare.F(cloudforce_one.ThreatEventListParamsSearchObjectOpEquals),
+			Value: cloudflare.F("x"),
 		}}),
 	})
 	if err != nil {

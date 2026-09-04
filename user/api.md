@@ -64,6 +64,20 @@ Methods:
 - <code title="delete /user/organizations/{organization_id}">client.User.Organizations.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user#OrganizationService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, organizationID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user#OrganizationDeleteResponse">OrganizationDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /user/organizations/{organization_id}">client.User.Organizations.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user#OrganizationService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, organizationID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user#OrganizationGetResponse">OrganizationGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+## SpectrumAnalytics
+
+### Zones
+
+#### Reports
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user#SpectrumAnalyticsZoneReportGetResponse">SpectrumAnalyticsZoneReportGetResponse</a>
+
+Methods:
+
+- <code title="get /user/spectrum_analytics/zones/report">client.User.SpectrumAnalytics.Zones.Reports.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user#SpectrumAnalyticsZoneReportService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user#SpectrumAnalyticsZoneReportGetParams">SpectrumAnalyticsZoneReportGetParams</a>) (\*[]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user#SpectrumAnalyticsZoneReportGetResponse">SpectrumAnalyticsZoneReportGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## Subscriptions
 
 Response Types:

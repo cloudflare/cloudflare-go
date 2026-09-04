@@ -1123,6 +1123,8 @@ type InvestigateListParams struct {
 	Query     param.Field[string] `query:"query"`
 	Recipient param.Field[string] `query:"recipient"`
 	Sender    param.Field[string] `query:"sender"`
+	// Matches messages whose SMTP HELO server IP address equals this value.
+	SmtpHeloIP param.Field[string] `query:"smtp_helo_ip"`
 	// The beginning of the search date range. Defaults to `now - 30 days`. Must not be
 	// in the future.
 	Start   param.Field[time.Time] `query:"start" format:"date-time"`

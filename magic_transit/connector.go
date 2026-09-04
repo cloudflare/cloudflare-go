@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // ConnectorService contains methods and other services that help with interacting
@@ -840,7 +841,6 @@ func (r ConnectorGetResponseDeviceType) IsKnown() bool {
 }
 
 type ConnectorNewParams struct {
-	// Account identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Exactly one of id, serial_number, or provision_license must be provided.
 	Device    param.Field[ConnectorNewParamsDevice] `json:"device" api:"required"`
@@ -894,11 +894,11 @@ func (r ConnectorNewParamsInterruptWindowDaysOfWeek) IsKnown() bool {
 }
 
 type ConnectorNewResponseEnvelope struct {
-	Errors   []ConnectorNewResponseEnvelopeErrors   `json:"errors" api:"required"`
-	Messages []ConnectorNewResponseEnvelopeMessages `json:"messages" api:"required"`
-	Result   ConnectorNewResponse                   `json:"result" api:"required"`
-	Success  bool                                   `json:"success" api:"required"`
-	JSON     connectorNewResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo            `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo            `json:"messages" api:"required"`
+	Result   ConnectorNewResponse             `json:"result" api:"required"`
+	Success  bool                             `json:"success" api:"required"`
+	JSON     connectorNewResponseEnvelopeJSON `json:"-"`
 }
 
 // connectorNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -920,54 +920,7 @@ func (r connectorNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ConnectorNewResponseEnvelopeErrors struct {
-	Code    float64                                `json:"code" api:"required"`
-	Message string                                 `json:"message" api:"required"`
-	JSON    connectorNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// connectorNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ConnectorNewResponseEnvelopeErrors]
-type connectorNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectorNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectorNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConnectorNewResponseEnvelopeMessages struct {
-	Code    float64                                  `json:"code" api:"required"`
-	Message string                                   `json:"message" api:"required"`
-	JSON    connectorNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// connectorNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ConnectorNewResponseEnvelopeMessages]
-type connectorNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectorNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectorNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type ConnectorUpdateParams struct {
-	// Account identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Activated param.Field[bool]   `json:"activated"`
 	// Allowed days of the week for upgrades. Default is all days.
@@ -1009,11 +962,11 @@ func (r ConnectorUpdateParamsInterruptWindowDaysOfWeek) IsKnown() bool {
 }
 
 type ConnectorUpdateResponseEnvelope struct {
-	Errors   []ConnectorUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
-	Messages []ConnectorUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
-	Result   ConnectorUpdateResponse                   `json:"result" api:"required"`
-	Success  bool                                      `json:"success" api:"required"`
-	JSON     connectorUpdateResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo               `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo               `json:"messages" api:"required"`
+	Result   ConnectorUpdateResponse             `json:"result" api:"required"`
+	Success  bool                                `json:"success" api:"required"`
+	JSON     connectorUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // connectorUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -1035,54 +988,7 @@ func (r connectorUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ConnectorUpdateResponseEnvelopeErrors struct {
-	Code    float64                                   `json:"code" api:"required"`
-	Message string                                    `json:"message" api:"required"`
-	JSON    connectorUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// connectorUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ConnectorUpdateResponseEnvelopeErrors]
-type connectorUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectorUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectorUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConnectorUpdateResponseEnvelopeMessages struct {
-	Code    float64                                     `json:"code" api:"required"`
-	Message string                                      `json:"message" api:"required"`
-	JSON    connectorUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// connectorUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ConnectorUpdateResponseEnvelopeMessages]
-type connectorUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectorUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectorUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type ConnectorListParams struct {
-	// Account identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Filter connectors by device type.
 	DeviceType param.Field[ConnectorListParamsDeviceType] `query:"device_type"`
@@ -1113,16 +1019,15 @@ func (r ConnectorListParamsDeviceType) IsKnown() bool {
 }
 
 type ConnectorDeleteParams struct {
-	// Account identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConnectorDeleteResponseEnvelope struct {
-	Errors   []ConnectorDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
-	Messages []ConnectorDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
-	Result   ConnectorDeleteResponse                   `json:"result" api:"required"`
-	Success  bool                                      `json:"success" api:"required"`
-	JSON     connectorDeleteResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo               `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo               `json:"messages" api:"required"`
+	Result   ConnectorDeleteResponse             `json:"result" api:"required"`
+	Success  bool                                `json:"success" api:"required"`
+	JSON     connectorDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // connectorDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -1144,54 +1049,7 @@ func (r connectorDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ConnectorDeleteResponseEnvelopeErrors struct {
-	Code    float64                                   `json:"code" api:"required"`
-	Message string                                    `json:"message" api:"required"`
-	JSON    connectorDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// connectorDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ConnectorDeleteResponseEnvelopeErrors]
-type connectorDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectorDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectorDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConnectorDeleteResponseEnvelopeMessages struct {
-	Code    float64                                     `json:"code" api:"required"`
-	Message string                                      `json:"message" api:"required"`
-	JSON    connectorDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// connectorDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ConnectorDeleteResponseEnvelopeMessages]
-type connectorDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectorDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectorDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type ConnectorEditParams struct {
-	// Account identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Activated param.Field[bool]   `json:"activated"`
 	// Allowed days of the week for upgrades. Default is all days.
@@ -1233,11 +1091,11 @@ func (r ConnectorEditParamsInterruptWindowDaysOfWeek) IsKnown() bool {
 }
 
 type ConnectorEditResponseEnvelope struct {
-	Errors   []ConnectorEditResponseEnvelopeErrors   `json:"errors" api:"required"`
-	Messages []ConnectorEditResponseEnvelopeMessages `json:"messages" api:"required"`
-	Result   ConnectorEditResponse                   `json:"result" api:"required"`
-	Success  bool                                    `json:"success" api:"required"`
-	JSON     connectorEditResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo             `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo             `json:"messages" api:"required"`
+	Result   ConnectorEditResponse             `json:"result" api:"required"`
+	Success  bool                              `json:"success" api:"required"`
+	JSON     connectorEditResponseEnvelopeJSON `json:"-"`
 }
 
 // connectorEditResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -1259,63 +1117,16 @@ func (r connectorEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ConnectorEditResponseEnvelopeErrors struct {
-	Code    float64                                 `json:"code" api:"required"`
-	Message string                                  `json:"message" api:"required"`
-	JSON    connectorEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// connectorEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ConnectorEditResponseEnvelopeErrors]
-type connectorEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectorEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectorEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConnectorEditResponseEnvelopeMessages struct {
-	Code    float64                                   `json:"code" api:"required"`
-	Message string                                    `json:"message" api:"required"`
-	JSON    connectorEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// connectorEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ConnectorEditResponseEnvelopeMessages]
-type connectorEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectorEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectorEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type ConnectorGetParams struct {
-	// Account identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ConnectorGetResponseEnvelope struct {
-	Errors   []ConnectorGetResponseEnvelopeErrors   `json:"errors" api:"required"`
-	Messages []ConnectorGetResponseEnvelopeMessages `json:"messages" api:"required"`
-	Result   ConnectorGetResponse                   `json:"result" api:"required"`
-	Success  bool                                   `json:"success" api:"required"`
-	JSON     connectorGetResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo            `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo            `json:"messages" api:"required"`
+	Result   ConnectorGetResponse             `json:"result" api:"required"`
+	Success  bool                             `json:"success" api:"required"`
+	JSON     connectorGetResponseEnvelopeJSON `json:"-"`
 }
 
 // connectorGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -1334,51 +1145,5 @@ func (r *ConnectorGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r connectorGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConnectorGetResponseEnvelopeErrors struct {
-	Code    float64                                `json:"code" api:"required"`
-	Message string                                 `json:"message" api:"required"`
-	JSON    connectorGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// connectorGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ConnectorGetResponseEnvelopeErrors]
-type connectorGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectorGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectorGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConnectorGetResponseEnvelopeMessages struct {
-	Code    float64                                  `json:"code" api:"required"`
-	Message string                                   `json:"message" api:"required"`
-	JSON    connectorGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// connectorGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ConnectorGetResponseEnvelopeMessages]
-type connectorGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectorGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectorGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

@@ -216,14 +216,14 @@ type Client struct {
 	//
 	// Before using this API, ensure:
 	//
-	//  1. **Cloudflare account** — the caller must have a valid Cloudflare account.
-	//  2. **Billing profile** — the account must have a billing profile with a valid,
-	//     current default payment method (credit card or other accepted method). This
-	//     cannot be set up via API — the account owner must configure billing at
-	//     `https://dash.cloudflare.com/{account_id}/billing/payment-info` before
-	//     calling `POST /registrations`.
-	//  3. **API authentication** — use an API token or API key with the appropriate
-	//     Registrar permissions for the operations you are calling.
+	// 1. **Cloudflare account** — the caller must have a valid Cloudflare account.
+	// 2. **Billing profile** — the account must have a billing profile with a valid,
+	//    current default payment method (credit card or other accepted method). This
+	//    cannot be set up via API — the account owner must configure billing at
+	//    `https://dash.cloudflare.com/{account_id}/billing/payment-info` before
+	//    calling `POST /registrations`.
+	// 3. **API authentication** — use an API token or API key with the appropriate
+	//    Registrar permissions for the operations you are calling.
 	//
 	// ## Terminology: domain extension
 	//
@@ -246,32 +246,32 @@ type Client struct {
 	//
 	// ## Typical workflow
 	//
-	//  1. **Search** — call `GET /domain-search?q={keyword}` to discover available
-	//     domains.
-	//  2. **Check** — call `POST /domain-check` with candidate domains to verify
-	//     real-time availability and pricing.
-	//  3. **Review the response** — if `registrable: false`, inspect `reason` to
-	//     understand whether the domain is unavailable, the extension is not supported
-	//     by this API, the extension is not supported by Cloudflare Registrar at all,
-	//     or the extension's registry has frozen new registrations.
-	//  4. **Handle premium domains** — if `tier: premium`, premium registration is not
-	//     currently supported by this API. Surface the premium pricing to the user, but
-	//     do not proceed to `POST /registrations` for that domain.
-	//  5. **Observe the registration schema** — call `GET /extensions/:extension_name`
-	//     to discover the required values for registering this extension.
-	//  6. **Register** — call `POST /registrations` with the chosen domain name for
-	//     supported non-premium registrations.
-	//  7. **Confirm completion** — if the response is `201 Created`, registration
-	//     completed within the default timeout and no polling is needed.
-	//  8. **Poll when needed** — if the response is `202 Accepted`, poll `links.self`
-	//     from the workflow response.
-	//  9. **Stop for user action** — if `state: action_required`, stop polling and
-	//     surface `context.action` to the user. The workflow will not resolve on its
-	//     own.
-	//  10. **Continue when blocked** — if `state: blocked`, continue polling and inform
+	// 1. **Search** — call `GET /domain-search?q={keyword}` to discover available
+	//    domains.
+	// 2. **Check** — call `POST /domain-check` with candidate domains to verify
+	//    real-time availability and pricing.
+	// 3. **Review the response** — if `registrable: false`, inspect `reason` to
+	//    understand whether the domain is unavailable, the extension is not supported
+	//    by this API, the extension is not supported by Cloudflare Registrar at all,
+	//    or the extension's registry has frozen new registrations.
+	// 4. **Handle premium domains** — if `tier: premium`, premium registration is not
+	//    currently supported by this API. Surface the premium pricing to the user, but
+	//    do not proceed to `POST /registrations` for that domain.
+	// 5. **Observe the registration schema** — call `GET /extensions/:extension_name`
+	//    to discover the required values for registering this extension.
+	// 6. **Register** — call `POST /registrations` with the chosen domain name for
+	//    supported non-premium registrations.
+	// 7. **Confirm completion** — if the response is `201 Created`, registration
+	//    completed within the default timeout and no polling is needed.
+	// 8. **Poll when needed** — if the response is `202 Accepted`, poll `links.self`
+	//    from the workflow response.
+	// 9. **Stop for user action** — if `state: action_required`, stop polling and
+	//    surface `context.action` to the user. The workflow will not resolve on its
+	//    own.
+	// 10. **Continue when blocked** — if `state: blocked`, continue polling and inform
 	//     the user that a third party, such as the extension registry or losing
 	//     registrar, is delaying progress.
-	//  11. **Review failures before retrying** — if `state: failed`, review
+	// 11. **Review failures before retrying** — if `state: failed`, review
 	//     `error.code` and `error.message`, then decide whether user action or a new
 	//     Check call is needed.
 	//
@@ -287,12 +287,12 @@ type Client struct {
 	// most cases, the response contains a completed workflow status and no polling is
 	// required.
 	//
-	//   - **Completed within the synchronous wait window:** Returns `201` (create) or
-	//     `200` (update) with a `workflow_status` where `state: succeeded` and
-	//     `completed: true`.
-	//   - **Still processing after the synchronous wait window:** Returns `202 Accepted`
-	//     with a `workflow_status` where `completed: false`. Use the `links.self` URL to
-	//     poll for completion.
+	// - **Completed within the synchronous wait window:** Returns `201` (create) or
+	//   `200` (update) with a `workflow_status` where `state: succeeded` and
+	//   `completed: true`.
+	// - **Still processing after the synchronous wait window:** Returns `202 Accepted`
+	//   with a `workflow_status` where `completed: false`. Use the `links.self` URL to
+	//   poll for completion.
 	//
 	// ## Non-blocking mode
 	//
@@ -315,20 +315,20 @@ type Client struct {
 	//
 	// Before using this API, make sure you have:
 	//
-	//  1. **Cloudflare account** — the caller must have a valid Cloudflare account.
-	//  2. **API authentication** — create an API token with Registrar Sandbox
-	//     permissions.
+	// 1. **Cloudflare account** — the caller must have a valid Cloudflare account.
+	// 2. **API authentication** — create an API token with Registrar Sandbox
+	//    permissions.
 	//
 	// ## How the Sandbox API differs from the production Registrar API
 	//
 	// Because the Sandbox API is intended for testing, it behaves differently from the
 	// production Registrar API in a few important ways:
 	//
-	//  1. **No billing** — you will not be charged real money for purchasing a domain.
-	//  2. **No real domains** — purchased domains are test records and will not be
-	//     reachable on the Internet.
-	//  3. **No DNS zones** — purchasing a domain does not create a zone resource.
-	//  4. **No Registration Express Mode** — you must provide full contact data.
+	// 1. **No billing** — you will not be charged real money for purchasing a domain.
+	// 2. **No real domains** — purchased domains are test records and will not be
+	//    reachable on the Internet.
+	// 3. **No DNS zones** — purchasing a domain does not create a zone resource.
+	// 4. **No Registration Express Mode** — you must provide full contact data.
 	//
 	// Sandbox purchases are still persisted. If you purchase a domain in the sandbox,
 	// that domain will not be available for others to purchase in the sandbox.
@@ -356,35 +356,35 @@ type Client struct {
 	//
 	// ## Typical workflow
 	//
-	//  1. **Search** — call `GET /domain-search?q={keyword}` to discover available
-	//     domains.
-	//  2. **Check** — call `POST /domain-check` with candidate domains to verify
-	//     real-time availability and pricing.
-	//  3. **Review the response** — if `registrable: false`, inspect `reason` to
-	//     understand whether the domain is unavailable, the extension is not supported
-	//     by this API, the extension is not supported by Cloudflare Registrar at all,
-	//     or the extension's registry has frozen new registrations.
-	//  4. **Handle premium domains** — if `tier: premium`, premium registration is not
-	//     currently supported by this API. The Sandbox API currently supports only
-	//     `com` and `net`, which do not have premium registrations, but clients should
-	//     still handle this response for consistency with the production Registrar API.
-	//     Surface the premium pricing to the user, but do not proceed to
-	//     `POST /registrations` for that domain.
-	//  5. **Observe the registration schema** — call `GET /extensions/:extension_name`
-	//     to discover the required values for registering this extension.
-	//  6. **Register** — call `POST /registrations` with the chosen domain name for
-	//     supported non-premium registrations.
-	//  7. **Confirm completion** — if the response is `201 Created`, registration
-	//     completed within the default timeout and no polling is needed.
-	//  8. **Poll when needed** — if the response is `202 Accepted`, poll `links.self`
-	//     from the workflow response.
-	//  9. **Stop for user action** — if `state: action_required`, stop polling and
-	//     surface `context.action` to the user. The workflow will not resolve on its
-	//     own.
-	//  10. **Continue when blocked** — if `state: blocked`, continue polling and inform
+	// 1. **Search** — call `GET /domain-search?q={keyword}` to discover available
+	//    domains.
+	// 2. **Check** — call `POST /domain-check` with candidate domains to verify
+	//    real-time availability and pricing.
+	// 3. **Review the response** — if `registrable: false`, inspect `reason` to
+	//    understand whether the domain is unavailable, the extension is not supported
+	//    by this API, the extension is not supported by Cloudflare Registrar at all,
+	//    or the extension's registry has frozen new registrations.
+	// 4. **Handle premium domains** — if `tier: premium`, premium registration is not
+	//    currently supported by this API. The Sandbox API currently supports only
+	//    `com` and `net`, which do not have premium registrations, but clients should
+	//    still handle this response for consistency with the production Registrar API.
+	//    Surface the premium pricing to the user, but do not proceed to
+	//    `POST /registrations` for that domain.
+	// 5. **Observe the registration schema** — call `GET /extensions/:extension_name`
+	//    to discover the required values for registering this extension.
+	// 6. **Register** — call `POST /registrations` with the chosen domain name for
+	//    supported non-premium registrations.
+	// 7. **Confirm completion** — if the response is `201 Created`, registration
+	//    completed within the default timeout and no polling is needed.
+	// 8. **Poll when needed** — if the response is `202 Accepted`, poll `links.self`
+	//    from the workflow response.
+	// 9. **Stop for user action** — if `state: action_required`, stop polling and
+	//    surface `context.action` to the user. The workflow will not resolve on its
+	//    own.
+	// 10. **Continue when blocked** — if `state: blocked`, continue polling and inform
 	//     the user that a third party, such as the extension registry or losing
 	//     registrar, is delaying progress.
-	//  11. **Review failures before retrying** — if `state: failed`, review
+	// 11. **Review failures before retrying** — if `state: failed`, review
 	//     `error.code` and `error.message`, then decide whether user action or a new
 	//     Check call is needed.
 	//
@@ -395,12 +395,12 @@ type Client struct {
 	// most cases, the response contains a completed workflow status and no polling is
 	// required.
 	//
-	//   - **Completed within the synchronous wait window:** Returns `201` (create) or
-	//     `200` (update) with a `workflow_status` where `state: succeeded` and
-	//     `completed: true`.
-	//   - **Still processing after the synchronous wait window:** Returns `202 Accepted`
-	//     with a `workflow_status` where `completed: false`. Use the `links.self` URL to
-	//     poll for completion.
+	// - **Completed within the synchronous wait window:** Returns `201` (create) or
+	//   `200` (update) with a `workflow_status` where `state: succeeded` and
+	//   `completed: true`.
+	// - **Still processing after the synchronous wait window:** Returns `202 Accepted`
+	//   with a `workflow_status` where `completed: false`. Use the `links.self` URL to
+	//   poll for completion.
 	//
 	// ## Non-blocking mode
 	//

@@ -1831,8 +1831,10 @@ type NamespaceChatCompletionsParams struct {
 	AccountID       param.Field[string]                                        `path:"account_id" api:"required"`
 	AISearchOptions param.Field[NamespaceChatCompletionsParamsAISearchOptions] `json:"ai_search_options" api:"required"`
 	Messages        param.Field[[]NamespaceChatCompletionsParamsMessage]       `json:"messages" api:"required"`
-	Model           param.Field[string]                                        `json:"model"`
-	Stream          param.Field[bool]                                          `json:"stream"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
+	Model  param.Field[string] `json:"model"`
+	Stream param.Field[bool]   `json:"stream"`
 }
 
 func (r NamespaceChatCompletionsParams) MarshalJSON() (data []byte, err error) {
@@ -1878,7 +1880,9 @@ func (r NamespaceChatCompletionsParamsAISearchOptionsCacheCacheThreshold) IsKnow
 }
 
 type NamespaceChatCompletionsParamsAISearchOptionsQueryRewrite struct {
-	Enabled       param.Field[bool]   `json:"enabled"`
+	Enabled param.Field[bool] `json:"enabled"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
 	Model         param.Field[string] `json:"model"`
 	RewritePrompt param.Field[string] `json:"rewrite_prompt"`
 }
@@ -2212,7 +2216,9 @@ func (r NamespaceSearchParamsAISearchOptionsCacheCacheThreshold) IsKnown() bool 
 }
 
 type NamespaceSearchParamsAISearchOptionsQueryRewrite struct {
-	Enabled       param.Field[bool]   `json:"enabled"`
+	Enabled param.Field[bool] `json:"enabled"`
+	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
+	// Completions API. An empty string uses the configured or default model.
 	Model         param.Field[string] `json:"model"`
 	RewritePrompt param.Field[string] `json:"rewrite_prompt"`
 }

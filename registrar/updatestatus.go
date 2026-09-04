@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // UpdateStatusService contains methods and other services that help with
@@ -67,16 +66,16 @@ func (r *UpdateStatusService) Get(ctx context.Context, domainName string, query 
 }
 
 type UpdateStatusGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type UpdateStatusGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Errors   []UpdateStatusGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []UpdateStatusGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Status of an async registration workflow.
 	Result WorkflowStatus `json:"result" api:"required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success UpdateStatusGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    updateStatusGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -100,7 +99,105 @@ func (r updateStatusGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+type UpdateStatusGetResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source UpdateStatusGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON   updateStatusGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// updateStatusGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [UpdateStatusGetResponseEnvelopeErrors]
+type updateStatusGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UpdateStatusGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r updateStatusGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type UpdateStatusGetResponseEnvelopeErrorsSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                          `json:"pointer" api:"required"`
+	JSON    updateStatusGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// updateStatusGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [UpdateStatusGetResponseEnvelopeErrorsSource]
+type updateStatusGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UpdateStatusGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r updateStatusGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type UpdateStatusGetResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source UpdateStatusGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON   updateStatusGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// updateStatusGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [UpdateStatusGetResponseEnvelopeMessages]
+type updateStatusGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UpdateStatusGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r updateStatusGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type UpdateStatusGetResponseEnvelopeMessagesSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                            `json:"pointer" api:"required"`
+	JSON    updateStatusGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// updateStatusGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [UpdateStatusGetResponseEnvelopeMessagesSource]
+type updateStatusGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UpdateStatusGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r updateStatusGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
 type UpdateStatusGetResponseEnvelopeSuccess bool
 
 const (

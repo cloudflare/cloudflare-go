@@ -39,15 +39,15 @@ func NewKeyService(opts ...option.RequestOption) (r *KeyService) {
 // Creates an RSA private key in PEM and JWK formats. Key files are only displayed
 // once after creation. Keys are created, used, and deleted independently of
 // videos, and every key can sign any video.
-func (r *KeyService) New(ctx context.Context, params KeyNewParams, opts ...option.RequestOption) (res *Keys, err error) {
+func (r *KeyService) New(ctx context.Context, body KeyNewParams, opts ...option.RequestOption) (res *Keys, err error) {
 	var env KeyNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/stream/keys", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/keys", body.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -163,11 +163,6 @@ func (r keyGetResponseJSON) RawJSON() string {
 type KeyNewParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Body      interface{}         `json:"body" api:"required"`
-}
-
-func (r KeyNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type KeyNewResponseEnvelope struct {

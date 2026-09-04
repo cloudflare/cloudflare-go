@@ -66,7 +66,7 @@ func (r *DatasetFieldService) Get(ctx context.Context, datasetID DatasetFieldGet
 	return res, nil
 }
 
-type DatasetFieldGetResponse = interface{}
+type DatasetFieldGetResponse map[string]string
 
 type DatasetFieldGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.

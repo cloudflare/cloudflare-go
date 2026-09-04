@@ -105,14 +105,19 @@ func (r threatEventIndicatorByDatasetListResponseJSON) RawJSON() string {
 type ThreatEventIndicatorByDatasetListResponseIndicator struct {
 	CreatedAt     time.Time `json:"createdAt" api:"required" format:"date-time"`
 	IndicatorType string    `json:"indicatorType" api:"required"`
-	UpdatedAt     time.Time `json:"updatedAt" api:"required" format:"date-time"`
-	UUID          string    `json:"uuid" api:"required"`
-	Value         string    `json:"value" api:"required"`
+	// RSS article sources from which this indicator was extracted.
+	Sources   []ThreatEventIndicatorByDatasetListResponseIndicatorsSource `json:"sources" api:"required"`
+	UpdatedAt time.Time                                                   `json:"updatedAt" api:"required" format:"date-time"`
+	UUID      string                                                      `json:"uuid" api:"required"`
+	Value     string                                                      `json:"value" api:"required"`
 	// The dataset ID this indicator belongs to. Included in list responses.
 	DatasetID     string                                                            `json:"datasetId"`
 	RelatedEvents []ThreatEventIndicatorByDatasetListResponseIndicatorsRelatedEvent `json:"relatedEvents"`
 	Tags          []ThreatEventIndicatorByDatasetListResponseIndicatorsTag          `json:"tags"`
-	JSON          threatEventIndicatorByDatasetListResponseIndicatorJSON            `json:"-"`
+	// Traffic Light Protocol designation. UPPERCASE. Possible values: CLEAR, GREEN,
+	// AMBER, AMBER-STRICT, RED, PURPLE. Null when not set.
+	TLP  string                                                 `json:"tlp" api:"nullable"`
+	JSON threatEventIndicatorByDatasetListResponseIndicatorJSON `json:"-"`
 }
 
 // threatEventIndicatorByDatasetListResponseIndicatorJSON contains the JSON
@@ -120,12 +125,14 @@ type ThreatEventIndicatorByDatasetListResponseIndicator struct {
 type threatEventIndicatorByDatasetListResponseIndicatorJSON struct {
 	CreatedAt     apijson.Field
 	IndicatorType apijson.Field
+	Sources       apijson.Field
 	UpdatedAt     apijson.Field
 	UUID          apijson.Field
 	Value         apijson.Field
 	DatasetID     apijson.Field
 	RelatedEvents apijson.Field
 	Tags          apijson.Field
+	TLP           apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -136,6 +143,60 @@ func (r *ThreatEventIndicatorByDatasetListResponseIndicator) UnmarshalJSON(data 
 
 func (r threatEventIndicatorByDatasetListResponseIndicatorJSON) RawJSON() string {
 	return r.raw
+}
+
+type ThreatEventIndicatorByDatasetListResponseIndicatorsSource struct {
+	ResourceID   string                                                                 `json:"resourceId" api:"required" format:"uuid"`
+	ResourceType ThreatEventIndicatorByDatasetListResponseIndicatorsSourcesResourceType `json:"resourceType" api:"required"`
+	System       ThreatEventIndicatorByDatasetListResponseIndicatorsSourcesSystem       `json:"system" api:"required"`
+	JSON         threatEventIndicatorByDatasetListResponseIndicatorsSourceJSON          `json:"-"`
+}
+
+// threatEventIndicatorByDatasetListResponseIndicatorsSourceJSON contains the JSON
+// metadata for the struct
+// [ThreatEventIndicatorByDatasetListResponseIndicatorsSource]
+type threatEventIndicatorByDatasetListResponseIndicatorsSourceJSON struct {
+	ResourceID   apijson.Field
+	ResourceType apijson.Field
+	System       apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ThreatEventIndicatorByDatasetListResponseIndicatorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatEventIndicatorByDatasetListResponseIndicatorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ThreatEventIndicatorByDatasetListResponseIndicatorsSourcesResourceType string
+
+const (
+	ThreatEventIndicatorByDatasetListResponseIndicatorsSourcesResourceTypeArticle ThreatEventIndicatorByDatasetListResponseIndicatorsSourcesResourceType = "article"
+)
+
+func (r ThreatEventIndicatorByDatasetListResponseIndicatorsSourcesResourceType) IsKnown() bool {
+	switch r {
+	case ThreatEventIndicatorByDatasetListResponseIndicatorsSourcesResourceTypeArticle:
+		return true
+	}
+	return false
+}
+
+type ThreatEventIndicatorByDatasetListResponseIndicatorsSourcesSystem string
+
+const (
+	ThreatEventIndicatorByDatasetListResponseIndicatorsSourcesSystemThreatSignals ThreatEventIndicatorByDatasetListResponseIndicatorsSourcesSystem = "threat-signals"
+)
+
+func (r ThreatEventIndicatorByDatasetListResponseIndicatorsSourcesSystem) IsKnown() bool {
+	switch r {
+	case ThreatEventIndicatorByDatasetListResponseIndicatorsSourcesSystemThreatSignals:
+		return true
+	}
+	return false
 }
 
 type ThreatEventIndicatorByDatasetListResponseIndicatorsRelatedEvent struct {
@@ -167,6 +228,8 @@ func (r threatEventIndicatorByDatasetListResponseIndicatorsRelatedEventJSON) Raw
 }
 
 type ThreatEventIndicatorByDatasetListResponseIndicatorsTag struct {
+	// The UUID of the tag category, or null when the tag is uncategorized.
+	CategoryID   string                                                     `json:"categoryId" api:"nullable"`
 	CategoryName string                                                     `json:"categoryName"`
 	UUID         string                                                     `json:"uuid"`
 	Value        string                                                     `json:"value"`
@@ -176,6 +239,7 @@ type ThreatEventIndicatorByDatasetListResponseIndicatorsTag struct {
 // threatEventIndicatorByDatasetListResponseIndicatorsTagJSON contains the JSON
 // metadata for the struct [ThreatEventIndicatorByDatasetListResponseIndicatorsTag]
 type threatEventIndicatorByDatasetListResponseIndicatorsTagJSON struct {
+	CategoryID   apijson.Field
 	CategoryName apijson.Field
 	UUID         apijson.Field
 	Value        apijson.Field
@@ -228,7 +292,10 @@ type ThreatEventIndicatorByDatasetGetResponse struct {
 	DatasetID     string                                                 `json:"datasetId"`
 	RelatedEvents []ThreatEventIndicatorByDatasetGetResponseRelatedEvent `json:"relatedEvents"`
 	Tags          []ThreatEventIndicatorByDatasetGetResponseTag          `json:"tags"`
-	JSON          threatEventIndicatorByDatasetGetResponseJSON           `json:"-"`
+	// Traffic Light Protocol designation. UPPERCASE. Possible values: CLEAR, GREEN,
+	// AMBER, AMBER-STRICT, RED, PURPLE. Null when not set.
+	TLP  string                                       `json:"tlp" api:"nullable"`
+	JSON threatEventIndicatorByDatasetGetResponseJSON `json:"-"`
 }
 
 // threatEventIndicatorByDatasetGetResponseJSON contains the JSON metadata for the
@@ -242,6 +309,7 @@ type threatEventIndicatorByDatasetGetResponseJSON struct {
 	DatasetID     apijson.Field
 	RelatedEvents apijson.Field
 	Tags          apijson.Field
+	TLP           apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -282,6 +350,8 @@ func (r threatEventIndicatorByDatasetGetResponseRelatedEventJSON) RawJSON() stri
 }
 
 type ThreatEventIndicatorByDatasetGetResponseTag struct {
+	// The UUID of the tag category, or null when the tag is uncategorized.
+	CategoryID   string                                          `json:"categoryId" api:"nullable"`
 	CategoryName string                                          `json:"categoryName"`
 	UUID         string                                          `json:"uuid"`
 	Value        string                                          `json:"value"`
@@ -291,6 +361,7 @@ type ThreatEventIndicatorByDatasetGetResponseTag struct {
 // threatEventIndicatorByDatasetGetResponseTagJSON contains the JSON metadata for
 // the struct [ThreatEventIndicatorByDatasetGetResponseTag]
 type threatEventIndicatorByDatasetGetResponseTagJSON struct {
+	CategoryID   apijson.Field
 	CategoryName apijson.Field
 	UUID         apijson.Field
 	Value        apijson.Field

@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // ConnectorInterruptService contains methods and other services that help with
@@ -280,7 +281,6 @@ func (r connectorInterruptListResponseShutdownJSON) RawJSON() string {
 }
 
 type ConnectorInterruptNewParams struct {
-	// Account identifier
 	AccountID param.Field[string]                              `path:"account_id" api:"required"`
 	Reboot    param.Field[ConnectorInterruptNewParamsReboot]   `json:"reboot"`
 	Restart   param.Field[ConnectorInterruptNewParamsRestart]  `json:"restart"`
@@ -319,8 +319,8 @@ func (r ConnectorInterruptNewParamsShutdown) MarshalJSON() (data []byte, err err
 }
 
 type ConnectorInterruptNewResponseEnvelope struct {
-	Errors   []ConnectorInterruptNewResponseEnvelopeErrors   `json:"errors" api:"required"`
-	Messages []ConnectorInterruptNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
 	// Interrupt action for a connector.
 	Result  ConnectorInterruptNewResponse             `json:"result" api:"required"`
 	Success bool                                      `json:"success" api:"required"`
@@ -346,53 +346,6 @@ func (r connectorInterruptNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ConnectorInterruptNewResponseEnvelopeErrors struct {
-	Code    float64                                         `json:"code" api:"required"`
-	Message string                                          `json:"message" api:"required"`
-	JSON    connectorInterruptNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// connectorInterruptNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ConnectorInterruptNewResponseEnvelopeErrors]
-type connectorInterruptNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectorInterruptNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectorInterruptNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConnectorInterruptNewResponseEnvelopeMessages struct {
-	Code    float64                                           `json:"code" api:"required"`
-	Message string                                            `json:"message" api:"required"`
-	JSON    connectorInterruptNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// connectorInterruptNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ConnectorInterruptNewResponseEnvelopeMessages]
-type connectorInterruptNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectorInterruptNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectorInterruptNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type ConnectorInterruptListParams struct {
-	// Account identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

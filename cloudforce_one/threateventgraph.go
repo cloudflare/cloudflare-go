@@ -127,8 +127,9 @@ type ThreatEventGraphListParams struct {
 	// Opaque pagination token. Only valid when seeds has exactly 1 entry; 400
 	// otherwise.
 	Cursor param.Field[string] `query:"cursor"`
-	// Comma-separated dataset UUIDs to restrict neighbor scope. Intersected with ACL
-	// grants.
+	// Comma-separated dataset UUIDs to restrict neighbor scope, or one standalone
+	// scope value: 'all'/'\*', 'analytics' for isAnalytics=true datasets, or
+	// 'operational' for isAnalytics=false datasets. Intersected with access grants.
 	DatasetIDs param.Field[[]string] `query:"datasetIds"`
 	// Edge direction relative to each seed: out (seed→neighbors), in (neighbors→seed),
 	// both (default).
