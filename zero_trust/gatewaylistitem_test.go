@@ -5,6 +5,8 @@ package zero_trust_test
 import (
 	"context"
 	"errors"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"testing"
 
@@ -41,5 +43,53 @@ func TestGatewayListItemList(t *testing.T) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
 		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestGatewayListItemListAutoPaging(t *testing.T) {
+	var page1, page2 int
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Query().Get("page") {
+		case "", "1":
+			page1++
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"result":[{"created_at":"2024-01-01T00:00:00Z","description":"one","value":"one"}],"result_info":{"page":1,"per_page":50}}`))
+		case "2":
+			page2++
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"result":[{"created_at":"2024-01-01T00:00:00Z","description":"two","value":"two"}],"result_info":{"page":2,"per_page":50}}`))
+		case "3":
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"result":[],"result_info":{"page":3,"per_page":50}}`))
+		default:
+			http.Error(w, "unexpected page", http.StatusBadRequest)
+		}
+	}))
+	defer server.Close()
+
+	client := cloudflare.NewClient(
+		option.WithBaseURL(server.URL),
+		option.WithAPIKey("test"),
+		option.WithAPIEmail("user@example.com"),
+	)
+
+	pager := client.ZeroTrust.Gateway.Lists.Items.ListAutoPaging(
+		context.Background(),
+		"list-123",
+		zero_trust.GatewayListItemListParams{AccountID: cloudflare.F("acct-123")},
+	)
+
+	var got []string
+	for pager.Next() {
+		got = append(got, pager.Current().Value)
+	}
+	if err := pager.Err(); err != nil {
+		t.Fatalf("pager.Err() = %v", err)
+	}
+	if len(got) != 2 || got[0] != "one" || got[1] != "two" {
+		t.Fatalf("pager returned %v, want [one two]", got)
+	}
+	if page1 != 1 || page2 != 1 {
+		t.Fatalf("pages requested = (%d, %d), want (1, 1)", page1, page2)
 	}
 }
