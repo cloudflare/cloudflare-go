@@ -13,16 +13,17 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewMagicTransitService] method instead.
 type MagicTransitService struct {
-	Options         []option.RequestOption
-	Apps            *AppService
-	CfInterconnects *CfInterconnectService
-	GRETunnels      *GRETunnelService
-	IPSECTunnels    *IPSECTunnelService
-	Routes          *RouteService
-	Sites           *SiteService
-	Connectors      *ConnectorService
-	Cf1Sites        *Cf1SiteService
-	PCAPs           *PCAPService
+	Options           []option.RequestOption
+	Apps              *AppService
+	CfInterconnects   *CfInterconnectService
+	GRETunnels        *GRETunnelService
+	IPSECTunnels      *IPSECTunnelService
+	Routes            *RouteService
+	BGPFilterProfiles *BGPFilterProfileService
+	Sites             *SiteService
+	Connectors        *ConnectorService
+	Cf1Sites          *Cf1SiteService
+	PCAPs             *PCAPService
 }
 
 // NewMagicTransitService generates a new service that applies the given options to
@@ -36,6 +37,7 @@ func NewMagicTransitService(opts ...option.RequestOption) (r *MagicTransitServic
 	r.GRETunnels = NewGRETunnelService(opts...)
 	r.IPSECTunnels = NewIPSECTunnelService(opts...)
 	r.Routes = NewRouteService(opts...)
+	r.BGPFilterProfiles = NewBGPFilterProfileService(opts...)
 	r.Sites = NewSiteService(opts...)
 	r.Connectors = NewConnectorService(opts...)
 	r.Cf1Sites = NewCf1SiteService(opts...)

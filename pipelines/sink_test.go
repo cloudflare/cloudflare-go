@@ -63,8 +63,8 @@ func TestSinkNewWithOptionalParams(t *testing.T) {
 			Unstructured:    cloudflare.F(true),
 		}),
 		Schema: cloudflare.F(pipelines.SinkNewParamsSchema{
-			Fields: cloudflare.F([]pipelines.SinkNewParamsSchemaFieldUnion{pipelines.SinkNewParamsSchemaFieldsInt32{
-				Type:        cloudflare.F(pipelines.SinkNewParamsSchemaFieldsInt32TypeInt32),
+			Fields: cloudflare.F([]pipelines.SourceFieldUnionParam{pipelines.SourceFieldInt32Param{
+				Type:        cloudflare.F(pipelines.SourceFieldInt32TypeInt32),
 				MetadataKey: cloudflare.F("metadata_key"),
 				Name:        cloudflare.F("name"),
 				Required:    cloudflare.F(true),

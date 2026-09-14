@@ -281,7 +281,6 @@ TEST_PATHS=(
 	addressing/regionalhostnameregion_test.go
 	addressing/service_test.go
 	addressing/addressmap_test.go
-	addressing/addressmapaccount_test.go
 	addressing/addressmapip_test.go
 	addressing/addressmapzone_test.go
 	addressing/loadocument_test.go
@@ -342,6 +341,7 @@ TEST_PATHS=(
 	magic_transit/gretunnel_test.go
 	magic_transit/ipsectunnel_test.go
 	magic_transit/route_test.go
+	magic_transit/bgpfilterprofile_test.go
 	magic_transit/site_test.go
 	magic_transit/siteacl_test.go
 	magic_transit/sitelan_test.go
@@ -531,6 +531,7 @@ TEST_PATHS=(
 	zero_trust/casbposturefindingtyperemediationtype_test.go
 	zero_trust/casbposturecontent_test.go
 	zero_trust/casbpostureremediationjob_test.go
+	zero_trust/casbposturepolicy_test.go
 	zero_trust/casbposturewebhook_test.go
 	zero_trust/casbposturewebhookjob_test.go
 	zero_trust/dexwarpchangeevent_test.go
@@ -855,6 +856,8 @@ TEST_PATHS=(
 	ai_security/customtopic_test.go
 	csam_scanner/csamscanner_test.go
 	abuse_reports/abusereport_test.go
+	abuse_reports/submitted_test.go
+	abuse_reports/submittedemail_test.go
 	abuse_reports/mitigation_test.go
 	ai/ai_test.go
 	ai/finetune_test.go
@@ -909,6 +912,7 @@ TEST_PATHS=(
 	token_validation/configuration_test.go
 	token_validation/configurationcredential_test.go
 	token_validation/rule_test.go
+	field_extractors/fieldextractor_test.go
 	usage_test.go
 	paginationauto_test.go
 	paginationmanual_test.go

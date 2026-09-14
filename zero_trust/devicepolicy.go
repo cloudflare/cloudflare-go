@@ -178,6 +178,9 @@ type SettingsPolicy struct {
 	TargetTests  []SettingsPolicyTargetTest `json:"target_tests"`
 	// Determines which tunnel protocol to use.
 	TunnelProtocol string `json:"tunnel_protocol"`
+	// Determines whether uninstalling the WARP client requires an override code.
+	// (Windows only).
+	UninstallProtection bool `json:"uninstall_protection"`
 	// Virtual network access settings for the device.
 	VirtualNetworks SettingsPolicyVirtualNetworks `json:"virtual_networks" api:"nullable"`
 	JSON            settingsPolicyJSON            `json:"-"`
@@ -214,6 +217,7 @@ type settingsPolicyJSON struct {
 	SwitchLocked               apijson.Field
 	TargetTests                apijson.Field
 	TunnelProtocol             apijson.Field
+	UninstallProtection        apijson.Field
 	VirtualNetworks            apijson.Field
 	raw                        string
 	ExtraFields                map[string]apijson.Field

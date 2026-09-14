@@ -436,6 +436,7 @@ type InsightListParams struct {
 	ProductNeq  param.Field[[]string]                   `query:"product~neq"`
 	Severity    param.Field[[]intel.SeverityQueryParam] `query:"severity"`
 	SeverityNeq param.Field[[]intel.SeverityQueryParam] `query:"severity~neq"`
+	Source      param.Field[[]InsightListParamsSource]  `query:"source"`
 	Subject     param.Field[[]string]                   `query:"subject"`
 	SubjectNeq  param.Field[[]string]                   `query:"subject~neq"`
 }
@@ -446,6 +447,21 @@ func (r InsightListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type InsightListParamsSource string
+
+const (
+	InsightListParamsSourceCloudflare InsightListParamsSource = "cloudflare"
+	InsightListParamsSourceRiskrecon  InsightListParamsSource = "riskrecon"
+)
+
+func (r InsightListParamsSource) IsKnown() bool {
+	switch r {
+	case InsightListParamsSourceCloudflare, InsightListParamsSourceRiskrecon:
+		return true
+	}
+	return false
 }
 
 type InsightDismissParams struct {

@@ -38,10 +38,10 @@ func NewAccessBookmarkService(opts ...option.RequestOption) (r *AccessBookmarkSe
 // Create a new Bookmark application.
 //
 // Deprecated: deprecated
-func (r *AccessBookmarkService) New(ctx context.Context, bookmarkID string, params AccessBookmarkNewParams, opts ...option.RequestOption) (res *Bookmark, err error) {
+func (r *AccessBookmarkService) New(ctx context.Context, bookmarkID string, body AccessBookmarkNewParams, opts ...option.RequestOption) (res *Bookmark, err error) {
 	var env AccessBookmarkNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -49,8 +49,8 @@ func (r *AccessBookmarkService) New(ctx context.Context, bookmarkID string, para
 		err = errors.New("missing required bookmark_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", params.AccountID, bookmarkID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", body.AccountID, bookmarkID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -61,10 +61,10 @@ func (r *AccessBookmarkService) New(ctx context.Context, bookmarkID string, para
 // Updates a configured Bookmark application.
 //
 // Deprecated: deprecated
-func (r *AccessBookmarkService) Update(ctx context.Context, bookmarkID string, params AccessBookmarkUpdateParams, opts ...option.RequestOption) (res *Bookmark, err error) {
+func (r *AccessBookmarkService) Update(ctx context.Context, bookmarkID string, body AccessBookmarkUpdateParams, opts ...option.RequestOption) (res *Bookmark, err error) {
 	var env AccessBookmarkUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -72,8 +72,8 @@ func (r *AccessBookmarkService) Update(ctx context.Context, bookmarkID string, p
 		err = errors.New("missing required bookmark_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", params.AccountID, bookmarkID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", body.AccountID, bookmarkID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -215,11 +215,6 @@ func (r accessBookmarkDeleteResponseJSON) RawJSON() string {
 
 type AccessBookmarkNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Body      interface{}         `json:"body" api:"required"`
-}
-
-func (r AccessBookmarkNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type AccessBookmarkNewResponseEnvelope struct {
@@ -363,11 +358,6 @@ func (r AccessBookmarkNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessBookmarkUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Body      interface{}         `json:"body" api:"required"`
-}
-
-func (r AccessBookmarkUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type AccessBookmarkUpdateResponseEnvelope struct {

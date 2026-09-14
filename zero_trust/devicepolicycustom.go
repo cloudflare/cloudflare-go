@@ -230,6 +230,9 @@ type DevicePolicyCustomNewParams struct {
 	SwitchLocked param.Field[bool] `json:"switch_locked"`
 	// Determines which tunnel protocol to use.
 	TunnelProtocol param.Field[string] `json:"tunnel_protocol"`
+	// Determines whether uninstalling the WARP client requires an override code.
+	// (Windows only).
+	UninstallProtection param.Field[bool] `json:"uninstall_protection"`
 	// Virtual network access settings for the device.
 	VirtualNetworks param.Field[DevicePolicyCustomNewParamsVirtualNetworks] `json:"virtual_networks"`
 }
@@ -413,6 +416,9 @@ type DevicePolicyCustomEditParams struct {
 	SwitchLocked param.Field[bool] `json:"switch_locked"`
 	// Determines which tunnel protocol to use.
 	TunnelProtocol param.Field[string] `json:"tunnel_protocol"`
+	// Determines whether uninstalling the WARP client requires an override code.
+	// (Windows only).
+	UninstallProtection param.Field[bool] `json:"uninstall_protection"`
 	// Virtual network access settings for the device.
 	VirtualNetworks param.Field[DevicePolicyCustomEditParamsVirtualNetworks] `json:"virtual_networks"`
 }

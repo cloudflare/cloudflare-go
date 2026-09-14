@@ -35,7 +35,7 @@ func NewWebhookService(opts ...option.RequestOption) (r *WebhookService) {
 	return
 }
 
-// Creates a webhook notification.
+// Create a webhook for notifications about on-demand video uploads.
 func (r *WebhookService) Update(ctx context.Context, params WebhookUpdateParams, opts ...option.RequestOption) (res *WebhookUpdateResponse, err error) {
 	var env WebhookUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -52,7 +52,7 @@ func (r *WebhookService) Update(ctx context.Context, params WebhookUpdateParams,
 	return res, nil
 }
 
-// Deletes a webhook.
+// Deletes the on-demand video webhook.
 func (r *WebhookService) Delete(ctx context.Context, body WebhookDeleteParams, opts ...option.RequestOption) (res *string, err error) {
 	var env WebhookDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -69,7 +69,7 @@ func (r *WebhookService) Delete(ctx context.Context, body WebhookDeleteParams, o
 	return res, nil
 }
 
-// Retrieves a list of webhooks.
+// Retrieve current on-demand webhook information.
 func (r *WebhookService) Get(ctx context.Context, query WebhookGetParams, opts ...option.RequestOption) (res *WebhookGetResponse, err error) {
 	var env WebhookGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

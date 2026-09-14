@@ -39,7 +39,10 @@ func NewDispatchNamespaceScriptSecretService(opts ...option.RequestOption) (r *D
 	return
 }
 
-// Add a secret to a script uploaded to a Workers for Platforms namespace.
+// Add a secret to a script by creating a new version with that secret.
+//
+// When changing more than one secret at a time, prefer the "Patch multiple script
+// secrets" API instead of changing many secrets individually.
 func (r *DispatchNamespaceScriptSecretService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptSecretUpdateParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretUpdateResponse, err error) {
 	var env DispatchNamespaceScriptSecretUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -99,7 +102,10 @@ func (r *DispatchNamespaceScriptSecretService) ListAutoPaging(ctx context.Contex
 	return pagination.NewSinglePageAutoPager(r.List(ctx, dispatchNamespace, scriptName, query, opts...))
 }
 
-// Remove a secret from a script uploaded to a Workers for Platforms namespace.
+// Remove a secret from a script by creating a new version without that secret.
+//
+// When changing more than one secret at a time, prefer the "Patch multiple script
+// secrets" API instead of changing many secrets individually.
 func (r *DispatchNamespaceScriptSecretService) Delete(ctx context.Context, dispatchNamespace string, scriptName string, secretName string, params DispatchNamespaceScriptSecretDeleteParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretDeleteResponse, err error) {
 	var env DispatchNamespaceScriptSecretDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -129,7 +135,9 @@ func (r *DispatchNamespaceScriptSecretService) Delete(ctx context.Context, dispa
 }
 
 // Create, update, or delete multiple secrets on a script in a single operation
-// using JSON Merge Patch (RFC 7396).
+// using JSON Merge Patch (RFC 7396). This operation creates a single version with
+// all changes included. Prefer this API instead of changing many secrets
+// individually.
 //
 // Usage:
 //

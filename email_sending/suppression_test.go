@@ -30,7 +30,7 @@ func TestSuppressionNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSending.Suppressions.New(context.TODO(), email_sending.SuppressionNewParams{
-		AccountID: cloudflare.F("54442216"),
+		AccountID: cloudflare.F("12345678"),
 		Email:     cloudflare.F("user@example.com"),
 		ExpiresAt: cloudflare.F(time.Now()),
 		Note:      cloudflare.F("Imported from CRM"),
@@ -59,11 +59,11 @@ func TestSuppressionListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSending.Suppressions.List(context.TODO(), email_sending.SuppressionListParams{
-		AccountID: cloudflare.F("54442216"),
+		AccountID: cloudflare.F("12345678"),
 		Cursor:    cloudflare.F("eyJ0IjozLCJwIjoxMjMsImMiOiJjM2RjNWYwYjM0YTE0ZmY4ZTFiM2VjMDQ4OTVlMWIyMiJ9"),
 		Email:     cloudflare.F("user@example.com"),
-		PerPage:   cloudflare.F(int64(1)),
-		Reason:    cloudflare.F(email_sending.SuppressionListParamsReasonManual),
+		PerPage:   cloudflare.F(int64(100)),
+		Reason:    cloudflare.F(email_sending.SuppressionListParamsReasonHardBounce),
 		Search:    cloudflare.F("billing@"),
 	})
 	if err != nil {
@@ -93,7 +93,7 @@ func TestSuppressionDelete(t *testing.T) {
 		context.TODO(),
 		"396a5436-d4b0-42a6-b3fc-48e8fa522321",
 		email_sending.SuppressionDeleteParams{
-			AccountID: cloudflare.F("54442216"),
+			AccountID: cloudflare.F("12345678"),
 		},
 	)
 	if err != nil {
@@ -123,7 +123,7 @@ func TestSuppressionEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"396a5436-d4b0-42a6-b3fc-48e8fa522321",
 		email_sending.SuppressionEditParams{
-			AccountID: cloudflare.F("54442216"),
+			AccountID: cloudflare.F("12345678"),
 			ExpiresAt: cloudflare.F(time.Now()),
 			Note:      cloudflare.F("Customer re-confirmed opt-in"),
 		},
@@ -155,7 +155,7 @@ func TestSuppressionGet(t *testing.T) {
 		context.TODO(),
 		"396a5436-d4b0-42a6-b3fc-48e8fa522321",
 		email_sending.SuppressionGetParams{
-			AccountID: cloudflare.F("54442216"),
+			AccountID: cloudflare.F("12345678"),
 		},
 	)
 	if err != nil {
@@ -182,11 +182,15 @@ func TestSuppressionImport(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSending.Suppressions.Import(context.TODO(), email_sending.SuppressionImportParams{
-		AccountID: cloudflare.F("54442216"),
+		AccountID: cloudflare.F("12345678"),
 		Items: cloudflare.F([]email_sending.SuppressionImportParamsItem{{
-			Email:     cloudflare.F("email"),
+			Email:     cloudflare.F("user@example.com"),
 			ExpiresAt: cloudflare.F(time.Now()),
-			Note:      cloudflare.F("note"),
+			Note:      cloudflare.F("Imported from CRM"),
+		}, {
+			Email:     cloudflare.F("other@example.com"),
+			ExpiresAt: cloudflare.F(time.Now()),
+			Note:      cloudflare.F("Imported from CRM"),
 		}}),
 	})
 	if err != nil {

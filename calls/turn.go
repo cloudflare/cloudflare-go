@@ -145,15 +145,15 @@ func (r *TURNService) Get(ctx context.Context, keyID string, query TURNGetParams
 
 type TURNNewResponse struct {
 	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// Bearer token
-	Key string `json:"key"`
+	Key string `json:"key" api:"required"`
 	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// A short description of a TURN key, not shown to end users.
-	Name string `json:"name"`
+	Name string `json:"name" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
-	UID  string              `json:"uid"`
+	UID  string              `json:"uid" api:"required"`
 	JSON turnNewResponseJSON `json:"-"`
 }
 
@@ -178,13 +178,13 @@ func (r turnNewResponseJSON) RawJSON() string {
 
 type TURNUpdateResponse struct {
 	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// A short description of Calls app, not shown to end users.
-	Name string `json:"name"`
+	Name string `json:"name" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
-	UID  string                 `json:"uid"`
+	UID  string                 `json:"uid" api:"required"`
 	JSON turnUpdateResponseJSON `json:"-"`
 }
 
@@ -209,13 +209,13 @@ func (r turnUpdateResponseJSON) RawJSON() string {
 
 type TURNListResponse struct {
 	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// A short description of Calls app, not shown to end users.
-	Name string `json:"name"`
+	Name string `json:"name" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
-	UID  string               `json:"uid"`
+	UID  string               `json:"uid" api:"required"`
 	JSON turnListResponseJSON `json:"-"`
 }
 
@@ -240,13 +240,13 @@ func (r turnListResponseJSON) RawJSON() string {
 
 type TURNDeleteResponse struct {
 	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// A short description of Calls app, not shown to end users.
-	Name string `json:"name"`
+	Name string `json:"name" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
-	UID  string                 `json:"uid"`
+	UID  string                 `json:"uid" api:"required"`
 	JSON turnDeleteResponseJSON `json:"-"`
 }
 
@@ -271,13 +271,13 @@ func (r turnDeleteResponseJSON) RawJSON() string {
 
 type TURNGetResponse struct {
 	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// A short description of Calls app, not shown to end users.
-	Name string `json:"name"`
+	Name string `json:"name" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
-	UID  string              `json:"uid"`
+	UID  string              `json:"uid" api:"required"`
 	JSON turnGetResponseJSON `json:"-"`
 }
 

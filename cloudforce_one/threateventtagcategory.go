@@ -126,10 +126,16 @@ func (r threatEventTagCategoryNewResponseJSON) RawJSON() string {
 }
 
 type ThreatEventTagCategoryNewResponseSchema struct {
-	Key              string                                                  `json:"key" api:"required"`
-	Kind             ThreatEventTagCategoryNewResponseSchemaKind             `json:"kind" api:"required"`
-	AllowedValues    []string                                                `json:"allowedValues"`
-	Annotations      ThreatEventTagCategoryNewResponseSchemaAnnotations      `json:"annotations"`
+	Key           string                                             `json:"key" api:"required"`
+	Kind          ThreatEventTagCategoryNewResponseSchemaKind        `json:"kind" api:"required"`
+	AllowedValues []string                                           `json:"allowedValues"`
+	Annotations   ThreatEventTagCategoryNewResponseSchemaAnnotations `json:"annotations"`
+	// Marks a field as unavailable for new values while retaining its definition for
+	// historical values.
+	Deprecated bool `json:"deprecated"`
+	// Enum values unavailable for new writes but retained in allowedValues for
+	// historical display.
+	DeprecatedValues []string                                                `json:"deprecatedValues"`
 	Element          interface{}                                             `json:"element"`
 	Enforcement      ThreatEventTagCategoryNewResponseSchemaEnforcement      `json:"enforcement"`
 	Format           ThreatEventTagCategoryNewResponseSchemaFormat           `json:"format"`
@@ -150,6 +156,8 @@ type threatEventTagCategoryNewResponseSchemaJSON struct {
 	Kind             apijson.Field
 	AllowedValues    apijson.Field
 	Annotations      apijson.Field
+	Deprecated       apijson.Field
+	DeprecatedValues apijson.Field
 	Element          apijson.Field
 	Enforcement      apijson.Field
 	Format           apijson.Field
@@ -326,10 +334,16 @@ func (r threatEventTagCategoryListResponseCategoryJSON) RawJSON() string {
 }
 
 type ThreatEventTagCategoryListResponseCategoriesSchema struct {
-	Key              string                                                             `json:"key" api:"required"`
-	Kind             ThreatEventTagCategoryListResponseCategoriesSchemaKind             `json:"kind" api:"required"`
-	AllowedValues    []string                                                           `json:"allowedValues"`
-	Annotations      ThreatEventTagCategoryListResponseCategoriesSchemaAnnotations      `json:"annotations"`
+	Key           string                                                        `json:"key" api:"required"`
+	Kind          ThreatEventTagCategoryListResponseCategoriesSchemaKind        `json:"kind" api:"required"`
+	AllowedValues []string                                                      `json:"allowedValues"`
+	Annotations   ThreatEventTagCategoryListResponseCategoriesSchemaAnnotations `json:"annotations"`
+	// Marks a field as unavailable for new values while retaining its definition for
+	// historical values.
+	Deprecated bool `json:"deprecated"`
+	// Enum values unavailable for new writes but retained in allowedValues for
+	// historical display.
+	DeprecatedValues []string                                                           `json:"deprecatedValues"`
 	Element          interface{}                                                        `json:"element"`
 	Enforcement      ThreatEventTagCategoryListResponseCategoriesSchemaEnforcement      `json:"enforcement"`
 	Format           ThreatEventTagCategoryListResponseCategoriesSchemaFormat           `json:"format"`
@@ -350,6 +364,8 @@ type threatEventTagCategoryListResponseCategoriesSchemaJSON struct {
 	Kind             apijson.Field
 	AllowedValues    apijson.Field
 	Annotations      apijson.Field
+	Deprecated       apijson.Field
+	DeprecatedValues apijson.Field
 	Element          apijson.Field
 	Enforcement      apijson.Field
 	Format           apijson.Field
@@ -527,10 +543,16 @@ func (r threatEventTagCategoryEditResponseJSON) RawJSON() string {
 }
 
 type ThreatEventTagCategoryEditResponseSchema struct {
-	Key              string                                                   `json:"key" api:"required"`
-	Kind             ThreatEventTagCategoryEditResponseSchemaKind             `json:"kind" api:"required"`
-	AllowedValues    []string                                                 `json:"allowedValues"`
-	Annotations      ThreatEventTagCategoryEditResponseSchemaAnnotations      `json:"annotations"`
+	Key           string                                              `json:"key" api:"required"`
+	Kind          ThreatEventTagCategoryEditResponseSchemaKind        `json:"kind" api:"required"`
+	AllowedValues []string                                            `json:"allowedValues"`
+	Annotations   ThreatEventTagCategoryEditResponseSchemaAnnotations `json:"annotations"`
+	// Marks a field as unavailable for new values while retaining its definition for
+	// historical values.
+	Deprecated bool `json:"deprecated"`
+	// Enum values unavailable for new writes but retained in allowedValues for
+	// historical display.
+	DeprecatedValues []string                                                 `json:"deprecatedValues"`
 	Element          interface{}                                              `json:"element"`
 	Enforcement      ThreatEventTagCategoryEditResponseSchemaEnforcement      `json:"enforcement"`
 	Format           ThreatEventTagCategoryEditResponseSchemaFormat           `json:"format"`
@@ -551,6 +573,8 @@ type threatEventTagCategoryEditResponseSchemaJSON struct {
 	Kind             apijson.Field
 	AllowedValues    apijson.Field
 	Annotations      apijson.Field
+	Deprecated       apijson.Field
+	DeprecatedValues apijson.Field
 	Element          apijson.Field
 	Enforcement      apijson.Field
 	Format           apijson.Field
@@ -687,10 +711,16 @@ func (r ThreatEventTagCategoryNewParams) MarshalJSON() (data []byte, err error) 
 }
 
 type ThreatEventTagCategoryNewParamsSchema struct {
-	Key              param.Field[string]                                                `json:"key" api:"required"`
-	Kind             param.Field[ThreatEventTagCategoryNewParamsSchemaKind]             `json:"kind" api:"required"`
-	AllowedValues    param.Field[[]string]                                              `json:"allowedValues"`
-	Annotations      param.Field[ThreatEventTagCategoryNewParamsSchemaAnnotations]      `json:"annotations"`
+	Key           param.Field[string]                                           `json:"key" api:"required"`
+	Kind          param.Field[ThreatEventTagCategoryNewParamsSchemaKind]        `json:"kind" api:"required"`
+	AllowedValues param.Field[[]string]                                         `json:"allowedValues"`
+	Annotations   param.Field[ThreatEventTagCategoryNewParamsSchemaAnnotations] `json:"annotations"`
+	// Marks a field as unavailable for new values while retaining its definition for
+	// historical values.
+	Deprecated param.Field[bool] `json:"deprecated"`
+	// Enum values unavailable for new writes but retained in allowedValues for
+	// historical display.
+	DeprecatedValues param.Field[[]string]                                              `json:"deprecatedValues"`
 	Element          param.Field[interface{}]                                           `json:"element"`
 	Enforcement      param.Field[ThreatEventTagCategoryNewParamsSchemaEnforcement]      `json:"enforcement"`
 	Format           param.Field[ThreatEventTagCategoryNewParamsSchemaFormat]           `json:"format"`
@@ -813,10 +843,16 @@ func (r ThreatEventTagCategoryEditParams) MarshalJSON() (data []byte, err error)
 }
 
 type ThreatEventTagCategoryEditParamsSchema struct {
-	Key              param.Field[string]                                                 `json:"key" api:"required"`
-	Kind             param.Field[ThreatEventTagCategoryEditParamsSchemaKind]             `json:"kind" api:"required"`
-	AllowedValues    param.Field[[]string]                                               `json:"allowedValues"`
-	Annotations      param.Field[ThreatEventTagCategoryEditParamsSchemaAnnotations]      `json:"annotations"`
+	Key           param.Field[string]                                            `json:"key" api:"required"`
+	Kind          param.Field[ThreatEventTagCategoryEditParamsSchemaKind]        `json:"kind" api:"required"`
+	AllowedValues param.Field[[]string]                                          `json:"allowedValues"`
+	Annotations   param.Field[ThreatEventTagCategoryEditParamsSchemaAnnotations] `json:"annotations"`
+	// Marks a field as unavailable for new values while retaining its definition for
+	// historical values.
+	Deprecated param.Field[bool] `json:"deprecated"`
+	// Enum values unavailable for new writes but retained in allowedValues for
+	// historical display.
+	DeprecatedValues param.Field[[]string]                                               `json:"deprecatedValues"`
 	Element          param.Field[interface{}]                                            `json:"element"`
 	Enforcement      param.Field[ThreatEventTagCategoryEditParamsSchemaEnforcement]      `json:"enforcement"`
 	Format           param.Field[ThreatEventTagCategoryEditParamsSchemaFormat]           `json:"format"`

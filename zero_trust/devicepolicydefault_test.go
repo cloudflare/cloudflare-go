@@ -63,9 +63,10 @@ func TestDevicePolicyDefaultEditWithOptionalParams(t *testing.T) {
 			Mode: cloudflare.F("proxy"),
 			Port: cloudflare.F(3000.000000),
 		}),
-		SupportURL:     cloudflare.F("https://1.1.1.1/help"),
-		SwitchLocked:   cloudflare.F(true),
-		TunnelProtocol: cloudflare.F("wireguard"),
+		SupportURL:          cloudflare.F("https://1.1.1.1/help"),
+		SwitchLocked:        cloudflare.F(true),
+		TunnelProtocol:      cloudflare.F("wireguard"),
+		UninstallProtection: cloudflare.F(false),
 		VirtualNetworks: cloudflare.F(zero_trust.DevicePolicyDefaultEditParamsVirtualNetworks{
 			Allowed: cloudflare.F([]string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"}),
 			Default: cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),

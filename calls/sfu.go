@@ -146,15 +146,15 @@ func (r *SFUService) Get(ctx context.Context, appID string, query SFUGetParams, 
 
 type SFUNewResponse struct {
 	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// A short description of Calls app, not shown to end users.
-	Name string `json:"name"`
+	Name string `json:"name" api:"required"`
 	// Bearer token
-	Secret string `json:"secret"`
+	Secret string `json:"secret" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
-	UID  string             `json:"uid"`
+	UID  string             `json:"uid" api:"required"`
 	JSON sfuNewResponseJSON `json:"-"`
 }
 
@@ -179,13 +179,13 @@ func (r sfuNewResponseJSON) RawJSON() string {
 
 type SFUUpdateResponse struct {
 	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// A short description of Calls app, not shown to end users.
-	Name string `json:"name"`
+	Name string `json:"name" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
-	UID  string                `json:"uid"`
+	UID  string                `json:"uid" api:"required"`
 	JSON sfuUpdateResponseJSON `json:"-"`
 }
 
@@ -210,13 +210,13 @@ func (r sfuUpdateResponseJSON) RawJSON() string {
 
 type SFUListResponse struct {
 	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// A short description of Calls app, not shown to end users.
-	Name string `json:"name"`
+	Name string `json:"name" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
-	UID  string              `json:"uid"`
+	UID  string              `json:"uid" api:"required"`
 	JSON sfuListResponseJSON `json:"-"`
 }
 
@@ -240,13 +240,13 @@ func (r sfuListResponseJSON) RawJSON() string {
 
 type SFUDeleteResponse struct {
 	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// A short description of Calls app, not shown to end users.
-	Name string `json:"name"`
+	Name string `json:"name" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
-	UID  string                `json:"uid"`
+	UID  string                `json:"uid" api:"required"`
 	JSON sfuDeleteResponseJSON `json:"-"`
 }
 
@@ -271,13 +271,13 @@ func (r sfuDeleteResponseJSON) RawJSON() string {
 
 type SFUGetResponse struct {
 	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// A short description of Calls app, not shown to end users.
-	Name string `json:"name"`
+	Name string `json:"name" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
-	UID  string             `json:"uid"`
+	UID  string             `json:"uid" api:"required"`
 	JSON sfuGetResponseJSON `json:"-"`
 }
 

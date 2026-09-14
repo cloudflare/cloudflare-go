@@ -311,7 +311,7 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestGatewayRuleList(t *testing.T) {
+func TestGatewayRuleListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -327,6 +327,10 @@ func TestGatewayRuleList(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Gateway.Rules.List(context.TODO(), zero_trust.GatewayRuleListParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		Direction: cloudflare.F(zero_trust.GatewayRuleListParamsDirectionAsc),
+		Filter:    cloudflare.F([]interface{}{map[string]interface{}{}}),
+		OrderBy:   cloudflare.F(zero_trust.GatewayRuleListParamsOrderByName),
+		Search:    cloudflare.F("search"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

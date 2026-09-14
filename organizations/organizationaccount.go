@@ -64,8 +64,14 @@ type OrganizationAccountGetParams struct {
 	Direction param.Field[OrganizationAccountGetParamsDirection] `query:"direction"`
 	// Include Account tags from the resource tag mirror. Omit this parameter to
 	// preserve the existing Account response shape.
-	IncludeTags param.Field[bool]                             `query:"include_tags"`
-	Name        param.Field[OrganizationAccountGetParamsName] `query:"name"`
+	IncludeTags param.Field[bool] `query:"include_tags"`
+	// Whether to calculate and return the exact result_info.total_size for cursor
+	// pagination. Defaults to true. When false, total_size is omitted. page_size and
+	// include_total may change between pages; next_page_token remains the
+	// authoritative continuation signal. Legacy page/per_page requests always
+	// calculate total_count.
+	IncludeTotal param.Field[bool]                             `query:"include_total"`
+	Name         param.Field[OrganizationAccountGetParamsName] `query:"name"`
 	// Field to order results by. Currently supported values: `account_name`. When not
 	// specified, results are ordered by internal account ID.
 	OrderBy param.Field[OrganizationAccountGetParamsOrderBy] `query:"order_by"`

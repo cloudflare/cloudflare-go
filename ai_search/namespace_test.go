@@ -202,6 +202,10 @@ func TestNamespaceChatCompletionsWithOptionalParams(t *testing.T) {
 					CacheThreshold: cloudflare.F(ai_search.NamespaceChatCompletionsParamsAISearchOptionsCacheCacheThresholdSuperStrictMatch),
 					Enabled:        cloudflare.F(true),
 				}),
+				CustomMetadata: cloudflare.F(map[string]ai_search.NamespaceChatCompletionsParamsAISearchOptionsCustomMetadataUnion{
+					"test":    shared.UnionBool(true),
+					"user_id": shared.UnionString("user-123"),
+				}),
 				QueryRewrite: cloudflare.F(ai_search.NamespaceChatCompletionsParamsAISearchOptionsQueryRewrite{
 					Enabled:       cloudflare.F(true),
 					Model:         cloudflare.F("model"),
@@ -300,6 +304,10 @@ func TestNamespaceSearchWithOptionalParams(t *testing.T) {
 				Cache: cloudflare.F(ai_search.NamespaceSearchParamsAISearchOptionsCache{
 					CacheThreshold: cloudflare.F(ai_search.NamespaceSearchParamsAISearchOptionsCacheCacheThresholdSuperStrictMatch),
 					Enabled:        cloudflare.F(true),
+				}),
+				CustomMetadata: cloudflare.F(map[string]ai_search.NamespaceSearchParamsAISearchOptionsCustomMetadataUnion{
+					"test":    shared.UnionBool(true),
+					"user_id": shared.UnionString("user-123"),
 				}),
 				QueryRewrite: cloudflare.F(ai_search.NamespaceSearchParamsAISearchOptionsQueryRewrite{
 					Enabled:       cloudflare.F(true),

@@ -503,15 +503,16 @@ func (r BucketLockUpdateParamsRulesConditionType) IsKnown() bool {
 type BucketLockUpdateParamsCfR2Jurisdiction string
 
 const (
-	BucketLockUpdateParamsCfR2JurisdictionDefault BucketLockUpdateParamsCfR2Jurisdiction = "default"
-	BucketLockUpdateParamsCfR2JurisdictionEu      BucketLockUpdateParamsCfR2Jurisdiction = "eu"
-	BucketLockUpdateParamsCfR2JurisdictionUs      BucketLockUpdateParamsCfR2Jurisdiction = "us"
-	BucketLockUpdateParamsCfR2JurisdictionFedramp BucketLockUpdateParamsCfR2Jurisdiction = "fedramp"
+	BucketLockUpdateParamsCfR2JurisdictionDefault     BucketLockUpdateParamsCfR2Jurisdiction = "default"
+	BucketLockUpdateParamsCfR2JurisdictionEu          BucketLockUpdateParamsCfR2Jurisdiction = "eu"
+	BucketLockUpdateParamsCfR2JurisdictionUs          BucketLockUpdateParamsCfR2Jurisdiction = "us"
+	BucketLockUpdateParamsCfR2JurisdictionFedramp     BucketLockUpdateParamsCfR2Jurisdiction = "fedramp"
+	BucketLockUpdateParamsCfR2JurisdictionFedrampHigh BucketLockUpdateParamsCfR2Jurisdiction = "fedramp-high"
 )
 
 func (r BucketLockUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketLockUpdateParamsCfR2JurisdictionDefault, BucketLockUpdateParamsCfR2JurisdictionEu, BucketLockUpdateParamsCfR2JurisdictionUs, BucketLockUpdateParamsCfR2JurisdictionFedramp:
+	case BucketLockUpdateParamsCfR2JurisdictionDefault, BucketLockUpdateParamsCfR2JurisdictionEu, BucketLockUpdateParamsCfR2JurisdictionUs, BucketLockUpdateParamsCfR2JurisdictionFedramp, BucketLockUpdateParamsCfR2JurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -571,15 +572,16 @@ type BucketLockGetParams struct {
 type BucketLockGetParamsCfR2Jurisdiction string
 
 const (
-	BucketLockGetParamsCfR2JurisdictionDefault BucketLockGetParamsCfR2Jurisdiction = "default"
-	BucketLockGetParamsCfR2JurisdictionEu      BucketLockGetParamsCfR2Jurisdiction = "eu"
-	BucketLockGetParamsCfR2JurisdictionUs      BucketLockGetParamsCfR2Jurisdiction = "us"
-	BucketLockGetParamsCfR2JurisdictionFedramp BucketLockGetParamsCfR2Jurisdiction = "fedramp"
+	BucketLockGetParamsCfR2JurisdictionDefault     BucketLockGetParamsCfR2Jurisdiction = "default"
+	BucketLockGetParamsCfR2JurisdictionEu          BucketLockGetParamsCfR2Jurisdiction = "eu"
+	BucketLockGetParamsCfR2JurisdictionUs          BucketLockGetParamsCfR2Jurisdiction = "us"
+	BucketLockGetParamsCfR2JurisdictionFedramp     BucketLockGetParamsCfR2Jurisdiction = "fedramp"
+	BucketLockGetParamsCfR2JurisdictionFedrampHigh BucketLockGetParamsCfR2Jurisdiction = "fedramp-high"
 )
 
 func (r BucketLockGetParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketLockGetParamsCfR2JurisdictionDefault, BucketLockGetParamsCfR2JurisdictionEu, BucketLockGetParamsCfR2JurisdictionUs, BucketLockGetParamsCfR2JurisdictionFedramp:
+	case BucketLockGetParamsCfR2JurisdictionDefault, BucketLockGetParamsCfR2JurisdictionEu, BucketLockGetParamsCfR2JurisdictionUs, BucketLockGetParamsCfR2JurisdictionFedramp, BucketLockGetParamsCfR2JurisdictionFedrampHigh:
 		return true
 	}
 	return false

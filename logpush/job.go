@@ -218,6 +218,9 @@ type LogpushJob struct {
 	// is recorded. On successful execution of a job the error_message and last_error
 	// are set to null.
 	ErrorMessage string `json:"error_message" api:"nullable"`
+	// When true, excludes DDoS attack traffic from logs. This option is supported for
+	// the `http_requests`, `firewall_events`, and `network_analytics_logs` datasets.
+	FilterAttackTraffic bool `json:"filter_attack_traffic"`
 	// This field is deprecated. Please use `max_upload_*` parameters instead. . The
 	// frequency at which Cloudflare sends batches of logs to your destination. Setting
 	// frequency to high sends your logs in larger quantities of smaller files. Setting
@@ -277,6 +280,7 @@ type logpushJobJSON struct {
 	DestinationConf          apijson.Field
 	Enabled                  apijson.Field
 	ErrorMessage             apijson.Field
+	FilterAttackTraffic      apijson.Field
 	Frequency                apijson.Field
 	Kind                     apijson.Field
 	LastComplete             apijson.Field
@@ -475,8 +479,9 @@ type OutputOptions struct {
 	// well, otherwise they will end up as null. Format as a Go `text/template` without
 	// any standard functions, like conditionals, loops, sub-templates, etc.
 	RecordTemplate string `json:"record_template" api:"nullable"`
-	// Floating number to specify sampling rate. Sampling is applied on top of
-	// filtering, and regardless of the current `sample_interval` of the data.
+	// Specifies the sampling rate as a floating number greater than 0 and at most 1.
+	// Sampling is applied on top of filtering, and regardless of the current
+	// `sample_interval` of the data.
 	SampleRate float64 `json:"sample_rate" api:"nullable"`
 	// String to specify the format for timestamps, such as `unixnano`, `unix`,
 	// `rfc3339`, `rfc3339ms` or `rfc3339ns`.
@@ -583,8 +588,9 @@ type OutputOptionsParam struct {
 	// well, otherwise they will end up as null. Format as a Go `text/template` without
 	// any standard functions, like conditionals, loops, sub-templates, etc.
 	RecordTemplate param.Field[string] `json:"record_template"`
-	// Floating number to specify sampling rate. Sampling is applied on top of
-	// filtering, and regardless of the current `sample_interval` of the data.
+	// Specifies the sampling rate as a floating number greater than 0 and at most 1.
+	// Sampling is applied on top of filtering, and regardless of the current
+	// `sample_interval` of the data.
 	SampleRate param.Field[float64] `json:"sample_rate"`
 	// String to specify the format for timestamps, such as `unixnano`, `unix`,
 	// `rfc3339`, `rfc3339ms` or `rfc3339ns`.
@@ -635,6 +641,9 @@ type JobNewParams struct {
 	// more information, refer to
 	// [Filters](https://developers.cloudflare.com/logs/reference/filters/).
 	Filter param.Field[string] `json:"filter"`
+	// When true, excludes DDoS attack traffic from logs. This option is supported for
+	// the `http_requests`, `firewall_events`, and `network_analytics_logs` datasets.
+	FilterAttackTraffic param.Field[bool] `json:"filter_attack_traffic"`
 	// This field is deprecated. Please use `max_upload_*` parameters instead. . The
 	// frequency at which Cloudflare sends batches of logs to your destination. Setting
 	// frequency to high sends your logs in larger quantities of smaller files. Setting
@@ -975,6 +984,9 @@ type JobUpdateParams struct {
 	// more information, refer to
 	// [Filters](https://developers.cloudflare.com/logs/reference/filters/).
 	Filter param.Field[string] `json:"filter"`
+	// When true, excludes DDoS attack traffic from logs. This option is supported for
+	// the `http_requests`, `firewall_events`, and `network_analytics_logs` datasets.
+	FilterAttackTraffic param.Field[bool] `json:"filter_attack_traffic"`
 	// This field is deprecated. Please use `max_upload_*` parameters instead. . The
 	// frequency at which Cloudflare sends batches of logs to your destination. Setting
 	// frequency to high sends your logs in larger quantities of smaller files. Setting

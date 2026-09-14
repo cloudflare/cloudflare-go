@@ -208,8 +208,10 @@ type AccessInfrastructureTargetNewResponse struct {
 	// The IPv4/IPv6 address that identifies where to reach a target
 	IP AccessInfrastructureTargetNewResponseIP `json:"ip" api:"required"`
 	// Date and time at which the target was modified
-	ModifiedAt time.Time                                 `json:"modified_at" api:"required" format:"date-time"`
-	JSON       accessInfrastructureTargetNewResponseJSON `json:"-"`
+	ModifiedAt time.Time `json:"modified_at" api:"required" format:"date-time"`
+	// Tags assigned to the target. Empty when no tags are assigned.
+	Tags map[string]string                         `json:"tags" api:"nullable"`
+	JSON accessInfrastructureTargetNewResponseJSON `json:"-"`
 }
 
 // accessInfrastructureTargetNewResponseJSON contains the JSON metadata for the
@@ -220,6 +222,7 @@ type accessInfrastructureTargetNewResponseJSON struct {
 	Hostname    apijson.Field
 	IP          apijson.Field
 	ModifiedAt  apijson.Field
+	Tags        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -322,8 +325,10 @@ type AccessInfrastructureTargetUpdateResponse struct {
 	// The IPv4/IPv6 address that identifies where to reach a target
 	IP AccessInfrastructureTargetUpdateResponseIP `json:"ip" api:"required"`
 	// Date and time at which the target was modified
-	ModifiedAt time.Time                                    `json:"modified_at" api:"required" format:"date-time"`
-	JSON       accessInfrastructureTargetUpdateResponseJSON `json:"-"`
+	ModifiedAt time.Time `json:"modified_at" api:"required" format:"date-time"`
+	// Tags assigned to the target. Empty when no tags are assigned.
+	Tags map[string]string                            `json:"tags" api:"nullable"`
+	JSON accessInfrastructureTargetUpdateResponseJSON `json:"-"`
 }
 
 // accessInfrastructureTargetUpdateResponseJSON contains the JSON metadata for the
@@ -334,6 +339,7 @@ type accessInfrastructureTargetUpdateResponseJSON struct {
 	Hostname    apijson.Field
 	IP          apijson.Field
 	ModifiedAt  apijson.Field
+	Tags        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -436,8 +442,10 @@ type AccessInfrastructureTargetListResponse struct {
 	// The IPv4/IPv6 address that identifies where to reach a target
 	IP AccessInfrastructureTargetListResponseIP `json:"ip" api:"required"`
 	// Date and time at which the target was modified
-	ModifiedAt time.Time                                  `json:"modified_at" api:"required" format:"date-time"`
-	JSON       accessInfrastructureTargetListResponseJSON `json:"-"`
+	ModifiedAt time.Time `json:"modified_at" api:"required" format:"date-time"`
+	// Tags assigned to the target. Empty when no tags are assigned.
+	Tags map[string]string                          `json:"tags" api:"nullable"`
+	JSON accessInfrastructureTargetListResponseJSON `json:"-"`
 }
 
 // accessInfrastructureTargetListResponseJSON contains the JSON metadata for the
@@ -448,6 +456,7 @@ type accessInfrastructureTargetListResponseJSON struct {
 	Hostname    apijson.Field
 	IP          apijson.Field
 	ModifiedAt  apijson.Field
+	Tags        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -550,8 +559,10 @@ type AccessInfrastructureTargetBulkUpdateResponse struct {
 	// The IPv4/IPv6 address that identifies where to reach a target
 	IP AccessInfrastructureTargetBulkUpdateResponseIP `json:"ip" api:"required"`
 	// Date and time at which the target was modified
-	ModifiedAt time.Time                                        `json:"modified_at" api:"required" format:"date-time"`
-	JSON       accessInfrastructureTargetBulkUpdateResponseJSON `json:"-"`
+	ModifiedAt time.Time `json:"modified_at" api:"required" format:"date-time"`
+	// Tags assigned to the target. Empty when no tags are assigned.
+	Tags map[string]string                                `json:"tags" api:"nullable"`
+	JSON accessInfrastructureTargetBulkUpdateResponseJSON `json:"-"`
 }
 
 // accessInfrastructureTargetBulkUpdateResponseJSON contains the JSON metadata for
@@ -562,6 +573,7 @@ type accessInfrastructureTargetBulkUpdateResponseJSON struct {
 	Hostname    apijson.Field
 	IP          apijson.Field
 	ModifiedAt  apijson.Field
+	Tags        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -664,8 +676,10 @@ type AccessInfrastructureTargetGetResponse struct {
 	// The IPv4/IPv6 address that identifies where to reach a target
 	IP AccessInfrastructureTargetGetResponseIP `json:"ip" api:"required"`
 	// Date and time at which the target was modified
-	ModifiedAt time.Time                                 `json:"modified_at" api:"required" format:"date-time"`
-	JSON       accessInfrastructureTargetGetResponseJSON `json:"-"`
+	ModifiedAt time.Time `json:"modified_at" api:"required" format:"date-time"`
+	// Tags assigned to the target. Empty when no tags are assigned.
+	Tags map[string]string                         `json:"tags" api:"nullable"`
+	JSON accessInfrastructureTargetGetResponseJSON `json:"-"`
 }
 
 // accessInfrastructureTargetGetResponseJSON contains the JSON metadata for the
@@ -676,6 +690,7 @@ type accessInfrastructureTargetGetResponseJSON struct {
 	Hostname    apijson.Field
 	IP          apijson.Field
 	ModifiedAt  apijson.Field
+	Tags        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -777,6 +792,9 @@ type AccessInfrastructureTargetNewParams struct {
 	Hostname param.Field[string] `json:"hostname" api:"required"`
 	// The IPv4/IPv6 address that identifies where to reach a target
 	IP param.Field[AccessInfrastructureTargetNewParamsIP] `json:"ip" api:"required"`
+	// Optional tags to associate with the target. Keys and values are user-defined
+	// strings.
+	Tags param.Field[map[string]string] `json:"tags"`
 }
 
 func (r AccessInfrastructureTargetNewParams) MarshalJSON() (data []byte, err error) {
@@ -971,6 +989,9 @@ type AccessInfrastructureTargetUpdateParams struct {
 	Hostname param.Field[string] `json:"hostname" api:"required"`
 	// The IPv4/IPv6 address that identifies where to reach a target
 	IP param.Field[AccessInfrastructureTargetUpdateParamsIP] `json:"ip" api:"required"`
+	// Optional tags to associate with the target. Keys and values are user-defined
+	// strings.
+	Tags param.Field[map[string]string] `json:"tags"`
 }
 
 func (r AccessInfrastructureTargetUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1202,6 +1223,10 @@ type AccessInfrastructureTargetListParams struct {
 	Page param.Field[int64] `query:"page"`
 	// Max amount of entries returned per page
 	PerPage param.Field[int64] `query:"per_page"`
+	// Filter by tag key:value pairs. Multiple `tag` params are AND'd. Format:
+	// `tag=key:value` (e.g., `tag=environment:production`). Key and value must both be
+	// non-empty; `tag=:value` and `tag=key:` return 400.
+	Tag param.Field[[]string] `query:"tag"`
 	// Filters for targets that have any of the following UUIDs. Specify `target_ids`
 	// multiple times in query parameter to build list of candidates.
 	TargetIDs param.Field[[]string] `query:"target_ids" format:"uuid"`
@@ -1288,6 +1313,9 @@ type AccessInfrastructureTargetBulkUpdateParamsBody struct {
 	Hostname param.Field[string] `json:"hostname" api:"required"`
 	// The IPv4/IPv6 address that identifies where to reach a target
 	IP param.Field[AccessInfrastructureTargetBulkUpdateParamsBodyIP] `json:"ip" api:"required"`
+	// Optional tags to associate with the target. Keys and values are user-defined
+	// strings.
+	Tags param.Field[map[string]string] `json:"tags"`
 }
 
 func (r AccessInfrastructureTargetBulkUpdateParamsBody) MarshalJSON() (data []byte, err error) {

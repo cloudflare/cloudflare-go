@@ -210,13 +210,14 @@ func (r serviceBindingProvisioningJSON) RawJSON() string {
 type ServiceBindingProvisioningState string
 
 const (
-	ServiceBindingProvisioningStateProvisioning ServiceBindingProvisioningState = "provisioning"
-	ServiceBindingProvisioningStateActive       ServiceBindingProvisioningState = "active"
+	ServiceBindingProvisioningStateProvisioning             ServiceBindingProvisioningState = "provisioning"
+	ServiceBindingProvisioningStateActive                   ServiceBindingProvisioningState = "active"
+	ServiceBindingProvisioningStateMagicTransitRouteMissing ServiceBindingProvisioningState = "magic_transit_route_missing"
 )
 
 func (r ServiceBindingProvisioningState) IsKnown() bool {
 	switch r {
-	case ServiceBindingProvisioningStateProvisioning, ServiceBindingProvisioningStateActive:
+	case ServiceBindingProvisioningStateProvisioning, ServiceBindingProvisioningStateActive, ServiceBindingProvisioningStateMagicTransitRouteMissing:
 		return true
 	}
 	return false

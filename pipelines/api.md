@@ -1,7 +1,16 @@
 # Pipelines
 
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/pipelines">pipelines</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/pipelines#ListFieldParam">ListFieldParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/pipelines">pipelines</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/pipelines#SourceFieldUnionParam">SourceFieldUnionParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/pipelines">pipelines</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/pipelines#StructFieldParam">StructFieldParam</a>
+
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/pipelines">pipelines</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/pipelines#ListField">ListField</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/pipelines">pipelines</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/pipelines#SourceField">SourceField</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/pipelines">pipelines</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/pipelines#StructField">StructField</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/pipelines">pipelines</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/pipelines#PipelineNewResponse">PipelineNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/pipelines">pipelines</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/pipelines#PipelineUpdateResponse">PipelineUpdateResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/pipelines">pipelines</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/pipelines#PipelineListResponse">PipelineListResponse</a>

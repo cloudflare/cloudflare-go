@@ -158,6 +158,10 @@ type Version struct {
 	// files should be included as modules named `_headers` and `_redirects` with
 	// content type `text/plain`.
 	Assets VersionAssets `json:"assets"`
+	// Email of the user who created the version.
+	AuthorEmail string `json:"author_email" format:"email"`
+	// Identifier of the user who created the version.
+	AuthorID string `json:"author_id"`
 	// List of bindings attached to a Worker. You can find more about bindings on our
 	// docs:
 	// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/#bindings.
@@ -236,6 +240,8 @@ type versionJSON struct {
 	URLs                  apijson.Field
 	Annotations           apijson.Field
 	Assets                apijson.Field
+	AuthorEmail           apijson.Field
+	AuthorID              apijson.Field
 	Bindings              apijson.Field
 	CacheOptions          apijson.Field
 	CompatibilityDate     apijson.Field

@@ -39,19 +39,13 @@ func TestEmailSendingSendWithOptionalParams(t *testing.T) {
 			Filename:    cloudflare.F("report.pdf"),
 			Type:        cloudflare.F("application/pdf"),
 		}}),
-		Bcc: cloudflare.F[email_sending.EmailSendingSendParamsBccUnion](email_sending.EmailSendingSendParamsBccArray([]email_sending.EmailSendingSendParamsBccArrayItemUnion{shared.UnionString("recipient-a@example.com"), email_sending.EmailSendingSendParamsBccArrayEmailSendingEmailAddressObject{
-			Address: cloudflare.F("recipient-b@example.com"),
-			Name:    cloudflare.F("Recipient B"),
-		}})),
-		Cc: cloudflare.F[email_sending.EmailSendingSendParamsCcUnion](email_sending.EmailSendingSendParamsCcArray([]email_sending.EmailSendingSendParamsCcArrayItemUnion{shared.UnionString("recipient-a@example.com"), email_sending.EmailSendingSendParamsCcArrayEmailSendingEmailAddressObject{
-			Address: cloudflare.F("recipient-b@example.com"),
-			Name:    cloudflare.F("Recipient B"),
-		}})),
+		Bcc: cloudflare.F[email_sending.EmailSendingSendParamsBccUnion](email_sending.EmailSendingSendParamsBccArray([]email_sending.EmailSendingSendParamsBccArrayItemUnion{shared.UnionString("bcc-recipient@example.com")})),
+		Cc:  cloudflare.F[email_sending.EmailSendingSendParamsCcUnion](email_sending.EmailSendingSendParamsCcArray([]email_sending.EmailSendingSendParamsCcArrayItemUnion{shared.UnionString("cc-recipient@example.com")})),
 		Headers: cloudflare.F(map[string]string{
 			"X-Custom-Header": "value",
 		}),
 		HTML:    cloudflare.F("<h1>Hello</h1><p>Please find your report attached.</p>"),
-		ReplyTo: cloudflare.F[email_sending.EmailSendingSendParamsReplyToUnion](shared.UnionString("user@example.com")),
+		ReplyTo: cloudflare.F[email_sending.EmailSendingSendParamsReplyToUnion](shared.UnionString("replies@example.com")),
 		Text:    cloudflare.F("Hello\n\nPlease find your report attached."),
 		To:      cloudflare.F[email_sending.EmailSendingSendParamsToUnion](email_sending.EmailSendingSendParamsToArray([]email_sending.EmailSendingSendParamsToArrayItemUnion{shared.UnionString("recipient@example.com")})),
 	})

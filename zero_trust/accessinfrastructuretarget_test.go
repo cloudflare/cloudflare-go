@@ -42,6 +42,9 @@ func TestAccessInfrastructureTargetNewWithOptionalParams(t *testing.T) {
 				VirtualNetworkID: cloudflare.F("c77b744e-acc8-428f-9257-6878c046ed55"),
 			}),
 		}),
+		Tags: cloudflare.F(map[string]string{
+			"foo": "string",
+		}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -81,6 +84,9 @@ func TestAccessInfrastructureTargetUpdateWithOptionalParams(t *testing.T) {
 					IPAddr:           cloudflare.F("64c0:64e8:f0b4:8dbf:7104:72b0:ec8f:f5e0"),
 					VirtualNetworkID: cloudflare.F("c77b744e-acc8-428f-9257-6878c046ed55"),
 				}),
+			}),
+			Tags: cloudflare.F(map[string]string{
+				"foo": "string",
 			}),
 		},
 	)
@@ -127,6 +133,7 @@ func TestAccessInfrastructureTargetListWithOptionalParams(t *testing.T) {
 		Order:            cloudflare.F(zero_trust.AccessInfrastructureTargetListParamsOrderHostname),
 		Page:             cloudflare.F(int64(1)),
 		PerPage:          cloudflare.F(int64(1)),
+		Tag:              cloudflare.F([]string{"string"}),
 		TargetIDs:        cloudflare.F([]string{"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"}),
 		VirtualNetworkID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 	})
@@ -249,6 +256,9 @@ func TestAccessInfrastructureTargetBulkUpdate(t *testing.T) {
 					IPAddr:           cloudflare.F("64c0:64e8:f0b4:8dbf:7104:72b0:ec8f:f5e0"),
 					VirtualNetworkID: cloudflare.F("c77b744e-acc8-428f-9257-6878c046ed55"),
 				}),
+			}),
+			Tags: cloudflare.F(map[string]string{
+				"foo": "string",
 			}),
 		}},
 	})

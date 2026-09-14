@@ -105,7 +105,8 @@ func (r *DirectoryServiceService) ListAutoPaging(ctx context.Context, params Dir
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Removes a single Workers VPC connectivity service by its ID.
+// Removes a single Workers VPC connectivity service by its ID. Any Worker bindings
+// referencing this service will stop working.
 func (r *DirectoryServiceService) Delete(ctx context.Context, serviceID string, body DirectoryServiceDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)

@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"reflect"
 	"slices"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
@@ -109,6 +110,14 @@ type ZoneTagUpdateResponse struct {
 	Type ZoneTagUpdateResponseType `json:"type" api:"required"`
 	// Access application ID is required only for access_application_policy resources
 	AccessApplicationID string `json:"access_application_id" format:"uuid"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time `json:"tags_updated_at" format:"date-time"`
 	// Worker ID is required only for worker_version resources
 	WorkerID string `json:"worker_id"`
 	// Zone ID is required only for zone-level resources
@@ -126,6 +135,7 @@ type zoneTagUpdateResponseJSON struct {
 	Tags                apijson.Field
 	Type                apijson.Field
 	AccessApplicationID apijson.Field
+	TagsUpdatedAt       apijson.Field
 	WorkerID            apijson.Field
 	ZoneID              apijson.Field
 	raw                 string
@@ -161,6 +171,10 @@ func (r *ZoneTagUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificate],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostname],
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment],
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy],
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet],
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectD1Database],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecord],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace],
@@ -205,6 +219,10 @@ func (r ZoneTagUpdateResponse) AsUnion() ZoneTagUpdateResponseUnion {
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificate],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostname],
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment],
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy],
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet],
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectD1Database],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecord],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace],
@@ -297,6 +315,26 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostname{}),
 			DiscriminatorValue: "custom_hostname",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment{}),
+			DiscriminatorValue: "cws_deployment",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy{}),
+			DiscriminatorValue: "cws_policy",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet{}),
+			DiscriminatorValue: "cws_policy_set",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload{}),
+			DiscriminatorValue: "cws_workload",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -442,20 +480,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplication s
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                             `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                     `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplication]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplication) UnmarshalJSON(data []byte) (err error) {
@@ -502,8 +549,16 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationPo
 	Tags map[string]string                                                                   `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicyType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                              `json:"zone_id" api:"required"`
-	JSON   zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicyJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                           `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicyJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicyJSON
@@ -517,6 +572,7 @@ type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationPo
 	Tags                apijson.Field
 	Type                apijson.Field
 	ZoneID              apijson.Field
+	TagsUpdatedAt       apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
@@ -562,20 +618,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroup struct 
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                       `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroupType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroupJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                               `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroupJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroupJSON contains
 // the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroup]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroupJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroup) UnmarshalJSON(data []byte) (err error) {
@@ -619,20 +684,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccount struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                   `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccountType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccountJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                           `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccountJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccountJSON contains the
 // JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccount]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccountJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccount) UnmarshalJSON(data []byte) (err error) {
@@ -676,20 +750,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRuleset stru
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                          `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRulesetType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRulesetJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                  `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRulesetJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRulesetJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRuleset]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRulesetJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRuleset) UnmarshalJSON(data []byte) (err error) {
@@ -733,20 +816,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAIGateway struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                     `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAIGatewayType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAIGatewayJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                             `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAIGatewayJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAIGatewayJSON contains
 // the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAIGateway]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAIGatewayJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAIGateway) UnmarshalJSON(data []byte) (err error) {
@@ -790,20 +882,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicy stru
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                          `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicyType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicyJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                  `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicyJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicyJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicy]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicyJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -847,20 +948,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhook str
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                           `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhookType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhookJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                   `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhookJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhookJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhook]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhookJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhook) UnmarshalJSON(data []byte) (err error) {
@@ -905,22 +1015,31 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAPIGatewayOperation
 	Tags map[string]string                                                               `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAPIGatewayOperationType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                          `json:"zone_id" api:"required"`
-	JSON   zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAPIGatewayOperationJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                       `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAPIGatewayOperationJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAPIGatewayOperationJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAPIGatewayOperation]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectAPIGatewayOperationJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectAPIGatewayOperation) UnmarshalJSON(data []byte) (err error) {
@@ -964,20 +1083,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel s
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                             `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                     `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel) UnmarshalJSON(data []byte) (err error) {
@@ -1022,22 +1150,31 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificate s
 	Tags map[string]string                                                             `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificateType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                        `json:"zone_id" api:"required"`
-	JSON   zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificateJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                     `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificateJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificateJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificate]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificateJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificate) UnmarshalJSON(data []byte) (err error) {
@@ -1082,22 +1219,31 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostname stru
 	Tags map[string]string                                                          `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostnameType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                     `json:"zone_id" api:"required"`
-	JSON   zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostnameJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                  `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostnameJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostnameJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostname]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostnameJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostname) UnmarshalJSON(data []byte) (err error) {
@@ -1125,6 +1271,270 @@ func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostnameTy
 	return false
 }
 
+// Response for cws_deployment resources
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                         `json:"tags" api:"required"`
+	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentType `json:"type" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                 `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON `json:"-"`
+}
+
+// zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON
+// contains the JSON metadata for the struct
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment]
+type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment) implementsZoneTagUpdateResponse() {
+}
+
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentType string
+
+const (
+	ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentTypeCwsDeployment ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentType = "cws_deployment"
+)
+
+func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentType) IsKnown() bool {
+	switch r {
+	case ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentTypeCwsDeployment:
+		return true
+	}
+	return false
+}
+
+// Response for cws_policy resources
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                     `json:"tags" api:"required"`
+	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyType `json:"type" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                             `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON `json:"-"`
+}
+
+// zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON contains
+// the JSON metadata for the struct
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy]
+type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy) implementsZoneTagUpdateResponse() {
+}
+
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyType string
+
+const (
+	ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyTypeCwsPolicy ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyType = "cws_policy"
+)
+
+func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyType) IsKnown() bool {
+	switch r {
+	case ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyTypeCwsPolicy:
+		return true
+	}
+	return false
+}
+
+// Response for cws_policy_set resources
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                        `json:"tags" api:"required"`
+	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetType `json:"type" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON `json:"-"`
+}
+
+// zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON
+// contains the JSON metadata for the struct
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet]
+type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet) implementsZoneTagUpdateResponse() {
+}
+
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetType string
+
+const (
+	ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetTypeCwsPolicySet ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetType = "cws_policy_set"
+)
+
+func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetType) IsKnown() bool {
+	switch r {
+	case ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetTypeCwsPolicySet:
+		return true
+	}
+	return false
+}
+
+// Response for cws_workload resources
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                       `json:"tags" api:"required"`
+	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadType `json:"type" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                               `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON `json:"-"`
+}
+
+// zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON contains
+// the JSON metadata for the struct
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload]
+type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload) implementsZoneTagUpdateResponse() {
+}
+
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadType string
+
+const (
+	ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadTypeCwsWorkload ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadType = "cws_workload"
+)
+
+func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadType) IsKnown() bool {
+	switch r {
+	case ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadTypeCwsWorkload:
+		return true
+	}
+	return false
+}
+
 // Response for d1_database resources
 type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectD1Database struct {
 	// Identifies the unique resource.
@@ -1141,20 +1551,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectD1Database struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                      `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectD1DatabaseType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectD1DatabaseJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                              `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectD1DatabaseJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectD1DatabaseJSON contains
 // the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectD1Database]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectD1DatabaseJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectD1Database) UnmarshalJSON(data []byte) (err error) {
@@ -1199,22 +1618,31 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecord struct {
 	Tags map[string]string                                                     `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecordType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                `json:"zone_id" api:"required"`
-	JSON   zoneTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecordJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                             `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecordJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecordJSON contains
 // the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecord]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecordJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecord) UnmarshalJSON(data []byte) (err error) {
@@ -1258,20 +1686,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamesp
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                                  `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                          `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace) UnmarshalJSON(data []byte) (err error) {
@@ -1315,20 +1752,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayList struct 
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                       `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayListType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayListJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                               `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayListJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayListJSON contains
 // the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayList]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayListJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayList) UnmarshalJSON(data []byte) (err error) {
@@ -1372,20 +1818,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRule struct 
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                       `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRuleType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRuleJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                               `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRuleJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRuleJSON contains
 // the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRule]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRuleJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayRule) UnmarshalJSON(data []byte) (err error) {
@@ -1430,22 +1885,31 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheck struct 
 	Tags map[string]string                                                       `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheckType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                  `json:"zone_id" api:"required"`
-	JSON   zoneTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheckJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                               `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheckJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheckJSON contains
 // the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheck]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheckJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectHealthcheck) UnmarshalJSON(data []byte) (err error) {
@@ -1489,20 +1953,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectImage struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                 `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectImageType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectImageJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                         `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectImageJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectImageJSON contains the
 // JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectImage]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectImageJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectImage) UnmarshalJSON(data []byte) (err error) {
@@ -1546,20 +2019,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTarge
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                                `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTargetType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTargetJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                        `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTargetJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTargetJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTarget]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTargetJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectInfrastructureTarget) UnmarshalJSON(data []byte) (err error) {
@@ -1603,20 +2085,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespace struct 
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                       `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespaceType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespaceJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                               `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespaceJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespaceJSON contains
 // the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespace]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespaceJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectKVNamespace) UnmarshalJSON(data []byte) (err error) {
@@ -1661,22 +2152,31 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancer struct
 	Tags map[string]string                                                        `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                   `json:"zone_id" api:"required"`
-	JSON   zoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancer]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancer) UnmarshalJSON(data []byte) (err error) {
@@ -1720,20 +2220,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                               `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                       `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor) UnmarshalJSON(data []byte) (err error) {
@@ -1777,20 +2286,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPool st
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                            `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                    `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPool]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPool) UnmarshalJSON(data []byte) (err error) {
@@ -1835,22 +2353,31 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertif
 	Tags map[string]string                                                                    `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificateType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                               `json:"zone_id" api:"required"`
-	JSON   zoneTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificateJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                            `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificateJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificateJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificate]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificateJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificate) UnmarshalJSON(data []byte) (err error) {
@@ -1894,20 +2421,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProject struct
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                        `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProjectType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProjectJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProjectJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProjectJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProject]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProjectJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProject) UnmarshalJSON(data []byte) (err error) {
@@ -1951,20 +2487,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectQueue struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                 `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectQueueType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectQueueJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                         `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectQueueJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectQueueJSON contains the
 // JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectQueue]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectQueueJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectQueue) UnmarshalJSON(data []byte) (err error) {
@@ -2008,20 +2553,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectR2Bucket struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                    `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectR2BucketType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectR2BucketJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                            `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectR2BucketJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectR2BucketJSON contains
 // the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectR2Bucket]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectR2BucketJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectR2Bucket) UnmarshalJSON(data []byte) (err error) {
@@ -2065,20 +2619,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectResourceShare struc
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                         `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectResourceShareType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectResourceShareJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                 `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectResourceShareJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectResourceShareJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectResourceShare]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectResourceShareJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectResourceShare) UnmarshalJSON(data []byte) (err error) {
@@ -2122,20 +2685,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectStreamLiveInput str
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                           `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectStreamLiveInputType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectStreamLiveInputJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                   `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectStreamLiveInputJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectStreamLiveInputJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectStreamLiveInput]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectStreamLiveInputJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectStreamLiveInput) UnmarshalJSON(data []byte) (err error) {
@@ -2179,20 +2751,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideo struct 
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                       `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideoType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideoJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                               `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideoJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideoJSON contains
 // the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideo]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideoJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectStreamVideo) UnmarshalJSON(data []byte) (err error) {
@@ -2236,20 +2817,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndex stru
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                          `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndexType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndexJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                  `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndexJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndexJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndex]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndexJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectVectorizeIndex) UnmarshalJSON(data []byte) (err error) {
@@ -2293,20 +2883,29 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorker struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                  `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerType `json:"type" api:"required"`
-	JSON zoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                          `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerJSON contains the
 // JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorker]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorker) UnmarshalJSON(data []byte) (err error) {
@@ -2351,22 +2950,31 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRoute struct 
 	Tags map[string]string                                                       `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRouteType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                  `json:"zone_id" api:"required"`
-	JSON   zoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRouteJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                               `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRouteJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRouteJSON contains
 // the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRoute]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRouteJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerRoute) UnmarshalJSON(data []byte) (err error) {
@@ -2411,22 +3019,31 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersion struc
 	Tags map[string]string                                                         `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersionType `json:"type" api:"required"`
 	// Worker ID is required only for worker_version resources
-	WorkerID string                                                                    `json:"worker_id" api:"required"`
-	JSON     zoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersionJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                 `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersionJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersionJSON
 // contains the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersion]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersionJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	WorkerID    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	WorkerID      apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectWorkerVersion) UnmarshalJSON(data []byte) (err error) {
@@ -2471,22 +3088,31 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectZone struct {
 	Tags map[string]string                                                `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectZoneType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                           `json:"zone_id" api:"required"`
-	JSON   zoneTagUpdateResponseResourceTaggingTaggedResourceObjectZoneJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                        `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectZoneJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectZoneJSON contains the
 // JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectZone]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectZoneJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectZone) UnmarshalJSON(data []byte) (err error) {
@@ -2531,22 +3157,31 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRuleset struct 
 	Tags map[string]string                                                       `json:"tags" api:"required"`
 	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRulesetType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                  `json:"zone_id" api:"required"`
-	JSON   zoneTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRulesetJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                               `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRulesetJSON `json:"-"`
 }
 
 // zoneTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRulesetJSON contains
 // the JSON metadata for the struct
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRuleset]
 type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRulesetJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectZoneRuleset) UnmarshalJSON(data []byte) (err error) {
@@ -2589,6 +3224,10 @@ const (
 	ZoneTagUpdateResponseTypeCloudflaredTunnel        ZoneTagUpdateResponseType = "cloudflared_tunnel"
 	ZoneTagUpdateResponseTypeCustomCertificate        ZoneTagUpdateResponseType = "custom_certificate"
 	ZoneTagUpdateResponseTypeCustomHostname           ZoneTagUpdateResponseType = "custom_hostname"
+	ZoneTagUpdateResponseTypeCwsDeployment            ZoneTagUpdateResponseType = "cws_deployment"
+	ZoneTagUpdateResponseTypeCwsPolicy                ZoneTagUpdateResponseType = "cws_policy"
+	ZoneTagUpdateResponseTypeCwsPolicySet             ZoneTagUpdateResponseType = "cws_policy_set"
+	ZoneTagUpdateResponseTypeCwsWorkload              ZoneTagUpdateResponseType = "cws_workload"
 	ZoneTagUpdateResponseTypeD1Database               ZoneTagUpdateResponseType = "d1_database"
 	ZoneTagUpdateResponseTypeDNSRecord                ZoneTagUpdateResponseType = "dns_record"
 	ZoneTagUpdateResponseTypeDurableObjectNamespace   ZoneTagUpdateResponseType = "durable_object_namespace"
@@ -2618,7 +3257,7 @@ const (
 
 func (r ZoneTagUpdateResponseType) IsKnown() bool {
 	switch r {
-	case ZoneTagUpdateResponseTypeAccessApplication, ZoneTagUpdateResponseTypeAccessApplicationPolicy, ZoneTagUpdateResponseTypeAccessGroup, ZoneTagUpdateResponseTypeAccount, ZoneTagUpdateResponseTypeAccountRuleset, ZoneTagUpdateResponseTypeAIGateway, ZoneTagUpdateResponseTypeAlertingPolicy, ZoneTagUpdateResponseTypeAlertingWebhook, ZoneTagUpdateResponseTypeAPIGatewayOperation, ZoneTagUpdateResponseTypeCloudflaredTunnel, ZoneTagUpdateResponseTypeCustomCertificate, ZoneTagUpdateResponseTypeCustomHostname, ZoneTagUpdateResponseTypeD1Database, ZoneTagUpdateResponseTypeDNSRecord, ZoneTagUpdateResponseTypeDurableObjectNamespace, ZoneTagUpdateResponseTypeGatewayList, ZoneTagUpdateResponseTypeGatewayRule, ZoneTagUpdateResponseTypeHealthcheck, ZoneTagUpdateResponseTypeImage, ZoneTagUpdateResponseTypeInfrastructureTarget, ZoneTagUpdateResponseTypeKVNamespace, ZoneTagUpdateResponseTypeLoadBalancer, ZoneTagUpdateResponseTypeLoadBalancerMonitor, ZoneTagUpdateResponseTypeLoadBalancerPool, ZoneTagUpdateResponseTypeManagedClientCertificate, ZoneTagUpdateResponseTypePagesProject, ZoneTagUpdateResponseTypeQueue, ZoneTagUpdateResponseTypeR2Bucket, ZoneTagUpdateResponseTypeResourceShare, ZoneTagUpdateResponseTypeStreamLiveInput, ZoneTagUpdateResponseTypeStreamVideo, ZoneTagUpdateResponseTypeVectorizeIndex, ZoneTagUpdateResponseTypeWorker, ZoneTagUpdateResponseTypeWorkerRoute, ZoneTagUpdateResponseTypeWorkerVersion, ZoneTagUpdateResponseTypeZone, ZoneTagUpdateResponseTypeZoneRuleset:
+	case ZoneTagUpdateResponseTypeAccessApplication, ZoneTagUpdateResponseTypeAccessApplicationPolicy, ZoneTagUpdateResponseTypeAccessGroup, ZoneTagUpdateResponseTypeAccount, ZoneTagUpdateResponseTypeAccountRuleset, ZoneTagUpdateResponseTypeAIGateway, ZoneTagUpdateResponseTypeAlertingPolicy, ZoneTagUpdateResponseTypeAlertingWebhook, ZoneTagUpdateResponseTypeAPIGatewayOperation, ZoneTagUpdateResponseTypeCloudflaredTunnel, ZoneTagUpdateResponseTypeCustomCertificate, ZoneTagUpdateResponseTypeCustomHostname, ZoneTagUpdateResponseTypeCwsDeployment, ZoneTagUpdateResponseTypeCwsPolicy, ZoneTagUpdateResponseTypeCwsPolicySet, ZoneTagUpdateResponseTypeCwsWorkload, ZoneTagUpdateResponseTypeD1Database, ZoneTagUpdateResponseTypeDNSRecord, ZoneTagUpdateResponseTypeDurableObjectNamespace, ZoneTagUpdateResponseTypeGatewayList, ZoneTagUpdateResponseTypeGatewayRule, ZoneTagUpdateResponseTypeHealthcheck, ZoneTagUpdateResponseTypeImage, ZoneTagUpdateResponseTypeInfrastructureTarget, ZoneTagUpdateResponseTypeKVNamespace, ZoneTagUpdateResponseTypeLoadBalancer, ZoneTagUpdateResponseTypeLoadBalancerMonitor, ZoneTagUpdateResponseTypeLoadBalancerPool, ZoneTagUpdateResponseTypeManagedClientCertificate, ZoneTagUpdateResponseTypePagesProject, ZoneTagUpdateResponseTypeQueue, ZoneTagUpdateResponseTypeR2Bucket, ZoneTagUpdateResponseTypeResourceShare, ZoneTagUpdateResponseTypeStreamLiveInput, ZoneTagUpdateResponseTypeStreamVideo, ZoneTagUpdateResponseTypeVectorizeIndex, ZoneTagUpdateResponseTypeWorker, ZoneTagUpdateResponseTypeWorkerRoute, ZoneTagUpdateResponseTypeWorkerVersion, ZoneTagUpdateResponseTypeZone, ZoneTagUpdateResponseTypeZoneRuleset:
 		return true
 	}
 	return false
@@ -2641,6 +3280,14 @@ type ZoneTagGetResponse struct {
 	Type ZoneTagGetResponseType `json:"type" api:"required"`
 	// Access application ID is required only for access_application_policy resources
 	AccessApplicationID string `json:"access_application_id" format:"uuid"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time `json:"tags_updated_at" format:"date-time"`
 	// Worker ID is required only for worker_version resources
 	WorkerID string `json:"worker_id"`
 	// Zone ID is required only for zone-level resources
@@ -2658,6 +3305,7 @@ type zoneTagGetResponseJSON struct {
 	Tags                apijson.Field
 	Type                apijson.Field
 	AccessApplicationID apijson.Field
+	TagsUpdatedAt       apijson.Field
 	WorkerID            apijson.Field
 	ZoneID              apijson.Field
 	raw                 string
@@ -2693,6 +3341,10 @@ func (r *ZoneTagGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificate],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomHostname],
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment],
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy],
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet],
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectD1Database],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectDNSRecord],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace],
@@ -2737,6 +3389,10 @@ func (r ZoneTagGetResponse) AsUnion() ZoneTagGetResponseUnion {
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificate],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomHostname],
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment],
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy],
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet],
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectD1Database],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectDNSRecord],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace],
@@ -2829,6 +3485,26 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomHostname{}),
 			DiscriminatorValue: "custom_hostname",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment{}),
+			DiscriminatorValue: "cws_deployment",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy{}),
+			DiscriminatorValue: "cws_policy",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet{}),
+			DiscriminatorValue: "cws_policy_set",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload{}),
+			DiscriminatorValue: "cws_workload",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -2974,20 +3650,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectAccessApplication stru
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                          `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                  `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationJSON
 // contains the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectAccessApplication]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectAccessApplication) UnmarshalJSON(data []byte) (err error) {
@@ -3034,8 +3719,16 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationPolic
 	Tags map[string]string                                                                `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicyType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                           `json:"zone_id" api:"required"`
-	JSON   zoneTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicyJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                        `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicyJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicyJSON
@@ -3049,6 +3742,7 @@ type zoneTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationPolic
 	Tags                apijson.Field
 	Type                apijson.Field
 	ZoneID              apijson.Field
+	TagsUpdatedAt       apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
@@ -3094,20 +3788,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectAccessGroup struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                    `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectAccessGroupType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectAccessGroupJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                            `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectAccessGroupJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectAccessGroupJSON contains
 // the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectAccessGroup]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectAccessGroupJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectAccessGroup) UnmarshalJSON(data []byte) (err error) {
@@ -3151,20 +3854,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectAccount struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectAccountType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectAccountJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                        `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectAccountJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectAccountJSON contains the
 // JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectAccount]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectAccountJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectAccount) UnmarshalJSON(data []byte) (err error) {
@@ -3208,20 +3920,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectAccountRuleset struct 
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                       `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectAccountRulesetType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectAccountRulesetJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                               `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectAccountRulesetJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectAccountRulesetJSON contains
 // the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectAccountRuleset]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectAccountRulesetJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectAccountRuleset) UnmarshalJSON(data []byte) (err error) {
@@ -3265,20 +3986,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectAIGateway struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                  `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectAIGatewayType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectAIGatewayJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                          `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectAIGatewayJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectAIGatewayJSON contains the
 // JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectAIGateway]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectAIGatewayJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectAIGateway) UnmarshalJSON(data []byte) (err error) {
@@ -3322,20 +4052,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicy struct 
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                       `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicyType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicyJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                               `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicyJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicyJSON contains
 // the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicy]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicyJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -3379,20 +4118,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhook struct
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                        `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhookType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhookJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhookJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhookJSON
 // contains the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhook]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhookJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhook) UnmarshalJSON(data []byte) (err error) {
@@ -3437,22 +4185,31 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectAPIGatewayOperation st
 	Tags map[string]string                                                            `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectAPIGatewayOperationType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                       `json:"zone_id" api:"required"`
-	JSON   zoneTagGetResponseResourceTaggingTaggedResourceObjectAPIGatewayOperationJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                    `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectAPIGatewayOperationJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectAPIGatewayOperationJSON
 // contains the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectAPIGatewayOperation]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectAPIGatewayOperationJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectAPIGatewayOperation) UnmarshalJSON(data []byte) (err error) {
@@ -3496,20 +4253,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel stru
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                          `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                  `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelJSON
 // contains the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnelJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel) UnmarshalJSON(data []byte) (err error) {
@@ -3554,22 +4320,31 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificate stru
 	Tags map[string]string                                                          `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificateType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                     `json:"zone_id" api:"required"`
-	JSON   zoneTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificateJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                  `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificateJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificateJSON
 // contains the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificate]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificateJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificate) UnmarshalJSON(data []byte) (err error) {
@@ -3614,22 +4389,31 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomHostname struct 
 	Tags map[string]string                                                       `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomHostnameType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                  `json:"zone_id" api:"required"`
-	JSON   zoneTagGetResponseResourceTaggingTaggedResourceObjectCustomHostnameJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                               `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectCustomHostnameJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectCustomHostnameJSON contains
 // the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomHostname]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectCustomHostnameJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomHostname) UnmarshalJSON(data []byte) (err error) {
@@ -3657,6 +4441,270 @@ func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomHostnameType)
 	return false
 }
 
+// Response for cws_deployment resources
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                      `json:"tags" api:"required"`
+	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentType `json:"type" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                              `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON `json:"-"`
+}
+
+// zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON contains
+// the JSON metadata for the struct
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment]
+type zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment) implementsZoneTagGetResponse() {
+}
+
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentType string
+
+const (
+	ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentTypeCwsDeployment ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentType = "cws_deployment"
+)
+
+func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentType) IsKnown() bool {
+	switch r {
+	case ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentTypeCwsDeployment:
+		return true
+	}
+	return false
+}
+
+// Response for cws_policy resources
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                  `json:"tags" api:"required"`
+	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyType `json:"type" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                          `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON `json:"-"`
+}
+
+// zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON contains the
+// JSON metadata for the struct
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy]
+type zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy) implementsZoneTagGetResponse() {
+}
+
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyType string
+
+const (
+	ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyTypeCwsPolicy ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyType = "cws_policy"
+)
+
+func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyType) IsKnown() bool {
+	switch r {
+	case ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyTypeCwsPolicy:
+		return true
+	}
+	return false
+}
+
+// Response for cws_policy_set resources
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                     `json:"tags" api:"required"`
+	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetType `json:"type" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                             `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON `json:"-"`
+}
+
+// zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON contains
+// the JSON metadata for the struct
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet]
+type zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet) implementsZoneTagGetResponse() {
+}
+
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetType string
+
+const (
+	ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetTypeCwsPolicySet ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetType = "cws_policy_set"
+)
+
+func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetType) IsKnown() bool {
+	switch r {
+	case ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetTypeCwsPolicySet:
+		return true
+	}
+	return false
+}
+
+// Response for cws_workload resources
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                    `json:"tags" api:"required"`
+	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadType `json:"type" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                            `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON `json:"-"`
+}
+
+// zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON contains
+// the JSON metadata for the struct
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload]
+type zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload) implementsZoneTagGetResponse() {
+}
+
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadType string
+
+const (
+	ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadTypeCwsWorkload ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadType = "cws_workload"
+)
+
+func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadType) IsKnown() bool {
+	switch r {
+	case ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadTypeCwsWorkload:
+		return true
+	}
+	return false
+}
+
 // Response for d1_database resources
 type ZoneTagGetResponseResourceTaggingTaggedResourceObjectD1Database struct {
 	// Identifies the unique resource.
@@ -3673,20 +4721,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectD1Database struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                   `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectD1DatabaseType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectD1DatabaseJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                           `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectD1DatabaseJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectD1DatabaseJSON contains the
 // JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectD1Database]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectD1DatabaseJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectD1Database) UnmarshalJSON(data []byte) (err error) {
@@ -3731,22 +4788,31 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectDNSRecord struct {
 	Tags map[string]string                                                  `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectDNSRecordType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                             `json:"zone_id" api:"required"`
-	JSON   zoneTagGetResponseResourceTaggingTaggedResourceObjectDNSRecordJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                          `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectDNSRecordJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectDNSRecordJSON contains the
 // JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectDNSRecord]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectDNSRecordJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectDNSRecord) UnmarshalJSON(data []byte) (err error) {
@@ -3790,20 +4856,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                               `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                       `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceJSON
 // contains the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespaceJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace) UnmarshalJSON(data []byte) (err error) {
@@ -3847,20 +4922,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectGatewayList struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                    `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectGatewayListType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectGatewayListJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                            `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectGatewayListJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectGatewayListJSON contains
 // the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectGatewayList]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectGatewayListJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectGatewayList) UnmarshalJSON(data []byte) (err error) {
@@ -3904,20 +4988,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectGatewayRule struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                    `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectGatewayRuleType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectGatewayRuleJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                            `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectGatewayRuleJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectGatewayRuleJSON contains
 // the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectGatewayRule]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectGatewayRuleJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectGatewayRule) UnmarshalJSON(data []byte) (err error) {
@@ -3962,22 +5055,31 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectHealthcheck struct {
 	Tags map[string]string                                                    `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectHealthcheckType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                               `json:"zone_id" api:"required"`
-	JSON   zoneTagGetResponseResourceTaggingTaggedResourceObjectHealthcheckJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                            `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectHealthcheckJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectHealthcheckJSON contains
 // the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectHealthcheck]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectHealthcheckJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectHealthcheck) UnmarshalJSON(data []byte) (err error) {
@@ -4021,20 +5123,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectImage struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                              `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectImageType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectImageJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                      `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectImageJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectImageJSON contains the JSON
 // metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectImage]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectImageJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectImage) UnmarshalJSON(data []byte) (err error) {
@@ -4077,20 +5188,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTarget s
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                             `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTargetType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTargetJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                     `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTargetJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTargetJSON
 // contains the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTarget]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTargetJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectInfrastructureTarget) UnmarshalJSON(data []byte) (err error) {
@@ -4134,20 +5254,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectKVNamespace struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                    `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectKVNamespaceType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectKVNamespaceJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                            `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectKVNamespaceJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectKVNamespaceJSON contains
 // the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectKVNamespace]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectKVNamespaceJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectKVNamespace) UnmarshalJSON(data []byte) (err error) {
@@ -4192,22 +5321,31 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancer struct {
 	Tags map[string]string                                                     `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                `json:"zone_id" api:"required"`
-	JSON   zoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                             `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerJSON contains
 // the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancer]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancer) UnmarshalJSON(data []byte) (err error) {
@@ -4251,20 +5389,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor st
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                            `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                    `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorJSON
 // contains the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitorJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor) UnmarshalJSON(data []byte) (err error) {
@@ -4308,20 +5455,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPool struc
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                         `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                 `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolJSON
 // contains the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPool]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPoolJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPool) UnmarshalJSON(data []byte) (err error) {
@@ -4366,22 +5522,31 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertifica
 	Tags map[string]string                                                                 `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificateType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                                            `json:"zone_id" api:"required"`
-	JSON   zoneTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificateJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                         `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificateJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificateJSON
 // contains the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificate]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificateJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificate) UnmarshalJSON(data []byte) (err error) {
@@ -4425,20 +5590,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectPagesProject struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                     `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectPagesProjectType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectPagesProjectJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                             `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectPagesProjectJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectPagesProjectJSON contains
 // the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectPagesProject]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectPagesProjectJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectPagesProject) UnmarshalJSON(data []byte) (err error) {
@@ -4482,20 +5656,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectQueue struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                              `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectQueueType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectQueueJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                      `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectQueueJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectQueueJSON contains the JSON
 // metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectQueue]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectQueueJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectQueue) UnmarshalJSON(data []byte) (err error) {
@@ -4538,20 +5721,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectR2Bucket struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                 `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectR2BucketType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectR2BucketJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                         `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectR2BucketJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectR2BucketJSON contains the
 // JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectR2Bucket]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectR2BucketJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectR2Bucket) UnmarshalJSON(data []byte) (err error) {
@@ -4595,20 +5787,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectResourceShare struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                      `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectResourceShareType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectResourceShareJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                              `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectResourceShareJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectResourceShareJSON contains
 // the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectResourceShare]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectResourceShareJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectResourceShare) UnmarshalJSON(data []byte) (err error) {
@@ -4652,20 +5853,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectStreamLiveInput struct
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                        `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectStreamLiveInputType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectStreamLiveInputJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectStreamLiveInputJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectStreamLiveInputJSON
 // contains the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectStreamLiveInput]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectStreamLiveInputJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectStreamLiveInput) UnmarshalJSON(data []byte) (err error) {
@@ -4709,20 +5919,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectStreamVideo struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                    `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectStreamVideoType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectStreamVideoJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                            `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectStreamVideoJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectStreamVideoJSON contains
 // the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectStreamVideo]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectStreamVideoJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectStreamVideo) UnmarshalJSON(data []byte) (err error) {
@@ -4766,20 +5985,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndex struct 
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                       `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndexType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndexJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                               `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndexJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndexJSON contains
 // the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndex]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndexJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectVectorizeIndex) UnmarshalJSON(data []byte) (err error) {
@@ -4823,20 +6051,29 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectWorker struct {
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                               `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerType `json:"type" api:"required"`
-	JSON zoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerJSON `json:"-"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                       `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerJSON contains the
 // JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectWorker]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectWorker) UnmarshalJSON(data []byte) (err error) {
@@ -4880,22 +6117,31 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerRoute struct {
 	Tags map[string]string                                                    `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerRouteType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                               `json:"zone_id" api:"required"`
-	JSON   zoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerRouteJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                            `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerRouteJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerRouteJSON contains
 // the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerRoute]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerRouteJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerRoute) UnmarshalJSON(data []byte) (err error) {
@@ -4940,22 +6186,31 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersion struct {
 	Tags map[string]string                                                      `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersionType `json:"type" api:"required"`
 	// Worker ID is required only for worker_version resources
-	WorkerID string                                                                 `json:"worker_id" api:"required"`
-	JSON     zoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersionJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                              `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersionJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersionJSON contains
 // the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersion]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersionJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	WorkerID    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	WorkerID      apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectWorkerVersion) UnmarshalJSON(data []byte) (err error) {
@@ -5000,22 +6255,31 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectZone struct {
 	Tags map[string]string                                             `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectZoneType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                        `json:"zone_id" api:"required"`
-	JSON   zoneTagGetResponseResourceTaggingTaggedResourceObjectZoneJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                     `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectZoneJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectZoneJSON contains the JSON
 // metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectZone]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectZoneJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectZone) UnmarshalJSON(data []byte) (err error) {
@@ -5059,22 +6323,31 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectZoneRuleset struct {
 	Tags map[string]string                                                    `json:"tags" api:"required"`
 	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectZoneRulesetType `json:"type" api:"required"`
 	// Zone ID is required only for zone-level resources
-	ZoneID string                                                               `json:"zone_id" api:"required"`
-	JSON   zoneTagGetResponseResourceTaggingTaggedResourceObjectZoneRulesetJSON `json:"-"`
+	ZoneID string `json:"zone_id" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                            `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectZoneRulesetJSON `json:"-"`
 }
 
 // zoneTagGetResponseResourceTaggingTaggedResourceObjectZoneRulesetJSON contains
 // the JSON metadata for the struct
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectZoneRuleset]
 type zoneTagGetResponseResourceTaggingTaggedResourceObjectZoneRulesetJSON struct {
-	ID          apijson.Field
-	Etag        apijson.Field
-	Name        apijson.Field
-	Tags        apijson.Field
-	Type        apijson.Field
-	ZoneID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	ZoneID        apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectZoneRuleset) UnmarshalJSON(data []byte) (err error) {
@@ -5117,6 +6390,10 @@ const (
 	ZoneTagGetResponseTypeCloudflaredTunnel        ZoneTagGetResponseType = "cloudflared_tunnel"
 	ZoneTagGetResponseTypeCustomCertificate        ZoneTagGetResponseType = "custom_certificate"
 	ZoneTagGetResponseTypeCustomHostname           ZoneTagGetResponseType = "custom_hostname"
+	ZoneTagGetResponseTypeCwsDeployment            ZoneTagGetResponseType = "cws_deployment"
+	ZoneTagGetResponseTypeCwsPolicy                ZoneTagGetResponseType = "cws_policy"
+	ZoneTagGetResponseTypeCwsPolicySet             ZoneTagGetResponseType = "cws_policy_set"
+	ZoneTagGetResponseTypeCwsWorkload              ZoneTagGetResponseType = "cws_workload"
 	ZoneTagGetResponseTypeD1Database               ZoneTagGetResponseType = "d1_database"
 	ZoneTagGetResponseTypeDNSRecord                ZoneTagGetResponseType = "dns_record"
 	ZoneTagGetResponseTypeDurableObjectNamespace   ZoneTagGetResponseType = "durable_object_namespace"
@@ -5146,7 +6423,7 @@ const (
 
 func (r ZoneTagGetResponseType) IsKnown() bool {
 	switch r {
-	case ZoneTagGetResponseTypeAccessApplication, ZoneTagGetResponseTypeAccessApplicationPolicy, ZoneTagGetResponseTypeAccessGroup, ZoneTagGetResponseTypeAccount, ZoneTagGetResponseTypeAccountRuleset, ZoneTagGetResponseTypeAIGateway, ZoneTagGetResponseTypeAlertingPolicy, ZoneTagGetResponseTypeAlertingWebhook, ZoneTagGetResponseTypeAPIGatewayOperation, ZoneTagGetResponseTypeCloudflaredTunnel, ZoneTagGetResponseTypeCustomCertificate, ZoneTagGetResponseTypeCustomHostname, ZoneTagGetResponseTypeD1Database, ZoneTagGetResponseTypeDNSRecord, ZoneTagGetResponseTypeDurableObjectNamespace, ZoneTagGetResponseTypeGatewayList, ZoneTagGetResponseTypeGatewayRule, ZoneTagGetResponseTypeHealthcheck, ZoneTagGetResponseTypeImage, ZoneTagGetResponseTypeInfrastructureTarget, ZoneTagGetResponseTypeKVNamespace, ZoneTagGetResponseTypeLoadBalancer, ZoneTagGetResponseTypeLoadBalancerMonitor, ZoneTagGetResponseTypeLoadBalancerPool, ZoneTagGetResponseTypeManagedClientCertificate, ZoneTagGetResponseTypePagesProject, ZoneTagGetResponseTypeQueue, ZoneTagGetResponseTypeR2Bucket, ZoneTagGetResponseTypeResourceShare, ZoneTagGetResponseTypeStreamLiveInput, ZoneTagGetResponseTypeStreamVideo, ZoneTagGetResponseTypeVectorizeIndex, ZoneTagGetResponseTypeWorker, ZoneTagGetResponseTypeWorkerRoute, ZoneTagGetResponseTypeWorkerVersion, ZoneTagGetResponseTypeZone, ZoneTagGetResponseTypeZoneRuleset:
+	case ZoneTagGetResponseTypeAccessApplication, ZoneTagGetResponseTypeAccessApplicationPolicy, ZoneTagGetResponseTypeAccessGroup, ZoneTagGetResponseTypeAccount, ZoneTagGetResponseTypeAccountRuleset, ZoneTagGetResponseTypeAIGateway, ZoneTagGetResponseTypeAlertingPolicy, ZoneTagGetResponseTypeAlertingWebhook, ZoneTagGetResponseTypeAPIGatewayOperation, ZoneTagGetResponseTypeCloudflaredTunnel, ZoneTagGetResponseTypeCustomCertificate, ZoneTagGetResponseTypeCustomHostname, ZoneTagGetResponseTypeCwsDeployment, ZoneTagGetResponseTypeCwsPolicy, ZoneTagGetResponseTypeCwsPolicySet, ZoneTagGetResponseTypeCwsWorkload, ZoneTagGetResponseTypeD1Database, ZoneTagGetResponseTypeDNSRecord, ZoneTagGetResponseTypeDurableObjectNamespace, ZoneTagGetResponseTypeGatewayList, ZoneTagGetResponseTypeGatewayRule, ZoneTagGetResponseTypeHealthcheck, ZoneTagGetResponseTypeImage, ZoneTagGetResponseTypeInfrastructureTarget, ZoneTagGetResponseTypeKVNamespace, ZoneTagGetResponseTypeLoadBalancer, ZoneTagGetResponseTypeLoadBalancerMonitor, ZoneTagGetResponseTypeLoadBalancerPool, ZoneTagGetResponseTypeManagedClientCertificate, ZoneTagGetResponseTypePagesProject, ZoneTagGetResponseTypeQueue, ZoneTagGetResponseTypeR2Bucket, ZoneTagGetResponseTypeResourceShare, ZoneTagGetResponseTypeStreamLiveInput, ZoneTagGetResponseTypeStreamVideo, ZoneTagGetResponseTypeVectorizeIndex, ZoneTagGetResponseTypeWorker, ZoneTagGetResponseTypeWorkerRoute, ZoneTagGetResponseTypeWorkerVersion, ZoneTagGetResponseTypeZone, ZoneTagGetResponseTypeZoneRuleset:
 		return true
 	}
 	return false

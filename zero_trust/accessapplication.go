@@ -8778,14 +8778,25 @@ func (r accessApplicationNewResponseInfrastructureApplicationJSON) RawJSON() str
 func (r AccessApplicationNewResponseInfrastructureApplication) implementsAccessApplicationNewResponse() {
 }
 
+// Defines targets covered by the application. Use either the legacy top-level
+// target_attributes format or the rule format, but not both. The rule format
+// requires include; require and exclude are optional.
 type AccessApplicationNewResponseInfrastructureApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
 	Port int64 `json:"port" api:"required"`
 	// The communication protocol your application secures.
 	Protocol AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol" api:"required"`
+	// Target is excluded when any selector in this rule matches.
+	Exclude AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaExclude `json:"exclude"`
+	// Target matches when any selector in this rule matches.
+	Include AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaInclude `json:"include"`
+	// Target matches only when every selector in this rule matches.
+	Require AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaRequire `json:"require"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                      `json:"target_attributes" api:"required"`
+	//
+	// Deprecated: deprecated
+	TargetAttributes map[string][]string                                                      `json:"target_attributes"`
 	JSON             accessApplicationNewResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
 }
 
@@ -8795,6 +8806,9 @@ type AccessApplicationNewResponseInfrastructureApplicationTargetCriterion struct
 type accessApplicationNewResponseInfrastructureApplicationTargetCriterionJSON struct {
 	Port             apijson.Field
 	Protocol         apijson.Field
+	Exclude          apijson.Field
+	Include          apijson.Field
+	Require          apijson.Field
 	TargetAttributes apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
@@ -8821,6 +8835,168 @@ func (r AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProto
 		return true
 	}
 	return false
+}
+
+// Target is excluded when any selector in this rule matches.
+type AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaExclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationNewResponseInfrastructureApplicationTargetCriteriaExcludeJSON             `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationTargetCriteriaExcludeJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaExclude]
+type accessApplicationNewResponseInfrastructureApplicationTargetCriteriaExcludeJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaExclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationTargetCriteriaExcludeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributes struct {
+	Hostname []string                                                                                       `json:"hostname"`
+	JSON     accessApplicationNewResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributes]
+type accessApplicationNewResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Target matches when any selector in this rule matches.
+type AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaInclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationNewResponseInfrastructureApplicationTargetCriteriaIncludeJSON             `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationTargetCriteriaIncludeJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaInclude]
+type accessApplicationNewResponseInfrastructureApplicationTargetCriteriaIncludeJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaInclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationTargetCriteriaIncludeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributes struct {
+	Hostname []string                                                                                       `json:"hostname"`
+	JSON     accessApplicationNewResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributes]
+type accessApplicationNewResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Target matches only when every selector in this rule matches.
+type AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaRequire struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationNewResponseInfrastructureApplicationTargetCriteriaRequireJSON             `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationTargetCriteriaRequireJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaRequire]
+type accessApplicationNewResponseInfrastructureApplicationTargetCriteriaRequireJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaRequire) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationTargetCriteriaRequireJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributes struct {
+	Hostname []string                                                                                       `json:"hostname"`
+	JSON     accessApplicationNewResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributes]
+type accessApplicationNewResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures multi-factor authentication (MFA) settings for infrastructure
@@ -9192,14 +9368,25 @@ func (r accessApplicationNewResponseBrowserRDPApplicationJSON) RawJSON() string 
 
 func (r AccessApplicationNewResponseBrowserRDPApplication) implementsAccessApplicationNewResponse() {}
 
+// Defines targets covered by the application. Use either the legacy top-level
+// target_attributes format or the rule format, but not both. The rule format
+// requires include; require and exclude are optional.
 type AccessApplicationNewResponseBrowserRDPApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
 	Port int64 `json:"port" api:"required"`
 	// The communication protocol your application secures.
 	Protocol AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaProtocol `json:"protocol" api:"required"`
+	// Target is excluded when any selector in this rule matches.
+	Exclude AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaExclude `json:"exclude"`
+	// Target matches when any selector in this rule matches.
+	Include AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaInclude `json:"include"`
+	// Target matches only when every selector in this rule matches.
+	Require AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaRequire `json:"require"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                  `json:"target_attributes" api:"required"`
+	//
+	// Deprecated: deprecated
+	TargetAttributes map[string][]string                                                  `json:"target_attributes"`
 	JSON             accessApplicationNewResponseBrowserRDPApplicationTargetCriterionJSON `json:"-"`
 }
 
@@ -9209,6 +9396,9 @@ type AccessApplicationNewResponseBrowserRDPApplicationTargetCriterion struct {
 type accessApplicationNewResponseBrowserRDPApplicationTargetCriterionJSON struct {
 	Port             apijson.Field
 	Protocol         apijson.Field
+	Exclude          apijson.Field
+	Include          apijson.Field
+	Require          apijson.Field
 	TargetAttributes apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
@@ -9235,6 +9425,168 @@ func (r AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaProtocol)
 		return true
 	}
 	return false
+}
+
+// Target is excluded when any selector in this rule matches.
+type AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaExclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaExcludeJSON             `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaExcludeJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaExclude]
+type accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaExcludeJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaExclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaExcludeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes struct {
+	Hostname []string                                                                                   `json:"hostname"`
+	JSON     accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes]
+type accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Target matches when any selector in this rule matches.
+type AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaInclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaIncludeJSON             `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaIncludeJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaInclude]
+type accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaIncludeJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaInclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaIncludeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes struct {
+	Hostname []string                                                                                   `json:"hostname"`
+	JSON     accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes]
+type accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Target matches only when every selector in this rule matches.
+type AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaRequire struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaRequireJSON             `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaRequireJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaRequire]
+type accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaRequireJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaRequire) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaRequireJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributes struct {
+	Hostname []string                                                                                   `json:"hostname"`
+	JSON     accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributes]
+type accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributesJSON) RawJSON() string {
+	return r.raw
 }
 
 // A public hostname that Access will secure. Public destinations support
@@ -19569,14 +19921,25 @@ func (r accessApplicationUpdateResponseInfrastructureApplicationJSON) RawJSON() 
 func (r AccessApplicationUpdateResponseInfrastructureApplication) implementsAccessApplicationUpdateResponse() {
 }
 
+// Defines targets covered by the application. Use either the legacy top-level
+// target_attributes format or the rule format, but not both. The rule format
+// requires include; require and exclude are optional.
 type AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
 	Port int64 `json:"port" api:"required"`
 	// The communication protocol your application secures.
 	Protocol AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol" api:"required"`
+	// Target is excluded when any selector in this rule matches.
+	Exclude AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaExclude `json:"exclude"`
+	// Target matches when any selector in this rule matches.
+	Include AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaInclude `json:"include"`
+	// Target matches only when every selector in this rule matches.
+	Require AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaRequire `json:"require"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                         `json:"target_attributes" api:"required"`
+	//
+	// Deprecated: deprecated
+	TargetAttributes map[string][]string                                                         `json:"target_attributes"`
 	JSON             accessApplicationUpdateResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
 }
 
@@ -19586,6 +19949,9 @@ type AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion str
 type accessApplicationUpdateResponseInfrastructureApplicationTargetCriterionJSON struct {
 	Port             apijson.Field
 	Protocol         apijson.Field
+	Exclude          apijson.Field
+	Include          apijson.Field
+	Require          apijson.Field
 	TargetAttributes apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
@@ -19612,6 +19978,168 @@ func (r AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaPr
 		return true
 	}
 	return false
+}
+
+// Target is excluded when any selector in this rule matches.
+type AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaExclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaExcludeJSON             `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaExcludeJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaExclude]
+type accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaExcludeJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaExclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaExcludeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributes struct {
+	Hostname []string                                                                                          `json:"hostname"`
+	JSON     accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributes]
+type accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Target matches when any selector in this rule matches.
+type AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaInclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaIncludeJSON             `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaIncludeJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaInclude]
+type accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaIncludeJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaInclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaIncludeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributes struct {
+	Hostname []string                                                                                          `json:"hostname"`
+	JSON     accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributes]
+type accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Target matches only when every selector in this rule matches.
+type AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaRequire struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaRequireJSON             `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaRequireJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaRequire]
+type accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaRequireJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaRequire) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaRequireJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributes struct {
+	Hostname []string                                                                                          `json:"hostname"`
+	JSON     accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributes]
+type accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures multi-factor authentication (MFA) settings for infrastructure
@@ -19984,14 +20512,25 @@ func (r accessApplicationUpdateResponseBrowserRDPApplicationJSON) RawJSON() stri
 func (r AccessApplicationUpdateResponseBrowserRDPApplication) implementsAccessApplicationUpdateResponse() {
 }
 
+// Defines targets covered by the application. Use either the legacy top-level
+// target_attributes format or the rule format, but not both. The rule format
+// requires include; require and exclude are optional.
 type AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
 	Port int64 `json:"port" api:"required"`
 	// The communication protocol your application secures.
 	Protocol AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaProtocol `json:"protocol" api:"required"`
+	// Target is excluded when any selector in this rule matches.
+	Exclude AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaExclude `json:"exclude"`
+	// Target matches when any selector in this rule matches.
+	Include AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaInclude `json:"include"`
+	// Target matches only when every selector in this rule matches.
+	Require AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaRequire `json:"require"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                     `json:"target_attributes" api:"required"`
+	//
+	// Deprecated: deprecated
+	TargetAttributes map[string][]string                                                     `json:"target_attributes"`
 	JSON             accessApplicationUpdateResponseBrowserRDPApplicationTargetCriterionJSON `json:"-"`
 }
 
@@ -20001,6 +20540,9 @@ type AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriterion struct 
 type accessApplicationUpdateResponseBrowserRDPApplicationTargetCriterionJSON struct {
 	Port             apijson.Field
 	Protocol         apijson.Field
+	Exclude          apijson.Field
+	Include          apijson.Field
+	Require          apijson.Field
 	TargetAttributes apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
@@ -20027,6 +20569,168 @@ func (r AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaProtoc
 		return true
 	}
 	return false
+}
+
+// Target is excluded when any selector in this rule matches.
+type AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaExclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaExcludeJSON             `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaExcludeJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaExclude]
+type accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaExcludeJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaExclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaExcludeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes struct {
+	Hostname []string                                                                                      `json:"hostname"`
+	JSON     accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes]
+type accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Target matches when any selector in this rule matches.
+type AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaInclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaIncludeJSON             `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaIncludeJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaInclude]
+type accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaIncludeJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaInclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaIncludeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes struct {
+	Hostname []string                                                                                      `json:"hostname"`
+	JSON     accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes]
+type accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Target matches only when every selector in this rule matches.
+type AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaRequire struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaRequireJSON             `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaRequireJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaRequire]
+type accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaRequireJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaRequire) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaRequireJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributes struct {
+	Hostname []string                                                                                      `json:"hostname"`
+	JSON     accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributes]
+type accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributesJSON) RawJSON() string {
+	return r.raw
 }
 
 // A public hostname that Access will secure. Public destinations support
@@ -30360,14 +31064,25 @@ func (r accessApplicationListResponseInfrastructureApplicationJSON) RawJSON() st
 func (r AccessApplicationListResponseInfrastructureApplication) implementsAccessApplicationListResponse() {
 }
 
+// Defines targets covered by the application. Use either the legacy top-level
+// target_attributes format or the rule format, but not both. The rule format
+// requires include; require and exclude are optional.
 type AccessApplicationListResponseInfrastructureApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
 	Port int64 `json:"port" api:"required"`
 	// The communication protocol your application secures.
 	Protocol AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol" api:"required"`
+	// Target is excluded when any selector in this rule matches.
+	Exclude AccessApplicationListResponseInfrastructureApplicationTargetCriteriaExclude `json:"exclude"`
+	// Target matches when any selector in this rule matches.
+	Include AccessApplicationListResponseInfrastructureApplicationTargetCriteriaInclude `json:"include"`
+	// Target matches only when every selector in this rule matches.
+	Require AccessApplicationListResponseInfrastructureApplicationTargetCriteriaRequire `json:"require"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                       `json:"target_attributes" api:"required"`
+	//
+	// Deprecated: deprecated
+	TargetAttributes map[string][]string                                                       `json:"target_attributes"`
 	JSON             accessApplicationListResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
 }
 
@@ -30377,6 +31092,9 @@ type AccessApplicationListResponseInfrastructureApplicationTargetCriterion struc
 type accessApplicationListResponseInfrastructureApplicationTargetCriterionJSON struct {
 	Port             apijson.Field
 	Protocol         apijson.Field
+	Exclude          apijson.Field
+	Include          apijson.Field
+	Require          apijson.Field
 	TargetAttributes apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
@@ -30403,6 +31121,168 @@ func (r AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProt
 		return true
 	}
 	return false
+}
+
+// Target is excluded when any selector in this rule matches.
+type AccessApplicationListResponseInfrastructureApplicationTargetCriteriaExclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationListResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationListResponseInfrastructureApplicationTargetCriteriaExcludeJSON             `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationTargetCriteriaExcludeJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationTargetCriteriaExclude]
+type accessApplicationListResponseInfrastructureApplicationTargetCriteriaExcludeJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationTargetCriteriaExclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationTargetCriteriaExcludeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationListResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributes struct {
+	Hostname []string                                                                                        `json:"hostname"`
+	JSON     accessApplicationListResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributes]
+type accessApplicationListResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Target matches when any selector in this rule matches.
+type AccessApplicationListResponseInfrastructureApplicationTargetCriteriaInclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationListResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationListResponseInfrastructureApplicationTargetCriteriaIncludeJSON             `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationTargetCriteriaIncludeJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationTargetCriteriaInclude]
+type accessApplicationListResponseInfrastructureApplicationTargetCriteriaIncludeJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationTargetCriteriaInclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationTargetCriteriaIncludeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationListResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributes struct {
+	Hostname []string                                                                                        `json:"hostname"`
+	JSON     accessApplicationListResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributes]
+type accessApplicationListResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Target matches only when every selector in this rule matches.
+type AccessApplicationListResponseInfrastructureApplicationTargetCriteriaRequire struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationListResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationListResponseInfrastructureApplicationTargetCriteriaRequireJSON             `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationTargetCriteriaRequireJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationTargetCriteriaRequire]
+type accessApplicationListResponseInfrastructureApplicationTargetCriteriaRequireJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationTargetCriteriaRequire) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationTargetCriteriaRequireJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationListResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributes struct {
+	Hostname []string                                                                                        `json:"hostname"`
+	JSON     accessApplicationListResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributes]
+type accessApplicationListResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures multi-factor authentication (MFA) settings for infrastructure
@@ -30775,14 +31655,25 @@ func (r accessApplicationListResponseBrowserRDPApplicationJSON) RawJSON() string
 func (r AccessApplicationListResponseBrowserRDPApplication) implementsAccessApplicationListResponse() {
 }
 
+// Defines targets covered by the application. Use either the legacy top-level
+// target_attributes format or the rule format, but not both. The rule format
+// requires include; require and exclude are optional.
 type AccessApplicationListResponseBrowserRDPApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
 	Port int64 `json:"port" api:"required"`
 	// The communication protocol your application secures.
 	Protocol AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaProtocol `json:"protocol" api:"required"`
+	// Target is excluded when any selector in this rule matches.
+	Exclude AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaExclude `json:"exclude"`
+	// Target matches when any selector in this rule matches.
+	Include AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaInclude `json:"include"`
+	// Target matches only when every selector in this rule matches.
+	Require AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaRequire `json:"require"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                   `json:"target_attributes" api:"required"`
+	//
+	// Deprecated: deprecated
+	TargetAttributes map[string][]string                                                   `json:"target_attributes"`
 	JSON             accessApplicationListResponseBrowserRDPApplicationTargetCriterionJSON `json:"-"`
 }
 
@@ -30792,6 +31683,9 @@ type AccessApplicationListResponseBrowserRDPApplicationTargetCriterion struct {
 type accessApplicationListResponseBrowserRDPApplicationTargetCriterionJSON struct {
 	Port             apijson.Field
 	Protocol         apijson.Field
+	Exclude          apijson.Field
+	Include          apijson.Field
+	Require          apijson.Field
 	TargetAttributes apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
@@ -30818,6 +31712,168 @@ func (r AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaProtocol
 		return true
 	}
 	return false
+}
+
+// Target is excluded when any selector in this rule matches.
+type AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaExclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationListResponseBrowserRDPApplicationTargetCriteriaExcludeJSON             `json:"-"`
+}
+
+// accessApplicationListResponseBrowserRDPApplicationTargetCriteriaExcludeJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaExclude]
+type accessApplicationListResponseBrowserRDPApplicationTargetCriteriaExcludeJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaExclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserRDPApplicationTargetCriteriaExcludeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes struct {
+	Hostname []string                                                                                    `json:"hostname"`
+	JSON     accessApplicationListResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes]
+type accessApplicationListResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Target matches when any selector in this rule matches.
+type AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaInclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationListResponseBrowserRDPApplicationTargetCriteriaIncludeJSON             `json:"-"`
+}
+
+// accessApplicationListResponseBrowserRDPApplicationTargetCriteriaIncludeJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaInclude]
+type accessApplicationListResponseBrowserRDPApplicationTargetCriteriaIncludeJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaInclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserRDPApplicationTargetCriteriaIncludeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes struct {
+	Hostname []string                                                                                    `json:"hostname"`
+	JSON     accessApplicationListResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes]
+type accessApplicationListResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Target matches only when every selector in this rule matches.
+type AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaRequire struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationListResponseBrowserRDPApplicationTargetCriteriaRequireJSON             `json:"-"`
+}
+
+// accessApplicationListResponseBrowserRDPApplicationTargetCriteriaRequireJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaRequire]
+type accessApplicationListResponseBrowserRDPApplicationTargetCriteriaRequireJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaRequire) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserRDPApplicationTargetCriteriaRequireJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributes struct {
+	Hostname []string                                                                                    `json:"hostname"`
+	JSON     accessApplicationListResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributes]
+type accessApplicationListResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributesJSON) RawJSON() string {
+	return r.raw
 }
 
 // A public hostname that Access will secure. Public destinations support
@@ -41170,14 +42226,25 @@ func (r accessApplicationGetResponseInfrastructureApplicationJSON) RawJSON() str
 func (r AccessApplicationGetResponseInfrastructureApplication) implementsAccessApplicationGetResponse() {
 }
 
+// Defines targets covered by the application. Use either the legacy top-level
+// target_attributes format or the rule format, but not both. The rule format
+// requires include; require and exclude are optional.
 type AccessApplicationGetResponseInfrastructureApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
 	Port int64 `json:"port" api:"required"`
 	// The communication protocol your application secures.
 	Protocol AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol" api:"required"`
+	// Target is excluded when any selector in this rule matches.
+	Exclude AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaExclude `json:"exclude"`
+	// Target matches when any selector in this rule matches.
+	Include AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaInclude `json:"include"`
+	// Target matches only when every selector in this rule matches.
+	Require AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaRequire `json:"require"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                      `json:"target_attributes" api:"required"`
+	//
+	// Deprecated: deprecated
+	TargetAttributes map[string][]string                                                      `json:"target_attributes"`
 	JSON             accessApplicationGetResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
 }
 
@@ -41187,6 +42254,9 @@ type AccessApplicationGetResponseInfrastructureApplicationTargetCriterion struct
 type accessApplicationGetResponseInfrastructureApplicationTargetCriterionJSON struct {
 	Port             apijson.Field
 	Protocol         apijson.Field
+	Exclude          apijson.Field
+	Include          apijson.Field
+	Require          apijson.Field
 	TargetAttributes apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
@@ -41213,6 +42283,168 @@ func (r AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProto
 		return true
 	}
 	return false
+}
+
+// Target is excluded when any selector in this rule matches.
+type AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaExclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationGetResponseInfrastructureApplicationTargetCriteriaExcludeJSON             `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationTargetCriteriaExcludeJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaExclude]
+type accessApplicationGetResponseInfrastructureApplicationTargetCriteriaExcludeJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaExclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationTargetCriteriaExcludeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributes struct {
+	Hostname []string                                                                                       `json:"hostname"`
+	JSON     accessApplicationGetResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributes]
+type accessApplicationGetResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationTargetCriteriaExcludeTargetAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Target matches when any selector in this rule matches.
+type AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaInclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationGetResponseInfrastructureApplicationTargetCriteriaIncludeJSON             `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationTargetCriteriaIncludeJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaInclude]
+type accessApplicationGetResponseInfrastructureApplicationTargetCriteriaIncludeJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaInclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationTargetCriteriaIncludeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributes struct {
+	Hostname []string                                                                                       `json:"hostname"`
+	JSON     accessApplicationGetResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributes]
+type accessApplicationGetResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationTargetCriteriaIncludeTargetAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Target matches only when every selector in this rule matches.
+type AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaRequire struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationGetResponseInfrastructureApplicationTargetCriteriaRequireJSON             `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationTargetCriteriaRequireJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaRequire]
+type accessApplicationGetResponseInfrastructureApplicationTargetCriteriaRequireJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaRequire) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationTargetCriteriaRequireJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributes struct {
+	Hostname []string                                                                                       `json:"hostname"`
+	JSON     accessApplicationGetResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributes]
+type accessApplicationGetResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationTargetCriteriaRequireTargetAttributesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures multi-factor authentication (MFA) settings for infrastructure
@@ -41584,14 +42816,25 @@ func (r accessApplicationGetResponseBrowserRDPApplicationJSON) RawJSON() string 
 
 func (r AccessApplicationGetResponseBrowserRDPApplication) implementsAccessApplicationGetResponse() {}
 
+// Defines targets covered by the application. Use either the legacy top-level
+// target_attributes format or the rule format, but not both. The rule format
+// requires include; require and exclude are optional.
 type AccessApplicationGetResponseBrowserRDPApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
 	Port int64 `json:"port" api:"required"`
 	// The communication protocol your application secures.
 	Protocol AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaProtocol `json:"protocol" api:"required"`
+	// Target is excluded when any selector in this rule matches.
+	Exclude AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaExclude `json:"exclude"`
+	// Target matches when any selector in this rule matches.
+	Include AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaInclude `json:"include"`
+	// Target matches only when every selector in this rule matches.
+	Require AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaRequire `json:"require"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                  `json:"target_attributes" api:"required"`
+	//
+	// Deprecated: deprecated
+	TargetAttributes map[string][]string                                                  `json:"target_attributes"`
 	JSON             accessApplicationGetResponseBrowserRDPApplicationTargetCriterionJSON `json:"-"`
 }
 
@@ -41601,6 +42844,9 @@ type AccessApplicationGetResponseBrowserRDPApplicationTargetCriterion struct {
 type accessApplicationGetResponseBrowserRDPApplicationTargetCriterionJSON struct {
 	Port             apijson.Field
 	Protocol         apijson.Field
+	Exclude          apijson.Field
+	Include          apijson.Field
+	Require          apijson.Field
 	TargetAttributes apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
@@ -41627,6 +42873,168 @@ func (r AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaProtocol)
 		return true
 	}
 	return false
+}
+
+// Target is excluded when any selector in this rule matches.
+type AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaExclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaExcludeJSON             `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaExcludeJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaExclude]
+type accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaExcludeJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaExclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaExcludeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes struct {
+	Hostname []string                                                                                   `json:"hostname"`
+	JSON     accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes]
+type accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaExcludeTargetAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Target matches when any selector in this rule matches.
+type AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaInclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaIncludeJSON             `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaIncludeJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaInclude]
+type accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaIncludeJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaInclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaIncludeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes struct {
+	Hostname []string                                                                                   `json:"hostname"`
+	JSON     accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes]
+type accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaIncludeTargetAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Target matches only when every selector in this rule matches.
+type AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaRequire struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags map[string][]string `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributes `json:"target_attributes"`
+	JSON             accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaRequireJSON             `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaRequireJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaRequire]
+type accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaRequireJSON struct {
+	Tags             apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaRequire) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaRequireJSON) RawJSON() string {
+	return r.raw
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributes struct {
+	Hostname []string                                                                                   `json:"hostname"`
+	JSON     accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributesJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributes]
+type accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributesJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserRDPApplicationTargetCriteriaRequireTargetAttributesJSON) RawJSON() string {
+	return r.raw
 }
 
 // A public hostname that Access will secure. Public destinations support
@@ -50043,14 +51451,25 @@ func (r AccessApplicationNewParamsBodyInfrastructureApplication) MarshalJSON() (
 func (r AccessApplicationNewParamsBodyInfrastructureApplication) implementsAccessApplicationNewParamsBodyUnion() {
 }
 
+// Defines targets covered by the application. Use either the legacy top-level
+// target_attributes format or the rule format, but not both. The rule format
+// requires include; require and exclude are optional.
 type AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
 	Port param.Field[int64] `json:"port" api:"required"`
 	// The communication protocol your application secures.
 	Protocol param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocol] `json:"protocol" api:"required"`
+	// Target is excluded when any selector in this rule matches.
+	Exclude param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaExclude] `json:"exclude"`
+	// Target matches when any selector in this rule matches.
+	Include param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaInclude] `json:"include"`
+	// Target matches only when every selector in this rule matches.
+	Require param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaRequire] `json:"require"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes param.Field[map[string][]string] `json:"target_attributes" api:"required"`
+	//
+	// Deprecated: deprecated
+	TargetAttributes param.Field[map[string][]string] `json:"target_attributes"`
 }
 
 func (r AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriterion) MarshalJSON() (data []byte, err error) {
@@ -50070,6 +51489,81 @@ func (r AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaPro
 		return true
 	}
 	return false
+}
+
+// Target is excluded when any selector in this rule matches.
+type AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaExclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags param.Field[map[string][]string] `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaExcludeTargetAttributes] `json:"target_attributes"`
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaExclude) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaExcludeTargetAttributes struct {
+	Hostname param.Field[[]string] `json:"hostname"`
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaExcludeTargetAttributes) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Target matches when any selector in this rule matches.
+type AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaInclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags param.Field[map[string][]string] `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaIncludeTargetAttributes] `json:"target_attributes"`
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaInclude) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaIncludeTargetAttributes struct {
+	Hostname param.Field[[]string] `json:"hostname"`
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaIncludeTargetAttributes) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Target matches only when every selector in this rule matches.
+type AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaRequire struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags param.Field[map[string][]string] `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaRequireTargetAttributes] `json:"target_attributes"`
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaRequire) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaRequireTargetAttributes struct {
+	Hostname param.Field[[]string] `json:"hostname"`
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaRequireTargetAttributes) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Configures multi-factor authentication (MFA) settings for infrastructure
@@ -50308,14 +51802,25 @@ func (r AccessApplicationNewParamsBodyBrowserRDPApplication) MarshalJSON() (data
 func (r AccessApplicationNewParamsBodyBrowserRDPApplication) implementsAccessApplicationNewParamsBodyUnion() {
 }
 
+// Defines targets covered by the application. Use either the legacy top-level
+// target_attributes format or the rule format, but not both. The rule format
+// requires include; require and exclude are optional.
 type AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
 	Port param.Field[int64] `json:"port" api:"required"`
 	// The communication protocol your application secures.
 	Protocol param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaProtocol] `json:"protocol" api:"required"`
+	// Target is excluded when any selector in this rule matches.
+	Exclude param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaExclude] `json:"exclude"`
+	// Target matches when any selector in this rule matches.
+	Include param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaInclude] `json:"include"`
+	// Target matches only when every selector in this rule matches.
+	Require param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaRequire] `json:"require"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes param.Field[map[string][]string] `json:"target_attributes" api:"required"`
+	//
+	// Deprecated: deprecated
+	TargetAttributes param.Field[map[string][]string] `json:"target_attributes"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriterion) MarshalJSON() (data []byte, err error) {
@@ -50335,6 +51840,81 @@ func (r AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaProtoco
 		return true
 	}
 	return false
+}
+
+// Target is excluded when any selector in this rule matches.
+type AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaExclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags param.Field[map[string][]string] `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes] `json:"target_attributes"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaExclude) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes struct {
+	Hostname param.Field[[]string] `json:"hostname"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Target matches when any selector in this rule matches.
+type AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaInclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags param.Field[map[string][]string] `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes] `json:"target_attributes"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaInclude) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes struct {
+	Hostname param.Field[[]string] `json:"hostname"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Target matches only when every selector in this rule matches.
+type AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaRequire struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags param.Field[map[string][]string] `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaRequireTargetAttributes] `json:"target_attributes"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaRequire) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaRequireTargetAttributes struct {
+	Hostname param.Field[[]string] `json:"hostname"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationTargetCriteriaRequireTargetAttributes) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // A public hostname that Access will secure. Public destinations support
@@ -57782,14 +59362,25 @@ func (r AccessApplicationUpdateParamsBodyInfrastructureApplication) MarshalJSON(
 func (r AccessApplicationUpdateParamsBodyInfrastructureApplication) implementsAccessApplicationUpdateParamsBodyUnion() {
 }
 
+// Defines targets covered by the application. Use either the legacy top-level
+// target_attributes format or the rule format, but not both. The rule format
+// requires include; require and exclude are optional.
 type AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
 	Port param.Field[int64] `json:"port" api:"required"`
 	// The communication protocol your application secures.
 	Protocol param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocol] `json:"protocol" api:"required"`
+	// Target is excluded when any selector in this rule matches.
+	Exclude param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaExclude] `json:"exclude"`
+	// Target matches when any selector in this rule matches.
+	Include param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaInclude] `json:"include"`
+	// Target matches only when every selector in this rule matches.
+	Require param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaRequire] `json:"require"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes param.Field[map[string][]string] `json:"target_attributes" api:"required"`
+	//
+	// Deprecated: deprecated
+	TargetAttributes param.Field[map[string][]string] `json:"target_attributes"`
 }
 
 func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriterion) MarshalJSON() (data []byte, err error) {
@@ -57809,6 +59400,81 @@ func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteria
 		return true
 	}
 	return false
+}
+
+// Target is excluded when any selector in this rule matches.
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaExclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags param.Field[map[string][]string] `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaExcludeTargetAttributes] `json:"target_attributes"`
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaExclude) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaExcludeTargetAttributes struct {
+	Hostname param.Field[[]string] `json:"hostname"`
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaExcludeTargetAttributes) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Target matches when any selector in this rule matches.
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaInclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags param.Field[map[string][]string] `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaIncludeTargetAttributes] `json:"target_attributes"`
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaInclude) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaIncludeTargetAttributes struct {
+	Hostname param.Field[[]string] `json:"hostname"`
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaIncludeTargetAttributes) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Target matches only when every selector in this rule matches.
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaRequire struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags param.Field[map[string][]string] `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaRequireTargetAttributes] `json:"target_attributes"`
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaRequire) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaRequireTargetAttributes struct {
+	Hostname param.Field[[]string] `json:"hostname"`
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaRequireTargetAttributes) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Configures multi-factor authentication (MFA) settings for infrastructure
@@ -58047,14 +59713,25 @@ func (r AccessApplicationUpdateParamsBodyBrowserRDPApplication) MarshalJSON() (d
 func (r AccessApplicationUpdateParamsBodyBrowserRDPApplication) implementsAccessApplicationUpdateParamsBodyUnion() {
 }
 
+// Defines targets covered by the application. Use either the legacy top-level
+// target_attributes format or the rule format, but not both. The rule format
+// requires include; require and exclude are optional.
 type AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriterion struct {
 	// The port that the targets use for the chosen communication protocol. A port
 	// cannot be assigned to multiple protocols.
 	Port param.Field[int64] `json:"port" api:"required"`
 	// The communication protocol your application secures.
 	Protocol param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaProtocol] `json:"protocol" api:"required"`
+	// Target is excluded when any selector in this rule matches.
+	Exclude param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaExclude] `json:"exclude"`
+	// Target matches when any selector in this rule matches.
+	Include param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaInclude] `json:"include"`
+	// Target matches only when every selector in this rule matches.
+	Require param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaRequire] `json:"require"`
 	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes param.Field[map[string][]string] `json:"target_attributes" api:"required"`
+	//
+	// Deprecated: deprecated
+	TargetAttributes param.Field[map[string][]string] `json:"target_attributes"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriterion) MarshalJSON() (data []byte, err error) {
@@ -58074,6 +59751,81 @@ func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaProt
 		return true
 	}
 	return false
+}
+
+// Target is excluded when any selector in this rule matches.
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaExclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags param.Field[map[string][]string] `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes] `json:"target_attributes"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaExclude) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes struct {
+	Hostname param.Field[[]string] `json:"hostname"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaExcludeTargetAttributes) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Target matches when any selector in this rule matches.
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaInclude struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags param.Field[map[string][]string] `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes] `json:"target_attributes"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaInclude) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes struct {
+	Hostname param.Field[[]string] `json:"hostname"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaIncludeTargetAttributes) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Target matches only when every selector in this rule matches.
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaRequire struct {
+	// Map of target tag keys to values. Values within a key are OR'd.
+	Tags param.Field[map[string][]string] `json:"tags"`
+	// Hostname selector map for include, require, or exclude rules. This is distinct
+	// from the deprecated top-level target_attributes field and only supports the
+	// hostname key.
+	TargetAttributes param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaRequireTargetAttributes] `json:"target_attributes"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaRequire) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Hostname selector map for include, require, or exclude rules. This is distinct
+// from the deprecated top-level target_attributes field and only supports the
+// hostname key.
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaRequireTargetAttributes struct {
+	Hostname param.Field[[]string] `json:"hostname"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationTargetCriteriaRequireTargetAttributes) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // A public hostname that Access will secure. Public destinations support

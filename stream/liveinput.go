@@ -96,8 +96,8 @@ func (r *LiveInputService) List(ctx context.Context, params LiveInputListParams,
 	return res, nil
 }
 
-// Prevents a live input from being streamed to and makes the live input
-// inaccessible to any future API calls.
+// Permanently delete a live input, making it inaccessible and blocking current and
+// future broadcasts to it. Existing recordings will be retained.
 func (r *LiveInputService) Delete(ctx context.Context, liveInputIdentifier string, body LiveInputDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)

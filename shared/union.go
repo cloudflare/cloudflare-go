@@ -338,32 +338,42 @@ func (UnionString) ImplementsVersionGraphResponseGraphWorkflowNodesObjectConfigR
 func (UnionString) ImplementsVersionGraphResponseGraphWorkflowNodesObjectConfigTimeoutUnion()      {}
 func (UnionString) ImplementsVersionGraphResponseGraphWorkflowNodesObjectOptionsTimeoutUnion()     {}
 func (UnionString) ImplementsAbuseReportGetResponseEnvelopeErrorsCode()                            {}
+func (UnionString) ImplementsSubmittedListResponseEnvelopeErrorsCode()                             {}
+func (UnionString) ImplementsSubmittedGetResponseEnvelopeErrorsCode()                              {}
+func (UnionString) ImplementsSubmittedEmailListResponseEnvelopeErrorsCode()                        {}
 func (UnionString) ImplementsAIRunResponseUnion()                                                  {}
 func (UnionString) ImplementsAIRunParamsBodyTextEmbeddingsTextUnion()                              {}
 func (UnionString) ImplementsAIRunParamsBodyTextGenerationMessagesContentUnion()                   {}
 func (UnionString) ImplementsAIRunParamsBodyImageTextToTextMessagesContentUnion()                  {}
 func (UnionString) ImplementsNamespaceChatCompletionsResponseChoicesMessageContentUnion()          {}
+func (UnionString) ImplementsNamespaceChatCompletionsParamsAISearchOptionsCustomMetadataUnion()    {}
 func (UnionString) ImplementsNamespaceChatCompletionsParamsMessagesContentUnion()                  {}
+func (UnionString) ImplementsNamespaceSearchParamsAISearchOptionsCustomMetadataUnion()             {}
 func (UnionString) ImplementsNamespaceSearchParamsMessagesContentUnion()                           {}
 func (UnionString) ImplementsNamespaceInstanceChatCompletionsResponseChoicesMessageContentUnion()  {}
 func (UnionString) ImplementsNamespaceInstanceChatCompletionsParamsMessagesContentUnion()          {}
-func (UnionString) ImplementsNamespaceInstanceSearchParamsMessagesContentUnion()                   {}
-func (UnionString) ImplementsNamespaceInstanceItemListResponseMetadataUnion()                      {}
-func (UnionString) ImplementsNamespaceInstanceItemNewOrUpdateResponseMetadataUnion()               {}
-func (UnionString) ImplementsNamespaceInstanceItemGetResponseMetadataUnion()                       {}
-func (UnionString) ImplementsNamespaceInstanceItemSyncResponseMetadataUnion()                      {}
-func (UnionString) ImplementsNamespaceInstanceItemUploadResponseMetadataUnion()                    {}
-func (UnionString) ImplementsInstanceChatCompletionsResponseChoicesMessageContentUnion()           {}
-func (UnionString) ImplementsInstanceChatCompletionsParamsMessagesContentUnion()                   {}
-func (UnionString) ImplementsInstanceSearchParamsMessagesContentUnion()                            {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsHeightUnion()                                   {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginBottomUnion()                             {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginLeftUnion()                               {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginRightUnion()                              {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginTopUnion()                                {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsWidthUnion()                                    {}
-func (UnionString) ImplementsSnapshotNewResponseAccessibilityTreeValueUnion()                      {}
-func (UnionString) ImplementsAccessibilityTreeNewResponseAccessibilityTreeValueUnion()             {}
+func (UnionString) ImplementsNamespaceInstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion() {
+}
+func (UnionString) ImplementsNamespaceInstanceSearchParamsAISearchOptionsCustomMetadataUnion() {}
+func (UnionString) ImplementsNamespaceInstanceSearchParamsMessagesContentUnion()               {}
+func (UnionString) ImplementsNamespaceInstanceItemListResponseMetadataUnion()                  {}
+func (UnionString) ImplementsNamespaceInstanceItemNewOrUpdateResponseMetadataUnion()           {}
+func (UnionString) ImplementsNamespaceInstanceItemGetResponseMetadataUnion()                   {}
+func (UnionString) ImplementsNamespaceInstanceItemSyncResponseMetadataUnion()                  {}
+func (UnionString) ImplementsNamespaceInstanceItemUploadResponseMetadataUnion()                {}
+func (UnionString) ImplementsInstanceChatCompletionsResponseChoicesMessageContentUnion()       {}
+func (UnionString) ImplementsInstanceChatCompletionsParamsMessagesContentUnion()               {}
+func (UnionString) ImplementsInstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion() {}
+func (UnionString) ImplementsInstanceSearchParamsAISearchOptionsCustomMetadataUnion()          {}
+func (UnionString) ImplementsInstanceSearchParamsMessagesContentUnion()                        {}
+func (UnionString) ImplementsPDFNewParamsPDFOptionsHeightUnion()                               {}
+func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginBottomUnion()                         {}
+func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginLeftUnion()                           {}
+func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginRightUnion()                          {}
+func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginTopUnion()                            {}
+func (UnionString) ImplementsPDFNewParamsPDFOptionsWidthUnion()                                {}
+func (UnionString) ImplementsSnapshotNewResponseAccessibilityTreeValueUnion()                  {}
+func (UnionString) ImplementsAccessibilityTreeNewResponseAccessibilityTreeValueUnion()         {}
 
 type UnionBool bool
 
@@ -552,19 +562,26 @@ func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterRulesCondition
 }
 func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesUnion() {
 }
-func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterVariationsUnion()    {}
-func (UnionBool) ImplementsAppFlagChangelogListResponseObjectDiffFromUnion()           {}
-func (UnionBool) ImplementsAppFlagChangelogListResponseObjectDiffToUnion()             {}
-func (UnionBool) ImplementsAppEvaluateGetResponseValueUnion()                          {}
-func (UnionBool) ImplementsNamespaceInstanceItemListResponseMetadataUnion()            {}
-func (UnionBool) ImplementsNamespaceInstanceItemNewOrUpdateResponseMetadataUnion()     {}
-func (UnionBool) ImplementsNamespaceInstanceItemGetResponseMetadataUnion()             {}
-func (UnionBool) ImplementsNamespaceInstanceItemSyncResponseMetadataUnion()            {}
-func (UnionBool) ImplementsNamespaceInstanceItemUploadResponseMetadataUnion()          {}
-func (UnionBool) ImplementsSnapshotNewResponseAccessibilityTreeCheckedUnion()          {}
-func (UnionBool) ImplementsSnapshotNewResponseAccessibilityTreePressedUnion()          {}
-func (UnionBool) ImplementsAccessibilityTreeNewResponseAccessibilityTreeCheckedUnion() {}
-func (UnionBool) ImplementsAccessibilityTreeNewResponseAccessibilityTreePressedUnion() {}
+func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterVariationsUnion()           {}
+func (UnionBool) ImplementsAppFlagChangelogListResponseObjectDiffFromUnion()                  {}
+func (UnionBool) ImplementsAppFlagChangelogListResponseObjectDiffToUnion()                    {}
+func (UnionBool) ImplementsAppEvaluateGetResponseValueUnion()                                 {}
+func (UnionBool) ImplementsNamespaceChatCompletionsParamsAISearchOptionsCustomMetadataUnion() {}
+func (UnionBool) ImplementsNamespaceSearchParamsAISearchOptionsCustomMetadataUnion()          {}
+func (UnionBool) ImplementsNamespaceInstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion() {
+}
+func (UnionBool) ImplementsNamespaceInstanceSearchParamsAISearchOptionsCustomMetadataUnion() {}
+func (UnionBool) ImplementsNamespaceInstanceItemListResponseMetadataUnion()                  {}
+func (UnionBool) ImplementsNamespaceInstanceItemNewOrUpdateResponseMetadataUnion()           {}
+func (UnionBool) ImplementsNamespaceInstanceItemGetResponseMetadataUnion()                   {}
+func (UnionBool) ImplementsNamespaceInstanceItemSyncResponseMetadataUnion()                  {}
+func (UnionBool) ImplementsNamespaceInstanceItemUploadResponseMetadataUnion()                {}
+func (UnionBool) ImplementsInstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion() {}
+func (UnionBool) ImplementsInstanceSearchParamsAISearchOptionsCustomMetadataUnion()          {}
+func (UnionBool) ImplementsSnapshotNewResponseAccessibilityTreeCheckedUnion()                {}
+func (UnionBool) ImplementsSnapshotNewResponseAccessibilityTreePressedUnion()                {}
+func (UnionBool) ImplementsAccessibilityTreeNewResponseAccessibilityTreeCheckedUnion()       {}
+func (UnionBool) ImplementsAccessibilityTreeNewResponseAccessibilityTreePressedUnion()       {}
 
 type UnionInt int64
 
@@ -784,16 +801,26 @@ func (UnionFloat) ImplementsVersionGraphResponseGraphWorkflowNodesObjectConfigRe
 func (UnionFloat) ImplementsVersionGraphResponseGraphWorkflowNodesObjectConfigTimeoutUnion()      {}
 func (UnionFloat) ImplementsVersionGraphResponseGraphWorkflowNodesObjectOptionsTimeoutUnion()     {}
 func (UnionFloat) ImplementsAbuseReportGetResponseEnvelopeErrorsCode()                            {}
-func (UnionFloat) ImplementsNamespaceInstanceItemListResponseMetadataUnion()                      {}
-func (UnionFloat) ImplementsNamespaceInstanceItemNewOrUpdateResponseMetadataUnion()               {}
-func (UnionFloat) ImplementsNamespaceInstanceItemGetResponseMetadataUnion()                       {}
-func (UnionFloat) ImplementsNamespaceInstanceItemSyncResponseMetadataUnion()                      {}
-func (UnionFloat) ImplementsNamespaceInstanceItemUploadResponseMetadataUnion()                    {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsHeightUnion()                                   {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginBottomUnion()                             {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginLeftUnion()                               {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginRightUnion()                              {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginTopUnion()                                {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsWidthUnion()                                    {}
-func (UnionFloat) ImplementsSnapshotNewResponseAccessibilityTreeValueUnion()                      {}
-func (UnionFloat) ImplementsAccessibilityTreeNewResponseAccessibilityTreeValueUnion()             {}
+func (UnionFloat) ImplementsSubmittedListResponseEnvelopeErrorsCode()                             {}
+func (UnionFloat) ImplementsSubmittedGetResponseEnvelopeErrorsCode()                              {}
+func (UnionFloat) ImplementsSubmittedEmailListResponseEnvelopeErrorsCode()                        {}
+func (UnionFloat) ImplementsNamespaceChatCompletionsParamsAISearchOptionsCustomMetadataUnion()    {}
+func (UnionFloat) ImplementsNamespaceSearchParamsAISearchOptionsCustomMetadataUnion()             {}
+func (UnionFloat) ImplementsNamespaceInstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion() {
+}
+func (UnionFloat) ImplementsNamespaceInstanceSearchParamsAISearchOptionsCustomMetadataUnion() {}
+func (UnionFloat) ImplementsNamespaceInstanceItemListResponseMetadataUnion()                  {}
+func (UnionFloat) ImplementsNamespaceInstanceItemNewOrUpdateResponseMetadataUnion()           {}
+func (UnionFloat) ImplementsNamespaceInstanceItemGetResponseMetadataUnion()                   {}
+func (UnionFloat) ImplementsNamespaceInstanceItemSyncResponseMetadataUnion()                  {}
+func (UnionFloat) ImplementsNamespaceInstanceItemUploadResponseMetadataUnion()                {}
+func (UnionFloat) ImplementsInstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion() {}
+func (UnionFloat) ImplementsInstanceSearchParamsAISearchOptionsCustomMetadataUnion()          {}
+func (UnionFloat) ImplementsPDFNewParamsPDFOptionsHeightUnion()                               {}
+func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginBottomUnion()                         {}
+func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginLeftUnion()                           {}
+func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginRightUnion()                          {}
+func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginTopUnion()                            {}
+func (UnionFloat) ImplementsPDFNewParamsPDFOptionsWidthUnion()                                {}
+func (UnionFloat) ImplementsSnapshotNewResponseAccessibilityTreeValueUnion()                  {}
+func (UnionFloat) ImplementsAccessibilityTreeNewResponseAccessibilityTreeValueUnion()         {}

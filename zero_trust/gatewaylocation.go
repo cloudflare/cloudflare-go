@@ -7,10 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
@@ -76,16 +78,16 @@ func (r *GatewayLocationService) Update(ctx context.Context, locationID string, 
 }
 
 // List Zero Trust Gateway locations for an account.
-func (r *GatewayLocationService) List(ctx context.Context, query GatewayLocationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Location], err error) {
+func (r *GatewayLocationService) List(ctx context.Context, params GatewayLocationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Location], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/gateway/locations", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/gateway/locations", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -98,8 +100,8 @@ func (r *GatewayLocationService) List(ctx context.Context, query GatewayLocation
 }
 
 // List Zero Trust Gateway locations for an account.
-func (r *GatewayLocationService) ListAutoPaging(ctx context.Context, query GatewayLocationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Location] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *GatewayLocationService) ListAutoPaging(ctx context.Context, params GatewayLocationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Location] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a configured Zero Trust Gateway location.
@@ -770,6 +772,97 @@ func (r GatewayLocationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayLocationListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Sort direction. Only takes effect when `order_by` is also provided; it is
+	// ignored otherwise. When `direction` is omitted the effective direction is
+	// field-specific: `created_at` and `updated_at` default to descending (newest
+	// first); `name` defaults to ascending.
+	//
+	// - `asc` — ascending.
+	// - `desc` — descending.
+	Direction param.Field[GatewayLocationListParamsDirection] `query:"direction"`
+	// Filter the returned locations by one or more `field:value` pairs. Repeat the
+	// parameter to apply multiple filters; they are combined with logical AND (a
+	// location must satisfy every filter to be returned).
+	//
+	// Supported fields and their matching behaviour:
+	//
+	// - `name` — case-insensitive substring match on the location name.
+	// - `id` — substring match on the location ID (UUID), with or without dashes.
+	// - `is_default` — whether it is the default for the account.
+	//
+	// Each entry must match one of the per-field patterns below:
+	//
+	// - the field must be one of `name`, `id`, or `is_default`;
+	// - `name`/`id` accept any value;
+	// - `is_default` only accepts `true` or `false`; any other value returns `400`
+	Filter param.Field[[]interface{}] `query:"filter"`
+	// Field to sort the returned locations by. When omitted, the order of results is
+	// unspecified. Supported values:
+	//
+	//   - `name` — sort alphabetically by location name.
+	//   - `created_at` — sort by creation time; defaults to descending unless
+	//     `direction` is set.
+	//   - `updated_at` — sort by last-modified time; defaults to descending unless
+	//     `direction` is set.
+	OrderBy param.Field[GatewayLocationListParamsOrderBy] `query:"order_by"`
+	// Case-insensitive substring match on the location name. When combined with
+	// `filter`, both must match (logical AND).
+	Search param.Field[string] `query:"search"`
+}
+
+// URLQuery serializes [GatewayLocationListParams]'s query parameters as
+// `url.Values`.
+func (r GatewayLocationListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Sort direction. Only takes effect when `order_by` is also provided; it is
+// ignored otherwise. When `direction` is omitted the effective direction is
+// field-specific: `created_at` and `updated_at` default to descending (newest
+// first); `name` defaults to ascending.
+//
+// - `asc` — ascending.
+// - `desc` — descending.
+type GatewayLocationListParamsDirection string
+
+const (
+	GatewayLocationListParamsDirectionAsc  GatewayLocationListParamsDirection = "asc"
+	GatewayLocationListParamsDirectionDesc GatewayLocationListParamsDirection = "desc"
+)
+
+func (r GatewayLocationListParamsDirection) IsKnown() bool {
+	switch r {
+	case GatewayLocationListParamsDirectionAsc, GatewayLocationListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
+// Field to sort the returned locations by. When omitted, the order of results is
+// unspecified. Supported values:
+//
+//   - `name` — sort alphabetically by location name.
+//   - `created_at` — sort by creation time; defaults to descending unless
+//     `direction` is set.
+//   - `updated_at` — sort by last-modified time; defaults to descending unless
+//     `direction` is set.
+type GatewayLocationListParamsOrderBy string
+
+const (
+	GatewayLocationListParamsOrderByName      GatewayLocationListParamsOrderBy = "name"
+	GatewayLocationListParamsOrderByCreatedAt GatewayLocationListParamsOrderBy = "created_at"
+	GatewayLocationListParamsOrderByUpdatedAt GatewayLocationListParamsOrderBy = "updated_at"
+)
+
+func (r GatewayLocationListParamsOrderBy) IsKnown() bool {
+	switch r {
+	case GatewayLocationListParamsOrderByName, GatewayLocationListParamsOrderByCreatedAt, GatewayLocationListParamsOrderByUpdatedAt:
+		return true
+	}
+	return false
 }
 
 type GatewayLocationDeleteParams struct {

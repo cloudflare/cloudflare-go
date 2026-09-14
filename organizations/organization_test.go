@@ -32,7 +32,7 @@ func TestOrganizationNewWithOptionalParams(t *testing.T) {
 		Organization: organizations.OrganizationParam{
 			Name: cloudflare.F("name"),
 			Parent: cloudflare.F(organizations.OrganizationParentParam{
-				ID: cloudflare.F("a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8"),
+				ID: cloudflare.F("a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8"),
 			}),
 			Profile: cloudflare.F(accounts.AccountProfileParam{
 				BusinessAddress:  cloudflare.F("business_address"),
@@ -67,12 +67,12 @@ func TestOrganizationUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Organizations.Update(
 		context.TODO(),
-		"a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8",
+		"a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8",
 		organizations.OrganizationUpdateParams{
 			Organization: organizations.OrganizationParam{
 				Name: cloudflare.F("name"),
 				Parent: cloudflare.F(organizations.OrganizationParentParam{
-					ID: cloudflare.F("a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8"),
+					ID: cloudflare.F("a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8"),
 				}),
 				Profile: cloudflare.F(accounts.AccountProfileParam{
 					BusinessAddress:  cloudflare.F("business_address"),
@@ -108,7 +108,7 @@ func TestOrganizationListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Organizations.List(context.TODO(), organizations.OrganizationListParams{
-		ID: cloudflare.F([]string{"a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8"}),
+		ID: cloudflare.F([]string{"a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8"}),
 		Containing: cloudflare.F(organizations.OrganizationListParamsContaining{
 			Account:      cloudflare.F("account"),
 			Organization: cloudflare.F("organization"),
@@ -147,7 +147,7 @@ func TestOrganizationDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Organizations.Delete(context.TODO(), "a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8")
+	_, err := client.Organizations.Delete(context.TODO(), "a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -170,7 +170,7 @@ func TestOrganizationGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Organizations.Get(context.TODO(), "a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8")
+	_, err := client.Organizations.Get(context.TODO(), "a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

@@ -31,7 +31,7 @@ func TestCertificatePackNewWithOptionalParams(t *testing.T) {
 	_, err := client.SSL.CertificatePacks.New(context.TODO(), ssl.CertificatePackNewParams{
 		ZoneID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		CertificateAuthority: cloudflare.F(ssl.CertificatePackNewParamsCertificateAuthorityLetsEncrypt),
-		Hosts:                cloudflare.F([]string{"example.com", "*.example.com", "www.example.com"}),
+		Hosts:                cloudflare.F([]ssl.HostParam{"example.com", "*.example.com", "www.example.com"}),
 		Type:                 cloudflare.F(ssl.CertificatePackNewParamsTypeAdvanced),
 		ValidationMethod:     cloudflare.F(ssl.CertificatePackNewParamsValidationMethodTXT),
 		ValidityDays:         cloudflare.F(ssl.CertificatePackNewParamsValidityDays14),

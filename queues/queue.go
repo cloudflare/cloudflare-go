@@ -194,16 +194,17 @@ func (r *QueueService) GetMetrics(ctx context.Context, queueID string, query Que
 }
 
 type Queue struct {
-	Consumers           []Consumer      `json:"consumers"`
-	ConsumersTotalCount float64         `json:"consumers_total_count"`
-	CreatedOn           string          `json:"created_on"`
-	ModifiedOn          string          `json:"modified_on"`
-	Producers           []QueueProducer `json:"producers"`
-	ProducersTotalCount float64         `json:"producers_total_count"`
-	QueueID             string          `json:"queue_id"`
-	QueueName           string          `json:"queue_name"`
-	Settings            QueueSettings   `json:"settings"`
-	JSON                queueJSON       `json:"-"`
+	Consumers           []Consumer        `json:"consumers"`
+	ConsumersTotalCount float64           `json:"consumers_total_count"`
+	CreatedOn           string            `json:"created_on"`
+	Jurisdiction        QueueJurisdiction `json:"jurisdiction"`
+	ModifiedOn          string            `json:"modified_on"`
+	Producers           []QueueProducer   `json:"producers"`
+	ProducersTotalCount float64           `json:"producers_total_count"`
+	QueueID             string            `json:"queue_id"`
+	QueueName           string            `json:"queue_name"`
+	Settings            QueueSettings     `json:"settings"`
+	JSON                queueJSON         `json:"-"`
 }
 
 // queueJSON contains the JSON metadata for the struct [Queue]
@@ -211,6 +212,7 @@ type queueJSON struct {
 	Consumers           apijson.Field
 	ConsumersTotalCount apijson.Field
 	CreatedOn           apijson.Field
+	Jurisdiction        apijson.Field
 	ModifiedOn          apijson.Field
 	Producers           apijson.Field
 	ProducersTotalCount apijson.Field
@@ -227,6 +229,22 @@ func (r *Queue) UnmarshalJSON(data []byte) (err error) {
 
 func (r queueJSON) RawJSON() string {
 	return r.raw
+}
+
+type QueueJurisdiction string
+
+const (
+	QueueJurisdictionEu      QueueJurisdiction = "eu"
+	QueueJurisdictionUs      QueueJurisdiction = "us"
+	QueueJurisdictionFedramp QueueJurisdiction = "fedramp"
+)
+
+func (r QueueJurisdiction) IsKnown() bool {
+	switch r {
+	case QueueJurisdictionEu, QueueJurisdictionUs, QueueJurisdictionFedramp:
+		return true
+	}
+	return false
 }
 
 type QueueProducer struct {
@@ -410,8 +428,9 @@ func (r queueSettingsJSON) RawJSON() string {
 }
 
 type QueueParam struct {
-	QueueName param.Field[string]             `json:"queue_name"`
-	Settings  param.Field[QueueSettingsParam] `json:"settings"`
+	Jurisdiction param.Field[QueueJurisdiction]  `json:"jurisdiction"`
+	QueueName    param.Field[string]             `json:"queue_name"`
+	Settings     param.Field[QueueSettingsParam] `json:"settings"`
 }
 
 func (r QueueParam) MarshalJSON() (data []byte, err error) {
@@ -545,12 +564,29 @@ func (r queueGetMetricsResponseJSON) RawJSON() string {
 
 type QueueNewParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	QueueName param.Field[string] `json:"queue_name" api:"required"`
+	AccountID    param.Field[string]                     `path:"account_id" api:"required"`
+	QueueName    param.Field[string]                     `json:"queue_name" api:"required"`
+	Jurisdiction param.Field[QueueNewParamsJurisdiction] `json:"jurisdiction"`
 }
 
 func (r QueueNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type QueueNewParamsJurisdiction string
+
+const (
+	QueueNewParamsJurisdictionEu      QueueNewParamsJurisdiction = "eu"
+	QueueNewParamsJurisdictionUs      QueueNewParamsJurisdiction = "us"
+	QueueNewParamsJurisdictionFedramp QueueNewParamsJurisdiction = "fedramp"
+)
+
+func (r QueueNewParamsJurisdiction) IsKnown() bool {
+	switch r {
+	case QueueNewParamsJurisdictionEu, QueueNewParamsJurisdictionUs, QueueNewParamsJurisdictionFedramp:
+		return true
+	}
+	return false
 }
 
 type QueueNewResponseEnvelope struct {

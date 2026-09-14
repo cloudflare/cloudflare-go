@@ -127,6 +127,9 @@ type DevicePolicyDefaultEditResponse struct {
 	SwitchLocked bool `json:"switch_locked"`
 	// Determines which tunnel protocol to use.
 	TunnelProtocol string `json:"tunnel_protocol"`
+	// Determines whether uninstalling the WARP client requires an override code.
+	// (Windows only).
+	UninstallProtection bool `json:"uninstall_protection"`
 	// Virtual network access settings for the device.
 	VirtualNetworks DevicePolicyDefaultEditResponseVirtualNetworks `json:"virtual_networks" api:"nullable"`
 	JSON            devicePolicyDefaultEditResponseJSON            `json:"-"`
@@ -157,6 +160,7 @@ type devicePolicyDefaultEditResponseJSON struct {
 	SupportURL                 apijson.Field
 	SwitchLocked               apijson.Field
 	TunnelProtocol             apijson.Field
+	UninstallProtection        apijson.Field
 	VirtualNetworks            apijson.Field
 	raw                        string
 	ExtraFields                map[string]apijson.Field
@@ -334,6 +338,9 @@ type DevicePolicyDefaultGetResponse struct {
 	SwitchLocked bool `json:"switch_locked"`
 	// Determines which tunnel protocol to use.
 	TunnelProtocol string `json:"tunnel_protocol"`
+	// Determines whether uninstalling the WARP client requires an override code.
+	// (Windows only).
+	UninstallProtection bool `json:"uninstall_protection"`
 	// Virtual network access settings for the device.
 	VirtualNetworks DevicePolicyDefaultGetResponseVirtualNetworks `json:"virtual_networks" api:"nullable"`
 	JSON            devicePolicyDefaultGetResponseJSON            `json:"-"`
@@ -364,6 +371,7 @@ type devicePolicyDefaultGetResponseJSON struct {
 	SupportURL                 apijson.Field
 	SwitchLocked               apijson.Field
 	TunnelProtocol             apijson.Field
+	UninstallProtection        apijson.Field
 	VirtualNetworks            apijson.Field
 	raw                        string
 	ExtraFields                map[string]apijson.Field
@@ -545,6 +553,9 @@ type DevicePolicyDefaultEditParams struct {
 	SwitchLocked param.Field[bool] `json:"switch_locked"`
 	// Determines which tunnel protocol to use.
 	TunnelProtocol param.Field[string] `json:"tunnel_protocol"`
+	// Determines whether uninstalling the WARP client requires an override code.
+	// (Windows only).
+	UninstallProtection param.Field[bool] `json:"uninstall_protection"`
 	// Virtual network access settings for the device.
 	VirtualNetworks param.Field[DevicePolicyDefaultEditParamsVirtualNetworks] `json:"virtual_networks"`
 }

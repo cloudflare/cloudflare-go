@@ -36,10 +36,10 @@ func NewTokenValueService(opts ...option.RequestOption) (r *TokenValueService) {
 }
 
 // Roll the Account Owned API token secret.
-func (r *TokenValueService) Update(ctx context.Context, tokenID string, params TokenValueUpdateParams, opts ...option.RequestOption) (res *shared.TokenValue, err error) {
+func (r *TokenValueService) Update(ctx context.Context, tokenID string, body TokenValueUpdateParams, opts ...option.RequestOption) (res *shared.TokenValue, err error) {
 	var env TokenValueUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -47,8 +47,8 @@ func (r *TokenValueService) Update(ctx context.Context, tokenID string, params T
 		err = errors.New("missing required token_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/tokens/%s/value", params.AccountID, tokenID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/tokens/%s/value", body.AccountID, tokenID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -59,11 +59,6 @@ func (r *TokenValueService) Update(ctx context.Context, tokenID string, params T
 type TokenValueUpdateParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Body      interface{}         `json:"body" api:"required"`
-}
-
-func (r TokenValueUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type TokenValueUpdateResponseEnvelope struct {

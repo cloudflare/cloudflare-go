@@ -952,15 +952,16 @@ func (r BucketLifecycleUpdateParamsRulesStorageClassTransitionsStorageClass) IsK
 type BucketLifecycleUpdateParamsCfR2Jurisdiction string
 
 const (
-	BucketLifecycleUpdateParamsCfR2JurisdictionDefault BucketLifecycleUpdateParamsCfR2Jurisdiction = "default"
-	BucketLifecycleUpdateParamsCfR2JurisdictionEu      BucketLifecycleUpdateParamsCfR2Jurisdiction = "eu"
-	BucketLifecycleUpdateParamsCfR2JurisdictionUs      BucketLifecycleUpdateParamsCfR2Jurisdiction = "us"
-	BucketLifecycleUpdateParamsCfR2JurisdictionFedramp BucketLifecycleUpdateParamsCfR2Jurisdiction = "fedramp"
+	BucketLifecycleUpdateParamsCfR2JurisdictionDefault     BucketLifecycleUpdateParamsCfR2Jurisdiction = "default"
+	BucketLifecycleUpdateParamsCfR2JurisdictionEu          BucketLifecycleUpdateParamsCfR2Jurisdiction = "eu"
+	BucketLifecycleUpdateParamsCfR2JurisdictionUs          BucketLifecycleUpdateParamsCfR2Jurisdiction = "us"
+	BucketLifecycleUpdateParamsCfR2JurisdictionFedramp     BucketLifecycleUpdateParamsCfR2Jurisdiction = "fedramp"
+	BucketLifecycleUpdateParamsCfR2JurisdictionFedrampHigh BucketLifecycleUpdateParamsCfR2Jurisdiction = "fedramp-high"
 )
 
 func (r BucketLifecycleUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketLifecycleUpdateParamsCfR2JurisdictionDefault, BucketLifecycleUpdateParamsCfR2JurisdictionEu, BucketLifecycleUpdateParamsCfR2JurisdictionUs, BucketLifecycleUpdateParamsCfR2JurisdictionFedramp:
+	case BucketLifecycleUpdateParamsCfR2JurisdictionDefault, BucketLifecycleUpdateParamsCfR2JurisdictionEu, BucketLifecycleUpdateParamsCfR2JurisdictionUs, BucketLifecycleUpdateParamsCfR2JurisdictionFedramp, BucketLifecycleUpdateParamsCfR2JurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -1020,15 +1021,16 @@ type BucketLifecycleGetParams struct {
 type BucketLifecycleGetParamsCfR2Jurisdiction string
 
 const (
-	BucketLifecycleGetParamsCfR2JurisdictionDefault BucketLifecycleGetParamsCfR2Jurisdiction = "default"
-	BucketLifecycleGetParamsCfR2JurisdictionEu      BucketLifecycleGetParamsCfR2Jurisdiction = "eu"
-	BucketLifecycleGetParamsCfR2JurisdictionUs      BucketLifecycleGetParamsCfR2Jurisdiction = "us"
-	BucketLifecycleGetParamsCfR2JurisdictionFedramp BucketLifecycleGetParamsCfR2Jurisdiction = "fedramp"
+	BucketLifecycleGetParamsCfR2JurisdictionDefault     BucketLifecycleGetParamsCfR2Jurisdiction = "default"
+	BucketLifecycleGetParamsCfR2JurisdictionEu          BucketLifecycleGetParamsCfR2Jurisdiction = "eu"
+	BucketLifecycleGetParamsCfR2JurisdictionUs          BucketLifecycleGetParamsCfR2Jurisdiction = "us"
+	BucketLifecycleGetParamsCfR2JurisdictionFedramp     BucketLifecycleGetParamsCfR2Jurisdiction = "fedramp"
+	BucketLifecycleGetParamsCfR2JurisdictionFedrampHigh BucketLifecycleGetParamsCfR2Jurisdiction = "fedramp-high"
 )
 
 func (r BucketLifecycleGetParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketLifecycleGetParamsCfR2JurisdictionDefault, BucketLifecycleGetParamsCfR2JurisdictionEu, BucketLifecycleGetParamsCfR2JurisdictionUs, BucketLifecycleGetParamsCfR2JurisdictionFedramp:
+	case BucketLifecycleGetParamsCfR2JurisdictionDefault, BucketLifecycleGetParamsCfR2JurisdictionEu, BucketLifecycleGetParamsCfR2JurisdictionUs, BucketLifecycleGetParamsCfR2JurisdictionFedramp, BucketLifecycleGetParamsCfR2JurisdictionFedrampHigh:
 		return true
 	}
 	return false

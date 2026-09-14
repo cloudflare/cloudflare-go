@@ -453,13 +453,17 @@ type InstanceNewResponseIndexingOptions struct {
 	// enables character-level substring matching (good for partial matches, code,
 	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer InstanceNewResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
-	JSON             instanceNewResponseIndexingOptionsJSON             `json:"-"`
+	// Enables OCR ingestion for PDFs and images. Changing this triggers a full
+	// re-index. Defaults to false.
+	UseOCR bool                                   `json:"use_ocr"`
+	JSON   instanceNewResponseIndexingOptionsJSON `json:"-"`
 }
 
 // instanceNewResponseIndexingOptionsJSON contains the JSON metadata for the struct
 // [InstanceNewResponseIndexingOptions]
 type instanceNewResponseIndexingOptionsJSON struct {
 	KeywordTokenizer apijson.Field
+	UseOCR           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -1262,13 +1266,17 @@ type InstanceUpdateResponseIndexingOptions struct {
 	// enables character-level substring matching (good for partial matches, code,
 	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer InstanceUpdateResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
-	JSON             instanceUpdateResponseIndexingOptionsJSON             `json:"-"`
+	// Enables OCR ingestion for PDFs and images. Changing this triggers a full
+	// re-index. Defaults to false.
+	UseOCR bool                                      `json:"use_ocr"`
+	JSON   instanceUpdateResponseIndexingOptionsJSON `json:"-"`
 }
 
 // instanceUpdateResponseIndexingOptionsJSON contains the JSON metadata for the
 // struct [InstanceUpdateResponseIndexingOptions]
 type instanceUpdateResponseIndexingOptionsJSON struct {
 	KeywordTokenizer apijson.Field
+	UseOCR           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -2060,6 +2068,7 @@ func (r instanceListResponseIndexMethodJSON) RawJSON() string {
 
 type InstanceListResponseIndexingOptions struct {
 	KeywordTokenizer InstanceListResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
+	UseOCR           bool                                                `json:"use_ocr"`
 	ExtraFields      map[string]interface{}                              `json:"-" api:"extrafields"`
 	JSON             instanceListResponseIndexingOptionsJSON             `json:"-"`
 }
@@ -2068,6 +2077,7 @@ type InstanceListResponseIndexingOptions struct {
 // struct [InstanceListResponseIndexingOptions]
 type instanceListResponseIndexingOptionsJSON struct {
 	KeywordTokenizer apijson.Field
+	UseOCR           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -2821,13 +2831,17 @@ type InstanceDeleteResponseIndexingOptions struct {
 	// enables character-level substring matching (good for partial matches, code,
 	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer InstanceDeleteResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
-	JSON             instanceDeleteResponseIndexingOptionsJSON             `json:"-"`
+	// Enables OCR ingestion for PDFs and images. Changing this triggers a full
+	// re-index. Defaults to false.
+	UseOCR bool                                      `json:"use_ocr"`
+	JSON   instanceDeleteResponseIndexingOptionsJSON `json:"-"`
 }
 
 // instanceDeleteResponseIndexingOptionsJSON contains the JSON metadata for the
 // struct [InstanceDeleteResponseIndexingOptions]
 type instanceDeleteResponseIndexingOptionsJSON struct {
 	KeywordTokenizer apijson.Field
+	UseOCR           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -3994,13 +4008,17 @@ type InstanceReadResponseIndexingOptions struct {
 	// enables character-level substring matching (good for partial matches, code,
 	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer InstanceReadResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
-	JSON             instanceReadResponseIndexingOptionsJSON             `json:"-"`
+	// Enables OCR ingestion for PDFs and images. Changing this triggers a full
+	// re-index. Defaults to false.
+	UseOCR bool                                    `json:"use_ocr"`
+	JSON   instanceReadResponseIndexingOptionsJSON `json:"-"`
 }
 
 // instanceReadResponseIndexingOptionsJSON contains the JSON metadata for the
 // struct [InstanceReadResponseIndexingOptions]
 type instanceReadResponseIndexingOptionsJSON struct {
 	KeywordTokenizer apijson.Field
+	UseOCR           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -4976,6 +4994,9 @@ type InstanceNewParamsIndexingOptions struct {
 	// enables character-level substring matching (good for partial matches, code,
 	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer param.Field[InstanceNewParamsIndexingOptionsKeywordTokenizer] `json:"keyword_tokenizer"`
+	// Enables OCR ingestion for PDFs and images. Changing this triggers a full
+	// re-index. Defaults to false.
+	UseOCR param.Field[bool] `json:"use_ocr"`
 }
 
 func (r InstanceNewParamsIndexingOptions) MarshalJSON() (data []byte, err error) {
@@ -5505,6 +5526,9 @@ type InstanceUpdateParamsIndexingOptions struct {
 	// enables character-level substring matching (good for partial matches, code,
 	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer param.Field[InstanceUpdateParamsIndexingOptionsKeywordTokenizer] `json:"keyword_tokenizer"`
+	// Enables OCR ingestion for PDFs and images. Changing this triggers a full
+	// re-index. Defaults to false.
+	UseOCR param.Field[bool] `json:"use_ocr"`
 }
 
 func (r InstanceUpdateParamsIndexingOptions) MarshalJSON() (data []byte, err error) {
@@ -6067,10 +6091,14 @@ func (r InstanceChatCompletionsParamsMessagesRole) IsKnown() bool {
 }
 
 type InstanceChatCompletionsParamsAISearchOptions struct {
-	Cache        param.Field[InstanceChatCompletionsParamsAISearchOptionsCache]        `json:"cache"`
-	QueryRewrite param.Field[InstanceChatCompletionsParamsAISearchOptionsQueryRewrite] `json:"query_rewrite"`
-	Reranking    param.Field[InstanceChatCompletionsParamsAISearchOptionsReranking]    `json:"reranking"`
-	Retrieval    param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrieval]    `json:"retrieval"`
+	Cache param.Field[InstanceChatCompletionsParamsAISearchOptionsCache] `json:"cache"`
+	// Metadata added to AI Gateway logs for requests triggered by this operation.
+	// Accepts up to 2 string, number, or boolean entries. Keys 'ai-search', 'task',
+	// 'origin', and keys beginning with 'cf.' are reserved.
+	CustomMetadata param.Field[map[string]InstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion] `json:"custom_metadata"`
+	QueryRewrite   param.Field[InstanceChatCompletionsParamsAISearchOptionsQueryRewrite]                   `json:"query_rewrite"`
+	Reranking      param.Field[InstanceChatCompletionsParamsAISearchOptionsReranking]                      `json:"reranking"`
+	Retrieval      param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrieval]                      `json:"retrieval"`
 }
 
 func (r InstanceChatCompletionsParamsAISearchOptions) MarshalJSON() (data []byte, err error) {
@@ -6101,6 +6129,11 @@ func (r InstanceChatCompletionsParamsAISearchOptionsCacheCacheThreshold) IsKnown
 		return true
 	}
 	return false
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type InstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion interface {
+	ImplementsInstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion()
 }
 
 type InstanceChatCompletionsParamsAISearchOptionsQueryRewrite struct {
@@ -6283,10 +6316,14 @@ func (r InstanceSearchParams) MarshalJSON() (data []byte, err error) {
 }
 
 type InstanceSearchParamsAISearchOptions struct {
-	Cache        param.Field[InstanceSearchParamsAISearchOptionsCache]        `json:"cache"`
-	QueryRewrite param.Field[InstanceSearchParamsAISearchOptionsQueryRewrite] `json:"query_rewrite"`
-	Reranking    param.Field[InstanceSearchParamsAISearchOptionsReranking]    `json:"reranking"`
-	Retrieval    param.Field[InstanceSearchParamsAISearchOptionsRetrieval]    `json:"retrieval"`
+	Cache param.Field[InstanceSearchParamsAISearchOptionsCache] `json:"cache"`
+	// Metadata added to AI Gateway logs for requests triggered by this operation.
+	// Accepts up to 2 string, number, or boolean entries. Keys 'ai-search', 'task',
+	// 'origin', and keys beginning with 'cf.' are reserved.
+	CustomMetadata param.Field[map[string]InstanceSearchParamsAISearchOptionsCustomMetadataUnion] `json:"custom_metadata"`
+	QueryRewrite   param.Field[InstanceSearchParamsAISearchOptionsQueryRewrite]                   `json:"query_rewrite"`
+	Reranking      param.Field[InstanceSearchParamsAISearchOptionsReranking]                      `json:"reranking"`
+	Retrieval      param.Field[InstanceSearchParamsAISearchOptionsRetrieval]                      `json:"retrieval"`
 }
 
 func (r InstanceSearchParamsAISearchOptions) MarshalJSON() (data []byte, err error) {
@@ -6317,6 +6354,11 @@ func (r InstanceSearchParamsAISearchOptionsCacheCacheThreshold) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type InstanceSearchParamsAISearchOptionsCustomMetadataUnion interface {
+	ImplementsInstanceSearchParamsAISearchOptionsCustomMetadataUnion()
 }
 
 type InstanceSearchParamsAISearchOptionsQueryRewrite struct {

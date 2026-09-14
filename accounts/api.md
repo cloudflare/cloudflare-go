@@ -140,7 +140,7 @@ Methods:
 
 Methods:
 
-- <code title="put /accounts/{account_id}/tokens/{token_id}/value">client.Accounts.Tokens.Value.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#TokenValueService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, tokenID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#TokenValueUpdateParams">TokenValueUpdateParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#TokenValue">TokenValue</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="put /accounts/{account_id}/tokens/{token_id}/value">client.Accounts.Tokens.Value.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#TokenValueService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, tokenID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#TokenValueUpdateParams">TokenValueUpdateParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/shared#TokenValue">TokenValue</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Logs
 

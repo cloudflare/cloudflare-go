@@ -564,15 +564,16 @@ func (r BucketSippyUpdateParamsBodyR2EnableSippyAzureSourceProvider) IsKnown() b
 type BucketSippyUpdateParamsCfR2Jurisdiction string
 
 const (
-	BucketSippyUpdateParamsCfR2JurisdictionDefault BucketSippyUpdateParamsCfR2Jurisdiction = "default"
-	BucketSippyUpdateParamsCfR2JurisdictionEu      BucketSippyUpdateParamsCfR2Jurisdiction = "eu"
-	BucketSippyUpdateParamsCfR2JurisdictionUs      BucketSippyUpdateParamsCfR2Jurisdiction = "us"
-	BucketSippyUpdateParamsCfR2JurisdictionFedramp BucketSippyUpdateParamsCfR2Jurisdiction = "fedramp"
+	BucketSippyUpdateParamsCfR2JurisdictionDefault     BucketSippyUpdateParamsCfR2Jurisdiction = "default"
+	BucketSippyUpdateParamsCfR2JurisdictionEu          BucketSippyUpdateParamsCfR2Jurisdiction = "eu"
+	BucketSippyUpdateParamsCfR2JurisdictionUs          BucketSippyUpdateParamsCfR2Jurisdiction = "us"
+	BucketSippyUpdateParamsCfR2JurisdictionFedramp     BucketSippyUpdateParamsCfR2Jurisdiction = "fedramp"
+	BucketSippyUpdateParamsCfR2JurisdictionFedrampHigh BucketSippyUpdateParamsCfR2Jurisdiction = "fedramp-high"
 )
 
 func (r BucketSippyUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketSippyUpdateParamsCfR2JurisdictionDefault, BucketSippyUpdateParamsCfR2JurisdictionEu, BucketSippyUpdateParamsCfR2JurisdictionUs, BucketSippyUpdateParamsCfR2JurisdictionFedramp:
+	case BucketSippyUpdateParamsCfR2JurisdictionDefault, BucketSippyUpdateParamsCfR2JurisdictionEu, BucketSippyUpdateParamsCfR2JurisdictionUs, BucketSippyUpdateParamsCfR2JurisdictionFedramp, BucketSippyUpdateParamsCfR2JurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -632,15 +633,16 @@ type BucketSippyDeleteParams struct {
 type BucketSippyDeleteParamsCfR2Jurisdiction string
 
 const (
-	BucketSippyDeleteParamsCfR2JurisdictionDefault BucketSippyDeleteParamsCfR2Jurisdiction = "default"
-	BucketSippyDeleteParamsCfR2JurisdictionEu      BucketSippyDeleteParamsCfR2Jurisdiction = "eu"
-	BucketSippyDeleteParamsCfR2JurisdictionUs      BucketSippyDeleteParamsCfR2Jurisdiction = "us"
-	BucketSippyDeleteParamsCfR2JurisdictionFedramp BucketSippyDeleteParamsCfR2Jurisdiction = "fedramp"
+	BucketSippyDeleteParamsCfR2JurisdictionDefault     BucketSippyDeleteParamsCfR2Jurisdiction = "default"
+	BucketSippyDeleteParamsCfR2JurisdictionEu          BucketSippyDeleteParamsCfR2Jurisdiction = "eu"
+	BucketSippyDeleteParamsCfR2JurisdictionUs          BucketSippyDeleteParamsCfR2Jurisdiction = "us"
+	BucketSippyDeleteParamsCfR2JurisdictionFedramp     BucketSippyDeleteParamsCfR2Jurisdiction = "fedramp"
+	BucketSippyDeleteParamsCfR2JurisdictionFedrampHigh BucketSippyDeleteParamsCfR2Jurisdiction = "fedramp-high"
 )
 
 func (r BucketSippyDeleteParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketSippyDeleteParamsCfR2JurisdictionDefault, BucketSippyDeleteParamsCfR2JurisdictionEu, BucketSippyDeleteParamsCfR2JurisdictionUs, BucketSippyDeleteParamsCfR2JurisdictionFedramp:
+	case BucketSippyDeleteParamsCfR2JurisdictionDefault, BucketSippyDeleteParamsCfR2JurisdictionEu, BucketSippyDeleteParamsCfR2JurisdictionUs, BucketSippyDeleteParamsCfR2JurisdictionFedramp, BucketSippyDeleteParamsCfR2JurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -700,15 +702,16 @@ type BucketSippyGetParams struct {
 type BucketSippyGetParamsCfR2Jurisdiction string
 
 const (
-	BucketSippyGetParamsCfR2JurisdictionDefault BucketSippyGetParamsCfR2Jurisdiction = "default"
-	BucketSippyGetParamsCfR2JurisdictionEu      BucketSippyGetParamsCfR2Jurisdiction = "eu"
-	BucketSippyGetParamsCfR2JurisdictionUs      BucketSippyGetParamsCfR2Jurisdiction = "us"
-	BucketSippyGetParamsCfR2JurisdictionFedramp BucketSippyGetParamsCfR2Jurisdiction = "fedramp"
+	BucketSippyGetParamsCfR2JurisdictionDefault     BucketSippyGetParamsCfR2Jurisdiction = "default"
+	BucketSippyGetParamsCfR2JurisdictionEu          BucketSippyGetParamsCfR2Jurisdiction = "eu"
+	BucketSippyGetParamsCfR2JurisdictionUs          BucketSippyGetParamsCfR2Jurisdiction = "us"
+	BucketSippyGetParamsCfR2JurisdictionFedramp     BucketSippyGetParamsCfR2Jurisdiction = "fedramp"
+	BucketSippyGetParamsCfR2JurisdictionFedrampHigh BucketSippyGetParamsCfR2Jurisdiction = "fedramp-high"
 )
 
 func (r BucketSippyGetParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketSippyGetParamsCfR2JurisdictionDefault, BucketSippyGetParamsCfR2JurisdictionEu, BucketSippyGetParamsCfR2JurisdictionUs, BucketSippyGetParamsCfR2JurisdictionFedramp:
+	case BucketSippyGetParamsCfR2JurisdictionDefault, BucketSippyGetParamsCfR2JurisdictionEu, BucketSippyGetParamsCfR2JurisdictionUs, BucketSippyGetParamsCfR2JurisdictionFedramp, BucketSippyGetParamsCfR2JurisdictionFedrampHigh:
 		return true
 	}
 	return false

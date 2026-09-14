@@ -39,7 +39,10 @@ func NewScriptSecretService(opts ...option.RequestOption) (r *ScriptSecretServic
 	return
 }
 
-// Add a secret to a script.
+// Add a secret to a script by creating a new version with that secret.
+//
+// When changing more than one secret at a time, prefer the "Patch multiple script
+// secrets" API instead of changing many secrets individually.
 func (r *ScriptSecretService) Update(ctx context.Context, scriptName string, params ScriptSecretUpdateParams, opts ...option.RequestOption) (res *ScriptSecretUpdateResponse, err error) {
 	var env ScriptSecretUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -91,7 +94,10 @@ func (r *ScriptSecretService) ListAutoPaging(ctx context.Context, scriptName str
 	return pagination.NewSinglePageAutoPager(r.List(ctx, scriptName, query, opts...))
 }
 
-// Remove a secret from a script.
+// Remove a secret from a script by creating a new version without that secret.
+//
+// When changing more than one secret at a time, prefer the "Patch multiple script
+// secrets" API instead of changing many secrets individually.
 func (r *ScriptSecretService) Delete(ctx context.Context, scriptName string, secretName string, params ScriptSecretDeleteParams, opts ...option.RequestOption) (res *ScriptSecretDeleteResponse, err error) {
 	var env ScriptSecretDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -117,7 +123,9 @@ func (r *ScriptSecretService) Delete(ctx context.Context, scriptName string, sec
 }
 
 // Create, update, or delete multiple secrets on a script in a single operation
-// using JSON Merge Patch (RFC 7396).
+// using JSON Merge Patch (RFC 7396). This operation creates a single version with
+// all changes included. Prefer this API instead of changing many secrets
+// individually.
 //
 // Usage:
 //

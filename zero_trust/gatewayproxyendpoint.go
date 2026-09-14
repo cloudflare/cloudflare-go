@@ -7,11 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
@@ -57,16 +59,16 @@ func (r *GatewayProxyEndpointService) New(ctx context.Context, params GatewayPro
 }
 
 // List all Zero Trust Gateway proxy endpoints for an account.
-func (r *GatewayProxyEndpointService) List(ctx context.Context, query GatewayProxyEndpointListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ProxyEndpoint], err error) {
+func (r *GatewayProxyEndpointService) List(ctx context.Context, params GatewayProxyEndpointListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ProxyEndpoint], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -79,8 +81,8 @@ func (r *GatewayProxyEndpointService) List(ctx context.Context, query GatewayPro
 }
 
 // List all Zero Trust Gateway proxy endpoints for an account.
-func (r *GatewayProxyEndpointService) ListAutoPaging(ctx context.Context, query GatewayProxyEndpointListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ProxyEndpoint] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *GatewayProxyEndpointService) ListAutoPaging(ctx context.Context, params GatewayProxyEndpointListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ProxyEndpoint] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a configured Zero Trust Gateway proxy endpoint.
@@ -497,6 +499,96 @@ func (r GatewayProxyEndpointNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayProxyEndpointListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Sort direction. Only takes effect when `order_by` is also provided; it is
+	// ignored otherwise. When `direction` is omitted the effective direction is
+	// field-specific: `created_at` and `updated_at` default to descending (newest
+	// first); `name` defaults to ascending.
+	//
+	// - `asc` — ascending.
+	// - `desc` — descending.
+	Direction param.Field[GatewayProxyEndpointListParamsDirection] `query:"direction"`
+	// Filter the returned proxy endpoints by one or more `field:value` pairs. Repeat
+	// the parameter to apply multiple filters; they are combined with logical AND (an
+	// endpoint must satisfy every filter to be returned).
+	//
+	// Supported fields and their matching behaviour:
+	//
+	//   - `name` — case-insensitive substring match on the endpoint name.
+	//   - `id` — substring match on the endpoint ID (UUID), with or without dashes.
+	//   - `kind` — exact match on the endpoint kind. The value must be `ip` or
+	//     `identity`; any other value returns `400`.
+	//
+	// Each entry must match one of the per-field patterns below: the field must be one
+	// of `name`, `id`, or `kind`; `name`/`id` accept any value, while `kind` only
+	// accepts `ip` or `identity`.
+	Filter param.Field[[]interface{}] `query:"filter"`
+	// Field to sort the returned endpoints by. When omitted, the order of results is
+	// unspecified. Supported values:
+	//
+	//   - `name` — sort alphabetically by endpoint name.
+	//   - `created_at` — sort by creation time; defaults to descending unless
+	//     `direction` is set.
+	//   - `updated_at` — sort by last-modified time; defaults to descending unless
+	//     `direction` is set.
+	OrderBy param.Field[GatewayProxyEndpointListParamsOrderBy] `query:"order_by"`
+	// Case-insensitive substring match on the endpoint name. When combined with
+	// `filter`, both must match (logical AND).
+	Search param.Field[string] `query:"search"`
+}
+
+// URLQuery serializes [GatewayProxyEndpointListParams]'s query parameters as
+// `url.Values`.
+func (r GatewayProxyEndpointListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Sort direction. Only takes effect when `order_by` is also provided; it is
+// ignored otherwise. When `direction` is omitted the effective direction is
+// field-specific: `created_at` and `updated_at` default to descending (newest
+// first); `name` defaults to ascending.
+//
+// - `asc` — ascending.
+// - `desc` — descending.
+type GatewayProxyEndpointListParamsDirection string
+
+const (
+	GatewayProxyEndpointListParamsDirectionAsc  GatewayProxyEndpointListParamsDirection = "asc"
+	GatewayProxyEndpointListParamsDirectionDesc GatewayProxyEndpointListParamsDirection = "desc"
+)
+
+func (r GatewayProxyEndpointListParamsDirection) IsKnown() bool {
+	switch r {
+	case GatewayProxyEndpointListParamsDirectionAsc, GatewayProxyEndpointListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
+// Field to sort the returned endpoints by. When omitted, the order of results is
+// unspecified. Supported values:
+//
+//   - `name` — sort alphabetically by endpoint name.
+//   - `created_at` — sort by creation time; defaults to descending unless
+//     `direction` is set.
+//   - `updated_at` — sort by last-modified time; defaults to descending unless
+//     `direction` is set.
+type GatewayProxyEndpointListParamsOrderBy string
+
+const (
+	GatewayProxyEndpointListParamsOrderByName      GatewayProxyEndpointListParamsOrderBy = "name"
+	GatewayProxyEndpointListParamsOrderByCreatedAt GatewayProxyEndpointListParamsOrderBy = "created_at"
+	GatewayProxyEndpointListParamsOrderByUpdatedAt GatewayProxyEndpointListParamsOrderBy = "updated_at"
+)
+
+func (r GatewayProxyEndpointListParamsOrderBy) IsKnown() bool {
+	switch r {
+	case GatewayProxyEndpointListParamsOrderByName, GatewayProxyEndpointListParamsOrderByCreatedAt, GatewayProxyEndpointListParamsOrderByUpdatedAt:
+		return true
+	}
+	return false
 }
 
 type GatewayProxyEndpointDeleteParams struct {

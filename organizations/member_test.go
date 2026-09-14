@@ -29,7 +29,7 @@ func TestMemberNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Organizations.Members.New(
 		context.TODO(),
-		"a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8",
+		"a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8",
 		organizations.MemberNewParams{
 			Member: cloudflare.F(organizations.MemberNewParamsMember{
 				User: cloudflare.F(organizations.MemberNewParamsMemberUser{
@@ -63,7 +63,7 @@ func TestMemberListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Organizations.Members.List(
 		context.TODO(),
-		"a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8",
+		"a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8",
 		organizations.MemberListParams{
 			PageSize:  cloudflare.F(int64(0)),
 			PageToken: cloudflare.F("page_token"),
@@ -97,8 +97,8 @@ func TestMemberDelete(t *testing.T) {
 	)
 	err := client.Organizations.Members.Delete(
 		context.TODO(),
-		"a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8",
-		"a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8",
+		"a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8",
+		"a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -124,8 +124,8 @@ func TestMemberGet(t *testing.T) {
 	)
 	_, err := client.Organizations.Members.Get(
 		context.TODO(),
-		"a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8",
-		"a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8",
+		"a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8",
+		"a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

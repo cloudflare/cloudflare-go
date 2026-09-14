@@ -53,6 +53,7 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 		}),
 		IndexingOptions: cloudflare.F(ai_search.InstanceNewParamsIndexingOptions{
 			KeywordTokenizer: cloudflare.F(ai_search.InstanceNewParamsIndexingOptionsKeywordTokenizerPorter),
+			UseOCR:           cloudflare.F(true),
 		}),
 		MaxNumResults: cloudflare.F(int64(1)),
 		Metadata: cloudflare.F(ai_search.InstanceNewParamsMetadata{
@@ -177,6 +178,7 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 			}),
 			IndexingOptions: cloudflare.F(ai_search.InstanceUpdateParamsIndexingOptions{
 				KeywordTokenizer: cloudflare.F(ai_search.InstanceUpdateParamsIndexingOptionsKeywordTokenizerPorter),
+				UseOCR:           cloudflare.F(true),
 			}),
 			MaxNumResults: cloudflare.F(int64(1)),
 			Metadata: cloudflare.F(ai_search.InstanceUpdateParamsMetadata{
@@ -358,6 +360,10 @@ func TestInstanceChatCompletionsWithOptionalParams(t *testing.T) {
 					CacheThreshold: cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptionsCacheCacheThresholdSuperStrictMatch),
 					Enabled:        cloudflare.F(true),
 				}),
+				CustomMetadata: cloudflare.F(map[string]ai_search.InstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion{
+					"test":    shared.UnionBool(true),
+					"user_id": shared.UnionString("user-123"),
+				}),
 				QueryRewrite: cloudflare.F(ai_search.InstanceChatCompletionsParamsAISearchOptionsQueryRewrite{
 					Enabled:       cloudflare.F(true),
 					Model:         cloudflare.F("model"),
@@ -451,6 +457,10 @@ func TestInstanceSearchWithOptionalParams(t *testing.T) {
 				Cache: cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsCache{
 					CacheThreshold: cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsCacheCacheThresholdSuperStrictMatch),
 					Enabled:        cloudflare.F(true),
+				}),
+				CustomMetadata: cloudflare.F(map[string]ai_search.InstanceSearchParamsAISearchOptionsCustomMetadataUnion{
+					"test":    shared.UnionBool(true),
+					"user_id": shared.UnionString("user-123"),
 				}),
 				QueryRewrite: cloudflare.F(ai_search.InstanceSearchParamsAISearchOptionsQueryRewrite{
 					Enabled:       cloudflare.F(true),

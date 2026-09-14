@@ -206,15 +206,16 @@ func (r bucketJSON) RawJSON() string {
 type BucketJurisdiction string
 
 const (
-	BucketJurisdictionDefault BucketJurisdiction = "default"
-	BucketJurisdictionEu      BucketJurisdiction = "eu"
-	BucketJurisdictionUs      BucketJurisdiction = "us"
-	BucketJurisdictionFedramp BucketJurisdiction = "fedramp"
+	BucketJurisdictionDefault     BucketJurisdiction = "default"
+	BucketJurisdictionEu          BucketJurisdiction = "eu"
+	BucketJurisdictionUs          BucketJurisdiction = "us"
+	BucketJurisdictionFedramp     BucketJurisdiction = "fedramp"
+	BucketJurisdictionFedrampHigh BucketJurisdiction = "fedramp-high"
 )
 
 func (r BucketJurisdiction) IsKnown() bool {
 	switch r {
-	case BucketJurisdictionDefault, BucketJurisdictionEu, BucketJurisdictionUs, BucketJurisdictionFedramp:
+	case BucketJurisdictionDefault, BucketJurisdictionEu, BucketJurisdictionUs, BucketJurisdictionFedramp, BucketJurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -336,15 +337,16 @@ func (r BucketNewParamsStorageClass) IsKnown() bool {
 type BucketNewParamsCfR2Jurisdiction string
 
 const (
-	BucketNewParamsCfR2JurisdictionDefault BucketNewParamsCfR2Jurisdiction = "default"
-	BucketNewParamsCfR2JurisdictionEu      BucketNewParamsCfR2Jurisdiction = "eu"
-	BucketNewParamsCfR2JurisdictionUs      BucketNewParamsCfR2Jurisdiction = "us"
-	BucketNewParamsCfR2JurisdictionFedramp BucketNewParamsCfR2Jurisdiction = "fedramp"
+	BucketNewParamsCfR2JurisdictionDefault     BucketNewParamsCfR2Jurisdiction = "default"
+	BucketNewParamsCfR2JurisdictionEu          BucketNewParamsCfR2Jurisdiction = "eu"
+	BucketNewParamsCfR2JurisdictionUs          BucketNewParamsCfR2Jurisdiction = "us"
+	BucketNewParamsCfR2JurisdictionFedramp     BucketNewParamsCfR2Jurisdiction = "fedramp"
+	BucketNewParamsCfR2JurisdictionFedrampHigh BucketNewParamsCfR2Jurisdiction = "fedramp-high"
 )
 
 func (r BucketNewParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketNewParamsCfR2JurisdictionDefault, BucketNewParamsCfR2JurisdictionEu, BucketNewParamsCfR2JurisdictionUs, BucketNewParamsCfR2JurisdictionFedramp:
+	case BucketNewParamsCfR2JurisdictionDefault, BucketNewParamsCfR2JurisdictionEu, BucketNewParamsCfR2JurisdictionUs, BucketNewParamsCfR2JurisdictionFedramp, BucketNewParamsCfR2JurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -458,15 +460,16 @@ func (r BucketListParamsOrder) IsKnown() bool {
 type BucketListParamsCfR2Jurisdiction string
 
 const (
-	BucketListParamsCfR2JurisdictionDefault BucketListParamsCfR2Jurisdiction = "default"
-	BucketListParamsCfR2JurisdictionEu      BucketListParamsCfR2Jurisdiction = "eu"
-	BucketListParamsCfR2JurisdictionUs      BucketListParamsCfR2Jurisdiction = "us"
-	BucketListParamsCfR2JurisdictionFedramp BucketListParamsCfR2Jurisdiction = "fedramp"
+	BucketListParamsCfR2JurisdictionDefault     BucketListParamsCfR2Jurisdiction = "default"
+	BucketListParamsCfR2JurisdictionEu          BucketListParamsCfR2Jurisdiction = "eu"
+	BucketListParamsCfR2JurisdictionUs          BucketListParamsCfR2Jurisdiction = "us"
+	BucketListParamsCfR2JurisdictionFedramp     BucketListParamsCfR2Jurisdiction = "fedramp"
+	BucketListParamsCfR2JurisdictionFedrampHigh BucketListParamsCfR2Jurisdiction = "fedramp-high"
 )
 
 func (r BucketListParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketListParamsCfR2JurisdictionDefault, BucketListParamsCfR2JurisdictionEu, BucketListParamsCfR2JurisdictionUs, BucketListParamsCfR2JurisdictionFedramp:
+	case BucketListParamsCfR2JurisdictionDefault, BucketListParamsCfR2JurisdictionEu, BucketListParamsCfR2JurisdictionUs, BucketListParamsCfR2JurisdictionFedramp, BucketListParamsCfR2JurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -553,15 +556,16 @@ type BucketDeleteParams struct {
 type BucketDeleteParamsCfR2Jurisdiction string
 
 const (
-	BucketDeleteParamsCfR2JurisdictionDefault BucketDeleteParamsCfR2Jurisdiction = "default"
-	BucketDeleteParamsCfR2JurisdictionEu      BucketDeleteParamsCfR2Jurisdiction = "eu"
-	BucketDeleteParamsCfR2JurisdictionUs      BucketDeleteParamsCfR2Jurisdiction = "us"
-	BucketDeleteParamsCfR2JurisdictionFedramp BucketDeleteParamsCfR2Jurisdiction = "fedramp"
+	BucketDeleteParamsCfR2JurisdictionDefault     BucketDeleteParamsCfR2Jurisdiction = "default"
+	BucketDeleteParamsCfR2JurisdictionEu          BucketDeleteParamsCfR2Jurisdiction = "eu"
+	BucketDeleteParamsCfR2JurisdictionUs          BucketDeleteParamsCfR2Jurisdiction = "us"
+	BucketDeleteParamsCfR2JurisdictionFedramp     BucketDeleteParamsCfR2Jurisdiction = "fedramp"
+	BucketDeleteParamsCfR2JurisdictionFedrampHigh BucketDeleteParamsCfR2Jurisdiction = "fedramp-high"
 )
 
 func (r BucketDeleteParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketDeleteParamsCfR2JurisdictionDefault, BucketDeleteParamsCfR2JurisdictionEu, BucketDeleteParamsCfR2JurisdictionUs, BucketDeleteParamsCfR2JurisdictionFedramp:
+	case BucketDeleteParamsCfR2JurisdictionDefault, BucketDeleteParamsCfR2JurisdictionEu, BucketDeleteParamsCfR2JurisdictionUs, BucketDeleteParamsCfR2JurisdictionFedramp, BucketDeleteParamsCfR2JurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -639,15 +643,16 @@ func (r BucketEditParamsCfR2StorageClass) IsKnown() bool {
 type BucketEditParamsCfR2Jurisdiction string
 
 const (
-	BucketEditParamsCfR2JurisdictionDefault BucketEditParamsCfR2Jurisdiction = "default"
-	BucketEditParamsCfR2JurisdictionEu      BucketEditParamsCfR2Jurisdiction = "eu"
-	BucketEditParamsCfR2JurisdictionUs      BucketEditParamsCfR2Jurisdiction = "us"
-	BucketEditParamsCfR2JurisdictionFedramp BucketEditParamsCfR2Jurisdiction = "fedramp"
+	BucketEditParamsCfR2JurisdictionDefault     BucketEditParamsCfR2Jurisdiction = "default"
+	BucketEditParamsCfR2JurisdictionEu          BucketEditParamsCfR2Jurisdiction = "eu"
+	BucketEditParamsCfR2JurisdictionUs          BucketEditParamsCfR2Jurisdiction = "us"
+	BucketEditParamsCfR2JurisdictionFedramp     BucketEditParamsCfR2Jurisdiction = "fedramp"
+	BucketEditParamsCfR2JurisdictionFedrampHigh BucketEditParamsCfR2Jurisdiction = "fedramp-high"
 )
 
 func (r BucketEditParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketEditParamsCfR2JurisdictionDefault, BucketEditParamsCfR2JurisdictionEu, BucketEditParamsCfR2JurisdictionUs, BucketEditParamsCfR2JurisdictionFedramp:
+	case BucketEditParamsCfR2JurisdictionDefault, BucketEditParamsCfR2JurisdictionEu, BucketEditParamsCfR2JurisdictionUs, BucketEditParamsCfR2JurisdictionFedramp, BucketEditParamsCfR2JurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -708,15 +713,16 @@ type BucketGetParams struct {
 type BucketGetParamsCfR2Jurisdiction string
 
 const (
-	BucketGetParamsCfR2JurisdictionDefault BucketGetParamsCfR2Jurisdiction = "default"
-	BucketGetParamsCfR2JurisdictionEu      BucketGetParamsCfR2Jurisdiction = "eu"
-	BucketGetParamsCfR2JurisdictionUs      BucketGetParamsCfR2Jurisdiction = "us"
-	BucketGetParamsCfR2JurisdictionFedramp BucketGetParamsCfR2Jurisdiction = "fedramp"
+	BucketGetParamsCfR2JurisdictionDefault     BucketGetParamsCfR2Jurisdiction = "default"
+	BucketGetParamsCfR2JurisdictionEu          BucketGetParamsCfR2Jurisdiction = "eu"
+	BucketGetParamsCfR2JurisdictionUs          BucketGetParamsCfR2Jurisdiction = "us"
+	BucketGetParamsCfR2JurisdictionFedramp     BucketGetParamsCfR2Jurisdiction = "fedramp"
+	BucketGetParamsCfR2JurisdictionFedrampHigh BucketGetParamsCfR2Jurisdiction = "fedramp-high"
 )
 
 func (r BucketGetParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketGetParamsCfR2JurisdictionDefault, BucketGetParamsCfR2JurisdictionEu, BucketGetParamsCfR2JurisdictionUs, BucketGetParamsCfR2JurisdictionFedramp:
+	case BucketGetParamsCfR2JurisdictionDefault, BucketGetParamsCfR2JurisdictionEu, BucketGetParamsCfR2JurisdictionUs, BucketGetParamsCfR2JurisdictionFedramp, BucketGetParamsCfR2JurisdictionFedrampHigh:
 		return true
 	}
 	return false

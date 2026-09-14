@@ -7,10 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
@@ -76,16 +78,16 @@ func (r *GatewayRuleService) Update(ctx context.Context, ruleID string, params G
 }
 
 // List Zero Trust Gateway rules for an account.
-func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[GatewayRule], err error) {
+func (r *GatewayRuleService) List(ctx context.Context, params GatewayRuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[GatewayRule], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/gateway/rules", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/gateway/rules", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -98,8 +100,8 @@ func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListPara
 }
 
 // List Zero Trust Gateway rules for an account.
-func (r *GatewayRuleService) ListAutoPaging(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[GatewayRule] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *GatewayRuleService) ListAutoPaging(ctx context.Context, params GatewayRuleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[GatewayRule] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a Zero Trust Gateway rule.
@@ -2010,6 +2012,70 @@ func (r GatewayRuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayRuleListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Sort direction. When `order_by` is omitted, this controls the direction of the
+	// existing precedence ordering. Shared rules remain first in either direction.
+	// Accepted values are `asc` and `desc`.
+	Direction param.Field[GatewayRuleListParamsDirection] `query:"direction"`
+	// Filter the returned rules by one or more `field:value` pairs. Repeat the
+	// parameter to combine filters with logical AND.
+	//
+	// Supported fields are `name`, `id`, `action`, `enabled`, `source_account`,
+	// `is_shared`, `filters`, and `expression` (max 1024 bytes). The `source_account`
+	// value is matched as a normalized UUID substring. The `filters` value must be one
+	// of the rule filter names and matches a member of the rule's `filters` array. The
+	// `expression` filter performs a case-insensitive literal substring match across
+	// traffic, identity, and device posture expressions.
+	Filter param.Field[[]interface{}] `query:"filter"`
+	// Field to sort the returned rules by. Supported values are `name`, `created_at`,
+	// `updated_at`, and `precedence`.
+	OrderBy param.Field[GatewayRuleListParamsOrderBy] `query:"order_by"`
+	// Case-insensitive substring search across rule name and description.
+	Search param.Field[string] `query:"search"`
+}
+
+// URLQuery serializes [GatewayRuleListParams]'s query parameters as `url.Values`.
+func (r GatewayRuleListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Sort direction. When `order_by` is omitted, this controls the direction of the
+// existing precedence ordering. Shared rules remain first in either direction.
+// Accepted values are `asc` and `desc`.
+type GatewayRuleListParamsDirection string
+
+const (
+	GatewayRuleListParamsDirectionAsc  GatewayRuleListParamsDirection = "asc"
+	GatewayRuleListParamsDirectionDesc GatewayRuleListParamsDirection = "desc"
+)
+
+func (r GatewayRuleListParamsDirection) IsKnown() bool {
+	switch r {
+	case GatewayRuleListParamsDirectionAsc, GatewayRuleListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
+// Field to sort the returned rules by. Supported values are `name`, `created_at`,
+// `updated_at`, and `precedence`.
+type GatewayRuleListParamsOrderBy string
+
+const (
+	GatewayRuleListParamsOrderByName       GatewayRuleListParamsOrderBy = "name"
+	GatewayRuleListParamsOrderByCreatedAt  GatewayRuleListParamsOrderBy = "created_at"
+	GatewayRuleListParamsOrderByUpdatedAt  GatewayRuleListParamsOrderBy = "updated_at"
+	GatewayRuleListParamsOrderByPrecedence GatewayRuleListParamsOrderBy = "precedence"
+)
+
+func (r GatewayRuleListParamsOrderBy) IsKnown() bool {
+	switch r {
+	case GatewayRuleListParamsOrderByName, GatewayRuleListParamsOrderByCreatedAt, GatewayRuleListParamsOrderByUpdatedAt, GatewayRuleListParamsOrderByPrecedence:
+		return true
+	}
+	return false
 }
 
 type GatewayRuleDeleteParams struct {

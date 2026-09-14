@@ -102,6 +102,10 @@ const (
 	ValueListParamsTypeCloudflaredTunnel        ValueListParamsType = "cloudflared_tunnel"
 	ValueListParamsTypeCustomCertificate        ValueListParamsType = "custom_certificate"
 	ValueListParamsTypeCustomHostname           ValueListParamsType = "custom_hostname"
+	ValueListParamsTypeCwsDeployment            ValueListParamsType = "cws_deployment"
+	ValueListParamsTypeCwsPolicy                ValueListParamsType = "cws_policy"
+	ValueListParamsTypeCwsPolicySet             ValueListParamsType = "cws_policy_set"
+	ValueListParamsTypeCwsWorkload              ValueListParamsType = "cws_workload"
 	ValueListParamsTypeD1Database               ValueListParamsType = "d1_database"
 	ValueListParamsTypeDNSRecord                ValueListParamsType = "dns_record"
 	ValueListParamsTypeDurableObjectNamespace   ValueListParamsType = "durable_object_namespace"
@@ -131,7 +135,7 @@ const (
 
 func (r ValueListParamsType) IsKnown() bool {
 	switch r {
-	case ValueListParamsTypeAccessApplication, ValueListParamsTypeAccessApplicationPolicy, ValueListParamsTypeAccessGroup, ValueListParamsTypeAccount, ValueListParamsTypeAccountRuleset, ValueListParamsTypeAIGateway, ValueListParamsTypeAlertingPolicy, ValueListParamsTypeAlertingWebhook, ValueListParamsTypeAPIGatewayOperation, ValueListParamsTypeCloudflaredTunnel, ValueListParamsTypeCustomCertificate, ValueListParamsTypeCustomHostname, ValueListParamsTypeD1Database, ValueListParamsTypeDNSRecord, ValueListParamsTypeDurableObjectNamespace, ValueListParamsTypeGatewayList, ValueListParamsTypeGatewayRule, ValueListParamsTypeHealthcheck, ValueListParamsTypeImage, ValueListParamsTypeInfrastructureTarget, ValueListParamsTypeKVNamespace, ValueListParamsTypeLoadBalancer, ValueListParamsTypeLoadBalancerMonitor, ValueListParamsTypeLoadBalancerPool, ValueListParamsTypeManagedClientCertificate, ValueListParamsTypePagesProject, ValueListParamsTypeQueue, ValueListParamsTypeR2Bucket, ValueListParamsTypeResourceShare, ValueListParamsTypeStreamLiveInput, ValueListParamsTypeStreamVideo, ValueListParamsTypeVectorizeIndex, ValueListParamsTypeWorker, ValueListParamsTypeWorkerRoute, ValueListParamsTypeWorkerVersion, ValueListParamsTypeZone, ValueListParamsTypeZoneRuleset:
+	case ValueListParamsTypeAccessApplication, ValueListParamsTypeAccessApplicationPolicy, ValueListParamsTypeAccessGroup, ValueListParamsTypeAccount, ValueListParamsTypeAccountRuleset, ValueListParamsTypeAIGateway, ValueListParamsTypeAlertingPolicy, ValueListParamsTypeAlertingWebhook, ValueListParamsTypeAPIGatewayOperation, ValueListParamsTypeCloudflaredTunnel, ValueListParamsTypeCustomCertificate, ValueListParamsTypeCustomHostname, ValueListParamsTypeCwsDeployment, ValueListParamsTypeCwsPolicy, ValueListParamsTypeCwsPolicySet, ValueListParamsTypeCwsWorkload, ValueListParamsTypeD1Database, ValueListParamsTypeDNSRecord, ValueListParamsTypeDurableObjectNamespace, ValueListParamsTypeGatewayList, ValueListParamsTypeGatewayRule, ValueListParamsTypeHealthcheck, ValueListParamsTypeImage, ValueListParamsTypeInfrastructureTarget, ValueListParamsTypeKVNamespace, ValueListParamsTypeLoadBalancer, ValueListParamsTypeLoadBalancerMonitor, ValueListParamsTypeLoadBalancerPool, ValueListParamsTypeManagedClientCertificate, ValueListParamsTypePagesProject, ValueListParamsTypeQueue, ValueListParamsTypeR2Bucket, ValueListParamsTypeResourceShare, ValueListParamsTypeStreamLiveInput, ValueListParamsTypeStreamVideo, ValueListParamsTypeVectorizeIndex, ValueListParamsTypeWorker, ValueListParamsTypeWorkerRoute, ValueListParamsTypeWorkerVersion, ValueListParamsTypeZone, ValueListParamsTypeZoneRuleset:
 		return true
 	}
 	return false
