@@ -1,0 +1,41 @@
+.release-please-manifest.json
+  s_eb975af9a8a216::t_4da79354522bd3 2
+CHANGELOG.md
+  s_bbc72941708565::t_bf8d48ec8deb02 64,66,68,70,72-78,80-109,111,113,115,117,119-128,130,132-170,172,174,176-180,182,184-185,187,189-211,213,215-217,219,221-224,226,228,230,232-235,238,240-252,255,257,259,261,263,265-266,269,271-280,282,284,286,288,290,292,294,296,298-307,311-317,319,321,323,325,327-329,331,333,335,337,339,341,343,345,347,349,351,353,355-360,364-383,385-459,463-466,469-522
+SECURITY.md
+  s_eb975af9a8a216::t_e47e7fece116a4 1,28-29
+docs/migration-guides/v7.6.0-migration-guide.md
+  s_eb975af9a8a216::t_957c5dacf3a2ce 1-132
+docs/migration-guides/v7.8.0-migration-guide.md
+  s_eb975af9a8a216::t_f1de1561869b53 1-318
+docs/migration-guides/v7.9.0-migration-guide.md
+  s_eb975af9a8a216::t_c49ab056ec6767 1-285
+email_routing/rule_test.go
+  s_eb975af9a8a216::t_dbddc6b64838f3 32,36,74,78
+waiting_rooms/waitingroom.go
+  s_eb975af9a8a216::t_3ae8a6ac91643d 642,662,1139,1159
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "b5fc3826d99bc499ff50e6ab613c13b4c8697acb",
+  "prompts": {},
+  "sessions": {
+    "s_bbc72941708565": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f91baf392ffe4d3eHmx6tvnKiC",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Musa Jundi <musa@cloudflare.com>"
+    },
+    "s_eb975af9a8a216": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f91bc0eabffe7Csy90MezloDwR",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Musa Jundi <musa@cloudflare.com>"
+    }
+  }
+}
