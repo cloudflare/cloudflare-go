@@ -120,8 +120,8 @@ func (r *SessionService) GetSessionDetails(ctx context.Context, appID string, se
 	return res, err
 }
 
-// Returns details of the given participant ID along with call statistics for the
-// given session ID.
+// Returns details of the given participant ID for the given session ID. Use the
+// peer report endpoint to retrieve call statistics.
 func (r *SessionService) GetSessionParticipantDetails(ctx context.Context, appID string, sessionID string, participantID string, params SessionGetSessionParticipantDetailsParams, opts ...option.RequestOption) (res *SessionGetSessionParticipantDetailsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -4082,8 +4082,8 @@ type SessionGetSessionParticipantsParams struct {
 	IncludePeerEvents param.Field[bool] `query:"include_peer_events"`
 	// The page number from which you want your page search results to be displayed.
 	PageNo param.Field[float64] `query:"page_no"`
-	// Number of results per page
-	PerPage param.Field[float64] `query:"per_page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
 	// The search query string. You can search using participant ID, custom participant
 	// ID, or display name.
 	Search    param.Field[string]                                       `query:"search"`
