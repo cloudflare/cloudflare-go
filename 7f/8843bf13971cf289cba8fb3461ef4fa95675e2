@@ -1,0 +1,33 @@
+CHANGELOG.md
+  s_61da62741c44d2::t_14602e371fc67a 3-30,32-43,45-49,54,69,111,126,152,169,202,419
+  s_61da62741c44d2::t_56257cf4b0d0e9 31
+  s_61da62741c44d2::t_54a1f7000b590b 44
+  s_61da62741c44d2::t_fe2e0edaab8631 50-53
+  s_61da62741c44d2::t_ad915926180522 55-57,66-68
+  s_61da62741c44d2::t_6775220f0531e9 70-72,108-110
+  s_61da62741c44d2::t_882a4e421d2590 112-114,123-125
+  s_61da62741c44d2::t_9a10a3a8a1063d 127-129,149-151
+  s_61da62741c44d2::t_5a107107f45b3a 153-155,166-168
+  s_61da62741c44d2::t_57645977c853f2 170-172
+  s_61da62741c44d2::t_0ed6c71b86d1ff 416-418
+  s_61da62741c44d2::t_31015aee99ea3a 420-422
+docs/migration-guides/v7.9.0-migration-guide.md
+  s_61da62741c44d2::t_3a5248bff3d7f2 213,223,232
+  s_61da62741c44d2::t_aa5255626e7b0f 1-212,214-222,224-231,233-285
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "7f8843bf13971cf289cba8fb3461ef4fa95675e2",
+  "prompts": {},
+  "sessions": {
+    "s_61da62741c44d2": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fe50ff9abffeP8gfxSYNYTQ5CZ",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "rotem <rotem@cloudflare.com>"
+    }
+  }
+}

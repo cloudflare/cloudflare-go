@@ -1,0 +1,21 @@
+email_routing/rule.go
+  s_1d70ea38bbae4f::t_087912d0e933a3 123,125-126,129-130,232,234,236,238,241-242
+zones/nel_test.go
+  s_1d70ea38bbae4f::t_ad5fb95c3a1bce 16,18-20,34,40-44,55,57-59,73,75-77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "6fc2916fb263bcec7b076582c65fd6d60e9060d0",
+  "prompts": {},
+  "sessions": {
+    "s_1d70ea38bbae4f": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_fa1befea3ffeYcU60dlGNWOo1D",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "rotem <rotem@cloudflare.com>"
+    }
+  }
+}
