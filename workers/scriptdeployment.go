@@ -39,7 +39,7 @@ func NewScriptDeploymentService(opts ...option.RequestOption) (r *ScriptDeployme
 
 // Deployments configure how
 // [Worker Versions](https://developers.cloudflare.com/api/operations/worker-versions-list-versions)
-// are deployed to traffic. A deployment can consist of one or two versions of a
+// are deployed to traffic. A deployment can consist of multiple versions of a
 // Worker.
 func (r *ScriptDeploymentService) New(ctx context.Context, scriptName string, params ScriptDeploymentNewParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	var env ScriptDeploymentNewResponseEnvelope
@@ -61,7 +61,7 @@ func (r *ScriptDeploymentService) New(ctx context.Context, scriptName string, pa
 	return res, nil
 }
 
-// List of Worker Deployments. The first deployment in the list is the latest
+// List Worker deployments. The first deployment in the list is the latest
 // deployment actively serving traffic.
 func (r *ScriptDeploymentService) List(ctx context.Context, scriptName string, query ScriptDeploymentListParams, opts ...option.RequestOption) (res *ScriptDeploymentListResponse, err error) {
 	var env ScriptDeploymentListResponseEnvelope

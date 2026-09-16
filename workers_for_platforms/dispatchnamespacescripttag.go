@@ -35,7 +35,8 @@ func NewDispatchNamespaceScriptTagService(opts ...option.RequestOption) (r *Disp
 	return
 }
 
-// Put script tags for a script uploaded to a Workers for Platforms namespace.
+// Replace tags for a script uploaded to a Workers for Platforms dispatch
+// namespace.
 func (r *DispatchNamespaceScriptTagService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptTagUpdateParams, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -65,12 +66,13 @@ func (r *DispatchNamespaceScriptTagService) Update(ctx context.Context, dispatch
 	return res, nil
 }
 
-// Put script tags for a script uploaded to a Workers for Platforms namespace.
+// Replace tags for a script uploaded to a Workers for Platforms dispatch
+// namespace.
 func (r *DispatchNamespaceScriptTagService) UpdateAutoPaging(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptTagUpdateParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[string] {
 	return pagination.NewSinglePageAutoPager(r.Update(ctx, dispatchNamespace, scriptName, params, opts...))
 }
 
-// Fetch tags from a script uploaded to a Workers for Platforms namespace.
+// Fetch tags from a script uploaded to a Workers for Platforms dispatch namespace.
 func (r *DispatchNamespaceScriptTagService) List(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptTagListParams, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -100,12 +102,13 @@ func (r *DispatchNamespaceScriptTagService) List(ctx context.Context, dispatchNa
 	return res, nil
 }
 
-// Fetch tags from a script uploaded to a Workers for Platforms namespace.
+// Fetch tags from a script uploaded to a Workers for Platforms dispatch namespace.
 func (r *DispatchNamespaceScriptTagService) ListAutoPaging(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptTagListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[string] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, dispatchNamespace, scriptName, query, opts...))
 }
 
-// Delete script tag for a script uploaded to a Workers for Platforms namespace.
+// Delete a tag from a script uploaded to a Workers for Platforms dispatch
+// namespace.
 func (r *DispatchNamespaceScriptTagService) Delete(ctx context.Context, dispatchNamespace string, scriptName string, tag string, body DispatchNamespaceScriptTagDeleteParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptTagDeleteResponse, err error) {
 	var env DispatchNamespaceScriptTagDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

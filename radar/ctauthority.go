@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"slices"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
@@ -223,9 +224,9 @@ type CTAuthorityGetResponseCertificateAuthority struct {
 	// The subjectKeyIdentifier value extracted from the certificate PEM.
 	SubjectKeyIdentifier string `json:"subjectKeyIdentifier" api:"required"`
 	// The start date of the certificate’s validity period (ISO format).
-	ValidFrom string `json:"validFrom" api:"required"`
+	ValidFrom time.Time `json:"validFrom" api:"required" format:"date"`
 	// The end date of the certificate’s validity period (ISO format).
-	ValidTo string                                         `json:"validTo" api:"required"`
+	ValidTo time.Time                                      `json:"validTo" api:"required" format:"date"`
 	JSON    ctAuthorityGetResponseCertificateAuthorityJSON `json:"-"`
 }
 

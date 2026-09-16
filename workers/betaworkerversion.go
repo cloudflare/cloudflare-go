@@ -41,7 +41,7 @@ func NewBetaWorkerVersionService(opts ...option.RequestOption) (r *BetaWorkerVer
 	return
 }
 
-// Create a new version.
+// Create a new version for a Worker.
 func (r *BetaWorkerVersionService) New(ctx context.Context, workerID string, params BetaWorkerVersionNewParams, opts ...option.RequestOption) (res *Version, err error) {
 	var env BetaWorkerVersionNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -93,7 +93,7 @@ func (r *BetaWorkerVersionService) ListAutoPaging(ctx context.Context, workerID 
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, workerID, params, opts...))
 }
 
-// Delete a version.
+// Delete a Worker version.
 func (r *BetaWorkerVersionService) Delete(ctx context.Context, workerID string, versionID string, body BetaWorkerVersionDeleteParams, opts ...option.RequestOption) (res *BetaWorkerVersionDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
@@ -113,7 +113,7 @@ func (r *BetaWorkerVersionService) Delete(ctx context.Context, workerID string, 
 	return res, err
 }
 
-// Get details about a specific version.
+// Get details about a specific Worker version.
 func (r *BetaWorkerVersionService) Get(ctx context.Context, workerID string, versionID string, params BetaWorkerVersionGetParams, opts ...option.RequestOption) (res *Version, err error) {
 	var env BetaWorkerVersionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

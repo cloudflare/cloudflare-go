@@ -304,7 +304,7 @@ func (r attackLayer7TopAseOriginResponseMetaUnitJSON) RawJSON() string {
 type AttackLayer7TopAseOriginResponseTop0 struct {
 	OriginASN     string                                   `json:"originAsn" api:"required"`
 	OriginASNName string                                   `json:"originAsnName" api:"required"`
-	Rank          float64                                  `json:"rank" api:"required"`
+	Rank          int64                                    `json:"rank" api:"required"`
 	Value         string                                   `json:"value" api:"required"`
 	JSON          attackLayer7TopAseOriginResponseTop0JSON `json:"-"`
 }

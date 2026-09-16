@@ -19,6 +19,7 @@ func (UnionTime) ImplementsThreatEventIndicatorAggregateListParamsCreatedBeforeU
 
 type UnionString string
 
+func (UnionString) ImplementsEntitlementListResponseAllocationValueUnion()                         {}
 func (UnionString) ImplementsBillingUsageGetResponseTagsUnion()                                    {}
 func (UnionString) ImplementsSettingEditParamsBodyValueValueUnion()                                {}
 func (UnionString) ImplementsAnalyticsQuerySummaryParamsFiltersValueUnion()                        {}
@@ -366,17 +367,18 @@ func (UnionString) ImplementsInstanceChatCompletionsParamsMessagesContentUnion()
 func (UnionString) ImplementsInstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion() {}
 func (UnionString) ImplementsInstanceSearchParamsAISearchOptionsCustomMetadataUnion()          {}
 func (UnionString) ImplementsInstanceSearchParamsMessagesContentUnion()                        {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsHeightUnion()                               {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginBottomUnion()                         {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginLeftUnion()                           {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginRightUnion()                          {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsMarginTopUnion()                            {}
-func (UnionString) ImplementsPDFNewParamsPDFOptionsWidthUnion()                                {}
+func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsHeightUnion()                     {}
+func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginBottomUnion()               {}
+func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginLeftUnion()                 {}
+func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginRightUnion()                {}
+func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginTopUnion()                  {}
+func (UnionString) ImplementsPDFNewParamsBodyObjectPDFOptionsWidthUnion()                      {}
 func (UnionString) ImplementsSnapshotNewResponseAccessibilityTreeValueUnion()                  {}
 func (UnionString) ImplementsAccessibilityTreeNewResponseAccessibilityTreeValueUnion()         {}
 
 type UnionBool bool
 
+func (UnionBool) ImplementsEntitlementListResponseAllocationValueUnion()                         {}
 func (UnionBool) ImplementsAnalyticsQuerySummaryParamsFiltersValueUnion()                        {}
 func (UnionBool) ImplementsAnalyticsQueryTimeseriesParamsFiltersValueUnion()                     {}
 func (UnionBool) ImplementsAnalyticsQueryTopNParamsFiltersValueUnion()                           {}
@@ -585,6 +587,7 @@ func (UnionBool) ImplementsAccessibilityTreeNewResponseAccessibilityTreePressedU
 
 type UnionInt int64
 
+func (UnionInt) ImplementsEntitlementListResponseAllocationValueUnion()                  {}
 func (UnionInt) ImplementsReceivedGetParamsEndUnion()                                    {}
 func (UnionInt) ImplementsReceivedGetParamsStartUnion()                                  {}
 func (UnionInt) ImplementsPageRuleActionsCacheTTLByStatusValueUnion()                    {}
@@ -816,11 +819,11 @@ func (UnionFloat) ImplementsNamespaceInstanceItemSyncResponseMetadataUnion()    
 func (UnionFloat) ImplementsNamespaceInstanceItemUploadResponseMetadataUnion()                {}
 func (UnionFloat) ImplementsInstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion() {}
 func (UnionFloat) ImplementsInstanceSearchParamsAISearchOptionsCustomMetadataUnion()          {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsHeightUnion()                               {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginBottomUnion()                         {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginLeftUnion()                           {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginRightUnion()                          {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsMarginTopUnion()                            {}
-func (UnionFloat) ImplementsPDFNewParamsPDFOptionsWidthUnion()                                {}
+func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsHeightUnion()                     {}
+func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginBottomUnion()               {}
+func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginLeftUnion()                 {}
+func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginRightUnion()                {}
+func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsMarginTopUnion()                  {}
+func (UnionFloat) ImplementsPDFNewParamsBodyObjectPDFOptionsWidthUnion()                      {}
 func (UnionFloat) ImplementsSnapshotNewResponseAccessibilityTreeValueUnion()                  {}
 func (UnionFloat) ImplementsAccessibilityTreeNewResponseAccessibilityTreeValueUnion()         {}

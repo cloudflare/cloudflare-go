@@ -36,6 +36,7 @@ type AccountService struct {
 	Subscriptions  *SubscriptionService
 	Tokens         *TokenService
 	Logs           *LogService
+	Entitlements   *EntitlementService
 	SpeedSettings  *SpeedSettingService
 	PaymentMethods *PaymentMethodService
 	PayInvoice     *PayInvoiceService
@@ -58,6 +59,7 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 	r.Subscriptions = NewSubscriptionService(opts...)
 	r.Tokens = NewTokenService(opts...)
 	r.Logs = NewLogService(opts...)
+	r.Entitlements = NewEntitlementService(opts...)
 	r.SpeedSettings = NewSpeedSettingService(opts...)
 	r.PaymentMethods = NewPaymentMethodService(opts...)
 	r.PayInvoice = NewPayInvoiceService(opts...)

@@ -54,7 +54,7 @@ func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, o
 	return res, nil
 }
 
-// Lists all domains for an account.
+// Lists all Worker domains for an account.
 func (r *DomainService) List(ctx context.Context, params DomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DomainListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -76,7 +76,7 @@ func (r *DomainService) List(ctx context.Context, params DomainListParams, opts 
 	return res, nil
 }
 
-// Lists all domains for an account.
+// Lists all Worker domains for an account.
 func (r *DomainService) ListAutoPaging(ctx context.Context, params DomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DomainListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
@@ -98,7 +98,7 @@ func (r *DomainService) Delete(ctx context.Context, domainID string, body Domain
 	return res, err
 }
 
-// Gets information about a domain.
+// Gets information about a Worker domain.
 func (r *DomainService) Get(ctx context.Context, domainID string, query DomainGetParams, opts ...option.RequestOption) (res *DomainGetResponse, err error) {
 	var env DomainGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

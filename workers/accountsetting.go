@@ -34,7 +34,7 @@ func NewAccountSettingService(opts ...option.RequestOption) (r *AccountSettingSe
 	return
 }
 
-// Creates Worker account settings for an account.
+// Configure Workers account settings for an account.
 func (r *AccountSettingService) Update(ctx context.Context, params AccountSettingUpdateParams, opts ...option.RequestOption) (res *AccountSettingUpdateResponse, err error) {
 	var env AccountSettingUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -51,7 +51,7 @@ func (r *AccountSettingService) Update(ctx context.Context, params AccountSettin
 	return res, nil
 }
 
-// Fetches Worker account settings for an account.
+// Fetches Workers account settings for an account.
 func (r *AccountSettingService) Get(ctx context.Context, query AccountSettingGetParams, opts ...option.RequestOption) (res *AccountSettingGetResponse, err error) {
 	var env AccountSettingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

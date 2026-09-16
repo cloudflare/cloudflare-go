@@ -39,7 +39,7 @@ func NewScriptScriptAndVersionSettingService(opts ...option.RequestOption) (r *S
 	return
 }
 
-// Patch metadata or config, such as bindings or usage model.
+// Patch Worker script metadata or config, such as bindings or usage model.
 func (r *ScriptScriptAndVersionSettingService) Edit(ctx context.Context, scriptName string, params ScriptScriptAndVersionSettingEditParams, opts ...option.RequestOption) (res *ScriptScriptAndVersionSettingEditResponse, err error) {
 	var env ScriptScriptAndVersionSettingEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -60,7 +60,7 @@ func (r *ScriptScriptAndVersionSettingService) Edit(ctx context.Context, scriptN
 	return res, nil
 }
 
-// Get metadata and config, such as bindings or usage model.
+// Get Worker script metadata and config, such as bindings or usage model.
 func (r *ScriptScriptAndVersionSettingService) Get(ctx context.Context, scriptName string, query ScriptScriptAndVersionSettingGetParams, opts ...option.RequestOption) (res *ScriptScriptAndVersionSettingGetResponse, err error) {
 	var env ScriptScriptAndVersionSettingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -3844,6 +3844,8 @@ type ScriptScriptAndVersionSettingEditResponseObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
+	// Real-time Issues settings for the Worker.
+	Issues ScriptScriptAndVersionSettingEditResponseObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs ScriptScriptAndVersionSettingEditResponseObservabilityLogs `json:"logs" api:"nullable"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -3858,6 +3860,7 @@ type ScriptScriptAndVersionSettingEditResponseObservability struct {
 type scriptScriptAndVersionSettingEditResponseObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -3870,6 +3873,30 @@ func (r *ScriptScriptAndVersionSettingEditResponseObservability) UnmarshalJSON(d
 }
 
 func (r scriptScriptAndVersionSettingEditResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type ScriptScriptAndVersionSettingEditResponseObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                                                             `json:"enabled"`
+	JSON    scriptScriptAndVersionSettingEditResponseObservabilityIssuesJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseObservabilityIssuesJSON contains the
+// JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseObservabilityIssues]
+type scriptScriptAndVersionSettingEditResponseObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -8030,6 +8057,8 @@ type ScriptScriptAndVersionSettingGetResponseObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
+	// Real-time Issues settings for the Worker.
+	Issues ScriptScriptAndVersionSettingGetResponseObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs ScriptScriptAndVersionSettingGetResponseObservabilityLogs `json:"logs" api:"nullable"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -8044,6 +8073,7 @@ type ScriptScriptAndVersionSettingGetResponseObservability struct {
 type scriptScriptAndVersionSettingGetResponseObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -8056,6 +8086,30 @@ func (r *ScriptScriptAndVersionSettingGetResponseObservability) UnmarshalJSON(da
 }
 
 func (r scriptScriptAndVersionSettingGetResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type ScriptScriptAndVersionSettingGetResponseObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                                                            `json:"enabled"`
+	JSON    scriptScriptAndVersionSettingGetResponseObservabilityIssuesJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseObservabilityIssuesJSON contains the
+// JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseObservabilityIssues]
+type scriptScriptAndVersionSettingGetResponseObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -10904,6 +10958,8 @@ type ScriptScriptAndVersionSettingEditParamsSettingsObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Real-time Issues settings for the Worker.
+	Issues param.Field[ScriptScriptAndVersionSettingEditParamsSettingsObservabilityIssues] `json:"issues"`
 	// Log settings for the Worker.
 	Logs param.Field[ScriptScriptAndVersionSettingEditParamsSettingsObservabilityLogs] `json:"logs"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -10913,6 +10969,16 @@ type ScriptScriptAndVersionSettingEditParamsSettingsObservability struct {
 }
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsObservability) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Real-time Issues settings for the Worker.
+type ScriptScriptAndVersionSettingEditParamsSettingsObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsObservabilityIssues) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

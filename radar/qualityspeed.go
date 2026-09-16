@@ -598,14 +598,21 @@ func (r qualitySpeedSummaryResponseMetaUnitJSON) RawJSON() string {
 }
 
 type QualitySpeedSummaryResponseSummary0 struct {
-	BandwidthDownload string                                  `json:"bandwidthDownload" api:"required"`
-	BandwidthUpload   string                                  `json:"bandwidthUpload" api:"required"`
-	JitterIdle        string                                  `json:"jitterIdle" api:"required"`
-	JitterLoaded      string                                  `json:"jitterLoaded" api:"required"`
-	LatencyIdle       string                                  `json:"latencyIdle" api:"required"`
-	LatencyLoaded     string                                  `json:"latencyLoaded" api:"required"`
-	PacketLoss        string                                  `json:"packetLoss" api:"required"`
-	JSON              qualitySpeedSummaryResponseSummary0JSON `json:"-"`
+	// A numeric string.
+	BandwidthDownload string `json:"bandwidthDownload" api:"required"`
+	// A numeric string.
+	BandwidthUpload string `json:"bandwidthUpload" api:"required"`
+	// A numeric string.
+	JitterIdle string `json:"jitterIdle" api:"required"`
+	// A numeric string.
+	JitterLoaded string `json:"jitterLoaded" api:"required"`
+	// A numeric string.
+	LatencyIdle string `json:"latencyIdle" api:"required"`
+	// A numeric string.
+	LatencyLoaded string `json:"latencyLoaded" api:"required"`
+	// A numeric string.
+	PacketLoss string                                  `json:"packetLoss" api:"required"`
+	JSON       qualitySpeedSummaryResponseSummary0JSON `json:"-"`
 }
 
 // qualitySpeedSummaryResponseSummary0JSON contains the JSON metadata for the

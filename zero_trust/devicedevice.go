@@ -484,6 +484,8 @@ type DeviceDeviceListParams struct {
 	// records. A cursor value can be obtained from the result_info.cursor field in the
 	// response.
 	Cursor param.Field[string] `query:"cursor"`
+	// Filter by the type of active registration associated with the device.
+	HasRegistrationType param.Field[DeviceDeviceListParamsHasRegistrationType] `query:"has_registration_type"`
 	// Comma-separated list of additional information that should be included in the
 	// device response. Supported values are: "last_seen_registration.policy".
 	Include              param.Field[string]                                     `query:"include"`
@@ -526,6 +528,22 @@ const (
 func (r DeviceDeviceListParamsActiveRegistrations) IsKnown() bool {
 	switch r {
 	case DeviceDeviceListParamsActiveRegistrationsInclude, DeviceDeviceListParamsActiveRegistrationsOnly, DeviceDeviceListParamsActiveRegistrationsExclude:
+		return true
+	}
+	return false
+}
+
+// Filter by the type of active registration associated with the device.
+type DeviceDeviceListParamsHasRegistrationType string
+
+const (
+	DeviceDeviceListParamsHasRegistrationTypeWARP             DeviceDeviceListParamsHasRegistrationType = "warp"
+	DeviceDeviceListParamsHasRegistrationTypeBrowserExtension DeviceDeviceListParamsHasRegistrationType = "browser_extension"
+)
+
+func (r DeviceDeviceListParamsHasRegistrationType) IsKnown() bool {
+	switch r {
+	case DeviceDeviceListParamsHasRegistrationTypeWARP, DeviceDeviceListParamsHasRegistrationTypeBrowserExtension:
 		return true
 	}
 	return false

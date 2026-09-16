@@ -40,7 +40,8 @@ func NewDispatchNamespaceScriptSettingService(opts ...option.RequestOption) (r *
 	return
 }
 
-// Patch script metadata, such as bindings.
+// Patch metadata for a script uploaded to a Workers for Platforms dispatch
+// namespace, such as bindings.
 func (r *DispatchNamespaceScriptSettingService) Edit(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptSettingEditParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSettingEditResponse, err error) {
 	var env DispatchNamespaceScriptSettingEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -65,7 +66,8 @@ func (r *DispatchNamespaceScriptSettingService) Edit(ctx context.Context, dispat
 	return res, nil
 }
 
-// Get script settings from a script uploaded to a Workers for Platforms namespace.
+// Get settings for a script uploaded to a Workers for Platforms dispatch
+// namespace.
 func (r *DispatchNamespaceScriptSettingService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptSettingGetParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSettingGetResponse, err error) {
 	var env DispatchNamespaceScriptSettingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -3821,6 +3823,8 @@ type DispatchNamespaceScriptSettingEditResponseObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
+	// Real-time Issues settings for the Worker.
+	Issues DispatchNamespaceScriptSettingEditResponseObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs DispatchNamespaceScriptSettingEditResponseObservabilityLogs `json:"logs" api:"nullable"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -3836,6 +3840,7 @@ type DispatchNamespaceScriptSettingEditResponseObservability struct {
 type dispatchNamespaceScriptSettingEditResponseObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -3848,6 +3853,30 @@ func (r *DispatchNamespaceScriptSettingEditResponseObservability) UnmarshalJSON(
 }
 
 func (r dispatchNamespaceScriptSettingEditResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type DispatchNamespaceScriptSettingEditResponseObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                                                              `json:"enabled"`
+	JSON    dispatchNamespaceScriptSettingEditResponseObservabilityIssuesJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseObservabilityIssuesJSON contains the
+// JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseObservabilityIssues]
+type dispatchNamespaceScriptSettingEditResponseObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -7978,6 +8007,8 @@ type DispatchNamespaceScriptSettingGetResponseObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
+	// Real-time Issues settings for the Worker.
+	Issues DispatchNamespaceScriptSettingGetResponseObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs DispatchNamespaceScriptSettingGetResponseObservabilityLogs `json:"logs" api:"nullable"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -7992,6 +8023,7 @@ type DispatchNamespaceScriptSettingGetResponseObservability struct {
 type dispatchNamespaceScriptSettingGetResponseObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -8004,6 +8036,30 @@ func (r *DispatchNamespaceScriptSettingGetResponseObservability) UnmarshalJSON(d
 }
 
 func (r dispatchNamespaceScriptSettingGetResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type DispatchNamespaceScriptSettingGetResponseObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                                                             `json:"enabled"`
+	JSON    dispatchNamespaceScriptSettingGetResponseObservabilityIssuesJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseObservabilityIssuesJSON contains the
+// JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseObservabilityIssues]
+type dispatchNamespaceScriptSettingGetResponseObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -10840,6 +10896,8 @@ type DispatchNamespaceScriptSettingEditParamsSettingsObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Real-time Issues settings for the Worker.
+	Issues param.Field[DispatchNamespaceScriptSettingEditParamsSettingsObservabilityIssues] `json:"issues"`
 	// Log settings for the Worker.
 	Logs param.Field[DispatchNamespaceScriptSettingEditParamsSettingsObservabilityLogs] `json:"logs"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -10849,6 +10907,16 @@ type DispatchNamespaceScriptSettingEditParamsSettingsObservability struct {
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsObservability) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Real-time Issues settings for the Worker.
+type DispatchNamespaceScriptSettingEditParamsSettingsObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsObservabilityIssues) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

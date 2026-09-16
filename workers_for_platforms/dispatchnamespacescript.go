@@ -56,8 +56,8 @@ func NewDispatchNamespaceScriptService(opts ...option.RequestOption) (r *Dispatc
 	return
 }
 
-// Upload a worker module to a Workers for Platforms namespace. You can find more
-// about the multipart metadata on our docs:
+// Upload a Workers for Platforms script module to a dispatch namespace. You can
+// find more about the multipart metadata on our docs:
 // https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/.
 func (r *DispatchNamespaceScriptService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptUpdateParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptUpdateResponse, err error) {
 	var env DispatchNamespaceScriptUpdateResponseEnvelope
@@ -83,8 +83,8 @@ func (r *DispatchNamespaceScriptService) Update(ctx context.Context, dispatchNam
 	return res, nil
 }
 
-// Delete a worker from a Workers for Platforms namespace. This call has no
-// response body on a successful delete.
+// Delete a script from a Workers for Platforms dispatch namespace. This call has
+// no response body on a successful delete.
 func (r *DispatchNamespaceScriptService) Delete(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptDeleteParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptDeleteResponse, err error) {
 	var env DispatchNamespaceScriptDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -109,7 +109,8 @@ func (r *DispatchNamespaceScriptService) Delete(ctx context.Context, dispatchNam
 	return res, nil
 }
 
-// Fetch information about a script uploaded to a Workers for Platforms namespace.
+// Fetch information about a script uploaded to a Workers for Platforms dispatch
+// namespace.
 func (r *DispatchNamespaceScriptService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptGetParams, opts ...option.RequestOption) (res *Script, err error) {
 	var env DispatchNamespaceScriptGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -994,6 +995,8 @@ type DispatchNamespaceScriptUpdateResponseObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
+	// Real-time Issues settings for the Worker.
+	Issues DispatchNamespaceScriptUpdateResponseObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs DispatchNamespaceScriptUpdateResponseObservabilityLogs `json:"logs" api:"nullable"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -1008,6 +1011,7 @@ type DispatchNamespaceScriptUpdateResponseObservability struct {
 type dispatchNamespaceScriptUpdateResponseObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -1020,6 +1024,30 @@ func (r *DispatchNamespaceScriptUpdateResponseObservability) UnmarshalJSON(data 
 }
 
 func (r dispatchNamespaceScriptUpdateResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type DispatchNamespaceScriptUpdateResponseObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                                                         `json:"enabled"`
+	JSON    dispatchNamespaceScriptUpdateResponseObservabilityIssuesJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptUpdateResponseObservabilityIssuesJSON contains the JSON
+// metadata for the struct
+// [DispatchNamespaceScriptUpdateResponseObservabilityIssues]
+type dispatchNamespaceScriptUpdateResponseObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptUpdateResponseObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptUpdateResponseObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3934,6 +3962,8 @@ type DispatchNamespaceScriptUpdateParamsMetadataObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Real-time Issues settings for the Worker.
+	Issues param.Field[DispatchNamespaceScriptUpdateParamsMetadataObservabilityIssues] `json:"issues"`
 	// Log settings for the Worker.
 	Logs param.Field[DispatchNamespaceScriptUpdateParamsMetadataObservabilityLogs] `json:"logs"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -3943,6 +3973,16 @@ type DispatchNamespaceScriptUpdateParamsMetadataObservability struct {
 }
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataObservability) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Real-time Issues settings for the Worker.
+type DispatchNamespaceScriptUpdateParamsMetadataObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataObservabilityIssues) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

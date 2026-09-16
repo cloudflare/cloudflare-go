@@ -36,9 +36,10 @@ func NewThreatEventRelationshipService(opts ...option.RequestOption) (r *ThreatE
 	return
 }
 
-// The `event_id` must be defined (to list existing events (and their IDs), use the
-// [`Filter and List Events`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/methods/list/)
-// endpoint). Also, must provide query parameters.
+// Deprecated; use GET /events/by-id/{event_id}/relationships. Available through
+// 2026-11-28.
+//
+// Deprecated: Use GET /events/by-id/{event_id}/relationships before 2026-11-28.
 func (r *ThreatEventRelationshipService) List(ctx context.Context, eventID string, params ThreatEventRelationshipListParams, opts ...option.RequestOption) (res *[]ThreatEventRelationshipListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {

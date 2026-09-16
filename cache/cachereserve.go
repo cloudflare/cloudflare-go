@@ -40,15 +40,15 @@ func NewCacheReserveService(opts ...option.RequestOption) (r *CacheReserveServic
 // disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 // You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
 // that you cannot undo or cancel this operation.
-func (r *CacheReserveService) Clear(ctx context.Context, params CacheReserveClearParams, opts ...option.RequestOption) (res *CacheReserveClearResponse, err error) {
+func (r *CacheReserveService) Clear(ctx context.Context, body CacheReserveClearParams, opts ...option.RequestOption) (res *CacheReserveClearResponse, err error) {
 	var env CacheReserveClearResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.ZoneID.Value == "" {
+	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -150,22 +150,6 @@ func (r CacheReserveClear) IsKnown() bool {
 	return false
 }
 
-// The current state of the Cache Reserve Clear operation.
-type State string
-
-const (
-	StateInProgress State = "In-progress"
-	StateCompleted  State = "Completed"
-)
-
-func (r State) IsKnown() bool {
-	switch r {
-	case StateInProgress, StateCompleted:
-		return true
-	}
-	return false
-}
-
 // You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 // disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 // You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
@@ -176,7 +160,7 @@ type CacheReserveClearResponse struct {
 	// The time that the latest Cache Reserve Clear operation started.
 	StartTs time.Time `json:"start_ts" api:"required" format:"date-time"`
 	// The current state of the Cache Reserve Clear operation.
-	State State `json:"state" api:"required"`
+	State CacheReserveClearResponseState `json:"state" api:"required"`
 	// The time that the latest Cache Reserve Clear operation completed.
 	EndTs time.Time `json:"end_ts" format:"date-time"`
 	// Last time this setting was modified.
@@ -202,6 +186,22 @@ func (r *CacheReserveClearResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r cacheReserveClearResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// The current state of the Cache Reserve Clear operation.
+type CacheReserveClearResponseState string
+
+const (
+	CacheReserveClearResponseStateInProgress CacheReserveClearResponseState = "In-progress"
+	CacheReserveClearResponseStateCompleted  CacheReserveClearResponseState = "Completed"
+)
+
+func (r CacheReserveClearResponseState) IsKnown() bool {
+	switch r {
+	case CacheReserveClearResponseStateInProgress, CacheReserveClearResponseStateCompleted:
+		return true
+	}
+	return false
 }
 
 type CacheReserveEditResponse struct {
@@ -308,7 +308,7 @@ type CacheReserveStatusResponse struct {
 	// The time that the latest Cache Reserve Clear operation started.
 	StartTs time.Time `json:"start_ts" api:"required" format:"date-time"`
 	// The current state of the Cache Reserve Clear operation.
-	State State `json:"state" api:"required"`
+	State CacheReserveStatusResponseState `json:"state" api:"required"`
 	// The time that the latest Cache Reserve Clear operation completed.
 	EndTs time.Time `json:"end_ts" format:"date-time"`
 	// Last time this setting was modified.
@@ -336,14 +336,25 @@ func (r cacheReserveStatusResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// The current state of the Cache Reserve Clear operation.
+type CacheReserveStatusResponseState string
+
+const (
+	CacheReserveStatusResponseStateInProgress CacheReserveStatusResponseState = "In-progress"
+	CacheReserveStatusResponseStateCompleted  CacheReserveStatusResponseState = "Completed"
+)
+
+func (r CacheReserveStatusResponseState) IsKnown() bool {
+	switch r {
+	case CacheReserveStatusResponseStateInProgress, CacheReserveStatusResponseStateCompleted:
+		return true
+	}
+	return false
+}
+
 type CacheReserveClearParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-	Body   interface{}         `json:"body" api:"required"`
-}
-
-func (r CacheReserveClearParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type CacheReserveClearResponseEnvelope struct {

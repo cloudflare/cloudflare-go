@@ -87,7 +87,7 @@ func (r *ScriptService) Update(ctx context.Context, scriptName string, params Sc
 	return res, nil
 }
 
-// Fetch a list of uploaded workers.
+// Fetch a list of uploaded Worker scripts.
 func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ScriptListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -109,7 +109,7 @@ func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts 
 	return res, nil
 }
 
-// Fetch a list of uploaded workers.
+// Fetch a list of uploaded Worker scripts.
 func (r *ScriptService) ListAutoPaging(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ScriptListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
@@ -135,8 +135,8 @@ func (r *ScriptService) Delete(ctx context.Context, scriptName string, params Sc
 	return res, nil
 }
 
-// Fetch raw script content for your worker. Note this is the original script
-// content, not JSON encoded.
+// Fetch raw content for a Worker script. Note this is the original script content,
+// not JSON encoded.
 func (r *ScriptService) Get(ctx context.Context, scriptName string, query ScriptGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/javascript")}, opts...)
@@ -153,7 +153,7 @@ func (r *ScriptService) Get(ctx context.Context, scriptName string, query Script
 	return res, err
 }
 
-// Search for Workers in an account.
+// Search for Worker scripts in an account.
 func (r *ScriptService) Search(ctx context.Context, params ScriptSearchParams, opts ...option.RequestOption) (res *[]ScriptSearchResponse, err error) {
 	var env ScriptSearchResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -984,6 +984,8 @@ type ScriptObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
+	// Real-time Issues settings for the Worker.
+	Issues ScriptObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs ScriptObservabilityLogs `json:"logs" api:"nullable"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -998,6 +1000,7 @@ type ScriptObservability struct {
 type scriptObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -1010,6 +1013,29 @@ func (r *ScriptObservability) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type ScriptObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                          `json:"enabled"`
+	JSON    scriptObservabilityIssuesJSON `json:"-"`
+}
+
+// scriptObservabilityIssuesJSON contains the JSON metadata for the struct
+// [ScriptObservabilityIssues]
+type scriptObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1377,6 +1403,8 @@ type ScriptSettingObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
+	// Real-time Issues settings for the Worker.
+	Issues ScriptSettingObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs ScriptSettingObservabilityLogs `json:"logs" api:"nullable"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -1391,6 +1419,7 @@ type ScriptSettingObservability struct {
 type scriptSettingObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -1403,6 +1432,29 @@ func (r *ScriptSettingObservability) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptSettingObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type ScriptSettingObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                                 `json:"enabled"`
+	JSON    scriptSettingObservabilityIssuesJSON `json:"-"`
+}
+
+// scriptSettingObservabilityIssuesJSON contains the JSON metadata for the struct
+// [ScriptSettingObservabilityIssues]
+type scriptSettingObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptSettingObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSettingObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1524,6 +1576,8 @@ type ScriptSettingObservabilityParam struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Real-time Issues settings for the Worker.
+	Issues param.Field[ScriptSettingObservabilityIssuesParam] `json:"issues"`
 	// Log settings for the Worker.
 	Logs param.Field[ScriptSettingObservabilityLogsParam] `json:"logs"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -1533,6 +1587,16 @@ type ScriptSettingObservabilityParam struct {
 }
 
 func (r ScriptSettingObservabilityParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Real-time Issues settings for the Worker.
+type ScriptSettingObservabilityIssuesParam struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r ScriptSettingObservabilityIssuesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2402,6 +2466,8 @@ type ScriptUpdateResponseObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
+	// Real-time Issues settings for the Worker.
+	Issues ScriptUpdateResponseObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs ScriptUpdateResponseObservabilityLogs `json:"logs" api:"nullable"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -2416,6 +2482,7 @@ type ScriptUpdateResponseObservability struct {
 type scriptUpdateResponseObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -2428,6 +2495,29 @@ func (r *ScriptUpdateResponseObservability) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r scriptUpdateResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type ScriptUpdateResponseObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                                        `json:"enabled"`
+	JSON    scriptUpdateResponseObservabilityIssuesJSON `json:"-"`
+}
+
+// scriptUpdateResponseObservabilityIssuesJSON contains the JSON metadata for the
+// struct [ScriptUpdateResponseObservabilityIssues]
+type scriptUpdateResponseObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptUpdateResponseObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptUpdateResponseObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3584,6 +3674,8 @@ type ScriptListResponseObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
+	// Real-time Issues settings for the Worker.
+	Issues ScriptListResponseObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs ScriptListResponseObservabilityLogs `json:"logs" api:"nullable"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -3598,6 +3690,7 @@ type ScriptListResponseObservability struct {
 type scriptListResponseObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -3610,6 +3703,29 @@ func (r *ScriptListResponseObservability) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r scriptListResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type ScriptListResponseObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                                      `json:"enabled"`
+	JSON    scriptListResponseObservabilityIssuesJSON `json:"-"`
+}
+
+// scriptListResponseObservabilityIssuesJSON contains the JSON metadata for the
+// struct [ScriptListResponseObservabilityIssues]
+type scriptListResponseObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptListResponseObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptListResponseObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -6592,6 +6708,8 @@ type ScriptUpdateParamsMetadataObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Real-time Issues settings for the Worker.
+	Issues param.Field[ScriptUpdateParamsMetadataObservabilityIssues] `json:"issues"`
 	// Log settings for the Worker.
 	Logs param.Field[ScriptUpdateParamsMetadataObservabilityLogs] `json:"logs"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -6601,6 +6719,16 @@ type ScriptUpdateParamsMetadataObservability struct {
 }
 
 func (r ScriptUpdateParamsMetadataObservability) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Real-time Issues settings for the Worker.
+type ScriptUpdateParamsMetadataObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r ScriptUpdateParamsMetadataObservabilityIssues) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

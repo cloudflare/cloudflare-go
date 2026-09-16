@@ -315,17 +315,23 @@ func (r qualitySpeedTopAsesResponseMetaUnitJSON) RawJSON() string {
 }
 
 type QualitySpeedTopAsesResponseTop0 struct {
-	BandwidthDownload string                              `json:"bandwidthDownload" api:"required"`
-	BandwidthUpload   string                              `json:"bandwidthUpload" api:"required"`
-	ClientASN         float64                             `json:"clientASN" api:"required"`
-	ClientAsName      string                              `json:"clientASName" api:"required"`
-	JitterIdle        string                              `json:"jitterIdle" api:"required"`
-	JitterLoaded      string                              `json:"jitterLoaded" api:"required"`
-	LatencyIdle       string                              `json:"latencyIdle" api:"required"`
-	LatencyLoaded     string                              `json:"latencyLoaded" api:"required"`
-	NumTests          float64                             `json:"numTests" api:"required"`
-	RankPower         float64                             `json:"rankPower" api:"required"`
-	JSON              qualitySpeedTopAsesResponseTop0JSON `json:"-"`
+	// A numeric string.
+	BandwidthDownload string `json:"bandwidthDownload" api:"required"`
+	// A numeric string.
+	BandwidthUpload string `json:"bandwidthUpload" api:"required"`
+	ClientASN       int64  `json:"clientASN" api:"required"`
+	ClientAsName    string `json:"clientASName" api:"required"`
+	// A numeric string.
+	JitterIdle string `json:"jitterIdle" api:"required"`
+	// A numeric string.
+	JitterLoaded string `json:"jitterLoaded" api:"required"`
+	// A numeric string.
+	LatencyIdle string `json:"latencyIdle" api:"required"`
+	// A numeric string.
+	LatencyLoaded string                              `json:"latencyLoaded" api:"required"`
+	NumTests      int64                               `json:"numTests" api:"required"`
+	RankPower     float64                             `json:"rankPower" api:"required"`
+	JSON          qualitySpeedTopAsesResponseTop0JSON `json:"-"`
 }
 
 // qualitySpeedTopAsesResponseTop0JSON contains the JSON metadata for the struct
@@ -605,17 +611,23 @@ func (r qualitySpeedTopLocationsResponseMetaUnitJSON) RawJSON() string {
 }
 
 type QualitySpeedTopLocationsResponseTop0 struct {
-	BandwidthDownload   string                                   `json:"bandwidthDownload" api:"required"`
-	BandwidthUpload     string                                   `json:"bandwidthUpload" api:"required"`
-	ClientCountryAlpha2 string                                   `json:"clientCountryAlpha2" api:"required"`
-	ClientCountryName   string                                   `json:"clientCountryName" api:"required"`
-	JitterIdle          string                                   `json:"jitterIdle" api:"required"`
-	JitterLoaded        string                                   `json:"jitterLoaded" api:"required"`
-	LatencyIdle         string                                   `json:"latencyIdle" api:"required"`
-	LatencyLoaded       string                                   `json:"latencyLoaded" api:"required"`
-	NumTests            float64                                  `json:"numTests" api:"required"`
-	RankPower           float64                                  `json:"rankPower" api:"required"`
-	JSON                qualitySpeedTopLocationsResponseTop0JSON `json:"-"`
+	// A numeric string.
+	BandwidthDownload string `json:"bandwidthDownload" api:"required"`
+	// A numeric string.
+	BandwidthUpload     string `json:"bandwidthUpload" api:"required"`
+	ClientCountryAlpha2 string `json:"clientCountryAlpha2" api:"required"`
+	ClientCountryName   string `json:"clientCountryName" api:"required"`
+	// A numeric string.
+	JitterIdle string `json:"jitterIdle" api:"required"`
+	// A numeric string.
+	JitterLoaded string `json:"jitterLoaded" api:"required"`
+	// A numeric string.
+	LatencyIdle string `json:"latencyIdle" api:"required"`
+	// A numeric string.
+	LatencyLoaded string                                   `json:"latencyLoaded" api:"required"`
+	NumTests      int64                                    `json:"numTests" api:"required"`
+	RankPower     float64                                  `json:"rankPower" api:"required"`
+	JSON          qualitySpeedTopLocationsResponseTop0JSON `json:"-"`
 }
 
 // qualitySpeedTopLocationsResponseTop0JSON contains the JSON metadata for the

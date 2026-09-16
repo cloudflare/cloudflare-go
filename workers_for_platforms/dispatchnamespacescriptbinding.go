@@ -37,7 +37,7 @@ func NewDispatchNamespaceScriptBindingService(opts ...option.RequestOption) (r *
 	return
 }
 
-// Fetch script bindings from a script uploaded to a Workers for Platforms
+// Fetch bindings from a script uploaded to a Workers for Platforms dispatch
 // namespace.
 func (r *DispatchNamespaceScriptBindingService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptBindingGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[DispatchNamespaceScriptBindingGetResponse], err error) {
 	var raw *http.Response
@@ -68,7 +68,7 @@ func (r *DispatchNamespaceScriptBindingService) Get(ctx context.Context, dispatc
 	return res, nil
 }
 
-// Fetch script bindings from a script uploaded to a Workers for Platforms
+// Fetch bindings from a script uploaded to a Workers for Platforms dispatch
 // namespace.
 func (r *DispatchNamespaceScriptBindingService) GetAutoPaging(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptBindingGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DispatchNamespaceScriptBindingGetResponse] {
 	return pagination.NewSinglePageAutoPager(r.Get(ctx, dispatchNamespace, scriptName, query, opts...))

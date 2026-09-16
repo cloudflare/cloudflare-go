@@ -43,6 +43,9 @@ func NewLiveInputService(opts ...option.RequestOption) (r *LiveInputService) {
 // stream live video to Cloudflare Stream.
 func (r *LiveInputService) New(ctx context.Context, params LiveInputNewParams, opts ...option.RequestOption) (res *LiveInput, err error) {
 	var env LiveInputNewResponseEnvelope
+	if params.IdempotencyKey.Present {
+		opts = append(opts, option.WithHeader("Idempotency-Key", fmt.Sprintf("%v", params.IdempotencyKey)))
+	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -574,7 +577,8 @@ type LiveInputNewParams struct {
 	// Records the input to a Cloudflare Stream video. Behavior depends on the mode. In
 	// most cases, the video will initially be viewable as a live video and transition
 	// to on-demand after a condition is satisfied.
-	Recording param.Field[LiveInputNewParamsRecording] `json:"recording"`
+	Recording      param.Field[LiveInputNewParamsRecording] `json:"recording"`
+	IdempotencyKey param.Field[string]                      `header:"Idempotency-Key"`
 }
 
 func (r LiveInputNewParams) MarshalJSON() (data []byte, err error) {

@@ -225,6 +225,8 @@ type WorkerObservability struct {
 	Enabled bool `json:"enabled"`
 	// The sampling rate for observability. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	HeadSamplingRate float64 `json:"head_sampling_rate"`
+	// Real-time Issues settings for the Worker.
+	Issues WorkerObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs WorkerObservabilityLogs `json:"logs"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -239,6 +241,7 @@ type WorkerObservability struct {
 type workerObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -251,6 +254,29 @@ func (r *WorkerObservability) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r workerObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type WorkerObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                          `json:"enabled"`
+	JSON    workerObservabilityIssuesJSON `json:"-"`
+}
+
+// workerObservabilityIssuesJSON contains the JSON metadata for the struct
+// [WorkerObservabilityIssues]
+type workerObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -625,6 +651,8 @@ type WorkerObservabilityParam struct {
 	Enabled param.Field[bool] `json:"enabled"`
 	// The sampling rate for observability. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Real-time Issues settings for the Worker.
+	Issues param.Field[WorkerObservabilityIssuesParam] `json:"issues"`
 	// Log settings for the Worker.
 	Logs param.Field[WorkerObservabilityLogsParam] `json:"logs"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -634,6 +662,16 @@ type WorkerObservabilityParam struct {
 }
 
 func (r WorkerObservabilityParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Real-time Issues settings for the Worker.
+type WorkerObservabilityIssuesParam struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r WorkerObservabilityIssuesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

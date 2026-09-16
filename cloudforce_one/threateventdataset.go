@@ -114,8 +114,11 @@ func (r *ThreatEventDatasetService) Get(ctx context.Context, datasetID string, q
 	return res, err
 }
 
-// Retrieves the raw data associated with an event. Searches across all shards in
-// the dataset.
+// Deprecated; use GET /events/datasets/{dataset_id}/events/{event_id}/raw.
+// Available through 2026-11-28.
+//
+// Deprecated: Use GET /events/datasets/{dataset_id}/events/{event_id}/raw before
+// 2026-11-28.
 func (r *ThreatEventDatasetService) Raw(ctx context.Context, datasetID string, eventID string, query ThreatEventDatasetRawParams, opts ...option.RequestOption) (res *ThreatEventDatasetRawResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

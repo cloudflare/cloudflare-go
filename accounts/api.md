@@ -158,6 +158,16 @@ Methods:
 - <code title="get /accounts/{account_id}/logs/audit/{id}/history">client.Accounts.Logs.Audit.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#LogAuditService.History">History</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, id <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#LogAuditHistoryParams">LogAuditHistoryParams</a>) (\*[]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#LogAuditHistoryResponse">LogAuditHistoryResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/logs/audit/product_categories">client.Accounts.Logs.Audit.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#LogAuditService.ProductCategories">ProductCategories</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#LogAuditProductCategoriesParams">LogAuditProductCategoriesParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#LogAuditProductCategoriesResponse">LogAuditProductCategoriesResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+## Entitlements
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#EntitlementListResponse">EntitlementListResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/entitlements">client.Accounts.Entitlements.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#EntitlementService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#EntitlementListParams">EntitlementListParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#EntitlementListResponse">EntitlementListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## SpeedSettings
 
 ### Transformations

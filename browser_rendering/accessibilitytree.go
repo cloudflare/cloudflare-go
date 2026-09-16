@@ -259,60 +259,14 @@ func init() {
 
 type AccessibilityTreeNewParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
+	AccountID param.Field[string]                 `path:"account_id" api:"required"`
+	Body      AccessibilityTreeNewParamsBodyUnion `json:"body" api:"required"`
 	// Cache TTL default is 5s. Set to 0 to disable.
 	CacheTTL param.Field[float64] `query:"cacheTTL"`
-	// The maximum duration allowed for the browser action to complete after the page
-	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
-	// If this time limit is exceeded, the action stops and returns a timeout error.
-	ActionTimeout param.Field[float64] `json:"actionTimeout"`
-	// Adds a `<script>` tag into the page with the desired URL or content.
-	AddScriptTag param.Field[[]AccessibilityTreeNewParamsAddScriptTag] `json:"addScriptTag"`
-	// Adds a `<link rel="stylesheet">` tag into the page with the desired URL or a
-	// `<style type="text/css">` tag with the content.
-	AddStyleTag param.Field[[]AccessibilityTreeNewParamsAddStyleTag] `json:"addStyleTag"`
-	// Only allow requests that match the provided regex patterns, eg. '/^.\*\.(css)'.
-	// Reject rules are applied first.
-	AllowRequestPattern param.Field[[]string] `json:"allowRequestPattern"`
-	// Only allow requests that match the provided resource types, eg. 'image' or
-	// 'script'. Reject rules are applied first.
-	AllowResourceTypes param.Field[[]AccessibilityTreeNewParamsAllowResourceType] `json:"allowResourceTypes"`
-	// Provide credentials for HTTP authentication.
-	Authenticate param.Field[AccessibilityTreeNewParamsAuthenticate] `json:"authenticate"`
-	// Attempt to proceed when 'awaited' events fail or timeout.
-	BestAttempt param.Field[bool] `json:"bestAttempt"`
-	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
-	Cookies          param.Field[[]AccessibilityTreeNewParamsCookie] `json:"cookies"`
-	EmulateMediaType param.Field[string]                             `json:"emulateMediaType"`
-	// Check [options](https://pptr.dev/api/puppeteer.gotooptions).
-	GotoOptions param.Field[AccessibilityTreeNewParamsGotoOptions] `json:"gotoOptions"`
-	// Set the content of the page, eg: `<h1>Hello World!!</h1>`. Either `html` or
-	// `url` must be set.
-	HTML            param.Field[string] `json:"html"`
-	InterestingOnly param.Field[bool]   `json:"interestingOnly"`
-	// Block undesired requests that match the provided regex patterns, eg.
-	// '/^.\*\.(css)'.
-	RejectRequestPattern param.Field[[]string] `json:"rejectRequestPattern"`
-	// Block undesired requests that match the provided resource types, eg. 'image' or
-	// 'script'.
-	RejectResourceTypes  param.Field[[]AccessibilityTreeNewParamsRejectResourceType] `json:"rejectResourceTypes"`
-	Root                 param.Field[string]                                         `json:"root"`
-	SetExtraHTTPHeaders  param.Field[map[string]string]                              `json:"setExtraHTTPHeaders"`
-	SetJavaScriptEnabled param.Field[bool]                                           `json:"setJavaScriptEnabled"`
-	// URL to navigate to, eg. `https://example.com`.
-	URL       param.Field[string] `json:"url" format:"uri"`
-	UserAgent param.Field[string] `json:"userAgent"`
-	// Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
-	Viewport param.Field[AccessibilityTreeNewParamsViewport] `json:"viewport"`
-	// Wait for the selector to appear in page. Check
-	// [options](https://pptr.dev/api/puppeteer.page.waitforselector).
-	WaitForSelector param.Field[AccessibilityTreeNewParamsWaitForSelector] `json:"waitForSelector"`
-	// Waits for a specified timeout before continuing.
-	WaitForTimeout param.Field[float64] `json:"waitForTimeout"`
 }
 
 func (r AccessibilityTreeNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Body)
 }
 
 // URLQuery serializes [AccessibilityTreeNewParams]'s query parameters as
@@ -324,231 +278,327 @@ func (r AccessibilityTreeNewParams) URLQuery() (v url.Values) {
 	})
 }
 
-type AccessibilityTreeNewParamsAddScriptTag struct {
+type AccessibilityTreeNewParamsBody struct {
+	// The maximum duration allowed for the browser action to complete after the page
+	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
+	// If this time limit is exceeded, the action stops and returns a timeout error.
+	ActionTimeout       param.Field[float64]     `json:"actionTimeout"`
+	AddScriptTag        param.Field[interface{}] `json:"addScriptTag"`
+	AddStyleTag         param.Field[interface{}] `json:"addStyleTag"`
+	AllowRequestPattern param.Field[interface{}] `json:"allowRequestPattern"`
+	AllowResourceTypes  param.Field[interface{}] `json:"allowResourceTypes"`
+	Authenticate        param.Field[interface{}] `json:"authenticate"`
+	// Attempt to proceed when 'awaited' events fail or timeout.
+	BestAttempt          param.Field[bool]        `json:"bestAttempt"`
+	Cookies              param.Field[interface{}] `json:"cookies"`
+	EmulateMediaType     param.Field[string]      `json:"emulateMediaType"`
+	GotoOptions          param.Field[interface{}] `json:"gotoOptions"`
+	HTML                 param.Field[string]      `json:"html"`
+	InterestingOnly      param.Field[bool]        `json:"interestingOnly"`
+	RejectRequestPattern param.Field[interface{}] `json:"rejectRequestPattern"`
+	RejectResourceTypes  param.Field[interface{}] `json:"rejectResourceTypes"`
+	Root                 param.Field[string]      `json:"root"`
+	SetExtraHTTPHeaders  param.Field[interface{}] `json:"setExtraHTTPHeaders"`
+	SetJavaScriptEnabled param.Field[bool]        `json:"setJavaScriptEnabled"`
+	URL                  param.Field[string]      `json:"url"`
+	UserAgent            param.Field[string]      `json:"userAgent"`
+	Viewport             param.Field[interface{}] `json:"viewport"`
+	WaitForSelector      param.Field[interface{}] `json:"waitForSelector"`
+	// Waits for a specified timeout before continuing.
+	WaitForTimeout param.Field[float64] `json:"waitForTimeout"`
+}
+
+func (r AccessibilityTreeNewParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessibilityTreeNewParamsBody) implementsAccessibilityTreeNewParamsBodyUnion() {}
+
+// Satisfied by [browser_rendering.AccessibilityTreeNewParamsBodyObject],
+// [browser_rendering.AccessibilityTreeNewParamsBodyObject],
+// [AccessibilityTreeNewParamsBody].
+type AccessibilityTreeNewParamsBodyUnion interface {
+	implementsAccessibilityTreeNewParamsBodyUnion()
+}
+
+type AccessibilityTreeNewParamsBodyObject struct {
+	URL param.Field[string] `json:"url" api:"required"`
+	// The maximum duration allowed for the browser action to complete after the page
+	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
+	// If this time limit is exceeded, the action stops and returns a timeout error.
+	ActionTimeout param.Field[float64] `json:"actionTimeout"`
+	// Adds a script element into the page with the desired URL or content.
+	AddScriptTag param.Field[[]AccessibilityTreeNewParamsBodyObjectAddScriptTag] `json:"addScriptTag"`
+	// Adds a `<link rel="stylesheet">` tag into the page with the desired URL or a
+	// `<style type="text/css">` tag with the content.
+	AddStyleTag param.Field[[]AccessibilityTreeNewParamsBodyObjectAddStyleTag] `json:"addStyleTag"`
+	// Only allow requests that match the provided regex patterns, eg. '/^.\*\.(css)'.
+	// Reject rules are applied first.
+	AllowRequestPattern param.Field[[]string] `json:"allowRequestPattern"`
+	// Only allow requests that match the provided resource types, eg. 'image' or
+	// 'script'. Reject rules are applied first.
+	AllowResourceTypes param.Field[[]AccessibilityTreeNewParamsBodyObjectAllowResourceType] `json:"allowResourceTypes"`
+	// Provide credentials for HTTP authentication.
+	Authenticate param.Field[AccessibilityTreeNewParamsBodyObjectAuthenticate] `json:"authenticate"`
+	// Attempt to proceed when 'awaited' events fail or timeout.
+	BestAttempt param.Field[bool] `json:"bestAttempt"`
+	// Check [options](https://pptr.dev/api/puppeteer.page.setcookie).
+	Cookies          param.Field[[]AccessibilityTreeNewParamsBodyObjectCookie] `json:"cookies"`
+	EmulateMediaType param.Field[string]                                       `json:"emulateMediaType"`
+	// Check [options](https://pptr.dev/api/puppeteer.gotooptions).
+	GotoOptions     param.Field[AccessibilityTreeNewParamsBodyObjectGotoOptions] `json:"gotoOptions"`
+	HTML            param.Field[string]                                          `json:"html"`
+	InterestingOnly param.Field[bool]                                            `json:"interestingOnly"`
+	// Block undesired requests that match the provided regex patterns, eg.
+	// '/^.\*\.(css)'.
+	RejectRequestPattern param.Field[[]string] `json:"rejectRequestPattern"`
+	// Block undesired requests that match the provided resource types, eg. 'image' or
+	// 'script'.
+	RejectResourceTypes  param.Field[[]AccessibilityTreeNewParamsBodyObjectRejectResourceType] `json:"rejectResourceTypes"`
+	Root                 param.Field[string]                                                   `json:"root"`
+	SetExtraHTTPHeaders  param.Field[map[string]string]                                        `json:"setExtraHTTPHeaders"`
+	SetJavaScriptEnabled param.Field[bool]                                                     `json:"setJavaScriptEnabled"`
+	UserAgent            param.Field[string]                                                   `json:"userAgent"`
+	// Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
+	Viewport param.Field[AccessibilityTreeNewParamsBodyObjectViewport] `json:"viewport"`
+	// Wait for the selector to appear in page. Check
+	// [options](https://pptr.dev/api/puppeteer.page.waitforselector).
+	WaitForSelector param.Field[AccessibilityTreeNewParamsBodyObjectWaitForSelector] `json:"waitForSelector"`
+	// Waits for a specified timeout before continuing.
+	WaitForTimeout param.Field[float64] `json:"waitForTimeout"`
+}
+
+func (r AccessibilityTreeNewParamsBodyObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessibilityTreeNewParamsBodyObject) implementsAccessibilityTreeNewParamsBodyUnion() {}
+
+type AccessibilityTreeNewParamsBodyObjectAddScriptTag struct {
 	ID      param.Field[string] `json:"id"`
 	Content param.Field[string] `json:"content"`
 	Type    param.Field[string] `json:"type"`
 	URL     param.Field[string] `json:"url" format:"uri"`
 }
 
-func (r AccessibilityTreeNewParamsAddScriptTag) MarshalJSON() (data []byte, err error) {
+func (r AccessibilityTreeNewParamsBodyObjectAddScriptTag) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AccessibilityTreeNewParamsAddStyleTag struct {
+type AccessibilityTreeNewParamsBodyObjectAddStyleTag struct {
 	Content param.Field[string] `json:"content"`
 	URL     param.Field[string] `json:"url" format:"uri"`
 }
 
-func (r AccessibilityTreeNewParamsAddStyleTag) MarshalJSON() (data []byte, err error) {
+func (r AccessibilityTreeNewParamsBodyObjectAddStyleTag) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AccessibilityTreeNewParamsAllowResourceType string
+type AccessibilityTreeNewParamsBodyObjectAllowResourceType string
 
 const (
-	AccessibilityTreeNewParamsAllowResourceTypeDocument           AccessibilityTreeNewParamsAllowResourceType = "document"
-	AccessibilityTreeNewParamsAllowResourceTypeStylesheet         AccessibilityTreeNewParamsAllowResourceType = "stylesheet"
-	AccessibilityTreeNewParamsAllowResourceTypeImage              AccessibilityTreeNewParamsAllowResourceType = "image"
-	AccessibilityTreeNewParamsAllowResourceTypeMedia              AccessibilityTreeNewParamsAllowResourceType = "media"
-	AccessibilityTreeNewParamsAllowResourceTypeFont               AccessibilityTreeNewParamsAllowResourceType = "font"
-	AccessibilityTreeNewParamsAllowResourceTypeScript             AccessibilityTreeNewParamsAllowResourceType = "script"
-	AccessibilityTreeNewParamsAllowResourceTypeTexttrack          AccessibilityTreeNewParamsAllowResourceType = "texttrack"
-	AccessibilityTreeNewParamsAllowResourceTypeXHR                AccessibilityTreeNewParamsAllowResourceType = "xhr"
-	AccessibilityTreeNewParamsAllowResourceTypeFetch              AccessibilityTreeNewParamsAllowResourceType = "fetch"
-	AccessibilityTreeNewParamsAllowResourceTypePrefetch           AccessibilityTreeNewParamsAllowResourceType = "prefetch"
-	AccessibilityTreeNewParamsAllowResourceTypeEventsource        AccessibilityTreeNewParamsAllowResourceType = "eventsource"
-	AccessibilityTreeNewParamsAllowResourceTypeWebsocket          AccessibilityTreeNewParamsAllowResourceType = "websocket"
-	AccessibilityTreeNewParamsAllowResourceTypeManifest           AccessibilityTreeNewParamsAllowResourceType = "manifest"
-	AccessibilityTreeNewParamsAllowResourceTypeSignedexchange     AccessibilityTreeNewParamsAllowResourceType = "signedexchange"
-	AccessibilityTreeNewParamsAllowResourceTypePing               AccessibilityTreeNewParamsAllowResourceType = "ping"
-	AccessibilityTreeNewParamsAllowResourceTypeCspviolationreport AccessibilityTreeNewParamsAllowResourceType = "cspviolationreport"
-	AccessibilityTreeNewParamsAllowResourceTypePreflight          AccessibilityTreeNewParamsAllowResourceType = "preflight"
-	AccessibilityTreeNewParamsAllowResourceTypeOther              AccessibilityTreeNewParamsAllowResourceType = "other"
+	AccessibilityTreeNewParamsBodyObjectAllowResourceTypeDocument           AccessibilityTreeNewParamsBodyObjectAllowResourceType = "document"
+	AccessibilityTreeNewParamsBodyObjectAllowResourceTypeStylesheet         AccessibilityTreeNewParamsBodyObjectAllowResourceType = "stylesheet"
+	AccessibilityTreeNewParamsBodyObjectAllowResourceTypeImage              AccessibilityTreeNewParamsBodyObjectAllowResourceType = "image"
+	AccessibilityTreeNewParamsBodyObjectAllowResourceTypeMedia              AccessibilityTreeNewParamsBodyObjectAllowResourceType = "media"
+	AccessibilityTreeNewParamsBodyObjectAllowResourceTypeFont               AccessibilityTreeNewParamsBodyObjectAllowResourceType = "font"
+	AccessibilityTreeNewParamsBodyObjectAllowResourceTypeScript             AccessibilityTreeNewParamsBodyObjectAllowResourceType = "script"
+	AccessibilityTreeNewParamsBodyObjectAllowResourceTypeTexttrack          AccessibilityTreeNewParamsBodyObjectAllowResourceType = "texttrack"
+	AccessibilityTreeNewParamsBodyObjectAllowResourceTypeXHR                AccessibilityTreeNewParamsBodyObjectAllowResourceType = "xhr"
+	AccessibilityTreeNewParamsBodyObjectAllowResourceTypeFetch              AccessibilityTreeNewParamsBodyObjectAllowResourceType = "fetch"
+	AccessibilityTreeNewParamsBodyObjectAllowResourceTypePrefetch           AccessibilityTreeNewParamsBodyObjectAllowResourceType = "prefetch"
+	AccessibilityTreeNewParamsBodyObjectAllowResourceTypeEventsource        AccessibilityTreeNewParamsBodyObjectAllowResourceType = "eventsource"
+	AccessibilityTreeNewParamsBodyObjectAllowResourceTypeWebsocket          AccessibilityTreeNewParamsBodyObjectAllowResourceType = "websocket"
+	AccessibilityTreeNewParamsBodyObjectAllowResourceTypeManifest           AccessibilityTreeNewParamsBodyObjectAllowResourceType = "manifest"
+	AccessibilityTreeNewParamsBodyObjectAllowResourceTypeSignedexchange     AccessibilityTreeNewParamsBodyObjectAllowResourceType = "signedexchange"
+	AccessibilityTreeNewParamsBodyObjectAllowResourceTypePing               AccessibilityTreeNewParamsBodyObjectAllowResourceType = "ping"
+	AccessibilityTreeNewParamsBodyObjectAllowResourceTypeCspviolationreport AccessibilityTreeNewParamsBodyObjectAllowResourceType = "cspviolationreport"
+	AccessibilityTreeNewParamsBodyObjectAllowResourceTypePreflight          AccessibilityTreeNewParamsBodyObjectAllowResourceType = "preflight"
+	AccessibilityTreeNewParamsBodyObjectAllowResourceTypeOther              AccessibilityTreeNewParamsBodyObjectAllowResourceType = "other"
 )
 
-func (r AccessibilityTreeNewParamsAllowResourceType) IsKnown() bool {
+func (r AccessibilityTreeNewParamsBodyObjectAllowResourceType) IsKnown() bool {
 	switch r {
-	case AccessibilityTreeNewParamsAllowResourceTypeDocument, AccessibilityTreeNewParamsAllowResourceTypeStylesheet, AccessibilityTreeNewParamsAllowResourceTypeImage, AccessibilityTreeNewParamsAllowResourceTypeMedia, AccessibilityTreeNewParamsAllowResourceTypeFont, AccessibilityTreeNewParamsAllowResourceTypeScript, AccessibilityTreeNewParamsAllowResourceTypeTexttrack, AccessibilityTreeNewParamsAllowResourceTypeXHR, AccessibilityTreeNewParamsAllowResourceTypeFetch, AccessibilityTreeNewParamsAllowResourceTypePrefetch, AccessibilityTreeNewParamsAllowResourceTypeEventsource, AccessibilityTreeNewParamsAllowResourceTypeWebsocket, AccessibilityTreeNewParamsAllowResourceTypeManifest, AccessibilityTreeNewParamsAllowResourceTypeSignedexchange, AccessibilityTreeNewParamsAllowResourceTypePing, AccessibilityTreeNewParamsAllowResourceTypeCspviolationreport, AccessibilityTreeNewParamsAllowResourceTypePreflight, AccessibilityTreeNewParamsAllowResourceTypeOther:
+	case AccessibilityTreeNewParamsBodyObjectAllowResourceTypeDocument, AccessibilityTreeNewParamsBodyObjectAllowResourceTypeStylesheet, AccessibilityTreeNewParamsBodyObjectAllowResourceTypeImage, AccessibilityTreeNewParamsBodyObjectAllowResourceTypeMedia, AccessibilityTreeNewParamsBodyObjectAllowResourceTypeFont, AccessibilityTreeNewParamsBodyObjectAllowResourceTypeScript, AccessibilityTreeNewParamsBodyObjectAllowResourceTypeTexttrack, AccessibilityTreeNewParamsBodyObjectAllowResourceTypeXHR, AccessibilityTreeNewParamsBodyObjectAllowResourceTypeFetch, AccessibilityTreeNewParamsBodyObjectAllowResourceTypePrefetch, AccessibilityTreeNewParamsBodyObjectAllowResourceTypeEventsource, AccessibilityTreeNewParamsBodyObjectAllowResourceTypeWebsocket, AccessibilityTreeNewParamsBodyObjectAllowResourceTypeManifest, AccessibilityTreeNewParamsBodyObjectAllowResourceTypeSignedexchange, AccessibilityTreeNewParamsBodyObjectAllowResourceTypePing, AccessibilityTreeNewParamsBodyObjectAllowResourceTypeCspviolationreport, AccessibilityTreeNewParamsBodyObjectAllowResourceTypePreflight, AccessibilityTreeNewParamsBodyObjectAllowResourceTypeOther:
 		return true
 	}
 	return false
 }
 
 // Provide credentials for HTTP authentication.
-type AccessibilityTreeNewParamsAuthenticate struct {
+type AccessibilityTreeNewParamsBodyObjectAuthenticate struct {
 	Password param.Field[string] `json:"password" api:"required"`
 	Username param.Field[string] `json:"username" api:"required"`
 }
 
-func (r AccessibilityTreeNewParamsAuthenticate) MarshalJSON() (data []byte, err error) {
+func (r AccessibilityTreeNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AccessibilityTreeNewParamsCookie struct {
+type AccessibilityTreeNewParamsBodyObjectCookie struct {
 	// Cookie name.
-	Name         param.Field[string]                                        `json:"name" api:"required"`
-	Value        param.Field[string]                                        `json:"value" api:"required"`
-	Domain       param.Field[string]                                        `json:"domain"`
-	Expires      param.Field[float64]                                       `json:"expires"`
-	HTTPOnly     param.Field[bool]                                          `json:"httpOnly"`
-	PartitionKey param.Field[string]                                        `json:"partitionKey"`
-	Path         param.Field[string]                                        `json:"path"`
-	Priority     param.Field[AccessibilityTreeNewParamsCookiesPriority]     `json:"priority"`
-	SameParty    param.Field[bool]                                          `json:"sameParty"`
-	SameSite     param.Field[AccessibilityTreeNewParamsCookiesSameSite]     `json:"sameSite"`
-	Secure       param.Field[bool]                                          `json:"secure"`
-	SourcePort   param.Field[float64]                                       `json:"sourcePort"`
-	SourceScheme param.Field[AccessibilityTreeNewParamsCookiesSourceScheme] `json:"sourceScheme"`
-	URL          param.Field[string]                                        `json:"url"`
+	Name         param.Field[string]                                                  `json:"name" api:"required"`
+	Value        param.Field[string]                                                  `json:"value" api:"required"`
+	Domain       param.Field[string]                                                  `json:"domain"`
+	Expires      param.Field[float64]                                                 `json:"expires"`
+	HTTPOnly     param.Field[bool]                                                    `json:"httpOnly"`
+	PartitionKey param.Field[string]                                                  `json:"partitionKey"`
+	Path         param.Field[string]                                                  `json:"path"`
+	Priority     param.Field[AccessibilityTreeNewParamsBodyObjectCookiesPriority]     `json:"priority"`
+	SameParty    param.Field[bool]                                                    `json:"sameParty"`
+	SameSite     param.Field[AccessibilityTreeNewParamsBodyObjectCookiesSameSite]     `json:"sameSite"`
+	Secure       param.Field[bool]                                                    `json:"secure"`
+	SourcePort   param.Field[float64]                                                 `json:"sourcePort"`
+	SourceScheme param.Field[AccessibilityTreeNewParamsBodyObjectCookiesSourceScheme] `json:"sourceScheme"`
+	URL          param.Field[string]                                                  `json:"url"`
 }
 
-func (r AccessibilityTreeNewParamsCookie) MarshalJSON() (data []byte, err error) {
+func (r AccessibilityTreeNewParamsBodyObjectCookie) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AccessibilityTreeNewParamsCookiesPriority string
+type AccessibilityTreeNewParamsBodyObjectCookiesPriority string
 
 const (
-	AccessibilityTreeNewParamsCookiesPriorityLow    AccessibilityTreeNewParamsCookiesPriority = "Low"
-	AccessibilityTreeNewParamsCookiesPriorityMedium AccessibilityTreeNewParamsCookiesPriority = "Medium"
-	AccessibilityTreeNewParamsCookiesPriorityHigh   AccessibilityTreeNewParamsCookiesPriority = "High"
+	AccessibilityTreeNewParamsBodyObjectCookiesPriorityLow    AccessibilityTreeNewParamsBodyObjectCookiesPriority = "Low"
+	AccessibilityTreeNewParamsBodyObjectCookiesPriorityMedium AccessibilityTreeNewParamsBodyObjectCookiesPriority = "Medium"
+	AccessibilityTreeNewParamsBodyObjectCookiesPriorityHigh   AccessibilityTreeNewParamsBodyObjectCookiesPriority = "High"
 )
 
-func (r AccessibilityTreeNewParamsCookiesPriority) IsKnown() bool {
+func (r AccessibilityTreeNewParamsBodyObjectCookiesPriority) IsKnown() bool {
 	switch r {
-	case AccessibilityTreeNewParamsCookiesPriorityLow, AccessibilityTreeNewParamsCookiesPriorityMedium, AccessibilityTreeNewParamsCookiesPriorityHigh:
+	case AccessibilityTreeNewParamsBodyObjectCookiesPriorityLow, AccessibilityTreeNewParamsBodyObjectCookiesPriorityMedium, AccessibilityTreeNewParamsBodyObjectCookiesPriorityHigh:
 		return true
 	}
 	return false
 }
 
-type AccessibilityTreeNewParamsCookiesSameSite string
+type AccessibilityTreeNewParamsBodyObjectCookiesSameSite string
 
 const (
-	AccessibilityTreeNewParamsCookiesSameSiteStrict AccessibilityTreeNewParamsCookiesSameSite = "Strict"
-	AccessibilityTreeNewParamsCookiesSameSiteLax    AccessibilityTreeNewParamsCookiesSameSite = "Lax"
-	AccessibilityTreeNewParamsCookiesSameSiteNone   AccessibilityTreeNewParamsCookiesSameSite = "None"
+	AccessibilityTreeNewParamsBodyObjectCookiesSameSiteStrict AccessibilityTreeNewParamsBodyObjectCookiesSameSite = "Strict"
+	AccessibilityTreeNewParamsBodyObjectCookiesSameSiteLax    AccessibilityTreeNewParamsBodyObjectCookiesSameSite = "Lax"
+	AccessibilityTreeNewParamsBodyObjectCookiesSameSiteNone   AccessibilityTreeNewParamsBodyObjectCookiesSameSite = "None"
 )
 
-func (r AccessibilityTreeNewParamsCookiesSameSite) IsKnown() bool {
+func (r AccessibilityTreeNewParamsBodyObjectCookiesSameSite) IsKnown() bool {
 	switch r {
-	case AccessibilityTreeNewParamsCookiesSameSiteStrict, AccessibilityTreeNewParamsCookiesSameSiteLax, AccessibilityTreeNewParamsCookiesSameSiteNone:
+	case AccessibilityTreeNewParamsBodyObjectCookiesSameSiteStrict, AccessibilityTreeNewParamsBodyObjectCookiesSameSiteLax, AccessibilityTreeNewParamsBodyObjectCookiesSameSiteNone:
 		return true
 	}
 	return false
 }
 
-type AccessibilityTreeNewParamsCookiesSourceScheme string
+type AccessibilityTreeNewParamsBodyObjectCookiesSourceScheme string
 
 const (
-	AccessibilityTreeNewParamsCookiesSourceSchemeUnset     AccessibilityTreeNewParamsCookiesSourceScheme = "Unset"
-	AccessibilityTreeNewParamsCookiesSourceSchemeNonSecure AccessibilityTreeNewParamsCookiesSourceScheme = "NonSecure"
-	AccessibilityTreeNewParamsCookiesSourceSchemeSecure    AccessibilityTreeNewParamsCookiesSourceScheme = "Secure"
+	AccessibilityTreeNewParamsBodyObjectCookiesSourceSchemeUnset     AccessibilityTreeNewParamsBodyObjectCookiesSourceScheme = "Unset"
+	AccessibilityTreeNewParamsBodyObjectCookiesSourceSchemeNonSecure AccessibilityTreeNewParamsBodyObjectCookiesSourceScheme = "NonSecure"
+	AccessibilityTreeNewParamsBodyObjectCookiesSourceSchemeSecure    AccessibilityTreeNewParamsBodyObjectCookiesSourceScheme = "Secure"
 )
 
-func (r AccessibilityTreeNewParamsCookiesSourceScheme) IsKnown() bool {
+func (r AccessibilityTreeNewParamsBodyObjectCookiesSourceScheme) IsKnown() bool {
 	switch r {
-	case AccessibilityTreeNewParamsCookiesSourceSchemeUnset, AccessibilityTreeNewParamsCookiesSourceSchemeNonSecure, AccessibilityTreeNewParamsCookiesSourceSchemeSecure:
+	case AccessibilityTreeNewParamsBodyObjectCookiesSourceSchemeUnset, AccessibilityTreeNewParamsBodyObjectCookiesSourceSchemeNonSecure, AccessibilityTreeNewParamsBodyObjectCookiesSourceSchemeSecure:
 		return true
 	}
 	return false
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.gotooptions).
-type AccessibilityTreeNewParamsGotoOptions struct {
-	Referer        param.Field[string]                                              `json:"referer"`
-	ReferrerPolicy param.Field[string]                                              `json:"referrerPolicy"`
-	Timeout        param.Field[float64]                                             `json:"timeout"`
-	WaitUntil      param.Field[AccessibilityTreeNewParamsGotoOptionsWaitUntilUnion] `json:"waitUntil"`
+type AccessibilityTreeNewParamsBodyObjectGotoOptions struct {
+	Referer        param.Field[string]                                                        `json:"referer"`
+	ReferrerPolicy param.Field[string]                                                        `json:"referrerPolicy"`
+	Timeout        param.Field[float64]                                                       `json:"timeout"`
+	WaitUntil      param.Field[AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilUnion] `json:"waitUntil"`
 }
 
-func (r AccessibilityTreeNewParamsGotoOptions) MarshalJSON() (data []byte, err error) {
+func (r AccessibilityTreeNewParamsBodyObjectGotoOptions) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Satisfied by
-// [browser_rendering.AccessibilityTreeNewParamsGotoOptionsWaitUntilString],
-// [browser_rendering.AccessibilityTreeNewParamsGotoOptionsWaitUntilArray].
-type AccessibilityTreeNewParamsGotoOptionsWaitUntilUnion interface {
-	implementsAccessibilityTreeNewParamsGotoOptionsWaitUntilUnion()
+// [browser_rendering.AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilString],
+// [browser_rendering.AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilArray].
+type AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilUnion interface {
+	implementsAccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilUnion()
 }
 
-type AccessibilityTreeNewParamsGotoOptionsWaitUntilString string
+type AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilString string
 
 const (
-	AccessibilityTreeNewParamsGotoOptionsWaitUntilStringLoad             AccessibilityTreeNewParamsGotoOptionsWaitUntilString = "load"
-	AccessibilityTreeNewParamsGotoOptionsWaitUntilStringDomcontentloaded AccessibilityTreeNewParamsGotoOptionsWaitUntilString = "domcontentloaded"
-	AccessibilityTreeNewParamsGotoOptionsWaitUntilStringNetworkidle0     AccessibilityTreeNewParamsGotoOptionsWaitUntilString = "networkidle0"
-	AccessibilityTreeNewParamsGotoOptionsWaitUntilStringNetworkidle2     AccessibilityTreeNewParamsGotoOptionsWaitUntilString = "networkidle2"
+	AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilStringLoad             AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilString = "load"
+	AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilStringDomcontentloaded AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilString = "domcontentloaded"
+	AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle0     AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilString = "networkidle0"
+	AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle2     AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilString = "networkidle2"
 )
 
-func (r AccessibilityTreeNewParamsGotoOptionsWaitUntilString) IsKnown() bool {
+func (r AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilString) IsKnown() bool {
 	switch r {
-	case AccessibilityTreeNewParamsGotoOptionsWaitUntilStringLoad, AccessibilityTreeNewParamsGotoOptionsWaitUntilStringDomcontentloaded, AccessibilityTreeNewParamsGotoOptionsWaitUntilStringNetworkidle0, AccessibilityTreeNewParamsGotoOptionsWaitUntilStringNetworkidle2:
+	case AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilStringLoad, AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilStringDomcontentloaded, AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle0, AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilStringNetworkidle2:
 		return true
 	}
 	return false
 }
 
-func (r AccessibilityTreeNewParamsGotoOptionsWaitUntilString) implementsAccessibilityTreeNewParamsGotoOptionsWaitUntilUnion() {
+func (r AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilString) implementsAccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilUnion() {
 }
 
-type AccessibilityTreeNewParamsGotoOptionsWaitUntilArray []AccessibilityTreeNewParamsGotoOptionsWaitUntilArrayItem
+type AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilArray []AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilArrayItem
 
-func (r AccessibilityTreeNewParamsGotoOptionsWaitUntilArray) implementsAccessibilityTreeNewParamsGotoOptionsWaitUntilUnion() {
+func (r AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilArray) implementsAccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilUnion() {
 }
 
-type AccessibilityTreeNewParamsGotoOptionsWaitUntilArrayItem string
+type AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilArrayItem string
 
 const (
-	AccessibilityTreeNewParamsGotoOptionsWaitUntilArrayItemLoad             AccessibilityTreeNewParamsGotoOptionsWaitUntilArrayItem = "load"
-	AccessibilityTreeNewParamsGotoOptionsWaitUntilArrayItemDomcontentloaded AccessibilityTreeNewParamsGotoOptionsWaitUntilArrayItem = "domcontentloaded"
-	AccessibilityTreeNewParamsGotoOptionsWaitUntilArrayItemNetworkidle0     AccessibilityTreeNewParamsGotoOptionsWaitUntilArrayItem = "networkidle0"
-	AccessibilityTreeNewParamsGotoOptionsWaitUntilArrayItemNetworkidle2     AccessibilityTreeNewParamsGotoOptionsWaitUntilArrayItem = "networkidle2"
+	AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilArrayItemLoad             AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "load"
+	AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilArrayItemDomcontentloaded AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "domcontentloaded"
+	AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle0     AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "networkidle0"
+	AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle2     AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilArrayItem = "networkidle2"
 )
 
-func (r AccessibilityTreeNewParamsGotoOptionsWaitUntilArrayItem) IsKnown() bool {
+func (r AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilArrayItem) IsKnown() bool {
 	switch r {
-	case AccessibilityTreeNewParamsGotoOptionsWaitUntilArrayItemLoad, AccessibilityTreeNewParamsGotoOptionsWaitUntilArrayItemDomcontentloaded, AccessibilityTreeNewParamsGotoOptionsWaitUntilArrayItemNetworkidle0, AccessibilityTreeNewParamsGotoOptionsWaitUntilArrayItemNetworkidle2:
+	case AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilArrayItemLoad, AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilArrayItemDomcontentloaded, AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle0, AccessibilityTreeNewParamsBodyObjectGotoOptionsWaitUntilArrayItemNetworkidle2:
 		return true
 	}
 	return false
 }
 
-type AccessibilityTreeNewParamsRejectResourceType string
+type AccessibilityTreeNewParamsBodyObjectRejectResourceType string
 
 const (
-	AccessibilityTreeNewParamsRejectResourceTypeDocument           AccessibilityTreeNewParamsRejectResourceType = "document"
-	AccessibilityTreeNewParamsRejectResourceTypeStylesheet         AccessibilityTreeNewParamsRejectResourceType = "stylesheet"
-	AccessibilityTreeNewParamsRejectResourceTypeImage              AccessibilityTreeNewParamsRejectResourceType = "image"
-	AccessibilityTreeNewParamsRejectResourceTypeMedia              AccessibilityTreeNewParamsRejectResourceType = "media"
-	AccessibilityTreeNewParamsRejectResourceTypeFont               AccessibilityTreeNewParamsRejectResourceType = "font"
-	AccessibilityTreeNewParamsRejectResourceTypeScript             AccessibilityTreeNewParamsRejectResourceType = "script"
-	AccessibilityTreeNewParamsRejectResourceTypeTexttrack          AccessibilityTreeNewParamsRejectResourceType = "texttrack"
-	AccessibilityTreeNewParamsRejectResourceTypeXHR                AccessibilityTreeNewParamsRejectResourceType = "xhr"
-	AccessibilityTreeNewParamsRejectResourceTypeFetch              AccessibilityTreeNewParamsRejectResourceType = "fetch"
-	AccessibilityTreeNewParamsRejectResourceTypePrefetch           AccessibilityTreeNewParamsRejectResourceType = "prefetch"
-	AccessibilityTreeNewParamsRejectResourceTypeEventsource        AccessibilityTreeNewParamsRejectResourceType = "eventsource"
-	AccessibilityTreeNewParamsRejectResourceTypeWebsocket          AccessibilityTreeNewParamsRejectResourceType = "websocket"
-	AccessibilityTreeNewParamsRejectResourceTypeManifest           AccessibilityTreeNewParamsRejectResourceType = "manifest"
-	AccessibilityTreeNewParamsRejectResourceTypeSignedexchange     AccessibilityTreeNewParamsRejectResourceType = "signedexchange"
-	AccessibilityTreeNewParamsRejectResourceTypePing               AccessibilityTreeNewParamsRejectResourceType = "ping"
-	AccessibilityTreeNewParamsRejectResourceTypeCspviolationreport AccessibilityTreeNewParamsRejectResourceType = "cspviolationreport"
-	AccessibilityTreeNewParamsRejectResourceTypePreflight          AccessibilityTreeNewParamsRejectResourceType = "preflight"
-	AccessibilityTreeNewParamsRejectResourceTypeOther              AccessibilityTreeNewParamsRejectResourceType = "other"
+	AccessibilityTreeNewParamsBodyObjectRejectResourceTypeDocument           AccessibilityTreeNewParamsBodyObjectRejectResourceType = "document"
+	AccessibilityTreeNewParamsBodyObjectRejectResourceTypeStylesheet         AccessibilityTreeNewParamsBodyObjectRejectResourceType = "stylesheet"
+	AccessibilityTreeNewParamsBodyObjectRejectResourceTypeImage              AccessibilityTreeNewParamsBodyObjectRejectResourceType = "image"
+	AccessibilityTreeNewParamsBodyObjectRejectResourceTypeMedia              AccessibilityTreeNewParamsBodyObjectRejectResourceType = "media"
+	AccessibilityTreeNewParamsBodyObjectRejectResourceTypeFont               AccessibilityTreeNewParamsBodyObjectRejectResourceType = "font"
+	AccessibilityTreeNewParamsBodyObjectRejectResourceTypeScript             AccessibilityTreeNewParamsBodyObjectRejectResourceType = "script"
+	AccessibilityTreeNewParamsBodyObjectRejectResourceTypeTexttrack          AccessibilityTreeNewParamsBodyObjectRejectResourceType = "texttrack"
+	AccessibilityTreeNewParamsBodyObjectRejectResourceTypeXHR                AccessibilityTreeNewParamsBodyObjectRejectResourceType = "xhr"
+	AccessibilityTreeNewParamsBodyObjectRejectResourceTypeFetch              AccessibilityTreeNewParamsBodyObjectRejectResourceType = "fetch"
+	AccessibilityTreeNewParamsBodyObjectRejectResourceTypePrefetch           AccessibilityTreeNewParamsBodyObjectRejectResourceType = "prefetch"
+	AccessibilityTreeNewParamsBodyObjectRejectResourceTypeEventsource        AccessibilityTreeNewParamsBodyObjectRejectResourceType = "eventsource"
+	AccessibilityTreeNewParamsBodyObjectRejectResourceTypeWebsocket          AccessibilityTreeNewParamsBodyObjectRejectResourceType = "websocket"
+	AccessibilityTreeNewParamsBodyObjectRejectResourceTypeManifest           AccessibilityTreeNewParamsBodyObjectRejectResourceType = "manifest"
+	AccessibilityTreeNewParamsBodyObjectRejectResourceTypeSignedexchange     AccessibilityTreeNewParamsBodyObjectRejectResourceType = "signedexchange"
+	AccessibilityTreeNewParamsBodyObjectRejectResourceTypePing               AccessibilityTreeNewParamsBodyObjectRejectResourceType = "ping"
+	AccessibilityTreeNewParamsBodyObjectRejectResourceTypeCspviolationreport AccessibilityTreeNewParamsBodyObjectRejectResourceType = "cspviolationreport"
+	AccessibilityTreeNewParamsBodyObjectRejectResourceTypePreflight          AccessibilityTreeNewParamsBodyObjectRejectResourceType = "preflight"
+	AccessibilityTreeNewParamsBodyObjectRejectResourceTypeOther              AccessibilityTreeNewParamsBodyObjectRejectResourceType = "other"
 )
 
-func (r AccessibilityTreeNewParamsRejectResourceType) IsKnown() bool {
+func (r AccessibilityTreeNewParamsBodyObjectRejectResourceType) IsKnown() bool {
 	switch r {
-	case AccessibilityTreeNewParamsRejectResourceTypeDocument, AccessibilityTreeNewParamsRejectResourceTypeStylesheet, AccessibilityTreeNewParamsRejectResourceTypeImage, AccessibilityTreeNewParamsRejectResourceTypeMedia, AccessibilityTreeNewParamsRejectResourceTypeFont, AccessibilityTreeNewParamsRejectResourceTypeScript, AccessibilityTreeNewParamsRejectResourceTypeTexttrack, AccessibilityTreeNewParamsRejectResourceTypeXHR, AccessibilityTreeNewParamsRejectResourceTypeFetch, AccessibilityTreeNewParamsRejectResourceTypePrefetch, AccessibilityTreeNewParamsRejectResourceTypeEventsource, AccessibilityTreeNewParamsRejectResourceTypeWebsocket, AccessibilityTreeNewParamsRejectResourceTypeManifest, AccessibilityTreeNewParamsRejectResourceTypeSignedexchange, AccessibilityTreeNewParamsRejectResourceTypePing, AccessibilityTreeNewParamsRejectResourceTypeCspviolationreport, AccessibilityTreeNewParamsRejectResourceTypePreflight, AccessibilityTreeNewParamsRejectResourceTypeOther:
+	case AccessibilityTreeNewParamsBodyObjectRejectResourceTypeDocument, AccessibilityTreeNewParamsBodyObjectRejectResourceTypeStylesheet, AccessibilityTreeNewParamsBodyObjectRejectResourceTypeImage, AccessibilityTreeNewParamsBodyObjectRejectResourceTypeMedia, AccessibilityTreeNewParamsBodyObjectRejectResourceTypeFont, AccessibilityTreeNewParamsBodyObjectRejectResourceTypeScript, AccessibilityTreeNewParamsBodyObjectRejectResourceTypeTexttrack, AccessibilityTreeNewParamsBodyObjectRejectResourceTypeXHR, AccessibilityTreeNewParamsBodyObjectRejectResourceTypeFetch, AccessibilityTreeNewParamsBodyObjectRejectResourceTypePrefetch, AccessibilityTreeNewParamsBodyObjectRejectResourceTypeEventsource, AccessibilityTreeNewParamsBodyObjectRejectResourceTypeWebsocket, AccessibilityTreeNewParamsBodyObjectRejectResourceTypeManifest, AccessibilityTreeNewParamsBodyObjectRejectResourceTypeSignedexchange, AccessibilityTreeNewParamsBodyObjectRejectResourceTypePing, AccessibilityTreeNewParamsBodyObjectRejectResourceTypeCspviolationreport, AccessibilityTreeNewParamsBodyObjectRejectResourceTypePreflight, AccessibilityTreeNewParamsBodyObjectRejectResourceTypeOther:
 		return true
 	}
 	return false
 }
 
 // Check [options](https://pptr.dev/api/puppeteer.page.setviewport).
-type AccessibilityTreeNewParamsViewport struct {
+type AccessibilityTreeNewParamsBodyObjectViewport struct {
 	Height            param.Field[float64] `json:"height" api:"required"`
 	Width             param.Field[float64] `json:"width" api:"required"`
 	DeviceScaleFactor param.Field[float64] `json:"deviceScaleFactor"`
@@ -557,46 +607,46 @@ type AccessibilityTreeNewParamsViewport struct {
 	IsMobile          param.Field[bool]    `json:"isMobile"`
 }
 
-func (r AccessibilityTreeNewParamsViewport) MarshalJSON() (data []byte, err error) {
+func (r AccessibilityTreeNewParamsBodyObjectViewport) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Wait for the selector to appear in page. Check
 // [options](https://pptr.dev/api/puppeteer.page.waitforselector).
-type AccessibilityTreeNewParamsWaitForSelector struct {
-	Selector param.Field[string]                                           `json:"selector" api:"required"`
-	Hidden   param.Field[AccessibilityTreeNewParamsWaitForSelectorHidden]  `json:"hidden"`
-	Timeout  param.Field[float64]                                          `json:"timeout"`
-	Visible  param.Field[AccessibilityTreeNewParamsWaitForSelectorVisible] `json:"visible"`
+type AccessibilityTreeNewParamsBodyObjectWaitForSelector struct {
+	Selector param.Field[string]                                                     `json:"selector" api:"required"`
+	Hidden   param.Field[AccessibilityTreeNewParamsBodyObjectWaitForSelectorHidden]  `json:"hidden"`
+	Timeout  param.Field[float64]                                                    `json:"timeout"`
+	Visible  param.Field[AccessibilityTreeNewParamsBodyObjectWaitForSelectorVisible] `json:"visible"`
 }
 
-func (r AccessibilityTreeNewParamsWaitForSelector) MarshalJSON() (data []byte, err error) {
+func (r AccessibilityTreeNewParamsBodyObjectWaitForSelector) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AccessibilityTreeNewParamsWaitForSelectorHidden bool
+type AccessibilityTreeNewParamsBodyObjectWaitForSelectorHidden bool
 
 const (
-	AccessibilityTreeNewParamsWaitForSelectorHiddenTrue AccessibilityTreeNewParamsWaitForSelectorHidden = true
+	AccessibilityTreeNewParamsBodyObjectWaitForSelectorHiddenTrue AccessibilityTreeNewParamsBodyObjectWaitForSelectorHidden = true
 )
 
-func (r AccessibilityTreeNewParamsWaitForSelectorHidden) IsKnown() bool {
+func (r AccessibilityTreeNewParamsBodyObjectWaitForSelectorHidden) IsKnown() bool {
 	switch r {
-	case AccessibilityTreeNewParamsWaitForSelectorHiddenTrue:
+	case AccessibilityTreeNewParamsBodyObjectWaitForSelectorHiddenTrue:
 		return true
 	}
 	return false
 }
 
-type AccessibilityTreeNewParamsWaitForSelectorVisible bool
+type AccessibilityTreeNewParamsBodyObjectWaitForSelectorVisible bool
 
 const (
-	AccessibilityTreeNewParamsWaitForSelectorVisibleTrue AccessibilityTreeNewParamsWaitForSelectorVisible = true
+	AccessibilityTreeNewParamsBodyObjectWaitForSelectorVisibleTrue AccessibilityTreeNewParamsBodyObjectWaitForSelectorVisible = true
 )
 
-func (r AccessibilityTreeNewParamsWaitForSelectorVisible) IsKnown() bool {
+func (r AccessibilityTreeNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 	switch r {
-	case AccessibilityTreeNewParamsWaitForSelectorVisibleTrue:
+	case AccessibilityTreeNewParamsBodyObjectWaitForSelectorVisibleTrue:
 		return true
 	}
 	return false

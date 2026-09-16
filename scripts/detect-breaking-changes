@@ -21,6 +21,7 @@ TEST_PATHS=(
 	accounts/tokenpermissiongroup_test.go
 	accounts/tokenvalue_test.go
 	accounts/logaudit_test.go
+	accounts/entitlement_test.go
 	accounts/speedsettingtransformation_test.go
 	accounts/paymentmethod_test.go
 	accounts/payinvoice_test.go
@@ -66,6 +67,7 @@ TEST_PATHS=(
 	zones/subscription_test.go
 	zones/plan_test.go
 	zones/rateplan_test.go
+	zones/entitlement_test.go
 	zones/ctalerting_test.go
 	load_balancers/loadbalancer_test.go
 	load_balancers/monitor_test.go

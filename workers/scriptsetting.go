@@ -34,7 +34,7 @@ func NewScriptSettingService(opts ...option.RequestOption) (r *ScriptSettingServ
 	return
 }
 
-// Patch script-level settings when using
+// Patch Worker script-level settings when using
 // [Worker Versions](https://developers.cloudflare.com/api/operations/worker-versions-list-versions).
 // Including but not limited to Logpush and Tail Consumers.
 func (r *ScriptSettingService) Edit(ctx context.Context, scriptName string, params ScriptSettingEditParams, opts ...option.RequestOption) (res *ScriptSetting, err error) {
@@ -57,7 +57,7 @@ func (r *ScriptSettingService) Edit(ctx context.Context, scriptName string, para
 	return res, nil
 }
 
-// Get script-level settings when using
+// Get Worker script-level settings when using
 // [Worker Versions](https://developers.cloudflare.com/api/operations/worker-versions-list-versions).
 // Includes Logpush and Tail Consumers.
 func (r *ScriptSettingService) Get(ctx context.Context, scriptName string, query ScriptSettingGetParams, opts ...option.RequestOption) (res *ScriptSetting, err error) {

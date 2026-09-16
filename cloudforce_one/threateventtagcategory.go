@@ -60,7 +60,10 @@ func (r *ThreatEventTagCategoryService) List(ctx context.Context, params ThreatE
 	return res, err
 }
 
-// Deletes a Source-of-Truth tag category by UUID.
+// Deprecated; use DELETE /events/tag-categories/{category_uuid}. Available through
+// 2026-11-28.
+//
+// Deprecated: Use DELETE /events/tag-categories/{category_uuid} before 2026-11-28.
 func (r *ThreatEventTagCategoryService) Delete(ctx context.Context, categoryUUID string, body ThreatEventTagCategoryDeleteParams, opts ...option.RequestOption) (res *ThreatEventTagCategoryDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
@@ -76,7 +79,10 @@ func (r *ThreatEventTagCategoryService) Delete(ctx context.Context, categoryUUID
 	return res, err
 }
 
-// Updates a Source-of-Truth tag category by UUID.
+// Deprecated; use PATCH /events/tag-categories/{category_uuid}. Available through
+// 2026-11-28.
+//
+// Deprecated: Use PATCH /events/tag-categories/{category_uuid} before 2026-11-28.
 func (r *ThreatEventTagCategoryService) Edit(ctx context.Context, categoryUUID string, params ThreatEventTagCategoryEditParams, opts ...option.RequestOption) (res *ThreatEventTagCategoryEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {

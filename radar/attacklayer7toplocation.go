@@ -320,7 +320,7 @@ func (r attackLayer7TopLocationOriginResponseMetaUnitJSON) RawJSON() string {
 type AttackLayer7TopLocationOriginResponseTop0 struct {
 	OriginCountryAlpha2 string                                        `json:"originCountryAlpha2" api:"required"`
 	OriginCountryName   string                                        `json:"originCountryName" api:"required"`
-	Rank                float64                                       `json:"rank" api:"required"`
+	Rank                int64                                         `json:"rank" api:"required"`
 	Value               string                                        `json:"value" api:"required"`
 	JSON                attackLayer7TopLocationOriginResponseTop0JSON `json:"-"`
 }
@@ -597,7 +597,7 @@ func (r attackLayer7TopLocationTargetResponseMetaUnitJSON) RawJSON() string {
 }
 
 type AttackLayer7TopLocationTargetResponseTop0 struct {
-	Rank                float64                                       `json:"rank" api:"required"`
+	Rank                int64                                         `json:"rank" api:"required"`
 	TargetCountryAlpha2 string                                        `json:"targetCountryAlpha2" api:"required"`
 	TargetCountryName   string                                        `json:"targetCountryName" api:"required"`
 	Value               string                                        `json:"value" api:"required"`

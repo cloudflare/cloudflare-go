@@ -38,7 +38,7 @@ func NewDispatchNamespaceService(opts ...option.RequestOption) (r *DispatchNames
 	return
 }
 
-// Create a new Workers for Platforms namespace.
+// Create a new Workers for Platforms dispatch namespace.
 func (r *DispatchNamespaceService) New(ctx context.Context, params DispatchNamespaceNewParams, opts ...option.RequestOption) (res *DispatchNamespaceNewResponse, err error) {
 	var env DispatchNamespaceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -55,7 +55,7 @@ func (r *DispatchNamespaceService) New(ctx context.Context, params DispatchNames
 	return res, nil
 }
 
-// Fetch a list of Workers for Platforms namespaces.
+// Fetch a list of Workers for Platforms dispatch namespaces.
 func (r *DispatchNamespaceService) List(ctx context.Context, query DispatchNamespaceListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DispatchNamespaceListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -77,12 +77,12 @@ func (r *DispatchNamespaceService) List(ctx context.Context, query DispatchNames
 	return res, nil
 }
 
-// Fetch a list of Workers for Platforms namespaces.
+// Fetch a list of Workers for Platforms dispatch namespaces.
 func (r *DispatchNamespaceService) ListAutoPaging(ctx context.Context, query DispatchNamespaceListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DispatchNamespaceListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Delete a Workers for Platforms namespace.
+// Delete a Workers for Platforms dispatch namespace.
 func (r *DispatchNamespaceService) Delete(ctx context.Context, dispatchNamespace string, body DispatchNamespaceDeleteParams, opts ...option.RequestOption) (res *DispatchNamespaceDeleteResponse, err error) {
 	var env DispatchNamespaceDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -103,7 +103,7 @@ func (r *DispatchNamespaceService) Delete(ctx context.Context, dispatchNamespace
 	return res, nil
 }
 
-// Get a Workers for Platforms namespace.
+// Get a Workers for Platforms dispatch namespace.
 func (r *DispatchNamespaceService) Get(ctx context.Context, dispatchNamespace string, query DispatchNamespaceGetParams, opts ...option.RequestOption) (res *DispatchNamespaceGetResponse, err error) {
 	var env DispatchNamespaceGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
