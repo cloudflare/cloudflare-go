@@ -1,0 +1,20 @@
+pipelines/pipeline.go
+  s_ffdadc59928c72::t_75c17fe625bfc4 284-285
+  s_ffdadc59928c72::t_73f30852efec95 3843-3845
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "674cd7458648c23d47a430074484e7265822d0e5",
+  "prompts": {},
+  "sessions": {
+    "s_ffdadc59928c72": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f5e518586ffe7TJKf0DnuWZ0Uv",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": null
+    }
+  }
+}
