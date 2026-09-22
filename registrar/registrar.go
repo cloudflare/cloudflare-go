@@ -359,21 +359,21 @@ type WorkflowStatus struct {
 	Links     WorkflowStatusLinks `json:"links" api:"required"`
 	// Describes the workflow lifecycle state.
 	//
-	// - `pending`: The workflow awaits processing.
-	// - `in_progress`: Processing started. Continue polling `links.self`. An internal
-	//   deadline limits the duration of this state.
-	// - `action_required`: The workflow pauses for user action. See `context.action`
-	//   for details. Stop automated polling until the user completes the required
-	//   action.
-	// - `blocked`: A third party, such as the domain extension's registry or a losing
-	//   registrar, prevents progress. Continue polling because the block may resolve
-	//   when the third party responds.
-	// - `succeeded`: Terminal state. The operation completed successfully. `completed`
-	//   equals `true`. For registrations, `context.registration` contains the
-	//   resulting registration resource.
-	// - `failed`: Terminal state. The operation failed. `completed` equals `true`. See
-	//   `error.code` and `error.message` for the reason. Require user review before
-	//   retrying.
+	//   - `pending`: The workflow awaits processing.
+	//   - `in_progress`: Processing started. Continue polling `links.self`. An internal
+	//     deadline limits the duration of this state.
+	//   - `action_required`: The workflow pauses for user action. See `context.action`
+	//     for details. Stop automated polling until the user completes the required
+	//     action.
+	//   - `blocked`: A third party, such as the domain extension's registry or a losing
+	//     registrar, prevents progress. Continue polling because the block may resolve
+	//     when the third party responds.
+	//   - `succeeded`: Terminal state. The operation completed successfully. `completed`
+	//     equals `true`. For registrations, `context.registration` contains the
+	//     resulting registration resource.
+	//   - `failed`: Terminal state. The operation failed. `completed` equals `true`. See
+	//     `error.code` and `error.message` for the reason. Require user review before
+	//     retrying.
 	State     WorkflowStatusState `json:"state" api:"required"`
 	UpdatedAt time.Time           `json:"updated_at" api:"required" format:"date-time"`
 	// Provides workflow-specific data.
@@ -538,10 +538,10 @@ type RegistrarCheckResponseDomain struct {
 	// Indicates programmatic registration eligibility according to a real-time
 	// registry check.
 	//
-	// - `true`: The domain is available for registration. The response includes the
-	//   `pricing` object.
-	// - `false`: A restriction prevents registration. See the `reason` field for
-	//   details. Some results, such as premium domains, may still include `tier`.
+	//   - `true`: The domain is available for registration. The response includes the
+	//     `pricing` object.
+	//   - `false`: A restriction prevents registration. See the `reason` field for
+	//     details. Some results, such as premium domains, may still include `tier`.
 	Registrable bool `json:"registrable" api:"required"`
 	// Provides annual pricing information for a registrable domain. This object
 	// appears only when `registrable` is `true`. The API returns all per-year prices
@@ -557,19 +557,19 @@ type RegistrarCheckResponseDomain struct {
 	Pricing RegistrarCheckResponseDomainsPricing `json:"pricing"`
 	// Appears only when `registrable` is `false` and explains the result.
 	//
-	// - `extension_not_supported_via_api`: Cloudflare Registrar supports this
-	//   extension in the dashboard but currently excludes it from programmatic
-	//   registration through this API. The user can register via
-	//   `https://dash.cloudflare.com/{account_id}/domains/registrations`.
-	// - `extension_not_supported`: Cloudflare Registrar excludes this extension
-	//   entirely.
-	// - `extension_disallows_registration`: The extension's registry temporarily or
-	//   permanently freezes new registrations. Registrars currently cannot register
-	//   domains on this extension.
-	// - `domain_premium`: The domain carries premium pricing. This API currently
-	//   supports standard registrations only.
-	// - `domain_unavailable`: An existing registration, reservation, or other registry
-	//   restriction makes the domain unavailable on a supported extension.
+	//   - `extension_not_supported_via_api`: Cloudflare Registrar supports this
+	//     extension in the dashboard but currently excludes it from programmatic
+	//     registration through this API. The user can register via
+	//     `https://dash.cloudflare.com/{account_id}/domains/registrations`.
+	//   - `extension_not_supported`: Cloudflare Registrar excludes this extension
+	//     entirely.
+	//   - `extension_disallows_registration`: The extension's registry temporarily or
+	//     permanently freezes new registrations. Registrars currently cannot register
+	//     domains on this extension.
+	//   - `domain_premium`: The domain carries premium pricing. This API currently
+	//     supports standard registrations only.
+	//   - `domain_unavailable`: An existing registration, reservation, or other registry
+	//     restriction makes the domain unavailable on a supported extension.
 	Reason RegistrarCheckResponseDomainsReason `json:"reason"`
 	// The pricing tier for this domain. A `registrable` value of `true` always
 	// includes this field, which defaults to `standard` for most domains. A
@@ -734,10 +734,10 @@ type RegistrarSearchResponseDomain struct {
 	// Indicates domain availability according to potentially stale, non-authoritative
 	// search data.
 	//
-	// - `true`: The domain appears available. Use POST /domain-check to confirm before
-	//   registration.
-	// - `false`: Search results mark the domain ineligible for registration through
-	//   this API. See `reason` for details.
+	//   - `true`: The domain appears available. Use POST /domain-check to confirm before
+	//     registration.
+	//   - `false`: Search results mark the domain ineligible for registration through
+	//     this API. See `reason` for details.
 	Registrable bool `json:"registrable" api:"required"`
 	// Provides annual pricing information for a registrable domain. This object
 	// appears only when `registrable` is `true`. The API returns all per-year prices
@@ -754,16 +754,16 @@ type RegistrarSearchResponseDomain struct {
 	// Appears only when `registrable` is `false` and explains the advisory search
 	// result. Use POST /domain-check for authoritative status.
 	//
-	// - `extension_not_supported_via_api`: Cloudflare Registrar supports this
-	//   extension in the dashboard but currently excludes it from programmatic
-	//   registration through this API.
-	// - `extension_not_supported`: Cloudflare Registrar excludes this extension
-	//   entirely.
-	// - `extension_disallows_registration`: The extension's registry temporarily or
-	//   permanently freezes new registrations.
-	// - `domain_premium`: The domain carries premium pricing. This API currently
-	//   supports standard registrations only.
-	// - `domain_unavailable`: The domain appears unavailable.
+	//   - `extension_not_supported_via_api`: Cloudflare Registrar supports this
+	//     extension in the dashboard but currently excludes it from programmatic
+	//     registration through this API.
+	//   - `extension_not_supported`: Cloudflare Registrar excludes this extension
+	//     entirely.
+	//   - `extension_disallows_registration`: The extension's registry temporarily or
+	//     permanently freezes new registrations.
+	//   - `domain_premium`: The domain carries premium pricing. This API currently
+	//     supports standard registrations only.
+	//   - `domain_unavailable`: The domain appears unavailable.
 	Reason RegistrarSearchResponseDomainsReason `json:"reason"`
 	// The pricing tier for this domain. A `registrable` value of `true` always
 	// includes this field, which defaults to `standard` for most domains. A
@@ -898,12 +898,12 @@ type RegistrarCheckParams struct {
 	// List of fully qualified domain names (FQDNs) to check for availability. Each
 	// domain must include the extension.
 	//
-	// - Minimum: 1 domain.
-	// - Maximum: 20 domains per request.
-	// - The response returns domains on unsupported extensions with
-	//   `registrable: false` and a `reason` field.
-	// - The response may omit malformed domain names (e.g., names missing an
-	//   extension).
+	//   - Minimum: 1 domain.
+	//   - Maximum: 20 domains per request.
+	//   - The response returns domains on unsupported extensions with
+	//     `registrable: false` and a `reason` field.
+	//   - The response may omit malformed domain names (e.g., names missing an
+	//     extension).
 	Domains param.Field[[]string] `json:"domains" api:"required"`
 }
 
@@ -1059,9 +1059,9 @@ type RegistrarSearchParams struct {
 	// The search term to find domain suggestions. Accepts keywords, phrases, or full
 	// domain names.
 	//
-	// - Phrases: "coffee shop" returns coffeeshop.com, mycoffeeshop.net, etc.
-	// - Domain names: "example.com" returns example.com and variations across
-	//   extensions
+	//   - Phrases: "coffee shop" returns coffeeshop.com, mycoffeeshop.net, etc.
+	//   - Domain names: "example.com" returns example.com and variations across
+	//     extensions
 	Q param.Field[string] `query:"q" api:"required"`
 	// Limits results to specific domain extensions from the supported set. If not
 	// specified, returns results across all supported extensions. Extensions not in

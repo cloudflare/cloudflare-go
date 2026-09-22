@@ -123,7 +123,10 @@ func (r *DeviceRegistrationService) Get(ctx context.Context, registrationID stri
 	return res, nil
 }
 
-// Revokes a list of WARP registrations.
+// Revokes a list of WARP registrations. Prefer "delete" operation instead,
+// "revoke" does not release virtual IPs.
+//
+// Deprecated: deprecated
 func (r *DeviceRegistrationService) Revoke(ctx context.Context, params DeviceRegistrationRevokeParams, opts ...option.RequestOption) (res *DeviceRegistrationRevokeResponse, err error) {
 	var env DeviceRegistrationRevokeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -141,6 +144,8 @@ func (r *DeviceRegistrationService) Revoke(ctx context.Context, params DeviceReg
 }
 
 // Unrevokes a list of WARP registrations.
+//
+// Deprecated: deprecated
 func (r *DeviceRegistrationService) Unrevoke(ctx context.Context, params DeviceRegistrationUnrevokeParams, opts ...option.RequestOption) (res *DeviceRegistrationUnrevokeResponse, err error) {
 	var env DeviceRegistrationUnrevokeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

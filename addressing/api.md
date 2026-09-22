@@ -62,6 +62,16 @@ Methods:
 
 ### Accounts
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing#AddressMapAccountUpdateResponse">AddressMapAccountUpdateResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing#AddressMapAccountDeleteResponse">AddressMapAccountDeleteResponse</a>
+
+Methods:
+
+- <code title="put /accounts/{account_id}/addressing/address_maps/{address_map_id}/accounts/{member_account_id}">client.Addressing.AddressMaps.Accounts.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing#AddressMapAccountService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, addressMapID <a href="https://pkg.go.dev/builtin#string">string</a>, memberAccountID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing#AddressMapAccountUpdateParams">AddressMapAccountUpdateParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing#AddressMapAccountUpdateResponse">AddressMapAccountUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="delete /accounts/{account_id}/addressing/address_maps/{address_map_id}/accounts/{member_account_id}">client.Addressing.AddressMaps.Accounts.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing#AddressMapAccountService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, addressMapID <a href="https://pkg.go.dev/builtin#string">string</a>, memberAccountID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing#AddressMapAccountDeleteParams">AddressMapAccountDeleteParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing#AddressMapAccountDeleteResponse">AddressMapAccountDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ### IPs
 
 Response Types:

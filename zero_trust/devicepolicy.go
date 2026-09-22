@@ -321,8 +321,11 @@ type SettingsPolicyGlobalAcceleration struct {
 	MasqueEndpoints []string `json:"masque_endpoints" api:"required"`
 	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
 	// or masque_endpoints must be provided.
-	WireguardEndpoints []string                             `json:"wireguard_endpoints" api:"required"`
-	JSON               settingsPolicyGlobalAccelerationJSON `json:"-"`
+	WireguardEndpoints []string `json:"wireguard_endpoints" api:"required"`
+	// Automatically switch Global Acceleration regions based on device location.
+	// Defaults to false when not provided.
+	Autoswitch bool                                 `json:"autoswitch"`
+	JSON       settingsPolicyGlobalAccelerationJSON `json:"-"`
 }
 
 // settingsPolicyGlobalAccelerationJSON contains the JSON metadata for the struct
@@ -332,6 +335,7 @@ type settingsPolicyGlobalAccelerationJSON struct {
 	Enabled            apijson.Field
 	MasqueEndpoints    apijson.Field
 	WireguardEndpoints apijson.Field
+	Autoswitch         apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }

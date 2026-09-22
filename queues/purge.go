@@ -35,7 +35,7 @@ func NewPurgeService(opts ...option.RequestOption) (r *PurgeService) {
 	return
 }
 
-// Deletes all messages from the Queue.
+// Starts a purge that deletes all messages from a Queue.
 func (r *PurgeService) Start(ctx context.Context, queueID string, params PurgeStartParams, opts ...option.RequestOption) (res *Queue, err error) {
 	var env PurgeStartResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,7 +56,7 @@ func (r *PurgeService) Start(ctx context.Context, queueID string, params PurgeSt
 	return res, nil
 }
 
-// Get details about a Queue's purge status.
+// Returns the status of a Queue purge operation.
 func (r *PurgeService) Status(ctx context.Context, queueID string, query PurgeStatusParams, opts ...option.RequestOption) (res *PurgeStatusResponse, err error) {
 	var env PurgeStatusResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -105,7 +105,7 @@ func (r purgeStatusResponseJSON) RawJSON() string {
 type PurgeStartParams struct {
 	// A Resource identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Confimation that all messages will be deleted permanently.
+	// Confirms that all messages will be permanently deleted.
 	DeleteMessagesPermanently param.Field[bool] `json:"delete_messages_permanently"`
 }
 

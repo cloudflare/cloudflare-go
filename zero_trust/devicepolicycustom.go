@@ -306,6 +306,9 @@ type DevicePolicyCustomNewParamsGlobalAcceleration struct {
 	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
 	// or masque_endpoints must be provided.
 	WireguardEndpoints param.Field[[]string] `json:"wireguard_endpoints" api:"required"`
+	// Automatically switch Global Acceleration regions based on device location.
+	// Defaults to false when not provided.
+	Autoswitch param.Field[bool] `json:"autoswitch"`
 }
 
 func (r DevicePolicyCustomNewParamsGlobalAcceleration) MarshalJSON() (data []byte, err error) {
@@ -572,6 +575,9 @@ type DevicePolicyCustomEditParamsGlobalAcceleration struct {
 	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
 	// or masque_endpoints must be provided.
 	WireguardEndpoints param.Field[[]string] `json:"wireguard_endpoints" api:"required"`
+	// Automatically switch Global Acceleration regions based on device location.
+	// Defaults to false when not provided.
+	Autoswitch param.Field[bool] `json:"autoswitch"`
 }
 
 func (r DevicePolicyCustomEditParamsGlobalAcceleration) MarshalJSON() (data []byte, err error) {

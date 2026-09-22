@@ -46,7 +46,7 @@ func NewQueueService(opts ...option.RequestOption) (r *QueueService) {
 	return
 }
 
-// Create a new queue
+// Creates a Queue in the account.
 func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...option.RequestOption) (res *Queue, err error) {
 	var env QueueNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -63,9 +63,8 @@ func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...o
 	return res, nil
 }
 
-// Updates a Queue. Note that this endpoint does not support partial updates. If
-// successful, the Queue's configuration is overwritten with the supplied
-// configuration.
+// Replaces a Queue's configuration with the supplied configuration. This endpoint
+// does not support partial updates.
 func (r *QueueService) Update(ctx context.Context, queueID string, params QueueUpdateParams, opts ...option.RequestOption) (res *Queue, err error) {
 	var env QueueUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -113,7 +112,7 @@ func (r *QueueService) ListAutoPaging(ctx context.Context, query QueueListParams
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Deletes a queue
+// Deletes a Queue.
 func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDeleteParams, opts ...option.RequestOption) (res *QueueDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
@@ -129,7 +128,7 @@ func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDel
 	return res, err
 }
 
-// Updates a Queue.
+// Updates part of a Queue's configuration.
 func (r *QueueService) Edit(ctx context.Context, queueID string, params QueueEditParams, opts ...option.RequestOption) (res *Queue, err error) {
 	var env QueueEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -150,7 +149,7 @@ func (r *QueueService) Edit(ctx context.Context, queueID string, params QueueEdi
 	return res, nil
 }
 
-// Get details about a specific queue.
+// Returns details about a specific Queue.
 func (r *QueueService) Get(ctx context.Context, queueID string, query QueueGetParams, opts ...option.RequestOption) (res *Queue, err error) {
 	var env QueueGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -171,8 +170,8 @@ func (r *QueueService) Get(ctx context.Context, queueID string, query QueueGetPa
 	return res, nil
 }
 
-// Return best-effort metrics for a queue. Values may be approximate due to the
-// distributed nature of queues.
+// Returns best-effort metrics for a Queue. Values may be approximate due to the
+// distributed nature of Queues.
 func (r *QueueService) GetMetrics(ctx context.Context, queueID string, query QueueGetMetricsParams, opts ...option.RequestOption) (res *QueueGetMetricsResponse, err error) {
 	var env QueueGetMetricsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

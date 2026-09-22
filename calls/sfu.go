@@ -36,8 +36,8 @@ func NewSFUService(opts ...option.RequestOption) (r *SFUService) {
 	return
 }
 
-// Creates a new Cloudflare calls app. An app is an unique enviroment where each
-// Session can access all Tracks within the app.
+// Creates a Realtime SFU app. An app is an isolated namespace in which sessions
+// can access the app's tracks.
 func (r *SFUService) New(ctx context.Context, params SFUNewParams, opts ...option.RequestOption) (res *SFUNewResponse, err error) {
 	var env SFUNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -54,7 +54,7 @@ func (r *SFUService) New(ctx context.Context, params SFUNewParams, opts ...optio
 	return res, nil
 }
 
-// Edit details for a single app.
+// Updates details for a single Realtime SFU app.
 func (r *SFUService) Update(ctx context.Context, appID string, params SFUUpdateParams, opts ...option.RequestOption) (res *SFUUpdateResponse, err error) {
 	var env SFUUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -102,7 +102,7 @@ func (r *SFUService) ListAutoPaging(ctx context.Context, query SFUListParams, op
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Deletes an app from Cloudflare Calls
+// Deletes a Realtime SFU app.
 func (r *SFUService) Delete(ctx context.Context, appID string, body SFUDeleteParams, opts ...option.RequestOption) (res *SFUDeleteResponse, err error) {
 	var env SFUDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -123,7 +123,7 @@ func (r *SFUService) Delete(ctx context.Context, appID string, body SFUDeletePar
 	return res, nil
 }
 
-// Fetches details for a single Calls app.
+// Fetches details for a single Realtime SFU app.
 func (r *SFUService) Get(ctx context.Context, appID string, query SFUGetParams, opts ...option.RequestOption) (res *SFUGetResponse, err error) {
 	var env SFUGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -149,7 +149,7 @@ type SFUNewResponse struct {
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// The date and time the item was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
-	// A short description of Calls app, not shown to end users.
+	// A short description of a Realtime SFU app, not shown to end users.
 	Name string `json:"name" api:"required"`
 	// Bearer token
 	Secret string `json:"secret" api:"required"`
@@ -182,7 +182,7 @@ type SFUUpdateResponse struct {
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// The date and time the item was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
-	// A short description of Calls app, not shown to end users.
+	// A short description of a Realtime SFU app, not shown to end users.
 	Name string `json:"name" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
 	UID  string                `json:"uid" api:"required"`
@@ -213,7 +213,7 @@ type SFUListResponse struct {
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// The date and time the item was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
-	// A short description of Calls app, not shown to end users.
+	// A short description of a Realtime SFU app, not shown to end users.
 	Name string `json:"name" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
 	UID  string              `json:"uid" api:"required"`
@@ -243,7 +243,7 @@ type SFUDeleteResponse struct {
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// The date and time the item was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
-	// A short description of Calls app, not shown to end users.
+	// A short description of a Realtime SFU app, not shown to end users.
 	Name string `json:"name" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
 	UID  string                `json:"uid" api:"required"`
@@ -274,7 +274,7 @@ type SFUGetResponse struct {
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// The date and time the item was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
-	// A short description of Calls app, not shown to end users.
+	// A short description of a Realtime SFU app, not shown to end users.
 	Name string `json:"name" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
 	UID  string             `json:"uid" api:"required"`
@@ -302,7 +302,7 @@ func (r sfuGetResponseJSON) RawJSON() string {
 type SFUNewParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// A short description of Calls app, not shown to end users.
+	// A short description of a Realtime SFU app, not shown to end users.
 	Name param.Field[string] `json:"name"`
 }
 
@@ -452,7 +452,7 @@ func (r SFUNewResponseEnvelopeSuccess) IsKnown() bool {
 type SFUUpdateParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// A short description of Calls app, not shown to end users.
+	// A short description of a Realtime SFU app, not shown to end users.
 	Name param.Field[string] `json:"name"`
 }
 

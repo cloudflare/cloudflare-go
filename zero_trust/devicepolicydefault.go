@@ -216,8 +216,11 @@ type DevicePolicyDefaultEditResponseGlobalAcceleration struct {
 	MasqueEndpoints []string `json:"masque_endpoints" api:"required"`
 	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
 	// or masque_endpoints must be provided.
-	WireguardEndpoints []string                                              `json:"wireguard_endpoints" api:"required"`
-	JSON               devicePolicyDefaultEditResponseGlobalAccelerationJSON `json:"-"`
+	WireguardEndpoints []string `json:"wireguard_endpoints" api:"required"`
+	// Automatically switch Global Acceleration regions based on device location.
+	// Defaults to false when not provided.
+	Autoswitch bool                                                  `json:"autoswitch"`
+	JSON       devicePolicyDefaultEditResponseGlobalAccelerationJSON `json:"-"`
 }
 
 // devicePolicyDefaultEditResponseGlobalAccelerationJSON contains the JSON metadata
@@ -227,6 +230,7 @@ type devicePolicyDefaultEditResponseGlobalAccelerationJSON struct {
 	Enabled            apijson.Field
 	MasqueEndpoints    apijson.Field
 	WireguardEndpoints apijson.Field
+	Autoswitch         apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -446,8 +450,11 @@ type DevicePolicyDefaultGetResponseGlobalAcceleration struct {
 	MasqueEndpoints []string `json:"masque_endpoints" api:"required"`
 	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
 	// or masque_endpoints must be provided.
-	WireguardEndpoints []string                                             `json:"wireguard_endpoints" api:"required"`
-	JSON               devicePolicyDefaultGetResponseGlobalAccelerationJSON `json:"-"`
+	WireguardEndpoints []string `json:"wireguard_endpoints" api:"required"`
+	// Automatically switch Global Acceleration regions based on device location.
+	// Defaults to false when not provided.
+	Autoswitch bool                                                 `json:"autoswitch"`
+	JSON       devicePolicyDefaultGetResponseGlobalAccelerationJSON `json:"-"`
 }
 
 // devicePolicyDefaultGetResponseGlobalAccelerationJSON contains the JSON metadata
@@ -457,6 +464,7 @@ type devicePolicyDefaultGetResponseGlobalAccelerationJSON struct {
 	Enabled            apijson.Field
 	MasqueEndpoints    apijson.Field
 	WireguardEndpoints apijson.Field
+	Autoswitch         apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -628,6 +636,9 @@ type DevicePolicyDefaultEditParamsGlobalAcceleration struct {
 	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
 	// or masque_endpoints must be provided.
 	WireguardEndpoints param.Field[[]string] `json:"wireguard_endpoints" api:"required"`
+	// Automatically switch Global Acceleration regions based on device location.
+	// Defaults to false when not provided.
+	Autoswitch param.Field[bool] `json:"autoswitch"`
 }
 
 func (r DevicePolicyDefaultEditParamsGlobalAcceleration) MarshalJSON() (data []byte, err error) {

@@ -513,10 +513,10 @@ type GatewayProxyEndpointListParams struct {
 	//
 	// Supported fields and their matching behaviour:
 	//
-	// - `name` — case-insensitive substring match on the endpoint name.
-	// - `id` — substring match on the endpoint ID (UUID), with or without dashes.
-	// - `kind` — exact match on the endpoint kind. The value must be `ip` or
-	//   `identity`; any other value returns `400`.
+	//   - `name` — case-insensitive substring match on the endpoint name.
+	//   - `id` — substring match on the endpoint ID (UUID), with or without dashes.
+	//   - `kind` — exact match on the endpoint kind. The value must be `ip` or
+	//     `identity`; any other value returns `400`.
 	//
 	// Each entry must match one of the per-field patterns below: the field must be one
 	// of `name`, `id`, or `kind`; `name`/`id` accept any value, while `kind` only
@@ -525,11 +525,11 @@ type GatewayProxyEndpointListParams struct {
 	// Field to sort the returned endpoints by. When omitted, the order of results is
 	// unspecified. Supported values:
 	//
-	// - `name` — sort alphabetically by endpoint name.
-	// - `created_at` — sort by creation time; defaults to descending unless
-	//   `direction` is set.
-	// - `updated_at` — sort by last-modified time; defaults to descending unless
-	//   `direction` is set.
+	//   - `name` — sort alphabetically by endpoint name.
+	//   - `created_at` — sort by creation time; defaults to descending unless
+	//     `direction` is set.
+	//   - `updated_at` — sort by last-modified time; defaults to descending unless
+	//     `direction` is set.
 	OrderBy param.Field[GatewayProxyEndpointListParamsOrderBy] `query:"order_by"`
 	// Case-insensitive substring match on the endpoint name. When combined with
 	// `filter`, both must match (logical AND).

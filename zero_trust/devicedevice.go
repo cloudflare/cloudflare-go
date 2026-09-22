@@ -106,7 +106,10 @@ func (r *DeviceDeviceService) Get(ctx context.Context, deviceID string, params D
 	return res, nil
 }
 
-// Revokes all WARP registrations associated with the specified device.
+// Revokes all WARP registrations associated with the specified device. Prefer
+// "delete" operation instead, "revoke" does not release virtual IPs.
+//
+// Deprecated: deprecated
 func (r *DeviceDeviceService) Revoke(ctx context.Context, deviceID string, body DeviceDeviceRevokeParams, opts ...option.RequestOption) (res *DeviceDeviceRevokeResponse, err error) {
 	var env DeviceDeviceRevokeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

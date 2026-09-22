@@ -57,6 +57,8 @@ TEST_PATHS=(
 	user/tokenvalue_test.go
 	zones/zone_test.go
 	zones/activationcheck_test.go
+	zones/observabilitytracingsetting_test.go
+	zones/observabilitytracingrule_test.go
 	zones/setting_test.go
 	zones/transformationsallowedorigin_test.go
 	zones/transformationsc2pa_test.go
@@ -283,6 +285,7 @@ TEST_PATHS=(
 	addressing/regionalhostnameregion_test.go
 	addressing/service_test.go
 	addressing/addressmap_test.go
+	addressing/addressmapaccount_test.go
 	addressing/addressmapip_test.go
 	addressing/addressmapzone_test.go
 	addressing/loadocument_test.go

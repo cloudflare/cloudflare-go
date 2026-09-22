@@ -39,7 +39,7 @@ func NewConsumerService(opts ...option.RequestOption) (r *ConsumerService) {
 	return
 }
 
-// Creates a new consumer for a Queue
+// Creates a consumer for a Queue.
 func (r *ConsumerService) New(ctx context.Context, queueID string, params ConsumerNewParams, opts ...option.RequestOption) (res *Consumer, err error) {
 	var env ConsumerNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -60,7 +60,7 @@ func (r *ConsumerService) New(ctx context.Context, queueID string, params Consum
 	return res, nil
 }
 
-// Updates the consumer for a queue, or creates one if it does not exist.
+// Replaces a Queue consumer, or creates it if it does not exist.
 func (r *ConsumerService) Update(ctx context.Context, queueID string, consumerID string, params ConsumerUpdateParams, opts ...option.RequestOption) (res *Consumer, err error) {
 	var env ConsumerUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -85,7 +85,7 @@ func (r *ConsumerService) Update(ctx context.Context, queueID string, consumerID
 	return res, nil
 }
 
-// Returns the consumers for a Queue
+// Returns the consumers configured for a Queue.
 func (r *ConsumerService) List(ctx context.Context, queueID string, query ConsumerListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Consumer], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -111,12 +111,12 @@ func (r *ConsumerService) List(ctx context.Context, queueID string, query Consum
 	return res, nil
 }
 
-// Returns the consumers for a Queue
+// Returns the consumers configured for a Queue.
 func (r *ConsumerService) ListAutoPaging(ctx context.Context, queueID string, query ConsumerListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Consumer] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, queueID, query, opts...))
 }
 
-// Deletes the consumer for a queue.
+// Deletes a consumer from a Queue.
 func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID string, body ConsumerDeleteParams, opts ...option.RequestOption) (res *ConsumerDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
@@ -136,7 +136,7 @@ func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID
 	return res, err
 }
 
-// Fetches the consumer for a queue by consumer id
+// Returns a Queue consumer by identifier.
 func (r *ConsumerService) Get(ctx context.Context, queueID string, consumerID string, query ConsumerGetParams, opts ...option.RequestOption) (res *Consumer, err error) {
 	var env ConsumerGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
