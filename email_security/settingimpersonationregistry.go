@@ -175,7 +175,7 @@ type SettingImpersonationRegistryNewResponse struct {
 	LastModified time.Time                                         `json:"last_modified" format:"date-time"`
 	ModifiedAt   time.Time                                         `json:"modified_at" format:"date-time"`
 	Name         string                                            `json:"name"`
-	Provenance   SettingImpersonationRegistryNewResponseProvenance `json:"provenance"`
+	Provenance   SettingImpersonationRegistryNewResponseProvenance `json:"provenance" api:"nullable"`
 	JSON         settingImpersonationRegistryNewResponseJSON       `json:"-"`
 }
 
@@ -241,7 +241,7 @@ type SettingImpersonationRegistryListResponse struct {
 	LastModified time.Time                                          `json:"last_modified" format:"date-time"`
 	ModifiedAt   time.Time                                          `json:"modified_at" format:"date-time"`
 	Name         string                                             `json:"name"`
-	Provenance   SettingImpersonationRegistryListResponseProvenance `json:"provenance"`
+	Provenance   SettingImpersonationRegistryListResponseProvenance `json:"provenance" api:"nullable"`
 	JSON         settingImpersonationRegistryListResponseJSON       `json:"-"`
 }
 
@@ -329,7 +329,7 @@ type SettingImpersonationRegistryEditResponse struct {
 	LastModified time.Time                                          `json:"last_modified" format:"date-time"`
 	ModifiedAt   time.Time                                          `json:"modified_at" format:"date-time"`
 	Name         string                                             `json:"name"`
-	Provenance   SettingImpersonationRegistryEditResponseProvenance `json:"provenance"`
+	Provenance   SettingImpersonationRegistryEditResponseProvenance `json:"provenance" api:"nullable"`
 	JSON         settingImpersonationRegistryEditResponseJSON       `json:"-"`
 }
 
@@ -395,7 +395,7 @@ type SettingImpersonationRegistryGetResponse struct {
 	LastModified time.Time                                         `json:"last_modified" format:"date-time"`
 	ModifiedAt   time.Time                                         `json:"modified_at" format:"date-time"`
 	Name         string                                            `json:"name"`
-	Provenance   SettingImpersonationRegistryGetResponseProvenance `json:"provenance"`
+	Provenance   SettingImpersonationRegistryGetResponseProvenance `json:"provenance" api:"nullable"`
 	JSON         settingImpersonationRegistryGetResponseJSON       `json:"-"`
 }
 

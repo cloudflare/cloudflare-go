@@ -344,7 +344,7 @@ type GatewayRule struct {
 	// response.
 	Traffic string `json:"traffic" api:"required"`
 	// Identify the API resource with a UUID.
-	ID        string    `json:"id"`
+	ID        string    `json:"id" format:"uuid"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Indicate the date of deletion, if any.
 	DeletedAt time.Time `json:"deleted_at" api:"nullable" format:"date-time"`
@@ -2025,7 +2025,7 @@ type GatewayRuleListParams struct {
 	// of the rule filter names and matches a member of the rule's `filters` array. The
 	// `expression` filter performs a case-insensitive literal substring match across
 	// traffic, identity, and device posture expressions.
-	Filter param.Field[[]interface{}] `query:"filter"`
+	Filter param.Field[[]string] `query:"filter"`
 	// Field to sort the returned rules by. Supported values are `name`, `created_at`,
 	// `updated_at`, and `precedence`.
 	OrderBy param.Field[GatewayRuleListParamsOrderBy] `query:"order_by"`

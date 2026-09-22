@@ -193,7 +193,7 @@ func (r *NamespaceService) Search(ctx context.Context, name string, params Names
 }
 
 type NamespaceNewResponse struct {
-	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required,nullable" format:"date-time"`
 	Name      string    `json:"name" api:"required"`
 	// Optional description for the namespace. Max 256 characters.
 	Description          string                                   `json:"description" api:"nullable"`
@@ -381,7 +381,7 @@ func (r namespaceNewResponsePublicEndpointParamsSearchEndpointJSON) RawJSON() st
 }
 
 type NamespaceUpdateResponse struct {
-	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required,nullable" format:"date-time"`
 	Name      string    `json:"name" api:"required"`
 	// Optional description for the namespace. Max 256 characters.
 	Description          string                                      `json:"description" api:"nullable"`
@@ -570,7 +570,7 @@ func (r namespaceUpdateResponsePublicEndpointParamsSearchEndpointJSON) RawJSON()
 }
 
 type NamespaceListResponse struct {
-	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required,nullable" format:"date-time"`
 	Name      string    `json:"name" api:"required"`
 	// Optional description for the namespace. Max 256 characters.
 	Description          string                                    `json:"description" api:"nullable"`
@@ -1150,7 +1150,7 @@ func (r namespaceChatCompletionsResponseErrorJSON) RawJSON() string {
 }
 
 type NamespaceReadResponse struct {
-	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required,nullable" format:"date-time"`
 	Name      string    `json:"name" api:"required"`
 	// Optional description for the namespace. Max 256 characters.
 	Description          string                                    `json:"description" api:"nullable"`

@@ -70,14 +70,14 @@ type AccessLogAccessRequestListParams struct {
 	// Filter by user email. Match mode is controlled by `emailOp` (preferred) or the
 	// legacy `email_exact` flag.
 	//
-	//   - Default (no `emailOp`, `email_exact=false` or unset): substring match —
-	//     `email=@example.com` returns all events with that domain.
-	//   - Exact match: set `emailOp=eq` (preferred) or `email_exact=true` — e.g.
-	//     `email=user@example.com&email_exact=true` returns only that user.
-	//   - Explicit substring match: set `emailOp=contains` (without `email_exact=true`).
-	//     When both are set, `email_exact=true` takes precedence and the match is exact.
-	//   - Exclusion: set `emailOp=neq`. With `email_exact=true` this is an exact-value
-	//     exclusion; without it, a fuzzy substring exclusion.
+	// - Default (no `emailOp`, `email_exact=false` or unset): substring match —
+	//   `email=@example.com` returns all events with that domain.
+	// - Exact match: set `emailOp=eq` (preferred) or `email_exact=true` — e.g.
+	//   `email=user@example.com&email_exact=true` returns only that user.
+	// - Explicit substring match: set `emailOp=contains` (without `email_exact=true`).
+	//   When both are set, `email_exact=true` takes precedence and the match is exact.
+	// - Exclusion: set `emailOp=neq`. With `email_exact=true` this is an exact-value
+	//   exclusion; without it, a fuzzy substring exclusion.
 	Email param.Field[string] `query:"email" format:"email"`
 	// When true, `email` is matched exactly instead of substring matching.
 	EmailExact param.Field[bool] `query:"email_exact"`

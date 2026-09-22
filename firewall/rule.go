@@ -833,21 +833,23 @@ type RuleBulkDeleteParams struct {
 type RuleBulkEditParams struct {
 	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-	Body   interface{}         `json:"body" api:"required"`
+	// The unique identifier of the firewall rule.
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r RuleBulkEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 type RuleBulkUpdateParams struct {
 	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-	Body   interface{}         `json:"body" api:"required"`
+	// The unique identifier of the firewall rule.
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r RuleBulkUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 type RuleEditParams struct {

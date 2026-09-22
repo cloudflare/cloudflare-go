@@ -136,7 +136,7 @@ func (r *SnippetService) Get(ctx context.Context, snippetName string, query Snip
 	return res, nil
 }
 
-// Contain the response result.
+// Define a snippet.
 type SnippetUpdateResponse struct {
 	// Indicates when the snippet was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
@@ -196,7 +196,7 @@ func (r snippetListResponseJSON) RawJSON() string {
 
 type SnippetDeleteResponse = interface{}
 
-// Contain the response result.
+// Define a snippet.
 type SnippetGetResponse struct {
 	// Indicates when the snippet was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
@@ -263,7 +263,7 @@ type SnippetUpdateResponseEnvelope struct {
 	Errors []SnippetUpdateResponseEnvelopeErrors `json:"errors" api:"required"`
 	// Contain warning messages.
 	Messages []SnippetUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
-	// Contain the response result.
+	// Define a snippet.
 	Result SnippetUpdateResponse `json:"result" api:"required"`
 	// Indicate whether the API call was successful.
 	Success SnippetUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
@@ -384,8 +384,7 @@ type SnippetDeleteResponseEnvelope struct {
 	Errors []SnippetDeleteResponseEnvelopeErrors `json:"errors" api:"required"`
 	// Contain warning messages.
 	Messages []SnippetDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
-	// Contain the response result.
-	Result SnippetDeleteResponse `json:"result" api:"required,nullable"`
+	Result   SnippetDeleteResponse                   `json:"result" api:"required,nullable"`
 	// Indicate whether the API call was successful.
 	Success SnippetDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    snippetDeleteResponseEnvelopeJSON    `json:"-"`
@@ -488,7 +487,7 @@ type SnippetGetResponseEnvelope struct {
 	Errors []SnippetGetResponseEnvelopeErrors `json:"errors" api:"required"`
 	// Contain warning messages.
 	Messages []SnippetGetResponseEnvelopeMessages `json:"messages" api:"required"`
-	// Contain the response result.
+	// Define a snippet.
 	Result SnippetGetResponse `json:"result" api:"required"`
 	// Indicate whether the API call was successful.
 	Success SnippetGetResponseEnvelopeSuccess `json:"success" api:"required"`

@@ -120,10 +120,13 @@ func (r investigateBulkMessageListResponseJSON) RawJSON() string {
 }
 
 type InvestigateBulkMessageListResponseActionParams struct {
-	ClientRecipient     string                                                            `json:"client_recipient" api:"required"`
-	Type                InvestigateBulkMessageListResponseActionParamsType                `json:"type" api:"required"`
-	Destination         InvestigateBulkMessageListResponseActionParamsDestination         `json:"destination"`
-	ExpectedDisposition InvestigateBulkMessageListResponseActionParamsExpectedDisposition `json:"expected_disposition"`
+	ClientRecipient string                                                    `json:"client_recipient" api:"required"`
+	Type            InvestigateBulkMessageListResponseActionParamsType        `json:"type" api:"required"`
+	Destination     InvestigateBulkMessageListResponseActionParamsDestination `json:"destination"`
+	// Nonfunctional field. End of life: December 1, 2026.
+	//
+	// Deprecated: This field is nonfunctional.
+	ExpectedDisposition InvestigateBulkMessageListResponseActionParamsExpectedDisposition `json:"expected_disposition" api:"nullable"`
 	JSON                investigateBulkMessageListResponseActionParamsJSON                `json:"-"`
 	union               InvestigateBulkMessageListResponseActionParamsUnion
 }
@@ -186,10 +189,13 @@ func init() {
 }
 
 type InvestigateBulkMessageListResponseActionParamsMove struct {
-	ClientRecipient     string                                                                `json:"client_recipient" api:"required"`
-	Destination         InvestigateBulkMessageListResponseActionParamsMoveDestination         `json:"destination" api:"required"`
-	Type                InvestigateBulkMessageListResponseActionParamsMoveType                `json:"type" api:"required"`
-	ExpectedDisposition InvestigateBulkMessageListResponseActionParamsMoveExpectedDisposition `json:"expected_disposition"`
+	ClientRecipient string                                                        `json:"client_recipient" api:"required"`
+	Destination     InvestigateBulkMessageListResponseActionParamsMoveDestination `json:"destination" api:"required"`
+	Type            InvestigateBulkMessageListResponseActionParamsMoveType        `json:"type" api:"required"`
+	// Nonfunctional field. End of life: December 1, 2026.
+	//
+	// Deprecated: This field is nonfunctional.
+	ExpectedDisposition InvestigateBulkMessageListResponseActionParamsMoveExpectedDisposition `json:"expected_disposition" api:"nullable"`
 	JSON                investigateBulkMessageListResponseActionParamsMoveJSON                `json:"-"`
 }
 
@@ -247,6 +253,7 @@ func (r InvestigateBulkMessageListResponseActionParamsMoveType) IsKnown() bool {
 	return false
 }
 
+// Nonfunctional field. End of life: December 1, 2026.
 type InvestigateBulkMessageListResponseActionParamsMoveExpectedDisposition string
 
 const (
@@ -343,6 +350,7 @@ func (r InvestigateBulkMessageListResponseActionParamsDestination) IsKnown() boo
 	return false
 }
 
+// Nonfunctional field. End of life: December 1, 2026.
 type InvestigateBulkMessageListResponseActionParamsExpectedDisposition string
 
 const (
@@ -422,12 +430,12 @@ type InvestigateBulkMessageListResponseMessage struct {
 	// Deprecated: Use `scanned_at` instead.
 	Ts               string                                                    `json:"ts" api:"required"`
 	AlertID          string                                                    `json:"alert_id" api:"nullable"`
-	DeliveryMode     InvestigateBulkMessageListResponseMessageDeliveryMode     `json:"delivery_mode"`
+	DeliveryMode     InvestigateBulkMessageListResponseMessageDeliveryMode     `json:"delivery_mode" api:"nullable"`
 	DeliveryStatus   []InvestigateBulkMessageListResponseMessageDeliveryStatus `json:"delivery_status" api:"nullable"`
 	EdfHash          string                                                    `json:"edf_hash" api:"nullable"`
 	EnvelopeFrom     string                                                    `json:"envelope_from" api:"nullable"`
 	EnvelopeTo       []string                                                  `json:"envelope_to" api:"nullable"`
-	FinalDisposition InvestigateBulkMessageListResponseMessageFinalDisposition `json:"final_disposition"`
+	FinalDisposition InvestigateBulkMessageListResponseMessageFinalDisposition `json:"final_disposition" api:"nullable"`
 	// Deprecated, use the `findings` field from
 	// `GET /investigate/{investigate_id}/detections` instead. End of life: November
 	// 1, 2026. Detection findings for this message.
@@ -454,7 +462,7 @@ type InvestigateBulkMessageListResponseMessage struct {
 	ThreatCategories  []string                                            `json:"threat_categories" api:"nullable"`
 	To                []string                                            `json:"to" api:"nullable"`
 	ToName            []string                                            `json:"to_name" api:"nullable"`
-	Validation        InvestigateBulkMessageListResponseMessageValidation `json:"validation"`
+	Validation        InvestigateBulkMessageListResponseMessageValidation `json:"validation" api:"nullable"`
 	XOriginatingIP    string                                              `json:"x_originating_ip" api:"nullable"`
 	JSON              investigateBulkMessageListResponseMessageJSON       `json:"-"`
 }
@@ -743,7 +751,7 @@ func (r InvestigateBulkMessageListResponseMessageFinalDisposition) IsKnown() boo
 type InvestigateBulkMessageListResponseMessageFinding struct {
 	Attachment string                                                     `json:"attachment" api:"nullable"`
 	Detail     string                                                     `json:"detail" api:"nullable"`
-	Detection  InvestigateBulkMessageListResponseMessageFindingsDetection `json:"detection"`
+	Detection  InvestigateBulkMessageListResponseMessageFindingsDetection `json:"detection" api:"nullable"`
 	Field      string                                                     `json:"field" api:"nullable"`
 	Name       string                                                     `json:"name" api:"nullable"`
 	Portion    string                                                     `json:"portion" api:"nullable"`
@@ -819,9 +827,9 @@ func (r InvestigateBulkMessageListResponseMessagePostDeliveryOperation) IsKnown(
 
 type InvestigateBulkMessageListResponseMessageValidation struct {
 	Comment string                                                   `json:"comment" api:"nullable"`
-	DKIM    InvestigateBulkMessageListResponseMessageValidationDKIM  `json:"dkim"`
-	DMARC   InvestigateBulkMessageListResponseMessageValidationDMARC `json:"dmarc"`
-	SPF     InvestigateBulkMessageListResponseMessageValidationSPF   `json:"spf"`
+	DKIM    InvestigateBulkMessageListResponseMessageValidationDKIM  `json:"dkim" api:"nullable"`
+	DMARC   InvestigateBulkMessageListResponseMessageValidationDMARC `json:"dmarc" api:"nullable"`
+	SPF     InvestigateBulkMessageListResponseMessageValidationSPF   `json:"spf" api:"nullable"`
 	JSON    investigateBulkMessageListResponseMessageValidationJSON  `json:"-"`
 }
 

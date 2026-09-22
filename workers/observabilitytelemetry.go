@@ -2350,7 +2350,6 @@ func (r ObservabilityTelemetryQueryResponseEventsEventsSourceMap) ImplementsObse
 // debugging issues.
 type ObservabilityTelemetryQueryResponseEventsEventsWorkers struct {
 	EventType  ObservabilityTelemetryQueryResponseEventsEventsWorkersEventType `json:"eventType" api:"required"`
-	RequestID  string                                                          `json:"requestId" api:"required"`
 	ScriptName string                                                          `json:"scriptName" api:"required"`
 	CPUTimeMs  float64                                                         `json:"cpuTimeMs"`
 	// This field can have the runtime type of
@@ -2365,7 +2364,8 @@ type ObservabilityTelemetryQueryResponseEventsEventsWorkers struct {
 	Outcome        string                                                               `json:"outcome"`
 	// This field can have the runtime type of
 	// [ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectPreview].
-	Preview interface{} `json:"preview"`
+	Preview   interface{} `json:"preview"`
+	RequestID string      `json:"requestId"`
 	// This field can have the runtime type of
 	// [ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectScriptVersion].
 	ScriptVersion interface{}                                                `json:"scriptVersion"`
@@ -2381,7 +2381,6 @@ type ObservabilityTelemetryQueryResponseEventsEventsWorkers struct {
 // metadata for the struct [ObservabilityTelemetryQueryResponseEventsEventsWorkers]
 type observabilityTelemetryQueryResponseEventsEventsWorkersJSON struct {
 	EventType                apijson.Field
-	RequestID                apijson.Field
 	ScriptName               apijson.Field
 	CPUTimeMs                apijson.Field
 	DiagnosticsChannelEvents apijson.Field
@@ -2392,6 +2391,7 @@ type observabilityTelemetryQueryResponseEventsEventsWorkersJSON struct {
 	ExecutionModel           apijson.Field
 	Outcome                  apijson.Field
 	Preview                  apijson.Field
+	RequestID                apijson.Field
 	ScriptVersion            apijson.Field
 	SpanID                   apijson.Field
 	TraceID                  apijson.Field
@@ -2451,7 +2451,6 @@ func init() {
 
 type ObservabilityTelemetryQueryResponseEventsEventsWorkersObject struct {
 	EventType       ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectEventType      `json:"eventType" api:"required"`
-	RequestID       string                                                                     `json:"requestId" api:"required"`
 	ScriptName      string                                                                     `json:"scriptName" api:"required"`
 	DurableObjectID string                                                                     `json:"durableObjectId"`
 	Entrypoint      string                                                                     `json:"entrypoint"`
@@ -2459,6 +2458,7 @@ type ObservabilityTelemetryQueryResponseEventsEventsWorkersObject struct {
 	ExecutionModel  ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectExecutionModel `json:"executionModel"`
 	Outcome         string                                                                     `json:"outcome"`
 	Preview         ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectPreview        `json:"preview"`
+	RequestID       string                                                                     `json:"requestId"`
 	ScriptVersion   ObservabilityTelemetryQueryResponseEventsEventsWorkersObjectScriptVersion  `json:"scriptVersion"`
 	SpanID          string                                                                     `json:"spanId"`
 	TraceID         string                                                                     `json:"traceId"`
@@ -2471,7 +2471,6 @@ type ObservabilityTelemetryQueryResponseEventsEventsWorkersObject struct {
 // [ObservabilityTelemetryQueryResponseEventsEventsWorkersObject]
 type observabilityTelemetryQueryResponseEventsEventsWorkersObjectJSON struct {
 	EventType       apijson.Field
-	RequestID       apijson.Field
 	ScriptName      apijson.Field
 	DurableObjectID apijson.Field
 	Entrypoint      apijson.Field
@@ -2479,6 +2478,7 @@ type observabilityTelemetryQueryResponseEventsEventsWorkersObjectJSON struct {
 	ExecutionModel  apijson.Field
 	Outcome         apijson.Field
 	Preview         apijson.Field
+	RequestID       apijson.Field
 	ScriptVersion   apijson.Field
 	SpanID          apijson.Field
 	TraceID         apijson.Field
@@ -2967,7 +2967,6 @@ func (r ObservabilityTelemetryQueryResponseInvocationsSourceMap) ImplementsObser
 // debugging issues.
 type ObservabilityTelemetryQueryResponseInvocationsWorkers struct {
 	EventType  ObservabilityTelemetryQueryResponseInvocationsWorkersEventType `json:"eventType" api:"required"`
-	RequestID  string                                                         `json:"requestId" api:"required"`
 	ScriptName string                                                         `json:"scriptName" api:"required"`
 	CPUTimeMs  float64                                                        `json:"cpuTimeMs"`
 	// This field can have the runtime type of
@@ -2982,7 +2981,8 @@ type ObservabilityTelemetryQueryResponseInvocationsWorkers struct {
 	Outcome        string                                                              `json:"outcome"`
 	// This field can have the runtime type of
 	// [ObservabilityTelemetryQueryResponseInvocationsWorkersObjectPreview].
-	Preview interface{} `json:"preview"`
+	Preview   interface{} `json:"preview"`
+	RequestID string      `json:"requestId"`
 	// This field can have the runtime type of
 	// [ObservabilityTelemetryQueryResponseInvocationsWorkersObjectScriptVersion].
 	ScriptVersion interface{}                                               `json:"scriptVersion"`
@@ -2998,7 +2998,6 @@ type ObservabilityTelemetryQueryResponseInvocationsWorkers struct {
 // metadata for the struct [ObservabilityTelemetryQueryResponseInvocationsWorkers]
 type observabilityTelemetryQueryResponseInvocationsWorkersJSON struct {
 	EventType                apijson.Field
-	RequestID                apijson.Field
 	ScriptName               apijson.Field
 	CPUTimeMs                apijson.Field
 	DiagnosticsChannelEvents apijson.Field
@@ -3009,6 +3008,7 @@ type observabilityTelemetryQueryResponseInvocationsWorkersJSON struct {
 	ExecutionModel           apijson.Field
 	Outcome                  apijson.Field
 	Preview                  apijson.Field
+	RequestID                apijson.Field
 	ScriptVersion            apijson.Field
 	SpanID                   apijson.Field
 	TraceID                  apijson.Field
@@ -3067,7 +3067,6 @@ func init() {
 
 type ObservabilityTelemetryQueryResponseInvocationsWorkersObject struct {
 	EventType       ObservabilityTelemetryQueryResponseInvocationsWorkersObjectEventType      `json:"eventType" api:"required"`
-	RequestID       string                                                                    `json:"requestId" api:"required"`
 	ScriptName      string                                                                    `json:"scriptName" api:"required"`
 	DurableObjectID string                                                                    `json:"durableObjectId"`
 	Entrypoint      string                                                                    `json:"entrypoint"`
@@ -3075,6 +3074,7 @@ type ObservabilityTelemetryQueryResponseInvocationsWorkersObject struct {
 	ExecutionModel  ObservabilityTelemetryQueryResponseInvocationsWorkersObjectExecutionModel `json:"executionModel"`
 	Outcome         string                                                                    `json:"outcome"`
 	Preview         ObservabilityTelemetryQueryResponseInvocationsWorkersObjectPreview        `json:"preview"`
+	RequestID       string                                                                    `json:"requestId"`
 	ScriptVersion   ObservabilityTelemetryQueryResponseInvocationsWorkersObjectScriptVersion  `json:"scriptVersion"`
 	SpanID          string                                                                    `json:"spanId"`
 	TraceID         string                                                                    `json:"traceId"`
@@ -3087,7 +3087,6 @@ type ObservabilityTelemetryQueryResponseInvocationsWorkersObject struct {
 // [ObservabilityTelemetryQueryResponseInvocationsWorkersObject]
 type observabilityTelemetryQueryResponseInvocationsWorkersObjectJSON struct {
 	EventType       apijson.Field
-	RequestID       apijson.Field
 	ScriptName      apijson.Field
 	DurableObjectID apijson.Field
 	Entrypoint      apijson.Field
@@ -3095,6 +3094,7 @@ type observabilityTelemetryQueryResponseInvocationsWorkersObjectJSON struct {
 	ExecutionModel  apijson.Field
 	Outcome         apijson.Field
 	Preview         apijson.Field
+	RequestID       apijson.Field
 	ScriptVersion   apijson.Field
 	SpanID          apijson.Field
 	TraceID         apijson.Field

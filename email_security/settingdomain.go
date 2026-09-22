@@ -236,12 +236,12 @@ type SettingDomainNewResponse struct {
 	// Domain identifier.
 	ID                   string                                        `json:"id" format:"uuid"`
 	AllowedDeliveryModes []SettingDomainNewResponseAllowedDeliveryMode `json:"allowed_delivery_modes"`
-	Authorization        SettingDomainNewResponseAuthorization         `json:"authorization"`
+	Authorization        SettingDomainNewResponseAuthorization         `json:"authorization" api:"nullable"`
 	CreatedAt            time.Time                                     `json:"created_at" format:"date-time"`
 	DMARCStatus          SettingDomainNewResponseDMARCStatus           `json:"dmarc_status" api:"nullable"`
 	Domain               string                                        `json:"domain"`
 	DropDispositions     []SettingDomainNewResponseDropDisposition     `json:"drop_dispositions"`
-	EmailsProcessed      SettingDomainNewResponseEmailsProcessed       `json:"emails_processed"`
+	EmailsProcessed      SettingDomainNewResponseEmailsProcessed       `json:"emails_processed" api:"nullable"`
 	Folder               SettingDomainNewResponseFolder                `json:"folder" api:"nullable"`
 	InboxProvider        SettingDomainNewResponseInboxProvider         `json:"inbox_provider" api:"nullable"`
 	IntegrationID        string                                        `json:"integration_id" api:"nullable" format:"uuid"`
@@ -493,12 +493,12 @@ type SettingDomainUpdateResponse struct {
 	// Domain identifier.
 	ID                   string                                           `json:"id" format:"uuid"`
 	AllowedDeliveryModes []SettingDomainUpdateResponseAllowedDeliveryMode `json:"allowed_delivery_modes"`
-	Authorization        SettingDomainUpdateResponseAuthorization         `json:"authorization"`
+	Authorization        SettingDomainUpdateResponseAuthorization         `json:"authorization" api:"nullable"`
 	CreatedAt            time.Time                                        `json:"created_at" format:"date-time"`
 	DMARCStatus          SettingDomainUpdateResponseDMARCStatus           `json:"dmarc_status" api:"nullable"`
 	Domain               string                                           `json:"domain"`
 	DropDispositions     []SettingDomainUpdateResponseDropDisposition     `json:"drop_dispositions"`
-	EmailsProcessed      SettingDomainUpdateResponseEmailsProcessed       `json:"emails_processed"`
+	EmailsProcessed      SettingDomainUpdateResponseEmailsProcessed       `json:"emails_processed" api:"nullable"`
 	Folder               SettingDomainUpdateResponseFolder                `json:"folder" api:"nullable"`
 	InboxProvider        SettingDomainUpdateResponseInboxProvider         `json:"inbox_provider" api:"nullable"`
 	IntegrationID        string                                           `json:"integration_id" api:"nullable" format:"uuid"`
@@ -750,12 +750,12 @@ type SettingDomainListResponse struct {
 	// Domain identifier.
 	ID                   string                                         `json:"id" format:"uuid"`
 	AllowedDeliveryModes []SettingDomainListResponseAllowedDeliveryMode `json:"allowed_delivery_modes"`
-	Authorization        SettingDomainListResponseAuthorization         `json:"authorization"`
+	Authorization        SettingDomainListResponseAuthorization         `json:"authorization" api:"nullable"`
 	CreatedAt            time.Time                                      `json:"created_at" format:"date-time"`
 	DMARCStatus          SettingDomainListResponseDMARCStatus           `json:"dmarc_status" api:"nullable"`
 	Domain               string                                         `json:"domain"`
 	DropDispositions     []SettingDomainListResponseDropDisposition     `json:"drop_dispositions"`
-	EmailsProcessed      SettingDomainListResponseEmailsProcessed       `json:"emails_processed"`
+	EmailsProcessed      SettingDomainListResponseEmailsProcessed       `json:"emails_processed" api:"nullable"`
 	Folder               SettingDomainListResponseFolder                `json:"folder" api:"nullable"`
 	InboxProvider        SettingDomainListResponseInboxProvider         `json:"inbox_provider" api:"nullable"`
 	IntegrationID        string                                         `json:"integration_id" api:"nullable" format:"uuid"`
@@ -1078,12 +1078,12 @@ type SettingDomainBatchResponsePatch struct {
 	// Domain identifier.
 	ID                   string                                                 `json:"id" format:"uuid"`
 	AllowedDeliveryModes []SettingDomainBatchResponsePatchesAllowedDeliveryMode `json:"allowed_delivery_modes"`
-	Authorization        SettingDomainBatchResponsePatchesAuthorization         `json:"authorization"`
+	Authorization        SettingDomainBatchResponsePatchesAuthorization         `json:"authorization" api:"nullable"`
 	CreatedAt            time.Time                                              `json:"created_at" format:"date-time"`
 	DMARCStatus          SettingDomainBatchResponsePatchesDMARCStatus           `json:"dmarc_status" api:"nullable"`
 	Domain               string                                                 `json:"domain"`
 	DropDispositions     []SettingDomainBatchResponsePatchesDropDisposition     `json:"drop_dispositions"`
-	EmailsProcessed      SettingDomainBatchResponsePatchesEmailsProcessed       `json:"emails_processed"`
+	EmailsProcessed      SettingDomainBatchResponsePatchesEmailsProcessed       `json:"emails_processed" api:"nullable"`
 	Folder               SettingDomainBatchResponsePatchesFolder                `json:"folder" api:"nullable"`
 	InboxProvider        SettingDomainBatchResponsePatchesInboxProvider         `json:"inbox_provider" api:"nullable"`
 	IntegrationID        string                                                 `json:"integration_id" api:"nullable" format:"uuid"`
@@ -1335,12 +1335,12 @@ type SettingDomainBatchResponsePost struct {
 	// Domain identifier.
 	ID                   string                                               `json:"id" format:"uuid"`
 	AllowedDeliveryModes []SettingDomainBatchResponsePostsAllowedDeliveryMode `json:"allowed_delivery_modes"`
-	Authorization        SettingDomainBatchResponsePostsAuthorization         `json:"authorization"`
+	Authorization        SettingDomainBatchResponsePostsAuthorization         `json:"authorization" api:"nullable"`
 	CreatedAt            time.Time                                            `json:"created_at" format:"date-time"`
 	DMARCStatus          SettingDomainBatchResponsePostsDMARCStatus           `json:"dmarc_status" api:"nullable"`
 	Domain               string                                               `json:"domain"`
 	DropDispositions     []SettingDomainBatchResponsePostsDropDisposition     `json:"drop_dispositions"`
-	EmailsProcessed      SettingDomainBatchResponsePostsEmailsProcessed       `json:"emails_processed"`
+	EmailsProcessed      SettingDomainBatchResponsePostsEmailsProcessed       `json:"emails_processed" api:"nullable"`
 	Folder               SettingDomainBatchResponsePostsFolder                `json:"folder" api:"nullable"`
 	InboxProvider        SettingDomainBatchResponsePostsInboxProvider         `json:"inbox_provider" api:"nullable"`
 	IntegrationID        string                                               `json:"integration_id" api:"nullable" format:"uuid"`
@@ -1592,12 +1592,12 @@ type SettingDomainBatchResponsePut struct {
 	// Domain identifier.
 	ID                   string                                              `json:"id" format:"uuid"`
 	AllowedDeliveryModes []SettingDomainBatchResponsePutsAllowedDeliveryMode `json:"allowed_delivery_modes"`
-	Authorization        SettingDomainBatchResponsePutsAuthorization         `json:"authorization"`
+	Authorization        SettingDomainBatchResponsePutsAuthorization         `json:"authorization" api:"nullable"`
 	CreatedAt            time.Time                                           `json:"created_at" format:"date-time"`
 	DMARCStatus          SettingDomainBatchResponsePutsDMARCStatus           `json:"dmarc_status" api:"nullable"`
 	Domain               string                                              `json:"domain"`
 	DropDispositions     []SettingDomainBatchResponsePutsDropDisposition     `json:"drop_dispositions"`
-	EmailsProcessed      SettingDomainBatchResponsePutsEmailsProcessed       `json:"emails_processed"`
+	EmailsProcessed      SettingDomainBatchResponsePutsEmailsProcessed       `json:"emails_processed" api:"nullable"`
 	Folder               SettingDomainBatchResponsePutsFolder                `json:"folder" api:"nullable"`
 	InboxProvider        SettingDomainBatchResponsePutsInboxProvider         `json:"inbox_provider" api:"nullable"`
 	IntegrationID        string                                              `json:"integration_id" api:"nullable" format:"uuid"`
@@ -1871,12 +1871,12 @@ type SettingDomainEditResponse struct {
 	// Domain identifier.
 	ID                   string                                         `json:"id" format:"uuid"`
 	AllowedDeliveryModes []SettingDomainEditResponseAllowedDeliveryMode `json:"allowed_delivery_modes"`
-	Authorization        SettingDomainEditResponseAuthorization         `json:"authorization"`
+	Authorization        SettingDomainEditResponseAuthorization         `json:"authorization" api:"nullable"`
 	CreatedAt            time.Time                                      `json:"created_at" format:"date-time"`
 	DMARCStatus          SettingDomainEditResponseDMARCStatus           `json:"dmarc_status" api:"nullable"`
 	Domain               string                                         `json:"domain"`
 	DropDispositions     []SettingDomainEditResponseDropDisposition     `json:"drop_dispositions"`
-	EmailsProcessed      SettingDomainEditResponseEmailsProcessed       `json:"emails_processed"`
+	EmailsProcessed      SettingDomainEditResponseEmailsProcessed       `json:"emails_processed" api:"nullable"`
 	Folder               SettingDomainEditResponseFolder                `json:"folder" api:"nullable"`
 	InboxProvider        SettingDomainEditResponseInboxProvider         `json:"inbox_provider" api:"nullable"`
 	IntegrationID        string                                         `json:"integration_id" api:"nullable" format:"uuid"`
@@ -2128,12 +2128,12 @@ type SettingDomainGetResponse struct {
 	// Domain identifier.
 	ID                   string                                        `json:"id" format:"uuid"`
 	AllowedDeliveryModes []SettingDomainGetResponseAllowedDeliveryMode `json:"allowed_delivery_modes"`
-	Authorization        SettingDomainGetResponseAuthorization         `json:"authorization"`
+	Authorization        SettingDomainGetResponseAuthorization         `json:"authorization" api:"nullable"`
 	CreatedAt            time.Time                                     `json:"created_at" format:"date-time"`
 	DMARCStatus          SettingDomainGetResponseDMARCStatus           `json:"dmarc_status" api:"nullable"`
 	Domain               string                                        `json:"domain"`
 	DropDispositions     []SettingDomainGetResponseDropDisposition     `json:"drop_dispositions"`
-	EmailsProcessed      SettingDomainGetResponseEmailsProcessed       `json:"emails_processed"`
+	EmailsProcessed      SettingDomainGetResponseEmailsProcessed       `json:"emails_processed" api:"nullable"`
 	Folder               SettingDomainGetResponseFolder                `json:"folder" api:"nullable"`
 	InboxProvider        SettingDomainGetResponseInboxProvider         `json:"inbox_provider" api:"nullable"`
 	IntegrationID        string                                        `json:"integration_id" api:"nullable" format:"uuid"`

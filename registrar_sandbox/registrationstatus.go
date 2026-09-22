@@ -108,21 +108,21 @@ type RegistrationStatusGetResponse struct {
 	Links     RegistrationStatusGetResponseLinks `json:"links" api:"required"`
 	// Describes the workflow lifecycle state.
 	//
-	//   - `pending`: The workflow awaits processing.
-	//   - `in_progress`: Processing started. Continue polling `links.self`. An internal
-	//     deadline limits the duration of this state.
-	//   - `action_required`: The workflow pauses for user action. See `context.action`
-	//     for details. Stop automated polling until the user completes the required
-	//     action.
-	//   - `blocked`: A third party, such as the domain extension's registry or a losing
-	//     registrar, prevents progress. Continue polling because the block may resolve
-	//     when the third party responds.
-	//   - `succeeded`: Terminal state. The operation completed successfully. `completed`
-	//     equals `true`. For registrations, `context.registration` contains the
-	//     resulting registration resource.
-	//   - `failed`: Terminal state. The operation failed. `completed` equals `true`. See
-	//     `error.code` and `error.message` for the reason. Require user review before
-	//     retrying.
+	// - `pending`: The workflow awaits processing.
+	// - `in_progress`: Processing started. Continue polling `links.self`. An internal
+	//   deadline limits the duration of this state.
+	// - `action_required`: The workflow pauses for user action. See `context.action`
+	//   for details. Stop automated polling until the user completes the required
+	//   action.
+	// - `blocked`: A third party, such as the domain extension's registry or a losing
+	//   registrar, prevents progress. Continue polling because the block may resolve
+	//   when the third party responds.
+	// - `succeeded`: Terminal state. The operation completed successfully. `completed`
+	//   equals `true`. For registrations, `context.registration` contains the
+	//   resulting registration resource.
+	// - `failed`: Terminal state. The operation failed. `completed` equals `true`. See
+	//   `error.code` and `error.message` for the reason. Require user review before
+	//   retrying.
 	State     RegistrationStatusGetResponseState `json:"state" api:"required"`
 	UpdatedAt time.Time                          `json:"updated_at" api:"required" format:"date-time"`
 	// Provides workflow-specific data.

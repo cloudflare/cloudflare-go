@@ -225,8 +225,10 @@ type CasbPostureFindingInstanceListResponseAsset struct {
 	// Unique identifier for the asset.
 	ID string `json:"id" format:"uuid"`
 	// Direct link to the asset.
-	Link string                                          `json:"link" api:"nullable" format:"uri"`
-	JSON casbPostureFindingInstanceListResponseAssetJSON `json:"-"`
+	Link string `json:"link" api:"nullable" format:"uri"`
+	// Timestamp of the asset row version represented by this data.
+	Updated time.Time                                       `json:"updated" format:"date-time"`
+	JSON    casbPostureFindingInstanceListResponseAssetJSON `json:"-"`
 }
 
 // casbPostureFindingInstanceListResponseAssetJSON contains the JSON metadata for
@@ -238,6 +240,7 @@ type casbPostureFindingInstanceListResponseAssetJSON struct {
 	Name        apijson.Field
 	ID          apijson.Field
 	Link        apijson.Field
+	Updated     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -555,8 +558,10 @@ type CasbPostureFindingInstanceArchiveResponseAsset struct {
 	// Unique identifier for the asset.
 	ID string `json:"id" format:"uuid"`
 	// Direct link to the asset.
-	Link string                                             `json:"link" api:"nullable" format:"uri"`
-	JSON casbPostureFindingInstanceArchiveResponseAssetJSON `json:"-"`
+	Link string `json:"link" api:"nullable" format:"uri"`
+	// Timestamp of the asset row version represented by this data.
+	Updated time.Time                                          `json:"updated" format:"date-time"`
+	JSON    casbPostureFindingInstanceArchiveResponseAssetJSON `json:"-"`
 }
 
 // casbPostureFindingInstanceArchiveResponseAssetJSON contains the JSON metadata
@@ -568,6 +573,7 @@ type casbPostureFindingInstanceArchiveResponseAssetJSON struct {
 	Name        apijson.Field
 	ID          apijson.Field
 	Link        apijson.Field
+	Updated     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -967,8 +973,10 @@ type CasbPostureFindingInstanceGetResponseAsset struct {
 	// Unique identifier for the asset.
 	ID string `json:"id" format:"uuid"`
 	// Direct link to the asset.
-	Link string                                         `json:"link" api:"nullable" format:"uri"`
-	JSON casbPostureFindingInstanceGetResponseAssetJSON `json:"-"`
+	Link string `json:"link" api:"nullable" format:"uri"`
+	// Timestamp of the asset row version represented by this data.
+	Updated time.Time                                      `json:"updated" format:"date-time"`
+	JSON    casbPostureFindingInstanceGetResponseAssetJSON `json:"-"`
 }
 
 // casbPostureFindingInstanceGetResponseAssetJSON contains the JSON metadata for
@@ -980,6 +988,7 @@ type casbPostureFindingInstanceGetResponseAssetJSON struct {
 	Name        apijson.Field
 	ID          apijson.Field
 	Link        apijson.Field
+	Updated     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1296,8 +1305,10 @@ type CasbPostureFindingInstanceUnarchiveResponseAsset struct {
 	// Unique identifier for the asset.
 	ID string `json:"id" format:"uuid"`
 	// Direct link to the asset.
-	Link string                                               `json:"link" api:"nullable" format:"uri"`
-	JSON casbPostureFindingInstanceUnarchiveResponseAssetJSON `json:"-"`
+	Link string `json:"link" api:"nullable" format:"uri"`
+	// Timestamp of the asset row version represented by this data.
+	Updated time.Time                                            `json:"updated" format:"date-time"`
+	JSON    casbPostureFindingInstanceUnarchiveResponseAssetJSON `json:"-"`
 }
 
 // casbPostureFindingInstanceUnarchiveResponseAssetJSON contains the JSON metadata
@@ -1309,6 +1320,7 @@ type casbPostureFindingInstanceUnarchiveResponseAssetJSON struct {
 	Name        apijson.Field
 	ID          apijson.Field
 	Link        apijson.Field
+	Updated     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -54,6 +54,9 @@ func NewBillingUsageService(opts ...option.RequestOption) (r *BillingUsageServic
 //
 // When `from` and `to` are omitted, defaults to the start of the current month
 // through today. The maximum date range is 31 days.
+//
+// An organization with no accounts, or an organization ID that does not exist,
+// returns a successful response with an empty result set rather than an error.
 func (r *BillingUsageService) Get(ctx context.Context, organizationID string, query BillingUsageGetParams, opts ...option.RequestOption) (res *[]BillingUsageGetResponse, err error) {
 	var env BillingUsageGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

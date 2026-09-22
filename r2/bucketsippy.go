@@ -38,8 +38,8 @@ func NewBucketSippyService(opts ...option.RequestOption) (r *BucketSippyService)
 // Sets configuration for Sippy for an existing R2 bucket.
 func (r *BucketSippyService) Update(ctx context.Context, bucketName string, params BucketSippyUpdateParams, opts ...option.RequestOption) (res *Sippy, err error) {
 	var env BucketSippyUpdateResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -62,8 +62,8 @@ func (r *BucketSippyService) Update(ctx context.Context, bucketName string, para
 // Disables Sippy on this bucket.
 func (r *BucketSippyService) Delete(ctx context.Context, bucketName string, params BucketSippyDeleteParams, opts ...option.RequestOption) (res *BucketSippyDeleteResponse, err error) {
 	var env BucketSippyDeleteResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -86,8 +86,8 @@ func (r *BucketSippyService) Delete(ctx context.Context, bucketName string, para
 // Gets configuration for Sippy for an existing R2 bucket.
 func (r *BucketSippyService) Get(ctx context.Context, bucketName string, params BucketSippyGetParams, opts ...option.RequestOption) (res *Sippy, err error) {
 	var env BucketSippyGetResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -265,10 +265,9 @@ func (r BucketSippyDeleteResponseEnabled) IsKnown() bool {
 
 type BucketSippyUpdateParams struct {
 	// Account ID.
-	AccountID param.Field[string]              `path:"account_id" api:"required"`
-	Body      BucketSippyUpdateParamsBodyUnion `json:"body" api:"required"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketSippyUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	AccountID        param.Field[string]                                  `path:"account_id" api:"required"`
+	Body             BucketSippyUpdateParamsBodyUnion                     `json:"body" api:"required"`
+	CfR2Jurisdiction param.Field[BucketSippyUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 func (r BucketSippyUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -560,7 +559,6 @@ func (r BucketSippyUpdateParamsBodyR2EnableSippyAzureSourceProvider) IsKnown() b
 	return false
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketSippyUpdateParamsCfR2Jurisdiction string
 
 const (
@@ -624,12 +622,10 @@ func (r BucketSippyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketSippyDeleteParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketSippyDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	AccountID        param.Field[string]                                  `path:"account_id" api:"required"`
+	CfR2Jurisdiction param.Field[BucketSippyDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketSippyDeleteParamsCfR2Jurisdiction string
 
 const (
@@ -693,12 +689,10 @@ func (r BucketSippyDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketSippyGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketSippyGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	AccountID        param.Field[string]                               `path:"account_id" api:"required"`
+	CfR2Jurisdiction param.Field[BucketSippyGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketSippyGetParamsCfR2Jurisdiction string
 
 const (

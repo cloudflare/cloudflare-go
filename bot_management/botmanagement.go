@@ -170,6 +170,9 @@ type BotFightModeConfiguration struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged bool `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled bool `json:"jsd_api_results_enabled"`
 	// A read-only field that shows which unauthorized settings are currently active on
 	// the zone. These settings typically result from upgrades or downgrades.
 	StaleZoneConfiguration BotFightModeConfigurationStaleZoneConfiguration `json:"stale_zone_configuration"`
@@ -194,6 +197,7 @@ type botFightModeConfigurationJSON struct {
 	EnableJS                 apijson.Field
 	FightMode                apijson.Field
 	IsRobotsTXTManaged       apijson.Field
+	JsdAPIResultsEnabled     apijson.Field
 	StaleZoneConfiguration   apijson.Field
 	UsingLatestModel         apijson.Field
 	raw                      string
@@ -404,6 +408,9 @@ type BotFightModeConfigurationParam struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged param.Field[bool] `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled param.Field[bool] `json:"jsd_api_results_enabled"`
 }
 
 func (r BotFightModeConfigurationParam) MarshalJSON() (data []byte, err error) {
@@ -472,6 +479,9 @@ type SubscriptionConfiguration struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged bool `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled bool `json:"jsd_api_results_enabled"`
 	// A read-only field that shows which unauthorized settings are currently active on
 	// the zone. These settings typically result from upgrades or downgrades.
 	StaleZoneConfiguration SubscriptionConfigurationStaleZoneConfiguration `json:"stale_zone_configuration"`
@@ -500,6 +510,7 @@ type subscriptionConfigurationJSON struct {
 	CrawlerProtection        apijson.Field
 	EnableJS                 apijson.Field
 	IsRobotsTXTManaged       apijson.Field
+	JsdAPIResultsEnabled     apijson.Field
 	StaleZoneConfiguration   apijson.Field
 	SuppressSessionScore     apijson.Field
 	UsingLatestModel         apijson.Field
@@ -716,6 +727,9 @@ type SubscriptionConfigurationParam struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged param.Field[bool] `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled param.Field[bool] `json:"jsd_api_results_enabled"`
 	// Whether to disable tracking the highest bot score for a session in the Bot
 	// Management cookie.
 	SuppressSessionScore param.Field[bool] `json:"suppress_session_score"`
@@ -780,6 +794,9 @@ type SuperBotFightModeDefinitelyConfiguration struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged bool `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled bool `json:"jsd_api_results_enabled"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress bool `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
@@ -813,6 +830,7 @@ type superBotFightModeDefinitelyConfigurationJSON struct {
 	CrawlerProtection            apijson.Field
 	EnableJS                     apijson.Field
 	IsRobotsTXTManaged           apijson.Field
+	JsdAPIResultsEnabled         apijson.Field
 	OptimizeWordpress            apijson.Field
 	SBFMDefinitelyAutomated      apijson.Field
 	SBFMStaticResourceProtection apijson.Field
@@ -1046,6 +1064,9 @@ type SuperBotFightModeDefinitelyConfigurationParam struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged param.Field[bool] `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled param.Field[bool] `json:"jsd_api_results_enabled"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress param.Field[bool] `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
@@ -1109,6 +1130,9 @@ type SuperBotFightModeLikelyConfiguration struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged bool `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled bool `json:"jsd_api_results_enabled"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress bool `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
@@ -1144,6 +1168,7 @@ type superBotFightModeLikelyConfigurationJSON struct {
 	CrawlerProtection            apijson.Field
 	EnableJS                     apijson.Field
 	IsRobotsTXTManaged           apijson.Field
+	JsdAPIResultsEnabled         apijson.Field
 	OptimizeWordpress            apijson.Field
 	SBFMDefinitelyAutomated      apijson.Field
 	SBFMLikelyAutomated          apijson.Field
@@ -1391,6 +1416,9 @@ type SuperBotFightModeLikelyConfigurationParam struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged param.Field[bool] `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled param.Field[bool] `json:"jsd_api_results_enabled"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress param.Field[bool] `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
@@ -1461,6 +1489,9 @@ type BotManagementUpdateResponse struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged bool `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled bool `json:"jsd_api_results_enabled"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress bool `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
@@ -1506,6 +1537,7 @@ type botManagementUpdateResponseJSON struct {
 	EnableJS                     apijson.Field
 	FightMode                    apijson.Field
 	IsRobotsTXTManaged           apijson.Field
+	JsdAPIResultsEnabled         apijson.Field
 	OptimizeWordpress            apijson.Field
 	SBFMDefinitelyAutomated      apijson.Field
 	SBFMLikelyAutomated          apijson.Field
@@ -1779,6 +1811,9 @@ type BotManagementGetResponse struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged bool `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled bool `json:"jsd_api_results_enabled"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress bool `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
@@ -1824,6 +1859,7 @@ type botManagementGetResponseJSON struct {
 	EnableJS                     apijson.Field
 	FightMode                    apijson.Field
 	IsRobotsTXTManaged           apijson.Field
+	JsdAPIResultsEnabled         apijson.Field
 	OptimizeWordpress            apijson.Field
 	SBFMDefinitelyAutomated      apijson.Field
 	SBFMLikelyAutomated          apijson.Field
@@ -2107,6 +2143,9 @@ type BotManagementUpdateParamsBody struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged param.Field[bool] `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled param.Field[bool] `json:"jsd_api_results_enabled"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress param.Field[bool] `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.

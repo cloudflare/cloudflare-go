@@ -41,8 +41,8 @@ func NewBucketLockService(opts ...option.RequestOption) (r *BucketLockService) {
 // Set lock rules for a bucket.
 func (r *BucketLockService) Update(ctx context.Context, bucketName string, params BucketLockUpdateParams, opts ...option.RequestOption) (res *BucketLockUpdateResponse, err error) {
 	var env BucketLockUpdateResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -65,8 +65,8 @@ func (r *BucketLockService) Update(ctx context.Context, bucketName string, param
 // Get lock rules for a bucket.
 func (r *BucketLockService) Get(ctx context.Context, bucketName string, params BucketLockGetParams, opts ...option.RequestOption) (res *BucketLockGetResponse, err error) {
 	var env BucketLockGetResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -354,10 +354,9 @@ func (r BucketLockGetResponseRulesConditionType) IsKnown() bool {
 
 type BucketLockUpdateParams struct {
 	// Account ID.
-	AccountID param.Field[string]                       `path:"account_id" api:"required"`
-	Rules     param.Field[[]BucketLockUpdateParamsRule] `json:"rules"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketLockUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	AccountID        param.Field[string]                                 `path:"account_id" api:"required"`
+	Rules            param.Field[[]BucketLockUpdateParamsRule]           `json:"rules"`
+	CfR2Jurisdiction param.Field[BucketLockUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 func (r BucketLockUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -499,7 +498,6 @@ func (r BucketLockUpdateParamsRulesConditionType) IsKnown() bool {
 	return false
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketLockUpdateParamsCfR2Jurisdiction string
 
 const (
@@ -563,12 +561,10 @@ func (r BucketLockUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketLockGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketLockGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	AccountID        param.Field[string]                              `path:"account_id" api:"required"`
+	CfR2Jurisdiction param.Field[BucketLockGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketLockGetParamsCfR2Jurisdiction string
 
 const (

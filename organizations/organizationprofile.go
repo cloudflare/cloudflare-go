@@ -11,6 +11,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v7/accounts"
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/shared"
@@ -68,11 +69,15 @@ func (r *OrganizationProfileService) Get(ctx context.Context, organizationID str
 }
 
 type OrganizationProfileUpdateParams struct {
-	AccountProfile accounts.AccountProfileParam `json:"account_profile" api:"required"`
+	BusinessAddress  param.Field[string] `json:"business_address" api:"required"`
+	BusinessEmail    param.Field[string] `json:"business_email" api:"required"`
+	BusinessName     param.Field[string] `json:"business_name" api:"required"`
+	BusinessPhone    param.Field[string] `json:"business_phone" api:"required"`
+	ExternalMetadata param.Field[string] `json:"external_metadata" api:"required"`
 }
 
 func (r OrganizationProfileUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.AccountProfile)
+	return apijson.MarshalRoot(r)
 }
 
 type OrganizationProfileGetResponseEnvelope struct {

@@ -2243,7 +2243,6 @@ func (r ObservabilitySharedQueryGetResponseEventsEventsSourceMap) ImplementsObse
 // debugging issues.
 type ObservabilitySharedQueryGetResponseEventsEventsWorkers struct {
 	EventType  ObservabilitySharedQueryGetResponseEventsEventsWorkersEventType `json:"eventType" api:"required"`
-	RequestID  string                                                          `json:"requestId" api:"required"`
 	ScriptName string                                                          `json:"scriptName" api:"required"`
 	CPUTimeMs  float64                                                         `json:"cpuTimeMs"`
 	// This field can have the runtime type of
@@ -2258,7 +2257,8 @@ type ObservabilitySharedQueryGetResponseEventsEventsWorkers struct {
 	Outcome        string                                                               `json:"outcome"`
 	// This field can have the runtime type of
 	// [ObservabilitySharedQueryGetResponseEventsEventsWorkersObjectPreview].
-	Preview interface{} `json:"preview"`
+	Preview   interface{} `json:"preview"`
+	RequestID string      `json:"requestId"`
 	// This field can have the runtime type of
 	// [ObservabilitySharedQueryGetResponseEventsEventsWorkersObjectScriptVersion].
 	ScriptVersion interface{}                                                `json:"scriptVersion"`
@@ -2274,7 +2274,6 @@ type ObservabilitySharedQueryGetResponseEventsEventsWorkers struct {
 // metadata for the struct [ObservabilitySharedQueryGetResponseEventsEventsWorkers]
 type observabilitySharedQueryGetResponseEventsEventsWorkersJSON struct {
 	EventType                apijson.Field
-	RequestID                apijson.Field
 	ScriptName               apijson.Field
 	CPUTimeMs                apijson.Field
 	DiagnosticsChannelEvents apijson.Field
@@ -2285,6 +2284,7 @@ type observabilitySharedQueryGetResponseEventsEventsWorkersJSON struct {
 	ExecutionModel           apijson.Field
 	Outcome                  apijson.Field
 	Preview                  apijson.Field
+	RequestID                apijson.Field
 	ScriptVersion            apijson.Field
 	SpanID                   apijson.Field
 	TraceID                  apijson.Field
@@ -2344,7 +2344,6 @@ func init() {
 
 type ObservabilitySharedQueryGetResponseEventsEventsWorkersObject struct {
 	EventType       ObservabilitySharedQueryGetResponseEventsEventsWorkersObjectEventType      `json:"eventType" api:"required"`
-	RequestID       string                                                                     `json:"requestId" api:"required"`
 	ScriptName      string                                                                     `json:"scriptName" api:"required"`
 	DurableObjectID string                                                                     `json:"durableObjectId"`
 	Entrypoint      string                                                                     `json:"entrypoint"`
@@ -2352,6 +2351,7 @@ type ObservabilitySharedQueryGetResponseEventsEventsWorkersObject struct {
 	ExecutionModel  ObservabilitySharedQueryGetResponseEventsEventsWorkersObjectExecutionModel `json:"executionModel"`
 	Outcome         string                                                                     `json:"outcome"`
 	Preview         ObservabilitySharedQueryGetResponseEventsEventsWorkersObjectPreview        `json:"preview"`
+	RequestID       string                                                                     `json:"requestId"`
 	ScriptVersion   ObservabilitySharedQueryGetResponseEventsEventsWorkersObjectScriptVersion  `json:"scriptVersion"`
 	SpanID          string                                                                     `json:"spanId"`
 	TraceID         string                                                                     `json:"traceId"`
@@ -2364,7 +2364,6 @@ type ObservabilitySharedQueryGetResponseEventsEventsWorkersObject struct {
 // [ObservabilitySharedQueryGetResponseEventsEventsWorkersObject]
 type observabilitySharedQueryGetResponseEventsEventsWorkersObjectJSON struct {
 	EventType       apijson.Field
-	RequestID       apijson.Field
 	ScriptName      apijson.Field
 	DurableObjectID apijson.Field
 	Entrypoint      apijson.Field
@@ -2372,6 +2371,7 @@ type observabilitySharedQueryGetResponseEventsEventsWorkersObjectJSON struct {
 	ExecutionModel  apijson.Field
 	Outcome         apijson.Field
 	Preview         apijson.Field
+	RequestID       apijson.Field
 	ScriptVersion   apijson.Field
 	SpanID          apijson.Field
 	TraceID         apijson.Field
@@ -2860,7 +2860,6 @@ func (r ObservabilitySharedQueryGetResponseInvocationsSourceMap) ImplementsObser
 // debugging issues.
 type ObservabilitySharedQueryGetResponseInvocationsWorkers struct {
 	EventType  ObservabilitySharedQueryGetResponseInvocationsWorkersEventType `json:"eventType" api:"required"`
-	RequestID  string                                                         `json:"requestId" api:"required"`
 	ScriptName string                                                         `json:"scriptName" api:"required"`
 	CPUTimeMs  float64                                                        `json:"cpuTimeMs"`
 	// This field can have the runtime type of
@@ -2875,7 +2874,8 @@ type ObservabilitySharedQueryGetResponseInvocationsWorkers struct {
 	Outcome        string                                                              `json:"outcome"`
 	// This field can have the runtime type of
 	// [ObservabilitySharedQueryGetResponseInvocationsWorkersObjectPreview].
-	Preview interface{} `json:"preview"`
+	Preview   interface{} `json:"preview"`
+	RequestID string      `json:"requestId"`
 	// This field can have the runtime type of
 	// [ObservabilitySharedQueryGetResponseInvocationsWorkersObjectScriptVersion].
 	ScriptVersion interface{}                                               `json:"scriptVersion"`
@@ -2891,7 +2891,6 @@ type ObservabilitySharedQueryGetResponseInvocationsWorkers struct {
 // metadata for the struct [ObservabilitySharedQueryGetResponseInvocationsWorkers]
 type observabilitySharedQueryGetResponseInvocationsWorkersJSON struct {
 	EventType                apijson.Field
-	RequestID                apijson.Field
 	ScriptName               apijson.Field
 	CPUTimeMs                apijson.Field
 	DiagnosticsChannelEvents apijson.Field
@@ -2902,6 +2901,7 @@ type observabilitySharedQueryGetResponseInvocationsWorkersJSON struct {
 	ExecutionModel           apijson.Field
 	Outcome                  apijson.Field
 	Preview                  apijson.Field
+	RequestID                apijson.Field
 	ScriptVersion            apijson.Field
 	SpanID                   apijson.Field
 	TraceID                  apijson.Field
@@ -2960,7 +2960,6 @@ func init() {
 
 type ObservabilitySharedQueryGetResponseInvocationsWorkersObject struct {
 	EventType       ObservabilitySharedQueryGetResponseInvocationsWorkersObjectEventType      `json:"eventType" api:"required"`
-	RequestID       string                                                                    `json:"requestId" api:"required"`
 	ScriptName      string                                                                    `json:"scriptName" api:"required"`
 	DurableObjectID string                                                                    `json:"durableObjectId"`
 	Entrypoint      string                                                                    `json:"entrypoint"`
@@ -2968,6 +2967,7 @@ type ObservabilitySharedQueryGetResponseInvocationsWorkersObject struct {
 	ExecutionModel  ObservabilitySharedQueryGetResponseInvocationsWorkersObjectExecutionModel `json:"executionModel"`
 	Outcome         string                                                                    `json:"outcome"`
 	Preview         ObservabilitySharedQueryGetResponseInvocationsWorkersObjectPreview        `json:"preview"`
+	RequestID       string                                                                    `json:"requestId"`
 	ScriptVersion   ObservabilitySharedQueryGetResponseInvocationsWorkersObjectScriptVersion  `json:"scriptVersion"`
 	SpanID          string                                                                    `json:"spanId"`
 	TraceID         string                                                                    `json:"traceId"`
@@ -2980,7 +2980,6 @@ type ObservabilitySharedQueryGetResponseInvocationsWorkersObject struct {
 // [ObservabilitySharedQueryGetResponseInvocationsWorkersObject]
 type observabilitySharedQueryGetResponseInvocationsWorkersObjectJSON struct {
 	EventType       apijson.Field
-	RequestID       apijson.Field
 	ScriptName      apijson.Field
 	DurableObjectID apijson.Field
 	Entrypoint      apijson.Field
@@ -2988,6 +2987,7 @@ type observabilitySharedQueryGetResponseInvocationsWorkersObjectJSON struct {
 	ExecutionModel  apijson.Field
 	Outcome         apijson.Field
 	Preview         apijson.Field
+	RequestID       apijson.Field
 	ScriptVersion   apijson.Field
 	SpanID          apijson.Field
 	TraceID         apijson.Field

@@ -38,8 +38,8 @@ func NewBucketCORSService(opts ...option.RequestOption) (r *BucketCORSService) {
 // Set the CORS policy for a bucket.
 func (r *BucketCORSService) Update(ctx context.Context, bucketName string, params BucketCORSUpdateParams, opts ...option.RequestOption) (res *BucketCORSUpdateResponse, err error) {
 	var env BucketCORSUpdateResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -62,8 +62,8 @@ func (r *BucketCORSService) Update(ctx context.Context, bucketName string, param
 // Delete the CORS policy for a bucket.
 func (r *BucketCORSService) Delete(ctx context.Context, bucketName string, params BucketCORSDeleteParams, opts ...option.RequestOption) (res *BucketCORSDeleteResponse, err error) {
 	var env BucketCORSDeleteResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -86,8 +86,8 @@ func (r *BucketCORSService) Delete(ctx context.Context, bucketName string, param
 // Get the CORS policy for a bucket.
 func (r *BucketCORSService) Get(ctx context.Context, bucketName string, params BucketCORSGetParams, opts ...option.RequestOption) (res *BucketCORSGetResponse, err error) {
 	var env BucketCORSGetResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -222,10 +222,9 @@ func (r BucketCORSGetResponseRulesAllowedMethod) IsKnown() bool {
 
 type BucketCORSUpdateParams struct {
 	// Account ID.
-	AccountID param.Field[string]                       `path:"account_id" api:"required"`
-	Rules     param.Field[[]BucketCORSUpdateParamsRule] `json:"rules"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketCORSUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	AccountID        param.Field[string]                                 `path:"account_id" api:"required"`
+	Rules            param.Field[[]BucketCORSUpdateParamsRule]           `json:"rules"`
+	CfR2Jurisdiction param.Field[BucketCORSUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 func (r BucketCORSUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -289,7 +288,6 @@ func (r BucketCORSUpdateParamsRulesAllowedMethod) IsKnown() bool {
 	return false
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketCORSUpdateParamsCfR2Jurisdiction string
 
 const (
@@ -353,12 +351,10 @@ func (r BucketCORSUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketCORSDeleteParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketCORSDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	AccountID        param.Field[string]                                 `path:"account_id" api:"required"`
+	CfR2Jurisdiction param.Field[BucketCORSDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketCORSDeleteParamsCfR2Jurisdiction string
 
 const (
@@ -422,12 +418,10 @@ func (r BucketCORSDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketCORSGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketCORSGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	AccountID        param.Field[string]                              `path:"account_id" api:"required"`
+	CfR2Jurisdiction param.Field[BucketCORSGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketCORSGetParamsCfR2Jurisdiction string
 
 const (

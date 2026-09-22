@@ -64,15 +64,15 @@ func (r *EmailRoutingService) Update(ctx context.Context, params EmailRoutingUpd
 // required for Email Routing to work.
 //
 // Deprecated: deprecated
-func (r *EmailRoutingService) Disable(ctx context.Context, params EmailRoutingDisableParams, opts ...option.RequestOption) (res *Settings, err error) {
+func (r *EmailRoutingService) Disable(ctx context.Context, body EmailRoutingDisableParams, opts ...option.RequestOption) (res *Settings, err error) {
 	var env EmailRoutingDisableResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.ZoneID.Value == "" {
+	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("zones/%s/email/routing/disable", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	path := fmt.Sprintf("zones/%s/email/routing/disable", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -100,15 +100,15 @@ func (r *EmailRoutingService) Edit(ctx context.Context, params EmailRoutingEditP
 // Enable you Email Routing zone. Add and lock the necessary MX and SPF records.
 //
 // Deprecated: deprecated
-func (r *EmailRoutingService) Enable(ctx context.Context, params EmailRoutingEnableParams, opts ...option.RequestOption) (res *Settings, err error) {
+func (r *EmailRoutingService) Enable(ctx context.Context, body EmailRoutingEnableParams, opts ...option.RequestOption) (res *Settings, err error) {
 	var env EmailRoutingEnableResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.ZoneID.Value == "" {
+	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("zones/%s/email/routing/enable", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	path := fmt.Sprintf("zones/%s/email/routing/enable", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -480,11 +480,6 @@ func (r EmailRoutingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type EmailRoutingDisableParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-	Body   interface{}         `json:"body" api:"required"`
-}
-
-func (r EmailRoutingDisableParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type EmailRoutingDisableResponseEnvelope struct {
@@ -835,11 +830,6 @@ func (r EmailRoutingEditResponseEnvelopeSuccess) IsKnown() bool {
 type EmailRoutingEnableParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-	Body   interface{}         `json:"body" api:"required"`
-}
-
-func (r EmailRoutingEnableParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type EmailRoutingEnableResponseEnvelope struct {

@@ -459,7 +459,10 @@ type ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSource struct {
 	ResourceID   string                                                                       `json:"resourceId" api:"required" format:"uuid"`
 	ResourceType ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSourcesResourceType `json:"resourceType" api:"required"`
 	System       ThreatEventIndicatorListResponsePropertiesIndicatorsItemsSourcesSystem       `json:"system" api:"required"`
-	JSON         threatEventIndicatorListResponsePropertiesIndicatorsItemsSourceJSON          `json:"-"`
+	// Threat Signals article title; null for historical provenance without a stored
+	// title.
+	Title string                                                              `json:"title" api:"required,nullable"`
+	JSON  threatEventIndicatorListResponsePropertiesIndicatorsItemsSourceJSON `json:"-"`
 }
 
 // threatEventIndicatorListResponsePropertiesIndicatorsItemsSourceJSON contains the
@@ -469,6 +472,7 @@ type threatEventIndicatorListResponsePropertiesIndicatorsItemsSourceJSON struct 
 	ResourceID   apijson.Field
 	ResourceType apijson.Field
 	System       apijson.Field
+	Title        apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }

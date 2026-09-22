@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
 )
 
 // ScriptDeploymentService contains methods and other services that help with
@@ -63,10 +64,11 @@ func (r *ScriptDeploymentService) New(ctx context.Context, scriptName string, pa
 
 // List Worker deployments. The first deployment in the list is the latest
 // deployment actively serving traffic.
-func (r *ScriptDeploymentService) List(ctx context.Context, scriptName string, query ScriptDeploymentListParams, opts ...option.RequestOption) (res *ScriptDeploymentListResponse, err error) {
-	var env ScriptDeploymentListResponseEnvelope
+func (r *ScriptDeploymentService) List(ctx context.Context, scriptName string, params ScriptDeploymentListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[ScriptDeploymentListResponse], err error) {
+	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
-	if query.AccountID.Value == "" {
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -74,13 +76,23 @@ func (r *ScriptDeploymentService) List(ctx context.Context, scriptName string, q
 		err = errors.New("missing required script_name parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/deployments", query.AccountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/deployments", params.AccountID, scriptName)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
-	res = &env.Result
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
 	return res, nil
+}
+
+// List Worker deployments. The first deployment in the list is the latest
+// deployment actively serving traffic.
+func (r *ScriptDeploymentService) ListAutoPaging(ctx context.Context, scriptName string, params ScriptDeploymentListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[ScriptDeploymentListResponse] {
+	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, scriptName, params, opts...))
 }
 
 // Delete a Worker Deployment. The latest deployment, which is actively serving
@@ -130,10 +142,16 @@ func (r *ScriptDeploymentService) Get(ctx context.Context, scriptName string, de
 }
 
 type Deployment struct {
-	ID          string                `json:"id" api:"required" format:"uuid"`
-	CreatedOn   time.Time             `json:"created_on" api:"required" format:"date-time"`
-	Source      string                `json:"source" api:"required"`
-	Strategy    DeploymentStrategy    `json:"strategy" api:"required"`
+	ID        string             `json:"id" api:"required" format:"uuid"`
+	CreatedOn time.Time          `json:"created_on" api:"required" format:"date-time"`
+	Source    string             `json:"source" api:"required"`
+	Strategy  DeploymentStrategy `json:"strategy" api:"required"`
+	// Worker versions included in this deployment. Each object must contain a
+	// `version_id` UUID and a `percentage`; percentages across all objects must
+	// total 100. In the `cf` CLI, pass the entire array as one JSON value to
+	// `--versions`, either inline, for example
+	// `--versions '[{"version_id":"023e105f-2a42-4f8b-a1c1-73f6a2a30c0f","percentage":100}]'`,
+	// or from a JSON file with `--versions @versions.json`.
 	Versions    []DeploymentVersion   `json:"versions" api:"required"`
 	Annotations DeploymentAnnotations `json:"annotations"`
 	AuthorEmail string                `json:"author_email" format:"email"`
@@ -176,9 +194,11 @@ func (r DeploymentStrategy) IsKnown() bool {
 }
 
 type DeploymentVersion struct {
-	Percentage float64               `json:"percentage" api:"required"`
-	VersionID  string                `json:"version_id" api:"required" format:"uuid"`
-	JSON       deploymentVersionJSON `json:"-"`
+	// Percentage of traffic served by this version.
+	Percentage float64 `json:"percentage" api:"required"`
+	// Identifier of the Worker Version.
+	VersionID string                `json:"version_id" api:"required" format:"uuid"`
+	JSON      deploymentVersionJSON `json:"-"`
 }
 
 // deploymentVersionJSON contains the JSON metadata for the struct
@@ -224,7 +244,13 @@ func (r deploymentAnnotationsJSON) RawJSON() string {
 }
 
 type DeploymentParam struct {
-	Strategy    param.Field[DeploymentStrategy]         `json:"strategy" api:"required"`
+	Strategy param.Field[DeploymentStrategy] `json:"strategy" api:"required"`
+	// Worker versions included in this deployment. Each object must contain a
+	// `version_id` UUID and a `percentage`; percentages across all objects must
+	// total 100. In the `cf` CLI, pass the entire array as one JSON value to
+	// `--versions`, either inline, for example
+	// `--versions '[{"version_id":"023e105f-2a42-4f8b-a1c1-73f6a2a30c0f","percentage":100}]'`,
+	// or from a JSON file with `--versions @versions.json`.
 	Versions    param.Field[[]DeploymentVersionParam]   `json:"versions" api:"required"`
 	Annotations param.Field[DeploymentAnnotationsParam] `json:"annotations"`
 }
@@ -234,8 +260,10 @@ func (r DeploymentParam) MarshalJSON() (data []byte, err error) {
 }
 
 type DeploymentVersionParam struct {
+	// Percentage of traffic served by this version.
 	Percentage param.Field[float64] `json:"percentage" api:"required"`
-	VersionID  param.Field[string]  `json:"version_id" api:"required" format:"uuid"`
+	// Identifier of the Worker Version.
+	VersionID param.Field[string] `json:"version_id" api:"required" format:"uuid"`
 }
 
 func (r DeploymentVersionParam) MarshalJSON() (data []byte, err error) {
@@ -573,145 +601,23 @@ func (r ScriptDeploymentNewResponseEnvelopeSuccess) IsKnown() bool {
 type ScriptDeploymentListParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Current page.
+	Page param.Field[int64] `query:"page"`
+	// Items per page.
+	PerPage param.Field[int64] `query:"per_page"`
+	// Start of the deployment creation time range, inclusive.
+	Since param.Field[time.Time] `query:"since" format:"date-time"`
+	// End of the deployment creation time range, inclusive.
+	Until param.Field[time.Time] `query:"until" format:"date-time"`
 }
 
-type ScriptDeploymentListResponseEnvelope struct {
-	Errors   []ScriptDeploymentListResponseEnvelopeErrors   `json:"errors" api:"required"`
-	Messages []ScriptDeploymentListResponseEnvelopeMessages `json:"messages" api:"required"`
-	Result   ScriptDeploymentListResponse                   `json:"result" api:"required"`
-	// Whether the API call was successful.
-	Success ScriptDeploymentListResponseEnvelopeSuccess `json:"success" api:"required"`
-	JSON    scriptDeploymentListResponseEnvelopeJSON    `json:"-"`
-}
-
-// scriptDeploymentListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [ScriptDeploymentListResponseEnvelope]
-type scriptDeploymentListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptDeploymentListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptDeploymentListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptDeploymentListResponseEnvelopeErrors struct {
-	Code             int64                                            `json:"code" api:"required"`
-	Message          string                                           `json:"message" api:"required"`
-	DocumentationURL string                                           `json:"documentation_url"`
-	Source           ScriptDeploymentListResponseEnvelopeErrorsSource `json:"source"`
-	JSON             scriptDeploymentListResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// scriptDeploymentListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ScriptDeploymentListResponseEnvelopeErrors]
-type scriptDeploymentListResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ScriptDeploymentListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptDeploymentListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptDeploymentListResponseEnvelopeErrorsSource struct {
-	Pointer string                                               `json:"pointer"`
-	JSON    scriptDeploymentListResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// scriptDeploymentListResponseEnvelopeErrorsSourceJSON contains the JSON metadata
-// for the struct [ScriptDeploymentListResponseEnvelopeErrorsSource]
-type scriptDeploymentListResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptDeploymentListResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptDeploymentListResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptDeploymentListResponseEnvelopeMessages struct {
-	Code             int64                                              `json:"code" api:"required"`
-	Message          string                                             `json:"message" api:"required"`
-	DocumentationURL string                                             `json:"documentation_url"`
-	Source           ScriptDeploymentListResponseEnvelopeMessagesSource `json:"source"`
-	JSON             scriptDeploymentListResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// scriptDeploymentListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ScriptDeploymentListResponseEnvelopeMessages]
-type scriptDeploymentListResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ScriptDeploymentListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptDeploymentListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptDeploymentListResponseEnvelopeMessagesSource struct {
-	Pointer string                                                 `json:"pointer"`
-	JSON    scriptDeploymentListResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// scriptDeploymentListResponseEnvelopeMessagesSourceJSON contains the JSON
-// metadata for the struct [ScriptDeploymentListResponseEnvelopeMessagesSource]
-type scriptDeploymentListResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptDeploymentListResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptDeploymentListResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type ScriptDeploymentListResponseEnvelopeSuccess bool
-
-const (
-	ScriptDeploymentListResponseEnvelopeSuccessTrue ScriptDeploymentListResponseEnvelopeSuccess = true
-)
-
-func (r ScriptDeploymentListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ScriptDeploymentListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
+// URLQuery serializes [ScriptDeploymentListParams]'s query parameters as
+// `url.Values`.
+func (r ScriptDeploymentListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type ScriptDeploymentDeleteParams struct {

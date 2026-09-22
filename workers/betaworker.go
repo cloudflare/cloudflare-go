@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"slices"
 	"time"
 
@@ -17,6 +18,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
+	"github.com/tidwall/gjson"
 )
 
 // BetaWorkerService contains methods and other services that help with interacting
@@ -190,25 +192,28 @@ type Worker struct {
 	UpdatedOn time.Time `json:"updated_on" api:"required" format:"date-time"`
 	// When the Worker's most recent deployment was created. `null` if the Worker has
 	// never been deployed.
-	DeployedOn time.Time  `json:"deployed_on" api:"nullable" format:"date-time"`
-	JSON       workerJSON `json:"-"`
+	DeployedOn time.Time `json:"deployed_on" api:"nullable" format:"date-time"`
+	// Template configuration used when creating new Previews for this Worker.
+	PreviewsBaseConfig WorkerPreviewsBaseConfig `json:"previews_base_config"`
+	JSON               workerJSON               `json:"-"`
 }
 
 // workerJSON contains the JSON metadata for the struct [Worker]
 type workerJSON struct {
-	ID            apijson.Field
-	CreatedOn     apijson.Field
-	Logpush       apijson.Field
-	Name          apijson.Field
-	Observability apijson.Field
-	References    apijson.Field
-	Subdomain     apijson.Field
-	Tags          apijson.Field
-	TailConsumers apijson.Field
-	UpdatedOn     apijson.Field
-	DeployedOn    apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID                 apijson.Field
+	CreatedOn          apijson.Field
+	Logpush            apijson.Field
+	Name               apijson.Field
+	Observability      apijson.Field
+	References         apijson.Field
+	Subdomain          apijson.Field
+	Tags               apijson.Field
+	TailConsumers      apijson.Field
+	UpdatedOn          apijson.Field
+	DeployedOn         apijson.Field
+	PreviewsBaseConfig apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *Worker) UnmarshalJSON(data []byte) (err error) {
@@ -626,6 +631,572 @@ func (r workerTailConsumerJSON) RawJSON() string {
 	return r.raw
 }
 
+// Template configuration used when creating new Previews for this Worker.
+type WorkerPreviewsBaseConfig struct {
+	// Cache options used when creating new Previews.
+	CacheOptions WorkerPreviewsBaseConfigCacheOptions `json:"cache_options"`
+	// Bindings used when creating new Previews, keyed by binding name.
+	Env map[string]WorkerPreviewsBaseConfigEnv `json:"env"`
+	// Resource limits enforced at runtime for newly created Previews.
+	Limits WorkerPreviewsBaseConfigLimits `json:"limits"`
+	// Whether logpush is enabled when creating new Previews.
+	Logpush bool `json:"logpush"`
+	// Observability settings used when creating new Previews.
+	Observability WorkerPreviewsBaseConfigObservability `json:"observability"`
+	// Placement configuration used when creating new Previews.
+	Placement WorkerPreviewsBaseConfigPlacement `json:"placement"`
+	// Other Workers that should consume logs from newly created Previews.
+	TailConsumers []WorkerPreviewsBaseConfigTailConsumer `json:"tail_consumers"`
+	JSON          workerPreviewsBaseConfigJSON           `json:"-"`
+}
+
+// workerPreviewsBaseConfigJSON contains the JSON metadata for the struct
+// [WorkerPreviewsBaseConfig]
+type workerPreviewsBaseConfigJSON struct {
+	CacheOptions  apijson.Field
+	Env           apijson.Field
+	Limits        apijson.Field
+	Logpush       apijson.Field
+	Observability apijson.Field
+	Placement     apijson.Field
+	TailConsumers apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *WorkerPreviewsBaseConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerPreviewsBaseConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+// Cache options used when creating new Previews.
+type WorkerPreviewsBaseConfigCacheOptions struct {
+	// Whether caching is enabled for this Worker.
+	Enabled bool `json:"enabled" api:"required"`
+	// Whether cached responses are shared across Worker version uploads. This is
+	// independent of `enabled`. It can stay true while caching is off, so the
+	// preference survives turning caching off and back on.
+	CrossVersionCache bool                                     `json:"cross_version_cache"`
+	JSON              workerPreviewsBaseConfigCacheOptionsJSON `json:"-"`
+}
+
+// workerPreviewsBaseConfigCacheOptionsJSON contains the JSON metadata for the
+// struct [WorkerPreviewsBaseConfigCacheOptions]
+type workerPreviewsBaseConfigCacheOptionsJSON struct {
+	Enabled           apijson.Field
+	CrossVersionCache apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *WorkerPreviewsBaseConfigCacheOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerPreviewsBaseConfigCacheOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
+// A single entry in the `env` map. An entry holds the same payload as an entry of
+// `bindings` without the `name` property, because the map key supplies the name.
+// See `binding_item` for the payload of each binding kind.
+type WorkerPreviewsBaseConfigEnv struct {
+	// The kind of resource that the binding provides.
+	Type        string                          `json:"type" api:"required"`
+	ExtraFields map[string]interface{}          `json:"-" api:"extrafields"`
+	JSON        workerPreviewsBaseConfigEnvJSON `json:"-"`
+}
+
+// workerPreviewsBaseConfigEnvJSON contains the JSON metadata for the struct
+// [WorkerPreviewsBaseConfigEnv]
+type workerPreviewsBaseConfigEnvJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerPreviewsBaseConfigEnv) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerPreviewsBaseConfigEnvJSON) RawJSON() string {
+	return r.raw
+}
+
+// Resource limits enforced at runtime for newly created Previews.
+type WorkerPreviewsBaseConfigLimits struct {
+	// The amount of CPU time this Worker can use in milliseconds.
+	CPUMs int64 `json:"cpu_ms"`
+	// The number of subrequests this Worker can make per request.
+	Subrequests int64                              `json:"subrequests"`
+	JSON        workerPreviewsBaseConfigLimitsJSON `json:"-"`
+}
+
+// workerPreviewsBaseConfigLimitsJSON contains the JSON metadata for the struct
+// [WorkerPreviewsBaseConfigLimits]
+type workerPreviewsBaseConfigLimitsJSON struct {
+	CPUMs       apijson.Field
+	Subrequests apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerPreviewsBaseConfigLimits) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerPreviewsBaseConfigLimitsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Observability settings used when creating new Previews.
+type WorkerPreviewsBaseConfigObservability struct {
+	// Whether observability is enabled for the Worker.
+	Enabled bool `json:"enabled"`
+	// The sampling rate for observability. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	HeadSamplingRate float64 `json:"head_sampling_rate"`
+	// Real-time Issues settings for the Worker.
+	Issues WorkerPreviewsBaseConfigObservabilityIssues `json:"issues" api:"nullable"`
+	// Log settings for the Worker.
+	Logs WorkerPreviewsBaseConfigObservabilityLogs `json:"logs"`
+	// Whether query strings are removed from request URLs in logs and traces.
+	RedactQueryString bool `json:"redact_query_string"`
+	// Trace settings for the Worker.
+	Traces WorkerPreviewsBaseConfigObservabilityTraces `json:"traces"`
+	JSON   workerPreviewsBaseConfigObservabilityJSON   `json:"-"`
+}
+
+// workerPreviewsBaseConfigObservabilityJSON contains the JSON metadata for the
+// struct [WorkerPreviewsBaseConfigObservability]
+type workerPreviewsBaseConfigObservabilityJSON struct {
+	Enabled           apijson.Field
+	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
+	Logs              apijson.Field
+	RedactQueryString apijson.Field
+	Traces            apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *WorkerPreviewsBaseConfigObservability) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerPreviewsBaseConfigObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type WorkerPreviewsBaseConfigObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                                            `json:"enabled"`
+	JSON    workerPreviewsBaseConfigObservabilityIssuesJSON `json:"-"`
+}
+
+// workerPreviewsBaseConfigObservabilityIssuesJSON contains the JSON metadata for
+// the struct [WorkerPreviewsBaseConfigObservabilityIssues]
+type workerPreviewsBaseConfigObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerPreviewsBaseConfigObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerPreviewsBaseConfigObservabilityIssuesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Log settings for the Worker.
+type WorkerPreviewsBaseConfigObservabilityLogs struct {
+	// A list of destinations where logs will be exported to.
+	Destinations []string `json:"destinations"`
+	// Whether logs are enabled for the Worker.
+	Enabled bool `json:"enabled"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	HeadSamplingRate float64 `json:"head_sampling_rate"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs bool `json:"invocation_logs"`
+	// Whether log persistence is enabled for the Worker.
+	Persist bool                                          `json:"persist"`
+	JSON    workerPreviewsBaseConfigObservabilityLogsJSON `json:"-"`
+}
+
+// workerPreviewsBaseConfigObservabilityLogsJSON contains the JSON metadata for the
+// struct [WorkerPreviewsBaseConfigObservabilityLogs]
+type workerPreviewsBaseConfigObservabilityLogsJSON struct {
+	Destinations     apijson.Field
+	Enabled          apijson.Field
+	HeadSamplingRate apijson.Field
+	InvocationLogs   apijson.Field
+	Persist          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *WorkerPreviewsBaseConfigObservabilityLogs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerPreviewsBaseConfigObservabilityLogsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Trace settings for the Worker.
+type WorkerPreviewsBaseConfigObservabilityTraces struct {
+	// A list of destinations where traces will be exported to.
+	Destinations []string `json:"destinations"`
+	// Whether traces are enabled for the Worker.
+	Enabled bool `json:"enabled"`
+	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	HeadSamplingRate float64 `json:"head_sampling_rate"`
+	// Whether trace persistence is enabled for the Worker.
+	Persist bool `json:"persist"`
+	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
+	// requests are handled. "authenticated" honors inbound trace context only when
+	// accompanied by a valid trace auth token. "accept" unconditionally accepts
+	// inbound trace context. Requires the trace propagation feature to be enabled.
+	// Returns null when the trace propagation feature is not enabled for the account.
+	PropagationPolicy WorkerPreviewsBaseConfigObservabilityTracesPropagationPolicy `json:"propagation_policy" api:"nullable"`
+	JSON              workerPreviewsBaseConfigObservabilityTracesJSON              `json:"-"`
+}
+
+// workerPreviewsBaseConfigObservabilityTracesJSON contains the JSON metadata for
+// the struct [WorkerPreviewsBaseConfigObservabilityTraces]
+type workerPreviewsBaseConfigObservabilityTracesJSON struct {
+	Destinations      apijson.Field
+	Enabled           apijson.Field
+	HeadSamplingRate  apijson.Field
+	Persist           apijson.Field
+	PropagationPolicy apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *WorkerPreviewsBaseConfigObservabilityTraces) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerPreviewsBaseConfigObservabilityTracesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Controls how inbound trace context (traceparent/tracestate) headers on incoming
+// requests are handled. "authenticated" honors inbound trace context only when
+// accompanied by a valid trace auth token. "accept" unconditionally accepts
+// inbound trace context. Requires the trace propagation feature to be enabled.
+// Returns null when the trace propagation feature is not enabled for the account.
+type WorkerPreviewsBaseConfigObservabilityTracesPropagationPolicy string
+
+const (
+	WorkerPreviewsBaseConfigObservabilityTracesPropagationPolicyAuthenticated WorkerPreviewsBaseConfigObservabilityTracesPropagationPolicy = "authenticated"
+	WorkerPreviewsBaseConfigObservabilityTracesPropagationPolicyAccept        WorkerPreviewsBaseConfigObservabilityTracesPropagationPolicy = "accept"
+)
+
+func (r WorkerPreviewsBaseConfigObservabilityTracesPropagationPolicy) IsKnown() bool {
+	switch r {
+	case WorkerPreviewsBaseConfigObservabilityTracesPropagationPolicyAuthenticated, WorkerPreviewsBaseConfigObservabilityTracesPropagationPolicyAccept:
+		return true
+	}
+	return false
+}
+
+// Placement configuration used when creating new Previews.
+type WorkerPreviewsBaseConfigPlacement struct {
+	// TCP host and port for targeted placement.
+	Host string `json:"host"`
+	// HTTP hostname for targeted placement.
+	Hostname string `json:"hostname"`
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Mode WorkerPreviewsBaseConfigPlacementMode `json:"mode"`
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region string `json:"region"`
+	// This field can have the runtime type of
+	// [[]WorkerPreviewsBaseConfigPlacementObjectTarget].
+	Target interface{}                           `json:"target"`
+	JSON   workerPreviewsBaseConfigPlacementJSON `json:"-"`
+	union  WorkerPreviewsBaseConfigPlacementUnion
+}
+
+// workerPreviewsBaseConfigPlacementJSON contains the JSON metadata for the struct
+// [WorkerPreviewsBaseConfigPlacement]
+type workerPreviewsBaseConfigPlacementJSON struct {
+	Host        apijson.Field
+	Hostname    apijson.Field
+	Mode        apijson.Field
+	Region      apijson.Field
+	Target      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r workerPreviewsBaseConfigPlacementJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *WorkerPreviewsBaseConfigPlacement) UnmarshalJSON(data []byte) (err error) {
+	*r = WorkerPreviewsBaseConfigPlacement{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [WorkerPreviewsBaseConfigPlacementUnion] interface which you
+// can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [WorkerPreviewsBaseConfigPlacementMode],
+// [WorkerPreviewsBaseConfigPlacementRegion],
+// [WorkerPreviewsBaseConfigPlacementHostname],
+// [WorkerPreviewsBaseConfigPlacementHost],
+// [WorkerPreviewsBaseConfigPlacementObject],
+// [WorkerPreviewsBaseConfigPlacementObject],
+// [WorkerPreviewsBaseConfigPlacementObject],
+// [WorkerPreviewsBaseConfigPlacementObject].
+func (r WorkerPreviewsBaseConfigPlacement) AsUnion() WorkerPreviewsBaseConfigPlacementUnion {
+	return r.union
+}
+
+// Placement configuration used when creating new Previews.
+//
+// Union satisfied by [WorkerPreviewsBaseConfigPlacementMode],
+// [WorkerPreviewsBaseConfigPlacementRegion],
+// [WorkerPreviewsBaseConfigPlacementHostname],
+// [WorkerPreviewsBaseConfigPlacementHost],
+// [WorkerPreviewsBaseConfigPlacementObject],
+// [WorkerPreviewsBaseConfigPlacementObject],
+// [WorkerPreviewsBaseConfigPlacementObject] or
+// [WorkerPreviewsBaseConfigPlacementObject].
+type WorkerPreviewsBaseConfigPlacementUnion interface {
+	implementsWorkerPreviewsBaseConfigPlacement()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WorkerPreviewsBaseConfigPlacementUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkerPreviewsBaseConfigPlacementMode{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkerPreviewsBaseConfigPlacementRegion{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkerPreviewsBaseConfigPlacementHostname{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkerPreviewsBaseConfigPlacementHost{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkerPreviewsBaseConfigPlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkerPreviewsBaseConfigPlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkerPreviewsBaseConfigPlacementObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkerPreviewsBaseConfigPlacementObject{}),
+		},
+	)
+}
+
+type WorkerPreviewsBaseConfigPlacementMode struct {
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Mode WorkerPreviewsBaseConfigPlacementModeMode `json:"mode" api:"required"`
+	JSON workerPreviewsBaseConfigPlacementModeJSON `json:"-"`
+}
+
+// workerPreviewsBaseConfigPlacementModeJSON contains the JSON metadata for the
+// struct [WorkerPreviewsBaseConfigPlacementMode]
+type workerPreviewsBaseConfigPlacementModeJSON struct {
+	Mode        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerPreviewsBaseConfigPlacementMode) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerPreviewsBaseConfigPlacementModeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r WorkerPreviewsBaseConfigPlacementMode) implementsWorkerPreviewsBaseConfigPlacement() {}
+
+// Enables
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type WorkerPreviewsBaseConfigPlacementModeMode string
+
+const (
+	WorkerPreviewsBaseConfigPlacementModeModeSmart WorkerPreviewsBaseConfigPlacementModeMode = "smart"
+)
+
+func (r WorkerPreviewsBaseConfigPlacementModeMode) IsKnown() bool {
+	switch r {
+	case WorkerPreviewsBaseConfigPlacementModeModeSmart:
+		return true
+	}
+	return false
+}
+
+type WorkerPreviewsBaseConfigPlacementRegion struct {
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region string                                      `json:"region" api:"required"`
+	JSON   workerPreviewsBaseConfigPlacementRegionJSON `json:"-"`
+}
+
+// workerPreviewsBaseConfigPlacementRegionJSON contains the JSON metadata for the
+// struct [WorkerPreviewsBaseConfigPlacementRegion]
+type workerPreviewsBaseConfigPlacementRegionJSON struct {
+	Region      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerPreviewsBaseConfigPlacementRegion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerPreviewsBaseConfigPlacementRegionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r WorkerPreviewsBaseConfigPlacementRegion) implementsWorkerPreviewsBaseConfigPlacement() {}
+
+type WorkerPreviewsBaseConfigPlacementHostname struct {
+	// HTTP hostname for targeted placement.
+	Hostname string                                        `json:"hostname" api:"required"`
+	JSON     workerPreviewsBaseConfigPlacementHostnameJSON `json:"-"`
+}
+
+// workerPreviewsBaseConfigPlacementHostnameJSON contains the JSON metadata for the
+// struct [WorkerPreviewsBaseConfigPlacementHostname]
+type workerPreviewsBaseConfigPlacementHostnameJSON struct {
+	Hostname    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerPreviewsBaseConfigPlacementHostname) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerPreviewsBaseConfigPlacementHostnameJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r WorkerPreviewsBaseConfigPlacementHostname) implementsWorkerPreviewsBaseConfigPlacement() {}
+
+type WorkerPreviewsBaseConfigPlacementHost struct {
+	// TCP host and port for targeted placement.
+	Host string                                    `json:"host" api:"required"`
+	JSON workerPreviewsBaseConfigPlacementHostJSON `json:"-"`
+}
+
+// workerPreviewsBaseConfigPlacementHostJSON contains the JSON metadata for the
+// struct [WorkerPreviewsBaseConfigPlacementHost]
+type workerPreviewsBaseConfigPlacementHostJSON struct {
+	Host        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerPreviewsBaseConfigPlacementHost) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerPreviewsBaseConfigPlacementHostJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r WorkerPreviewsBaseConfigPlacementHost) implementsWorkerPreviewsBaseConfigPlacement() {}
+
+type WorkerPreviewsBaseConfigPlacementObject struct {
+	// Targeted placement mode.
+	Mode WorkerPreviewsBaseConfigPlacementObjectMode `json:"mode" api:"required"`
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region string                                      `json:"region" api:"required"`
+	JSON   workerPreviewsBaseConfigPlacementObjectJSON `json:"-"`
+}
+
+// workerPreviewsBaseConfigPlacementObjectJSON contains the JSON metadata for the
+// struct [WorkerPreviewsBaseConfigPlacementObject]
+type workerPreviewsBaseConfigPlacementObjectJSON struct {
+	Mode        apijson.Field
+	Region      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerPreviewsBaseConfigPlacementObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerPreviewsBaseConfigPlacementObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r WorkerPreviewsBaseConfigPlacementObject) implementsWorkerPreviewsBaseConfigPlacement() {}
+
+// Targeted placement mode.
+type WorkerPreviewsBaseConfigPlacementObjectMode string
+
+const (
+	WorkerPreviewsBaseConfigPlacementObjectModeTargeted WorkerPreviewsBaseConfigPlacementObjectMode = "targeted"
+)
+
+func (r WorkerPreviewsBaseConfigPlacementObjectMode) IsKnown() bool {
+	switch r {
+	case WorkerPreviewsBaseConfigPlacementObjectModeTargeted:
+		return true
+	}
+	return false
+}
+
+type WorkerPreviewsBaseConfigTailConsumer struct {
+	// Name of the consumer Worker.
+	Name string                                   `json:"name" api:"required"`
+	JSON workerPreviewsBaseConfigTailConsumerJSON `json:"-"`
+}
+
+// workerPreviewsBaseConfigTailConsumerJSON contains the JSON metadata for the
+// struct [WorkerPreviewsBaseConfigTailConsumer]
+type workerPreviewsBaseConfigTailConsumerJSON struct {
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerPreviewsBaseConfigTailConsumer) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerPreviewsBaseConfigTailConsumerJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerParam struct {
 	// Whether logpush is enabled for the Worker.
 	Logpush param.Field[bool] `json:"logpush" api:"required"`
@@ -639,6 +1210,8 @@ type WorkerParam struct {
 	Tags param.Field[[]string] `json:"tags" api:"required"`
 	// Other Workers that should consume logs from the Worker.
 	TailConsumers param.Field[[]WorkerTailConsumerParam] `json:"tail_consumers" api:"required"`
+	// Template configuration used when creating new Previews for this Worker.
+	PreviewsBaseConfig param.Field[WorkerPreviewsBaseConfigParam] `json:"previews_base_config"`
 }
 
 func (r WorkerParam) MarshalJSON() (data []byte, err error) {
@@ -827,6 +1400,247 @@ type WorkerTailConsumerParam struct {
 }
 
 func (r WorkerTailConsumerParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Template configuration used when creating new Previews for this Worker.
+type WorkerPreviewsBaseConfigParam struct {
+	// Cache options used when creating new Previews.
+	CacheOptions param.Field[WorkerPreviewsBaseConfigCacheOptionsParam] `json:"cache_options"`
+	// Bindings used when creating new Previews, keyed by binding name.
+	Env param.Field[map[string]WorkerPreviewsBaseConfigEnvParam] `json:"env"`
+	// Resource limits enforced at runtime for newly created Previews.
+	Limits param.Field[WorkerPreviewsBaseConfigLimitsParam] `json:"limits"`
+	// Whether logpush is enabled when creating new Previews.
+	Logpush param.Field[bool] `json:"logpush"`
+	// Observability settings used when creating new Previews.
+	Observability param.Field[WorkerPreviewsBaseConfigObservabilityParam] `json:"observability"`
+	// Placement configuration used when creating new Previews.
+	Placement param.Field[WorkerPreviewsBaseConfigPlacementUnionParam] `json:"placement"`
+	// Other Workers that should consume logs from newly created Previews.
+	TailConsumers param.Field[[]WorkerPreviewsBaseConfigTailConsumerParam] `json:"tail_consumers"`
+}
+
+func (r WorkerPreviewsBaseConfigParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Cache options used when creating new Previews.
+type WorkerPreviewsBaseConfigCacheOptionsParam struct {
+	// Whether caching is enabled for this Worker.
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
+	// Whether cached responses are shared across Worker version uploads. This is
+	// independent of `enabled`. It can stay true while caching is off, so the
+	// preference survives turning caching off and back on.
+	CrossVersionCache param.Field[bool] `json:"cross_version_cache"`
+}
+
+func (r WorkerPreviewsBaseConfigCacheOptionsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A single entry in the `env` map. An entry holds the same payload as an entry of
+// `bindings` without the `name` property, because the map key supplies the name.
+// See `binding_item` for the payload of each binding kind.
+type WorkerPreviewsBaseConfigEnvParam struct {
+	// The kind of resource that the binding provides.
+	Type        param.Field[string]    `json:"type" api:"required"`
+	ExtraFields map[string]interface{} `json:"-,extras"`
+}
+
+func (r WorkerPreviewsBaseConfigEnvParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Resource limits enforced at runtime for newly created Previews.
+type WorkerPreviewsBaseConfigLimitsParam struct {
+	// The amount of CPU time this Worker can use in milliseconds.
+	CPUMs param.Field[int64] `json:"cpu_ms"`
+	// The number of subrequests this Worker can make per request.
+	Subrequests param.Field[int64] `json:"subrequests"`
+}
+
+func (r WorkerPreviewsBaseConfigLimitsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Observability settings used when creating new Previews.
+type WorkerPreviewsBaseConfigObservabilityParam struct {
+	// Whether observability is enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The sampling rate for observability. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Real-time Issues settings for the Worker.
+	Issues param.Field[WorkerPreviewsBaseConfigObservabilityIssuesParam] `json:"issues"`
+	// Log settings for the Worker.
+	Logs param.Field[WorkerPreviewsBaseConfigObservabilityLogsParam] `json:"logs"`
+	// Whether query strings are removed from request URLs in logs and traces.
+	RedactQueryString param.Field[bool] `json:"redact_query_string"`
+	// Trace settings for the Worker.
+	Traces param.Field[WorkerPreviewsBaseConfigObservabilityTracesParam] `json:"traces"`
+}
+
+func (r WorkerPreviewsBaseConfigObservabilityParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Real-time Issues settings for the Worker.
+type WorkerPreviewsBaseConfigObservabilityIssuesParam struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r WorkerPreviewsBaseConfigObservabilityIssuesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Log settings for the Worker.
+type WorkerPreviewsBaseConfigObservabilityLogsParam struct {
+	// A list of destinations where logs will be exported to.
+	Destinations param.Field[[]string] `json:"destinations"`
+	// Whether logs are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The sampling rate for logs. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Whether
+	// [invocation logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#invocation-logs)
+	// are enabled for the Worker.
+	InvocationLogs param.Field[bool] `json:"invocation_logs"`
+	// Whether log persistence is enabled for the Worker.
+	Persist param.Field[bool] `json:"persist"`
+}
+
+func (r WorkerPreviewsBaseConfigObservabilityLogsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Trace settings for the Worker.
+type WorkerPreviewsBaseConfigObservabilityTracesParam struct {
+	// A list of destinations where traces will be exported to.
+	Destinations param.Field[[]string] `json:"destinations"`
+	// Whether traces are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The sampling rate for traces. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Whether trace persistence is enabled for the Worker.
+	Persist param.Field[bool] `json:"persist"`
+	// Controls how inbound trace context (traceparent/tracestate) headers on incoming
+	// requests are handled. "authenticated" honors inbound trace context only when
+	// accompanied by a valid trace auth token. "accept" unconditionally accepts
+	// inbound trace context. Requires the trace propagation feature to be enabled.
+	// Returns null when the trace propagation feature is not enabled for the account.
+	PropagationPolicy param.Field[WorkerPreviewsBaseConfigObservabilityTracesPropagationPolicy] `json:"propagation_policy"`
+}
+
+func (r WorkerPreviewsBaseConfigObservabilityTracesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Placement configuration used when creating new Previews.
+type WorkerPreviewsBaseConfigPlacementParam struct {
+	// TCP host and port for targeted placement.
+	Host param.Field[string] `json:"host"`
+	// HTTP hostname for targeted placement.
+	Hostname param.Field[string] `json:"hostname"`
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Mode param.Field[WorkerPreviewsBaseConfigPlacementMode] `json:"mode"`
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region param.Field[string]      `json:"region"`
+	Target param.Field[interface{}] `json:"target"`
+}
+
+func (r WorkerPreviewsBaseConfigPlacementParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r WorkerPreviewsBaseConfigPlacementParam) implementsWorkerPreviewsBaseConfigPlacementUnionParam() {
+}
+
+// Placement configuration used when creating new Previews.
+//
+// Satisfied by [workers.WorkerPreviewsBaseConfigPlacementModeParam],
+// [workers.WorkerPreviewsBaseConfigPlacementRegionParam],
+// [workers.WorkerPreviewsBaseConfigPlacementHostnameParam],
+// [workers.WorkerPreviewsBaseConfigPlacementHostParam],
+// [workers.WorkerPreviewsBaseConfigPlacementObjectParam],
+// [workers.WorkerPreviewsBaseConfigPlacementObjectParam],
+// [workers.WorkerPreviewsBaseConfigPlacementObjectParam],
+// [workers.WorkerPreviewsBaseConfigPlacementObjectParam],
+// [WorkerPreviewsBaseConfigPlacementParam].
+type WorkerPreviewsBaseConfigPlacementUnionParam interface {
+	implementsWorkerPreviewsBaseConfigPlacementUnionParam()
+}
+
+type WorkerPreviewsBaseConfigPlacementModeParam struct {
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Mode param.Field[WorkerPreviewsBaseConfigPlacementModeMode] `json:"mode" api:"required"`
+}
+
+func (r WorkerPreviewsBaseConfigPlacementModeParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r WorkerPreviewsBaseConfigPlacementModeParam) implementsWorkerPreviewsBaseConfigPlacementUnionParam() {
+}
+
+type WorkerPreviewsBaseConfigPlacementRegionParam struct {
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region param.Field[string] `json:"region" api:"required"`
+}
+
+func (r WorkerPreviewsBaseConfigPlacementRegionParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r WorkerPreviewsBaseConfigPlacementRegionParam) implementsWorkerPreviewsBaseConfigPlacementUnionParam() {
+}
+
+type WorkerPreviewsBaseConfigPlacementHostnameParam struct {
+	// HTTP hostname for targeted placement.
+	Hostname param.Field[string] `json:"hostname" api:"required"`
+}
+
+func (r WorkerPreviewsBaseConfigPlacementHostnameParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r WorkerPreviewsBaseConfigPlacementHostnameParam) implementsWorkerPreviewsBaseConfigPlacementUnionParam() {
+}
+
+type WorkerPreviewsBaseConfigPlacementHostParam struct {
+	// TCP host and port for targeted placement.
+	Host param.Field[string] `json:"host" api:"required"`
+}
+
+func (r WorkerPreviewsBaseConfigPlacementHostParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r WorkerPreviewsBaseConfigPlacementHostParam) implementsWorkerPreviewsBaseConfigPlacementUnionParam() {
+}
+
+type WorkerPreviewsBaseConfigPlacementObjectParam struct {
+	// Targeted placement mode.
+	Mode param.Field[WorkerPreviewsBaseConfigPlacementObjectMode] `json:"mode" api:"required"`
+	// Cloud region for targeted placement in format 'provider:region'.
+	Region param.Field[string] `json:"region" api:"required"`
+}
+
+func (r WorkerPreviewsBaseConfigPlacementObjectParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r WorkerPreviewsBaseConfigPlacementObjectParam) implementsWorkerPreviewsBaseConfigPlacementUnionParam() {
+}
+
+type WorkerPreviewsBaseConfigTailConsumerParam struct {
+	// Name of the consumer Worker.
+	Name param.Field[string] `json:"name" api:"required"`
+}
+
+func (r WorkerPreviewsBaseConfigTailConsumerParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

@@ -56,8 +56,8 @@ func NewBucketService(opts ...option.RequestOption) (r *BucketService) {
 // Creates a new R2 bucket.
 func (r *BucketService) New(ctx context.Context, params BucketNewParams, opts ...option.RequestOption) (res *Bucket, err error) {
 	var env BucketNewResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -76,8 +76,8 @@ func (r *BucketService) New(ctx context.Context, params BucketNewParams, opts ..
 // Lists all R2 buckets on your account.
 func (r *BucketService) List(ctx context.Context, params BucketListParams, opts ...option.RequestOption) (res *BucketListResponse, err error) {
 	var env BucketListResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -96,8 +96,8 @@ func (r *BucketService) List(ctx context.Context, params BucketListParams, opts 
 // Deletes an existing R2 bucket.
 func (r *BucketService) Delete(ctx context.Context, bucketName string, params BucketDeleteParams, opts ...option.RequestOption) (res *BucketDeleteResponse, err error) {
 	var env BucketDeleteResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -123,8 +123,8 @@ func (r *BucketService) Edit(ctx context.Context, bucketName string, params Buck
 	if params.StorageClass.Present {
 		opts = append(opts, option.WithHeader("cf-r2-storage-class", fmt.Sprintf("%v", params.StorageClass)))
 	}
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -147,8 +147,8 @@ func (r *BucketService) Edit(ctx context.Context, bucketName string, params Buck
 // Gets properties of an existing R2 bucket.
 func (r *BucketService) Get(ctx context.Context, bucketName string, params BucketGetParams, opts ...option.RequestOption) (res *Bucket, err error) {
 	var env BucketGetResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -288,9 +288,8 @@ type BucketNewParams struct {
 	// Location of the bucket.
 	LocationHint param.Field[BucketNewParamsLocationHint] `json:"locationHint"`
 	// Storage class for newly uploaded objects, unless specified otherwise.
-	StorageClass param.Field[BucketNewParamsStorageClass] `json:"storageClass"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketNewParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	StorageClass     param.Field[BucketNewParamsStorageClass]     `json:"storageClass"`
+	CfR2Jurisdiction param.Field[BucketNewParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 func (r BucketNewParams) MarshalJSON() (data []byte, err error) {
@@ -333,7 +332,6 @@ func (r BucketNewParamsStorageClass) IsKnown() bool {
 	return false
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketNewParamsCfR2Jurisdiction string
 
 const (
@@ -412,9 +410,8 @@ type BucketListParams struct {
 	// Maximum number of buckets to return in a single call.
 	PerPage param.Field[float64] `query:"per_page"`
 	// Bucket name to start searching after. Buckets are ordered lexicographically.
-	StartAfter param.Field[string] `query:"start_after"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	StartAfter       param.Field[string]                           `query:"start_after"`
+	CfR2Jurisdiction param.Field[BucketListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 // URLQuery serializes [BucketListParams]'s query parameters as `url.Values`.
@@ -456,7 +453,6 @@ func (r BucketListParamsOrder) IsKnown() bool {
 	return false
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketListParamsCfR2Jurisdiction string
 
 const (
@@ -547,12 +543,10 @@ func (r bucketListResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type BucketDeleteParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	AccountID        param.Field[string]                             `path:"account_id" api:"required"`
+	CfR2Jurisdiction param.Field[BucketDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketDeleteParamsCfR2Jurisdiction string
 
 const (
@@ -618,9 +612,8 @@ type BucketEditParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Storage class for newly uploaded objects, unless specified otherwise.
-	StorageClass param.Field[BucketEditParamsCfR2StorageClass] `header:"cf-r2-storage-class" api:"required"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketEditParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	StorageClass     param.Field[BucketEditParamsCfR2StorageClass] `header:"cf-r2-storage-class" api:"required"`
+	CfR2Jurisdiction param.Field[BucketEditParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 // Storage class for newly uploaded objects, unless specified otherwise.
@@ -639,7 +632,6 @@ func (r BucketEditParamsCfR2StorageClass) IsKnown() bool {
 	return false
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketEditParamsCfR2Jurisdiction string
 
 const (
@@ -704,12 +696,10 @@ func (r BucketEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	AccountID        param.Field[string]                          `path:"account_id" api:"required"`
+	CfR2Jurisdiction param.Field[BucketGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketGetParamsCfR2Jurisdiction string
 
 const (

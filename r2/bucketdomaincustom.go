@@ -38,8 +38,8 @@ func NewBucketDomainCustomService(opts ...option.RequestOption) (r *BucketDomain
 // Register a new custom domain for an existing R2 bucket.
 func (r *BucketDomainCustomService) New(ctx context.Context, bucketName string, params BucketDomainCustomNewParams, opts ...option.RequestOption) (res *BucketDomainCustomNewResponse, err error) {
 	var env BucketDomainCustomNewResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -62,8 +62,8 @@ func (r *BucketDomainCustomService) New(ctx context.Context, bucketName string, 
 // Edit the configuration for a custom domain on an existing R2 bucket.
 func (r *BucketDomainCustomService) Update(ctx context.Context, bucketName string, domain string, params BucketDomainCustomUpdateParams, opts ...option.RequestOption) (res *BucketDomainCustomUpdateResponse, err error) {
 	var env BucketDomainCustomUpdateResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -90,8 +90,8 @@ func (r *BucketDomainCustomService) Update(ctx context.Context, bucketName strin
 // Gets a list of all custom domains registered with an existing R2 bucket.
 func (r *BucketDomainCustomService) List(ctx context.Context, bucketName string, params BucketDomainCustomListParams, opts ...option.RequestOption) (res *BucketDomainCustomListResponse, err error) {
 	var env BucketDomainCustomListResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -114,8 +114,8 @@ func (r *BucketDomainCustomService) List(ctx context.Context, bucketName string,
 // Remove custom domain registration from an existing R2 bucket.
 func (r *BucketDomainCustomService) Delete(ctx context.Context, bucketName string, domain string, params BucketDomainCustomDeleteParams, opts ...option.RequestOption) (res *BucketDomainCustomDeleteResponse, err error) {
 	var env BucketDomainCustomDeleteResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -142,8 +142,8 @@ func (r *BucketDomainCustomService) Delete(ctx context.Context, bucketName strin
 // Get the configuration for a custom domain on an existing R2 bucket.
 func (r *BucketDomainCustomService) Get(ctx context.Context, bucketName string, domain string, params BucketDomainCustomGetParams, opts ...option.RequestOption) (res *BucketDomainCustomGetResponse, err error) {
 	var env BucketDomainCustomGetResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -582,9 +582,8 @@ type BucketDomainCustomNewParams struct {
 	Ciphers param.Field[[]string] `json:"ciphers"`
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
 	// not set, defaults to 1.0.
-	MinTLS param.Field[BucketDomainCustomNewParamsMinTLS] `json:"minTLS"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketDomainCustomNewParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	MinTLS           param.Field[BucketDomainCustomNewParamsMinTLS]           `json:"minTLS"`
+	CfR2Jurisdiction param.Field[BucketDomainCustomNewParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 func (r BucketDomainCustomNewParams) MarshalJSON() (data []byte, err error) {
@@ -610,7 +609,6 @@ func (r BucketDomainCustomNewParamsMinTLS) IsKnown() bool {
 	return false
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketDomainCustomNewParamsCfR2Jurisdiction string
 
 const (
@@ -682,9 +680,8 @@ type BucketDomainCustomUpdateParams struct {
 	Enabled param.Field[bool] `json:"enabled"`
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
 	// not set, defaults to previous value.
-	MinTLS param.Field[BucketDomainCustomUpdateParamsMinTLS] `json:"minTLS"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketDomainCustomUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	MinTLS           param.Field[BucketDomainCustomUpdateParamsMinTLS]           `json:"minTLS"`
+	CfR2Jurisdiction param.Field[BucketDomainCustomUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 func (r BucketDomainCustomUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -710,7 +707,6 @@ func (r BucketDomainCustomUpdateParamsMinTLS) IsKnown() bool {
 	return false
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketDomainCustomUpdateParamsCfR2Jurisdiction string
 
 const (
@@ -774,12 +770,10 @@ func (r BucketDomainCustomUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketDomainCustomListParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketDomainCustomListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	AccountID        param.Field[string]                                       `path:"account_id" api:"required"`
+	CfR2Jurisdiction param.Field[BucketDomainCustomListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketDomainCustomListParamsCfR2Jurisdiction string
 
 const (
@@ -843,12 +837,10 @@ func (r BucketDomainCustomListResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketDomainCustomDeleteParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketDomainCustomDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	AccountID        param.Field[string]                                         `path:"account_id" api:"required"`
+	CfR2Jurisdiction param.Field[BucketDomainCustomDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketDomainCustomDeleteParamsCfR2Jurisdiction string
 
 const (
@@ -912,12 +904,10 @@ func (r BucketDomainCustomDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketDomainCustomGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketDomainCustomGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	AccountID        param.Field[string]                                      `path:"account_id" api:"required"`
+	CfR2Jurisdiction param.Field[BucketDomainCustomGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketDomainCustomGetParamsCfR2Jurisdiction string
 
 const (

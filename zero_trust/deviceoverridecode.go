@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // DeviceOverrideCodeService contains methods and other services that help with
@@ -44,10 +44,9 @@ func NewDeviceOverrideCodeService(opts ...option.RequestOption) (r *DeviceOverri
 // instead.
 //
 // Deprecated: deprecated
-func (r *DeviceOverrideCodeService) List(ctx context.Context, deviceID string, query DeviceOverrideCodeListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DeviceOverrideCodeListResponse], err error) {
-	var raw *http.Response
+func (r *DeviceOverrideCodeService) List(ctx context.Context, deviceID string, query DeviceOverrideCodeListParams, opts ...option.RequestOption) (res *DeviceOverrideCodeListResponse, err error) {
+	var env DeviceOverrideCodeListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -57,29 +56,12 @@ func (r *DeviceOverrideCodeService) List(ctx context.Context, deviceID string, q
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/devices/%s/override_codes", query.AccountID, deviceID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
+	res = &env.Result
 	return res, nil
-}
-
-// Fetches a one-time use admin override code for a device. This relies on the
-// **Admin Override** setting being enabled in your device configuration. Not
-// supported when
-// [multi-user mode](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-multiuser/)
-// is enabled for the account. **Deprecated:** please use GET
-// /accounts/{account_id}/devices/registrations/{registration_id}/override_codes
-// instead.
-//
-// Deprecated: deprecated
-func (r *DeviceOverrideCodeService) ListAutoPaging(ctx context.Context, deviceID string, query DeviceOverrideCodeListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DeviceOverrideCodeListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, deviceID, query, opts...))
 }
 
 // Fetches one-time use admin override codes for a registration. This relies on the
@@ -104,7 +86,60 @@ func (r *DeviceOverrideCodeService) Get(ctx context.Context, registrationID stri
 	return res, nil
 }
 
-type DeviceOverrideCodeListResponse = interface{}
+type DeviceOverrideCodeListResponse struct {
+	DisableForTime DeviceOverrideCodeListResponseDisableForTime `json:"disable_for_time"`
+	JSON           deviceOverrideCodeListResponseJSON           `json:"-"`
+}
+
+// deviceOverrideCodeListResponseJSON contains the JSON metadata for the struct
+// [DeviceOverrideCodeListResponse]
+type deviceOverrideCodeListResponseJSON struct {
+	DisableForTime apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *DeviceOverrideCodeListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceOverrideCodeListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type DeviceOverrideCodeListResponseDisableForTime struct {
+	// Override code that is valid for 1 hour.
+	One string `json:"1"`
+	// Override code that is valid for 12 hour2.
+	Twelve string `json:"12"`
+	// Override code that is valid for 24 hour.2.
+	TwentyFour string `json:"24"`
+	// Override code that is valid for 3 hours.
+	Three string `json:"3"`
+	// Override code that is valid for 6 hours.
+	Six  string                                           `json:"6"`
+	JSON deviceOverrideCodeListResponseDisableForTimeJSON `json:"-"`
+}
+
+// deviceOverrideCodeListResponseDisableForTimeJSON contains the JSON metadata for
+// the struct [DeviceOverrideCodeListResponseDisableForTime]
+type deviceOverrideCodeListResponseDisableForTimeJSON struct {
+	One         apijson.Field
+	Twelve      apijson.Field
+	TwentyFour  apijson.Field
+	Three       apijson.Field
+	Six         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceOverrideCodeListResponseDisableForTime) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceOverrideCodeListResponseDisableForTimeJSON) RawJSON() string {
+	return r.raw
+}
 
 type DeviceOverrideCodeGetResponse struct {
 	DisableForTime map[string]string                 `json:"disable_for_time"`
@@ -129,6 +164,49 @@ func (r deviceOverrideCodeGetResponseJSON) RawJSON() string {
 
 type DeviceOverrideCodeListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+}
+
+type DeviceOverrideCodeListResponseEnvelope struct {
+	Errors   []shared.ResponseInfo          `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo          `json:"messages" api:"required"`
+	Result   DeviceOverrideCodeListResponse `json:"result" api:"required,nullable"`
+	// Whether the API call was successful.
+	Success DeviceOverrideCodeListResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    deviceOverrideCodeListResponseEnvelopeJSON    `json:"-"`
+}
+
+// deviceOverrideCodeListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DeviceOverrideCodeListResponseEnvelope]
+type deviceOverrideCodeListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceOverrideCodeListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceOverrideCodeListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type DeviceOverrideCodeListResponseEnvelopeSuccess bool
+
+const (
+	DeviceOverrideCodeListResponseEnvelopeSuccessTrue DeviceOverrideCodeListResponseEnvelopeSuccess = true
+)
+
+func (r DeviceOverrideCodeListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceOverrideCodeListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type DeviceOverrideCodeGetParams struct {

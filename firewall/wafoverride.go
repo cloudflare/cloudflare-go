@@ -15,8 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // WAFOverrideService contains methods and other services that help with
@@ -44,20 +42,16 @@ func NewWAFOverrideService(opts ...option.RequestOption) (r *WAFOverrideService)
 // Previously created a URI-based WAF override for a zone.
 //
 // Deprecated: deprecated
-func (r *WAFOverrideService) New(ctx context.Context, params WAFOverrideNewParams, opts ...option.RequestOption) (res *Override, err error) {
-	var env WAFOverrideNewResponseEnvelope
+func (r *WAFOverrideService) New(ctx context.Context, params WAFOverrideNewParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return nil, err
+		return err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
-	if err != nil {
-		return nil, err
-	}
-	res = &env.Result
-	return res, nil
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, nil, opts...)
+	return err
 }
 
 // **This endpoint has been deprecated and returns 410 Gone. Please use the
@@ -66,24 +60,20 @@ func (r *WAFOverrideService) New(ctx context.Context, params WAFOverrideNewParam
 // Previously updated an existing URI-based WAF override.
 //
 // Deprecated: deprecated
-func (r *WAFOverrideService) Update(ctx context.Context, overridesID string, params WAFOverrideUpdateParams, opts ...option.RequestOption) (res *Override, err error) {
-	var env WAFOverrideUpdateResponseEnvelope
+func (r *WAFOverrideService) Update(ctx context.Context, overridesID string, params WAFOverrideUpdateParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return nil, err
+		return err
 	}
 	if overridesID == "" {
 		err = errors.New("missing required overrides_id parameter")
-		return nil, err
+		return err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", params.ZoneID, overridesID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
-	if err != nil {
-		return nil, err
-	}
-	res = &env.Result
-	return res, nil
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, nil, opts...)
+	return err
 }
 
 // **This endpoint has been deprecated and returns 410 Gone. Please use the
@@ -92,35 +82,16 @@ func (r *WAFOverrideService) Update(ctx context.Context, overridesID string, par
 // Previously fetched the URI-based WAF overrides in a zone.
 //
 // Deprecated: deprecated
-func (r *WAFOverrideService) List(ctx context.Context, params WAFOverrideListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Override], err error) {
-	var raw *http.Response
+func (r *WAFOverrideService) List(ctx context.Context, params WAFOverrideListParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return nil, err
+		return err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides", params.ZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
-	if err != nil {
-		return nil, err
-	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
-	return res, nil
-}
-
-// **This endpoint has been deprecated and returns 410 Gone. Please use the
-// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
-//
-// Previously fetched the URI-based WAF overrides in a zone.
-//
-// Deprecated: deprecated
-func (r *WAFOverrideService) ListAutoPaging(ctx context.Context, params WAFOverrideListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Override] {
-	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, nil, opts...)
+	return err
 }
 
 // **This endpoint has been deprecated and returns 410 Gone. Please use the
@@ -129,24 +100,20 @@ func (r *WAFOverrideService) ListAutoPaging(ctx context.Context, params WAFOverr
 // Previously deleted an existing URI-based WAF override.
 //
 // Deprecated: deprecated
-func (r *WAFOverrideService) Delete(ctx context.Context, overridesID string, body WAFOverrideDeleteParams, opts ...option.RequestOption) (res *WAFOverrideDeleteResponse, err error) {
-	var env WAFOverrideDeleteResponseEnvelope
+func (r *WAFOverrideService) Delete(ctx context.Context, overridesID string, body WAFOverrideDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return nil, err
+		return err
 	}
 	if overridesID == "" {
 		err = errors.New("missing required overrides_id parameter")
-		return nil, err
+		return err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", body.ZoneID, overridesID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return nil, err
-	}
-	res = &env.Result
-	return res, nil
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	return err
 }
 
 // **This endpoint has been deprecated and returns 410 Gone. Please use the
@@ -155,118 +122,41 @@ func (r *WAFOverrideService) Delete(ctx context.Context, overridesID string, bod
 // Previously fetched the details of a URI-based WAF override.
 //
 // Deprecated: deprecated
-func (r *WAFOverrideService) Get(ctx context.Context, overridesID string, query WAFOverrideGetParams, opts ...option.RequestOption) (res *Override, err error) {
-	var env WAFOverrideGetResponseEnvelope
+func (r *WAFOverrideService) Get(ctx context.Context, overridesID string, query WAFOverrideGetParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
-		return nil, err
+		return err
 	}
 	if overridesID == "" {
 		err = errors.New("missing required overrides_id parameter")
-		return nil, err
+		return err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", query.ZoneID, overridesID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return nil, err
-	}
-	res = &env.Result
-	return res, nil
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, nil, opts...)
+	return err
 }
-
-type Override struct {
-	// The unique identifier of the WAF override.
-	ID string `json:"id"`
-	// An informative summary of the current URI-based WAF override.
-	Description string `json:"description" api:"nullable"`
-	// An object that allows you to enable or disable WAF rule groups for the current
-	// WAF override. Each key of this object must be the ID of a WAF rule group, and
-	// each value must be a valid WAF action (usually `default` or `disable`). When
-	// creating a new URI-based WAF override, you must provide a `groups` object or a
-	// `rules` object.
-	Groups map[string]interface{} `json:"groups"`
-	// When true, indicates that the rule is currently paused.
-	Paused bool `json:"paused"`
-	// The relative priority of the current URI-based WAF override when multiple
-	// overrides match a single URL. A lower number indicates higher priority. Higher
-	// priority overrides may overwrite values set by lower priority overrides.
-	Priority float64 `json:"priority"`
-	// Specifies that, when a WAF rule matches, its configured action will be replaced
-	// by the action configured in this object.
-	RewriteAction RewriteAction `json:"rewrite_action"`
-	// An object that allows you to override the action of specific WAF rules. Each key
-	// of this object must be the ID of a WAF rule, and each value must be a valid WAF
-	// action. Unless you are disabling a rule, ensure that you also enable the rule
-	// group that this WAF rule belongs to. When creating a new URI-based WAF override,
-	// you must provide a `groups` object or a `rules` object.
-	Rules WAFRule `json:"rules"`
-	// The URLs to include in the current WAF override. You can use wildcards. Each
-	// entered URL will be escaped before use, which means you can only use simple
-	// wildcard patterns.
-	URLs []OverrideURL `json:"urls"`
-	JSON overrideJSON  `json:"-"`
-}
-
-// overrideJSON contains the JSON metadata for the struct [Override]
-type overrideJSON struct {
-	ID            apijson.Field
-	Description   apijson.Field
-	Groups        apijson.Field
-	Paused        apijson.Field
-	Priority      apijson.Field
-	RewriteAction apijson.Field
-	Rules         apijson.Field
-	URLs          apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *Override) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r overrideJSON) RawJSON() string {
-	return r.raw
-}
-
-type OverrideURL = string
 
 type OverrideURLParam = string
 
 // Specifies that, when a WAF rule matches, its configured action will be replaced
 // by the action configured in this object.
-type RewriteAction struct {
+type RewriteActionParam struct {
 	// The WAF rule action to apply.
-	Block RewriteActionBlock `json:"block"`
+	Block param.Field[RewriteActionBlock] `json:"block"`
 	// The WAF rule action to apply.
-	Challenge RewriteActionChallenge `json:"challenge"`
+	Challenge param.Field[RewriteActionChallenge] `json:"challenge"`
 	// The WAF rule action to apply.
-	Default RewriteActionDefault `json:"default"`
+	Default param.Field[RewriteActionDefault] `json:"default"`
 	// The WAF rule action to apply.
-	Disable RewriteActionDisable `json:"disable"`
+	Disable param.Field[RewriteActionDisable] `json:"disable"`
 	// The WAF rule action to apply.
-	Simulate RewriteActionSimulate `json:"simulate"`
-	JSON     rewriteActionJSON     `json:"-"`
+	Simulate param.Field[RewriteActionSimulate] `json:"simulate"`
 }
 
-// rewriteActionJSON contains the JSON metadata for the struct [RewriteAction]
-type rewriteActionJSON struct {
-	Block       apijson.Field
-	Challenge   apijson.Field
-	Default     apijson.Field
-	Disable     apijson.Field
-	Simulate    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RewriteAction) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rewriteActionJSON) RawJSON() string {
-	return r.raw
+func (r RewriteActionParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // The WAF rule action to apply.
@@ -364,26 +254,7 @@ func (r RewriteActionSimulate) IsKnown() bool {
 	return false
 }
 
-// Specifies that, when a WAF rule matches, its configured action will be replaced
-// by the action configured in this object.
-type RewriteActionParam struct {
-	// The WAF rule action to apply.
-	Block param.Field[RewriteActionBlock] `json:"block"`
-	// The WAF rule action to apply.
-	Challenge param.Field[RewriteActionChallenge] `json:"challenge"`
-	// The WAF rule action to apply.
-	Default param.Field[RewriteActionDefault] `json:"default"`
-	// The WAF rule action to apply.
-	Disable param.Field[RewriteActionDisable] `json:"disable"`
-	// The WAF rule action to apply.
-	Simulate param.Field[RewriteActionSimulate] `json:"simulate"`
-}
-
-func (r RewriteActionParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type WAFRule map[string]WAFRuleItem
+type WAFRuleParam map[string]WAFRuleItem
 
 // The WAF rule action to apply.
 type WAFRuleItem string
@@ -404,30 +275,6 @@ func (r WAFRuleItem) IsKnown() bool {
 	return false
 }
 
-type WAFRuleParam map[string]WAFRuleItem
-
-type WAFOverrideDeleteResponse struct {
-	// The unique identifier of the WAF override.
-	ID   string                        `json:"id"`
-	JSON wafOverrideDeleteResponseJSON `json:"-"`
-}
-
-// wafOverrideDeleteResponseJSON contains the JSON metadata for the struct
-// [WAFOverrideDeleteResponse]
-type wafOverrideDeleteResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFOverrideDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafOverrideDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type WAFOverrideNewParams struct {
 	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
@@ -439,49 +286,6 @@ type WAFOverrideNewParams struct {
 
 func (r WAFOverrideNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type WAFOverrideNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	Result   Override              `json:"result" api:"required"`
-	// Defines whether the API call was successful.
-	Success WAFOverrideNewResponseEnvelopeSuccess `json:"success" api:"required"`
-	JSON    wafOverrideNewResponseEnvelopeJSON    `json:"-"`
-}
-
-// wafOverrideNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [WAFOverrideNewResponseEnvelope]
-type wafOverrideNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFOverrideNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafOverrideNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Defines whether the API call was successful.
-type WAFOverrideNewResponseEnvelopeSuccess bool
-
-const (
-	WAFOverrideNewResponseEnvelopeSuccessTrue WAFOverrideNewResponseEnvelopeSuccess = true
-)
-
-func (r WAFOverrideNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case WAFOverrideNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type WAFOverrideUpdateParams struct {
@@ -508,49 +312,6 @@ func (r WAFOverrideUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type WAFOverrideUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	Result   Override              `json:"result" api:"required"`
-	// Defines whether the API call was successful.
-	Success WAFOverrideUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
-	JSON    wafOverrideUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// wafOverrideUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [WAFOverrideUpdateResponseEnvelope]
-type wafOverrideUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFOverrideUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafOverrideUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Defines whether the API call was successful.
-type WAFOverrideUpdateResponseEnvelopeSuccess bool
-
-const (
-	WAFOverrideUpdateResponseEnvelopeSuccessTrue WAFOverrideUpdateResponseEnvelopeSuccess = true
-)
-
-func (r WAFOverrideUpdateResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case WAFOverrideUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type WAFOverrideListParams struct {
 	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
@@ -573,71 +334,7 @@ type WAFOverrideDeleteParams struct {
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
-type WAFOverrideDeleteResponseEnvelope struct {
-	Result WAFOverrideDeleteResponse             `json:"result"`
-	JSON   wafOverrideDeleteResponseEnvelopeJSON `json:"-"`
-}
-
-// wafOverrideDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [WAFOverrideDeleteResponseEnvelope]
-type wafOverrideDeleteResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFOverrideDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafOverrideDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
 type WAFOverrideGetParams struct {
 	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-}
-
-type WAFOverrideGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	Result   Override              `json:"result" api:"required"`
-	// Defines whether the API call was successful.
-	Success WAFOverrideGetResponseEnvelopeSuccess `json:"success" api:"required"`
-	JSON    wafOverrideGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// wafOverrideGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [WAFOverrideGetResponseEnvelope]
-type wafOverrideGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFOverrideGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafOverrideGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Defines whether the API call was successful.
-type WAFOverrideGetResponseEnvelopeSuccess bool
-
-const (
-	WAFOverrideGetResponseEnvelopeSuccessTrue WAFOverrideGetResponseEnvelopeSuccess = true
-)
-
-func (r WAFOverrideGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case WAFOverrideGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

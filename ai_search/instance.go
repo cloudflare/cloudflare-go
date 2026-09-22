@@ -44,6 +44,11 @@ func NewInstanceService(opts ...option.RequestOption) (r *InstanceService) {
 }
 
 // Create a new AI Search instance with the given configuration.
+//
+// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
+// (and descendant paths) instead.
+//
+// Deprecated: deprecated
 func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opts ...option.RequestOption) (res *InstanceNewResponse, err error) {
 	var env InstanceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -61,6 +66,11 @@ func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opt
 }
 
 // Update the configuration of an AI Search instance.
+//
+// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
+// (and descendant paths) instead.
+//
+// Deprecated: deprecated
 func (r *InstanceService) Update(ctx context.Context, id string, params InstanceUpdateParams, opts ...option.RequestOption) (res *InstanceUpdateResponse, err error) {
 	var env InstanceUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -82,6 +92,11 @@ func (r *InstanceService) Update(ctx context.Context, id string, params Instance
 }
 
 // List all AI Search instances in the account.
+//
+// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
+// (and descendant paths) instead.
+//
+// Deprecated: deprecated
 func (r *InstanceService) List(ctx context.Context, params InstanceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InstanceListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -104,11 +119,21 @@ func (r *InstanceService) List(ctx context.Context, params InstanceListParams, o
 }
 
 // List all AI Search instances in the account.
+//
+// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
+// (and descendant paths) instead.
+//
+// Deprecated: deprecated
 func (r *InstanceService) ListAutoPaging(ctx context.Context, params InstanceListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[InstanceListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Permanently delete an AI Search instance and all its indexed data.
+//
+// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
+// (and descendant paths) instead.
+//
+// Deprecated: deprecated
 func (r *InstanceService) Delete(ctx context.Context, id string, body InstanceDeleteParams, opts ...option.RequestOption) (res *InstanceDeleteResponse, err error) {
 	var env InstanceDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -131,6 +156,11 @@ func (r *InstanceService) Delete(ctx context.Context, id string, body InstanceDe
 
 // Performs a chat completion request against an AI Search instance, using indexed
 // content as context for generating responses.
+//
+// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
+// (and descendant paths) instead.
+//
+// Deprecated: deprecated
 func (r *InstanceService) ChatCompletions(ctx context.Context, id string, params InstanceChatCompletionsParams, opts ...option.RequestOption) (res *InstanceChatCompletionsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -147,6 +177,11 @@ func (r *InstanceService) ChatCompletions(ctx context.Context, id string, params
 }
 
 // Retrieve the configuration and status of an AI Search instance.
+//
+// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
+// (and descendant paths) instead.
+//
+// Deprecated: deprecated
 func (r *InstanceService) Read(ctx context.Context, id string, query InstanceReadParams, opts ...option.RequestOption) (res *InstanceReadResponse, err error) {
 	var env InstanceReadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -169,6 +204,11 @@ func (r *InstanceService) Read(ctx context.Context, id string, query InstanceRea
 
 // Executes a semantic search query against an AI Search instance to find relevant
 // indexed content.
+//
+// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
+// (and descendant paths) instead.
+//
+// Deprecated: deprecated
 func (r *InstanceService) Search(ctx context.Context, id string, params InstanceSearchParams, opts ...option.RequestOption) (res *InstanceSearchResponse, err error) {
 	var env InstanceSearchResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -190,6 +230,11 @@ func (r *InstanceService) Search(ctx context.Context, id string, params Instance
 }
 
 // Retrieve usage and indexing statistics for an AI Search instance.
+//
+// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
+// (and descendant paths) instead.
+//
+// Deprecated: deprecated
 func (r *InstanceService) Stats(ctx context.Context, id string, query InstanceStatsParams, opts ...option.RequestOption) (res *InstanceStatsResponse, err error) {
 	var env InstanceStatsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

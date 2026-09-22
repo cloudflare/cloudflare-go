@@ -173,7 +173,8 @@ type Consumer struct {
 	ScriptName string `json:"script_name"`
 	// This field can have the runtime type of
 	// [ConsumerMqWorkerConsumerResponseSettings],
-	// [ConsumerMqHTTPConsumerResponseSettings].
+	// [ConsumerMqHTTPConsumerResponseSettings],
+	// [ConsumerMqNotificationConsumerResponseSettings].
 	Settings interface{}  `json:"settings"`
 	Type     ConsumerType `json:"type"`
 	JSON     consumerJSON `json:"-"`
@@ -210,15 +211,15 @@ func (r *Consumer) UnmarshalJSON(data []byte) (err error) {
 // types for more type safety.
 //
 // Possible runtime types of the union are [ConsumerMqWorkerConsumerResponse],
-// [ConsumerMqHTTPConsumerResponse].
+// [ConsumerMqHTTPConsumerResponse], [ConsumerMqNotificationConsumerResponse].
 func (r Consumer) AsUnion() ConsumerUnion {
 	return r.union
 }
 
 // Response body representing a consumer
 //
-// Union satisfied by [ConsumerMqWorkerConsumerResponse] or
-// [ConsumerMqHTTPConsumerResponse].
+// Union satisfied by [ConsumerMqWorkerConsumerResponse],
+// [ConsumerMqHTTPConsumerResponse] or [ConsumerMqNotificationConsumerResponse].
 type ConsumerUnion interface {
 	implementsConsumer()
 }
@@ -236,6 +237,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ConsumerMqHTTPConsumerResponse{}),
 			DiscriminatorValue: "http_pull",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ConsumerMqNotificationConsumerResponse{}),
+			DiscriminatorValue: "notification",
 		},
 	)
 }
@@ -411,16 +417,246 @@ func (r ConsumerMqHTTPConsumerResponseType) IsKnown() bool {
 	return false
 }
 
+type ConsumerMqNotificationConsumerResponse struct {
+	// A Resource identifier.
+	ConsumerID string    `json:"consumer_id"`
+	CreatedOn  time.Time `json:"created_on" format:"date-time"`
+	// Name of the dead letter queue, or empty string if not configured.
+	DeadLetterQueue string `json:"dead_letter_queue"`
+	QueueName       string `json:"queue_name"`
+	// Notification destinations for a Queue. At least one email, webhook, or PagerDuty
+	// destination is required.
+	Settings ConsumerMqNotificationConsumerResponseSettings `json:"settings"`
+	Type     ConsumerMqNotificationConsumerResponseType     `json:"type"`
+	JSON     consumerMqNotificationConsumerResponseJSON     `json:"-"`
+}
+
+// consumerMqNotificationConsumerResponseJSON contains the JSON metadata for the
+// struct [ConsumerMqNotificationConsumerResponse]
+type consumerMqNotificationConsumerResponseJSON struct {
+	ConsumerID      apijson.Field
+	CreatedOn       apijson.Field
+	DeadLetterQueue apijson.Field
+	QueueName       apijson.Field
+	Settings        apijson.Field
+	Type            apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *ConsumerMqNotificationConsumerResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerMqNotificationConsumerResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConsumerMqNotificationConsumerResponse) implementsConsumer() {}
+
+// Notification destinations for a Queue. At least one email, webhook, or PagerDuty
+// destination is required.
+type ConsumerMqNotificationConsumerResponseSettings struct {
+	// This field can have the runtime type of
+	// [[]ConsumerMqNotificationConsumerResponseSettingsObjectEmail].
+	Email interface{} `json:"email"`
+	// This field can have the runtime type of
+	// [[]ConsumerMqNotificationConsumerResponseSettingsObjectPagerduty].
+	Pagerduty interface{} `json:"pagerduty"`
+	// This field can have the runtime type of
+	// [[]ConsumerMqNotificationConsumerResponseSettingsObjectWebhook].
+	Webhooks interface{}                                        `json:"webhooks"`
+	JSON     consumerMqNotificationConsumerResponseSettingsJSON `json:"-"`
+	union    ConsumerMqNotificationConsumerResponseSettingsUnion
+}
+
+// consumerMqNotificationConsumerResponseSettingsJSON contains the JSON metadata
+// for the struct [ConsumerMqNotificationConsumerResponseSettings]
+type consumerMqNotificationConsumerResponseSettingsJSON struct {
+	Email       apijson.Field
+	Pagerduty   apijson.Field
+	Webhooks    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r consumerMqNotificationConsumerResponseSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ConsumerMqNotificationConsumerResponseSettings) UnmarshalJSON(data []byte) (err error) {
+	*r = ConsumerMqNotificationConsumerResponseSettings{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ConsumerMqNotificationConsumerResponseSettingsUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [ConsumerMqNotificationConsumerResponseSettingsObject],
+// [ConsumerMqNotificationConsumerResponseSettingsObject],
+// [ConsumerMqNotificationConsumerResponseSettingsObject].
+func (r ConsumerMqNotificationConsumerResponseSettings) AsUnion() ConsumerMqNotificationConsumerResponseSettingsUnion {
+	return r.union
+}
+
+// Notification destinations for a Queue. At least one email, webhook, or PagerDuty
+// destination is required.
+//
+// Union satisfied by [ConsumerMqNotificationConsumerResponseSettingsObject],
+// [ConsumerMqNotificationConsumerResponseSettingsObject] or
+// [ConsumerMqNotificationConsumerResponseSettingsObject].
+type ConsumerMqNotificationConsumerResponseSettingsUnion interface {
+	implementsConsumerMqNotificationConsumerResponseSettings()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ConsumerMqNotificationConsumerResponseSettingsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ConsumerMqNotificationConsumerResponseSettingsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ConsumerMqNotificationConsumerResponseSettingsObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ConsumerMqNotificationConsumerResponseSettingsObject{}),
+		},
+	)
+}
+
+type ConsumerMqNotificationConsumerResponseSettingsObject struct {
+	Email []ConsumerMqNotificationConsumerResponseSettingsObjectEmail `json:"email" api:"required"`
+	// PagerDuty notification destinations.
+	Pagerduty []ConsumerMqNotificationConsumerResponseSettingsObjectPagerduty `json:"pagerduty"`
+	// Webhook notification destinations.
+	Webhooks []ConsumerMqNotificationConsumerResponseSettingsObjectWebhook `json:"webhooks"`
+	JSON     consumerMqNotificationConsumerResponseSettingsObjectJSON      `json:"-"`
+}
+
+// consumerMqNotificationConsumerResponseSettingsObjectJSON contains the JSON
+// metadata for the struct [ConsumerMqNotificationConsumerResponseSettingsObject]
+type consumerMqNotificationConsumerResponseSettingsObjectJSON struct {
+	Email       apijson.Field
+	Pagerduty   apijson.Field
+	Webhooks    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConsumerMqNotificationConsumerResponseSettingsObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerMqNotificationConsumerResponseSettingsObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConsumerMqNotificationConsumerResponseSettingsObject) implementsConsumerMqNotificationConsumerResponseSettings() {
+}
+
+type ConsumerMqNotificationConsumerResponseSettingsObjectEmail struct {
+	// The email address.
+	ID   string                                                        `json:"id" api:"required"`
+	JSON consumerMqNotificationConsumerResponseSettingsObjectEmailJSON `json:"-"`
+}
+
+// consumerMqNotificationConsumerResponseSettingsObjectEmailJSON contains the JSON
+// metadata for the struct
+// [ConsumerMqNotificationConsumerResponseSettingsObjectEmail]
+type consumerMqNotificationConsumerResponseSettingsObjectEmailJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConsumerMqNotificationConsumerResponseSettingsObjectEmail) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerMqNotificationConsumerResponseSettingsObjectEmailJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConsumerMqNotificationConsumerResponseSettingsObjectPagerduty struct {
+	// UUID.
+	ID   string                                                            `json:"id" api:"required"`
+	JSON consumerMqNotificationConsumerResponseSettingsObjectPagerdutyJSON `json:"-"`
+}
+
+// consumerMqNotificationConsumerResponseSettingsObjectPagerdutyJSON contains the
+// JSON metadata for the struct
+// [ConsumerMqNotificationConsumerResponseSettingsObjectPagerduty]
+type consumerMqNotificationConsumerResponseSettingsObjectPagerdutyJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConsumerMqNotificationConsumerResponseSettingsObjectPagerduty) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerMqNotificationConsumerResponseSettingsObjectPagerdutyJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConsumerMqNotificationConsumerResponseSettingsObjectWebhook struct {
+	// UUID.
+	ID   string                                                          `json:"id" api:"required"`
+	JSON consumerMqNotificationConsumerResponseSettingsObjectWebhookJSON `json:"-"`
+}
+
+// consumerMqNotificationConsumerResponseSettingsObjectWebhookJSON contains the
+// JSON metadata for the struct
+// [ConsumerMqNotificationConsumerResponseSettingsObjectWebhook]
+type consumerMqNotificationConsumerResponseSettingsObjectWebhookJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConsumerMqNotificationConsumerResponseSettingsObjectWebhook) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerMqNotificationConsumerResponseSettingsObjectWebhookJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConsumerMqNotificationConsumerResponseType string
+
+const (
+	ConsumerMqNotificationConsumerResponseTypeNotification ConsumerMqNotificationConsumerResponseType = "notification"
+)
+
+func (r ConsumerMqNotificationConsumerResponseType) IsKnown() bool {
+	switch r {
+	case ConsumerMqNotificationConsumerResponseTypeNotification:
+		return true
+	}
+	return false
+}
+
 type ConsumerType string
 
 const (
-	ConsumerTypeWorker   ConsumerType = "worker"
-	ConsumerTypeHTTPPull ConsumerType = "http_pull"
+	ConsumerTypeWorker       ConsumerType = "worker"
+	ConsumerTypeHTTPPull     ConsumerType = "http_pull"
+	ConsumerTypeNotification ConsumerType = "notification"
 )
 
 func (r ConsumerType) IsKnown() bool {
 	switch r {
-	case ConsumerTypeWorker, ConsumerTypeHTTPPull:
+	case ConsumerTypeWorker, ConsumerTypeHTTPPull, ConsumerTypeNotification:
 		return true
 	}
 	return false
@@ -446,7 +682,8 @@ func (r ConsumerParam) implementsConsumerUnionParam() {}
 // Response body representing a consumer
 //
 // Satisfied by [queues.ConsumerMqWorkerConsumerResponseParam],
-// [queues.ConsumerMqHTTPConsumerResponseParam], [ConsumerParam].
+// [queues.ConsumerMqHTTPConsumerResponseParam],
+// [queues.ConsumerMqNotificationConsumerResponseParam], [ConsumerParam].
 type ConsumerUnionParam interface {
 	implementsConsumerUnionParam()
 }
@@ -515,6 +752,90 @@ type ConsumerMqHTTPConsumerResponseSettingsParam struct {
 }
 
 func (r ConsumerMqHTTPConsumerResponseSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ConsumerMqNotificationConsumerResponseParam struct {
+	// Name of the dead letter queue, or empty string if not configured.
+	DeadLetterQueue param.Field[string] `json:"dead_letter_queue"`
+	QueueName       param.Field[string] `json:"queue_name"`
+	// Notification destinations for a Queue. At least one email, webhook, or PagerDuty
+	// destination is required.
+	Settings param.Field[ConsumerMqNotificationConsumerResponseSettingsUnionParam] `json:"settings"`
+	Type     param.Field[ConsumerMqNotificationConsumerResponseType]               `json:"type"`
+}
+
+func (r ConsumerMqNotificationConsumerResponseParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConsumerMqNotificationConsumerResponseParam) implementsConsumerUnionParam() {}
+
+// Notification destinations for a Queue. At least one email, webhook, or PagerDuty
+// destination is required.
+type ConsumerMqNotificationConsumerResponseSettingsParam struct {
+	Email     param.Field[interface{}] `json:"email"`
+	Pagerduty param.Field[interface{}] `json:"pagerduty"`
+	Webhooks  param.Field[interface{}] `json:"webhooks"`
+}
+
+func (r ConsumerMqNotificationConsumerResponseSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConsumerMqNotificationConsumerResponseSettingsParam) implementsConsumerMqNotificationConsumerResponseSettingsUnionParam() {
+}
+
+// Notification destinations for a Queue. At least one email, webhook, or PagerDuty
+// destination is required.
+//
+// Satisfied by [queues.ConsumerMqNotificationConsumerResponseSettingsObjectParam],
+// [queues.ConsumerMqNotificationConsumerResponseSettingsObjectParam],
+// [queues.ConsumerMqNotificationConsumerResponseSettingsObjectParam],
+// [ConsumerMqNotificationConsumerResponseSettingsParam].
+type ConsumerMqNotificationConsumerResponseSettingsUnionParam interface {
+	implementsConsumerMqNotificationConsumerResponseSettingsUnionParam()
+}
+
+type ConsumerMqNotificationConsumerResponseSettingsObjectParam struct {
+	Email param.Field[[]ConsumerMqNotificationConsumerResponseSettingsObjectEmailParam] `json:"email" api:"required"`
+	// PagerDuty notification destinations.
+	Pagerduty param.Field[[]ConsumerMqNotificationConsumerResponseSettingsObjectPagerdutyParam] `json:"pagerduty"`
+	// Webhook notification destinations.
+	Webhooks param.Field[[]ConsumerMqNotificationConsumerResponseSettingsObjectWebhookParam] `json:"webhooks"`
+}
+
+func (r ConsumerMqNotificationConsumerResponseSettingsObjectParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConsumerMqNotificationConsumerResponseSettingsObjectParam) implementsConsumerMqNotificationConsumerResponseSettingsUnionParam() {
+}
+
+type ConsumerMqNotificationConsumerResponseSettingsObjectEmailParam struct {
+	// The email address.
+	ID param.Field[string] `json:"id" api:"required"`
+}
+
+func (r ConsumerMqNotificationConsumerResponseSettingsObjectEmailParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ConsumerMqNotificationConsumerResponseSettingsObjectPagerdutyParam struct {
+	// UUID.
+	ID param.Field[string] `json:"id" api:"required"`
+}
+
+func (r ConsumerMqNotificationConsumerResponseSettingsObjectPagerdutyParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ConsumerMqNotificationConsumerResponseSettingsObjectWebhookParam struct {
+	// UUID.
+	ID param.Field[string] `json:"id" api:"required"`
+}
+
+func (r ConsumerMqNotificationConsumerResponseSettingsObjectWebhookParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -588,7 +909,9 @@ func (r ConsumerNewParamsBody) implementsConsumerNewParamsBodyUnion() {}
 // Request body for creating or updating a consumer
 //
 // Satisfied by [queues.ConsumerNewParamsBodyMqWorkerConsumerRequest],
-// [queues.ConsumerNewParamsBodyMqHTTPConsumerRequest], [ConsumerNewParamsBody].
+// [queues.ConsumerNewParamsBodyMqHTTPConsumerRequest],
+// [queues.ConsumerNewParamsBodyMqNotificationConsumerRequest],
+// [ConsumerNewParamsBody].
 type ConsumerNewParamsBodyUnion interface {
 	implementsConsumerNewParamsBodyUnion()
 }
@@ -684,16 +1007,117 @@ func (r ConsumerNewParamsBodyMqHTTPConsumerRequestSettings) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
+// Creates or updates the notification destinations for a Queue. Only one
+// notification consumer may exist per Queue. Updates replace all previously
+// configured destinations.
+type ConsumerNewParamsBodyMqNotificationConsumerRequest struct {
+	// Notification destinations for a Queue. At least one email, webhook, or PagerDuty
+	// destination is required.
+	Settings        param.Field[ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsUnion] `json:"settings" api:"required"`
+	Type            param.Field[ConsumerNewParamsBodyMqNotificationConsumerRequestType]          `json:"type" api:"required"`
+	DeadLetterQueue param.Field[string]                                                          `json:"dead_letter_queue"`
+}
+
+func (r ConsumerNewParamsBodyMqNotificationConsumerRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConsumerNewParamsBodyMqNotificationConsumerRequest) implementsConsumerNewParamsBodyUnion() {}
+
+// Notification destinations for a Queue. At least one email, webhook, or PagerDuty
+// destination is required.
+type ConsumerNewParamsBodyMqNotificationConsumerRequestSettings struct {
+	Email     param.Field[interface{}] `json:"email"`
+	Pagerduty param.Field[interface{}] `json:"pagerduty"`
+	Webhooks  param.Field[interface{}] `json:"webhooks"`
+}
+
+func (r ConsumerNewParamsBodyMqNotificationConsumerRequestSettings) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConsumerNewParamsBodyMqNotificationConsumerRequestSettings) implementsConsumerNewParamsBodyMqNotificationConsumerRequestSettingsUnion() {
+}
+
+// Notification destinations for a Queue. At least one email, webhook, or PagerDuty
+// destination is required.
+//
+// Satisfied by
+// [queues.ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObject],
+// [queues.ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObject],
+// [queues.ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObject],
+// [ConsumerNewParamsBodyMqNotificationConsumerRequestSettings].
+type ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsUnion interface {
+	implementsConsumerNewParamsBodyMqNotificationConsumerRequestSettingsUnion()
+}
+
+type ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObject struct {
+	Email param.Field[[]ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObjectEmail] `json:"email" api:"required"`
+	// PagerDuty notification destinations.
+	Pagerduty param.Field[[]ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObjectPagerduty] `json:"pagerduty"`
+	// Webhook notification destinations.
+	Webhooks param.Field[[]ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObjectWebhook] `json:"webhooks"`
+}
+
+func (r ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObject) implementsConsumerNewParamsBodyMqNotificationConsumerRequestSettingsUnion() {
+}
+
+type ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObjectEmail struct {
+	// The email address.
+	ID param.Field[string] `json:"id" api:"required"`
+}
+
+func (r ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObjectEmail) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObjectPagerduty struct {
+	// UUID.
+	ID param.Field[string] `json:"id" api:"required"`
+}
+
+func (r ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObjectPagerduty) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObjectWebhook struct {
+	// UUID.
+	ID param.Field[string] `json:"id" api:"required"`
+}
+
+func (r ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObjectWebhook) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ConsumerNewParamsBodyMqNotificationConsumerRequestType string
+
+const (
+	ConsumerNewParamsBodyMqNotificationConsumerRequestTypeNotification ConsumerNewParamsBodyMqNotificationConsumerRequestType = "notification"
+)
+
+func (r ConsumerNewParamsBodyMqNotificationConsumerRequestType) IsKnown() bool {
+	switch r {
+	case ConsumerNewParamsBodyMqNotificationConsumerRequestTypeNotification:
+		return true
+	}
+	return false
+}
+
 type ConsumerNewParamsBodyType string
 
 const (
-	ConsumerNewParamsBodyTypeWorker   ConsumerNewParamsBodyType = "worker"
-	ConsumerNewParamsBodyTypeHTTPPull ConsumerNewParamsBodyType = "http_pull"
+	ConsumerNewParamsBodyTypeWorker       ConsumerNewParamsBodyType = "worker"
+	ConsumerNewParamsBodyTypeHTTPPull     ConsumerNewParamsBodyType = "http_pull"
+	ConsumerNewParamsBodyTypeNotification ConsumerNewParamsBodyType = "notification"
 )
 
 func (r ConsumerNewParamsBodyType) IsKnown() bool {
 	switch r {
-	case ConsumerNewParamsBodyTypeWorker, ConsumerNewParamsBodyTypeHTTPPull:
+	case ConsumerNewParamsBodyTypeWorker, ConsumerNewParamsBodyTypeHTTPPull, ConsumerNewParamsBodyTypeNotification:
 		return true
 	}
 	return false
@@ -773,6 +1197,7 @@ func (r ConsumerUpdateParamsBody) implementsConsumerUpdateParamsBodyUnion() {}
 //
 // Satisfied by [queues.ConsumerUpdateParamsBodyMqWorkerConsumerRequest],
 // [queues.ConsumerUpdateParamsBodyMqHTTPConsumerRequest],
+// [queues.ConsumerUpdateParamsBodyMqNotificationConsumerRequest],
 // [ConsumerUpdateParamsBody].
 type ConsumerUpdateParamsBodyUnion interface {
 	implementsConsumerUpdateParamsBodyUnion()
@@ -869,16 +1294,118 @@ func (r ConsumerUpdateParamsBodyMqHTTPConsumerRequestSettings) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
+// Creates or updates the notification destinations for a Queue. Only one
+// notification consumer may exist per Queue. Updates replace all previously
+// configured destinations.
+type ConsumerUpdateParamsBodyMqNotificationConsumerRequest struct {
+	// Notification destinations for a Queue. At least one email, webhook, or PagerDuty
+	// destination is required.
+	Settings        param.Field[ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsUnion] `json:"settings" api:"required"`
+	Type            param.Field[ConsumerUpdateParamsBodyMqNotificationConsumerRequestType]          `json:"type" api:"required"`
+	DeadLetterQueue param.Field[string]                                                             `json:"dead_letter_queue"`
+}
+
+func (r ConsumerUpdateParamsBodyMqNotificationConsumerRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConsumerUpdateParamsBodyMqNotificationConsumerRequest) implementsConsumerUpdateParamsBodyUnion() {
+}
+
+// Notification destinations for a Queue. At least one email, webhook, or PagerDuty
+// destination is required.
+type ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettings struct {
+	Email     param.Field[interface{}] `json:"email"`
+	Pagerduty param.Field[interface{}] `json:"pagerduty"`
+	Webhooks  param.Field[interface{}] `json:"webhooks"`
+}
+
+func (r ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettings) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettings) implementsConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsUnion() {
+}
+
+// Notification destinations for a Queue. At least one email, webhook, or PagerDuty
+// destination is required.
+//
+// Satisfied by
+// [queues.ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObject],
+// [queues.ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObject],
+// [queues.ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObject],
+// [ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettings].
+type ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsUnion interface {
+	implementsConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsUnion()
+}
+
+type ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObject struct {
+	Email param.Field[[]ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObjectEmail] `json:"email" api:"required"`
+	// PagerDuty notification destinations.
+	Pagerduty param.Field[[]ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObjectPagerduty] `json:"pagerduty"`
+	// Webhook notification destinations.
+	Webhooks param.Field[[]ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObjectWebhook] `json:"webhooks"`
+}
+
+func (r ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObject) implementsConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsUnion() {
+}
+
+type ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObjectEmail struct {
+	// The email address.
+	ID param.Field[string] `json:"id" api:"required"`
+}
+
+func (r ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObjectEmail) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObjectPagerduty struct {
+	// UUID.
+	ID param.Field[string] `json:"id" api:"required"`
+}
+
+func (r ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObjectPagerduty) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObjectWebhook struct {
+	// UUID.
+	ID param.Field[string] `json:"id" api:"required"`
+}
+
+func (r ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObjectWebhook) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ConsumerUpdateParamsBodyMqNotificationConsumerRequestType string
+
+const (
+	ConsumerUpdateParamsBodyMqNotificationConsumerRequestTypeNotification ConsumerUpdateParamsBodyMqNotificationConsumerRequestType = "notification"
+)
+
+func (r ConsumerUpdateParamsBodyMqNotificationConsumerRequestType) IsKnown() bool {
+	switch r {
+	case ConsumerUpdateParamsBodyMqNotificationConsumerRequestTypeNotification:
+		return true
+	}
+	return false
+}
+
 type ConsumerUpdateParamsBodyType string
 
 const (
-	ConsumerUpdateParamsBodyTypeWorker   ConsumerUpdateParamsBodyType = "worker"
-	ConsumerUpdateParamsBodyTypeHTTPPull ConsumerUpdateParamsBodyType = "http_pull"
+	ConsumerUpdateParamsBodyTypeWorker       ConsumerUpdateParamsBodyType = "worker"
+	ConsumerUpdateParamsBodyTypeHTTPPull     ConsumerUpdateParamsBodyType = "http_pull"
+	ConsumerUpdateParamsBodyTypeNotification ConsumerUpdateParamsBodyType = "notification"
 )
 
 func (r ConsumerUpdateParamsBodyType) IsKnown() bool {
 	switch r {
-	case ConsumerUpdateParamsBodyTypeWorker, ConsumerUpdateParamsBodyTypeHTTPPull:
+	case ConsumerUpdateParamsBodyTypeWorker, ConsumerUpdateParamsBodyTypeHTTPPull, ConsumerUpdateParamsBodyTypeNotification:
 		return true
 	}
 	return false

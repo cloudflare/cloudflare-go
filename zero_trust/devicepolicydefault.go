@@ -114,6 +114,8 @@ type DevicePolicyDefaultEditResponse struct {
 	// List of routes included in the WARP client's tunnel.
 	Include  []SplitTunnelInclude `json:"include"`
 	PolicyID string               `json:"policy_id"`
+	// The client type to which the device settings profile applies.
+	ProfileType DevicePolicyDefaultEditResponseProfileType `json:"profile_type"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS bool `json:"register_interface_ip_with_dns"`
@@ -154,6 +156,7 @@ type devicePolicyDefaultEditResponseJSON struct {
 	GlobalAcceleration         apijson.Field
 	Include                    apijson.Field
 	PolicyID                   apijson.Field
+	ProfileType                apijson.Field
 	RegisterInterfaceIPWithDNS apijson.Field
 	SccmVpnBoundarySupport     apijson.Field
 	ServiceModeV2              apijson.Field
@@ -234,6 +237,22 @@ func (r *DevicePolicyDefaultEditResponseGlobalAcceleration) UnmarshalJSON(data [
 
 func (r devicePolicyDefaultEditResponseGlobalAccelerationJSON) RawJSON() string {
 	return r.raw
+}
+
+// The client type to which the device settings profile applies.
+type DevicePolicyDefaultEditResponseProfileType string
+
+const (
+	DevicePolicyDefaultEditResponseProfileTypeWARP             DevicePolicyDefaultEditResponseProfileType = "warp"
+	DevicePolicyDefaultEditResponseProfileTypeBrowserExtension DevicePolicyDefaultEditResponseProfileType = "browser_extension"
+)
+
+func (r DevicePolicyDefaultEditResponseProfileType) IsKnown() bool {
+	switch r {
+	case DevicePolicyDefaultEditResponseProfileTypeWARP, DevicePolicyDefaultEditResponseProfileTypeBrowserExtension:
+		return true
+	}
+	return false
 }
 
 type DevicePolicyDefaultEditResponseServiceModeV2 struct {
@@ -325,6 +344,8 @@ type DevicePolicyDefaultGetResponse struct {
 	// List of routes included in the WARP client's tunnel.
 	Include  []SplitTunnelInclude `json:"include"`
 	PolicyID string               `json:"policy_id"`
+	// The client type to which the device settings profile applies.
+	ProfileType DevicePolicyDefaultGetResponseProfileType `json:"profile_type"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS bool `json:"register_interface_ip_with_dns"`
@@ -365,6 +386,7 @@ type devicePolicyDefaultGetResponseJSON struct {
 	GlobalAcceleration         apijson.Field
 	Include                    apijson.Field
 	PolicyID                   apijson.Field
+	ProfileType                apijson.Field
 	RegisterInterfaceIPWithDNS apijson.Field
 	SccmVpnBoundarySupport     apijson.Field
 	ServiceModeV2              apijson.Field
@@ -445,6 +467,22 @@ func (r *DevicePolicyDefaultGetResponseGlobalAcceleration) UnmarshalJSON(data []
 
 func (r devicePolicyDefaultGetResponseGlobalAccelerationJSON) RawJSON() string {
 	return r.raw
+}
+
+// The client type to which the device settings profile applies.
+type DevicePolicyDefaultGetResponseProfileType string
+
+const (
+	DevicePolicyDefaultGetResponseProfileTypeWARP             DevicePolicyDefaultGetResponseProfileType = "warp"
+	DevicePolicyDefaultGetResponseProfileTypeBrowserExtension DevicePolicyDefaultGetResponseProfileType = "browser_extension"
+)
+
+func (r DevicePolicyDefaultGetResponseProfileType) IsKnown() bool {
+	switch r {
+	case DevicePolicyDefaultGetResponseProfileTypeWARP, DevicePolicyDefaultGetResponseProfileTypeBrowserExtension:
+		return true
+	}
+	return false
 }
 
 type DevicePolicyDefaultGetResponseServiceModeV2 struct {
