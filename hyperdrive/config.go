@@ -176,6 +176,29 @@ func (r *ConfigService) Get(ctx context.Context, hyperdriveID string, query Conf
 	return res, nil
 }
 
+// Restarts the connection pool for the specified Hyperdrive configuration without
+// changing its configuration. Existing connections are drained and a new pool is
+// established at the edge.
+func (r *ConfigService) Restart(ctx context.Context, hyperdriveID string, body ConfigRestartParams, opts ...option.RequestOption) (res *ConfigRestartResponse, err error) {
+	var env ConfigRestartResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if hyperdriveID == "" {
+		err = errors.New("missing required hyperdrive_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s/restart", body.AccountID, hyperdriveID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
 type ConfigNewResponse struct {
 	// Define configurations using a unique string identifier.
 	ID      string                   `json:"id" api:"required"`
@@ -2496,6 +2519,470 @@ func (r configGetResponseMTLSJSON) RawJSON() string {
 	return r.raw
 }
 
+type ConfigRestartResponse struct {
+	// Define configurations using a unique string identifier.
+	ID      string                       `json:"id" api:"required"`
+	Caching ConfigRestartResponseCaching `json:"caching" api:"required"`
+	// The name of the Hyperdrive configuration. Used to identify the configuration in
+	// the Cloudflare dashboard and API.
+	Name string `json:"name" api:"required"`
+	// Combines database connection fields with exactly one supported network location.
+	Origin ConfigRestartResponseOrigin `json:"origin" api:"required"`
+	// Defines the creation time of the Hyperdrive configuration.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// Connects to a PlanetScale database using credentials managed by Cloudflare. The
+	// Cloudflare account must already be linked to PlanetScale in the Hyperdrive
+	// dashboard.
+	Integration ConfigRestartResponseIntegration `json:"integration"`
+	// Defines the last modified time of the Hyperdrive configuration.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// mTLS configuration for the origin connection. Cannot be used with VPC Service
+	// origins; TLS must be managed on the VPC Service.
+	MTLS ConfigRestartResponseMTLS `json:"mtls"`
+	// The (soft) maximum number of connections the Hyperdrive is allowed to make to
+	// the origin database.
+	//
+	// Maximum allowed: 20 for free tier accounts, 100 for paid tier accounts. If not
+	// specified, defaults to 20 for free tier and 60 for paid tier. Certain
+	// Cloudflare-managed origins may be permitted a higher limit. Contact Cloudflare
+	// if you need a higher limit.
+	OriginConnectionLimit int64 `json:"origin_connection_limit"`
+	// Defines the last time the Hyperdrive connection pool was explicitly restarted
+	// via the restart endpoint. Omitted if the pool has never been explicitly
+	// restarted.
+	RestartedOn time.Time                 `json:"restarted_on" api:"nullable" format:"date-time"`
+	JSON        configRestartResponseJSON `json:"-"`
+}
+
+// configRestartResponseJSON contains the JSON metadata for the struct
+// [ConfigRestartResponse]
+type configRestartResponseJSON struct {
+	ID                    apijson.Field
+	Caching               apijson.Field
+	Name                  apijson.Field
+	Origin                apijson.Field
+	CreatedOn             apijson.Field
+	Integration           apijson.Field
+	ModifiedOn            apijson.Field
+	MTLS                  apijson.Field
+	OriginConnectionLimit apijson.Field
+	RestartedOn           apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *ConfigRestartResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configRestartResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConfigRestartResponseCaching struct {
+	// Defines whether caching is disabled.
+	Disabled bool `json:"disabled" api:"required"`
+	// Defines the maximum duration (in seconds) items persist in the cache.
+	MaxAge int64 `json:"max_age"`
+	// Defines the number of seconds the cache may serve a stale response.
+	StaleWhileRevalidate int64                            `json:"stale_while_revalidate"`
+	JSON                 configRestartResponseCachingJSON `json:"-"`
+}
+
+// configRestartResponseCachingJSON contains the JSON metadata for the struct
+// [ConfigRestartResponseCaching]
+type configRestartResponseCachingJSON struct {
+	Disabled             apijson.Field
+	MaxAge               apijson.Field
+	StaleWhileRevalidate apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *ConfigRestartResponseCaching) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configRestartResponseCachingJSON) RawJSON() string {
+	return r.raw
+}
+
+// Combines database connection fields with exactly one supported network location.
+type ConfigRestartResponseOrigin struct {
+	// Set the name of your origin database.
+	Database string `json:"database" api:"required"`
+	// Specifies the URL scheme used to connect to your origin database.
+	Scheme ConfigRestartResponseOriginScheme `json:"scheme" api:"required"`
+	// Set the user of your origin database.
+	User string `json:"user" api:"required"`
+	// Defines the Client ID of the Access token to use when connecting to the origin
+	// database.
+	AccessClientID string `json:"access_client_id"`
+	// Defines the publicly reachable hostname or IP of your origin database. Private,
+	// loopback, and link-local IP addresses are not allowed.
+	Host string `json:"host"`
+	// Defines the port of your origin database. Defaults to 5432 for PostgreSQL or
+	// 3306 for MySQL if not specified.
+	Port int64 `json:"port"`
+	// The identifier of the Workers VPC Service to connect through. Hyperdrive will
+	// egress through the specified VPC Service to reach the origin database.
+	ServiceID string                          `json:"service_id"`
+	JSON      configRestartResponseOriginJSON `json:"-"`
+	union     ConfigRestartResponseOriginUnion
+}
+
+// configRestartResponseOriginJSON contains the JSON metadata for the struct
+// [ConfigRestartResponseOrigin]
+type configRestartResponseOriginJSON struct {
+	Database       apijson.Field
+	Scheme         apijson.Field
+	User           apijson.Field
+	AccessClientID apijson.Field
+	Host           apijson.Field
+	Port           apijson.Field
+	ServiceID      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r configRestartResponseOriginJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ConfigRestartResponseOrigin) UnmarshalJSON(data []byte) (err error) {
+	*r = ConfigRestartResponseOrigin{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ConfigRestartResponseOriginUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [ConfigRestartResponseOriginPublicDatabase],
+// [ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnel],
+// [ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPC].
+func (r ConfigRestartResponseOrigin) AsUnion() ConfigRestartResponseOriginUnion {
+	return r.union
+}
+
+// Combines database connection fields with exactly one supported network location.
+//
+// Union satisfied by [ConfigRestartResponseOriginPublicDatabase],
+// [ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnel] or
+// [ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPC].
+type ConfigRestartResponseOriginUnion interface {
+	implementsConfigRestartResponseOrigin()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ConfigRestartResponseOriginUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ConfigRestartResponseOriginPublicDatabase{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnel{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPC{}),
+		},
+	)
+}
+
+type ConfigRestartResponseOriginPublicDatabase struct {
+	// Set the name of your origin database.
+	Database string `json:"database" api:"required"`
+	// Defines the publicly reachable hostname or IP of your origin database. Private,
+	// loopback, and link-local IP addresses are not allowed.
+	Host string `json:"host" api:"required"`
+	// Defines the port of your origin database. Defaults to 5432 for PostgreSQL or
+	// 3306 for MySQL if not specified.
+	Port int64 `json:"port" api:"required"`
+	// Specifies the URL scheme used to connect to your origin database.
+	Scheme ConfigRestartResponseOriginPublicDatabaseScheme `json:"scheme" api:"required"`
+	// Set the user of your origin database.
+	User string                                        `json:"user" api:"required"`
+	JSON configRestartResponseOriginPublicDatabaseJSON `json:"-"`
+}
+
+// configRestartResponseOriginPublicDatabaseJSON contains the JSON metadata for the
+// struct [ConfigRestartResponseOriginPublicDatabase]
+type configRestartResponseOriginPublicDatabaseJSON struct {
+	Database    apijson.Field
+	Host        apijson.Field
+	Port        apijson.Field
+	Scheme      apijson.Field
+	User        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConfigRestartResponseOriginPublicDatabase) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configRestartResponseOriginPublicDatabaseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConfigRestartResponseOriginPublicDatabase) implementsConfigRestartResponseOrigin() {}
+
+// Specifies the URL scheme used to connect to your origin database.
+type ConfigRestartResponseOriginPublicDatabaseScheme string
+
+const (
+	ConfigRestartResponseOriginPublicDatabaseSchemePostgres   ConfigRestartResponseOriginPublicDatabaseScheme = "postgres"
+	ConfigRestartResponseOriginPublicDatabaseSchemePostgresql ConfigRestartResponseOriginPublicDatabaseScheme = "postgresql"
+	ConfigRestartResponseOriginPublicDatabaseSchemeMysql      ConfigRestartResponseOriginPublicDatabaseScheme = "mysql"
+)
+
+func (r ConfigRestartResponseOriginPublicDatabaseScheme) IsKnown() bool {
+	switch r {
+	case ConfigRestartResponseOriginPublicDatabaseSchemePostgres, ConfigRestartResponseOriginPublicDatabaseSchemePostgresql, ConfigRestartResponseOriginPublicDatabaseSchemeMysql:
+		return true
+	}
+	return false
+}
+
+type ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnel struct {
+	// Defines the Client ID of the Access token to use when connecting to the origin
+	// database.
+	AccessClientID string `json:"access_client_id" api:"required"`
+	// Set the name of your origin database.
+	Database string `json:"database" api:"required"`
+	// Defines the host (hostname or IP) of your origin database.
+	Host string `json:"host" api:"required"`
+	// Specifies the URL scheme used to connect to your origin database.
+	Scheme ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme `json:"scheme" api:"required"`
+	// Set the user of your origin database.
+	User string                                                                       `json:"user" api:"required"`
+	JSON configRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnelJSON `json:"-"`
+}
+
+// configRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnelJSON
+// contains the JSON metadata for the struct
+// [ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnel]
+type configRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnelJSON struct {
+	AccessClientID apijson.Field
+	Database       apijson.Field
+	Host           apijson.Field
+	Scheme         apijson.Field
+	User           apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnelJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnel) implementsConfigRestartResponseOrigin() {
+}
+
+// Specifies the URL scheme used to connect to your origin database.
+type ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme string
+
+const (
+	ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnelSchemePostgres   ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme = "postgres"
+	ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnelSchemePostgresql ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme = "postgresql"
+	ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnelSchemeMysql      ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme = "mysql"
+)
+
+func (r ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnelScheme) IsKnown() bool {
+	switch r {
+	case ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnelSchemePostgres, ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnelSchemePostgresql, ConfigRestartResponseOriginAccessProtectedDatabaseBehindCloudflareTunnelSchemeMysql:
+		return true
+	}
+	return false
+}
+
+type ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPC struct {
+	// Set the name of your origin database.
+	Database string `json:"database" api:"required"`
+	// Specifies the URL scheme used to connect to your origin database.
+	Scheme ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPCScheme `json:"scheme" api:"required"`
+	// The identifier of the Workers VPC Service to connect through. Hyperdrive will
+	// egress through the specified VPC Service to reach the origin database.
+	ServiceID string `json:"service_id" api:"required"`
+	// Set the user of your origin database.
+	User string                                                             `json:"user" api:"required"`
+	JSON configRestartResponseOriginDatabaseReachableThroughAWorkersVPCJSON `json:"-"`
+}
+
+// configRestartResponseOriginDatabaseReachableThroughAWorkersVPCJSON contains the
+// JSON metadata for the struct
+// [ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPC]
+type configRestartResponseOriginDatabaseReachableThroughAWorkersVPCJSON struct {
+	Database    apijson.Field
+	Scheme      apijson.Field
+	ServiceID   apijson.Field
+	User        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPC) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configRestartResponseOriginDatabaseReachableThroughAWorkersVPCJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPC) implementsConfigRestartResponseOrigin() {
+}
+
+// Specifies the URL scheme used to connect to your origin database.
+type ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPCScheme string
+
+const (
+	ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPCSchemePostgres   ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPCScheme = "postgres"
+	ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPCSchemePostgresql ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPCScheme = "postgresql"
+	ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPCSchemeMysql      ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPCScheme = "mysql"
+)
+
+func (r ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPCScheme) IsKnown() bool {
+	switch r {
+	case ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPCSchemePostgres, ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPCSchemePostgresql, ConfigRestartResponseOriginDatabaseReachableThroughAWorkersVPCSchemeMysql:
+		return true
+	}
+	return false
+}
+
+// Specifies the URL scheme used to connect to your origin database.
+type ConfigRestartResponseOriginScheme string
+
+const (
+	ConfigRestartResponseOriginSchemePostgres   ConfigRestartResponseOriginScheme = "postgres"
+	ConfigRestartResponseOriginSchemePostgresql ConfigRestartResponseOriginScheme = "postgresql"
+	ConfigRestartResponseOriginSchemeMysql      ConfigRestartResponseOriginScheme = "mysql"
+)
+
+func (r ConfigRestartResponseOriginScheme) IsKnown() bool {
+	switch r {
+	case ConfigRestartResponseOriginSchemePostgres, ConfigRestartResponseOriginSchemePostgresql, ConfigRestartResponseOriginSchemeMysql:
+		return true
+	}
+	return false
+}
+
+// Connects to a PlanetScale database using credentials managed by Cloudflare. The
+// Cloudflare account must already be linked to PlanetScale in the Hyperdrive
+// dashboard.
+type ConfigRestartResponseIntegration struct {
+	// The name of the PlanetScale database branch.
+	DatabaseBranchName string `json:"database_branch_name" api:"required"`
+	// The name of the PlanetScale database.
+	DatabaseName string `json:"database_name" api:"required"`
+	// The database integration used by this operation.
+	Integration ConfigRestartResponseIntegrationIntegration `json:"integration" api:"required"`
+	// The name of the PlanetScale organization.
+	OrganizationName string `json:"organization_name" api:"required"`
+	// Specifies the URL scheme used to connect to your origin database.
+	Scheme ConfigRestartResponseIntegrationScheme `json:"scheme" api:"required"`
+	// The database name to use when connecting. Defaults to `postgres` for PostgreSQL
+	// and `mysql` for MySQL.
+	CustomDatabaseName string                               `json:"custom_database_name"`
+	JSON               configRestartResponseIntegrationJSON `json:"-"`
+}
+
+// configRestartResponseIntegrationJSON contains the JSON metadata for the struct
+// [ConfigRestartResponseIntegration]
+type configRestartResponseIntegrationJSON struct {
+	DatabaseBranchName apijson.Field
+	DatabaseName       apijson.Field
+	Integration        apijson.Field
+	OrganizationName   apijson.Field
+	Scheme             apijson.Field
+	CustomDatabaseName apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *ConfigRestartResponseIntegration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configRestartResponseIntegrationJSON) RawJSON() string {
+	return r.raw
+}
+
+// The database integration used by this operation.
+type ConfigRestartResponseIntegrationIntegration string
+
+const (
+	ConfigRestartResponseIntegrationIntegrationPlanetscale ConfigRestartResponseIntegrationIntegration = "planetscale"
+)
+
+func (r ConfigRestartResponseIntegrationIntegration) IsKnown() bool {
+	switch r {
+	case ConfigRestartResponseIntegrationIntegrationPlanetscale:
+		return true
+	}
+	return false
+}
+
+// Specifies the URL scheme used to connect to your origin database.
+type ConfigRestartResponseIntegrationScheme string
+
+const (
+	ConfigRestartResponseIntegrationSchemePostgres   ConfigRestartResponseIntegrationScheme = "postgres"
+	ConfigRestartResponseIntegrationSchemePostgresql ConfigRestartResponseIntegrationScheme = "postgresql"
+	ConfigRestartResponseIntegrationSchemeMysql      ConfigRestartResponseIntegrationScheme = "mysql"
+)
+
+func (r ConfigRestartResponseIntegrationScheme) IsKnown() bool {
+	switch r {
+	case ConfigRestartResponseIntegrationSchemePostgres, ConfigRestartResponseIntegrationSchemePostgresql, ConfigRestartResponseIntegrationSchemeMysql:
+		return true
+	}
+	return false
+}
+
+// mTLS configuration for the origin connection. Cannot be used with VPC Service
+// origins; TLS must be managed on the VPC Service.
+type ConfigRestartResponseMTLS struct {
+	// Define CA certificate ID obtained after uploading CA cert.
+	CACertificateID string `json:"ca_certificate_id"`
+	// Define mTLS certificate ID obtained after uploading client cert.
+	MTLSCertificateID string `json:"mtls_certificate_id"`
+	// PostgreSQL accepts `require`, `verify-ca`, and `verify-full`. MySQL accepts
+	// `REQUIRED`, `VERIFY_CA`, and `VERIFY_IDENTITY`. The verify modes require a CA
+	// certificate; the require modes cannot be used with a CA certificate.
+	Sslmode string                        `json:"sslmode"`
+	JSON    configRestartResponseMTLSJSON `json:"-"`
+}
+
+// configRestartResponseMTLSJSON contains the JSON metadata for the struct
+// [ConfigRestartResponseMTLS]
+type configRestartResponseMTLSJSON struct {
+	CACertificateID   apijson.Field
+	MTLSCertificateID apijson.Field
+	Sslmode           apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *ConfigRestartResponseMTLS) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configRestartResponseMTLSJSON) RawJSON() string {
+	return r.raw
+}
+
 type ConfigNewParams struct {
 	// Define configurations using a unique string identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -3563,6 +4050,54 @@ const (
 func (r ConfigGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case ConfigGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type ConfigRestartParams struct {
+	// Define configurations using a unique string identifier.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+}
+
+type ConfigRestartResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   ConfigRestartResponse `json:"result" api:"required"`
+	// Return the status of the API call success.
+	Success ConfigRestartResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    configRestartResponseEnvelopeJSON    `json:"-"`
+}
+
+// configRestartResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ConfigRestartResponseEnvelope]
+type configRestartResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConfigRestartResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configRestartResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Return the status of the API call success.
+type ConfigRestartResponseEnvelopeSuccess bool
+
+const (
+	ConfigRestartResponseEnvelopeSuccessTrue ConfigRestartResponseEnvelopeSuccess = true
+)
+
+func (r ConfigRestartResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConfigRestartResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
