@@ -38,7 +38,7 @@ func NewDatabaseTimeTravelService(opts ...option.RequestOption) (r *DatabaseTime
 	return
 }
 
-// Retrieves the current bookmark, or the nearest bookmark at or before a provided
+// Retrieve the current bookmark, or the nearest bookmark at or before a provided
 // timestamp. Bookmarks can be used with the restore endpoint to revert the
 // database to a previous point in time.
 func (r *DatabaseTimeTravelService) GetBookmark(ctx context.Context, databaseID string, params DatabaseTimeTravelGetBookmarkParams, opts ...option.RequestOption) (res *DatabaseTimeTravelGetBookmarkResponse, err error) {
@@ -61,7 +61,7 @@ func (r *DatabaseTimeTravelService) GetBookmark(ctx context.Context, databaseID 
 	return res, nil
 }
 
-// Restores a D1 database to a previous point in time either via a bookmark or a
+// Restore a D1 database to a previous point in time either via a bookmark or a
 // timestamp.
 func (r *DatabaseTimeTravelService) Restore(ctx context.Context, databaseID string, params DatabaseTimeTravelRestoreParams, opts ...option.RequestOption) (res *DatabaseTimeTravelRestoreResponse, err error) {
 	var env DatabaseTimeTravelRestoreResponseEnvelope

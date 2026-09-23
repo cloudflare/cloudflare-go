@@ -168,7 +168,9 @@ type ResourceLibraryApplicationNewResponse struct {
 	Hostnames []string `json:"hostnames" api:"required"`
 	// Returns the human readable ID.
 	HumanID string `json:"human_id" api:"required"`
-	// IP subnets matched by the application.
+	// IP subnets for this application. Custom application create and update requests
+	// accept IPv4 prefix lengths /8 through /32 and IPv6 prefix lengths /32 through
+	// /128.
 	IPSubnets []string `json:"ip_subnets" api:"required"`
 	// Returns the application name.
 	Name string `json:"name" api:"required"`
@@ -257,7 +259,9 @@ type ResourceLibraryApplicationUpdateResponse struct {
 	Hostnames []string `json:"hostnames" api:"required"`
 	// Returns the human readable ID.
 	HumanID string `json:"human_id" api:"required"`
-	// IP subnets matched by the application.
+	// IP subnets for this application. Custom application create and update requests
+	// accept IPv4 prefix lengths /8 through /32 and IPv6 prefix lengths /32 through
+	// /128.
 	IPSubnets []string `json:"ip_subnets" api:"required"`
 	// Returns the application name.
 	Name string `json:"name" api:"required"`
@@ -351,7 +355,9 @@ type ResourceLibraryApplicationListResponse struct {
 	Hostnames []string `json:"hostnames"`
 	// Returns the human readable ID.
 	HumanID string `json:"human_id"`
-	// IP subnets matched by the application.
+	// IP subnets for this application. Custom application create and update requests
+	// accept IPv4 prefix lengths /8 through /32 and IPv6 prefix lengths /32 through
+	// /128.
 	IPSubnets []string `json:"ip_subnets"`
 	// Returns the application name.
 	Name string `json:"name"`
@@ -463,7 +469,9 @@ type ResourceLibraryApplicationGetResponse struct {
 	Hostnames []string `json:"hostnames" api:"required"`
 	// Returns the human readable ID.
 	HumanID string `json:"human_id" api:"required"`
-	// IP subnets matched by the application.
+	// IP subnets for this application. Custom application create and update requests
+	// accept IPv4 prefix lengths /8 through /32 and IPv6 prefix lengths /32 through
+	// /128.
 	IPSubnets []string `json:"ip_subnets" api:"required"`
 	// Returns the application name.
 	Name string `json:"name" api:"required"`
@@ -533,24 +541,71 @@ func (r ResourceLibraryApplicationGetResponseSupported) IsKnown() bool {
 
 type ResourceLibraryApplicationNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Defines a custom application. At least one hostname or IP subnet is required.
+	// Support domains and port/protocol pairs do not satisfy this requirement.
+	Body ResourceLibraryApplicationNewParamsBodyUnion `json:"body" api:"required"`
+}
+
+func (r ResourceLibraryApplicationNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+// Defines a custom application. At least one hostname or IP subnet is required.
+// Support domains and port/protocol pairs do not satisfy this requirement.
+type ResourceLibraryApplicationNewParamsBody struct {
 	// Returns the category ID.
-	CategoryID param.Field[int64] `json:"category_id" api:"required"`
+	CategoryID param.Field[int64]       `json:"category_id"`
+	Hostnames  param.Field[interface{}] `json:"hostnames"`
 	// Returns the human readable ID.
-	HumanID param.Field[string] `json:"human_id" api:"required"`
+	HumanID   param.Field[string]      `json:"human_id"`
+	IPSubnets param.Field[interface{}] `json:"ip_subnets"`
 	// Returns the application name.
-	Name param.Field[string] `json:"name" api:"required"`
+	Name           param.Field[string]      `json:"name"`
+	PortProtocols  param.Field[interface{}] `json:"port_protocols"`
+	SupportDomains param.Field[interface{}] `json:"support_domains"`
+}
+
+func (r ResourceLibraryApplicationNewParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ResourceLibraryApplicationNewParamsBody) implementsResourceLibraryApplicationNewParamsBodyUnion() {
+}
+
+// Defines a custom application. At least one hostname or IP subnet is required.
+// Support domains and port/protocol pairs do not satisfy this requirement.
+//
+// Satisfied by [zero_trust.ResourceLibraryApplicationNewParamsBodyObject],
+// [zero_trust.ResourceLibraryApplicationNewParamsBodyObject],
+// [ResourceLibraryApplicationNewParamsBody].
+type ResourceLibraryApplicationNewParamsBodyUnion interface {
+	implementsResourceLibraryApplicationNewParamsBodyUnion()
+}
+
+type ResourceLibraryApplicationNewParamsBodyObject struct {
 	// Hostnames matched by the application.
-	Hostnames param.Field[[]string] `json:"hostnames"`
-	// IP subnets matched by the application.
+	Hostnames param.Field[[]string] `json:"hostnames" api:"required"`
+	// Returns the category ID.
+	CategoryID param.Field[int64] `json:"category_id"`
+	// Returns the human readable ID.
+	HumanID param.Field[string] `json:"human_id"`
+	// IP subnets for this application. Custom application create and update requests
+	// accept IPv4 prefix lengths /8 through /32 and IPv6 prefix lengths /32 through
+	// /128.
 	IPSubnets param.Field[[]string] `json:"ip_subnets"`
+	// Returns the application name.
+	Name param.Field[string] `json:"name"`
 	// Port and protocol pairs matched by the application.
 	PortProtocols param.Field[[]string] `json:"port_protocols"`
 	// Support domains matched by the application.
 	SupportDomains param.Field[[]string] `json:"support_domains"`
 }
 
-func (r ResourceLibraryApplicationNewParams) MarshalJSON() (data []byte, err error) {
+func (r ResourceLibraryApplicationNewParamsBodyObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r ResourceLibraryApplicationNewParamsBodyObject) implementsResourceLibraryApplicationNewParamsBodyUnion() {
 }
 
 type ResourceLibraryApplicationNewResponseEnvelope struct {
@@ -698,7 +753,9 @@ type ResourceLibraryApplicationUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Hostnames matched by the application.
 	Hostnames param.Field[[]string] `json:"hostnames"`
-	// IP subnets matched by the application.
+	// IP subnets for this application. Custom application create and update requests
+	// accept IPv4 prefix lengths /8 through /32 and IPv6 prefix lengths /32 through
+	// /128.
 	IPSubnets param.Field[[]string] `json:"ip_subnets"`
 	// Port and protocol pairs matched by the application.
 	PortProtocols param.Field[[]string] `json:"port_protocols"`
@@ -871,21 +928,21 @@ type ResourceLibraryApplicationListParams struct {
 	Fields param.Field[string] `query:"fields"`
 	// Filter applications using key:value format. Supported filter keys:
 	//
-	//   - name: Filter by application name (e.g., name:HR)
-	//   - id: Filter by application ID (e.g., id:498)
-	//   - human_id: Filter by human-readable ID (e.g., human_id:HR)
-	//   - hostname: Filter by hostname or support domain (e.g.,
-	//     hostname:portal.example.com)
-	//   - source: Filter by application source name (e.g., source:cloudflare)
-	//   - ip_subnet: Filter by IP subnet using CIDR containment — returns applications
-	//     where any stored subnet contains the search value (e.g., ip_subnet:10.0.1.5/32
-	//     matches apps with 10.0.0.0/16)
-	//   - category_id: Filter by category ID (e.g., category_id:12).
-	//   - category_name: Filter by category name (e.g., category_name:HR).
-	//   - supported: Filter by supported Cloudflare product (e.g., supported:ACCESS).
-	//     Values: GATEWAY, ACCESS, CASB.
-	//   - review_status: Filter by the account's Gateway review status. Values:
-	//     approved, unapproved, in_review, unreviewed. .
+	// - name: Filter by application name (e.g., name:HR)
+	// - id: Filter by application ID (e.g., id:498)
+	// - human_id: Filter by human-readable ID (e.g., human_id:HR)
+	// - hostname: Filter by hostname or support domain (e.g.,
+	//   hostname:portal.example.com)
+	// - source: Filter by application source name (e.g., source:cloudflare)
+	// - ip_subnet: Filter by IP subnet using CIDR containment — returns applications
+	//   where any stored subnet contains the search value (e.g., ip_subnet:10.0.1.5/32
+	//   matches apps with 10.0.0.0/16)
+	// - category_id: Filter by category ID (e.g., category_id:12).
+	// - category_name: Filter by category name (e.g., category_name:HR).
+	// - supported: Filter by supported Cloudflare product (e.g., supported:ACCESS).
+	//   Values: GATEWAY, ACCESS, CASB.
+	// - review_status: Filter by the account's Gateway review status. Values:
+	//   approved, unapproved, in_review, unreviewed. .
 	Filter param.Field[string] `query:"filter"`
 	// Limit of number of results to return (max 250).
 	Limit param.Field[int64] `query:"limit"`

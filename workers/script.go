@@ -7161,9 +7161,10 @@ func (r ScriptListParams) URLQuery() (v url.Values) {
 type ScriptDeleteParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// If set to true, delete will not be stopped by associated service binding,
-	// durable object, or other binding. Any of these associated bindings/durable
-	// objects will be deleted along with the script.
+	// If true, delete the Worker even when other Workers still reference it. Service
+	// bindings in those Workers may be left broken. Durable Object namespaces
+	// implemented by the deleted Worker are deleted even if other Workers reference
+	// them.
 	Force param.Field[bool] `query:"force"`
 }
 

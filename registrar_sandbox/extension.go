@@ -38,7 +38,8 @@ func NewExtensionService(opts ...option.RequestOption) (r *ExtensionService) {
 }
 
 // Returns metadata and JSON Schema documents describing the expected input
-// structure for registration operations on each supported extension (TLD).
+// structure for registration and transfer operations on each supported extension
+// (TLD).
 //
 // This endpoint uses cursor-based pagination. Results are ordered by extension
 // name by default. To fetch the next page, pass the `cursor` value from the
@@ -70,7 +71,8 @@ func (r *ExtensionService) List(ctx context.Context, params ExtensionListParams,
 }
 
 // Returns metadata and JSON Schema documents describing the expected input
-// structure for registration operations on each supported extension (TLD).
+// structure for registration and transfer operations on each supported extension
+// (TLD).
 //
 // This endpoint uses cursor-based pagination. Results are ordered by extension
 // name by default. To fetch the next page, pass the `cursor` value from the
@@ -85,7 +87,8 @@ func (r *ExtensionService) ListAutoPaging(ctx context.Context, params ExtensionL
 }
 
 // Returns metadata and JSON Schema documents describing the expected input
-// structure for registration operations on a specific extension (TLD).
+// structure for registration and transfer operations on a specific extension
+// (TLD).
 //
 // Supports HTTP conditional GET via `ETag`. Include the `ETag` value from a
 // previous response in an `If-None-Match` header to receive a `304 Not Modified`
@@ -110,15 +113,18 @@ func (r *ExtensionService) Get(ctx context.Context, extension string, query Exte
 	return res, nil
 }
 
-// Extension entry with metadata and JSON Schema documents for the registration
-// operation.
+// Extension entry with metadata and JSON Schema documents for registration and
+// transfer operations.
 type ExtensionListResponse struct {
 	// Extension metadata.
 	Metadata ExtensionListResponseMetadata `json:"metadata" api:"required"`
 	// JSON Schema describing the expected input structure for registration operations
 	// on this extension.
-	RegistrationSchema interface{}               `json:"registration_schema" api:"required"`
-	JSON               extensionListResponseJSON `json:"-"`
+	RegistrationSchema interface{} `json:"registration_schema" api:"required"`
+	// JSON Schema describing the expected input structure for transfer operations on
+	// this extension.
+	TransferSchema interface{}               `json:"transfer_schema" api:"required"`
+	JSON           extensionListResponseJSON `json:"-"`
 }
 
 // extensionListResponseJSON contains the JSON metadata for the struct
@@ -126,6 +132,7 @@ type ExtensionListResponse struct {
 type extensionListResponseJSON struct {
 	Metadata           apijson.Field
 	RegistrationSchema apijson.Field
+	TransferSchema     apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -165,15 +172,18 @@ func (r extensionListResponseMetadataJSON) RawJSON() string {
 	return r.raw
 }
 
-// Extension entry with metadata and JSON Schema documents for the registration
-// operation.
+// Extension entry with metadata and JSON Schema documents for registration and
+// transfer operations.
 type ExtensionGetResponse struct {
 	// Extension metadata.
 	Metadata ExtensionGetResponseMetadata `json:"metadata" api:"required"`
 	// JSON Schema describing the expected input structure for registration operations
 	// on this extension.
-	RegistrationSchema interface{}              `json:"registration_schema" api:"required"`
-	JSON               extensionGetResponseJSON `json:"-"`
+	RegistrationSchema interface{} `json:"registration_schema" api:"required"`
+	// JSON Schema describing the expected input structure for transfer operations on
+	// this extension.
+	TransferSchema interface{}              `json:"transfer_schema" api:"required"`
+	JSON           extensionGetResponseJSON `json:"-"`
 }
 
 // extensionGetResponseJSON contains the JSON metadata for the struct
@@ -181,6 +191,7 @@ type ExtensionGetResponse struct {
 type extensionGetResponseJSON struct {
 	Metadata           apijson.Field
 	RegistrationSchema apijson.Field
+	TransferSchema     apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -287,8 +298,8 @@ type ExtensionGetParams struct {
 type ExtensionGetResponseEnvelope struct {
 	Errors   []ExtensionGetResponseEnvelopeErrors   `json:"errors" api:"required"`
 	Messages []ExtensionGetResponseEnvelopeMessages `json:"messages" api:"required"`
-	// Extension entry with metadata and JSON Schema documents for the registration
-	// operation.
+	// Extension entry with metadata and JSON Schema documents for registration and
+	// transfer operations.
 	Result ExtensionGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
 	Success ExtensionGetResponseEnvelopeSuccess `json:"success" api:"required"`

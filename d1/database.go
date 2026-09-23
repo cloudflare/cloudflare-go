@@ -41,7 +41,7 @@ func NewDatabaseService(opts ...option.RequestOption) (r *DatabaseService) {
 	return
 }
 
-// Returns the created D1 database.
+// Create a new D1 database in your account.
 func (r *DatabaseService) New(ctx context.Context, params DatabaseNewParams, opts ...option.RequestOption) (res *D1, err error) {
 	var env DatabaseNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -58,7 +58,7 @@ func (r *DatabaseService) New(ctx context.Context, params DatabaseNewParams, opt
 	return res, nil
 }
 
-// Updates the specified D1 database.
+// Update a D1 database's configuration.
 func (r *DatabaseService) Update(ctx context.Context, databaseID string, params DatabaseUpdateParams, opts ...option.RequestOption) (res *D1, err error) {
 	var env DatabaseUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -79,7 +79,7 @@ func (r *DatabaseService) Update(ctx context.Context, databaseID string, params 
 	return res, nil
 }
 
-// Returns a list of D1 databases.
+// List D1 databases in your account.
 func (r *DatabaseService) List(ctx context.Context, params DatabaseListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DatabaseListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -101,12 +101,12 @@ func (r *DatabaseService) List(ctx context.Context, params DatabaseListParams, o
 	return res, nil
 }
 
-// Returns a list of D1 databases.
+// List D1 databases in your account.
 func (r *DatabaseService) ListAutoPaging(ctx context.Context, params DatabaseListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[DatabaseListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Deletes the specified D1 database.
+// Delete a D1 database.
 func (r *DatabaseService) Delete(ctx context.Context, databaseID string, body DatabaseDeleteParams, opts ...option.RequestOption) (res *DatabaseDeleteResponse, err error) {
 	var env DatabaseDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -127,7 +127,7 @@ func (r *DatabaseService) Delete(ctx context.Context, databaseID string, body Da
 	return res, nil
 }
 
-// Updates partially the specified D1 database.
+// Partially update a D1 database's configuration.
 func (r *DatabaseService) Edit(ctx context.Context, databaseID string, params DatabaseEditParams, opts ...option.RequestOption) (res *D1, err error) {
 	var env DatabaseEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -148,10 +148,11 @@ func (r *DatabaseService) Edit(ctx context.Context, databaseID string, params Da
 	return res, nil
 }
 
-// Returns a URL where the SQL contents of your D1 can be downloaded. Note: this
-// process may take some time for larger DBs, during which your D1 will be
-// unavailable to serve queries. To avoid blocking your DB unnecessarily, an
-// in-progress export must be continually polled or will automatically cancel.
+// Export the SQL contents of a D1 database and return a URL where they can be
+// downloaded. Note: this process may take some time for larger DBs, during which
+// your D1 will be unavailable to serve queries. To avoid blocking your DB
+// unnecessarily, an in-progress export must be continually polled or will
+// automatically cancel.
 func (r *DatabaseService) Export(ctx context.Context, databaseID string, params DatabaseExportParams, opts ...option.RequestOption) (res *DatabaseExportResponse, err error) {
 	var env DatabaseExportResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -172,7 +173,7 @@ func (r *DatabaseService) Export(ctx context.Context, databaseID string, params 
 	return res, nil
 }
 
-// Returns the specified D1 database.
+// Get details for a specific D1 database.
 func (r *DatabaseService) Get(ctx context.Context, databaseID string, params DatabaseGetParams, opts ...option.RequestOption) (res *D1, err error) {
 	var env DatabaseGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -193,8 +194,8 @@ func (r *DatabaseService) Get(ctx context.Context, databaseID string, params Dat
 	return res, nil
 }
 
-// Generates a temporary URL for uploading an SQL file to, then instructing the D1
-// to import it and polling it for status updates. Imports block the D1 for their
+// Generate a temporary URL for uploading an SQL file to, then instruct the D1 to
+// import it and poll it for status updates. Imports block the D1 for their
 // duration.
 func (r *DatabaseService) Import(ctx context.Context, databaseID string, params DatabaseImportParams, opts ...option.RequestOption) (res *DatabaseImportResponse, err error) {
 	var env DatabaseImportResponseEnvelope
@@ -216,7 +217,7 @@ func (r *DatabaseService) Import(ctx context.Context, databaseID string, params 
 	return res, nil
 }
 
-// Returns the query result as an object.
+// Execute a SQL query against a D1 database and return results as objects.
 func (r *DatabaseService) Query(ctx context.Context, databaseID string, params DatabaseQueryParams, opts ...option.RequestOption) (res *pagination.SinglePage[QueryResult], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -242,13 +243,14 @@ func (r *DatabaseService) Query(ctx context.Context, databaseID string, params D
 	return res, nil
 }
 
-// Returns the query result as an object.
+// Execute a SQL query against a D1 database and return results as objects.
 func (r *DatabaseService) QueryAutoPaging(ctx context.Context, databaseID string, params DatabaseQueryParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[QueryResult] {
 	return pagination.NewSinglePageAutoPager(r.Query(ctx, databaseID, params, opts...))
 }
 
-// Returns the query result rows as arrays rather than objects. This is a
-// performance-optimized version of the /query endpoint.
+// Execute a SQL query against a D1 database and return result rows as arrays
+// rather than objects. This is a performance-optimized version of the /query
+// endpoint.
 func (r *DatabaseService) Raw(ctx context.Context, databaseID string, params DatabaseRawParams, opts ...option.RequestOption) (res *pagination.SinglePage[DatabaseRawResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -274,8 +276,9 @@ func (r *DatabaseService) Raw(ctx context.Context, databaseID string, params Dat
 	return res, nil
 }
 
-// Returns the query result rows as arrays rather than objects. This is a
-// performance-optimized version of the /query endpoint.
+// Execute a SQL query against a D1 database and return result rows as arrays
+// rather than objects. This is a performance-optimized version of the /query
+// endpoint.
 func (r *DatabaseService) RawAutoPaging(ctx context.Context, databaseID string, params DatabaseRawParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DatabaseRawResponse] {
 	return pagination.NewSinglePageAutoPager(r.Raw(ctx, databaseID, params, opts...))
 }

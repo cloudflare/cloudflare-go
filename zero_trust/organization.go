@@ -249,6 +249,11 @@ type Organization struct {
 	MfaRequiredForAllApps bool `json:"mfa_required_for_all_apps"`
 	// The name of your Zero Trust organization.
 	Name string `json:"name"`
+	// Configures automatic enforcement for inactive service tokens. A service token is
+	// inactive if no policy references it, and it has not successfully authenticated
+	// with an Access application during the selected inactivity period. This setting
+	// applies to every service token in your Zero Trust account.
+	ServiceTokenInactivity OrganizationServiceTokenInactivity `json:"service_token_inactivity"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
 	// h.
@@ -284,6 +289,7 @@ type organizationJSON struct {
 	MfaPivKeyRequirements                  apijson.Field
 	MfaRequiredForAllApps                  apijson.Field
 	Name                                   apijson.Field
+	ServiceTokenInactivity                 apijson.Field
 	SessionDuration                        apijson.Field
 	UIReadOnlyToggleReason                 apijson.Field
 	UserSeatExpirationInactiveTime         apijson.Field
@@ -497,6 +503,55 @@ func (r OrganizationMfaPivKeyRequirementsTouchPolicy) IsKnown() bool {
 	return false
 }
 
+// Configures automatic enforcement for inactive service tokens. A service token is
+// inactive if no policy references it, and it has not successfully authenticated
+// with an Access application during the selected inactivity period. This setting
+// applies to every service token in your Zero Trust account.
+type OrganizationServiceTokenInactivity struct {
+	// The action applied to an inactive service token.
+	Action OrganizationServiceTokenInactivityAction `json:"action" api:"required"`
+	// Whether automatic enforcement for inactive service tokens is enabled.
+	Enabled bool `json:"enabled" api:"required"`
+	// The number of days a service token must be inactive before the configured action
+	// is applied.
+	InactivityThresholdDays int64                                  `json:"inactivity_threshold_days" api:"required"`
+	JSON                    organizationServiceTokenInactivityJSON `json:"-"`
+}
+
+// organizationServiceTokenInactivityJSON contains the JSON metadata for the struct
+// [OrganizationServiceTokenInactivity]
+type organizationServiceTokenInactivityJSON struct {
+	Action                  apijson.Field
+	Enabled                 apijson.Field
+	InactivityThresholdDays apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *OrganizationServiceTokenInactivity) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r organizationServiceTokenInactivityJSON) RawJSON() string {
+	return r.raw
+}
+
+// The action applied to an inactive service token.
+type OrganizationServiceTokenInactivityAction string
+
+const (
+	OrganizationServiceTokenInactivityActionDisable OrganizationServiceTokenInactivityAction = "disable"
+	OrganizationServiceTokenInactivityActionDelete  OrganizationServiceTokenInactivityAction = "delete"
+)
+
+func (r OrganizationServiceTokenInactivityAction) IsKnown() bool {
+	switch r {
+	case OrganizationServiceTokenInactivityActionDisable, OrganizationServiceTokenInactivityActionDelete:
+		return true
+	}
+	return false
+}
+
 type OrganizationListResponse struct {
 	// When set to true, users can authenticate via WARP for any application in your
 	// organization. Application settings will take precedence over this value.
@@ -534,6 +589,11 @@ type OrganizationListResponse struct {
 	MfaRequiredForAllApps bool `json:"mfa_required_for_all_apps"`
 	// The name of your Zero Trust organization.
 	Name string `json:"name"`
+	// Configures automatic enforcement for inactive service tokens. A service token is
+	// inactive if no policy references it, and it has not successfully authenticated
+	// with an Access application during the selected inactivity period. This setting
+	// applies to every service token in your Zero Trust account.
+	ServiceTokenInactivity OrganizationListResponseServiceTokenInactivity `json:"service_token_inactivity"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
 	// h.
@@ -573,6 +633,7 @@ type organizationListResponseJSON struct {
 	MfaPivKeyRequirements                  apijson.Field
 	MfaRequiredForAllApps                  apijson.Field
 	Name                                   apijson.Field
+	ServiceTokenInactivity                 apijson.Field
 	SessionDuration                        apijson.Field
 	TrustedAccounts                        apijson.Field
 	UIReadOnlyToggleReason                 apijson.Field
@@ -787,6 +848,55 @@ func (r OrganizationListResponseMfaPivKeyRequirementsTouchPolicy) IsKnown() bool
 	return false
 }
 
+// Configures automatic enforcement for inactive service tokens. A service token is
+// inactive if no policy references it, and it has not successfully authenticated
+// with an Access application during the selected inactivity period. This setting
+// applies to every service token in your Zero Trust account.
+type OrganizationListResponseServiceTokenInactivity struct {
+	// The action applied to an inactive service token.
+	Action OrganizationListResponseServiceTokenInactivityAction `json:"action" api:"required"`
+	// Whether automatic enforcement for inactive service tokens is enabled.
+	Enabled bool `json:"enabled" api:"required"`
+	// The number of days a service token must be inactive before the configured action
+	// is applied.
+	InactivityThresholdDays int64                                              `json:"inactivity_threshold_days" api:"required"`
+	JSON                    organizationListResponseServiceTokenInactivityJSON `json:"-"`
+}
+
+// organizationListResponseServiceTokenInactivityJSON contains the JSON metadata
+// for the struct [OrganizationListResponseServiceTokenInactivity]
+type organizationListResponseServiceTokenInactivityJSON struct {
+	Action                  apijson.Field
+	Enabled                 apijson.Field
+	InactivityThresholdDays apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *OrganizationListResponseServiceTokenInactivity) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r organizationListResponseServiceTokenInactivityJSON) RawJSON() string {
+	return r.raw
+}
+
+// The action applied to an inactive service token.
+type OrganizationListResponseServiceTokenInactivityAction string
+
+const (
+	OrganizationListResponseServiceTokenInactivityActionDisable OrganizationListResponseServiceTokenInactivityAction = "disable"
+	OrganizationListResponseServiceTokenInactivityActionDelete  OrganizationListResponseServiceTokenInactivityAction = "delete"
+)
+
+func (r OrganizationListResponseServiceTokenInactivityAction) IsKnown() bool {
+	switch r {
+	case OrganizationListResponseServiceTokenInactivityActionDisable, OrganizationListResponseServiceTokenInactivityActionDelete:
+		return true
+	}
+	return false
+}
+
 type OrganizationRevokeUsersResponse bool
 
 const (
@@ -842,6 +952,11 @@ type OrganizationNewParams struct {
 	// the infrastructure SSH authenticators ('piv_key' and 'ssh_fido2_key') if the
 	// organization has any non-infrastructure applications.
 	MfaRequiredForAllApps param.Field[bool] `json:"mfa_required_for_all_apps"`
+	// Configures automatic enforcement for inactive service tokens. A service token is
+	// inactive if no policy references it, and it has not successfully authenticated
+	// with an Access application during the selected inactivity period. This setting
+	// applies to every service token in your Zero Trust account.
+	ServiceTokenInactivity param.Field[OrganizationNewParamsServiceTokenInactivity] `json:"service_token_inactivity"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
 	// h.
@@ -998,6 +1113,40 @@ const (
 func (r OrganizationNewParamsMfaPivKeyRequirementsTouchPolicy) IsKnown() bool {
 	switch r {
 	case OrganizationNewParamsMfaPivKeyRequirementsTouchPolicyNever, OrganizationNewParamsMfaPivKeyRequirementsTouchPolicyAlways, OrganizationNewParamsMfaPivKeyRequirementsTouchPolicyCached:
+		return true
+	}
+	return false
+}
+
+// Configures automatic enforcement for inactive service tokens. A service token is
+// inactive if no policy references it, and it has not successfully authenticated
+// with an Access application during the selected inactivity period. This setting
+// applies to every service token in your Zero Trust account.
+type OrganizationNewParamsServiceTokenInactivity struct {
+	// The action applied to an inactive service token.
+	Action param.Field[OrganizationNewParamsServiceTokenInactivityAction] `json:"action" api:"required"`
+	// Whether automatic enforcement for inactive service tokens is enabled.
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
+	// The number of days a service token must be inactive before the configured action
+	// is applied.
+	InactivityThresholdDays param.Field[int64] `json:"inactivity_threshold_days" api:"required"`
+}
+
+func (r OrganizationNewParamsServiceTokenInactivity) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The action applied to an inactive service token.
+type OrganizationNewParamsServiceTokenInactivityAction string
+
+const (
+	OrganizationNewParamsServiceTokenInactivityActionDisable OrganizationNewParamsServiceTokenInactivityAction = "disable"
+	OrganizationNewParamsServiceTokenInactivityActionDelete  OrganizationNewParamsServiceTokenInactivityAction = "delete"
+)
+
+func (r OrganizationNewParamsServiceTokenInactivityAction) IsKnown() bool {
+	switch r {
+	case OrganizationNewParamsServiceTokenInactivityActionDisable, OrganizationNewParamsServiceTokenInactivityActionDelete:
 		return true
 	}
 	return false
@@ -1183,6 +1332,11 @@ type OrganizationUpdateParams struct {
 	MfaRequiredForAllApps param.Field[bool] `json:"mfa_required_for_all_apps"`
 	// The name of your Zero Trust organization.
 	Name param.Field[string] `json:"name"`
+	// Configures automatic enforcement for inactive service tokens. A service token is
+	// inactive if no policy references it, and it has not successfully authenticated
+	// with an Access application during the selected inactivity period. This setting
+	// applies to every service token in your Zero Trust account.
+	ServiceTokenInactivity param.Field[OrganizationUpdateParamsServiceTokenInactivity] `json:"service_token_inactivity"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
 	// h.
@@ -1351,6 +1505,40 @@ const (
 func (r OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicy) IsKnown() bool {
 	switch r {
 	case OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicyNever, OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicyAlways, OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicyCached:
+		return true
+	}
+	return false
+}
+
+// Configures automatic enforcement for inactive service tokens. A service token is
+// inactive if no policy references it, and it has not successfully authenticated
+// with an Access application during the selected inactivity period. This setting
+// applies to every service token in your Zero Trust account.
+type OrganizationUpdateParamsServiceTokenInactivity struct {
+	// The action applied to an inactive service token.
+	Action param.Field[OrganizationUpdateParamsServiceTokenInactivityAction] `json:"action" api:"required"`
+	// Whether automatic enforcement for inactive service tokens is enabled.
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
+	// The number of days a service token must be inactive before the configured action
+	// is applied.
+	InactivityThresholdDays param.Field[int64] `json:"inactivity_threshold_days" api:"required"`
+}
+
+func (r OrganizationUpdateParamsServiceTokenInactivity) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The action applied to an inactive service token.
+type OrganizationUpdateParamsServiceTokenInactivityAction string
+
+const (
+	OrganizationUpdateParamsServiceTokenInactivityActionDisable OrganizationUpdateParamsServiceTokenInactivityAction = "disable"
+	OrganizationUpdateParamsServiceTokenInactivityActionDelete  OrganizationUpdateParamsServiceTokenInactivityAction = "delete"
+)
+
+func (r OrganizationUpdateParamsServiceTokenInactivityAction) IsKnown() bool {
+	switch r {
+	case OrganizationUpdateParamsServiceTokenInactivityActionDisable, OrganizationUpdateParamsServiceTokenInactivityActionDelete:
 		return true
 	}
 	return false

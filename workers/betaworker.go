@@ -111,9 +111,9 @@ func (r *BetaWorkerService) ListAutoPaging(ctx context.Context, params BetaWorke
 }
 
 // Delete a Worker and all its associated resources (versions, deployments, etc.).
-func (r *BetaWorkerService) Delete(ctx context.Context, workerID string, body BetaWorkerDeleteParams, opts ...option.RequestOption) (res *BetaWorkerDeleteResponse, err error) {
+func (r *BetaWorkerService) Delete(ctx context.Context, workerID string, params BetaWorkerDeleteParams, opts ...option.RequestOption) (res *BetaWorkerDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if body.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -121,8 +121,8 @@ func (r *BetaWorkerService) Delete(ctx context.Context, workerID string, body Be
 		err = errors.New("missing required worker_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/workers/workers/%s", body.AccountID, workerID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/workers/%s", params.AccountID, workerID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &res, opts...)
 	return res, err
 }
 
@@ -2137,6 +2137,19 @@ func (r BetaWorkerListParamsOrderBy) IsKnown() bool {
 type BetaWorkerDeleteParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// If true, delete the Worker even when other Workers still reference it. Service
+	// bindings in those Workers may be left broken. Durable Object namespaces
+	// implemented by the deleted Worker are deleted even if other Workers reference
+	// them.
+	Force param.Field[bool] `query:"force"`
+}
+
+// URLQuery serializes [BetaWorkerDeleteParams]'s query parameters as `url.Values`.
+func (r BetaWorkerDeleteParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type BetaWorkerEditParams struct {

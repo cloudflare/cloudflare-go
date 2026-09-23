@@ -501,11 +501,11 @@ type GatewayListListParams struct {
 	//
 	// Supported fields and their matching behaviour:
 	//
-	//   - `name` — case-insensitive substring match on the list name.
-	//   - `id` — substring match on the list ID (UUID), with or without dashes.
-	//   - `type` — exact match on the list type. Supersedes the legacy `type` query
-	//     parameter when both are supplied. Must be one of the valid type values.
-	//   - `item_count` — exact integer match on the number of items in the list.
+	// - `name` — case-insensitive substring match on the list name.
+	// - `id` — substring match on the list ID (UUID), with or without dashes.
+	// - `type` — exact match on the list type. Supersedes the legacy `type` query
+	//   parameter when both are supplied. Must be one of the valid type values.
+	// - `item_count` — exact integer match on the number of items in the list.
 	//
 	// Each entry must match one of the per-field patterns below: the field must be one
 	// of `name`, `id`, `type`, or `item_count`; `name`/`id` accept any value, `type`
@@ -516,12 +516,12 @@ type GatewayListListParams struct {
 	// `created_at` in ascending order (i.e. creation order) for backwards
 	// compatibility. Supported values:
 	//
-	//   - `name` — sort alphabetically by list name.
-	//   - `created_at` — sort by creation time; defaults to descending unless
-	//     `direction` is set.
-	//   - `updated_at` — sort by last-modified time; defaults to descending unless
-	//     `direction` is set.
-	//   - `item_count` — sort by number of items in the list.
+	// - `name` — sort alphabetically by list name.
+	// - `created_at` — sort by creation time; defaults to descending unless
+	//   `direction` is set.
+	// - `updated_at` — sort by last-modified time; defaults to descending unless
+	//   `direction` is set.
+	// - `item_count` — sort by number of items in the list.
 	OrderBy param.Field[GatewayListListParamsOrderBy] `query:"order_by"`
 	// Case-insensitive substring match on the list name or description. When combined
 	// with `filter`, both must match (logical AND).

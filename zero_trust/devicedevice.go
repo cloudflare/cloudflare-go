@@ -143,6 +143,8 @@ type DeviceDeviceListResponse struct {
 	LastSeenAt string `json:"last_seen_at" api:"required,nullable"`
 	// The name of the device.
 	Name string `json:"name" api:"required"`
+	// Tags assigned to the device. An empty object if the device has no tags.
+	Tags map[string]string `json:"tags" api:"required"`
 	// The RFC3339 timestamp when the device was last updated.
 	UpdatedAt string `json:"updated_at" api:"required"`
 	// Version of the WARP client.
@@ -187,6 +189,7 @@ type deviceDeviceListResponseJSON struct {
 	CreatedAt            apijson.Field
 	LastSeenAt           apijson.Field
 	Name                 apijson.Field
+	Tags                 apijson.Field
 	UpdatedAt            apijson.Field
 	ClientVersion        apijson.Field
 	DeletedAt            apijson.Field
@@ -316,6 +319,8 @@ type DeviceDeviceGetResponse struct {
 	LastSeenAt string `json:"last_seen_at" api:"required,nullable"`
 	// The name of the device.
 	Name string `json:"name" api:"required"`
+	// Tags assigned to the device. An empty object if the device has no tags.
+	Tags map[string]string `json:"tags" api:"required"`
 	// The RFC3339 timestamp when the device was last updated.
 	UpdatedAt string `json:"updated_at" api:"required"`
 	// Version of the WARP client.
@@ -360,6 +365,7 @@ type deviceDeviceGetResponseJSON struct {
 	CreatedAt            apijson.Field
 	LastSeenAt           apijson.Field
 	Name                 apijson.Field
+	Tags                 apijson.Field
 	UpdatedAt            apijson.Field
 	ClientVersion        apijson.Field
 	DeletedAt            apijson.Field
@@ -508,6 +514,9 @@ type DeviceDeviceListParams struct {
 	SortBy param.Field[DeviceDeviceListParamsSortBy] `query:"sort_by"`
 	// Sort direction.
 	SortOrder param.Field[DeviceDeviceListParamsSortOrder] `query:"sort_order"`
+	// Filter by one or more device tags in key:value format. Devices must match all
+	// provided tags.
+	Tag param.Field[[]string] `query:"tag"`
 }
 
 // URLQuery serializes [DeviceDeviceListParams]'s query parameters as `url.Values`.

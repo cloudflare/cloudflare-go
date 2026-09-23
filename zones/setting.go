@@ -255,7 +255,7 @@ func (r AlwaysOnlineEditable) IsKnown() bool {
 }
 
 type AlwaysUseHTTPS struct {
-	// If enabled, any ` http://“ URL is converted to  `https://` through a 301
+	// If enabled, any ` http://`` URL is converted to  `https://` through a 301
 	// redirect.
 	ID   AlwaysUseHTTPSID   `json:"id"`
 	JSON alwaysUseHTTPSJSON `json:"-"`
@@ -295,7 +295,7 @@ func (r AlwaysUseHTTPSID) IsKnown() bool {
 }
 
 type AlwaysUseHTTPSParam struct {
-	// If enabled, any ` http://“ URL is converted to  `https://` through a 301
+	// If enabled, any ` http://`` URL is converted to  `https://` through a 301
 	// redirect.
 	ID param.Field[AlwaysUseHTTPSID] `json:"id"`
 }
@@ -678,14 +678,14 @@ func (r BrowserCheckParam) ImplementsPageRuleEditParamsActionUnion() {}
 type CacheLevel struct {
 	// Apply custom caching based on the option selected.
 	ID CacheLevelID `json:"id"`
-	//   - `bypass`: Cloudflare does not cache.
-	//   - `basic`: Delivers resources from cache when there is no query string.
-	//   - `simplified`: Delivers the same resource to everyone independent of the query
-	//     string.
-	//   - `aggressive`: Caches all static content that has a query string.
-	//   - `cache_everything`: Treats all content as static and caches all file types
-	//     beyond the
-	//     [Cloudflare default cached content](https://developers.cloudflare.com/cache/concepts/default-cache-behavior/#default-cached-file-extensions).
+	// - `bypass`: Cloudflare does not cache.
+	// - `basic`: Delivers resources from cache when there is no query string.
+	// - `simplified`: Delivers the same resource to everyone independent of the query
+	//   string.
+	// - `aggressive`: Caches all static content that has a query string.
+	// - `cache_everything`: Treats all content as static and caches all file types
+	//   beyond the
+	//   [Cloudflare default cached content](https://developers.cloudflare.com/cache/concepts/default-cache-behavior/#default-cached-file-extensions).
 	Value CacheLevelValue `json:"value"`
 	JSON  cacheLevelJSON  `json:"-"`
 }
@@ -752,14 +752,14 @@ func (r CacheLevelValue) IsKnown() bool {
 type CacheLevelParam struct {
 	// Apply custom caching based on the option selected.
 	ID param.Field[CacheLevelID] `json:"id"`
-	//   - `bypass`: Cloudflare does not cache.
-	//   - `basic`: Delivers resources from cache when there is no query string.
-	//   - `simplified`: Delivers the same resource to everyone independent of the query
-	//     string.
-	//   - `aggressive`: Caches all static content that has a query string.
-	//   - `cache_everything`: Treats all content as static and caches all file types
-	//     beyond the
-	//     [Cloudflare default cached content](https://developers.cloudflare.com/cache/concepts/default-cache-behavior/#default-cached-file-extensions).
+	// - `bypass`: Cloudflare does not cache.
+	// - `basic`: Delivers resources from cache when there is no query string.
+	// - `simplified`: Delivers the same resource to everyone independent of the query
+	//   string.
+	// - `aggressive`: Caches all static content that has a query string.
+	// - `cache_everything`: Treats all content as static and caches all file types
+	//   beyond the
+	//   [Cloudflare default cached content](https://developers.cloudflare.com/cache/concepts/default-cache-behavior/#default-cached-file-extensions).
 	Value param.Field[CacheLevelValue] `json:"value"`
 }
 

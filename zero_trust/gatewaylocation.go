@@ -799,11 +799,11 @@ type GatewayLocationListParams struct {
 	// Field to sort the returned locations by. When omitted, the order of results is
 	// unspecified. Supported values:
 	//
-	//   - `name` — sort alphabetically by location name.
-	//   - `created_at` — sort by creation time; defaults to descending unless
-	//     `direction` is set.
-	//   - `updated_at` — sort by last-modified time; defaults to descending unless
-	//     `direction` is set.
+	// - `name` — sort alphabetically by location name.
+	// - `created_at` — sort by creation time; defaults to descending unless
+	//   `direction` is set.
+	// - `updated_at` — sort by last-modified time; defaults to descending unless
+	//   `direction` is set.
 	OrderBy param.Field[GatewayLocationListParamsOrderBy] `query:"order_by"`
 	// Case-insensitive substring match on the location name. When combined with
 	// `filter`, both must match (logical AND).

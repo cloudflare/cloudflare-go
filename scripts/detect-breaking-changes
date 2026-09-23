@@ -404,6 +404,8 @@ TEST_PATHS=(
 	registrar/registrationstatus_test.go
 	registrar/updatestatus_test.go
 	registrar/extension_test.go
+	registrar/transferin_test.go
+	registrar/transferinstatus_test.go
 	registrar_sandbox/registrarsandbox_test.go
 	registrar_sandbox/registration_test.go
 	registrar_sandbox/registrationstatus_test.go

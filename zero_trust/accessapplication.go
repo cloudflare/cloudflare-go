@@ -2601,6 +2601,13 @@ type AccessApplicationNewResponseSelfHostedApplicationDestination struct {
 	L4Protocol AccessApplicationNewResponseSelfHostedApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                            `json:"port_range"`
@@ -2625,6 +2632,7 @@ type accessApplicationNewResponseSelfHostedApplicationDestinationJSON struct {
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -2717,7 +2725,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -2729,6 +2741,7 @@ type AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinat
 // contains the JSON metadata for the struct
 // [AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination]
 type accessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -2744,6 +2757,50 @@ func (r accessApplicationNewResponseSelfHostedApplicationDestinationsPublicDesti
 }
 
 func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestination) implementsAccessApplicationNewResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationOverride]
+type accessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewResponseSelfHostedApplicationDestinationsPublicDestinationType string
@@ -2885,8 +2942,12 @@ func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsViaMcpServe
 type AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                             `json:"worker_id" api:"required"`
-	JSON     accessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationJSON
@@ -2895,6 +2956,7 @@ type AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinat
 type accessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2924,6 +2986,50 @@ func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDesti
 	return false
 }
 
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -2932,8 +3038,12 @@ type AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerD
 	Type AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                    `json:"worker_id" api:"required"`
-	JSON     accessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON
@@ -2942,6 +3052,7 @@ type AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerD
 type accessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2971,6 +3082,50 @@ func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWork
 	return false
 }
 
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                            `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -2978,7 +3133,11 @@ func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsPreviewWork
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON
@@ -2986,6 +3145,7 @@ type AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDest
 // [AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestination]
 type accessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3015,6 +3175,50 @@ func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersD
 	return false
 }
 
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                         `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -3022,7 +3226,11 @@ func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsAllWorkersD
 // Workers, their previews, or specific paths.
 type AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -3030,6 +3238,7 @@ type AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWork
 // [AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3054,6 +3263,50 @@ const (
 func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -4708,6 +4961,13 @@ type AccessApplicationNewResponseBrowserSSHApplicationDestination struct {
 	L4Protocol AccessApplicationNewResponseBrowserSSHApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                            `json:"port_range"`
@@ -4732,6 +4992,7 @@ type accessApplicationNewResponseBrowserSSHApplicationDestinationJSON struct {
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -4824,7 +5085,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -4836,6 +5101,7 @@ type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinat
 // contains the JSON metadata for the struct
 // [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination]
 type accessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -4851,6 +5117,50 @@ func (r accessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDesti
 }
 
 func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestination) implementsAccessApplicationNewResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationOverride]
+type accessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPublicDestinationType string
@@ -4992,8 +5302,12 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsViaMcpServe
 type AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                             `json:"worker_id" api:"required"`
-	JSON     accessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON
@@ -5002,6 +5316,7 @@ type AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinat
 type accessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5031,6 +5346,50 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDesti
 	return false
 }
 
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -5039,8 +5398,12 @@ type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerD
 	Type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                    `json:"worker_id" api:"required"`
-	JSON     accessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON
@@ -5049,6 +5412,7 @@ type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerD
 type accessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5078,6 +5442,50 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWork
 	return false
 }
 
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                            `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -5085,7 +5493,11 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsPreviewWork
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON
@@ -5093,6 +5505,7 @@ type AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDest
 // [AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestination]
 type accessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5122,6 +5535,50 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersD
 	return false
 }
 
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                         `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -5129,7 +5586,11 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllWorkersD
 // Workers, their previews, or specific paths.
 type AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -5137,6 +5598,7 @@ type AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWork
 // [AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5161,6 +5623,50 @@ const (
 func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -6078,6 +6584,13 @@ type AccessApplicationNewResponseBrowserVNCApplicationDestination struct {
 	L4Protocol AccessApplicationNewResponseBrowserVNCApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                            `json:"port_range"`
@@ -6102,6 +6615,7 @@ type accessApplicationNewResponseBrowserVNCApplicationDestinationJSON struct {
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -6194,7 +6708,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -6206,6 +6724,7 @@ type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinat
 // contains the JSON metadata for the struct
 // [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination]
 type accessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -6221,6 +6740,50 @@ func (r accessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDesti
 }
 
 func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestination) implementsAccessApplicationNewResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationOverride]
+type accessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPublicDestinationType string
@@ -6362,8 +6925,12 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsViaMcpServe
 type AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                             `json:"worker_id" api:"required"`
-	JSON     accessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON
@@ -6372,6 +6939,7 @@ type AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinat
 type accessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -6401,6 +6969,50 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDesti
 	return false
 }
 
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -6409,8 +7021,12 @@ type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerD
 	Type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                    `json:"worker_id" api:"required"`
-	JSON     accessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON
@@ -6419,6 +7035,7 @@ type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerD
 type accessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -6448,6 +7065,50 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWork
 	return false
 }
 
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                            `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -6455,7 +7116,11 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsPreviewWork
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON
@@ -6463,6 +7128,7 @@ type AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDest
 // [AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestination]
 type accessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -6492,6 +7158,50 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersD
 	return false
 }
 
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                         `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -6499,7 +7209,11 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllWorkersD
 // Workers, their previews, or specific paths.
 type AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -6507,6 +7221,7 @@ type AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWork
 // [AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -6531,6 +7246,50 @@ const (
 func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -9601,6 +10360,13 @@ type AccessApplicationNewResponseBrowserRDPApplicationDestination struct {
 	L4Protocol AccessApplicationNewResponseBrowserRDPApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                            `json:"port_range"`
@@ -9625,6 +10391,7 @@ type accessApplicationNewResponseBrowserRDPApplicationDestinationJSON struct {
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -9717,7 +10484,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -9729,6 +10500,7 @@ type AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinat
 // contains the JSON metadata for the struct
 // [AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestination]
 type accessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -9744,6 +10516,50 @@ func (r accessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDesti
 }
 
 func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestination) implementsAccessApplicationNewResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationOverride]
+type accessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewResponseBrowserRDPApplicationDestinationsPublicDestinationType string
@@ -9885,8 +10701,12 @@ func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsViaMcpServe
 type AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                             `json:"worker_id" api:"required"`
-	JSON     accessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON
@@ -9895,6 +10715,7 @@ type AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinat
 type accessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -9924,6 +10745,50 @@ func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDesti
 	return false
 }
 
+type AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -9932,8 +10797,12 @@ type AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerD
 	Type AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                    `json:"worker_id" api:"required"`
-	JSON     accessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON
@@ -9942,6 +10811,7 @@ type AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerD
 type accessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -9971,6 +10841,50 @@ func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWork
 	return false
 }
 
+type AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                            `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -9978,7 +10892,11 @@ func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsPreviewWork
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON
@@ -9986,6 +10904,7 @@ type AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDest
 // [AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestination]
 type accessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -10015,6 +10934,50 @@ func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersD
 	return false
 }
 
+type AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                         `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -10022,7 +10985,11 @@ func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllWorkersD
 // Workers, their previews, or specific paths.
 type AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -10030,6 +10997,7 @@ type AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWork
 // [AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -10054,6 +11022,50 @@ const (
 func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -10886,6 +11898,13 @@ type AccessApplicationNewResponseMcpServerApplicationDestination struct {
 	L4Protocol AccessApplicationNewResponseMcpServerApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                           `json:"port_range"`
@@ -10910,6 +11929,7 @@ type accessApplicationNewResponseMcpServerApplicationDestinationJSON struct {
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -11002,7 +12022,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -11014,6 +12038,7 @@ type AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinati
 // contains the JSON metadata for the struct
 // [AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestination]
 type accessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -11029,6 +12054,50 @@ func (r accessApplicationNewResponseMcpServerApplicationDestinationsPublicDestin
 }
 
 func (r AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestination) implementsAccessApplicationNewResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                    `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationOverride]
+type accessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewResponseMcpServerApplicationDestinationsPublicDestinationType string
@@ -11170,8 +12239,12 @@ func (r AccessApplicationNewResponseMcpServerApplicationDestinationsViaMcpServer
 type AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                            `json:"worker_id" api:"required"`
-	JSON     accessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationJSON
@@ -11180,6 +12253,7 @@ type AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinati
 type accessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -11209,6 +12283,50 @@ func (r AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestin
 	return false
 }
 
+type AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                    `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -11217,8 +12335,12 @@ type AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDe
 	Type AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                   `json:"worker_id" api:"required"`
-	JSON     accessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON
@@ -11227,6 +12349,7 @@ type AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDe
 type accessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -11256,6 +12379,50 @@ func (r AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorke
 	return false
 }
 
+type AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                           `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -11263,7 +12430,11 @@ func (r AccessApplicationNewResponseMcpServerApplicationDestinationsPreviewWorke
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON
@@ -11271,6 +12442,7 @@ type AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDesti
 // [AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestination]
 type accessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -11300,6 +12472,50 @@ func (r AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDe
 	return false
 }
 
+type AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                        `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -11307,7 +12523,11 @@ func (r AccessApplicationNewResponseMcpServerApplicationDestinationsAllWorkersDe
 // Workers, their previews, or specific paths.
 type AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -11315,6 +12535,7 @@ type AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorke
 // [AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -11339,6 +12560,50 @@ const (
 func (r AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                               `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -12127,6 +13392,13 @@ type AccessApplicationNewResponseMcpServerPortalApplicationDestination struct {
 	L4Protocol AccessApplicationNewResponseMcpServerPortalApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                                 `json:"port_range"`
@@ -12151,6 +13423,7 @@ type accessApplicationNewResponseMcpServerPortalApplicationDestinationJSON struc
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -12243,7 +13516,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -12255,6 +13532,7 @@ type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDes
 // contains the JSON metadata for the struct
 // [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestination]
 type accessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -12270,6 +13548,50 @@ func (r accessApplicationNewResponseMcpServerPortalApplicationDestinationsPublic
 }
 
 func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestination) implementsAccessApplicationNewResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                          `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride]
+type accessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPublicDestinationType string
@@ -12411,8 +13733,12 @@ func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsViaMcp
 type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                                  `json:"worker_id" api:"required"`
-	JSON     accessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON
@@ -12421,6 +13747,7 @@ type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDes
 type accessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -12450,6 +13777,50 @@ func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorker
 	return false
 }
 
+type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                          `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -12458,8 +13829,12 @@ type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWo
 	Type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                         `json:"worker_id" api:"required"`
-	JSON     accessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON
@@ -12468,6 +13843,7 @@ type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWo
 type accessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -12497,6 +13873,50 @@ func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPrevie
 	return false
 }
 
+type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                 `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -12504,7 +13924,11 @@ func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsPrevie
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON
@@ -12512,6 +13936,7 @@ type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorker
 // [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestination]
 type accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -12541,6 +13966,50 @@ func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWor
 	return false
 }
 
+type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                              `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -12548,7 +14017,11 @@ func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllWor
 // Workers, their previews, or specific paths.
 type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -12556,6 +14029,7 @@ type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPrevie
 // [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -12580,6 +14054,50 @@ const (
 func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -13738,6 +15256,13 @@ type AccessApplicationUpdateResponseSelfHostedApplicationDestination struct {
 	L4Protocol AccessApplicationUpdateResponseSelfHostedApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                               `json:"port_range"`
@@ -13762,6 +15287,7 @@ type accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON struct 
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -13854,7 +15380,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -13866,6 +15396,7 @@ type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDesti
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination]
 type accessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -13881,6 +15412,50 @@ func (r accessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDe
 }
 
 func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestination) implementsAccessApplicationUpdateResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                        `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationOverride]
+type accessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPublicDestinationType string
@@ -14022,8 +15597,12 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsViaMcpSe
 type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                                `json:"worker_id" api:"required"`
-	JSON     accessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationJSON
@@ -14032,6 +15611,7 @@ type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDesti
 type accessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -14061,6 +15641,50 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDe
 	return false
 }
 
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                        `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -14069,8 +15693,12 @@ type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWork
 	Type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                       `json:"worker_id" api:"required"`
-	JSON     accessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON
@@ -14079,6 +15707,7 @@ type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWork
 type accessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -14108,6 +15737,50 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewW
 	return false
 }
 
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                               `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -14115,7 +15788,11 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsPreviewW
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON
@@ -14123,6 +15800,7 @@ type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersD
 // [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestination]
 type accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -14152,6 +15830,50 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorke
 	return false
 }
 
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                            `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -14159,7 +15881,11 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllWorke
 // Workers, their previews, or specific paths.
 type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -14167,6 +15893,7 @@ type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewW
 // [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -14191,6 +15918,50 @@ const (
 func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                   `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -15847,6 +17618,13 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationDestination struct {
 	L4Protocol AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                               `json:"port_range"`
@@ -15871,6 +17649,7 @@ type accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON struct 
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -15963,7 +17742,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -15975,6 +17758,7 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDesti
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination]
 type accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -15990,6 +17774,50 @@ func (r accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDe
 }
 
 func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestination) implementsAccessApplicationUpdateResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                        `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationOverride]
+type accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPublicDestinationType string
@@ -16131,8 +17959,12 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsViaMcpSe
 type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                                `json:"worker_id" api:"required"`
-	JSON     accessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON
@@ -16141,6 +17973,7 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDesti
 type accessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -16170,6 +18003,50 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDe
 	return false
 }
 
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                        `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -16178,8 +18055,12 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWork
 	Type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                       `json:"worker_id" api:"required"`
-	JSON     accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON
@@ -16188,6 +18069,7 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWork
 type accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -16217,6 +18099,50 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewW
 	return false
 }
 
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                               `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -16224,7 +18150,11 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsPreviewW
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON
@@ -16232,6 +18162,7 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersD
 // [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestination]
 type accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -16261,6 +18192,50 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorke
 	return false
 }
 
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                            `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -16268,7 +18243,11 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllWorke
 // Workers, their previews, or specific paths.
 type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -16276,6 +18255,7 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewW
 // [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -16300,6 +18280,50 @@ const (
 func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                   `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -17218,6 +19242,13 @@ type AccessApplicationUpdateResponseBrowserVNCApplicationDestination struct {
 	L4Protocol AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                               `json:"port_range"`
@@ -17242,6 +19273,7 @@ type accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON struct 
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -17334,7 +19366,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -17346,6 +19382,7 @@ type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDesti
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination]
 type accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -17361,6 +19398,50 @@ func (r accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDe
 }
 
 func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestination) implementsAccessApplicationUpdateResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                        `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationOverride]
+type accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPublicDestinationType string
@@ -17502,8 +19583,12 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsViaMcpSe
 type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                                `json:"worker_id" api:"required"`
-	JSON     accessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON
@@ -17512,6 +19597,7 @@ type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDesti
 type accessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -17541,6 +19627,50 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDe
 	return false
 }
 
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                        `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -17549,8 +19679,12 @@ type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWork
 	Type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                       `json:"worker_id" api:"required"`
-	JSON     accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON
@@ -17559,6 +19693,7 @@ type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWork
 type accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -17588,6 +19723,50 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewW
 	return false
 }
 
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                               `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -17595,7 +19774,11 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsPreviewW
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON
@@ -17603,6 +19786,7 @@ type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersD
 // [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestination]
 type accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -17632,6 +19816,50 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorke
 	return false
 }
 
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                            `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -17639,7 +19867,11 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllWorke
 // Workers, their previews, or specific paths.
 type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -17647,6 +19879,7 @@ type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewW
 // [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -17671,6 +19904,50 @@ const (
 func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                   `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -20745,6 +23022,13 @@ type AccessApplicationUpdateResponseBrowserRDPApplicationDestination struct {
 	L4Protocol AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                               `json:"port_range"`
@@ -20769,6 +23053,7 @@ type accessApplicationUpdateResponseBrowserRDPApplicationDestinationJSON struct 
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -20861,7 +23146,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -20873,6 +23162,7 @@ type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDesti
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestination]
 type accessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -20888,6 +23178,50 @@ func (r accessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDe
 }
 
 func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestination) implementsAccessApplicationUpdateResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                        `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationOverride]
+type accessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPublicDestinationType string
@@ -21029,8 +23363,12 @@ func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsViaMcpSe
 type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                                `json:"worker_id" api:"required"`
-	JSON     accessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON
@@ -21039,6 +23377,7 @@ type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDesti
 type accessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -21068,6 +23407,50 @@ func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDe
 	return false
 }
 
+type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                        `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -21076,8 +23459,12 @@ type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWork
 	Type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                       `json:"worker_id" api:"required"`
-	JSON     accessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON
@@ -21086,6 +23473,7 @@ type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWork
 type accessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -21115,6 +23503,50 @@ func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewW
 	return false
 }
 
+type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                               `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -21122,7 +23554,11 @@ func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsPreviewW
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON
@@ -21130,6 +23566,7 @@ type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersD
 // [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestination]
 type accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -21159,6 +23596,50 @@ func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorke
 	return false
 }
 
+type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                            `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -21166,7 +23647,11 @@ func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllWorke
 // Workers, their previews, or specific paths.
 type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -21174,6 +23659,7 @@ type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewW
 // [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -21198,6 +23684,50 @@ const (
 func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                   `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -22031,6 +24561,13 @@ type AccessApplicationUpdateResponseMcpServerApplicationDestination struct {
 	L4Protocol AccessApplicationUpdateResponseMcpServerApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                              `json:"port_range"`
@@ -22055,6 +24592,7 @@ type accessApplicationUpdateResponseMcpServerApplicationDestinationJSON struct {
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -22147,7 +24685,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -22159,6 +24701,7 @@ type AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestin
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestination]
 type accessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -22174,6 +24717,50 @@ func (r accessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDes
 }
 
 func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestination) implementsAccessApplicationUpdateResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                       `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationOverride]
+type accessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateResponseMcpServerApplicationDestinationsPublicDestinationType string
@@ -22315,8 +24902,12 @@ func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsViaMcpSer
 type AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                               `json:"worker_id" api:"required"`
-	JSON     accessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationJSON
@@ -22325,6 +24916,7 @@ type AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestin
 type accessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -22354,6 +24946,50 @@ func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDes
 	return false
 }
 
+type AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                       `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -22362,8 +24998,12 @@ type AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorke
 	Type AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                      `json:"worker_id" api:"required"`
-	JSON     accessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON
@@ -22372,6 +25012,7 @@ type AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorke
 type accessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -22401,6 +25042,50 @@ func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWo
 	return false
 }
 
+type AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                              `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -22408,7 +25093,11 @@ func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsPreviewWo
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON
@@ -22416,6 +25105,7 @@ type AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDe
 // [AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestination]
 type accessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -22445,6 +25135,50 @@ func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorker
 	return false
 }
 
+type AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                           `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -22452,7 +25186,11 @@ func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllWorker
 // Workers, their previews, or specific paths.
 type AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -22460,6 +25198,7 @@ type AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWo
 // [AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -22484,6 +25223,50 @@ const (
 func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                  `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -23274,6 +26057,13 @@ type AccessApplicationUpdateResponseMcpServerPortalApplicationDestination struct
 	L4Protocol AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                                    `json:"port_range"`
@@ -23298,6 +26088,7 @@ type accessApplicationUpdateResponseMcpServerPortalApplicationDestinationJSON st
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -23390,7 +26181,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -23402,6 +26197,7 @@ type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublic
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestination]
 type accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -23417,6 +26213,50 @@ func (r accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPub
 }
 
 func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestination) implementsAccessApplicationUpdateResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                             `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride]
+type accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPublicDestinationType string
@@ -23558,8 +26398,12 @@ func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsVia
 type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                                     `json:"worker_id" api:"required"`
-	JSON     accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON
@@ -23568,6 +26412,7 @@ type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorker
 type accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -23597,6 +26442,50 @@ func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWor
 	return false
 }
 
+type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                             `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -23605,8 +26494,12 @@ type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPrevie
 	Type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                            `json:"worker_id" api:"required"`
-	JSON     accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON
@@ -23615,6 +26508,7 @@ type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPrevie
 type accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -23644,6 +26538,50 @@ func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPre
 	return false
 }
 
+type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                    `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -23651,7 +26589,11 @@ func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsPre
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON
@@ -23659,6 +26601,7 @@ type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWor
 // [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestination]
 type accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -23688,6 +26631,50 @@ func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAll
 	return false
 }
 
+type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                 `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -23695,7 +26682,11 @@ func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAll
 // Workers, their previews, or specific paths.
 type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -23703,6 +26694,7 @@ type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPre
 // [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -23727,6 +26719,50 @@ const (
 func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                        `json:"path_pattern" api:"required"`
+	JSON        accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -24885,6 +27921,13 @@ type AccessApplicationListResponseSelfHostedApplicationDestination struct {
 	L4Protocol AccessApplicationListResponseSelfHostedApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                             `json:"port_range"`
@@ -24909,6 +27952,7 @@ type accessApplicationListResponseSelfHostedApplicationDestinationJSON struct {
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -25001,7 +28045,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -25013,6 +28061,7 @@ type AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestina
 // contains the JSON metadata for the struct
 // [AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination]
 type accessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -25028,6 +28077,50 @@ func (r accessApplicationListResponseSelfHostedApplicationDestinationsPublicDest
 }
 
 func (r AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestination) implementsAccessApplicationListResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                      `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationOverride]
+type accessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationListResponseSelfHostedApplicationDestinationsPublicDestinationType string
@@ -25169,8 +28262,12 @@ func (r AccessApplicationListResponseSelfHostedApplicationDestinationsViaMcpServ
 type AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                              `json:"worker_id" api:"required"`
-	JSON     accessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationJSON
@@ -25179,6 +28276,7 @@ type AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestina
 type accessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -25208,6 +28306,50 @@ func (r AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDest
 	return false
 }
 
+type AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                      `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -25216,8 +28358,12 @@ type AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorker
 	Type AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                     `json:"worker_id" api:"required"`
-	JSON     accessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON
@@ -25226,6 +28372,7 @@ type AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorker
 type accessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -25255,6 +28402,50 @@ func (r AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWor
 	return false
 }
 
+type AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                             `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -25262,7 +28453,11 @@ func (r AccessApplicationListResponseSelfHostedApplicationDestinationsPreviewWor
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON
@@ -25270,6 +28465,7 @@ type AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDes
 // [AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestination]
 type accessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -25299,6 +28495,50 @@ func (r AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkers
 	return false
 }
 
+type AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                          `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -25306,7 +28546,11 @@ func (r AccessApplicationListResponseSelfHostedApplicationDestinationsAllWorkers
 // Workers, their previews, or specific paths.
 type AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -25314,6 +28558,7 @@ type AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWor
 // [AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -25338,6 +28583,50 @@ const (
 func (r AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                 `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -26993,6 +30282,13 @@ type AccessApplicationListResponseBrowserSSHApplicationDestination struct {
 	L4Protocol AccessApplicationListResponseBrowserSSHApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                             `json:"port_range"`
@@ -27017,6 +30313,7 @@ type accessApplicationListResponseBrowserSSHApplicationDestinationJSON struct {
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -27109,7 +30406,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -27121,6 +30422,7 @@ type AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestina
 // contains the JSON metadata for the struct
 // [AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination]
 type accessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -27136,6 +30438,50 @@ func (r accessApplicationListResponseBrowserSSHApplicationDestinationsPublicDest
 }
 
 func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestination) implementsAccessApplicationListResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                      `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationOverride]
+type accessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationListResponseBrowserSSHApplicationDestinationsPublicDestinationType string
@@ -27277,8 +30623,12 @@ func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsViaMcpServ
 type AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                              `json:"worker_id" api:"required"`
-	JSON     accessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON
@@ -27287,6 +30637,7 @@ type AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestina
 type accessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -27316,6 +30667,50 @@ func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDest
 	return false
 }
 
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                      `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -27324,8 +30719,12 @@ type AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorker
 	Type AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                     `json:"worker_id" api:"required"`
-	JSON     accessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON
@@ -27334,6 +30733,7 @@ type AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorker
 type accessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -27363,6 +30763,50 @@ func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWor
 	return false
 }
 
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                             `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -27370,7 +30814,11 @@ func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsPreviewWor
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON
@@ -27378,6 +30826,7 @@ type AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDes
 // [AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestination]
 type accessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -27407,6 +30856,50 @@ func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkers
 	return false
 }
 
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                          `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -27414,7 +30907,11 @@ func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsAllWorkers
 // Workers, their previews, or specific paths.
 type AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -27422,6 +30919,7 @@ type AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWor
 // [AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -27446,6 +30944,50 @@ const (
 func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                 `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -28364,6 +31906,13 @@ type AccessApplicationListResponseBrowserVNCApplicationDestination struct {
 	L4Protocol AccessApplicationListResponseBrowserVNCApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                             `json:"port_range"`
@@ -28388,6 +31937,7 @@ type accessApplicationListResponseBrowserVNCApplicationDestinationJSON struct {
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -28480,7 +32030,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -28492,6 +32046,7 @@ type AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestina
 // contains the JSON metadata for the struct
 // [AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination]
 type accessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -28507,6 +32062,50 @@ func (r accessApplicationListResponseBrowserVNCApplicationDestinationsPublicDest
 }
 
 func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestination) implementsAccessApplicationListResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                      `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationOverride]
+type accessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationListResponseBrowserVNCApplicationDestinationsPublicDestinationType string
@@ -28648,8 +32247,12 @@ func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsViaMcpServ
 type AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                              `json:"worker_id" api:"required"`
-	JSON     accessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON
@@ -28658,6 +32261,7 @@ type AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestina
 type accessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -28687,6 +32291,50 @@ func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDest
 	return false
 }
 
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                      `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -28695,8 +32343,12 @@ type AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorker
 	Type AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                     `json:"worker_id" api:"required"`
-	JSON     accessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON
@@ -28705,6 +32357,7 @@ type AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorker
 type accessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -28734,6 +32387,50 @@ func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWor
 	return false
 }
 
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                             `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -28741,7 +32438,11 @@ func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsPreviewWor
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON
@@ -28749,6 +32450,7 @@ type AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDes
 // [AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestination]
 type accessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -28778,6 +32480,50 @@ func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkers
 	return false
 }
 
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                          `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -28785,7 +32531,11 @@ func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsAllWorkers
 // Workers, their previews, or specific paths.
 type AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -28793,6 +32543,7 @@ type AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWor
 // [AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -28817,6 +32568,50 @@ const (
 func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                 `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -31888,6 +35683,13 @@ type AccessApplicationListResponseBrowserRDPApplicationDestination struct {
 	L4Protocol AccessApplicationListResponseBrowserRDPApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                             `json:"port_range"`
@@ -31912,6 +35714,7 @@ type accessApplicationListResponseBrowserRDPApplicationDestinationJSON struct {
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -32004,7 +35807,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -32016,6 +35823,7 @@ type AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestina
 // contains the JSON metadata for the struct
 // [AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestination]
 type accessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -32031,6 +35839,50 @@ func (r accessApplicationListResponseBrowserRDPApplicationDestinationsPublicDest
 }
 
 func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestination) implementsAccessApplicationListResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                      `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationOverride]
+type accessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationListResponseBrowserRDPApplicationDestinationsPublicDestinationType string
@@ -32172,8 +36024,12 @@ func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsViaMcpServ
 type AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                              `json:"worker_id" api:"required"`
-	JSON     accessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON
@@ -32182,6 +36038,7 @@ type AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestina
 type accessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -32211,6 +36068,50 @@ func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDest
 	return false
 }
 
+type AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                      `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -32219,8 +36120,12 @@ type AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorker
 	Type AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                     `json:"worker_id" api:"required"`
-	JSON     accessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON
@@ -32229,6 +36134,7 @@ type AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorker
 type accessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -32258,6 +36164,50 @@ func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWor
 	return false
 }
 
+type AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                             `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -32265,7 +36215,11 @@ func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsPreviewWor
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON
@@ -32273,6 +36227,7 @@ type AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDes
 // [AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestination]
 type accessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -32302,6 +36257,50 @@ func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkers
 	return false
 }
 
+type AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                          `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -32309,7 +36308,11 @@ func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsAllWorkers
 // Workers, their previews, or specific paths.
 type AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -32317,6 +36320,7 @@ type AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWor
 // [AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -32341,6 +36345,50 @@ const (
 func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                 `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -33174,6 +37222,13 @@ type AccessApplicationListResponseMcpServerApplicationDestination struct {
 	L4Protocol AccessApplicationListResponseMcpServerApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                            `json:"port_range"`
@@ -33198,6 +37253,7 @@ type accessApplicationListResponseMcpServerApplicationDestinationJSON struct {
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -33290,7 +37346,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -33302,6 +37362,7 @@ type AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestinat
 // contains the JSON metadata for the struct
 // [AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestination]
 type accessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -33317,6 +37378,50 @@ func (r accessApplicationListResponseMcpServerApplicationDestinationsPublicDesti
 }
 
 func (r AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestination) implementsAccessApplicationListResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationOverride]
+type accessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationListResponseMcpServerApplicationDestinationsPublicDestinationType string
@@ -33458,8 +37563,12 @@ func (r AccessApplicationListResponseMcpServerApplicationDestinationsViaMcpServe
 type AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                             `json:"worker_id" api:"required"`
-	JSON     accessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationJSON
@@ -33468,6 +37577,7 @@ type AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinat
 type accessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -33497,6 +37607,50 @@ func (r AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDesti
 	return false
 }
 
+type AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -33505,8 +37659,12 @@ type AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerD
 	Type AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                    `json:"worker_id" api:"required"`
-	JSON     accessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON
@@ -33515,6 +37673,7 @@ type AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerD
 type accessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -33544,6 +37703,50 @@ func (r AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWork
 	return false
 }
 
+type AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                            `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -33551,7 +37754,11 @@ func (r AccessApplicationListResponseMcpServerApplicationDestinationsPreviewWork
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON
@@ -33559,6 +37766,7 @@ type AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDest
 // [AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestination]
 type accessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -33588,6 +37796,50 @@ func (r AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersD
 	return false
 }
 
+type AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                         `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -33595,7 +37847,11 @@ func (r AccessApplicationListResponseMcpServerApplicationDestinationsAllWorkersD
 // Workers, their previews, or specific paths.
 type AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -33603,6 +37859,7 @@ type AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWork
 // [AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -33627,6 +37884,50 @@ const (
 func (r AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -34417,6 +38718,13 @@ type AccessApplicationListResponseMcpServerPortalApplicationDestination struct {
 	L4Protocol AccessApplicationListResponseMcpServerPortalApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                                  `json:"port_range"`
@@ -34441,6 +38749,7 @@ type accessApplicationListResponseMcpServerPortalApplicationDestinationJSON stru
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -34533,7 +38842,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -34545,6 +38858,7 @@ type AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDe
 // contains the JSON metadata for the struct
 // [AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestination]
 type accessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -34560,6 +38874,50 @@ func (r accessApplicationListResponseMcpServerPortalApplicationDestinationsPubli
 }
 
 func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestination) implementsAccessApplicationListResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                           `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride]
+type accessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationListResponseMcpServerPortalApplicationDestinationsPublicDestinationType string
@@ -34701,8 +39059,12 @@ func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsViaMc
 type AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                                   `json:"worker_id" api:"required"`
-	JSON     accessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON
@@ -34711,6 +39073,7 @@ type AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDe
 type accessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -34740,6 +39103,50 @@ func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorke
 	return false
 }
 
+type AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                           `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -34748,8 +39155,12 @@ type AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewW
 	Type AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                          `json:"worker_id" api:"required"`
-	JSON     accessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON
@@ -34758,6 +39169,7 @@ type AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewW
 type accessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -34787,6 +39199,50 @@ func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsPrevi
 	return false
 }
 
+type AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                  `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -34794,7 +39250,11 @@ func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsPrevi
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON
@@ -34802,6 +39262,7 @@ type AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorke
 // [AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestination]
 type accessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -34831,6 +39292,50 @@ func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWo
 	return false
 }
 
+type AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                               `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -34838,7 +39343,11 @@ func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllWo
 // Workers, their previews, or specific paths.
 type AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -34846,6 +39355,7 @@ type AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPrevi
 // [AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -34870,6 +39380,50 @@ const (
 func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                      `json:"path_pattern" api:"required"`
+	JSON        accessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -36049,6 +40603,13 @@ type AccessApplicationGetResponseSelfHostedApplicationDestination struct {
 	L4Protocol AccessApplicationGetResponseSelfHostedApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                            `json:"port_range"`
@@ -36073,6 +40634,7 @@ type accessApplicationGetResponseSelfHostedApplicationDestinationJSON struct {
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -36165,7 +40727,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -36177,6 +40743,7 @@ type AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinat
 // contains the JSON metadata for the struct
 // [AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination]
 type accessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -36192,6 +40759,50 @@ func (r accessApplicationGetResponseSelfHostedApplicationDestinationsPublicDesti
 }
 
 func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestination) implementsAccessApplicationGetResponseSelfHostedApplicationDestination() {
+}
+
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationOverride]
+type accessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationGetResponseSelfHostedApplicationDestinationsPublicDestinationType string
@@ -36333,8 +40944,12 @@ func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsViaMcpServe
 type AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                             `json:"worker_id" api:"required"`
-	JSON     accessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationJSON
@@ -36343,6 +40958,7 @@ type AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinat
 type accessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -36372,6 +40988,50 @@ func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDesti
 	return false
 }
 
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseSelfHostedApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -36380,8 +41040,12 @@ type AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerD
 	Type AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                    `json:"worker_id" api:"required"`
-	JSON     accessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON
@@ -36390,6 +41054,7 @@ type AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerD
 type accessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -36419,6 +41084,50 @@ func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWork
 	return false
 }
 
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                            `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -36426,7 +41135,11 @@ func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsPreviewWork
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON
@@ -36434,6 +41147,7 @@ type AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDest
 // [AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestination]
 type accessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -36463,6 +41177,50 @@ func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersD
 	return false
 }
 
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                         `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -36470,7 +41228,11 @@ func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsAllWorkersD
 // Workers, their previews, or specific paths.
 type AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -36478,6 +41240,7 @@ type AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWork
 // [AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -36502,6 +41265,50 @@ const (
 func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseSelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -38156,6 +42963,13 @@ type AccessApplicationGetResponseBrowserSSHApplicationDestination struct {
 	L4Protocol AccessApplicationGetResponseBrowserSSHApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                            `json:"port_range"`
@@ -38180,6 +42994,7 @@ type accessApplicationGetResponseBrowserSSHApplicationDestinationJSON struct {
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -38272,7 +43087,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -38284,6 +43103,7 @@ type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinat
 // contains the JSON metadata for the struct
 // [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination]
 type accessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -38299,6 +43119,50 @@ func (r accessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDesti
 }
 
 func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestination) implementsAccessApplicationGetResponseBrowserSSHApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationOverride]
+type accessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPublicDestinationType string
@@ -38440,8 +43304,12 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsViaMcpServe
 type AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                             `json:"worker_id" api:"required"`
-	JSON     accessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON
@@ -38450,6 +43318,7 @@ type AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinat
 type accessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -38479,6 +43348,50 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDesti
 	return false
 }
 
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -38487,8 +43400,12 @@ type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerD
 	Type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                    `json:"worker_id" api:"required"`
-	JSON     accessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON
@@ -38497,6 +43414,7 @@ type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerD
 type accessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -38526,6 +43444,50 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWork
 	return false
 }
 
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                            `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -38533,7 +43495,11 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsPreviewWork
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON
@@ -38541,6 +43507,7 @@ type AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDest
 // [AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestination]
 type accessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -38570,6 +43537,50 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersD
 	return false
 }
 
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                         `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -38577,7 +43588,11 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllWorkersD
 // Workers, their previews, or specific paths.
 type AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -38585,6 +43600,7 @@ type AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWork
 // [AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -38609,6 +43625,50 @@ const (
 func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -39526,6 +44586,13 @@ type AccessApplicationGetResponseBrowserVNCApplicationDestination struct {
 	L4Protocol AccessApplicationGetResponseBrowserVNCApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                            `json:"port_range"`
@@ -39550,6 +44617,7 @@ type accessApplicationGetResponseBrowserVNCApplicationDestinationJSON struct {
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -39642,7 +44710,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -39654,6 +44726,7 @@ type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinat
 // contains the JSON metadata for the struct
 // [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination]
 type accessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -39669,6 +44742,50 @@ func (r accessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDesti
 }
 
 func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestination) implementsAccessApplicationGetResponseBrowserVNCApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationOverride]
+type accessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPublicDestinationType string
@@ -39810,8 +44927,12 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsViaMcpServe
 type AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                             `json:"worker_id" api:"required"`
-	JSON     accessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON
@@ -39820,6 +44941,7 @@ type AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinat
 type accessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -39849,6 +44971,50 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDesti
 	return false
 }
 
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -39857,8 +45023,12 @@ type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerD
 	Type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                    `json:"worker_id" api:"required"`
-	JSON     accessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON
@@ -39867,6 +45037,7 @@ type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerD
 type accessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -39896,6 +45067,50 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWork
 	return false
 }
 
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                            `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -39903,7 +45118,11 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsPreviewWork
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON
@@ -39911,6 +45130,7 @@ type AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDest
 // [AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestination]
 type accessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -39940,6 +45160,50 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersD
 	return false
 }
 
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                         `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -39947,7 +45211,11 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllWorkersD
 // Workers, their previews, or specific paths.
 type AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -39955,6 +45223,7 @@ type AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWork
 // [AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -39979,6 +45248,50 @@ const (
 func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -43049,6 +48362,13 @@ type AccessApplicationGetResponseBrowserRDPApplicationDestination struct {
 	L4Protocol AccessApplicationGetResponseBrowserRDPApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                            `json:"port_range"`
@@ -43073,6 +48393,7 @@ type accessApplicationGetResponseBrowserRDPApplicationDestinationJSON struct {
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -43165,7 +48486,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -43177,6 +48502,7 @@ type AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinat
 // contains the JSON metadata for the struct
 // [AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestination]
 type accessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -43192,6 +48518,50 @@ func (r accessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDesti
 }
 
 func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestination) implementsAccessApplicationGetResponseBrowserRDPApplicationDestination() {
+}
+
+type AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationOverride]
+type accessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationGetResponseBrowserRDPApplicationDestinationsPublicDestinationType string
@@ -43333,8 +48703,12 @@ func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsViaMcpServe
 type AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                             `json:"worker_id" api:"required"`
-	JSON     accessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON
@@ -43343,6 +48717,7 @@ type AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinat
 type accessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -43372,6 +48747,50 @@ func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDesti
 	return false
 }
 
+type AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -43380,8 +48799,12 @@ type AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerD
 	Type AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                    `json:"worker_id" api:"required"`
-	JSON     accessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON
@@ -43390,6 +48813,7 @@ type AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerD
 type accessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -43419,6 +48843,50 @@ func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWork
 	return false
 }
 
+type AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                            `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -43426,7 +48894,11 @@ func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsPreviewWork
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON
@@ -43434,6 +48906,7 @@ type AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDest
 // [AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestination]
 type accessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -43463,6 +48936,50 @@ func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersD
 	return false
 }
 
+type AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                         `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -43470,7 +48987,11 @@ func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllWorkersD
 // Workers, their previews, or specific paths.
 type AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -43478,6 +48999,7 @@ type AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWork
 // [AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -43502,6 +49024,50 @@ const (
 func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -44334,6 +49900,13 @@ type AccessApplicationGetResponseMcpServerApplicationDestination struct {
 	L4Protocol AccessApplicationGetResponseMcpServerApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                           `json:"port_range"`
@@ -44358,6 +49931,7 @@ type accessApplicationGetResponseMcpServerApplicationDestinationJSON struct {
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -44450,7 +50024,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -44462,6 +50040,7 @@ type AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinati
 // contains the JSON metadata for the struct
 // [AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestination]
 type accessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -44477,6 +50056,50 @@ func (r accessApplicationGetResponseMcpServerApplicationDestinationsPublicDestin
 }
 
 func (r AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestination) implementsAccessApplicationGetResponseMcpServerApplicationDestination() {
+}
+
+type AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                    `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationOverride]
+type accessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationGetResponseMcpServerApplicationDestinationsPublicDestinationType string
@@ -44618,8 +50241,12 @@ func (r AccessApplicationGetResponseMcpServerApplicationDestinationsViaMcpServer
 type AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                            `json:"worker_id" api:"required"`
-	JSON     accessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationJSON
@@ -44628,6 +50255,7 @@ type AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinati
 type accessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -44657,6 +50285,50 @@ func (r AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestin
 	return false
 }
 
+type AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                    `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseMcpServerApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -44665,8 +50337,12 @@ type AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDe
 	Type AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                   `json:"worker_id" api:"required"`
-	JSON     accessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON
@@ -44675,6 +50351,7 @@ type AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDe
 type accessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -44704,6 +50381,50 @@ func (r AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorke
 	return false
 }
 
+type AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                           `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -44711,7 +50432,11 @@ func (r AccessApplicationGetResponseMcpServerApplicationDestinationsPreviewWorke
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON
@@ -44719,6 +50444,7 @@ type AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDesti
 // [AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestination]
 type accessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -44748,6 +50474,50 @@ func (r AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDe
 	return false
 }
 
+type AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                        `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -44755,7 +50525,11 @@ func (r AccessApplicationGetResponseMcpServerApplicationDestinationsAllWorkersDe
 // Workers, their previews, or specific paths.
 type AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -44763,6 +50537,7 @@ type AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorke
 // [AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -44787,6 +50562,50 @@ const (
 func (r AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                               `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -45575,6 +51394,13 @@ type AccessApplicationGetResponseMcpServerPortalApplicationDestination struct {
 	L4Protocol AccessApplicationGetResponseMcpServerPortalApplicationDestinationsL4Protocol `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
 	McpServerID string `json:"mcp_server_id"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride],
+	// [[]AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride],
+	// [[]AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride],
+	// [[]AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride],
+	// [[]AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride].
+	Overrides interface{} `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange string                                                                 `json:"port_range"`
@@ -45599,6 +51425,7 @@ type accessApplicationGetResponseMcpServerPortalApplicationDestinationJSON struc
 	Hostname    apijson.Field
 	L4Protocol  apijson.Field
 	McpServerID apijson.Field
+	Overrides   apijson.Field
 	PortRange   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
@@ -45691,7 +51518,11 @@ func init() {
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestination struct {
-	Type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationType `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride `json:"overrides"`
+	Type      AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationType       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -45703,6 +51534,7 @@ type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDes
 // contains the JSON metadata for the struct
 // [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestination]
 type accessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationJSON struct {
+	Overrides   apijson.Field
 	Type        apijson.Field
 	URI         apijson.Field
 	raw         string
@@ -45718,6 +51550,50 @@ func (r accessApplicationGetResponseMcpServerPortalApplicationDestinationsPublic
 }
 
 func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestination) implementsAccessApplicationGetResponseMcpServerPortalApplicationDestination() {
+}
+
+type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                          `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride]
+type accessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPublicDestinationType string
@@ -45859,8 +51735,12 @@ func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsViaMcp
 type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestination struct {
 	Type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
-	WorkerID string                                                                                  `json:"worker_id" api:"required"`
-	JSON     accessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON
@@ -45869,6 +51749,7 @@ type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDes
 type accessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -45898,6 +51779,50 @@ func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorker
 	return false
 }
 
+type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                          `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride]
+type accessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -45906,8 +51831,12 @@ type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWo
 	Type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationType `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
-	WorkerID string                                                                                         `json:"worker_id" api:"required"`
-	JSON     accessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON `json:"-"`
+	WorkerID string `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON
@@ -45916,6 +51845,7 @@ type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWo
 type accessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationJSON struct {
 	Type        apijson.Field
 	WorkerID    apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -45945,6 +51875,50 @@ func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPrevie
 	return false
 }
 
+type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                 `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride]
+type accessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -45952,7 +51926,11 @@ func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsPrevie
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestination struct {
 	Type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON
@@ -45960,6 +51938,7 @@ type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorker
 // [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestination]
 type accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -45989,6 +51968,50 @@ func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWor
 	return false
 }
 
+type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                              `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride]
+type accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -45996,7 +52019,11 @@ func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllWor
 // Workers, their previews, or specific paths.
 type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	JSON accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON `json:"-"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides []AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride `json:"overrides"`
+	JSON      accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON       `json:"-"`
 }
 
 // accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON
@@ -46004,6 +52031,7 @@ type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPrevie
 // [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination]
 type accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationJSON struct {
 	Type        apijson.Field
+	Overrides   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -46028,6 +52056,50 @@ const (
 func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern string                                                                                                     `json:"path_pattern" api:"required"`
+	JSON        accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON `json:"-"`
+}
+
+// accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride]
+type accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON struct {
+	Behavior    apijson.Field
+	PathPattern apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
+	return r.raw
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -46961,7 +53033,8 @@ type AccessApplicationNewParamsBodySelfHostedApplicationDestination struct {
 	// match.
 	L4Protocol param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsL4Protocol] `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
-	McpServerID param.Field[string] `json:"mcp_server_id"`
+	McpServerID param.Field[string]      `json:"mcp_server_id"`
+	Overrides   param.Field[interface{}] `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                              `json:"port_range"`
@@ -47002,7 +53075,11 @@ type AccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion interfa
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestination struct {
-	Type param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationType] `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationOverride] `json:"overrides"`
+	Type      param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationType]       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -47014,6 +53091,35 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDes
 }
 
 func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestination) implementsAccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationType string
@@ -47122,6 +53228,10 @@ type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestin
 	Type param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -47145,6 +53255,35 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDes
 	return false
 }
 
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -47154,6 +53293,10 @@ type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorke
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -47177,6 +53320,35 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWo
 	return false
 }
 
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -47184,6 +53356,10 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWo
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestination struct {
 	Type param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -47207,6 +53383,35 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorker
 	return false
 }
 
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -47214,6 +53419,10 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorker
 // Workers, their previews, or specific paths.
 type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -47232,6 +53441,35 @@ const (
 func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -48465,7 +54703,8 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationDestination struct {
 	// match.
 	L4Protocol param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsL4Protocol] `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
-	McpServerID param.Field[string] `json:"mcp_server_id"`
+	McpServerID param.Field[string]      `json:"mcp_server_id"`
+	Overrides   param.Field[interface{}] `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                              `json:"port_range"`
@@ -48506,7 +54745,11 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationUnion interfa
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestination struct {
-	Type param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestinationType] `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestinationOverride] `json:"overrides"`
+	Type      param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestinationType]       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -48518,6 +54761,35 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDes
 }
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestination) implementsAccessApplicationNewParamsBodyBrowserSSHApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPublicDestinationType string
@@ -48626,6 +54898,10 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestin
 	Type param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -48649,6 +54925,35 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDes
 	return false
 }
 
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -48658,6 +54963,10 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorke
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -48681,6 +54990,35 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWo
 	return false
 }
 
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -48688,6 +55026,10 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsPreviewWo
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestination struct {
 	Type param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -48711,6 +55053,35 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorker
 	return false
 }
 
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -48718,6 +55089,10 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllWorker
 // Workers, their previews, or specific paths.
 type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -48736,6 +55111,35 @@ const (
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -49432,7 +55836,8 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationDestination struct {
 	// match.
 	L4Protocol param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsL4Protocol] `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
-	McpServerID param.Field[string] `json:"mcp_server_id"`
+	McpServerID param.Field[string]      `json:"mcp_server_id"`
+	Overrides   param.Field[interface{}] `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                              `json:"port_range"`
@@ -49473,7 +55878,11 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationUnion interfa
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestination struct {
-	Type param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestinationType] `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestinationOverride] `json:"overrides"`
+	Type      param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestinationType]       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -49485,6 +55894,35 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDes
 }
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestination) implementsAccessApplicationNewParamsBodyBrowserVNCApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPublicDestinationType string
@@ -49593,6 +56031,10 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestin
 	Type param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -49616,6 +56058,35 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDes
 	return false
 }
 
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -49625,6 +56096,10 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorke
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -49648,6 +56123,35 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWo
 	return false
 }
 
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -49655,6 +56159,10 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsPreviewWo
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestination struct {
 	Type param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -49678,6 +56186,35 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorker
 	return false
 }
 
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -49685,6 +56222,10 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllWorker
 // Workers, their previews, or specific paths.
 type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -49703,6 +56244,35 @@ const (
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -51928,7 +58498,8 @@ type AccessApplicationNewParamsBodyBrowserRDPApplicationDestination struct {
 	// match.
 	L4Protocol param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsL4Protocol] `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
-	McpServerID param.Field[string] `json:"mcp_server_id"`
+	McpServerID param.Field[string]      `json:"mcp_server_id"`
+	Overrides   param.Field[interface{}] `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                              `json:"port_range"`
@@ -51969,7 +58540,11 @@ type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationUnion interfa
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPublicDestination struct {
-	Type param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPublicDestinationType] `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPublicDestinationOverride] `json:"overrides"`
+	Type      param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPublicDestinationType]       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -51981,6 +58556,35 @@ func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPublicDes
 }
 
 func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPublicDestination) implementsAccessApplicationNewParamsBodyBrowserRDPApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPublicDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPublicDestinationType string
@@ -52089,6 +58693,10 @@ type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestin
 	Type param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -52112,6 +58720,35 @@ func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDes
 	return false
 }
 
+type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -52121,6 +58758,10 @@ type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorke
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -52144,6 +58785,35 @@ func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWo
 	return false
 }
 
+type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -52151,6 +58821,10 @@ func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsPreviewWo
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestination struct {
 	Type param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -52174,6 +58848,35 @@ func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorker
 	return false
 }
 
+type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -52181,6 +58884,10 @@ func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllWorker
 // Workers, their previews, or specific paths.
 type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -52199,6 +58906,35 @@ const (
 func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -52823,7 +59559,8 @@ type AccessApplicationNewParamsBodyMcpServerApplicationDestination struct {
 	// match.
 	L4Protocol param.Field[AccessApplicationNewParamsBodyMcpServerApplicationDestinationsL4Protocol] `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
-	McpServerID param.Field[string] `json:"mcp_server_id"`
+	McpServerID param.Field[string]      `json:"mcp_server_id"`
+	Overrides   param.Field[interface{}] `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                             `json:"port_range"`
@@ -52864,7 +59601,11 @@ type AccessApplicationNewParamsBodyMcpServerApplicationDestinationUnion interfac
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPublicDestination struct {
-	Type param.Field[AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPublicDestinationType] `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPublicDestinationOverride] `json:"overrides"`
+	Type      param.Field[AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPublicDestinationType]       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -52876,6 +59617,35 @@ func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPublicDest
 }
 
 func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPublicDestination) implementsAccessApplicationNewParamsBodyMcpServerApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPublicDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPublicDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPublicDestinationType string
@@ -52984,6 +59754,10 @@ type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestina
 	Type param.Field[AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -53007,6 +59781,35 @@ func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDest
 	return false
 }
 
+type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyMcpServerApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -53016,6 +59819,10 @@ type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorker
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -53039,6 +59846,35 @@ func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWor
 	return false
 }
 
+type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -53046,6 +59882,10 @@ func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsPreviewWor
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestination struct {
 	Type param.Field[AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -53069,6 +59909,35 @@ func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkers
 	return false
 }
 
+type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -53076,6 +59945,10 @@ func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllWorkers
 // Workers, their previews, or specific paths.
 type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type param.Field[AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -53094,6 +59967,35 @@ const (
 func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -53689,7 +60591,8 @@ type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestination struct 
 	// match.
 	L4Protocol param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsL4Protocol] `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
-	McpServerID param.Field[string] `json:"mcp_server_id"`
+	McpServerID param.Field[string]      `json:"mcp_server_id"`
+	Overrides   param.Field[interface{}] `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                                   `json:"port_range"`
@@ -53730,7 +60633,11 @@ type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationUnion in
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPublicDestination struct {
-	Type param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationType] `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationOverride] `json:"overrides"`
+	Type      param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationType]       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -53742,6 +60649,35 @@ func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPubl
 }
 
 func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPublicDestination) implementsAccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationUnion() {
+}
+
+type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationType string
@@ -53850,6 +60786,10 @@ type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerD
 	Type param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -53873,6 +60813,35 @@ func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWork
 	return false
 }
 
+type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -53882,6 +60851,10 @@ type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreview
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -53905,6 +60878,35 @@ func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPrev
 	return false
 }
 
+type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -53912,6 +60914,10 @@ func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsPrev
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestination struct {
 	Type param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -53935,6 +60941,35 @@ func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllW
 	return false
 }
 
+type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -53942,6 +60977,10 @@ func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllW
 // Workers, their previews, or specific paths.
 type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -53960,6 +60999,35 @@ const (
 func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -54872,7 +61940,8 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationDestination struct {
 	// match.
 	L4Protocol param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsL4Protocol] `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
-	McpServerID param.Field[string] `json:"mcp_server_id"`
+	McpServerID param.Field[string]      `json:"mcp_server_id"`
+	Overrides   param.Field[interface{}] `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                                 `json:"port_range"`
@@ -54913,7 +61982,11 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion inte
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestination struct {
-	Type param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationType] `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationOverride] `json:"overrides"`
+	Type      param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationType]       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -54925,6 +61998,35 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublic
 }
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestination) implementsAccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationType string
@@ -55033,6 +62135,10 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDes
 	Type param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -55056,6 +62162,35 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorker
 	return false
 }
 
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -55065,6 +62200,10 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWo
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -55088,6 +62227,35 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrevie
 	return false
 }
 
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -55095,6 +62263,10 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrevie
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestination struct {
 	Type param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -55118,6 +62290,35 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWor
 	return false
 }
 
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -55125,6 +62326,10 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWor
 // Workers, their previews, or specific paths.
 type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -55143,6 +62348,35 @@ const (
 func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -56376,7 +63610,8 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination struct {
 	// match.
 	L4Protocol param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsL4Protocol] `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
-	McpServerID param.Field[string] `json:"mcp_server_id"`
+	McpServerID param.Field[string]      `json:"mcp_server_id"`
+	Overrides   param.Field[interface{}] `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                                 `json:"port_range"`
@@ -56417,7 +63652,11 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationUnion inte
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestination struct {
-	Type param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestinationType] `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestinationOverride] `json:"overrides"`
+	Type      param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestinationType]       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -56429,6 +63668,35 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublic
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestination) implementsAccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPublicDestinationType string
@@ -56537,6 +63805,10 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDes
 	Type param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -56560,6 +63832,35 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorker
 	return false
 }
 
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -56569,6 +63870,10 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWo
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -56592,6 +63897,35 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrevie
 	return false
 }
 
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -56599,6 +63933,10 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsPrevie
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestination struct {
 	Type param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -56622,6 +63960,35 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWor
 	return false
 }
 
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -56629,6 +63996,10 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllWor
 // Workers, their previews, or specific paths.
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -56647,6 +64018,35 @@ const (
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -57343,7 +64743,8 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination struct {
 	// match.
 	L4Protocol param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsL4Protocol] `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
-	McpServerID param.Field[string] `json:"mcp_server_id"`
+	McpServerID param.Field[string]      `json:"mcp_server_id"`
+	Overrides   param.Field[interface{}] `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                                 `json:"port_range"`
@@ -57384,7 +64785,11 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationUnion inte
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestination struct {
-	Type param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestinationType] `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestinationOverride] `json:"overrides"`
+	Type      param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestinationType]       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -57396,6 +64801,35 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublic
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestination) implementsAccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPublicDestinationType string
@@ -57504,6 +64938,10 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDes
 	Type param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -57527,6 +64965,35 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorker
 	return false
 }
 
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -57536,6 +65003,10 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWo
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -57559,6 +65030,35 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrevie
 	return false
 }
 
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -57566,6 +65066,10 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsPrevie
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestination struct {
 	Type param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -57589,6 +65093,35 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWor
 	return false
 }
 
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -57596,6 +65129,10 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllWor
 // Workers, their previews, or specific paths.
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -57614,6 +65151,35 @@ const (
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -59839,7 +67405,8 @@ type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestination struct {
 	// match.
 	L4Protocol param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsL4Protocol] `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
-	McpServerID param.Field[string] `json:"mcp_server_id"`
+	McpServerID param.Field[string]      `json:"mcp_server_id"`
+	Overrides   param.Field[interface{}] `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                                 `json:"port_range"`
@@ -59880,7 +67447,11 @@ type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationUnion inte
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPublicDestination struct {
-	Type param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPublicDestinationType] `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPublicDestinationOverride] `json:"overrides"`
+	Type      param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPublicDestinationType]       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -59892,6 +67463,35 @@ func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPublic
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPublicDestination) implementsAccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPublicDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPublicDestinationType string
@@ -60000,6 +67600,10 @@ type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDes
 	Type param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -60023,6 +67627,35 @@ func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorker
 	return false
 }
 
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -60032,6 +67665,10 @@ type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWo
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -60055,6 +67692,35 @@ func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPrevie
 	return false
 }
 
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -60062,6 +67728,10 @@ func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsPrevie
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestination struct {
 	Type param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -60085,6 +67755,35 @@ func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWor
 	return false
 }
 
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -60092,6 +67791,10 @@ func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllWor
 // Workers, their previews, or specific paths.
 type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -60110,6 +67813,35 @@ const (
 func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserRDPApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -60734,7 +68466,8 @@ type AccessApplicationUpdateParamsBodyMcpServerApplicationDestination struct {
 	// match.
 	L4Protocol param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsL4Protocol] `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
-	McpServerID param.Field[string] `json:"mcp_server_id"`
+	McpServerID param.Field[string]      `json:"mcp_server_id"`
+	Overrides   param.Field[interface{}] `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                                `json:"port_range"`
@@ -60775,7 +68508,11 @@ type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationUnion inter
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPublicDestination struct {
-	Type param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPublicDestinationType] `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPublicDestinationOverride] `json:"overrides"`
+	Type      param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPublicDestinationType]       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -60787,6 +68524,35 @@ func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPublicD
 }
 
 func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPublicDestination) implementsAccessApplicationUpdateParamsBodyMcpServerApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPublicDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPublicDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPublicDestinationType string
@@ -60895,6 +68661,10 @@ type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDest
 	Type param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -60918,6 +68688,35 @@ func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerD
 	return false
 }
 
+type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -60927,6 +68726,10 @@ type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWor
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -60950,6 +68753,35 @@ func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreview
 	return false
 }
 
+type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -60957,6 +68789,10 @@ func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsPreview
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestination struct {
 	Type param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -60980,6 +68816,35 @@ func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWork
 	return false
 }
 
+type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -60987,6 +68852,10 @@ func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllWork
 // Workers, their previews, or specific paths.
 type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -61005,6 +68874,35 @@ const (
 func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyMcpServerApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
@@ -61600,7 +69498,8 @@ type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestination stru
 	// match.
 	L4Protocol param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsL4Protocol] `json:"l4_protocol"`
 	// The MCP server id configured in ai-controls.
-	McpServerID param.Field[string] `json:"mcp_server_id"`
+	McpServerID param.Field[string]      `json:"mcp_server_id"`
+	Overrides   param.Field[interface{}] `json:"overrides"`
 	// The port range of the destination. Can be a single port or a range of ports.
 	// When omitted, all ports will match.
 	PortRange param.Field[string]                                                                      `json:"port_range"`
@@ -61641,7 +69540,11 @@ type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationUnion
 // A public hostname that Access will secure. Public destinations support
 // sub-domain and path. Wildcard '\*' can be used in the definition.
 type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPublicDestination struct {
-	Type param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationType] `json:"type"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationOverride] `json:"overrides"`
+	Type      param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationType]       `json:"type"`
 	// The URI of the destination. Public destinations' URIs can include a domain and
 	// path with
 	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
@@ -61653,6 +69556,35 @@ func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsP
 }
 
 func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPublicDestination) implementsAccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
 }
 
 type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPublicDestinationType string
@@ -61761,6 +69693,10 @@ type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWork
 	Type param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationType] `json:"type" api:"required"`
 	// The ID of the Cloudflare Worker to protect with Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -61784,6 +69720,35 @@ func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsW
 	return false
 }
 
+type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // A specific Cloudflare Worker whose preview deployments Access will secure. Only
 // requests routed to the preview deployments of the specified Worker will be
 // protected. The `public` destination type takes precedence, so you can create
@@ -61793,6 +69758,10 @@ type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPrev
 	// The ID of the Cloudflare Worker whose preview deployments to protect with
 	// Access.
 	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
@@ -61816,6 +69785,35 @@ func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsP
 	return false
 }
 
+type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects all Cloudflare Workers on the account with Access, including their
 // preview deployments. At most one destination of this type can exist per account.
 // The `worker`, `preview_worker`, `all_preview_workers`, and `public` destination
@@ -61823,6 +69821,10 @@ func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsP
 // policies for specific Workers, their previews, or specific paths.
 type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestination struct {
 	Type param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -61846,6 +69848,35 @@ func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsA
 	return false
 }
 
+type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic:
+		return true
+	}
+	return false
+}
+
 // Protects the preview deployments of all Cloudflare Workers on the account with
 // Access. At most one destination of this type can exist per account. The
 // `worker`, `preview_worker`, and `public` destination types take precedence, so
@@ -61853,6 +69884,10 @@ func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsA
 // Workers, their previews, or specific paths.
 type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination struct {
 	Type param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType] `json:"type" api:"required"`
+	// Rules that override how Access handles requests to this destination. Each rule
+	// can make a matching path public, bypassing Access authentication. Overrides are
+	// supported for public destinations and Worker destinations.
+	Overrides param.Field[[]AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride] `json:"overrides"`
 }
 
 func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
@@ -61871,6 +69906,35 @@ const (
 func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationType) IsKnown() bool {
 	switch r {
 	case AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride struct {
+	// The behavior to apply to matching requests.
+	Behavior param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
+	// The request path pattern to match. Wildcards (`*`) are supported, but each path
+	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
+	// override path patterns do not implicitly cover subpaths; to do that, use a
+	// wildcard.
+	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior to apply to matching requests.
+type AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior string
+
+const (
+	AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior = "public"
+)
+
+func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyMcpServerPortalApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic:
 		return true
 	}
 	return false
