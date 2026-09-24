@@ -1,0 +1,24 @@
+email_sending/emailsending.go
+  s_ab9b8b5984a654::t_c0580f6002329a 152-175,179-340,343-364,367-388,392-495
+  s_ab9b8b5984a654::t_abf421da2aeeac 496
+shared/union.go
+  s_ab9b8b5984a654::t_0a58ae47aa710e 31-38
+email_sending/emailsending_test.go
+  s_ab9b8b5984a654::t_afbed1f25d6a92 34-50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "00d84a74f31ef85bc4c191e0fe1f8f59f80cd8be",
+  "prompts": {},
+  "sessions": {
+    "s_ab9b8b5984a654": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f2cf2c449ffe1nKyx36XLv88gS",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": null
+    }
+  }
+}
