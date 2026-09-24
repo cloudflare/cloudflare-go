@@ -273,7 +273,6 @@ Full Changelog: [v7.5.0...v7.6.0](https://github.com/cloudflare/cloudflare-go/co
 * feat(ct_alerter): add CT alerting subscription endpoint mappings ([1fbd47d](https://github.com/cloudflare/cloudflare-go/commit/1fbd47d82e5f7ce28a00ae24189614fbf2d40bd0))
 * feat(tenants): add tenants resource SDK mapping [PT-2567] ([8e4faec](https://github.com/cloudflare/cloudflare-go/commit/8e4faeca3d1c8aed151d1f32d0d7095192205e63))
 
-
 ### Chores
 
 * **api:** update composite API spec ([5053a77](https://github.com/cloudflare/cloudflare-go/commit/5053a772a0ae6460954320a042ff43a983539888))
@@ -290,7 +289,6 @@ Full Changelog: [v7.5.0...v7.6.0](https://github.com/cloudflare/cloudflare-go/co
 * **api:** update composite API spec ([47fa180](https://github.com/cloudflare/cloudflare-go/commit/47fa1808c80096ed6177f4966d200f9a6b876951))
 * **api:** update composite API spec ([835c44d](https://github.com/cloudflare/cloudflare-go/commit/835c44dc4d403df781e1faf8b9526a804f2f4e4d))
 
-
 ### Documentation
 
 * add v7.6.0 migration guide ([f27940b](https://github.com/cloudflare/cloudflare-go/commit/f27940b228914e7b7d924b16ad440574f356e0cc))
@@ -303,7 +301,6 @@ Full Changelog: [v7.4.0...v7.5.0](https://github.com/cloudflare/cloudflare-go/co
 
 * **addressing:** add regional hostname methods ([058abc9](https://github.com/cloudflare/cloudflare-go/commit/058abc9e6fec5e908d76f58e97d0b2dd9ce76644))
 * **resource_tagging:** add summary sub-resource ([db6483e](https://github.com/cloudflare/cloudflare-go/commit/db6483ef4295f2c99b014c765a4e77cd3158af6e))
-
 
 ### Chores
 
@@ -532,7 +529,6 @@ Full Changelog: [v7.2.0...v7.3.0](https://github.com/cloudflare/cloudflare-go/co
 * feat(secrets_store): add Terraform configuration for secrets_store resources ([effe30c](https://github.com/cloudflare/cloudflare-go/commit/effe30c9650c338900799580adad50c5c0a54997))
 * **zero_trust:** update generated types and methods ([0fe3c11](https://github.com/cloudflare/cloudflare-go/commit/0fe3c112248785b1eecac8cc802417f13186e991))
 
-
 ### Chores
 
 * **acm:** update generated types and methods ([7087016](https://github.com/cloudflare/cloudflare-go/commit/7087016f3a2ec722fe93a0391f37c99009e77964))
@@ -559,210 +555,6 @@ Full Changelog: [v7.2.0...v7.3.0](https://github.com/cloudflare/cloudflare-go/co
 * **workers:** update generated types and methods ([c1e2fb2](https://github.com/cloudflare/cloudflare-go/commit/c1e2fb2b5e42da956e516fe3feae1c3f57b7f85b))
 * **workflows:** update generated types and methods ([7f3a9ba](https://github.com/cloudflare/cloudflare-go/commit/7f3a9ba0692b4d820c082c2ba401b1be162d2313))
 * **zones:** update generated types and methods ([343acae](https://github.com/cloudflare/cloudflare-go/commit/343acaeecb199a05f97b852977e1f6e120628f90))
-
-## 6.10.0 (2026-04-23)
-
-Full Changelog: [v6.9.0...v6.10.0](https://github.com/cloudflare/cloudflare-go/compare/v6.9.0...v6.10.0)
-
-In this release, you'll see a number of breaking changes. This is primarily due to changes in OpenAPI definitions, which our libraries are based off of, and codegen updates that we rely on to read those OpenAPI definitions and produce our SDK libraries.
-
-## Please ensure you read through the list of changes below before moving to this version - this will help you understand any down or upstream issues it may cause to your environments.
-
----
-
-## Breaking Changes
-
-See the [v6.10.0 Migration Guide](./docs/migration-guides/v6.10.0-migration-guide.md) for before/after code examples and actions needed for each change.
-
-### Abuse Reports - Registrar WHOIS Report Field Removals
-
-Several fields have been removed from `AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReportRegWhoRequest`:
-
-- `RegWhoGoodFaithAffirmation`
-- `RegWhoLawfulProcessingAgreement`
-- `RegWhoLegalBasis`
-- `RegWhoRequestType`
-- `RegWhoRequestedDataElements`
-
-### AI Search - Instance Params Restructured
-
-The `InstanceNewParams` and `InstanceUpdateParams` types have been significantly restructured. Many fields have been moved or removed:
-
-- `InstanceNewParams.TokenID`, `Type`, `CreatedFromAISearchWizard`, `WorkerDomain` removed
-- `InstanceUpdateParams` — most configuration fields removed (including `IndexMethod`, `IndexingOptions`, `MaxNumResults`, `Metadata`, `Paused`, `PublicEndpointParams`, `Reranking`, `RerankingModel`, `RetrievalOptions`, `RewriteModel`, `RewriteQuery`, `ScoreThreshold`, `SourceParams`, `Summarization`, `SummarizationModel`, `SystemPromptAISearch`, `SystemPromptIndexSummarization`, `SystemPromptRewriteQuery`, `TokenID`, `CreatedFromAISearchWizard`, `WorkerDomain`)
-- `InstanceSearchParams.Messages` field removed along with `InstanceSearchParamsMessage` and `InstanceSearchParamsMessagesRole` types
-
-### AI Search - InstanceItem Service Removed
-
-The `InstanceItemService` type has been removed. The items sub-resource at `client.AISearch.Instances.Items` no longer exists in the non-namespace path. Use `client.AISearch.Namespaces.Instances.Items` instead.
-
-### AI Search - Token Types Removed
-
-The following types have been removed from the `ai_search` package:
-
-- `TokenDeleteResponse`
-- `TokenListParams` (and associated `TokenListParamsOrderBy`, `TokenListParamsOrderByDirection`)
-
-### Email Security - Investigate Move Return Type Change
-
-The `Investigate.Move.New()` method now returns a raw slice instead of a paginated wrapper:
-
-- `New()` returns `*[]InvestigateMoveNewResponse` instead of `*pagination.SinglePage[InvestigateMoveNewResponse]`
-- `NewAutoPaging()` method removed
-
-### Hyperdrive - Config Params Restructured
-
-The `ConfigEditParams` type lost its `MTLS` and `Name` fields. The `HyperdriveMTLSParam` type lost `MTLS` and `Host` fields. The `Host` field on origin config changed from `param.Field[string]` to a plain `string`.
-
-### IAM - UserGroupMember Params and Return Types Changed
-
-The `UserGroupMemberNewParams` struct has been restructured and the `New()` method now returns a paginated response:
-
-- `UserGroupMemberNewParams.Body` renamed to `UserGroupMemberNewParams.Members`
-- `UserGroupMemberNewParamsBody` renamed to `UserGroupMemberNewParamsMember`
-- `UserGroupMemberUpdateParams.Body` renamed to `UserGroupMemberUpdateParams.Members`
-- `UserGroupMemberUpdateParamsBody` renamed to `UserGroupMemberUpdateParamsMember`
-- `UserGroups.Members.New()` returns `*pagination.SinglePage[UserGroupMemberNewResponse]` instead of `*UserGroupMemberNewResponse`
-
-### IAM - UserGroup List Direction Type Changed
-
-The `UserGroupListParams.Direction` field changed from `param.Field[string]` to `param.Field[UserGroupListParamsDirection]` (typed enum with `asc`/`desc` values).
-
-### Pipelines - Delete Methods Now Return Typed Responses
-
-Several delete methods across Pipelines now return typed responses instead of bare `error`:
-
-- `Pipelines.DeleteV1()` returns `(*PipelineDeleteV1Response, error)` instead of `error`
-- `Pipelines.Sinks.Delete()` returns `(*SinkDeleteResponse, error)` instead of `error`
-- `Pipelines.Streams.Delete()` returns `(*StreamDeleteResponse, error)` instead of `error`
-
-### Queues - Message Response Types Removed
-
-The following response envelope types have been removed:
-
-- `MessageBulkPushResponseSuccess`
-- `MessagePushResponseSuccess`
-- `MessageAckResponse` fields `RetryCount` and `Warnings` removed
-
-### Secrets Store - Pagination Wrapper Removal and Type Changes
-
-Methods now return direct types instead of `SinglePage` wrappers, and several internal types have been removed. Associated `AutoPaging` methods have also been removed:
-
-- `Stores.New()` returns `*StoreNewResponse` instead of `*pagination.SinglePage[StoreNewResponse]`
-- `Stores.NewAutoPaging()` method removed
-- `Stores.Secrets.BulkDelete()` returns `*StoreSecretBulkDeleteResponse` instead of `*pagination.SinglePage[StoreSecretBulkDeleteResponse]`
-- `Stores.Secrets.BulkDeleteAutoPaging()` method removed
-- Removed types: `StoreDeleteResponse`, `StoreDeleteResponseEnvelopeResultInfo`, `StoreSecretDeleteResponse`, `StoreSecretDeleteResponseStatus`, `StoreSecretBulkDeleteResponse` (old shape), `StoreSecretBulkDeleteResponseStatus`, `StoreSecretDeleteResponseEnvelopeResultInfo`
-- `StoreNewParams` restructured (old `StoreNewParamsBody` removed)
-- `StoreSecretBulkDeleteParams` restructured
-
-### Stream - AudioTracks Return Type Change
-
-The `AudioTracks.Get()` method now returns a dedicated response type instead of a paginated list. The `GetAutoPaging()` method has been removed:
-
-- `Get()` returns `*AudioTrackGetResponse` instead of `*pagination.SinglePage[Audio]`
-- `GetAutoPaging()` method removed
-
-### Stream - Clip Type Removal and Return Type Change
-
-The `Clip.New()` method now returns the shared `Video` type. The following types have been entirely removed:
-
-- `Clip`, `ClipPlayback`, `ClipStatus`, `ClipWatermark`
-
-### Stream - Copy and Clip Params Field Removals
-
-- `ClipNewParams.MaxDurationSeconds`, `ThumbnailTimestampPct`, `Watermark` removed
-- `CopyNewParams.ThumbnailTimestampPct`, `Watermark` removed
-
-### Stream - Download and Webhook Changes
-
-- `DownloadNewResponseStatus` type removed
-- `WebhookUpdateResponse` and `WebhookGetResponse` changed from `interface{}` type aliases to full struct types
-
-### Zero Trust - Access AI Control MCP Portal Union Types Removed
-
-The following union interface types have been removed:
-
-- `AccessAIControlMcpPortalListResponseServersUpdatedPromptsUnion`
-- `AccessAIControlMcpPortalListResponseServersUpdatedToolsUnion`
-- `AccessAIControlMcpPortalReadResponseServersUpdatedPromptsUnion`
-- `AccessAIControlMcpPortalReadResponseServersUpdatedToolsUnion`
-
----
-
-## Features
-
-### Vulnerability Scanner (`client.VulnerabilityScanner`)
-
-- **NEW SERVICE**: Full vulnerability scanning management
-    - `CredentialSets` - CRUD for credential sets (`New`, `Update`, `List`, `Delete`, `Edit`, `Get`)
-        - `Credentials` - Manage credentials within sets (`New`, `Update`, `List`, `Delete`, `Edit`, `Get`)
-    - `Scans` - Create and manage vulnerability scans (`New`, `List`, `Get`)
-    - `TargetEnvironments` - Manage scan target environments (`New`, `Update`, `List`, `Delete`, `Edit`, `Get`)
-
-### AI Search - Namespaces (`client.AISearch.Namespaces`)
-
-- **NEW SERVICE**: Namespace-scoped AI Search management
-    - `New()`, `Update()`, `List()`, `Delete()`, `ChatCompletions()`, `Read()`, `Search()`
-    - `Instances` - Namespace-scoped instances (`New`, `Update`, `List`, `Delete`, `ChatCompletions`, `Read`, `Search`, `Stats`)
-        - `Jobs` - Instance job management (`New`, `Update`, `List`, `Get`, `Logs`)
-        - `Items` - Instance item management (`List`, `Delete`, `Chunks`, `NewOrUpdate`, `Download`, `Get`, `Logs`, `Sync`, `Upload`)
-
-### Browser Rendering - Devtools (`client.BrowserRendering.Devtools`)
-
-- **NEW SERVICE**: DevTools protocol browser control
-    - `Session` - List and get devtools sessions
-    - `Browser` - Browser lifecycle management (`New`, `Delete`, `Connect`, `Launch`, `Protocol`, `Version`)
-        - `Page` - Get page by target ID
-        - `Targets` - Manage browser targets (`New`, `List`, `Activate`, `Get`)
-
-### Registrar (`client.Registrar`)
-
-- **NEW**: Domain check and search endpoints
-    - `Check()` - POST `/accounts/{account_id}/registrar/domain-check`
-    - `Search()` - GET `/accounts/{account_id}/registrar/domain-search`
-- **NEW**: Registration management (`client.Registrar.Registrations`)
-    - `New()`, `List()`, `Edit()`, `Get()`
-- `RegistrationStatus.Get()` - Get registration workflow status
-- `UpdateStatus.Get()` - Get update workflow status
-
-### Cache - Origin Cloud Regions (`client.Cache.OriginCloudRegions`)
-
-- **NEW SERVICE**: Manage origin cloud region configurations
-    - `New()`, `List()`, `Delete()`, `BulkDelete()`, `BulkEdit()`, `Edit()`, `Get()`, `SupportedRegions()`
-
-### Zero Trust - DLP Settings (`client.ZeroTrust.DLP.Settings`)
-
-- **NEW SERVICE**: DLP settings management
-    - `Update()`, `Delete()`, `Edit()`, `Get()`
-
-### Radar
-
-- `AgentReadiness.Summary()` - Agent readiness summary by dimension
-- `AI.MarkdownForAgents.Summary()` - Markdown-for-agents summary
-- `AI.MarkdownForAgents.Timeseries()` - Markdown-for-agents timeseries
-
-### IAM (`client.IAM`)
-
-- `UserGroups.Members.Get()` - Get details of a specific member in a user group
-- `UserGroups.Members.NewAutoPaging()` - Auto-paging variant for adding members
-- `UserGroups.NewParams.Policies` changed from required to optional
-
-### Bot Management
-
-- `ContentBotsProtection` field added to `BotFightModeConfiguration` and `SubscriptionConfiguration` (block/disabled)
-
----
-
-## Deprecations
-
-None in this release.
-
----
-
-## Bug Fixes
-
-- **Testing**: CONTRIBUTING.md updated to reference [steady](https://github.com/dgellow/steady) instead of Prism for running tests against OpenAPI specs
 
 ## 6.9.0 (2026-04-01)
 
@@ -1160,7 +952,6 @@ Full Changelog: [v6.5.0...v6.6.0](https://github.com/cloudflare/cloudflare-go/co
 * **shared:** add union type implementations and documentation updates
 * **zero_trust:** simplify DLP shared entry types by removing entry_type unions
 
-
 ## 6.5.0 (2025-12-17)
 
 Full Changelog: [v6.4.0...v6.5.0](https://github.com/cloudflare/cloudflare-go/compare/v6.4.0...v6.5.0)
@@ -1195,12 +986,10 @@ Full Changelog: [v6.3.0...v6.4.0](https://github.com/cloudflare/cloudflare-go/co
 * feat(r2_data_catalog): Configure SDKs/Terraform to use R2 Data Catalog routes ([d1b1eab](https://github.com/cloudflare/cloudflare-go/commit/d1b1eab741593d97221a099b07e120cc205999dc))
 * feat(silences): add a new alert silencing api ([fbe4969](https://github.com/cloudflare/cloudflare-go/commit/fbe4969d2d8b61c2e8c635543297a04e14435391))
 
-
 ### Bug Fixes
 
 * **ci:** clean cache ([#4213](https://github.com/cloudflare/cloudflare-go/issues/4213)) ([92a4819](https://github.com/cloudflare/cloudflare-go/commit/92a481998217dd120e6f893c8631b6dafac5f24c))
 * **logaudit:** revert breaking change to query by log audit id param ([#4212](https://github.com/cloudflare/cloudflare-go/issues/4212)) ([e1d5999](https://github.com/cloudflare/cloudflare-go/commit/e1d5999b2509fb2b33bf2e22f135942d1be4b32e))
-
 
 ### Chores
 
@@ -1225,14 +1014,12 @@ Full Changelog: [v6.2.0...v6.3.0](https://github.com/cloudflare/cloudflare-go/co
 * **dlp:** switch DLP Predefined Profile endpoints ([496a17a](https://github.com/cloudflare/cloudflare-go/commit/496a17a))
 * **addressing_load:** add deprecation to LOA api ([2d0f886](https://github.com/cloudflare/cloudflare-go/commit/2d0f886))
 
-
 ### Bug Fixes
 
 * **schema:** correctly reflect schema validation model mapping ([e13a4b0](https://github.com/cloudflare/cloudflare-go/commit/e13a4b0))
 * **ai_controls:** incorrect use of standalone_api ([12b2f77](https://github.com/cloudflare/cloudflare-go/commit/12b2f77))
 * **wvpc:** move to connectivity module ([30e2d15](https://github.com/cloudflare/cloudflare-go/commit/30e2d15))
 * **realtime-kit:** tabbing on realtime-kit api resources ([b0f08de](https://github.com/cloudflare/cloudflare-go/commit/b0f08de))
-
 
 ### Chores
 
@@ -1305,11 +1092,9 @@ Full Changelog: [v6.0.1...v6.1.0](https://github.com/cloudflare/cloudflare-go/co
 * Deprecate Radar AI inference and leaked credential endpoints ([a96e487](https://github.com/cloudflare/cloudflare-go/commit/a96e4872df0d33d238ef4bf60dac0d1930904ca6))
 * Remove created_at and updated_at fields from Zero Trust organization ([9c36264](https://github.com/cloudflare/cloudflare-go/commit/9c36264367802c285a6b48b4e516bddb49dc10ed))
 
-
 ### Bug Fixes
 
 * bugfix for setting JSON keys with special characters ([7c0a952](https://github.com/cloudflare/cloudflare-go/commit/7c0a952665dcb75bfad342708f37dc3690a228da))
-
 
 ### Chores
 
@@ -1326,14 +1111,12 @@ Full Changelog: [v6.0.0...v6.0.1](https://github.com/cloudflare/cloudflare-go/co
 
 * Merge branch 'vaishak/skip-worker-test' into 'main' ([8bda71e](https://github.com/cloudflare/cloudflare-go/commit/8bda71eca34941140820022da6df800bc60dd9c7))
 
-
 ### Bug Fixes
 
 * **client:** custom fix to rename Body io.Reader param to file ([e845c6d](https://github.com/cloudflare/cloudflare-go/commit/e845c6d767c063b891008134ff632178aba6f171))
 * correctly handle sending multipart/form-data requests with JSON ([98bbcaa](https://github.com/cloudflare/cloudflare-go/commit/98bbcaa1be2d9d5f6c621a96eaa8b9f1df75d297))
 * remove null from release please manifest ([e3d2798](https://github.com/cloudflare/cloudflare-go/commit/e3d2798b229c3a8a2c0f9d079263f4d6b2524955))
 * use release please annotations on more places ([63ded25](https://github.com/cloudflare/cloudflare-go/commit/63ded25e9f14851eeb77c9ead21018d5528ff98e))
-
 
 ### Chores
 
@@ -1368,13 +1151,11 @@ Full Changelog: [v5.1.0...v6.0.0](https://github.com/cloudflare/cloudflare-go/co
 * **api:** api update ([878943e](https://github.com/cloudflare/cloudflare-go/commit/878943eb0fe1be816d84e9873ce84a4a1857a7a5))
 * **api:** api update ([bc6d589](https://github.com/cloudflare/cloudflare-go/commit/bc6d58960a0749a6c202f525880b54f376751ad4))
 
-
 ### Bug Fixes
 
 * close body before retrying ([9b946d5](https://github.com/cloudflare/cloudflare-go/commit/9b946d5b88f8206d071cddba1a4bd45efea08708))
 * fix multipart requests ([#136](https://github.com/cloudflare/cloudflare-go/issues/136)) ([c420698](https://github.com/cloudflare/cloudflare-go/commit/c42069832b13c89f7deca97970b9e94ca2fd4816))
 * update singularization rules ([54a49cf](https://github.com/cloudflare/cloudflare-go/commit/54a49cf9914237ccbd4c9fc40ec77a5071a4afac))
-
 
 ### Chores
 
@@ -1419,7 +1200,6 @@ Full Changelog: [v5.0.0...v5.1.0](https://github.com/cloudflare/cloudflare-go/co
 * **api:** api update ([c3712db](https://github.com/cloudflare/cloudflare-go/commit/c3712dbc6cf44a8221e14783f547079690c838ef))
 * **api:** api update ([c0918fa](https://github.com/cloudflare/cloudflare-go/commit/c0918fa268ba44a7c55bb355b1afa5438da537b9))
 * **client:** support optional json html escaping ([4404a00](https://github.com/cloudflare/cloudflare-go/commit/4404a00869fe9205db07d39ecf97e9b9a72b7da2))
-
 
 ### Chores
 
@@ -1499,12 +1279,10 @@ Full Changelog: [v4.6.0...v5.0.0](https://github.com/cloudflare/cloudflare-go/co
 * **api:** api update ([9c88409](https://github.com/cloudflare/cloudflare-go/commit/9c884090eb761e70e76aed943db69962b5e9ec06))
 * **client:** support file upload requests ([0d05222](https://github.com/cloudflare/cloudflare-go/commit/0d052220a745a1ec285f7e194ccae4ac2b1489ce))
 
-
 ### Bug Fixes
 
 * **api:** add missing `items` param ([ed5f28a](https://github.com/cloudflare/cloudflare-go/commit/ed5f28a511afb022d6a32f4227991835e1fedf63))
 * **client:** process custom base url ahead of time ([7ee7fb2](https://github.com/cloudflare/cloudflare-go/commit/7ee7fb2796e9b6840f6a04e19e7cb8e7e98dc529))
-
 
 ### Chores
 
@@ -1564,12 +1342,10 @@ Full Changelog: [v4.5.1...v4.6.0](https://github.com/cloudflare/cloudflare-go/co
 * **brand_protection:** Add new routes ([a91a512](https://github.com/cloudflare/cloudflare-go/commit/a91a51230bf62b13628d3dd0da5989001a98b485))
 * **zero_trust_dlp:** Added individual resources and new routes ([8c3106e](https://github.com/cloudflare/cloudflare-go/commit/8c3106eb39c102ae60d37352e5fbd3970d5bc868))
 
-
 ### Bug Fixes
 
 * don't try to deserialize as json when ResponseBodyInto is []byte ([590dee4](https://github.com/cloudflare/cloudflare-go/commit/590dee42c9afc1886f4958ca96864b304fb2cf7e))
 * **pagination:** check if page data is empty in GetNextPage ([a4d9e9c](https://github.com/cloudflare/cloudflare-go/commit/a4d9e9c6d5146d7aa64b3a089b023b737ca0a1c1))
-
 
 ### Chores
 
@@ -1588,7 +1364,6 @@ Full Changelog: [v4.5.0...v4.5.1](https://github.com/cloudflare/cloudflare-go/co
 ### Features
 
 * **client:** add debug log helper ([cd7dd39](https://github.com/cloudflare/cloudflare-go/commit/cd7dd39e4a76f4fd22d41bc2e51d7a9ce55ab0fc))
-
 
 ### Bug Fixes
 
@@ -1639,7 +1414,6 @@ Full Changelog: [v4.4.0...v4.5.0](https://github.com/cloudflare/cloudflare-go/co
 * **api:** fix account ID types ([e4231aa](https://github.com/cloudflare/cloudflare-go/commit/e4231aa184b6ce03ddc5cc738d6dac1380f18f90))
 * **infrastructure_targets:** swap DELETE handler to new endpoint ([338e920](https://github.com/cloudflare/cloudflare-go/commit/338e92006353bc46314683e8c7bf2d138744dae7))
 
-
 ### Bug Fixes
 
 * add back kv.namespaces bulk methods ([5cb2db9](https://github.com/cloudflare/cloudflare-go/commit/5cb2db9d75d4976ec273215805484e3a8fd0edce))
@@ -1649,7 +1423,6 @@ Full Changelog: [v4.4.0...v4.5.0](https://github.com/cloudflare/cloudflare-go/co
 * **api:** Typo in jsonpath-plus query for transformation ([ba73079](https://github.com/cloudflare/cloudflare-go/commit/ba730794cc5ace1691f3f7641fd3bc9ab8758542))
 * **config:** Diagnostic errors ([467f38f](https://github.com/cloudflare/cloudflare-go/commit/467f38fb755f63c0faecf3383b1797d2dcbba044))
 * **DLP:** Add explicit variant names ([70af3b9](https://github.com/cloudflare/cloudflare-go/commit/70af3b906dc4cbe935f0212a47cdd7b1f314bf8d))
-
 
 ### Chores
 
@@ -1682,7 +1455,6 @@ Full Changelog: [v4.3.0...v4.4.0](https://github.com/cloudflare/cloudflare-go/co
 * **client:** add support for endpoint-specific base URLs in python ([f59c493](https://github.com/cloudflare/cloudflare-go/commit/f59c49347d6618b71d7a327b8ae5e111e47c53d3))
 * **device_settings:** swap list to get endpoint ([60da729](https://github.com/cloudflare/cloudflare-go/commit/60da7299c51d2adb348b56d920e0871257b5ba99))
 * **schema_validation:** add mapped endpoints ([f069836](https://github.com/cloudflare/cloudflare-go/commit/f0698366b4777148de63821a4566b7bbc0575e20))
-
 
 ### Bug Fixes
 
@@ -1982,7 +1754,6 @@ Full Changelog: [v4.2.0...v4.3.0](https://github.com/cloudflare/cloudflare-go/co
 * **threat_events:** add list support ([89642c5](https://github.com/cloudflare/cloudflare-go/commit/89642c5ee3714f0c86da16992a6edc1fe196e0d2))
 * **workers_for_platforms_script_secret:** remove terraform resource ([c61b0fb](https://github.com/cloudflare/cloudflare-go/commit/c61b0fbb467992f2f18c798a514dc85c70540c09))
 
-
 ### Bug Fixes
 
 * **api:** Fix workers_route identifier attributes ([16db28e](https://github.com/cloudflare/cloudflare-go/commit/16db28ed77d2f2ac2a01c1bca970042b59237392))
@@ -1991,7 +1762,6 @@ Full Changelog: [v4.2.0...v4.3.0](https://github.com/cloudflare/cloudflare-go/co
 * **pagination:** handle errors when applying options ([65a1ad7](https://github.com/cloudflare/cloudflare-go/commit/65a1ad75e725fc5a746b957aef2a19cff95fdbf9))
 * **workers_route:** reset to generated ([441e345](https://github.com/cloudflare/cloudflare-go/commit/441e3455afb9c0129f0012e39de01d4c0c61ada9))
 * **workers:** reset to generated ([4b7adf9](https://github.com/cloudflare/cloudflare-go/commit/4b7adf9afa7399ddaf62240c1377b19bf6e0d523))
-
 
 ### Chores
 
@@ -2081,7 +1851,6 @@ Full Changelog: [v4.1.0...v4.2.0](https://github.com/cloudflare/cloudflare-go/co
 * **workers:** add in secrets endpoints ([#4038](https://github.com/cloudflare/cloudflare-go/issues/4038)) ([3f496ad](https://github.com/cloudflare/cloudflare-go/commit/3f496ad9d1d88ba4302d706113c48b814f92fb16))
 * **workflows:** add `bulk` support ([#4048](https://github.com/cloudflare/cloudflare-go/issues/4048)) ([9ac7110](https://github.com/cloudflare/cloudflare-go/commit/9ac71102060398f11ce5b9bba822bca11d1822ab))
 
-
 ### Bug Fixes
 
 * **abuse_report:** method types ([fde33f7](https://github.com/cloudflare/cloudflare-go/commit/fde33f71c7ea4cb45657179128848b8b0321c5e0))
@@ -2091,7 +1860,6 @@ Full Changelog: [v4.1.0...v4.2.0](https://github.com/cloudflare/cloudflare-go/co
 * **internal:** update WithAPIVersion handler ([4fc3228](https://github.com/cloudflare/cloudflare-go/commit/4fc322869d44a495519bfcd952bc1fb5699fc73b))
 * **r2_custom_domain:** update path placeholders to de-duplicate internal values ([#4001](https://github.com/cloudflare/cloudflare-go/issues/4001)) ([803d8ff](https://github.com/cloudflare/cloudflare-go/commit/803d8ffa37be1921f5d0d365fae068c220369a7b))
 * **workers_for_platforms:** remove cyclic import due to model ([#4039](https://github.com/cloudflare/cloudflare-go/issues/4039)) ([689c618](https://github.com/cloudflare/cloudflare-go/commit/689c618a0a9ddd5c438a5b7d2233ad924b67c727))
-
 
 ### Chores
 
@@ -2103,7 +1871,6 @@ Full Changelog: [v4.1.0...v4.2.0](https://github.com/cloudflare/cloudflare-go/co
 * **internal:** mark VPC and PDF as initialisms ([#3963](https://github.com/cloudflare/cloudflare-go/issues/3963)) ([4885383](https://github.com/cloudflare/cloudflare-go/commit/48853835d62f7ea0ab23509998d90b2c67956fee))
 * simplify string literals ([#3966](https://github.com/cloudflare/cloudflare-go/issues/3966)) ([34fe1de](https://github.com/cloudflare/cloudflare-go/commit/34fe1dea52e6539298ef8fe49d1a0fb171645cca))
 * use strconv.ParseInt instead of strconv.Atoi for pagination params ([#3973](https://github.com/cloudflare/cloudflare-go/issues/3973)) ([2a2769a](https://github.com/cloudflare/cloudflare-go/commit/2a2769ab72fc4f615e69444c879c79672316de12))
-
 
 ### Documentation
 
@@ -2169,7 +1936,6 @@ Full Changelog: [v4.0.0...v4.1.0](https://github.com/cloudflare/cloudflare-go/co
 * support deprecated markers ([#3850](https://github.com/cloudflare/cloudflare-go/issues/3850)) ([de93533](https://github.com/cloudflare/cloudflare-go/commit/de93533e6f8febdb263ac3b88ca83fae2a0ad76b))
 * **terraform:** add datasource for `zero_trust_tunnel_cloudflared_token` ([#3896](https://github.com/cloudflare/cloudflare-go/issues/3896)) ([94c1ff8](https://github.com/cloudflare/cloudflare-go/commit/94c1ff853d992d1619a05caa43a8107c6fd43760))
 
-
 ### Bug Fixes
 
 * do not call path.Base on ContentType ([#3913](https://github.com/cloudflare/cloudflare-go/issues/3913)) ([54ef15c](https://github.com/cloudflare/cloudflare-go/commit/54ef15c23801957f9d47071be497d02e06956006))
@@ -2179,7 +1945,6 @@ Full Changelog: [v4.0.0...v4.1.0](https://github.com/cloudflare/cloudflare-go/co
 * fix interface implementation stub names for unions ([#3871](https://github.com/cloudflare/cloudflare-go/issues/3871)) ([a095e93](https://github.com/cloudflare/cloudflare-go/commit/a095e936a848a620e0171ff88919c9574aeeedac))
 * fix unicode encoding for json ([#3880](https://github.com/cloudflare/cloudflare-go/issues/3880)) ([6e6d34c](https://github.com/cloudflare/cloudflare-go/commit/6e6d34ce2fb1be39471d92ed2452788c9545ba0e))
 * improve names for conflicting params ([#3894](https://github.com/cloudflare/cloudflare-go/issues/3894)) ([18108b0](https://github.com/cloudflare/cloudflare-go/commit/18108b0528267be768319c0096ca8d2339fe2de0))
-
 
 ### Chores
 
@@ -2194,7 +1959,6 @@ Full Changelog: [v4.0.0...v4.1.0](https://github.com/cloudflare/cloudflare-go/co
 * minor change to tests ([#3905](https://github.com/cloudflare/cloudflare-go/issues/3905)) ([415dd42](https://github.com/cloudflare/cloudflare-go/commit/415dd4222559e051f1f45b814ada4e5c8b563727))
 * trigger rebuild ([#3835](https://github.com/cloudflare/cloudflare-go/issues/3835)) ([ef963f9](https://github.com/cloudflare/cloudflare-go/commit/ef963f9c997069a9dd4743cf29ac2dc43998aee0))
 * updates ([#3822](https://github.com/cloudflare/cloudflare-go/issues/3822)) ([85a1852](https://github.com/cloudflare/cloudflare-go/commit/85a1852e7be43e90228f44404a45a8cf90289aab))
-
 
 ### Documentation
 
@@ -2409,7 +2173,6 @@ Full Changelog: [v3.1.0...v4.0.0](https://github.com/cloudflare/cloudflare-go/co
 * **zone_settings:** update `origin_max_http_version` model ([#3775](https://github.com/cloudflare/cloudflare-go/issues/3775)) ([27610fa](https://github.com/cloudflare/cloudflare-go/commit/27610fa745bd89f93fd0b81697f1ce0bcf06d568))
 * **zone_transfers:** move under DNS namespace ([#3692](https://github.com/cloudflare/cloudflare-go/issues/3692)) ([160af8b](https://github.com/cloudflare/cloudflare-go/commit/160af8b6854e9658f66989313de638c38bdb9d06))
 
-
 ### Bug Fixes
 
 * **api:** better support union schemas with common properties ([#3805](https://github.com/cloudflare/cloudflare-go/issues/3805)) ([de4206d](https://github.com/cloudflare/cloudflare-go/commit/de4206d87f7873b0af2a29e4994e2e78eb3cb444))
@@ -2419,7 +2182,6 @@ Full Changelog: [v3.1.0...v4.0.0](https://github.com/cloudflare/cloudflare-go/co
 * **internal:** add cleaner handling of DNS unions ([#3731](https://github.com/cloudflare/cloudflare-go/issues/3731)) ([2f37c95](https://github.com/cloudflare/cloudflare-go/commit/2f37c9580f4f800d8170d47a2dbf4dbfd620dc14))
 * **urlscanner:** fix invalid schema definition for plain text ([#3716](https://github.com/cloudflare/cloudflare-go/issues/3716)) ([328cb75](https://github.com/cloudflare/cloudflare-go/commit/328cb7575b33f5a0e522de6377e1397c43b79d81))
 * **waiting_room_rules:** define `body_param_name` for bulk rules endpoint  ([#3592](https://github.com/cloudflare/cloudflare-go/issues/3592)) ([7e3f242](https://github.com/cloudflare/cloudflare-go/commit/7e3f2421645acde470d0d51cad47733ccba9a796))
-
 
 ### Chores
 
@@ -2481,7 +2243,6 @@ Full Changelog: [v3.0.0...v3.1.0](https://github.com/cloudflare/cloudflare-go/co
 * **api:** OpenAPI spec update via Stainless API ([#3240](https://github.com/cloudflare/cloudflare-go/issues/3240)) ([a320ae0](https://github.com/cloudflare/cloudflare-go/commit/a320ae00913af109b9edda347bb03613ef1c8266))
 * **api:** point cloudflare-go to v3 ([#3204](https://github.com/cloudflare/cloudflare-go/issues/3204)) ([99143c8](https://github.com/cloudflare/cloudflare-go/commit/99143c83161eb1605389d6f43154873c1b5f73fa))
 * **api:** point Go at the `develop` branch ([#3203](https://github.com/cloudflare/cloudflare-go/issues/3203)) ([745a98d](https://github.com/cloudflare/cloudflare-go/commit/745a98d95ea14e8077fdb1dff2035291e24e699a))
-
 
 ### Chores
 
@@ -2746,7 +2507,6 @@ Full Changelog: [v2.4.0...v3.0.0](https://github.com/cloudflare/cloudflare-go/co
 * **api:** rename reserved `model_type` keyword ([#3034](https://github.com/cloudflare/cloudflare-go/issues/3034)) ([6798779](https://github.com/cloudflare/cloudflare-go/commit/6798779270f57a207ea6abffccfaf8bf66a7d655))
 * **api:** rename speculation endpoints ([#3199](https://github.com/cloudflare/cloudflare-go/issues/3199)) ([2b1c3c8](https://github.com/cloudflare/cloudflare-go/commit/2b1c3c885350035f934f81861d7a09ee61557317))
 
-
 ### Bug Fixes
 
 * **api:** duplicated ordering properties in ai-gateway ([#3022](https://github.com/cloudflare/cloudflare-go/issues/3022)) ([581f621](https://github.com/cloudflare/cloudflare-go/commit/581f621a269ce23fb0443e11df581d826fe5ba8a))
@@ -2755,7 +2515,6 @@ Full Changelog: [v2.4.0...v3.0.0](https://github.com/cloudflare/cloudflare-go/co
 * rectify pkg version ([28627b8](https://github.com/cloudflare/cloudflare-go/commit/28627b8e3c18b678db59c81b20edf0e0c3ae4931))
 * **requestconfig:** copy over more fields when cloning ([#3059](https://github.com/cloudflare/cloudflare-go/issues/3059)) ([f545a68](https://github.com/cloudflare/cloudflare-go/commit/f545a68dc99f9f71624abefdc6b772809387bf15))
 * **web3:** update path identifiers ([#2998](https://github.com/cloudflare/cloudflare-go/issues/2998)) ([123b0db](https://github.com/cloudflare/cloudflare-go/commit/123b0db0cf4a9391f7a77126d6d0429a101deb25))
-
 
 ### Chores
 
@@ -2767,7 +2526,6 @@ Full Changelog: [v2.4.0...v3.0.0](https://github.com/cloudflare/cloudflare-go/co
 * **internal:** codegen related update ([#3033](https://github.com/cloudflare/cloudflare-go/issues/3033)) ([2e4c5b8](https://github.com/cloudflare/cloudflare-go/commit/2e4c5b897f8725a2869367d978405912938545fd))
 * **internal:** codegen related update ([#3123](https://github.com/cloudflare/cloudflare-go/issues/3123)) ([335e301](https://github.com/cloudflare/cloudflare-go/commit/335e301a161cab55491fe2a1fe7be1190c01faaf))
 * **internal:** codegen related update ([#3174](https://github.com/cloudflare/cloudflare-go/issues/3174)) ([3613f52](https://github.com/cloudflare/cloudflare-go/commit/3613f520716a635bfa7a344991e698acac88950c))
-
 
 ### Documentation
 
@@ -3519,7 +3277,6 @@ Full Changelog: [v2.1.0...v2.2.0](https://github.com/cloudflare/cloudflare-go/co
 * **api:** update via SDK Studio ([#1976](https://github.com/cloudflare/cloudflare-go/issues/1976)) ([95f5df8](https://github.com/cloudflare/cloudflare-go/commit/95f5df84be86634d9b2942a5692ba24e65b99736))
 * **api:** update via SDK Studio ([#1977](https://github.com/cloudflare/cloudflare-go/issues/1977)) ([3943c86](https://github.com/cloudflare/cloudflare-go/commit/3943c86d41ec4502ba6903c8c4d8fb0cb2b0812d))
 
-
 ### Chores
 
 * rebuild project due to oas spec rename ([#1884](https://github.com/cloudflare/cloudflare-go/issues/1884)) ([59cd9f9](https://github.com/cloudflare/cloudflare-go/commit/59cd9f9bf4a2cd6f5a7b747c1b098839f41d84cc))
@@ -4160,13 +3917,11 @@ Full Changelog: [v2.0.0-beta.1...v2.0.0-beta.2](https://github.com/cloudflare/cl
 * update via SDK Studio ([#1535](https://github.com/cloudflare/cloudflare-go/issues/1535)) ([bae84f6](https://github.com/cloudflare/cloudflare-go/commit/bae84f668af8973c20d402e5bf01410214a80984))
 * update via SDK Studio ([#1536](https://github.com/cloudflare/cloudflare-go/issues/1536)) ([00093f3](https://github.com/cloudflare/cloudflare-go/commit/00093f35d549d71f14edffe963a3752103610b8f))
 
-
 ### Bug Fixes
 
 * consider SSH an initialism ([15eae05](https://github.com/cloudflare/cloudflare-go/commit/15eae05ee655c328a07a514b71312b59884235aa))
 * make options.WithHeader utils case-insensitive ([a26e311](https://github.com/cloudflare/cloudflare-go/commit/a26e311510283997972899e39e4cd3fbcdcd51bd))
 * **test:** avoid test failures when SKIP_MOCK_TESTS is not set ([b79aaf9](https://github.com/cloudflare/cloudflare-go/commit/b79aaf902674ae43a4b6d9804bcab181d5a87149))
-
 
 ### Chores
 
@@ -4179,12 +3934,10 @@ Full Changelog: [v2.0.0-beta.1...v2.0.0-beta.2](https://github.com/cloudflare/cl
 * sync changes ([b72168f](https://github.com/cloudflare/cloudflare-go/commit/b72168fbfcd717244519ef23a9041632189ed3ff))
 * sync changes ([#32](https://github.com/cloudflare/cloudflare-go/issues/32)) ([7cd4211](https://github.com/cloudflare/cloudflare-go/commit/7cd4211812eb0bf83e2bf12ceb8d98af2513b37e))
 
-
 ### Documentation
 
 * **options:** fix link to readme ([2338fa2](https://github.com/cloudflare/cloudflare-go/commit/2338fa246757dbce501a007977761ac9135944c7))
 * **readme:** improve api reference ([6df3cc7](https://github.com/cloudflare/cloudflare-go/commit/6df3cc74fe3189d58951c464e38045305b55f21e))
-
 
 ### Refactors
 
@@ -4450,13 +4203,11 @@ Full Changelog: [v0.0.1...v0.1.0](https://github.com/cloudflare/cloudflare-go/co
 * update via SDK Studio ([adafc3e](https://github.com/cloudflare/cloudflare-go/commit/adafc3e26798647cdbb91c831c14480183663f43))
 * update via SDK Studio ([#1518](https://github.com/cloudflare/cloudflare-go/issues/1518)) ([79737ea](https://github.com/cloudflare/cloudflare-go/commit/79737eafd1e8192b22f3c7ceb2e23a644ea34a8a))
 
-
 ### Bug Fixes
 
 * consider SSH an initialism ([15eae05](https://github.com/cloudflare/cloudflare-go/commit/15eae05ee655c328a07a514b71312b59884235aa))
 * make options.WithHeader utils case-insensitive ([a26e311](https://github.com/cloudflare/cloudflare-go/commit/a26e311510283997972899e39e4cd3fbcdcd51bd))
 * **test:** avoid test failures when SKIP_MOCK_TESTS is not set ([b79aaf9](https://github.com/cloudflare/cloudflare-go/commit/b79aaf902674ae43a4b6d9804bcab181d5a87149))
-
 
 ### Chores
 
@@ -4469,12 +4220,10 @@ Full Changelog: [v0.0.1...v0.1.0](https://github.com/cloudflare/cloudflare-go/co
 * sync changes ([b72168f](https://github.com/cloudflare/cloudflare-go/commit/b72168fbfcd717244519ef23a9041632189ed3ff))
 * sync changes ([#32](https://github.com/cloudflare/cloudflare-go/issues/32)) ([7cd4211](https://github.com/cloudflare/cloudflare-go/commit/7cd4211812eb0bf83e2bf12ceb8d98af2513b37e))
 
-
 ### Documentation
 
 * **options:** fix link to readme ([2338fa2](https://github.com/cloudflare/cloudflare-go/commit/2338fa246757dbce501a007977761ac9135944c7))
 * **readme:** improve api reference ([6df3cc7](https://github.com/cloudflare/cloudflare-go/commit/6df3cc74fe3189d58951c464e38045305b55f21e))
-
 
 ### Refactors
 

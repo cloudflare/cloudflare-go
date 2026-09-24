@@ -1,4 +1,4 @@
-# Security Policy
+# Reporting Security Vulnerabilities
 
 ## Reporting Security Issues
 
@@ -25,3 +25,5 @@ Please contact api@cloudflare.com for any questions or concerns regarding the se
 ---
 
 Thank you for helping us keep the SDKs and systems they interact with secure.
+
+Please see [this page](https://www.cloudflare.com/.well-known/security.txt) for information on how to report a vulnerability to Cloudflare. Thanks!
