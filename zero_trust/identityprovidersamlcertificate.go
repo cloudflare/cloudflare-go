@@ -46,7 +46,7 @@ func NewIdentityProviderSAMLCertificateService(opts ...option.RequestOption) (r 
 // 2. Update the IdP configuration (PUT `/identity_providers/{id}`) with:
 //   - `config.enable_encryption: true`
 //   - `saml_certificate_set_id: <uid from step 1>`
-//  3. Configure the certificate's public key in your external SAML Identity
+//     3. Configure the certificate's public key in your external SAML Identity
 //     Provider
 func (r *IdentityProviderSAMLCertificateService) New(ctx context.Context, identityProviderID string, body IdentityProviderSAMLCertificateNewParams, opts ...option.RequestOption) (res *IdentityProviderSAMLCertificateNewResponse, err error) {
 	var env IdentityProviderSAMLCertificateNewResponseEnvelope
