@@ -483,6 +483,9 @@ type PolicyFilter struct {
 	TargetIP []string `json:"target_ip"`
 	// Used for configuring advanced_ddos_attack_l7_alert
 	TargetZoneName []string `json:"target_zone_name"`
+	// Access service token IDs to include for expiring_service_token_alert. Omit this
+	// property to include all current and future service tokens.
+	TokenID []string `json:"token_id"`
 	// Used for configuring traffic_anomalies_alert
 	TrafficExclusions []PolicyFilterTrafficExclusion `json:"traffic_exclusions"`
 	// Used for configuring tunnel_health_event
@@ -537,6 +540,7 @@ type policyFilterJSON struct {
 	TargetHostname               apijson.Field
 	TargetIP                     apijson.Field
 	TargetZoneName               apijson.Field
+	TokenID                      apijson.Field
 	TrafficExclusions            apijson.Field
 	TunnelID                     apijson.Field
 	TunnelName                   apijson.Field
@@ -664,6 +668,9 @@ type PolicyFilterParam struct {
 	TargetIP param.Field[[]string] `json:"target_ip"`
 	// Used for configuring advanced_ddos_attack_l7_alert
 	TargetZoneName param.Field[[]string] `json:"target_zone_name"`
+	// Access service token IDs to include for expiring_service_token_alert. Omit this
+	// property to include all current and future service tokens.
+	TokenID param.Field[[]string] `json:"token_id"`
 	// Used for configuring traffic_anomalies_alert
 	TrafficExclusions param.Field[[]PolicyFilterTrafficExclusion] `json:"traffic_exclusions"`
 	// Used for configuring tunnel_health_event

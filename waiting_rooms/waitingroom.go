@@ -367,18 +367,18 @@ type QueryParam struct {
 	// https://mustache.github.io/ ). There are several variables that are evaluated by
 	// the Cloudflare edge:
 	//
-	// 1. {{`waitTimeKnown`}} Acts like a boolean value that indicates the behavior to
-	//    take when wait time is not available, for instance when queue_all is
-	//    **true**.
-	// 2. {{`waitTimeFormatted`}} Estimated wait time for the user. For example, five
-	//    minutes. Alternatively, you can use:
-	// 3. {{`waitTime`}} Number of minutes of estimated wait for a user.
-	// 4. {{`waitTimeHours`}} Number of hours of estimated wait for a user
-	//    (`Math.floor(waitTime/60)`).
-	// 5. {{`waitTimeHourMinutes`}} Number of minutes above the `waitTimeHours` value
-	//    (`waitTime%60`).
-	// 6. {{`queueIsFull`}} Changes to **true** when no more people can be added to the
-	//    queue.
+	//  1. {{`waitTimeKnown`}} Acts like a boolean value that indicates the behavior to
+	//     take when wait time is not available, for instance when queue_all is
+	//     **true**.
+	//  2. {{`waitTimeFormatted`}} Estimated wait time for the user. For example, five
+	//     minutes. Alternatively, you can use:
+	//  3. {{`waitTime`}} Number of minutes of estimated wait for a user.
+	//  4. {{`waitTimeHours`}} Number of hours of estimated wait for a user
+	//     (`Math.floor(waitTime/60)`).
+	//  5. {{`waitTimeHourMinutes`}} Number of minutes above the `waitTimeHours` value
+	//     (`waitTime%60`).
+	//  6. {{`queueIsFull`}} Changes to **true** when no more people can be added to the
+	//     queue.
 	//
 	// To view the full list of variables, look at the `cfWaitingRoom` object described
 	// under the `json_response_enabled` property in other Waiting Room API calls.
@@ -402,150 +402,150 @@ type QueryParam struct {
 	// as opposed to the configured static HTML page. This JSON response object has one
 	// property `cfWaitingRoom` which is an object containing the following fields:
 	//
-	// 1. `inWaitingRoom`: Boolean indicating if the user is in the waiting room
-	//    (always **true**).
-	// 2. `waitTimeKnown`: Boolean indicating if the current estimated wait times are
-	//    accurate. If **false**, they are not available.
-	// 3. `waitTime`: Valid only when `waitTimeKnown` is **true**. Integer indicating
-	//    the current estimated time in minutes the user will wait in the waiting room.
-	//    When `queueingMethod` is **random**, this is set to `waitTime50Percentile`.
-	// 4. `waitTime25Percentile`: Valid only when `queueingMethod` is **random** and
-	//    `waitTimeKnown` is **true**. Integer indicating the current estimated maximum
-	//    wait time for the 25% of users that gain entry the fastest (25th percentile).
-	// 5. `waitTime50Percentile`: Valid only when `queueingMethod` is **random** and
-	//    `waitTimeKnown` is **true**. Integer indicating the current estimated maximum
-	//    wait time for the 50% of users that gain entry the fastest (50th percentile).
-	//    In other words, half of the queued users are expected to let into the origin
-	//    website before `waitTime50Percentile` and half are expected to be let in
-	//    after it.
-	// 6. `waitTime75Percentile`: Valid only when `queueingMethod` is **random** and
-	//    `waitTimeKnown` is **true**. Integer indicating the current estimated maximum
-	//    wait time for the 75% of users that gain entry the fastest (75th percentile).
-	// 7. `waitTimeFormatted`: String displaying the `waitTime` formatted in English
-	//    for users. If `waitTimeKnown` is **false**, `waitTimeFormatted` will display
-	//    **unavailable**.
-	// 8. `queueIsFull`: Boolean indicating if the waiting room's queue is currently
-	//    full and not accepting new users at the moment.
-	// 9. `queueAll`: Boolean indicating if all users will be queued in the waiting
-	//    room and no one will be let into the origin website.
-	// 10. `lastUpdated`: String displaying the timestamp as an ISO 8601 string of the
+	//  1. `inWaitingRoom`: Boolean indicating if the user is in the waiting room
+	//     (always **true**).
+	//  2. `waitTimeKnown`: Boolean indicating if the current estimated wait times are
+	//     accurate. If **false**, they are not available.
+	//  3. `waitTime`: Valid only when `waitTimeKnown` is **true**. Integer indicating
+	//     the current estimated time in minutes the user will wait in the waiting room.
+	//     When `queueingMethod` is **random**, this is set to `waitTime50Percentile`.
+	//  4. `waitTime25Percentile`: Valid only when `queueingMethod` is **random** and
+	//     `waitTimeKnown` is **true**. Integer indicating the current estimated maximum
+	//     wait time for the 25% of users that gain entry the fastest (25th percentile).
+	//  5. `waitTime50Percentile`: Valid only when `queueingMethod` is **random** and
+	//     `waitTimeKnown` is **true**. Integer indicating the current estimated maximum
+	//     wait time for the 50% of users that gain entry the fastest (50th percentile).
+	//     In other words, half of the queued users are expected to let into the origin
+	//     website before `waitTime50Percentile` and half are expected to be let in
+	//     after it.
+	//  6. `waitTime75Percentile`: Valid only when `queueingMethod` is **random** and
+	//     `waitTimeKnown` is **true**. Integer indicating the current estimated maximum
+	//     wait time for the 75% of users that gain entry the fastest (75th percentile).
+	//  7. `waitTimeFormatted`: String displaying the `waitTime` formatted in English
+	//     for users. If `waitTimeKnown` is **false**, `waitTimeFormatted` will display
+	//     **unavailable**.
+	//  8. `queueIsFull`: Boolean indicating if the waiting room's queue is currently
+	//     full and not accepting new users at the moment.
+	//  9. `queueAll`: Boolean indicating if all users will be queued in the waiting
+	//     room and no one will be let into the origin website.
+	//  10. `lastUpdated`: String displaying the timestamp as an ISO 8601 string of the
 	//     user's last attempt to leave the waiting room and be let into the origin
 	//     website. The user is able to make another attempt after
 	//     `refreshIntervalSeconds` past this time. If the user makes a request too
 	//     soon, it will be ignored and `lastUpdated` will not change.
-	// 11. `refreshIntervalSeconds`: Integer indicating the number of seconds after
+	//  11. `refreshIntervalSeconds`: Integer indicating the number of seconds after
 	//     `lastUpdated` until the user is able to make another attempt to leave the
 	//     waiting room and be let into the origin website. When the `queueingMethod`
 	//     is `reject`, there is no specified refresh time —\_it will always be
 	//     **zero**.
-	// 12. `queueingMethod`: The queueing method currently used by the waiting room. It
+	//  12. `queueingMethod`: The queueing method currently used by the waiting room. It
 	//     is either **fifo**, **random**, **passthrough**, or **reject**.
-	// 13. `isFIFOQueue`: Boolean indicating if the waiting room uses a FIFO
+	//  13. `isFIFOQueue`: Boolean indicating if the waiting room uses a FIFO
 	//     (First-In-First-Out) queue.
-	// 14. `isRandomQueue`: Boolean indicating if the waiting room uses a Random queue
+	//  14. `isRandomQueue`: Boolean indicating if the waiting room uses a Random queue
 	//     where users gain access randomly.
-	// 15. `isPassthroughQueue`: Boolean indicating if the waiting room uses a
+	//  15. `isPassthroughQueue`: Boolean indicating if the waiting room uses a
 	//     passthrough queue. Keep in mind that when passthrough is enabled, this JSON
 	//     response will only exist when `queueAll` is **true** or `isEventPrequeueing`
 	//     is **true** because in all other cases requests will go directly to the
 	//     origin.
-	// 16. `isRejectQueue`: Boolean indicating if the waiting room uses a reject queue.
-	// 17. `isEventActive`: Boolean indicating if an event is currently occurring.
+	//  16. `isRejectQueue`: Boolean indicating if the waiting room uses a reject queue.
+	//  17. `isEventActive`: Boolean indicating if an event is currently occurring.
 	//     Events are able to change a waiting room's behavior during a specified
 	//     period of time. For additional information, look at the event properties
 	//     `prequeue_start_time`, `event_start_time`, and `event_end_time` in the
 	//     documentation for creating waiting room events. Events are considered active
 	//     between these start and end times, as well as during the prequeueing period
 	//     if it exists.
-	// 18. `isEventPrequeueing`: Valid only when `isEventActive` is **true**. Boolean
+	//  18. `isEventPrequeueing`: Valid only when `isEventActive` is **true**. Boolean
 	//     indicating if an event is currently prequeueing users before it starts.
-	// 19. `timeUntilEventStart`: Valid only when `isEventPrequeueing` is **true**.
+	//  19. `timeUntilEventStart`: Valid only when `isEventPrequeueing` is **true**.
 	//     Integer indicating the number of minutes until the event starts.
-	// 20. `timeUntilEventStartFormatted`: String displaying the `timeUntilEventStart`
+	//  20. `timeUntilEventStartFormatted`: String displaying the `timeUntilEventStart`
 	//     formatted in English for users. If `isEventPrequeueing` is **false**,
 	//     `timeUntilEventStartFormatted` will display **unavailable**.
-	// 21. `timeUntilEventEnd`: Valid only when `isEventActive` is **true**. Integer
+	//  21. `timeUntilEventEnd`: Valid only when `isEventActive` is **true**. Integer
 	//     indicating the number of minutes until the event ends.
-	// 22. `timeUntilEventEndFormatted`: String displaying the `timeUntilEventEnd`
+	//  22. `timeUntilEventEndFormatted`: String displaying the `timeUntilEventEnd`
 	//     formatted in English for users. If `isEventActive` is **false**,
 	//     `timeUntilEventEndFormatted` will display **unavailable**.
-	// 23. `shuffleAtEventStart`: Valid only when `isEventActive` is **true**. Boolean
+	//  23. `shuffleAtEventStart`: Valid only when `isEventActive` is **true**. Boolean
 	//     indicating if the users in the prequeue are shuffled randomly when the event
 	//     starts.
-	// 24. `turnstile`: Empty when turnstile isn't enabled. String displaying an html
+	//  24. `turnstile`: Empty when turnstile isn't enabled. String displaying an html
 	//     tag to display the Turnstile widget. Please add the `{{{turnstile}}}` tag to
 	//     the `custom_html` template to ensure the Turnstile widget appears.
-	// 25. `infiniteQueue`: Boolean indicating whether the response is for a user in
+	//  25. `infiniteQueue`: Boolean indicating whether the response is for a user in
 	//     the infinite queue.
 	//
 	// An example cURL to a waiting room could be:
 	//
-	//     curl -X GET "https://example.com/waitingroom" \
-	//     	-H "Accept: application/json"
+	//	curl -X GET "https://example.com/waitingroom" \
+	//		-H "Accept: application/json"
 	//
 	// If `json_response_enabled` is **true** and the request hits the waiting room, an
 	// example JSON response when `queueingMethod` is **fifo** and no event is active
 	// could be:
 	//
-	//     {
-	//     	"cfWaitingRoom": {
-	//     		"inWaitingRoom": true,
-	//     		"waitTimeKnown": true,
-	//     		"waitTime": 10,
-	//     		"waitTime25Percentile": 0,
-	//     		"waitTime50Percentile": 0,
-	//     		"waitTime75Percentile": 0,
-	//     		"waitTimeFormatted": "10 minutes",
-	//     		"queueIsFull": false,
-	//     		"queueAll": false,
-	//     		"lastUpdated": "2020-08-03T23:46:00.000Z",
-	//     		"refreshIntervalSeconds": 20,
-	//     		"queueingMethod": "fifo",
-	//     		"isFIFOQueue": true,
-	//     		"isRandomQueue": false,
-	//     		"isPassthroughQueue": false,
-	//     		"isRejectQueue": false,
-	//     		"isEventActive": false,
-	//     		"isEventPrequeueing": false,
-	//     		"timeUntilEventStart": 0,
-	//     		"timeUntilEventStartFormatted": "unavailable",
-	//     		"timeUntilEventEnd": 0,
-	//     		"timeUntilEventEndFormatted": "unavailable",
-	//     		"shuffleAtEventStart": false
-	//     	}
-	//     }
+	//	{
+	//		"cfWaitingRoom": {
+	//			"inWaitingRoom": true,
+	//			"waitTimeKnown": true,
+	//			"waitTime": 10,
+	//			"waitTime25Percentile": 0,
+	//			"waitTime50Percentile": 0,
+	//			"waitTime75Percentile": 0,
+	//			"waitTimeFormatted": "10 minutes",
+	//			"queueIsFull": false,
+	//			"queueAll": false,
+	//			"lastUpdated": "2020-08-03T23:46:00.000Z",
+	//			"refreshIntervalSeconds": 20,
+	//			"queueingMethod": "fifo",
+	//			"isFIFOQueue": true,
+	//			"isRandomQueue": false,
+	//			"isPassthroughQueue": false,
+	//			"isRejectQueue": false,
+	//			"isEventActive": false,
+	//			"isEventPrequeueing": false,
+	//			"timeUntilEventStart": 0,
+	//			"timeUntilEventStartFormatted": "unavailable",
+	//			"timeUntilEventEnd": 0,
+	//			"timeUntilEventEndFormatted": "unavailable",
+	//			"shuffleAtEventStart": false
+	//		}
+	//	}
 	//
 	// If `json_response_enabled` is **true** and the request hits the waiting room, an
 	// example JSON response when `queueingMethod` is **random** and an event is active
 	// could be:
 	//
-	//     {
-	//     	"cfWaitingRoom": {
-	//     		"inWaitingRoom": true,
-	//     		"waitTimeKnown": true,
-	//     		"waitTime": 10,
-	//     		"waitTime25Percentile": 5,
-	//     		"waitTime50Percentile": 10,
-	//     		"waitTime75Percentile": 15,
-	//     		"waitTimeFormatted": "5 minutes to 15 minutes",
-	//     		"queueIsFull": false,
-	//     		"queueAll": false,
-	//     		"lastUpdated": "2020-08-03T23:46:00.000Z",
-	//     		"refreshIntervalSeconds": 20,
-	//     		"queueingMethod": "random",
-	//     		"isFIFOQueue": false,
-	//     		"isRandomQueue": true,
-	//     		"isPassthroughQueue": false,
-	//     		"isRejectQueue": false,
-	//     		"isEventActive": true,
-	//     		"isEventPrequeueing": false,
-	//     		"timeUntilEventStart": 0,
-	//     		"timeUntilEventStartFormatted": "unavailable",
-	//     		"timeUntilEventEnd": 15,
-	//     		"timeUntilEventEndFormatted": "15 minutes",
-	//     		"shuffleAtEventStart": true
-	//     	}
-	//     }
+	//	{
+	//		"cfWaitingRoom": {
+	//			"inWaitingRoom": true,
+	//			"waitTimeKnown": true,
+	//			"waitTime": 10,
+	//			"waitTime25Percentile": 5,
+	//			"waitTime50Percentile": 10,
+	//			"waitTime75Percentile": 15,
+	//			"waitTimeFormatted": "5 minutes to 15 minutes",
+	//			"queueIsFull": false,
+	//			"queueAll": false,
+	//			"lastUpdated": "2020-08-03T23:46:00.000Z",
+	//			"refreshIntervalSeconds": 20,
+	//			"queueingMethod": "random",
+	//			"isFIFOQueue": false,
+	//			"isRandomQueue": true,
+	//			"isPassthroughQueue": false,
+	//			"isRejectQueue": false,
+	//			"isEventActive": true,
+	//			"isEventPrequeueing": false,
+	//			"timeUntilEventStart": 0,
+	//			"timeUntilEventStartFormatted": "unavailable",
+	//			"timeUntilEventEnd": 15,
+	//			"timeUntilEventEndFormatted": "15 minutes",
+	//			"shuffleAtEventStart": true
+	//		}
+	//	}
 	JsonResponseEnabled param.Field[bool] `json:"json_response_enabled"`
 	// Sets the path within the host to enable the waiting room on. The waiting room
 	// will be enabled for all subpaths as well. If there are two waiting rooms on the
@@ -563,26 +563,26 @@ type QueryParam struct {
 	// origin. These users will always see a waiting room page that refreshes
 	// automatically. The valid queueing methods are:
 	//
-	// 1. `fifo` **(default)**: First-In-First-Out queue where customers gain access in
-	//    the order they arrived.
-	// 2. `random`: Random queue where customers gain access randomly, regardless of
-	//    arrival time.
-	// 3. `passthrough`: Users will pass directly through the waiting room and into the
-	//    origin website. As a result, any configured limits will not be respected
-	//    while this is enabled. This method can be used as an alternative to disabling
-	//    a waiting room (with `suspended`) so that analytics are still reported. This
-	//    can be used if you wish to allow all traffic normally, but want to restrict
-	//    traffic during a waiting room event, or vice versa.
-	// 4. `reject`: Users will be immediately rejected from the waiting room. As a
-	//    result, no users will reach the origin website while this is enabled. This
-	//    can be used if you wish to reject all traffic while performing maintenance,
-	//    block traffic during a specified period of time (an event), or block traffic
-	//    while events are not occurring. Consider a waiting room used for vaccine
-	//    distribution that only allows traffic during sign-up events, and otherwise
-	//    blocks all traffic. For this case, the waiting room uses `reject`, and its
-	//    events override this with `fifo`, `random`, or `passthrough`. When this
-	//    queueing method is enabled and neither `queueAll` is enabled nor an event is
-	//    prequeueing, the waiting room page **will not refresh automatically**.
+	//  1. `fifo` **(default)**: First-In-First-Out queue where customers gain access in
+	//     the order they arrived.
+	//  2. `random`: Random queue where customers gain access randomly, regardless of
+	//     arrival time.
+	//  3. `passthrough`: Users will pass directly through the waiting room and into the
+	//     origin website. As a result, any configured limits will not be respected
+	//     while this is enabled. This method can be used as an alternative to disabling
+	//     a waiting room (with `suspended`) so that analytics are still reported. This
+	//     can be used if you wish to allow all traffic normally, but want to restrict
+	//     traffic during a waiting room event, or vice versa.
+	//  4. `reject`: Users will be immediately rejected from the waiting room. As a
+	//     result, no users will reach the origin website while this is enabled. This
+	//     can be used if you wish to reject all traffic while performing maintenance,
+	//     block traffic during a specified period of time (an event), or block traffic
+	//     while events are not occurring. Consider a waiting room used for vaccine
+	//     distribution that only allows traffic during sign-up events, and otherwise
+	//     blocks all traffic. For this case, the waiting room uses `reject`, and its
+	//     events override this with `fifo`, `random`, or `passthrough`. When this
+	//     queueing method is enabled and neither `queueAll` is enabled nor an event is
+	//     prequeueing, the waiting room page **will not refresh automatically**.
 	QueueingMethod param.Field[QueryQueueingMethod] `json:"queueing_method"`
 	// HTTP status code returned to a user while in the queue.
 	QueueingStatusCode param.Field[QueryQueueingStatusCode] `json:"queueing_status_code"`
@@ -639,6 +639,7 @@ const (
 	QueryDefaultTemplateLanguageDaDK QueryDefaultTemplateLanguage = "da-DK"
 	QueryDefaultTemplateLanguageFiFi QueryDefaultTemplateLanguage = "fi-FI"
 	QueryDefaultTemplateLanguageLtLt QueryDefaultTemplateLanguage = "lt-LT"
+	QueryDefaultTemplateLanguageLvLv QueryDefaultTemplateLanguage = "lv-LV"
 	QueryDefaultTemplateLanguageMsMy QueryDefaultTemplateLanguage = "ms-MY"
 	QueryDefaultTemplateLanguageNbNo QueryDefaultTemplateLanguage = "nb-NO"
 	QueryDefaultTemplateLanguageRoRo QueryDefaultTemplateLanguage = "ro-RO"
@@ -658,7 +659,7 @@ const (
 
 func (r QueryDefaultTemplateLanguage) IsKnown() bool {
 	switch r {
-	case QueryDefaultTemplateLanguageEnUs, QueryDefaultTemplateLanguageEsEs, QueryDefaultTemplateLanguageDeDe, QueryDefaultTemplateLanguageFrFr, QueryDefaultTemplateLanguageItIt, QueryDefaultTemplateLanguageJaJp, QueryDefaultTemplateLanguageKoKr, QueryDefaultTemplateLanguagePtBr, QueryDefaultTemplateLanguageZhCn, QueryDefaultTemplateLanguageZhTw, QueryDefaultTemplateLanguageNlNl, QueryDefaultTemplateLanguagePlPl, QueryDefaultTemplateLanguageIDID, QueryDefaultTemplateLanguageTrTr, QueryDefaultTemplateLanguageArEg, QueryDefaultTemplateLanguageRuRu, QueryDefaultTemplateLanguageFaIr, QueryDefaultTemplateLanguageBgBg, QueryDefaultTemplateLanguageHrHr, QueryDefaultTemplateLanguageCsCz, QueryDefaultTemplateLanguageDaDK, QueryDefaultTemplateLanguageFiFi, QueryDefaultTemplateLanguageLtLt, QueryDefaultTemplateLanguageMsMy, QueryDefaultTemplateLanguageNbNo, QueryDefaultTemplateLanguageRoRo, QueryDefaultTemplateLanguageElGr, QueryDefaultTemplateLanguageHeIl, QueryDefaultTemplateLanguageHiIn, QueryDefaultTemplateLanguageHuHu, QueryDefaultTemplateLanguageSrBa, QueryDefaultTemplateLanguageSkSk, QueryDefaultTemplateLanguageSlSi, QueryDefaultTemplateLanguageSvSe, QueryDefaultTemplateLanguageTlPh, QueryDefaultTemplateLanguageThTh, QueryDefaultTemplateLanguageUkUA, QueryDefaultTemplateLanguageViVn:
+	case QueryDefaultTemplateLanguageEnUs, QueryDefaultTemplateLanguageEsEs, QueryDefaultTemplateLanguageDeDe, QueryDefaultTemplateLanguageFrFr, QueryDefaultTemplateLanguageItIt, QueryDefaultTemplateLanguageJaJp, QueryDefaultTemplateLanguageKoKr, QueryDefaultTemplateLanguagePtBr, QueryDefaultTemplateLanguageZhCn, QueryDefaultTemplateLanguageZhTw, QueryDefaultTemplateLanguageNlNl, QueryDefaultTemplateLanguagePlPl, QueryDefaultTemplateLanguageIDID, QueryDefaultTemplateLanguageTrTr, QueryDefaultTemplateLanguageArEg, QueryDefaultTemplateLanguageRuRu, QueryDefaultTemplateLanguageFaIr, QueryDefaultTemplateLanguageBgBg, QueryDefaultTemplateLanguageHrHr, QueryDefaultTemplateLanguageCsCz, QueryDefaultTemplateLanguageDaDK, QueryDefaultTemplateLanguageFiFi, QueryDefaultTemplateLanguageLtLt, QueryDefaultTemplateLanguageLvLv, QueryDefaultTemplateLanguageMsMy, QueryDefaultTemplateLanguageNbNo, QueryDefaultTemplateLanguageRoRo, QueryDefaultTemplateLanguageElGr, QueryDefaultTemplateLanguageHeIl, QueryDefaultTemplateLanguageHiIn, QueryDefaultTemplateLanguageHuHu, QueryDefaultTemplateLanguageSrBa, QueryDefaultTemplateLanguageSkSk, QueryDefaultTemplateLanguageSlSi, QueryDefaultTemplateLanguageSvSe, QueryDefaultTemplateLanguageTlPh, QueryDefaultTemplateLanguageThTh, QueryDefaultTemplateLanguageUkUA, QueryDefaultTemplateLanguageViVn:
 		return true
 	}
 	return false
@@ -802,18 +803,18 @@ type WaitingRoom struct {
 	// https://mustache.github.io/ ). There are several variables that are evaluated by
 	// the Cloudflare edge:
 	//
-	// 1. {{`waitTimeKnown`}} Acts like a boolean value that indicates the behavior to
-	//    take when wait time is not available, for instance when queue_all is
-	//    **true**.
-	// 2. {{`waitTimeFormatted`}} Estimated wait time for the user. For example, five
-	//    minutes. Alternatively, you can use:
-	// 3. {{`waitTime`}} Number of minutes of estimated wait for a user.
-	// 4. {{`waitTimeHours`}} Number of hours of estimated wait for a user
-	//    (`Math.floor(waitTime/60)`).
-	// 5. {{`waitTimeHourMinutes`}} Number of minutes above the `waitTimeHours` value
-	//    (`waitTime%60`).
-	// 6. {{`queueIsFull`}} Changes to **true** when no more people can be added to the
-	//    queue.
+	//  1. {{`waitTimeKnown`}} Acts like a boolean value that indicates the behavior to
+	//     take when wait time is not available, for instance when queue_all is
+	//     **true**.
+	//  2. {{`waitTimeFormatted`}} Estimated wait time for the user. For example, five
+	//     minutes. Alternatively, you can use:
+	//  3. {{`waitTime`}} Number of minutes of estimated wait for a user.
+	//  4. {{`waitTimeHours`}} Number of hours of estimated wait for a user
+	//     (`Math.floor(waitTime/60)`).
+	//  5. {{`waitTimeHourMinutes`}} Number of minutes above the `waitTimeHours` value
+	//     (`waitTime%60`).
+	//  6. {{`queueIsFull`}} Changes to **true** when no more people can be added to the
+	//     queue.
 	//
 	// To view the full list of variables, look at the `cfWaitingRoom` object described
 	// under the `json_response_enabled` property in other Waiting Room API calls.
@@ -841,150 +842,150 @@ type WaitingRoom struct {
 	// as opposed to the configured static HTML page. This JSON response object has one
 	// property `cfWaitingRoom` which is an object containing the following fields:
 	//
-	// 1. `inWaitingRoom`: Boolean indicating if the user is in the waiting room
-	//    (always **true**).
-	// 2. `waitTimeKnown`: Boolean indicating if the current estimated wait times are
-	//    accurate. If **false**, they are not available.
-	// 3. `waitTime`: Valid only when `waitTimeKnown` is **true**. Integer indicating
-	//    the current estimated time in minutes the user will wait in the waiting room.
-	//    When `queueingMethod` is **random**, this is set to `waitTime50Percentile`.
-	// 4. `waitTime25Percentile`: Valid only when `queueingMethod` is **random** and
-	//    `waitTimeKnown` is **true**. Integer indicating the current estimated maximum
-	//    wait time for the 25% of users that gain entry the fastest (25th percentile).
-	// 5. `waitTime50Percentile`: Valid only when `queueingMethod` is **random** and
-	//    `waitTimeKnown` is **true**. Integer indicating the current estimated maximum
-	//    wait time for the 50% of users that gain entry the fastest (50th percentile).
-	//    In other words, half of the queued users are expected to let into the origin
-	//    website before `waitTime50Percentile` and half are expected to be let in
-	//    after it.
-	// 6. `waitTime75Percentile`: Valid only when `queueingMethod` is **random** and
-	//    `waitTimeKnown` is **true**. Integer indicating the current estimated maximum
-	//    wait time for the 75% of users that gain entry the fastest (75th percentile).
-	// 7. `waitTimeFormatted`: String displaying the `waitTime` formatted in English
-	//    for users. If `waitTimeKnown` is **false**, `waitTimeFormatted` will display
-	//    **unavailable**.
-	// 8. `queueIsFull`: Boolean indicating if the waiting room's queue is currently
-	//    full and not accepting new users at the moment.
-	// 9. `queueAll`: Boolean indicating if all users will be queued in the waiting
-	//    room and no one will be let into the origin website.
-	// 10. `lastUpdated`: String displaying the timestamp as an ISO 8601 string of the
+	//  1. `inWaitingRoom`: Boolean indicating if the user is in the waiting room
+	//     (always **true**).
+	//  2. `waitTimeKnown`: Boolean indicating if the current estimated wait times are
+	//     accurate. If **false**, they are not available.
+	//  3. `waitTime`: Valid only when `waitTimeKnown` is **true**. Integer indicating
+	//     the current estimated time in minutes the user will wait in the waiting room.
+	//     When `queueingMethod` is **random**, this is set to `waitTime50Percentile`.
+	//  4. `waitTime25Percentile`: Valid only when `queueingMethod` is **random** and
+	//     `waitTimeKnown` is **true**. Integer indicating the current estimated maximum
+	//     wait time for the 25% of users that gain entry the fastest (25th percentile).
+	//  5. `waitTime50Percentile`: Valid only when `queueingMethod` is **random** and
+	//     `waitTimeKnown` is **true**. Integer indicating the current estimated maximum
+	//     wait time for the 50% of users that gain entry the fastest (50th percentile).
+	//     In other words, half of the queued users are expected to let into the origin
+	//     website before `waitTime50Percentile` and half are expected to be let in
+	//     after it.
+	//  6. `waitTime75Percentile`: Valid only when `queueingMethod` is **random** and
+	//     `waitTimeKnown` is **true**. Integer indicating the current estimated maximum
+	//     wait time for the 75% of users that gain entry the fastest (75th percentile).
+	//  7. `waitTimeFormatted`: String displaying the `waitTime` formatted in English
+	//     for users. If `waitTimeKnown` is **false**, `waitTimeFormatted` will display
+	//     **unavailable**.
+	//  8. `queueIsFull`: Boolean indicating if the waiting room's queue is currently
+	//     full and not accepting new users at the moment.
+	//  9. `queueAll`: Boolean indicating if all users will be queued in the waiting
+	//     room and no one will be let into the origin website.
+	//  10. `lastUpdated`: String displaying the timestamp as an ISO 8601 string of the
 	//     user's last attempt to leave the waiting room and be let into the origin
 	//     website. The user is able to make another attempt after
 	//     `refreshIntervalSeconds` past this time. If the user makes a request too
 	//     soon, it will be ignored and `lastUpdated` will not change.
-	// 11. `refreshIntervalSeconds`: Integer indicating the number of seconds after
+	//  11. `refreshIntervalSeconds`: Integer indicating the number of seconds after
 	//     `lastUpdated` until the user is able to make another attempt to leave the
 	//     waiting room and be let into the origin website. When the `queueingMethod`
 	//     is `reject`, there is no specified refresh time —\_it will always be
 	//     **zero**.
-	// 12. `queueingMethod`: The queueing method currently used by the waiting room. It
+	//  12. `queueingMethod`: The queueing method currently used by the waiting room. It
 	//     is either **fifo**, **random**, **passthrough**, or **reject**.
-	// 13. `isFIFOQueue`: Boolean indicating if the waiting room uses a FIFO
+	//  13. `isFIFOQueue`: Boolean indicating if the waiting room uses a FIFO
 	//     (First-In-First-Out) queue.
-	// 14. `isRandomQueue`: Boolean indicating if the waiting room uses a Random queue
+	//  14. `isRandomQueue`: Boolean indicating if the waiting room uses a Random queue
 	//     where users gain access randomly.
-	// 15. `isPassthroughQueue`: Boolean indicating if the waiting room uses a
+	//  15. `isPassthroughQueue`: Boolean indicating if the waiting room uses a
 	//     passthrough queue. Keep in mind that when passthrough is enabled, this JSON
 	//     response will only exist when `queueAll` is **true** or `isEventPrequeueing`
 	//     is **true** because in all other cases requests will go directly to the
 	//     origin.
-	// 16. `isRejectQueue`: Boolean indicating if the waiting room uses a reject queue.
-	// 17. `isEventActive`: Boolean indicating if an event is currently occurring.
+	//  16. `isRejectQueue`: Boolean indicating if the waiting room uses a reject queue.
+	//  17. `isEventActive`: Boolean indicating if an event is currently occurring.
 	//     Events are able to change a waiting room's behavior during a specified
 	//     period of time. For additional information, look at the event properties
 	//     `prequeue_start_time`, `event_start_time`, and `event_end_time` in the
 	//     documentation for creating waiting room events. Events are considered active
 	//     between these start and end times, as well as during the prequeueing period
 	//     if it exists.
-	// 18. `isEventPrequeueing`: Valid only when `isEventActive` is **true**. Boolean
+	//  18. `isEventPrequeueing`: Valid only when `isEventActive` is **true**. Boolean
 	//     indicating if an event is currently prequeueing users before it starts.
-	// 19. `timeUntilEventStart`: Valid only when `isEventPrequeueing` is **true**.
+	//  19. `timeUntilEventStart`: Valid only when `isEventPrequeueing` is **true**.
 	//     Integer indicating the number of minutes until the event starts.
-	// 20. `timeUntilEventStartFormatted`: String displaying the `timeUntilEventStart`
+	//  20. `timeUntilEventStartFormatted`: String displaying the `timeUntilEventStart`
 	//     formatted in English for users. If `isEventPrequeueing` is **false**,
 	//     `timeUntilEventStartFormatted` will display **unavailable**.
-	// 21. `timeUntilEventEnd`: Valid only when `isEventActive` is **true**. Integer
+	//  21. `timeUntilEventEnd`: Valid only when `isEventActive` is **true**. Integer
 	//     indicating the number of minutes until the event ends.
-	// 22. `timeUntilEventEndFormatted`: String displaying the `timeUntilEventEnd`
+	//  22. `timeUntilEventEndFormatted`: String displaying the `timeUntilEventEnd`
 	//     formatted in English for users. If `isEventActive` is **false**,
 	//     `timeUntilEventEndFormatted` will display **unavailable**.
-	// 23. `shuffleAtEventStart`: Valid only when `isEventActive` is **true**. Boolean
+	//  23. `shuffleAtEventStart`: Valid only when `isEventActive` is **true**. Boolean
 	//     indicating if the users in the prequeue are shuffled randomly when the event
 	//     starts.
-	// 24. `turnstile`: Empty when turnstile isn't enabled. String displaying an html
+	//  24. `turnstile`: Empty when turnstile isn't enabled. String displaying an html
 	//     tag to display the Turnstile widget. Please add the `{{{turnstile}}}` tag to
 	//     the `custom_html` template to ensure the Turnstile widget appears.
-	// 25. `infiniteQueue`: Boolean indicating whether the response is for a user in
+	//  25. `infiniteQueue`: Boolean indicating whether the response is for a user in
 	//     the infinite queue.
 	//
 	// An example cURL to a waiting room could be:
 	//
-	//     curl -X GET "https://example.com/waitingroom" \
-	//     	-H "Accept: application/json"
+	//	curl -X GET "https://example.com/waitingroom" \
+	//		-H "Accept: application/json"
 	//
 	// If `json_response_enabled` is **true** and the request hits the waiting room, an
 	// example JSON response when `queueingMethod` is **fifo** and no event is active
 	// could be:
 	//
-	//     {
-	//     	"cfWaitingRoom": {
-	//     		"inWaitingRoom": true,
-	//     		"waitTimeKnown": true,
-	//     		"waitTime": 10,
-	//     		"waitTime25Percentile": 0,
-	//     		"waitTime50Percentile": 0,
-	//     		"waitTime75Percentile": 0,
-	//     		"waitTimeFormatted": "10 minutes",
-	//     		"queueIsFull": false,
-	//     		"queueAll": false,
-	//     		"lastUpdated": "2020-08-03T23:46:00.000Z",
-	//     		"refreshIntervalSeconds": 20,
-	//     		"queueingMethod": "fifo",
-	//     		"isFIFOQueue": true,
-	//     		"isRandomQueue": false,
-	//     		"isPassthroughQueue": false,
-	//     		"isRejectQueue": false,
-	//     		"isEventActive": false,
-	//     		"isEventPrequeueing": false,
-	//     		"timeUntilEventStart": 0,
-	//     		"timeUntilEventStartFormatted": "unavailable",
-	//     		"timeUntilEventEnd": 0,
-	//     		"timeUntilEventEndFormatted": "unavailable",
-	//     		"shuffleAtEventStart": false
-	//     	}
-	//     }
+	//	{
+	//		"cfWaitingRoom": {
+	//			"inWaitingRoom": true,
+	//			"waitTimeKnown": true,
+	//			"waitTime": 10,
+	//			"waitTime25Percentile": 0,
+	//			"waitTime50Percentile": 0,
+	//			"waitTime75Percentile": 0,
+	//			"waitTimeFormatted": "10 minutes",
+	//			"queueIsFull": false,
+	//			"queueAll": false,
+	//			"lastUpdated": "2020-08-03T23:46:00.000Z",
+	//			"refreshIntervalSeconds": 20,
+	//			"queueingMethod": "fifo",
+	//			"isFIFOQueue": true,
+	//			"isRandomQueue": false,
+	//			"isPassthroughQueue": false,
+	//			"isRejectQueue": false,
+	//			"isEventActive": false,
+	//			"isEventPrequeueing": false,
+	//			"timeUntilEventStart": 0,
+	//			"timeUntilEventStartFormatted": "unavailable",
+	//			"timeUntilEventEnd": 0,
+	//			"timeUntilEventEndFormatted": "unavailable",
+	//			"shuffleAtEventStart": false
+	//		}
+	//	}
 	//
 	// If `json_response_enabled` is **true** and the request hits the waiting room, an
 	// example JSON response when `queueingMethod` is **random** and an event is active
 	// could be:
 	//
-	//     {
-	//     	"cfWaitingRoom": {
-	//     		"inWaitingRoom": true,
-	//     		"waitTimeKnown": true,
-	//     		"waitTime": 10,
-	//     		"waitTime25Percentile": 5,
-	//     		"waitTime50Percentile": 10,
-	//     		"waitTime75Percentile": 15,
-	//     		"waitTimeFormatted": "5 minutes to 15 minutes",
-	//     		"queueIsFull": false,
-	//     		"queueAll": false,
-	//     		"lastUpdated": "2020-08-03T23:46:00.000Z",
-	//     		"refreshIntervalSeconds": 20,
-	//     		"queueingMethod": "random",
-	//     		"isFIFOQueue": false,
-	//     		"isRandomQueue": true,
-	//     		"isPassthroughQueue": false,
-	//     		"isRejectQueue": false,
-	//     		"isEventActive": true,
-	//     		"isEventPrequeueing": false,
-	//     		"timeUntilEventStart": 0,
-	//     		"timeUntilEventStartFormatted": "unavailable",
-	//     		"timeUntilEventEnd": 15,
-	//     		"timeUntilEventEndFormatted": "15 minutes",
-	//     		"shuffleAtEventStart": true
-	//     	}
-	//     }
+	//	{
+	//		"cfWaitingRoom": {
+	//			"inWaitingRoom": true,
+	//			"waitTimeKnown": true,
+	//			"waitTime": 10,
+	//			"waitTime25Percentile": 5,
+	//			"waitTime50Percentile": 10,
+	//			"waitTime75Percentile": 15,
+	//			"waitTimeFormatted": "5 minutes to 15 minutes",
+	//			"queueIsFull": false,
+	//			"queueAll": false,
+	//			"lastUpdated": "2020-08-03T23:46:00.000Z",
+	//			"refreshIntervalSeconds": 20,
+	//			"queueingMethod": "random",
+	//			"isFIFOQueue": false,
+	//			"isRandomQueue": true,
+	//			"isPassthroughQueue": false,
+	//			"isRejectQueue": false,
+	//			"isEventActive": true,
+	//			"isEventPrequeueing": false,
+	//			"timeUntilEventStart": 0,
+	//			"timeUntilEventStartFormatted": "unavailable",
+	//			"timeUntilEventEnd": 15,
+	//			"timeUntilEventEndFormatted": "15 minutes",
+	//			"shuffleAtEventStart": true
+	//		}
+	//	}
 	JsonResponseEnabled bool      `json:"json_response_enabled"`
 	ModifiedOn          time.Time `json:"modified_on" format:"date-time"`
 	// A unique name to identify the waiting room. Only alphanumeric characters,
@@ -1015,26 +1016,26 @@ type WaitingRoom struct {
 	// origin. These users will always see a waiting room page that refreshes
 	// automatically. The valid queueing methods are:
 	//
-	// 1. `fifo` **(default)**: First-In-First-Out queue where customers gain access in
-	//    the order they arrived.
-	// 2. `random`: Random queue where customers gain access randomly, regardless of
-	//    arrival time.
-	// 3. `passthrough`: Users will pass directly through the waiting room and into the
-	//    origin website. As a result, any configured limits will not be respected
-	//    while this is enabled. This method can be used as an alternative to disabling
-	//    a waiting room (with `suspended`) so that analytics are still reported. This
-	//    can be used if you wish to allow all traffic normally, but want to restrict
-	//    traffic during a waiting room event, or vice versa.
-	// 4. `reject`: Users will be immediately rejected from the waiting room. As a
-	//    result, no users will reach the origin website while this is enabled. This
-	//    can be used if you wish to reject all traffic while performing maintenance,
-	//    block traffic during a specified period of time (an event), or block traffic
-	//    while events are not occurring. Consider a waiting room used for vaccine
-	//    distribution that only allows traffic during sign-up events, and otherwise
-	//    blocks all traffic. For this case, the waiting room uses `reject`, and its
-	//    events override this with `fifo`, `random`, or `passthrough`. When this
-	//    queueing method is enabled and neither `queueAll` is enabled nor an event is
-	//    prequeueing, the waiting room page **will not refresh automatically**.
+	//  1. `fifo` **(default)**: First-In-First-Out queue where customers gain access in
+	//     the order they arrived.
+	//  2. `random`: Random queue where customers gain access randomly, regardless of
+	//     arrival time.
+	//  3. `passthrough`: Users will pass directly through the waiting room and into the
+	//     origin website. As a result, any configured limits will not be respected
+	//     while this is enabled. This method can be used as an alternative to disabling
+	//     a waiting room (with `suspended`) so that analytics are still reported. This
+	//     can be used if you wish to allow all traffic normally, but want to restrict
+	//     traffic during a waiting room event, or vice versa.
+	//  4. `reject`: Users will be immediately rejected from the waiting room. As a
+	//     result, no users will reach the origin website while this is enabled. This
+	//     can be used if you wish to reject all traffic while performing maintenance,
+	//     block traffic during a specified period of time (an event), or block traffic
+	//     while events are not occurring. Consider a waiting room used for vaccine
+	//     distribution that only allows traffic during sign-up events, and otherwise
+	//     blocks all traffic. For this case, the waiting room uses `reject`, and its
+	//     events override this with `fifo`, `random`, or `passthrough`. When this
+	//     queueing method is enabled and neither `queueAll` is enabled nor an event is
+	//     prequeueing, the waiting room page **will not refresh automatically**.
 	QueueingMethod WaitingRoomQueueingMethod `json:"queueing_method"`
 	// HTTP status code returned to a user while in the queue.
 	QueueingStatusCode WaitingRoomQueueingStatusCode `json:"queueing_status_code"`
@@ -1135,6 +1136,7 @@ const (
 	WaitingRoomDefaultTemplateLanguageDaDK WaitingRoomDefaultTemplateLanguage = "da-DK"
 	WaitingRoomDefaultTemplateLanguageFiFi WaitingRoomDefaultTemplateLanguage = "fi-FI"
 	WaitingRoomDefaultTemplateLanguageLtLt WaitingRoomDefaultTemplateLanguage = "lt-LT"
+	WaitingRoomDefaultTemplateLanguageLvLv WaitingRoomDefaultTemplateLanguage = "lv-LV"
 	WaitingRoomDefaultTemplateLanguageMsMy WaitingRoomDefaultTemplateLanguage = "ms-MY"
 	WaitingRoomDefaultTemplateLanguageNbNo WaitingRoomDefaultTemplateLanguage = "nb-NO"
 	WaitingRoomDefaultTemplateLanguageRoRo WaitingRoomDefaultTemplateLanguage = "ro-RO"
@@ -1154,7 +1156,7 @@ const (
 
 func (r WaitingRoomDefaultTemplateLanguage) IsKnown() bool {
 	switch r {
-	case WaitingRoomDefaultTemplateLanguageEnUs, WaitingRoomDefaultTemplateLanguageEsEs, WaitingRoomDefaultTemplateLanguageDeDe, WaitingRoomDefaultTemplateLanguageFrFr, WaitingRoomDefaultTemplateLanguageItIt, WaitingRoomDefaultTemplateLanguageJaJp, WaitingRoomDefaultTemplateLanguageKoKr, WaitingRoomDefaultTemplateLanguagePtBr, WaitingRoomDefaultTemplateLanguageZhCn, WaitingRoomDefaultTemplateLanguageZhTw, WaitingRoomDefaultTemplateLanguageNlNl, WaitingRoomDefaultTemplateLanguagePlPl, WaitingRoomDefaultTemplateLanguageIDID, WaitingRoomDefaultTemplateLanguageTrTr, WaitingRoomDefaultTemplateLanguageArEg, WaitingRoomDefaultTemplateLanguageRuRu, WaitingRoomDefaultTemplateLanguageFaIr, WaitingRoomDefaultTemplateLanguageBgBg, WaitingRoomDefaultTemplateLanguageHrHr, WaitingRoomDefaultTemplateLanguageCsCz, WaitingRoomDefaultTemplateLanguageDaDK, WaitingRoomDefaultTemplateLanguageFiFi, WaitingRoomDefaultTemplateLanguageLtLt, WaitingRoomDefaultTemplateLanguageMsMy, WaitingRoomDefaultTemplateLanguageNbNo, WaitingRoomDefaultTemplateLanguageRoRo, WaitingRoomDefaultTemplateLanguageElGr, WaitingRoomDefaultTemplateLanguageHeIl, WaitingRoomDefaultTemplateLanguageHiIn, WaitingRoomDefaultTemplateLanguageHuHu, WaitingRoomDefaultTemplateLanguageSrBa, WaitingRoomDefaultTemplateLanguageSkSk, WaitingRoomDefaultTemplateLanguageSlSi, WaitingRoomDefaultTemplateLanguageSvSe, WaitingRoomDefaultTemplateLanguageTlPh, WaitingRoomDefaultTemplateLanguageThTh, WaitingRoomDefaultTemplateLanguageUkUA, WaitingRoomDefaultTemplateLanguageViVn:
+	case WaitingRoomDefaultTemplateLanguageEnUs, WaitingRoomDefaultTemplateLanguageEsEs, WaitingRoomDefaultTemplateLanguageDeDe, WaitingRoomDefaultTemplateLanguageFrFr, WaitingRoomDefaultTemplateLanguageItIt, WaitingRoomDefaultTemplateLanguageJaJp, WaitingRoomDefaultTemplateLanguageKoKr, WaitingRoomDefaultTemplateLanguagePtBr, WaitingRoomDefaultTemplateLanguageZhCn, WaitingRoomDefaultTemplateLanguageZhTw, WaitingRoomDefaultTemplateLanguageNlNl, WaitingRoomDefaultTemplateLanguagePlPl, WaitingRoomDefaultTemplateLanguageIDID, WaitingRoomDefaultTemplateLanguageTrTr, WaitingRoomDefaultTemplateLanguageArEg, WaitingRoomDefaultTemplateLanguageRuRu, WaitingRoomDefaultTemplateLanguageFaIr, WaitingRoomDefaultTemplateLanguageBgBg, WaitingRoomDefaultTemplateLanguageHrHr, WaitingRoomDefaultTemplateLanguageCsCz, WaitingRoomDefaultTemplateLanguageDaDK, WaitingRoomDefaultTemplateLanguageFiFi, WaitingRoomDefaultTemplateLanguageLtLt, WaitingRoomDefaultTemplateLanguageLvLv, WaitingRoomDefaultTemplateLanguageMsMy, WaitingRoomDefaultTemplateLanguageNbNo, WaitingRoomDefaultTemplateLanguageRoRo, WaitingRoomDefaultTemplateLanguageElGr, WaitingRoomDefaultTemplateLanguageHeIl, WaitingRoomDefaultTemplateLanguageHiIn, WaitingRoomDefaultTemplateLanguageHuHu, WaitingRoomDefaultTemplateLanguageSrBa, WaitingRoomDefaultTemplateLanguageSkSk, WaitingRoomDefaultTemplateLanguageSlSi, WaitingRoomDefaultTemplateLanguageSvSe, WaitingRoomDefaultTemplateLanguageTlPh, WaitingRoomDefaultTemplateLanguageThTh, WaitingRoomDefaultTemplateLanguageUkUA, WaitingRoomDefaultTemplateLanguageViVn:
 		return true
 	}
 	return false
@@ -1309,14 +1311,20 @@ func (r WaitingRoomNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WaitingRoomNewResponseEnvelope struct {
-	Result WaitingRoom                        `json:"result" api:"required"`
-	JSON   waitingRoomNewResponseEnvelopeJSON `json:"-"`
+	Errors   []WaitingRoomNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []WaitingRoomNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   WaitingRoom                              `json:"result" api:"required,nullable"`
+	Success  bool                                     `json:"success" api:"required"`
+	JSON     waitingRoomNewResponseEnvelopeJSON       `json:"-"`
 }
 
 // waitingRoomNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [WaitingRoomNewResponseEnvelope]
 type waitingRoomNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1326,6 +1334,102 @@ func (r *WaitingRoomNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r waitingRoomNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomNewResponseEnvelopeErrors struct {
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           WaitingRoomNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             waitingRoomNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// waitingRoomNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WaitingRoomNewResponseEnvelopeErrors]
+type waitingRoomNewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *WaitingRoomNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomNewResponseEnvelopeErrorsSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    waitingRoomNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// waitingRoomNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [WaitingRoomNewResponseEnvelopeErrorsSource]
+type waitingRoomNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WaitingRoomNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomNewResponseEnvelopeMessages struct {
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           WaitingRoomNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             waitingRoomNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// waitingRoomNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [WaitingRoomNewResponseEnvelopeMessages]
+type waitingRoomNewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *WaitingRoomNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomNewResponseEnvelopeMessagesSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    waitingRoomNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// waitingRoomNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [WaitingRoomNewResponseEnvelopeMessagesSource]
+type waitingRoomNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WaitingRoomNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1340,14 +1444,20 @@ func (r WaitingRoomUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WaitingRoomUpdateResponseEnvelope struct {
-	Result WaitingRoom                           `json:"result" api:"required"`
-	JSON   waitingRoomUpdateResponseEnvelopeJSON `json:"-"`
+	Errors   []WaitingRoomUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []WaitingRoomUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   WaitingRoom                                 `json:"result" api:"required,nullable"`
+	Success  bool                                        `json:"success" api:"required"`
+	JSON     waitingRoomUpdateResponseEnvelopeJSON       `json:"-"`
 }
 
 // waitingRoomUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [WaitingRoomUpdateResponseEnvelope]
 type waitingRoomUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1357,6 +1467,102 @@ func (r *WaitingRoomUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r waitingRoomUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomUpdateResponseEnvelopeErrors struct {
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           WaitingRoomUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON             waitingRoomUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// waitingRoomUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WaitingRoomUpdateResponseEnvelopeErrors]
+type waitingRoomUpdateResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *WaitingRoomUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomUpdateResponseEnvelopeErrorsSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    waitingRoomUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// waitingRoomUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [WaitingRoomUpdateResponseEnvelopeErrorsSource]
+type waitingRoomUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WaitingRoomUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomUpdateResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomUpdateResponseEnvelopeMessages struct {
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           WaitingRoomUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON             waitingRoomUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// waitingRoomUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [WaitingRoomUpdateResponseEnvelopeMessages]
+type waitingRoomUpdateResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *WaitingRoomUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomUpdateResponseEnvelopeMessagesSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    waitingRoomUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// waitingRoomUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [WaitingRoomUpdateResponseEnvelopeMessagesSource]
+type waitingRoomUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WaitingRoomUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomUpdateResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1385,14 +1591,20 @@ type WaitingRoomDeleteParams struct {
 }
 
 type WaitingRoomDeleteResponseEnvelope struct {
-	Result WaitingRoomDeleteResponse             `json:"result" api:"required"`
-	JSON   waitingRoomDeleteResponseEnvelopeJSON `json:"-"`
+	Errors   []WaitingRoomDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []WaitingRoomDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   WaitingRoomDeleteResponse                   `json:"result" api:"required,nullable"`
+	Success  bool                                        `json:"success" api:"required"`
+	JSON     waitingRoomDeleteResponseEnvelopeJSON       `json:"-"`
 }
 
 // waitingRoomDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
 // [WaitingRoomDeleteResponseEnvelope]
 type waitingRoomDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1402,6 +1614,102 @@ func (r *WaitingRoomDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r waitingRoomDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomDeleteResponseEnvelopeErrors struct {
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           WaitingRoomDeleteResponseEnvelopeErrorsSource `json:"source"`
+	JSON             waitingRoomDeleteResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// waitingRoomDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WaitingRoomDeleteResponseEnvelopeErrors]
+type waitingRoomDeleteResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *WaitingRoomDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomDeleteResponseEnvelopeErrorsSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    waitingRoomDeleteResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// waitingRoomDeleteResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [WaitingRoomDeleteResponseEnvelopeErrorsSource]
+type waitingRoomDeleteResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WaitingRoomDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomDeleteResponseEnvelopeMessages struct {
+	Code             int64                                           `json:"code" api:"required"`
+	Message          string                                          `json:"message" api:"required"`
+	DocumentationURL string                                          `json:"documentation_url"`
+	Source           WaitingRoomDeleteResponseEnvelopeMessagesSource `json:"source"`
+	JSON             waitingRoomDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// waitingRoomDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [WaitingRoomDeleteResponseEnvelopeMessages]
+type waitingRoomDeleteResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *WaitingRoomDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomDeleteResponseEnvelopeMessagesSource struct {
+	Pointer string                                              `json:"pointer"`
+	JSON    waitingRoomDeleteResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// waitingRoomDeleteResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [WaitingRoomDeleteResponseEnvelopeMessagesSource]
+type waitingRoomDeleteResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WaitingRoomDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1416,14 +1724,20 @@ func (r WaitingRoomEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WaitingRoomEditResponseEnvelope struct {
-	Result WaitingRoom                         `json:"result" api:"required"`
-	JSON   waitingRoomEditResponseEnvelopeJSON `json:"-"`
+	Errors   []WaitingRoomEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []WaitingRoomEditResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   WaitingRoom                               `json:"result" api:"required,nullable"`
+	Success  bool                                      `json:"success" api:"required"`
+	JSON     waitingRoomEditResponseEnvelopeJSON       `json:"-"`
 }
 
 // waitingRoomEditResponseEnvelopeJSON contains the JSON metadata for the struct
 // [WaitingRoomEditResponseEnvelope]
 type waitingRoomEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1436,20 +1750,122 @@ func (r waitingRoomEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type WaitingRoomEditResponseEnvelopeErrors struct {
+	Code             int64                                       `json:"code" api:"required"`
+	Message          string                                      `json:"message" api:"required"`
+	DocumentationURL string                                      `json:"documentation_url"`
+	Source           WaitingRoomEditResponseEnvelopeErrorsSource `json:"source"`
+	JSON             waitingRoomEditResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// waitingRoomEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WaitingRoomEditResponseEnvelopeErrors]
+type waitingRoomEditResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *WaitingRoomEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomEditResponseEnvelopeErrorsSource struct {
+	Pointer string                                          `json:"pointer"`
+	JSON    waitingRoomEditResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// waitingRoomEditResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [WaitingRoomEditResponseEnvelopeErrorsSource]
+type waitingRoomEditResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WaitingRoomEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomEditResponseEnvelopeMessages struct {
+	Code             int64                                         `json:"code" api:"required"`
+	Message          string                                        `json:"message" api:"required"`
+	DocumentationURL string                                        `json:"documentation_url"`
+	Source           WaitingRoomEditResponseEnvelopeMessagesSource `json:"source"`
+	JSON             waitingRoomEditResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// waitingRoomEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [WaitingRoomEditResponseEnvelopeMessages]
+type waitingRoomEditResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *WaitingRoomEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomEditResponseEnvelopeMessagesSource struct {
+	Pointer string                                            `json:"pointer"`
+	JSON    waitingRoomEditResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// waitingRoomEditResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [WaitingRoomEditResponseEnvelopeMessagesSource]
+type waitingRoomEditResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WaitingRoomEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomGetParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 }
 
 type WaitingRoomGetResponseEnvelope struct {
-	Result WaitingRoom                        `json:"result" api:"required"`
-	JSON   waitingRoomGetResponseEnvelopeJSON `json:"-"`
+	Errors   []WaitingRoomGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []WaitingRoomGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   WaitingRoom                              `json:"result" api:"required,nullable"`
+	Success  bool                                     `json:"success" api:"required"`
+	JSON     waitingRoomGetResponseEnvelopeJSON       `json:"-"`
 }
 
 // waitingRoomGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [WaitingRoomGetResponseEnvelope]
 type waitingRoomGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1459,5 +1875,101 @@ func (r *WaitingRoomGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r waitingRoomGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomGetResponseEnvelopeErrors struct {
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           WaitingRoomGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             waitingRoomGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// waitingRoomGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WaitingRoomGetResponseEnvelopeErrors]
+type waitingRoomGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *WaitingRoomGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    waitingRoomGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// waitingRoomGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [WaitingRoomGetResponseEnvelopeErrorsSource]
+type waitingRoomGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WaitingRoomGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomGetResponseEnvelopeMessages struct {
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           WaitingRoomGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             waitingRoomGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// waitingRoomGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [WaitingRoomGetResponseEnvelopeMessages]
+type waitingRoomGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *WaitingRoomGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type WaitingRoomGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    waitingRoomGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// waitingRoomGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [WaitingRoomGetResponseEnvelopeMessagesSource]
+type waitingRoomGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WaitingRoomGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }

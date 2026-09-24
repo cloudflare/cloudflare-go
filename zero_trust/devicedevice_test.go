@@ -34,6 +34,7 @@ func TestDeviceDeviceListWithOptionalParams(t *testing.T) {
 		ID:                  cloudflare.F([]string{"string"}),
 		ActiveRegistrations: cloudflare.F(zero_trust.DeviceDeviceListParamsActiveRegistrationsInclude),
 		Cursor:              cloudflare.F("cursor"),
+		HasRegistrationType: cloudflare.F(zero_trust.DeviceDeviceListParamsHasRegistrationTypeWARP),
 		Include:             cloudflare.F("include"),
 		LastSeenRegistration: cloudflare.F(zero_trust.DeviceDeviceListParamsLastSeenRegistration{
 			Policy: cloudflare.F("11ffb86f-3f0c-4306-b4a2-e62f872b166a"),
@@ -47,6 +48,7 @@ func TestDeviceDeviceListWithOptionalParams(t *testing.T) {
 		SeenBefore: cloudflare.F("seen_before"),
 		SortBy:     cloudflare.F(zero_trust.DeviceDeviceListParamsSortByName),
 		SortOrder:  cloudflare.F(zero_trust.DeviceDeviceListParamsSortOrderAsc),
+		Tag:        cloudflare.F([]string{"environment:production", "fleet:warehouse"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

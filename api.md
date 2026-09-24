@@ -261,6 +261,8 @@ Methods:
 
 # [MoQ](moq/api.md)
 
+# [ManagedDefense](managed_defense/api.md)
+
 # [CloudforceOne](cloudforce_one/api.md)
 
 # [AIGateway](ai_gateway/api.md)

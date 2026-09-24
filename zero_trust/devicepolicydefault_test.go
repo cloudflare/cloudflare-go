@@ -50,6 +50,7 @@ func TestDevicePolicyDefaultEditWithOptionalParams(t *testing.T) {
 			Enabled:            cloudflare.F(true),
 			MasqueEndpoints:    cloudflare.F([]string{"198.51.100.1:443"}),
 			WireguardEndpoints: cloudflare.F([]string{"198.51.100.1:2408"}),
+			Autoswitch:         cloudflare.F(true),
 		}),
 		Include: cloudflare.F([]zero_trust.SplitTunnelIncludeUnionParam{zero_trust.SplitTunnelIncludeTeamsDevicesIncludeSplitTunnelWithAddressParam{
 			Address:     cloudflare.F("192.0.2.0/24"),

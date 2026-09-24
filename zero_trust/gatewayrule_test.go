@@ -328,7 +328,7 @@ func TestGatewayRuleListWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Gateway.Rules.List(context.TODO(), zero_trust.GatewayRuleListParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Direction: cloudflare.F(zero_trust.GatewayRuleListParamsDirectionAsc),
-		Filter:    cloudflare.F([]interface{}{map[string]interface{}{}}),
+		Filter:    cloudflare.F([]string{"string"}),
 		OrderBy:   cloudflare.F(zero_trust.GatewayRuleListParamsOrderByName),
 		Search:    cloudflare.F("search"),
 	})

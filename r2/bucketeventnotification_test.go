@@ -41,7 +41,7 @@ func TestBucketEventNotificationUpdateWithOptionalParams(t *testing.T) {
 				Prefix:      cloudflare.F("img/"),
 				Suffix:      cloudflare.F(".jpeg"),
 			}}),
-			Jurisdiction: cloudflare.F(r2.BucketEventNotificationUpdateParamsCfR2JurisdictionDefault),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketEventNotificationUpdateParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -72,8 +72,8 @@ func TestBucketEventNotificationListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.BucketEventNotificationListParams{
-			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Jurisdiction: cloudflare.F(r2.BucketEventNotificationListParamsCfR2JurisdictionDefault),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketEventNotificationListParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -105,8 +105,8 @@ func TestBucketEventNotificationDeleteWithOptionalParams(t *testing.T) {
 		"example-bucket",
 		"queue_id",
 		r2.BucketEventNotificationDeleteParams{
-			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Jurisdiction: cloudflare.F(r2.BucketEventNotificationDeleteParamsCfR2JurisdictionDefault),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketEventNotificationDeleteParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -138,8 +138,8 @@ func TestBucketEventNotificationGetWithOptionalParams(t *testing.T) {
 		"example-bucket",
 		"queue_id",
 		r2.BucketEventNotificationGetParams{
-			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Jurisdiction: cloudflare.F(r2.BucketEventNotificationGetParamsCfR2JurisdictionDefault),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketEventNotificationGetParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {

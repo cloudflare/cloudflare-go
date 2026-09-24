@@ -37,6 +37,9 @@ func TestBetaWorkerNewWithOptionalParams(t *testing.T) {
 			Observability: cloudflare.F(workers.WorkerObservabilityParam{
 				Enabled:          cloudflare.F(true),
 				HeadSamplingRate: cloudflare.F(1.000000),
+				Issues: cloudflare.F(workers.WorkerObservabilityIssuesParam{
+					Enabled: cloudflare.F(true),
+				}),
 				Logs: cloudflare.F(workers.WorkerObservabilityLogsParam{
 					Destinations:     cloudflare.F([]string{"string"}),
 					Enabled:          cloudflare.F(true),
@@ -61,6 +64,50 @@ func TestBetaWorkerNewWithOptionalParams(t *testing.T) {
 			TailConsumers: cloudflare.F([]workers.WorkerTailConsumerParam{{
 				Name: cloudflare.F("my-tail-consumer"),
 			}}),
+			PreviewsBaseConfig: cloudflare.F(workers.WorkerPreviewsBaseConfigParam{
+				CacheOptions: cloudflare.F(workers.WorkerPreviewsBaseConfigCacheOptionsParam{
+					Enabled:           cloudflare.F(true),
+					CrossVersionCache: cloudflare.F(true),
+				}),
+				Env: cloudflare.F(map[string]workers.WorkerPreviewsBaseConfigEnvParam{
+					"MY_ENV_VAR": {
+						Type: cloudflare.F("plain_text"),
+					},
+				}),
+				Limits: cloudflare.F(workers.WorkerPreviewsBaseConfigLimitsParam{
+					CPUMs:       cloudflare.F(int64(50)),
+					Subrequests: cloudflare.F(int64(1000)),
+				}),
+				Logpush: cloudflare.F(true),
+				Observability: cloudflare.F(workers.WorkerPreviewsBaseConfigObservabilityParam{
+					Enabled:          cloudflare.F(true),
+					HeadSamplingRate: cloudflare.F(1.000000),
+					Issues: cloudflare.F(workers.WorkerPreviewsBaseConfigObservabilityIssuesParam{
+						Enabled: cloudflare.F(true),
+					}),
+					Logs: cloudflare.F(workers.WorkerPreviewsBaseConfigObservabilityLogsParam{
+						Destinations:     cloudflare.F([]string{"string"}),
+						Enabled:          cloudflare.F(true),
+						HeadSamplingRate: cloudflare.F(1.000000),
+						InvocationLogs:   cloudflare.F(true),
+						Persist:          cloudflare.F(true),
+					}),
+					RedactQueryString: cloudflare.F(true),
+					Traces: cloudflare.F(workers.WorkerPreviewsBaseConfigObservabilityTracesParam{
+						Destinations:      cloudflare.F([]string{"string"}),
+						Enabled:           cloudflare.F(true),
+						HeadSamplingRate:  cloudflare.F(1.000000),
+						Persist:           cloudflare.F(true),
+						PropagationPolicy: cloudflare.F(workers.WorkerPreviewsBaseConfigObservabilityTracesPropagationPolicyAuthenticated),
+					}),
+				}),
+				Placement: cloudflare.F[workers.WorkerPreviewsBaseConfigPlacementUnionParam](workers.WorkerPreviewsBaseConfigPlacementModeParam{
+					Mode: cloudflare.F(workers.WorkerPreviewsBaseConfigPlacementModeModeSmart),
+				}),
+				TailConsumers: cloudflare.F([]workers.WorkerPreviewsBaseConfigTailConsumerParam{{
+					Name: cloudflare.F("my-tail-consumer"),
+				}}),
+			}),
 		},
 	})
 	if err != nil {
@@ -98,6 +145,9 @@ func TestBetaWorkerUpdateWithOptionalParams(t *testing.T) {
 				Observability: cloudflare.F(workers.WorkerObservabilityParam{
 					Enabled:          cloudflare.F(true),
 					HeadSamplingRate: cloudflare.F(1.000000),
+					Issues: cloudflare.F(workers.WorkerObservabilityIssuesParam{
+						Enabled: cloudflare.F(true),
+					}),
 					Logs: cloudflare.F(workers.WorkerObservabilityLogsParam{
 						Destinations:     cloudflare.F([]string{"string"}),
 						Enabled:          cloudflare.F(true),
@@ -122,6 +172,50 @@ func TestBetaWorkerUpdateWithOptionalParams(t *testing.T) {
 				TailConsumers: cloudflare.F([]workers.WorkerTailConsumerParam{{
 					Name: cloudflare.F("my-tail-consumer"),
 				}}),
+				PreviewsBaseConfig: cloudflare.F(workers.WorkerPreviewsBaseConfigParam{
+					CacheOptions: cloudflare.F(workers.WorkerPreviewsBaseConfigCacheOptionsParam{
+						Enabled:           cloudflare.F(true),
+						CrossVersionCache: cloudflare.F(true),
+					}),
+					Env: cloudflare.F(map[string]workers.WorkerPreviewsBaseConfigEnvParam{
+						"MY_ENV_VAR": {
+							Type: cloudflare.F("plain_text"),
+						},
+					}),
+					Limits: cloudflare.F(workers.WorkerPreviewsBaseConfigLimitsParam{
+						CPUMs:       cloudflare.F(int64(50)),
+						Subrequests: cloudflare.F(int64(1000)),
+					}),
+					Logpush: cloudflare.F(true),
+					Observability: cloudflare.F(workers.WorkerPreviewsBaseConfigObservabilityParam{
+						Enabled:          cloudflare.F(true),
+						HeadSamplingRate: cloudflare.F(1.000000),
+						Issues: cloudflare.F(workers.WorkerPreviewsBaseConfigObservabilityIssuesParam{
+							Enabled: cloudflare.F(true),
+						}),
+						Logs: cloudflare.F(workers.WorkerPreviewsBaseConfigObservabilityLogsParam{
+							Destinations:     cloudflare.F([]string{"string"}),
+							Enabled:          cloudflare.F(true),
+							HeadSamplingRate: cloudflare.F(1.000000),
+							InvocationLogs:   cloudflare.F(true),
+							Persist:          cloudflare.F(true),
+						}),
+						RedactQueryString: cloudflare.F(true),
+						Traces: cloudflare.F(workers.WorkerPreviewsBaseConfigObservabilityTracesParam{
+							Destinations:      cloudflare.F([]string{"string"}),
+							Enabled:           cloudflare.F(true),
+							HeadSamplingRate:  cloudflare.F(1.000000),
+							Persist:           cloudflare.F(true),
+							PropagationPolicy: cloudflare.F(workers.WorkerPreviewsBaseConfigObservabilityTracesPropagationPolicyAuthenticated),
+						}),
+					}),
+					Placement: cloudflare.F[workers.WorkerPreviewsBaseConfigPlacementUnionParam](workers.WorkerPreviewsBaseConfigPlacementModeParam{
+						Mode: cloudflare.F(workers.WorkerPreviewsBaseConfigPlacementModeModeSmart),
+					}),
+					TailConsumers: cloudflare.F([]workers.WorkerPreviewsBaseConfigTailConsumerParam{{
+						Name: cloudflare.F("my-tail-consumer"),
+					}}),
+				}),
 			},
 		},
 	)
@@ -164,7 +258,7 @@ func TestBetaWorkerListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestBetaWorkerDelete(t *testing.T) {
+func TestBetaWorkerDeleteWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -183,6 +277,7 @@ func TestBetaWorkerDelete(t *testing.T) {
 		"worker_id",
 		workers.BetaWorkerDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Force:     cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -219,6 +314,9 @@ func TestBetaWorkerEditWithOptionalParams(t *testing.T) {
 				Observability: cloudflare.F(workers.WorkerObservabilityParam{
 					Enabled:          cloudflare.F(true),
 					HeadSamplingRate: cloudflare.F(1.000000),
+					Issues: cloudflare.F(workers.WorkerObservabilityIssuesParam{
+						Enabled: cloudflare.F(true),
+					}),
 					Logs: cloudflare.F(workers.WorkerObservabilityLogsParam{
 						Destinations:     cloudflare.F([]string{"string"}),
 						Enabled:          cloudflare.F(true),
@@ -243,6 +341,50 @@ func TestBetaWorkerEditWithOptionalParams(t *testing.T) {
 				TailConsumers: cloudflare.F([]workers.WorkerTailConsumerParam{{
 					Name: cloudflare.F("my-tail-consumer"),
 				}}),
+				PreviewsBaseConfig: cloudflare.F(workers.WorkerPreviewsBaseConfigParam{
+					CacheOptions: cloudflare.F(workers.WorkerPreviewsBaseConfigCacheOptionsParam{
+						Enabled:           cloudflare.F(true),
+						CrossVersionCache: cloudflare.F(true),
+					}),
+					Env: cloudflare.F(map[string]workers.WorkerPreviewsBaseConfigEnvParam{
+						"MY_ENV_VAR": {
+							Type: cloudflare.F("plain_text"),
+						},
+					}),
+					Limits: cloudflare.F(workers.WorkerPreviewsBaseConfigLimitsParam{
+						CPUMs:       cloudflare.F(int64(50)),
+						Subrequests: cloudflare.F(int64(1000)),
+					}),
+					Logpush: cloudflare.F(true),
+					Observability: cloudflare.F(workers.WorkerPreviewsBaseConfigObservabilityParam{
+						Enabled:          cloudflare.F(true),
+						HeadSamplingRate: cloudflare.F(1.000000),
+						Issues: cloudflare.F(workers.WorkerPreviewsBaseConfigObservabilityIssuesParam{
+							Enabled: cloudflare.F(true),
+						}),
+						Logs: cloudflare.F(workers.WorkerPreviewsBaseConfigObservabilityLogsParam{
+							Destinations:     cloudflare.F([]string{"string"}),
+							Enabled:          cloudflare.F(true),
+							HeadSamplingRate: cloudflare.F(1.000000),
+							InvocationLogs:   cloudflare.F(true),
+							Persist:          cloudflare.F(true),
+						}),
+						RedactQueryString: cloudflare.F(true),
+						Traces: cloudflare.F(workers.WorkerPreviewsBaseConfigObservabilityTracesParam{
+							Destinations:      cloudflare.F([]string{"string"}),
+							Enabled:           cloudflare.F(true),
+							HeadSamplingRate:  cloudflare.F(1.000000),
+							Persist:           cloudflare.F(true),
+							PropagationPolicy: cloudflare.F(workers.WorkerPreviewsBaseConfigObservabilityTracesPropagationPolicyAuthenticated),
+						}),
+					}),
+					Placement: cloudflare.F[workers.WorkerPreviewsBaseConfigPlacementUnionParam](workers.WorkerPreviewsBaseConfigPlacementModeParam{
+						Mode: cloudflare.F(workers.WorkerPreviewsBaseConfigPlacementModeModeSmart),
+					}),
+					TailConsumers: cloudflare.F([]workers.WorkerPreviewsBaseConfigTailConsumerParam{{
+						Name: cloudflare.F("my-tail-consumer"),
+					}}),
+				}),
 			},
 		},
 	)

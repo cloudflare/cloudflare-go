@@ -29,7 +29,7 @@ func TestRateLimitNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.RateLimits.New(context.TODO(), rate_limits.RateLimitNewParams{
+	err := client.RateLimits.New(context.TODO(), rate_limits.RateLimitNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Action: cloudflare.F(rate_limits.RateLimitNewParamsAction{
 			Mode: cloudflare.F(rate_limits.RateLimitNewParamsActionModeChallenge),
@@ -80,7 +80,7 @@ func TestRateLimitListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.RateLimits.List(context.TODO(), rate_limits.RateLimitListParams{
+	err := client.RateLimits.List(context.TODO(), rate_limits.RateLimitListParams{
 		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Page:    cloudflare.F(1.000000),
 		PerPage: cloudflare.F(1.000000),
@@ -108,7 +108,7 @@ func TestRateLimitDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.RateLimits.Delete(
+	err := client.RateLimits.Delete(
 		context.TODO(),
 		"372e67954025e0ba6aaa6d586b9e0b59",
 		rate_limits.RateLimitDeleteParams{
@@ -139,7 +139,7 @@ func TestRateLimitEditWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.RateLimits.Edit(
+	err := client.RateLimits.Edit(
 		context.TODO(),
 		"372e67954025e0ba6aaa6d586b9e0b59",
 		rate_limits.RateLimitEditParams{
@@ -194,7 +194,7 @@ func TestRateLimitGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.RateLimits.Get(
+	err := client.RateLimits.Get(
 		context.TODO(),
 		"372e67954025e0ba6aaa6d586b9e0b59",
 		rate_limits.RateLimitGetParams{

@@ -43,6 +43,7 @@ func TestBotManagementUpdateWithOptionalParams(t *testing.T) {
 			EnableJS:                 cloudflare.F(true),
 			FightMode:                cloudflare.F(true),
 			IsRobotsTXTManaged:       cloudflare.F(false),
+			JsdAPIResultsEnabled:     cloudflare.F(true),
 		},
 	})
 	if err != nil {

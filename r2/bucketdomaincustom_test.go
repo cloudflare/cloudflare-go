@@ -33,13 +33,13 @@ func TestBucketDomainCustomNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.BucketDomainCustomNewParams{
-			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Domain:       cloudflare.F("prefix.example-domain.com"),
-			Enabled:      cloudflare.F(true),
-			ZoneID:       cloudflare.F("36ca64a6d92827b8a6b90be344bb1bfd"),
-			Ciphers:      cloudflare.F([]string{"string"}),
-			MinTLS:       cloudflare.F(r2.BucketDomainCustomNewParamsMinTLS1_0),
-			Jurisdiction: cloudflare.F(r2.BucketDomainCustomNewParamsCfR2JurisdictionDefault),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Domain:           cloudflare.F("prefix.example-domain.com"),
+			Enabled:          cloudflare.F(true),
+			ZoneID:           cloudflare.F("36ca64a6d92827b8a6b90be344bb1bfd"),
+			Ciphers:          cloudflare.F([]string{"string"}),
+			MinTLS:           cloudflare.F(r2.BucketDomainCustomNewParamsMinTLS1_0),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketDomainCustomNewParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -71,11 +71,11 @@ func TestBucketDomainCustomUpdateWithOptionalParams(t *testing.T) {
 		"example-bucket",
 		"example-domain/custom-domain.com",
 		r2.BucketDomainCustomUpdateParams{
-			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Ciphers:      cloudflare.F([]string{"string"}),
-			Enabled:      cloudflare.F(true),
-			MinTLS:       cloudflare.F(r2.BucketDomainCustomUpdateParamsMinTLS1_2),
-			Jurisdiction: cloudflare.F(r2.BucketDomainCustomUpdateParamsCfR2JurisdictionDefault),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Ciphers:          cloudflare.F([]string{"string"}),
+			Enabled:          cloudflare.F(true),
+			MinTLS:           cloudflare.F(r2.BucketDomainCustomUpdateParamsMinTLS1_2),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketDomainCustomUpdateParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -106,8 +106,8 @@ func TestBucketDomainCustomListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.BucketDomainCustomListParams{
-			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Jurisdiction: cloudflare.F(r2.BucketDomainCustomListParamsCfR2JurisdictionDefault),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketDomainCustomListParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -139,8 +139,8 @@ func TestBucketDomainCustomDeleteWithOptionalParams(t *testing.T) {
 		"example-bucket",
 		"example-domain/custom-domain.com",
 		r2.BucketDomainCustomDeleteParams{
-			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Jurisdiction: cloudflare.F(r2.BucketDomainCustomDeleteParamsCfR2JurisdictionDefault),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketDomainCustomDeleteParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -172,8 +172,8 @@ func TestBucketDomainCustomGetWithOptionalParams(t *testing.T) {
 		"example-bucket",
 		"example-domain/custom-domain.com",
 		r2.BucketDomainCustomGetParams{
-			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Jurisdiction: cloudflare.F(r2.BucketDomainCustomGetParamsCfR2JurisdictionDefault),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketDomainCustomGetParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {

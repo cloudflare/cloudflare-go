@@ -54,9 +54,17 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 			CustomNonIdentityDenyURL: cloudflare.F("custom_non_identity_deny_url"),
 			CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252"}),
 			Destinations: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion{zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestination{
+				Overrides: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationOverride{{
+					Behavior:    cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic),
+					PathPattern: cloudflare.F("/health/*"),
+				}}),
 				Type: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationTypePublic),
 				URI:  cloudflare.F("test.example.com/admin"),
 			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestination{
+				Overrides: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationOverride{{
+					Behavior:    cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic),
+					PathPattern: cloudflare.F("/health/*"),
+				}}),
 				Type: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationTypePublic),
 				URI:  cloudflare.F("test.anotherexample.com/staff"),
 			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestination{
@@ -86,13 +94,29 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestination{
 				Type:     cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationTypeWorker),
 				WorkerID: cloudflare.F("617f1d0431a98306ff61e336d79fce86"),
+				Overrides: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverride{{
+					Behavior:    cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverridesBehaviorPublic),
+					PathPattern: cloudflare.F("/health/*"),
+				}}),
 			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestination{
 				Type:     cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker),
 				WorkerID: cloudflare.F("617f1d0431a98306ff61e336d79fce86"),
+				Overrides: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverride{{
+					Behavior:    cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic),
+					PathPattern: cloudflare.F("/health/*"),
+				}}),
 			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestination{
 				Type: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationTypeAllWorkers),
+				Overrides: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverride{{
+					Behavior:    cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic),
+					PathPattern: cloudflare.F("/health/*"),
+				}}),
 			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestination{
 				Type: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers),
+				Overrides: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride{{
+					Behavior:    cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic),
+					PathPattern: cloudflare.F("/health/*"),
+				}}),
 			}}),
 			EagerRedirectCookieSetting: cloudflare.F(true),
 			EnableBindingCookie:        cloudflare.F(true),
@@ -205,9 +229,17 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 				CustomNonIdentityDenyURL: cloudflare.F("custom_non_identity_deny_url"),
 				CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252"}),
 				Destinations: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion{zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestination{
+					Overrides: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationOverride{{
+						Behavior:    cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic),
+						PathPattern: cloudflare.F("/health/*"),
+					}}),
 					Type: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationTypePublic),
 					URI:  cloudflare.F("test.example.com/admin"),
 				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestination{
+					Overrides: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationOverride{{
+						Behavior:    cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic),
+						PathPattern: cloudflare.F("/health/*"),
+					}}),
 					Type: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationTypePublic),
 					URI:  cloudflare.F("test.anotherexample.com/staff"),
 				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestination{
@@ -237,13 +269,29 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestination{
 					Type:     cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationTypeWorker),
 					WorkerID: cloudflare.F("617f1d0431a98306ff61e336d79fce86"),
+					Overrides: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverride{{
+						Behavior:    cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverridesBehaviorPublic),
+						PathPattern: cloudflare.F("/health/*"),
+					}}),
 				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestination{
 					Type:     cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker),
 					WorkerID: cloudflare.F("617f1d0431a98306ff61e336d79fce86"),
+					Overrides: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverride{{
+						Behavior:    cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic),
+						PathPattern: cloudflare.F("/health/*"),
+					}}),
 				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestination{
 					Type: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationTypeAllWorkers),
+					Overrides: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverride{{
+						Behavior:    cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic),
+						PathPattern: cloudflare.F("/health/*"),
+					}}),
 				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestination{
 					Type: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers),
+					Overrides: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride{{
+						Behavior:    cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic),
+						PathPattern: cloudflare.F("/health/*"),
+					}}),
 				}}),
 				EagerRedirectCookieSetting: cloudflare.F(true),
 				EnableBindingCookie:        cloudflare.F(true),

@@ -62,7 +62,7 @@ func TestGatewayProxyEndpointListWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Gateway.ProxyEndpoints.List(context.TODO(), zero_trust.GatewayProxyEndpointListParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Direction: cloudflare.F(zero_trust.GatewayProxyEndpointListParamsDirectionAsc),
-		Filter:    cloudflare.F([]interface{}{map[string]interface{}{}}),
+		Filter:    cloudflare.F([]string{"string"}),
 		OrderBy:   cloudflare.F(zero_trust.GatewayProxyEndpointListParamsOrderByName),
 		Search:    cloudflare.F("search"),
 	})

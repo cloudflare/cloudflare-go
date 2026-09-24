@@ -230,14 +230,20 @@ type EventDetailGetParams struct {
 }
 
 type EventDetailGetResponseEnvelope struct {
-	Result EventDetailGetResponse             `json:"result" api:"required"`
-	JSON   eventDetailGetResponseEnvelopeJSON `json:"-"`
+	Errors   []EventDetailGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []EventDetailGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   EventDetailGetResponse                   `json:"result" api:"required,nullable"`
+	Success  bool                                     `json:"success" api:"required"`
+	JSON     eventDetailGetResponseEnvelopeJSON       `json:"-"`
 }
 
 // eventDetailGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [EventDetailGetResponseEnvelope]
 type eventDetailGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -247,5 +253,101 @@ func (r *EventDetailGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r eventDetailGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type EventDetailGetResponseEnvelopeErrors struct {
+	Code             int64                                      `json:"code" api:"required"`
+	Message          string                                     `json:"message" api:"required"`
+	DocumentationURL string                                     `json:"documentation_url"`
+	Source           EventDetailGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             eventDetailGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// eventDetailGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [EventDetailGetResponseEnvelopeErrors]
+type eventDetailGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *EventDetailGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r eventDetailGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type EventDetailGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                         `json:"pointer"`
+	JSON    eventDetailGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// eventDetailGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [EventDetailGetResponseEnvelopeErrorsSource]
+type eventDetailGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EventDetailGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r eventDetailGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type EventDetailGetResponseEnvelopeMessages struct {
+	Code             int64                                        `json:"code" api:"required"`
+	Message          string                                       `json:"message" api:"required"`
+	DocumentationURL string                                       `json:"documentation_url"`
+	Source           EventDetailGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             eventDetailGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// eventDetailGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [EventDetailGetResponseEnvelopeMessages]
+type eventDetailGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *EventDetailGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r eventDetailGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type EventDetailGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                           `json:"pointer"`
+	JSON    eventDetailGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// eventDetailGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [EventDetailGetResponseEnvelopeMessagesSource]
+type eventDetailGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EventDetailGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r eventDetailGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }

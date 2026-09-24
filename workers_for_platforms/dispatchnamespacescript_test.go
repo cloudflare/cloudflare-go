@@ -44,6 +44,7 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 					Config: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfig{
 						Headers:          cloudflare.F("/dashboard/*\nX-Frame-Options: DENY\n\n/static/*\nAccess-Control-Allow-Origin: *"),
 						Redirects:        cloudflare.F("/foo /bar 301\n/news/* /blog/:splat"),
+						BasePath:         cloudflare.F("/docs/"),
 						HTMLHandling:     cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigHTMLHandlingAutoTrailingSlash),
 						NotFoundHandling: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigNotFoundHandling404Page),
 						RunWorkerFirst:   cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion](shared.UnionBool(true)),
@@ -117,6 +118,9 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 				Observability: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObservability{
 					Enabled:          cloudflare.F(true),
 					HeadSamplingRate: cloudflare.F(0.100000),
+					Issues: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObservabilityIssues{
+						Enabled: cloudflare.F(true),
+					}),
 					Logs: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObservabilityLogs{
 						Enabled:          cloudflare.F(true),
 						InvocationLogs:   cloudflare.F(true),

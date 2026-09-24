@@ -29,7 +29,7 @@ func TestWAFOverrideNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Firewall.WAF.Overrides.New(context.TODO(), firewall.WAFOverrideNewParams{
+	err := client.Firewall.WAF.Overrides.New(context.TODO(), firewall.WAFOverrideNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		URLs:   cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*"}),
 	})
@@ -57,7 +57,7 @@ func TestWAFOverrideUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Firewall.WAF.Overrides.Update(
+	err := client.Firewall.WAF.Overrides.Update(
 		context.TODO(),
 		"de677e5818985db1285d0e80225f06e5",
 		firewall.WAFOverrideUpdateParams{
@@ -99,7 +99,7 @@ func TestWAFOverrideListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Firewall.WAF.Overrides.List(context.TODO(), firewall.WAFOverrideListParams{
+	err := client.Firewall.WAF.Overrides.List(context.TODO(), firewall.WAFOverrideListParams{
 		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Page:    cloudflare.F(1.000000),
 		PerPage: cloudflare.F(5.000000),
@@ -127,7 +127,7 @@ func TestWAFOverrideDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Firewall.WAF.Overrides.Delete(
+	err := client.Firewall.WAF.Overrides.Delete(
 		context.TODO(),
 		"de677e5818985db1285d0e80225f06e5",
 		firewall.WAFOverrideDeleteParams{
@@ -157,7 +157,7 @@ func TestWAFOverrideGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Firewall.WAF.Overrides.Get(
+	err := client.Firewall.WAF.Overrides.Get(
 		context.TODO(),
 		"de677e5818985db1285d0e80225f06e5",
 		firewall.WAFOverrideGetParams{

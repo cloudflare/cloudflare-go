@@ -31,23 +31,7 @@ func TestEmailSendingSendWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.EmailSending.Send(context.TODO(), email_sending.EmailSendingSendParams{
 		AccountID: cloudflare.F("account_id"),
-		From:      cloudflare.F[email_sending.EmailSendingSendParamsFromUnion](shared.UnionString("sender@example.com")),
-		Subject:   cloudflare.F("Monthly Report"),
-		Attachments: cloudflare.F([]email_sending.EmailSendingSendParamsAttachmentUnion{email_sending.EmailSendingSendParamsAttachmentsEmailSendingEmailAttachment{
-			Content:     cloudflare.F("JVBERi0xLjQK..."),
-			Disposition: cloudflare.F(email_sending.EmailSendingSendParamsAttachmentsEmailSendingEmailAttachmentDispositionAttachment),
-			Filename:    cloudflare.F("report.pdf"),
-			Type:        cloudflare.F("application/pdf"),
-		}}),
-		Bcc: cloudflare.F[email_sending.EmailSendingSendParamsBccUnion](email_sending.EmailSendingSendParamsBccArray([]email_sending.EmailSendingSendParamsBccArrayItemUnion{shared.UnionString("bcc-recipient@example.com")})),
-		Cc:  cloudflare.F[email_sending.EmailSendingSendParamsCcUnion](email_sending.EmailSendingSendParamsCcArray([]email_sending.EmailSendingSendParamsCcArrayItemUnion{shared.UnionString("cc-recipient@example.com")})),
-		Headers: cloudflare.F(map[string]string{
-			"X-Custom-Header": "value",
-		}),
-		HTML:    cloudflare.F("<h1>Hello</h1><p>Please find your report attached.</p>"),
-		ReplyTo: cloudflare.F[email_sending.EmailSendingSendParamsReplyToUnion](shared.UnionString("replies@example.com")),
-		Text:    cloudflare.F("Hello\n\nPlease find your report attached."),
-		To:      cloudflare.F[email_sending.EmailSendingSendParamsToUnion](email_sending.EmailSendingSendParamsToArray([]email_sending.EmailSendingSendParamsToArrayItemUnion{shared.UnionString("recipient@example.com")})),
+		Body:      email_sending.EmailSendingSendParamsBody{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

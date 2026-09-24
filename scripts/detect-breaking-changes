@@ -778,6 +778,9 @@ TEST_PATHS=(
 	calls/turn_test.go
 	moq/relay_test.go
 	moq/relaytoken_test.go
+	managed_defense/vulnerabilitydiscoveryrepository_test.go
+	managed_defense/vulnerabilitydiscoveryscan_test.go
+	managed_defense/vulnerabilitydiscoveryreport_test.go
 	cloudforce_one/scanresult_test.go
 	cloudforce_one/scanconfig_test.go
 	cloudforce_one/binarystorage_test.go

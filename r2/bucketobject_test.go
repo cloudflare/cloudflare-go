@@ -37,13 +37,13 @@ func TestBucketObjectListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.BucketObjectListParams{
-			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Cursor:       cloudflare.F("cursor"),
-			Delimiter:    cloudflare.F("delimiter"),
-			PerPage:      cloudflare.F(int64(1)),
-			Prefix:       cloudflare.F("prefix"),
-			StartAfter:   cloudflare.F("start_after"),
-			Jurisdiction: cloudflare.F(r2.BucketObjectListParamsCfR2JurisdictionDefault),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Cursor:           cloudflare.F("cursor"),
+			Delimiter:        cloudflare.F("delimiter"),
+			PerPage:          cloudflare.F(int64(1)),
+			Prefix:           cloudflare.F("prefix"),
+			StartAfter:       cloudflare.F("start_after"),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketObjectListParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -75,8 +75,8 @@ func TestBucketObjectDeleteWithOptionalParams(t *testing.T) {
 		"example-bucket",
 		"path/to/my-object.txt",
 		r2.BucketObjectDeleteParams{
-			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Jurisdiction: cloudflare.F(r2.BucketObjectDeleteParamsCfR2JurisdictionDefault),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketObjectDeleteParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -106,10 +106,10 @@ func TestBucketObjectGetWithOptionalParams(t *testing.T) {
 		"example-bucket",
 		"path/to/my-object.txt",
 		r2.BucketObjectGetParams{
-			AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Jurisdiction:    cloudflare.F(r2.BucketObjectGetParamsCfR2JurisdictionDefault),
-			IfModifiedSince: cloudflare.F("If-Modified-Since"),
-			IfNoneMatch:     cloudflare.F("If-None-Match"),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketObjectGetParamsCfR2JurisdictionDefault),
+			IfModifiedSince:  cloudflare.F("If-Modified-Since"),
+			IfNoneMatch:      cloudflare.F("If-None-Match"),
 		},
 	)
 	if err != nil {
@@ -156,7 +156,7 @@ func TestBucketObjectUploadWithOptionalParams(t *testing.T) {
 		io.Reader(bytes.NewBuffer([]byte("Example data"))),
 		r2.BucketObjectUploadParams{
 			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Jurisdiction:     cloudflare.F(r2.BucketObjectUploadParamsCfR2JurisdictionDefault),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketObjectUploadParamsCfR2JurisdictionDefault),
 			CfR2StorageClass: cloudflare.F(r2.BucketObjectUploadParamsCfR2StorageClassStandard),
 		},
 	)

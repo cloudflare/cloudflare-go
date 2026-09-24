@@ -46,6 +46,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 					Config: cloudflare.F(workers.ScriptUpdateParamsMetadataAssetsConfig{
 						Headers:          cloudflare.F("/dashboard/*\nX-Frame-Options: DENY\n\n/static/*\nAccess-Control-Allow-Origin: *"),
 						Redirects:        cloudflare.F("/foo /bar 301\n/news/* /blog/:splat"),
+						BasePath:         cloudflare.F("/docs/"),
 						HTMLHandling:     cloudflare.F(workers.ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingAutoTrailingSlash),
 						NotFoundHandling: cloudflare.F(workers.ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling404Page),
 						RunWorkerFirst:   cloudflare.F[workers.ScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion](shared.UnionBool(true)),
@@ -119,6 +120,9 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 				Observability: cloudflare.F(workers.ScriptUpdateParamsMetadataObservability{
 					Enabled:          cloudflare.F(true),
 					HeadSamplingRate: cloudflare.F(0.100000),
+					Issues: cloudflare.F(workers.ScriptUpdateParamsMetadataObservabilityIssues{
+						Enabled: cloudflare.F(true),
+					}),
 					Logs: cloudflare.F(workers.ScriptUpdateParamsMetadataObservabilityLogs{
 						Enabled:          cloudflare.F(true),
 						InvocationLogs:   cloudflare.F(true),

@@ -9,7 +9,6 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v7"
-	"github.com/cloudflare/cloudflare-go/v7/accounts"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/organizations"
@@ -32,13 +31,11 @@ func TestOrganizationProfileUpdate(t *testing.T) {
 		context.TODO(),
 		"a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8",
 		organizations.OrganizationProfileUpdateParams{
-			AccountProfile: accounts.AccountProfileParam{
-				BusinessAddress:  cloudflare.F("business_address"),
-				BusinessEmail:    cloudflare.F("business_email"),
-				BusinessName:     cloudflare.F("business_name"),
-				BusinessPhone:    cloudflare.F("business_phone"),
-				ExternalMetadata: cloudflare.F("external_metadata"),
-			},
+			BusinessAddress:  cloudflare.F("business_address"),
+			BusinessEmail:    cloudflare.F("business_email"),
+			BusinessName:     cloudflare.F("business_name"),
+			BusinessPhone:    cloudflare.F("business_phone"),
+			ExternalMetadata: cloudflare.F("external_metadata"),
 		},
 	)
 	if err != nil {

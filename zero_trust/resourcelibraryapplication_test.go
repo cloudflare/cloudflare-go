@@ -29,14 +29,16 @@ func TestResourceLibraryApplicationNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.ResourceLibrary.Applications.New(context.TODO(), zero_trust.ResourceLibraryApplicationNewParams{
-		AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		CategoryID:     cloudflare.F(int64(12)),
-		HumanID:        cloudflare.F("HR"),
-		Name:           cloudflare.F("HR"),
-		Hostnames:      cloudflare.F([]string{"example.com", "foo.com"}),
-		IPSubnets:      cloudflare.F([]string{"192.168.1.0/24", "10.0.0.0/8"}),
-		PortProtocols:  cloudflare.F([]string{"tcp/80", "tcp/443"}),
-		SupportDomains: cloudflare.F([]string{"example.com", "foo.com"}),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Body: zero_trust.ResourceLibraryApplicationNewParamsBodyObject{
+			Hostnames:      cloudflare.F([]string{"example.com", "foo.com"}),
+			CategoryID:     cloudflare.F(int64(12)),
+			HumanID:        cloudflare.F("HR"),
+			IPSubnets:      cloudflare.F([]string{"192.168.1.0/24", "2001:db8::/48"}),
+			Name:           cloudflare.F("HR"),
+			PortProtocols:  cloudflare.F([]string{"tcp/80", "tcp/443"}),
+			SupportDomains: cloudflare.F([]string{"example.com", "foo.com"}),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -67,7 +69,7 @@ func TestResourceLibraryApplicationUpdateWithOptionalParams(t *testing.T) {
 		zero_trust.ResourceLibraryApplicationUpdateParams{
 			AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Hostnames:      cloudflare.F([]string{"example.com", "foo.com"}),
-			IPSubnets:      cloudflare.F([]string{"192.168.1.0/24", "10.0.0.0/8"}),
+			IPSubnets:      cloudflare.F([]string{"192.168.1.0/24", "2001:db8::/48"}),
 			PortProtocols:  cloudflare.F([]string{"tcp/80", "tcp/443"}),
 			SupportDomains: cloudflare.F([]string{"example.com", "foo.com"}),
 		},

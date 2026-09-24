@@ -44,6 +44,7 @@ func TestLiveInputNewWithOptionalParams(t *testing.T) {
 			RequireSignedURLs:   cloudflare.F(false),
 			TimeoutSeconds:      cloudflare.F(int64(0)),
 		}),
+		IdempotencyKey: cloudflare.F("Idempotency-Key"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -157,7 +157,7 @@ func TestGatewayLocationListWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Gateway.Locations.List(context.TODO(), zero_trust.GatewayLocationListParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Direction: cloudflare.F(zero_trust.GatewayLocationListParamsDirectionAsc),
-		Filter:    cloudflare.F([]interface{}{map[string]interface{}{}}),
+		Filter:    cloudflare.F([]string{"string"}),
 		OrderBy:   cloudflare.F(zero_trust.GatewayLocationListParamsOrderByName),
 		Search:    cloudflare.F("search"),
 	})

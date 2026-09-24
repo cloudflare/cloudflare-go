@@ -48,7 +48,7 @@ func TestBucketSippyUpdateWithOptionalParams(t *testing.T) {
 					SecretAccessKey: cloudflare.F("secretAccessKey"),
 				}),
 			},
-			Jurisdiction: cloudflare.F(r2.BucketSippyUpdateParamsCfR2JurisdictionDefault),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketSippyUpdateParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -79,8 +79,8 @@ func TestBucketSippyDeleteWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.BucketSippyDeleteParams{
-			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Jurisdiction: cloudflare.F(r2.BucketSippyDeleteParamsCfR2JurisdictionDefault),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketSippyDeleteParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -111,8 +111,8 @@ func TestBucketSippyGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.BucketSippyGetParams{
-			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Jurisdiction: cloudflare.F(r2.BucketSippyGetParamsCfR2JurisdictionDefault),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketSippyGetParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {

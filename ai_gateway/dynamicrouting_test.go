@@ -42,7 +42,7 @@ func TestDynamicRoutingNew(t *testing.T) {
 				}),
 				Type: cloudflare.F(ai_gateway.DynamicRoutingNewParamsElementsObjectTypeStart),
 			}}),
-			Name: cloudflare.F("name"),
+			Name: cloudflare.F("x"),
 		},
 	)
 	if err != nil {

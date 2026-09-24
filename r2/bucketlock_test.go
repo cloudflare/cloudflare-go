@@ -43,7 +43,7 @@ func TestBucketLockUpdateWithOptionalParams(t *testing.T) {
 				Enabled: cloudflare.F(true),
 				Prefix:  cloudflare.F("prefix"),
 			}}),
-			Jurisdiction: cloudflare.F(r2.BucketLockUpdateParamsCfR2JurisdictionDefault),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketLockUpdateParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -74,8 +74,8 @@ func TestBucketLockGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.BucketLockGetParams{
-			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Jurisdiction: cloudflare.F(r2.BucketLockGetParamsCfR2JurisdictionDefault),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketLockGetParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
