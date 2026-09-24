@@ -1,0 +1,22 @@
+email_sending/emailsending.go
+  s_ab9b8b5984a654::t_c0580f6002329a 152-175,179-340,343-364,367-388,392-495
+  s_ab9b8b5984a654::t_abf421da2aeeac 496
+email_sending/emailsending_test.go
+  s_ab9b8b5984a654::t_afbed1f25d6a92 34-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "7ab9c55e8d0de6f00184cd54315ba0b087d5341a",
+  "prompts": {},
+  "sessions": {
+    "s_ab9b8b5984a654": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f2cf2c449ffe1nKyx36XLv88gS",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "rotem <rotem@cloudflare.com>"
+    }
+  }
+}
