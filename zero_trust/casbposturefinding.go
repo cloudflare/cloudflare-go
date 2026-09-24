@@ -239,12 +239,11 @@ func (r casbPostureFindingListResponseJSON) RawJSON() string {
 // Basic finding type information.
 type CasbPostureFindingListResponseFinding struct {
 	// The unique identifier of the finding.
-	ID string `json:"id" api:"required" format:"uuid"`
-	// Category information for a finding.
+	ID       string                                        `json:"id" api:"required" format:"uuid"`
 	Category CasbPostureFindingListResponseFindingCategory `json:"category" api:"required"`
 	// The name of the finding.
 	Name string `json:"name" api:"required"`
-	// The severity level of a finding.
+	// Default severity used when no integration-specific severity override exists.
 	Severity CasbPostureFindingListResponseFindingSeverity `json:"severity" api:"required"`
 	// The SaaS/Cloud vendor of the platform with which the finding is associated.
 	Vendor string `json:"vendor" api:"required"`
@@ -277,7 +276,6 @@ func (r casbPostureFindingListResponseFindingJSON) RawJSON() string {
 	return r.raw
 }
 
-// Category information for a finding.
 type CasbPostureFindingListResponseFindingCategory struct {
 	// The type of the observation.
 	Observation CasbPostureFindingListResponseFindingCategoryObservation `json:"observation" api:"required"`
@@ -355,7 +353,7 @@ func (r CasbPostureFindingListResponseFindingCategoryType) IsKnown() bool {
 	return false
 }
 
-// The severity level of a finding.
+// Default severity used when no integration-specific severity override exists.
 type CasbPostureFindingListResponseFindingSeverity string
 
 const (
@@ -789,12 +787,11 @@ func (r casbPostureFindingGetResponseJSON) RawJSON() string {
 // Basic finding type information.
 type CasbPostureFindingGetResponseFinding struct {
 	// The unique identifier of the finding.
-	ID string `json:"id" api:"required" format:"uuid"`
-	// Category information for a finding.
+	ID       string                                       `json:"id" api:"required" format:"uuid"`
 	Category CasbPostureFindingGetResponseFindingCategory `json:"category" api:"required"`
 	// The name of the finding.
 	Name string `json:"name" api:"required"`
-	// The severity level of a finding.
+	// Default severity used when no integration-specific severity override exists.
 	Severity CasbPostureFindingGetResponseFindingSeverity `json:"severity" api:"required"`
 	// The SaaS/Cloud vendor of the platform with which the finding is associated.
 	Vendor string `json:"vendor" api:"required"`
@@ -827,7 +824,6 @@ func (r casbPostureFindingGetResponseFindingJSON) RawJSON() string {
 	return r.raw
 }
 
-// Category information for a finding.
 type CasbPostureFindingGetResponseFindingCategory struct {
 	// The type of the observation.
 	Observation CasbPostureFindingGetResponseFindingCategoryObservation `json:"observation" api:"required"`
@@ -905,7 +901,7 @@ func (r CasbPostureFindingGetResponseFindingCategoryType) IsKnown() bool {
 	return false
 }
 
-// The severity level of a finding.
+// Default severity used when no integration-specific severity override exists.
 type CasbPostureFindingGetResponseFindingSeverity string
 
 const (
@@ -1257,12 +1253,11 @@ func (r casbPostureFindingIgnoreResponseJSON) RawJSON() string {
 // Basic finding type information.
 type CasbPostureFindingIgnoreResponseFinding struct {
 	// The unique identifier of the finding.
-	ID string `json:"id" api:"required" format:"uuid"`
-	// Category information for a finding.
+	ID       string                                          `json:"id" api:"required" format:"uuid"`
 	Category CasbPostureFindingIgnoreResponseFindingCategory `json:"category" api:"required"`
 	// The name of the finding.
 	Name string `json:"name" api:"required"`
-	// The severity level of a finding.
+	// Default severity used when no integration-specific severity override exists.
 	Severity CasbPostureFindingIgnoreResponseFindingSeverity `json:"severity" api:"required"`
 	// The SaaS/Cloud vendor of the platform with which the finding is associated.
 	Vendor string `json:"vendor" api:"required"`
@@ -1295,7 +1290,6 @@ func (r casbPostureFindingIgnoreResponseFindingJSON) RawJSON() string {
 	return r.raw
 }
 
-// Category information for a finding.
 type CasbPostureFindingIgnoreResponseFindingCategory struct {
 	// The type of the observation.
 	Observation CasbPostureFindingIgnoreResponseFindingCategoryObservation `json:"observation" api:"required"`
@@ -1373,7 +1367,7 @@ func (r CasbPostureFindingIgnoreResponseFindingCategoryType) IsKnown() bool {
 	return false
 }
 
-// The severity level of a finding.
+// Default severity used when no integration-specific severity override exists.
 type CasbPostureFindingIgnoreResponseFindingSeverity string
 
 const (
@@ -1726,12 +1720,11 @@ func (r casbPostureFindingResetSeverityResponseJSON) RawJSON() string {
 // Basic finding type information.
 type CasbPostureFindingResetSeverityResponseFinding struct {
 	// The unique identifier of the finding.
-	ID string `json:"id" api:"required" format:"uuid"`
-	// Category information for a finding.
+	ID       string                                                 `json:"id" api:"required" format:"uuid"`
 	Category CasbPostureFindingResetSeverityResponseFindingCategory `json:"category" api:"required"`
 	// The name of the finding.
 	Name string `json:"name" api:"required"`
-	// The severity level of a finding.
+	// Default severity used when no integration-specific severity override exists.
 	Severity CasbPostureFindingResetSeverityResponseFindingSeverity `json:"severity" api:"required"`
 	// The SaaS/Cloud vendor of the platform with which the finding is associated.
 	Vendor string `json:"vendor" api:"required"`
@@ -1764,7 +1757,6 @@ func (r casbPostureFindingResetSeverityResponseFindingJSON) RawJSON() string {
 	return r.raw
 }
 
-// Category information for a finding.
 type CasbPostureFindingResetSeverityResponseFindingCategory struct {
 	// The type of the observation.
 	Observation CasbPostureFindingResetSeverityResponseFindingCategoryObservation `json:"observation" api:"required"`
@@ -1842,7 +1834,7 @@ func (r CasbPostureFindingResetSeverityResponseFindingCategoryType) IsKnown() bo
 	return false
 }
 
-// The severity level of a finding.
+// Default severity used when no integration-specific severity override exists.
 type CasbPostureFindingResetSeverityResponseFindingSeverity string
 
 const (
@@ -2199,12 +2191,11 @@ func (r casbPostureFindingTuneSeverityResponseJSON) RawJSON() string {
 // Basic finding type information.
 type CasbPostureFindingTuneSeverityResponseFinding struct {
 	// The unique identifier of the finding.
-	ID string `json:"id" api:"required" format:"uuid"`
-	// Category information for a finding.
+	ID       string                                                `json:"id" api:"required" format:"uuid"`
 	Category CasbPostureFindingTuneSeverityResponseFindingCategory `json:"category" api:"required"`
 	// The name of the finding.
 	Name string `json:"name" api:"required"`
-	// The severity level of a finding.
+	// Default severity used when no integration-specific severity override exists.
 	Severity CasbPostureFindingTuneSeverityResponseFindingSeverity `json:"severity" api:"required"`
 	// The SaaS/Cloud vendor of the platform with which the finding is associated.
 	Vendor string `json:"vendor" api:"required"`
@@ -2237,7 +2228,6 @@ func (r casbPostureFindingTuneSeverityResponseFindingJSON) RawJSON() string {
 	return r.raw
 }
 
-// Category information for a finding.
 type CasbPostureFindingTuneSeverityResponseFindingCategory struct {
 	// The type of the observation.
 	Observation CasbPostureFindingTuneSeverityResponseFindingCategoryObservation `json:"observation" api:"required"`
@@ -2315,7 +2305,7 @@ func (r CasbPostureFindingTuneSeverityResponseFindingCategoryType) IsKnown() boo
 	return false
 }
 
-// The severity level of a finding.
+// Default severity used when no integration-specific severity override exists.
 type CasbPostureFindingTuneSeverityResponseFindingSeverity string
 
 const (
@@ -2671,12 +2661,11 @@ func (r casbPostureFindingUnignoreResponseJSON) RawJSON() string {
 // Basic finding type information.
 type CasbPostureFindingUnignoreResponseFinding struct {
 	// The unique identifier of the finding.
-	ID string `json:"id" api:"required" format:"uuid"`
-	// Category information for a finding.
+	ID       string                                            `json:"id" api:"required" format:"uuid"`
 	Category CasbPostureFindingUnignoreResponseFindingCategory `json:"category" api:"required"`
 	// The name of the finding.
 	Name string `json:"name" api:"required"`
-	// The severity level of a finding.
+	// Default severity used when no integration-specific severity override exists.
 	Severity CasbPostureFindingUnignoreResponseFindingSeverity `json:"severity" api:"required"`
 	// The SaaS/Cloud vendor of the platform with which the finding is associated.
 	Vendor string `json:"vendor" api:"required"`
@@ -2709,7 +2698,6 @@ func (r casbPostureFindingUnignoreResponseFindingJSON) RawJSON() string {
 	return r.raw
 }
 
-// Category information for a finding.
 type CasbPostureFindingUnignoreResponseFindingCategory struct {
 	// The type of the observation.
 	Observation CasbPostureFindingUnignoreResponseFindingCategoryObservation `json:"observation" api:"required"`
@@ -2787,7 +2775,7 @@ func (r CasbPostureFindingUnignoreResponseFindingCategoryType) IsKnown() bool {
 	return false
 }
 
-// The severity level of a finding.
+// Default severity used when no integration-specific severity override exists.
 type CasbPostureFindingUnignoreResponseFindingSeverity string
 
 const (
@@ -3258,11 +3246,12 @@ const (
 	CasbPostureFindingListParamsVendorSalesforce          CasbPostureFindingListParamsVendor = "SALESFORCE"
 	CasbPostureFindingListParamsVendorServicenow          CasbPostureFindingListParamsVendor = "SERVICENOW"
 	CasbPostureFindingListParamsVendorSlack               CasbPostureFindingListParamsVendor = "SLACK"
+	CasbPostureFindingListParamsVendorZoom                CasbPostureFindingListParamsVendor = "ZOOM"
 )
 
 func (r CasbPostureFindingListParamsVendor) IsKnown() bool {
 	switch r {
-	case CasbPostureFindingListParamsVendorAnthropic, CasbPostureFindingListParamsVendorAws, CasbPostureFindingListParamsVendorBitbucket, CasbPostureFindingListParamsVendorBox, CasbPostureFindingListParamsVendorConfluence, CasbPostureFindingListParamsVendorDropbox, CasbPostureFindingListParamsVendorGitHub, CasbPostureFindingListParamsVendorGoogleCloudPlatform, CasbPostureFindingListParamsVendorGoogleWorkspace, CasbPostureFindingListParamsVendorJira, CasbPostureFindingListParamsVendorMicrosoft, CasbPostureFindingListParamsVendorMicrosoftInternal, CasbPostureFindingListParamsVendorOpenAI, CasbPostureFindingListParamsVendorSalesforce, CasbPostureFindingListParamsVendorServicenow, CasbPostureFindingListParamsVendorSlack:
+	case CasbPostureFindingListParamsVendorAnthropic, CasbPostureFindingListParamsVendorAws, CasbPostureFindingListParamsVendorBitbucket, CasbPostureFindingListParamsVendorBox, CasbPostureFindingListParamsVendorConfluence, CasbPostureFindingListParamsVendorDropbox, CasbPostureFindingListParamsVendorGitHub, CasbPostureFindingListParamsVendorGoogleCloudPlatform, CasbPostureFindingListParamsVendorGoogleWorkspace, CasbPostureFindingListParamsVendorJira, CasbPostureFindingListParamsVendorMicrosoft, CasbPostureFindingListParamsVendorMicrosoftInternal, CasbPostureFindingListParamsVendorOpenAI, CasbPostureFindingListParamsVendorSalesforce, CasbPostureFindingListParamsVendorServicenow, CasbPostureFindingListParamsVendorSlack, CasbPostureFindingListParamsVendorZoom:
 		return true
 	}
 	return false
@@ -3397,11 +3386,12 @@ const (
 	CasbPostureFindingExportParamsVendorSalesforce          CasbPostureFindingExportParamsVendor = "SALESFORCE"
 	CasbPostureFindingExportParamsVendorServicenow          CasbPostureFindingExportParamsVendor = "SERVICENOW"
 	CasbPostureFindingExportParamsVendorSlack               CasbPostureFindingExportParamsVendor = "SLACK"
+	CasbPostureFindingExportParamsVendorZoom                CasbPostureFindingExportParamsVendor = "ZOOM"
 )
 
 func (r CasbPostureFindingExportParamsVendor) IsKnown() bool {
 	switch r {
-	case CasbPostureFindingExportParamsVendorAnthropic, CasbPostureFindingExportParamsVendorAws, CasbPostureFindingExportParamsVendorBitbucket, CasbPostureFindingExportParamsVendorBox, CasbPostureFindingExportParamsVendorConfluence, CasbPostureFindingExportParamsVendorDropbox, CasbPostureFindingExportParamsVendorGitHub, CasbPostureFindingExportParamsVendorGoogleCloudPlatform, CasbPostureFindingExportParamsVendorGoogleWorkspace, CasbPostureFindingExportParamsVendorJira, CasbPostureFindingExportParamsVendorMicrosoft, CasbPostureFindingExportParamsVendorMicrosoftInternal, CasbPostureFindingExportParamsVendorOpenAI, CasbPostureFindingExportParamsVendorSalesforce, CasbPostureFindingExportParamsVendorServicenow, CasbPostureFindingExportParamsVendorSlack:
+	case CasbPostureFindingExportParamsVendorAnthropic, CasbPostureFindingExportParamsVendorAws, CasbPostureFindingExportParamsVendorBitbucket, CasbPostureFindingExportParamsVendorBox, CasbPostureFindingExportParamsVendorConfluence, CasbPostureFindingExportParamsVendorDropbox, CasbPostureFindingExportParamsVendorGitHub, CasbPostureFindingExportParamsVendorGoogleCloudPlatform, CasbPostureFindingExportParamsVendorGoogleWorkspace, CasbPostureFindingExportParamsVendorJira, CasbPostureFindingExportParamsVendorMicrosoft, CasbPostureFindingExportParamsVendorMicrosoftInternal, CasbPostureFindingExportParamsVendorOpenAI, CasbPostureFindingExportParamsVendorSalesforce, CasbPostureFindingExportParamsVendorServicenow, CasbPostureFindingExportParamsVendorSlack, CasbPostureFindingExportParamsVendorZoom:
 		return true
 	}
 	return false

@@ -167,28 +167,31 @@ func (r *AIGatewayService) Get(ctx context.Context, id string, query AIGatewayGe
 
 type AIGatewayNewResponse struct {
 	// gateway id
-	ID                      string                                    `json:"id" api:"required"`
-	CacheInvalidateOnUpdate bool                                      `json:"cache_invalidate_on_update" api:"required"`
-	CacheTTL                int64                                     `json:"cache_ttl" api:"required,nullable"`
-	CollectLogs             bool                                      `json:"collect_logs" api:"required"`
-	CreatedAt               time.Time                                 `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt              time.Time                                 `json:"modified_at" api:"required" format:"date-time"`
-	RateLimitingInterval    int64                                     `json:"rate_limiting_interval" api:"required,nullable"`
-	RateLimitingLimit       int64                                     `json:"rate_limiting_limit" api:"required,nullable"`
-	Authentication          bool                                      `json:"authentication"`
-	DLP                     AIGatewayNewResponseDLP                   `json:"dlp"`
-	Guardrails              AIGatewayNewResponseGuardrails            `json:"guardrails" api:"nullable"`
-	IsDefault               bool                                      `json:"is_default"`
-	LogClassification       bool                                      `json:"log_classification"`
-	LogManagement           int64                                     `json:"log_management" api:"nullable"`
-	LogManagementStrategy   AIGatewayNewResponseLogManagementStrategy `json:"log_management_strategy" api:"nullable"`
-	Logpush                 bool                                      `json:"logpush"`
-	LogpushPublicKey        string                                    `json:"logpush_public_key" api:"nullable"`
-	Otel                    []AIGatewayNewResponseOtel                `json:"otel" api:"nullable"`
-	RateLimitingTechnique   AIGatewayNewResponseRateLimitingTechnique `json:"rate_limiting_technique" api:"nullable"`
+	ID                      string    `json:"id" api:"required"`
+	CacheInvalidateOnUpdate bool      `json:"cache_invalidate_on_update" api:"required"`
+	CacheTTL                int64     `json:"cache_ttl" api:"required,nullable"`
+	CollectLogs             bool      `json:"collect_logs" api:"required"`
+	CreatedAt               time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt              time.Time `json:"modified_at" api:"required" format:"date-time"`
+	RateLimitingInterval    int64     `json:"rate_limiting_interval" api:"required,nullable"`
+	RateLimitingLimit       int64     `json:"rate_limiting_limit" api:"required,nullable"`
+	Authentication          bool      `json:"authentication"`
+	// Requires customer-provided provider credentials and prevents fallback to Unified
+	// Billing.
+	ByokOnly              bool                                      `json:"byok_only"`
+	DLP                   AIGatewayNewResponseDLP                   `json:"dlp"`
+	Guardrails            AIGatewayNewResponseGuardrails            `json:"guardrails" api:"nullable"`
+	IsDefault             bool                                      `json:"is_default"`
+	LogClassification     bool                                      `json:"log_classification"`
+	LogManagement         int64                                     `json:"log_management" api:"nullable"`
+	LogManagementStrategy AIGatewayNewResponseLogManagementStrategy `json:"log_management_strategy" api:"nullable"`
+	Logpush               bool                                      `json:"logpush"`
+	LogpushPublicKey      string                                    `json:"logpush_public_key" api:"nullable"`
+	Otel                  []AIGatewayNewResponseOtel                `json:"otel" api:"nullable"`
+	RateLimitingTechnique AIGatewayNewResponseRateLimitingTechnique `json:"rate_limiting_technique" api:"nullable"`
 	// Backoff strategy for retry delays
 	RetryBackoff AIGatewayNewResponseRetryBackoff `json:"retry_backoff" api:"nullable"`
-	// Delay between retry attempts in milliseconds (0-5000)
+	// Delay between retry attempts in milliseconds (0-60000)
 	RetryDelay int64 `json:"retry_delay" api:"nullable"`
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts int64                           `json:"retry_max_attempts" api:"nullable"`
@@ -216,6 +219,7 @@ type aiGatewayNewResponseJSON struct {
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
 	Authentication          apijson.Field
+	ByokOnly                apijson.Field
 	DLP                     apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
@@ -1361,28 +1365,31 @@ func (r AIGatewayNewResponseWorkersAIBillingMode) IsKnown() bool {
 
 type AIGatewayUpdateResponse struct {
 	// gateway id
-	ID                      string                                       `json:"id" api:"required"`
-	CacheInvalidateOnUpdate bool                                         `json:"cache_invalidate_on_update" api:"required"`
-	CacheTTL                int64                                        `json:"cache_ttl" api:"required,nullable"`
-	CollectLogs             bool                                         `json:"collect_logs" api:"required"`
-	CreatedAt               time.Time                                    `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt              time.Time                                    `json:"modified_at" api:"required" format:"date-time"`
-	RateLimitingInterval    int64                                        `json:"rate_limiting_interval" api:"required,nullable"`
-	RateLimitingLimit       int64                                        `json:"rate_limiting_limit" api:"required,nullable"`
-	Authentication          bool                                         `json:"authentication"`
-	DLP                     AIGatewayUpdateResponseDLP                   `json:"dlp"`
-	Guardrails              AIGatewayUpdateResponseGuardrails            `json:"guardrails" api:"nullable"`
-	IsDefault               bool                                         `json:"is_default"`
-	LogClassification       bool                                         `json:"log_classification"`
-	LogManagement           int64                                        `json:"log_management" api:"nullable"`
-	LogManagementStrategy   AIGatewayUpdateResponseLogManagementStrategy `json:"log_management_strategy" api:"nullable"`
-	Logpush                 bool                                         `json:"logpush"`
-	LogpushPublicKey        string                                       `json:"logpush_public_key" api:"nullable"`
-	Otel                    []AIGatewayUpdateResponseOtel                `json:"otel" api:"nullable"`
-	RateLimitingTechnique   AIGatewayUpdateResponseRateLimitingTechnique `json:"rate_limiting_technique" api:"nullable"`
+	ID                      string    `json:"id" api:"required"`
+	CacheInvalidateOnUpdate bool      `json:"cache_invalidate_on_update" api:"required"`
+	CacheTTL                int64     `json:"cache_ttl" api:"required,nullable"`
+	CollectLogs             bool      `json:"collect_logs" api:"required"`
+	CreatedAt               time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt              time.Time `json:"modified_at" api:"required" format:"date-time"`
+	RateLimitingInterval    int64     `json:"rate_limiting_interval" api:"required,nullable"`
+	RateLimitingLimit       int64     `json:"rate_limiting_limit" api:"required,nullable"`
+	Authentication          bool      `json:"authentication"`
+	// Requires customer-provided provider credentials and prevents fallback to Unified
+	// Billing.
+	ByokOnly              bool                                         `json:"byok_only"`
+	DLP                   AIGatewayUpdateResponseDLP                   `json:"dlp"`
+	Guardrails            AIGatewayUpdateResponseGuardrails            `json:"guardrails" api:"nullable"`
+	IsDefault             bool                                         `json:"is_default"`
+	LogClassification     bool                                         `json:"log_classification"`
+	LogManagement         int64                                        `json:"log_management" api:"nullable"`
+	LogManagementStrategy AIGatewayUpdateResponseLogManagementStrategy `json:"log_management_strategy" api:"nullable"`
+	Logpush               bool                                         `json:"logpush"`
+	LogpushPublicKey      string                                       `json:"logpush_public_key" api:"nullable"`
+	Otel                  []AIGatewayUpdateResponseOtel                `json:"otel" api:"nullable"`
+	RateLimitingTechnique AIGatewayUpdateResponseRateLimitingTechnique `json:"rate_limiting_technique" api:"nullable"`
 	// Backoff strategy for retry delays
 	RetryBackoff AIGatewayUpdateResponseRetryBackoff `json:"retry_backoff" api:"nullable"`
-	// Delay between retry attempts in milliseconds (0-5000)
+	// Delay between retry attempts in milliseconds (0-60000)
 	RetryDelay int64 `json:"retry_delay" api:"nullable"`
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts int64                              `json:"retry_max_attempts" api:"nullable"`
@@ -1410,6 +1417,7 @@ type aiGatewayUpdateResponseJSON struct {
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
 	Authentication          apijson.Field
+	ByokOnly                apijson.Field
 	DLP                     apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
@@ -2556,28 +2564,31 @@ func (r AIGatewayUpdateResponseWorkersAIBillingMode) IsKnown() bool {
 
 type AIGatewayListResponse struct {
 	// gateway id
-	ID                      string                                     `json:"id" api:"required"`
-	CacheInvalidateOnUpdate bool                                       `json:"cache_invalidate_on_update" api:"required"`
-	CacheTTL                int64                                      `json:"cache_ttl" api:"required,nullable"`
-	CollectLogs             bool                                       `json:"collect_logs" api:"required"`
-	CreatedAt               time.Time                                  `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt              time.Time                                  `json:"modified_at" api:"required" format:"date-time"`
-	RateLimitingInterval    int64                                      `json:"rate_limiting_interval" api:"required,nullable"`
-	RateLimitingLimit       int64                                      `json:"rate_limiting_limit" api:"required,nullable"`
-	Authentication          bool                                       `json:"authentication"`
-	DLP                     AIGatewayListResponseDLP                   `json:"dlp"`
-	Guardrails              AIGatewayListResponseGuardrails            `json:"guardrails" api:"nullable"`
-	IsDefault               bool                                       `json:"is_default"`
-	LogClassification       bool                                       `json:"log_classification"`
-	LogManagement           int64                                      `json:"log_management" api:"nullable"`
-	LogManagementStrategy   AIGatewayListResponseLogManagementStrategy `json:"log_management_strategy" api:"nullable"`
-	Logpush                 bool                                       `json:"logpush"`
-	LogpushPublicKey        string                                     `json:"logpush_public_key" api:"nullable"`
-	Otel                    []AIGatewayListResponseOtel                `json:"otel" api:"nullable"`
-	RateLimitingTechnique   AIGatewayListResponseRateLimitingTechnique `json:"rate_limiting_technique" api:"nullable"`
+	ID                      string    `json:"id" api:"required"`
+	CacheInvalidateOnUpdate bool      `json:"cache_invalidate_on_update" api:"required"`
+	CacheTTL                int64     `json:"cache_ttl" api:"required,nullable"`
+	CollectLogs             bool      `json:"collect_logs" api:"required"`
+	CreatedAt               time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt              time.Time `json:"modified_at" api:"required" format:"date-time"`
+	RateLimitingInterval    int64     `json:"rate_limiting_interval" api:"required,nullable"`
+	RateLimitingLimit       int64     `json:"rate_limiting_limit" api:"required,nullable"`
+	Authentication          bool      `json:"authentication"`
+	// Requires customer-provided provider credentials and prevents fallback to Unified
+	// Billing.
+	ByokOnly              bool                                       `json:"byok_only"`
+	DLP                   AIGatewayListResponseDLP                   `json:"dlp"`
+	Guardrails            AIGatewayListResponseGuardrails            `json:"guardrails" api:"nullable"`
+	IsDefault             bool                                       `json:"is_default"`
+	LogClassification     bool                                       `json:"log_classification"`
+	LogManagement         int64                                      `json:"log_management" api:"nullable"`
+	LogManagementStrategy AIGatewayListResponseLogManagementStrategy `json:"log_management_strategy" api:"nullable"`
+	Logpush               bool                                       `json:"logpush"`
+	LogpushPublicKey      string                                     `json:"logpush_public_key" api:"nullable"`
+	Otel                  []AIGatewayListResponseOtel                `json:"otel" api:"nullable"`
+	RateLimitingTechnique AIGatewayListResponseRateLimitingTechnique `json:"rate_limiting_technique" api:"nullable"`
 	// Backoff strategy for retry delays
 	RetryBackoff AIGatewayListResponseRetryBackoff `json:"retry_backoff" api:"nullable"`
-	// Delay between retry attempts in milliseconds (0-5000)
+	// Delay between retry attempts in milliseconds (0-60000)
 	RetryDelay int64 `json:"retry_delay" api:"nullable"`
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts int64                            `json:"retry_max_attempts" api:"nullable"`
@@ -2605,6 +2616,7 @@ type aiGatewayListResponseJSON struct {
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
 	Authentication          apijson.Field
+	ByokOnly                apijson.Field
 	DLP                     apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
@@ -3751,28 +3763,31 @@ func (r AIGatewayListResponseWorkersAIBillingMode) IsKnown() bool {
 
 type AIGatewayDeleteResponse struct {
 	// gateway id
-	ID                      string                                       `json:"id" api:"required"`
-	CacheInvalidateOnUpdate bool                                         `json:"cache_invalidate_on_update" api:"required"`
-	CacheTTL                int64                                        `json:"cache_ttl" api:"required,nullable"`
-	CollectLogs             bool                                         `json:"collect_logs" api:"required"`
-	CreatedAt               time.Time                                    `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt              time.Time                                    `json:"modified_at" api:"required" format:"date-time"`
-	RateLimitingInterval    int64                                        `json:"rate_limiting_interval" api:"required,nullable"`
-	RateLimitingLimit       int64                                        `json:"rate_limiting_limit" api:"required,nullable"`
-	Authentication          bool                                         `json:"authentication"`
-	DLP                     AIGatewayDeleteResponseDLP                   `json:"dlp"`
-	Guardrails              AIGatewayDeleteResponseGuardrails            `json:"guardrails" api:"nullable"`
-	IsDefault               bool                                         `json:"is_default"`
-	LogClassification       bool                                         `json:"log_classification"`
-	LogManagement           int64                                        `json:"log_management" api:"nullable"`
-	LogManagementStrategy   AIGatewayDeleteResponseLogManagementStrategy `json:"log_management_strategy" api:"nullable"`
-	Logpush                 bool                                         `json:"logpush"`
-	LogpushPublicKey        string                                       `json:"logpush_public_key" api:"nullable"`
-	Otel                    []AIGatewayDeleteResponseOtel                `json:"otel" api:"nullable"`
-	RateLimitingTechnique   AIGatewayDeleteResponseRateLimitingTechnique `json:"rate_limiting_technique" api:"nullable"`
+	ID                      string    `json:"id" api:"required"`
+	CacheInvalidateOnUpdate bool      `json:"cache_invalidate_on_update" api:"required"`
+	CacheTTL                int64     `json:"cache_ttl" api:"required,nullable"`
+	CollectLogs             bool      `json:"collect_logs" api:"required"`
+	CreatedAt               time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt              time.Time `json:"modified_at" api:"required" format:"date-time"`
+	RateLimitingInterval    int64     `json:"rate_limiting_interval" api:"required,nullable"`
+	RateLimitingLimit       int64     `json:"rate_limiting_limit" api:"required,nullable"`
+	Authentication          bool      `json:"authentication"`
+	// Requires customer-provided provider credentials and prevents fallback to Unified
+	// Billing.
+	ByokOnly              bool                                         `json:"byok_only"`
+	DLP                   AIGatewayDeleteResponseDLP                   `json:"dlp"`
+	Guardrails            AIGatewayDeleteResponseGuardrails            `json:"guardrails" api:"nullable"`
+	IsDefault             bool                                         `json:"is_default"`
+	LogClassification     bool                                         `json:"log_classification"`
+	LogManagement         int64                                        `json:"log_management" api:"nullable"`
+	LogManagementStrategy AIGatewayDeleteResponseLogManagementStrategy `json:"log_management_strategy" api:"nullable"`
+	Logpush               bool                                         `json:"logpush"`
+	LogpushPublicKey      string                                       `json:"logpush_public_key" api:"nullable"`
+	Otel                  []AIGatewayDeleteResponseOtel                `json:"otel" api:"nullable"`
+	RateLimitingTechnique AIGatewayDeleteResponseRateLimitingTechnique `json:"rate_limiting_technique" api:"nullable"`
 	// Backoff strategy for retry delays
 	RetryBackoff AIGatewayDeleteResponseRetryBackoff `json:"retry_backoff" api:"nullable"`
-	// Delay between retry attempts in milliseconds (0-5000)
+	// Delay between retry attempts in milliseconds (0-60000)
 	RetryDelay int64 `json:"retry_delay" api:"nullable"`
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts int64                              `json:"retry_max_attempts" api:"nullable"`
@@ -3800,6 +3815,7 @@ type aiGatewayDeleteResponseJSON struct {
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
 	Authentication          apijson.Field
+	ByokOnly                apijson.Field
 	DLP                     apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
@@ -4946,28 +4962,31 @@ func (r AIGatewayDeleteResponseWorkersAIBillingMode) IsKnown() bool {
 
 type AIGatewayGetResponse struct {
 	// gateway id
-	ID                      string                                    `json:"id" api:"required"`
-	CacheInvalidateOnUpdate bool                                      `json:"cache_invalidate_on_update" api:"required"`
-	CacheTTL                int64                                     `json:"cache_ttl" api:"required,nullable"`
-	CollectLogs             bool                                      `json:"collect_logs" api:"required"`
-	CreatedAt               time.Time                                 `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt              time.Time                                 `json:"modified_at" api:"required" format:"date-time"`
-	RateLimitingInterval    int64                                     `json:"rate_limiting_interval" api:"required,nullable"`
-	RateLimitingLimit       int64                                     `json:"rate_limiting_limit" api:"required,nullable"`
-	Authentication          bool                                      `json:"authentication"`
-	DLP                     AIGatewayGetResponseDLP                   `json:"dlp"`
-	Guardrails              AIGatewayGetResponseGuardrails            `json:"guardrails" api:"nullable"`
-	IsDefault               bool                                      `json:"is_default"`
-	LogClassification       bool                                      `json:"log_classification"`
-	LogManagement           int64                                     `json:"log_management" api:"nullable"`
-	LogManagementStrategy   AIGatewayGetResponseLogManagementStrategy `json:"log_management_strategy" api:"nullable"`
-	Logpush                 bool                                      `json:"logpush"`
-	LogpushPublicKey        string                                    `json:"logpush_public_key" api:"nullable"`
-	Otel                    []AIGatewayGetResponseOtel                `json:"otel" api:"nullable"`
-	RateLimitingTechnique   AIGatewayGetResponseRateLimitingTechnique `json:"rate_limiting_technique" api:"nullable"`
+	ID                      string    `json:"id" api:"required"`
+	CacheInvalidateOnUpdate bool      `json:"cache_invalidate_on_update" api:"required"`
+	CacheTTL                int64     `json:"cache_ttl" api:"required,nullable"`
+	CollectLogs             bool      `json:"collect_logs" api:"required"`
+	CreatedAt               time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt              time.Time `json:"modified_at" api:"required" format:"date-time"`
+	RateLimitingInterval    int64     `json:"rate_limiting_interval" api:"required,nullable"`
+	RateLimitingLimit       int64     `json:"rate_limiting_limit" api:"required,nullable"`
+	Authentication          bool      `json:"authentication"`
+	// Requires customer-provided provider credentials and prevents fallback to Unified
+	// Billing.
+	ByokOnly              bool                                      `json:"byok_only"`
+	DLP                   AIGatewayGetResponseDLP                   `json:"dlp"`
+	Guardrails            AIGatewayGetResponseGuardrails            `json:"guardrails" api:"nullable"`
+	IsDefault             bool                                      `json:"is_default"`
+	LogClassification     bool                                      `json:"log_classification"`
+	LogManagement         int64                                     `json:"log_management" api:"nullable"`
+	LogManagementStrategy AIGatewayGetResponseLogManagementStrategy `json:"log_management_strategy" api:"nullable"`
+	Logpush               bool                                      `json:"logpush"`
+	LogpushPublicKey      string                                    `json:"logpush_public_key" api:"nullable"`
+	Otel                  []AIGatewayGetResponseOtel                `json:"otel" api:"nullable"`
+	RateLimitingTechnique AIGatewayGetResponseRateLimitingTechnique `json:"rate_limiting_technique" api:"nullable"`
 	// Backoff strategy for retry delays
 	RetryBackoff AIGatewayGetResponseRetryBackoff `json:"retry_backoff" api:"nullable"`
-	// Delay between retry attempts in milliseconds (0-5000)
+	// Delay between retry attempts in milliseconds (0-60000)
 	RetryDelay int64 `json:"retry_delay" api:"nullable"`
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts int64                           `json:"retry_max_attempts" api:"nullable"`
@@ -4995,6 +5014,7 @@ type aiGatewayGetResponseJSON struct {
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
 	Authentication          apijson.Field
+	ByokOnly                apijson.Field
 	DLP                     apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
@@ -6141,21 +6161,24 @@ func (r AIGatewayGetResponseWorkersAIBillingMode) IsKnown() bool {
 type AIGatewayNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// gateway id
-	ID                      param.Field[string]                                  `json:"id" api:"required"`
-	CacheInvalidateOnUpdate param.Field[bool]                                    `json:"cache_invalidate_on_update" api:"required"`
-	CacheTTL                param.Field[int64]                                   `json:"cache_ttl" api:"required"`
-	CollectLogs             param.Field[bool]                                    `json:"collect_logs" api:"required"`
-	RateLimitingInterval    param.Field[int64]                                   `json:"rate_limiting_interval" api:"required"`
-	RateLimitingLimit       param.Field[int64]                                   `json:"rate_limiting_limit" api:"required"`
-	Authentication          param.Field[bool]                                    `json:"authentication"`
-	LogManagement           param.Field[int64]                                   `json:"log_management"`
-	LogManagementStrategy   param.Field[AIGatewayNewParamsLogManagementStrategy] `json:"log_management_strategy"`
-	Logpush                 param.Field[bool]                                    `json:"logpush"`
-	LogpushPublicKey        param.Field[string]                                  `json:"logpush_public_key"`
-	RateLimitingTechnique   param.Field[AIGatewayNewParamsRateLimitingTechnique] `json:"rate_limiting_technique"`
+	ID                      param.Field[string] `json:"id" api:"required"`
+	CacheInvalidateOnUpdate param.Field[bool]   `json:"cache_invalidate_on_update" api:"required"`
+	CacheTTL                param.Field[int64]  `json:"cache_ttl" api:"required"`
+	CollectLogs             param.Field[bool]   `json:"collect_logs" api:"required"`
+	RateLimitingInterval    param.Field[int64]  `json:"rate_limiting_interval" api:"required"`
+	RateLimitingLimit       param.Field[int64]  `json:"rate_limiting_limit" api:"required"`
+	Authentication          param.Field[bool]   `json:"authentication"`
+	// Requires customer-provided provider credentials and prevents fallback to Unified
+	// Billing.
+	ByokOnly              param.Field[bool]                                    `json:"byok_only"`
+	LogManagement         param.Field[int64]                                   `json:"log_management"`
+	LogManagementStrategy param.Field[AIGatewayNewParamsLogManagementStrategy] `json:"log_management_strategy"`
+	Logpush               param.Field[bool]                                    `json:"logpush"`
+	LogpushPublicKey      param.Field[string]                                  `json:"logpush_public_key"`
+	RateLimitingTechnique param.Field[AIGatewayNewParamsRateLimitingTechnique] `json:"rate_limiting_technique"`
 	// Backoff strategy for retry delays
 	RetryBackoff param.Field[AIGatewayNewParamsRetryBackoff] `json:"retry_backoff"`
-	// Delay between retry attempts in milliseconds (0-5000)
+	// Delay between retry attempts in milliseconds (0-60000)
 	RetryDelay param.Field[int64] `json:"retry_delay"`
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts param.Field[int64]  `json:"retry_max_attempts"`
@@ -6262,25 +6285,28 @@ func (r aiGatewayNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type AIGatewayUpdateParams struct {
-	AccountID               param.Field[string]                                     `path:"account_id" api:"required"`
-	CacheInvalidateOnUpdate param.Field[bool]                                       `json:"cache_invalidate_on_update" api:"required"`
-	CacheTTL                param.Field[int64]                                      `json:"cache_ttl" api:"required"`
-	CollectLogs             param.Field[bool]                                       `json:"collect_logs" api:"required"`
-	RateLimitingInterval    param.Field[int64]                                      `json:"rate_limiting_interval" api:"required"`
-	RateLimitingLimit       param.Field[int64]                                      `json:"rate_limiting_limit" api:"required"`
-	Authentication          param.Field[bool]                                       `json:"authentication"`
-	DLP                     param.Field[AIGatewayUpdateParamsDLPUnion]              `json:"dlp"`
-	Guardrails              param.Field[AIGatewayUpdateParamsGuardrails]            `json:"guardrails"`
-	LogClassification       param.Field[bool]                                       `json:"log_classification"`
-	LogManagement           param.Field[int64]                                      `json:"log_management"`
-	LogManagementStrategy   param.Field[AIGatewayUpdateParamsLogManagementStrategy] `json:"log_management_strategy"`
-	Logpush                 param.Field[bool]                                       `json:"logpush"`
-	LogpushPublicKey        param.Field[string]                                     `json:"logpush_public_key"`
-	Otel                    param.Field[[]AIGatewayUpdateParamsOtel]                `json:"otel"`
-	RateLimitingTechnique   param.Field[AIGatewayUpdateParamsRateLimitingTechnique] `json:"rate_limiting_technique"`
+	AccountID               param.Field[string] `path:"account_id" api:"required"`
+	CacheInvalidateOnUpdate param.Field[bool]   `json:"cache_invalidate_on_update" api:"required"`
+	CacheTTL                param.Field[int64]  `json:"cache_ttl" api:"required"`
+	CollectLogs             param.Field[bool]   `json:"collect_logs" api:"required"`
+	RateLimitingInterval    param.Field[int64]  `json:"rate_limiting_interval" api:"required"`
+	RateLimitingLimit       param.Field[int64]  `json:"rate_limiting_limit" api:"required"`
+	Authentication          param.Field[bool]   `json:"authentication"`
+	// Requires customer-provided provider credentials and prevents fallback to Unified
+	// Billing.
+	ByokOnly              param.Field[bool]                                       `json:"byok_only"`
+	DLP                   param.Field[AIGatewayUpdateParamsDLPUnion]              `json:"dlp"`
+	Guardrails            param.Field[AIGatewayUpdateParamsGuardrails]            `json:"guardrails"`
+	LogClassification     param.Field[bool]                                       `json:"log_classification"`
+	LogManagement         param.Field[int64]                                      `json:"log_management"`
+	LogManagementStrategy param.Field[AIGatewayUpdateParamsLogManagementStrategy] `json:"log_management_strategy"`
+	Logpush               param.Field[bool]                                       `json:"logpush"`
+	LogpushPublicKey      param.Field[string]                                     `json:"logpush_public_key"`
+	Otel                  param.Field[[]AIGatewayUpdateParamsOtel]                `json:"otel"`
+	RateLimitingTechnique param.Field[AIGatewayUpdateParamsRateLimitingTechnique] `json:"rate_limiting_technique"`
 	// Backoff strategy for retry delays
 	RetryBackoff param.Field[AIGatewayUpdateParamsRetryBackoff] `json:"retry_backoff"`
-	// Delay between retry attempts in milliseconds (0-5000)
+	// Delay between retry attempts in milliseconds (0-60000)
 	RetryDelay param.Field[int64] `json:"retry_delay"`
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts param.Field[int64]                            `json:"retry_max_attempts"`

@@ -203,21 +203,21 @@ type RegistrationNewResponse struct {
 	Links     RegistrationNewResponseLinks `json:"links" api:"required"`
 	// Describes the workflow lifecycle state.
 	//
-	// - `pending`: The workflow awaits processing.
-	// - `in_progress`: Processing started. Continue polling `links.self`. An internal
-	//   deadline limits the duration of this state.
-	// - `action_required`: The workflow pauses for user action. See `context.action`
-	//   for details. Stop automated polling until the user completes the required
-	//   action.
-	// - `blocked`: A third party, such as the domain extension's registry or a losing
-	//   registrar, prevents progress. Continue polling because the block may resolve
-	//   when the third party responds.
-	// - `succeeded`: Terminal state. The operation completed successfully. `completed`
-	//   equals `true`. For registrations, `context.registration` contains the
-	//   resulting registration resource.
-	// - `failed`: Terminal state. The operation failed. `completed` equals `true`. See
-	//   `error.code` and `error.message` for the reason. Require user review before
-	//   retrying.
+	//   - `pending`: The workflow awaits processing.
+	//   - `in_progress`: Processing started. Continue polling `links.self`. An internal
+	//     deadline limits the duration of this state.
+	//   - `action_required`: The workflow pauses for user action. See `context.action`
+	//     for details. Stop automated polling until the user completes the required
+	//     action.
+	//   - `blocked`: A third party, such as the domain extension's registry or a losing
+	//     registrar, prevents progress. Continue polling because the block may resolve
+	//     when the third party responds.
+	//   - `succeeded`: Terminal state. The operation completed successfully. `completed`
+	//     equals `true`. For registrations, `context.registration` contains the
+	//     resulting registration resource.
+	//   - `failed`: Terminal state. The operation failed. `completed` equals `true`. See
+	//     `error.code` and `error.message` for the reason. Require user review before
+	//     retrying.
 	State     RegistrationNewResponseState `json:"state" api:"required"`
 	UpdatedAt time.Time                    `json:"updated_at" api:"required" format:"date-time"`
 	// Provides workflow-specific data.
@@ -361,7 +361,7 @@ type RegistrationListResponse struct {
 	// domain name a natural idempotency key for registration requests.
 	DomainName string `json:"domain_name" api:"required"`
 	// When the domain registration expires. Ready registrations include this value;
-	// only `registration_pending` may return null.
+	// only `registration_pending` and `transfer_pending` may return null.
 	ExpiresAt time.Time `json:"expires_at" api:"required,nullable" format:"date-time"`
 	// Whether the domain is locked for transfer.
 	Locked bool `json:"locked" api:"required"`
@@ -371,6 +371,7 @@ type RegistrationListResponse struct {
 	//
 	// - `active`: The domain operates with an active registration.
 	// - `registration_pending`: Registration remains in progress.
+	// - `transfer_pending`: Domain transfer is in progress.
 	// - `expired`: The domain registration expired.
 	// - `suspended`: The registry suspended the domain.
 	// - `redemption_period`: The domain entered the redemption grace period.
@@ -421,6 +422,7 @@ func (r RegistrationListResponsePrivacyMode) IsKnown() bool {
 //
 // - `active`: The domain operates with an active registration.
 // - `registration_pending`: Registration remains in progress.
+// - `transfer_pending`: Domain transfer is in progress.
 // - `expired`: The domain registration expired.
 // - `suspended`: The registry suspended the domain.
 // - `redemption_period`: The domain entered the redemption grace period.
@@ -430,6 +432,7 @@ type RegistrationListResponseStatus string
 const (
 	RegistrationListResponseStatusActive              RegistrationListResponseStatus = "active"
 	RegistrationListResponseStatusRegistrationPending RegistrationListResponseStatus = "registration_pending"
+	RegistrationListResponseStatusTransferPending     RegistrationListResponseStatus = "transfer_pending"
 	RegistrationListResponseStatusExpired             RegistrationListResponseStatus = "expired"
 	RegistrationListResponseStatusSuspended           RegistrationListResponseStatus = "suspended"
 	RegistrationListResponseStatusRedemptionPeriod    RegistrationListResponseStatus = "redemption_period"
@@ -438,7 +441,7 @@ const (
 
 func (r RegistrationListResponseStatus) IsKnown() bool {
 	switch r {
-	case RegistrationListResponseStatusActive, RegistrationListResponseStatusRegistrationPending, RegistrationListResponseStatusExpired, RegistrationListResponseStatusSuspended, RegistrationListResponseStatusRedemptionPeriod, RegistrationListResponseStatusPendingDelete:
+	case RegistrationListResponseStatusActive, RegistrationListResponseStatusRegistrationPending, RegistrationListResponseStatusTransferPending, RegistrationListResponseStatusExpired, RegistrationListResponseStatusSuspended, RegistrationListResponseStatusRedemptionPeriod, RegistrationListResponseStatusPendingDelete:
 		return true
 	}
 	return false
@@ -454,21 +457,21 @@ type RegistrationEditResponse struct {
 	Links     RegistrationEditResponseLinks `json:"links" api:"required"`
 	// Describes the workflow lifecycle state.
 	//
-	// - `pending`: The workflow awaits processing.
-	// - `in_progress`: Processing started. Continue polling `links.self`. An internal
-	//   deadline limits the duration of this state.
-	// - `action_required`: The workflow pauses for user action. See `context.action`
-	//   for details. Stop automated polling until the user completes the required
-	//   action.
-	// - `blocked`: A third party, such as the domain extension's registry or a losing
-	//   registrar, prevents progress. Continue polling because the block may resolve
-	//   when the third party responds.
-	// - `succeeded`: Terminal state. The operation completed successfully. `completed`
-	//   equals `true`. For registrations, `context.registration` contains the
-	//   resulting registration resource.
-	// - `failed`: Terminal state. The operation failed. `completed` equals `true`. See
-	//   `error.code` and `error.message` for the reason. Require user review before
-	//   retrying.
+	//   - `pending`: The workflow awaits processing.
+	//   - `in_progress`: Processing started. Continue polling `links.self`. An internal
+	//     deadline limits the duration of this state.
+	//   - `action_required`: The workflow pauses for user action. See `context.action`
+	//     for details. Stop automated polling until the user completes the required
+	//     action.
+	//   - `blocked`: A third party, such as the domain extension's registry or a losing
+	//     registrar, prevents progress. Continue polling because the block may resolve
+	//     when the third party responds.
+	//   - `succeeded`: Terminal state. The operation completed successfully. `completed`
+	//     equals `true`. For registrations, `context.registration` contains the
+	//     resulting registration resource.
+	//   - `failed`: Terminal state. The operation failed. `completed` equals `true`. See
+	//     `error.code` and `error.message` for the reason. Require user review before
+	//     retrying.
 	State     RegistrationEditResponseState `json:"state" api:"required"`
 	UpdatedAt time.Time                     `json:"updated_at" api:"required" format:"date-time"`
 	// Provides workflow-specific data.
@@ -612,7 +615,7 @@ type RegistrationGetResponse struct {
 	// domain name a natural idempotency key for registration requests.
 	DomainName string `json:"domain_name" api:"required"`
 	// When the domain registration expires. Ready registrations include this value;
-	// only `registration_pending` may return null.
+	// only `registration_pending` and `transfer_pending` may return null.
 	ExpiresAt time.Time `json:"expires_at" api:"required,nullable" format:"date-time"`
 	// Whether the domain is locked for transfer.
 	Locked bool `json:"locked" api:"required"`
@@ -622,6 +625,7 @@ type RegistrationGetResponse struct {
 	//
 	// - `active`: The domain operates with an active registration.
 	// - `registration_pending`: Registration remains in progress.
+	// - `transfer_pending`: Domain transfer is in progress.
 	// - `expired`: The domain registration expired.
 	// - `suspended`: The registry suspended the domain.
 	// - `redemption_period`: The domain entered the redemption grace period.
@@ -672,6 +676,7 @@ func (r RegistrationGetResponsePrivacyMode) IsKnown() bool {
 //
 // - `active`: The domain operates with an active registration.
 // - `registration_pending`: Registration remains in progress.
+// - `transfer_pending`: Domain transfer is in progress.
 // - `expired`: The domain registration expired.
 // - `suspended`: The registry suspended the domain.
 // - `redemption_period`: The domain entered the redemption grace period.
@@ -681,6 +686,7 @@ type RegistrationGetResponseStatus string
 const (
 	RegistrationGetResponseStatusActive              RegistrationGetResponseStatus = "active"
 	RegistrationGetResponseStatusRegistrationPending RegistrationGetResponseStatus = "registration_pending"
+	RegistrationGetResponseStatusTransferPending     RegistrationGetResponseStatus = "transfer_pending"
 	RegistrationGetResponseStatusExpired             RegistrationGetResponseStatus = "expired"
 	RegistrationGetResponseStatusSuspended           RegistrationGetResponseStatus = "suspended"
 	RegistrationGetResponseStatusRedemptionPeriod    RegistrationGetResponseStatus = "redemption_period"
@@ -689,7 +695,7 @@ const (
 
 func (r RegistrationGetResponseStatus) IsKnown() bool {
 	switch r {
-	case RegistrationGetResponseStatusActive, RegistrationGetResponseStatusRegistrationPending, RegistrationGetResponseStatusExpired, RegistrationGetResponseStatusSuspended, RegistrationGetResponseStatusRedemptionPeriod, RegistrationGetResponseStatusPendingDelete:
+	case RegistrationGetResponseStatusActive, RegistrationGetResponseStatusRegistrationPending, RegistrationGetResponseStatusTransferPending, RegistrationGetResponseStatusExpired, RegistrationGetResponseStatusSuspended, RegistrationGetResponseStatusRedemptionPeriod, RegistrationGetResponseStatusPendingDelete:
 		return true
 	}
 	return false
@@ -745,9 +751,9 @@ type RegistrationNewParams struct {
 	Contacts param.Field[RegistrationNewParamsContacts] `json:"contacts"`
 	// Sets the WHOIS privacy mode for the registration. Defaults to `redaction`.
 	//
-	// - `off`: Disables WHOIS privacy.
-	// - `redaction`: Requests WHOIS redaction where the extension supports it. Some
-	//   extensions exclude privacy and redaction.
+	//   - `off`: Disables WHOIS privacy.
+	//   - `redaction`: Requests WHOIS redaction where the extension supports it. Some
+	//     extensions exclude privacy and redaction.
 	PrivacyMode param.Field[RegistrationNewParamsPrivacyMode] `json:"privacy_mode"`
 	// Sets the registration term from 1 to 10 years. When omitted, this field defaults
 	// to the registry's minimum registration period for the extension. Most extensions

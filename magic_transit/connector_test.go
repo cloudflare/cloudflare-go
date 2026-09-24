@@ -42,8 +42,6 @@ func TestConnectorNewWithOptionalParams(t *testing.T) {
 		InterruptWindowEmbargoDates:  cloudflare.F([]string{"string"}),
 		InterruptWindowHourOfDay:     cloudflare.F(0.000000),
 		Notes:                        cloudflare.F("notes"),
-		Primary:                      cloudflare.F(true),
-		SiteID:                       cloudflare.F("site_id"),
 		Timezone:                     cloudflare.F("timezone"),
 	})
 	if err != nil {
@@ -80,9 +78,7 @@ func TestConnectorUpdateWithOptionalParams(t *testing.T) {
 			InterruptWindowEmbargoDates:  cloudflare.F([]string{"string"}),
 			InterruptWindowHourOfDay:     cloudflare.F(0.000000),
 			Notes:                        cloudflare.F("notes"),
-			Primary:                      cloudflare.F(true),
 			ProvisionLicense:             cloudflare.F(true),
-			SiteID:                       cloudflare.F("site_id"),
 			Timezone:                     cloudflare.F("timezone"),
 		},
 	)
@@ -177,9 +173,7 @@ func TestConnectorEditWithOptionalParams(t *testing.T) {
 			InterruptWindowEmbargoDates:  cloudflare.F([]string{"string"}),
 			InterruptWindowHourOfDay:     cloudflare.F(0.000000),
 			Notes:                        cloudflare.F("notes"),
-			Primary:                      cloudflare.F(true),
 			ProvisionLicense:             cloudflare.F(true),
-			SiteID:                       cloudflare.F("site_id"),
 			Timezone:                     cloudflare.F("timezone"),
 		},
 	)

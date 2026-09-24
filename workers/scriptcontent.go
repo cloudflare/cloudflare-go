@@ -38,7 +38,7 @@ func NewScriptContentService(opts ...option.RequestOption) (r *ScriptContentServ
 	return
 }
 
-// Put script content without touching config or metadata.
+// Replace Worker script content without touching config or metadata.
 func (r *ScriptContentService) Update(ctx context.Context, scriptName string, params ScriptContentUpdateParams, opts ...option.RequestOption) (res *Script, err error) {
 	var env ScriptContentUpdateResponseEnvelope
 	if params.CfWorkerBodyPart.Present {
@@ -65,7 +65,7 @@ func (r *ScriptContentService) Update(ctx context.Context, scriptName string, pa
 	return res, nil
 }
 
-// Fetch script content only.
+// Fetch Worker script content only.
 func (r *ScriptContentService) Get(ctx context.Context, scriptName string, query ScriptContentGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "string")}, opts...)

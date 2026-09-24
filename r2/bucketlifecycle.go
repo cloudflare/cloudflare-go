@@ -41,8 +41,8 @@ func NewBucketLifecycleService(opts ...option.RequestOption) (r *BucketLifecycle
 // Set the object lifecycle rules for a bucket.
 func (r *BucketLifecycleService) Update(ctx context.Context, bucketName string, params BucketLifecycleUpdateParams, opts ...option.RequestOption) (res *BucketLifecycleUpdateResponse, err error) {
 	var env BucketLifecycleUpdateResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -65,8 +65,8 @@ func (r *BucketLifecycleService) Update(ctx context.Context, bucketName string, 
 // Get object lifecycle rules for a bucket.
 func (r *BucketLifecycleService) Get(ctx context.Context, bucketName string, params BucketLifecycleGetParams, opts ...option.RequestOption) (res *BucketLifecycleGetResponse, err error) {
 	var env BucketLifecycleGetResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -643,10 +643,9 @@ func (r BucketLifecycleGetResponseRulesStorageClassTransitionsStorageClass) IsKn
 
 type BucketLifecycleUpdateParams struct {
 	// Account ID.
-	AccountID param.Field[string]                            `path:"account_id" api:"required"`
-	Rules     param.Field[[]BucketLifecycleUpdateParamsRule] `json:"rules"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketLifecycleUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	AccountID        param.Field[string]                                      `path:"account_id" api:"required"`
+	Rules            param.Field[[]BucketLifecycleUpdateParamsRule]           `json:"rules"`
+	CfR2Jurisdiction param.Field[BucketLifecycleUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 func (r BucketLifecycleUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -948,19 +947,19 @@ func (r BucketLifecycleUpdateParamsRulesStorageClassTransitionsStorageClass) IsK
 	return false
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketLifecycleUpdateParamsCfR2Jurisdiction string
 
 const (
-	BucketLifecycleUpdateParamsCfR2JurisdictionDefault BucketLifecycleUpdateParamsCfR2Jurisdiction = "default"
-	BucketLifecycleUpdateParamsCfR2JurisdictionEu      BucketLifecycleUpdateParamsCfR2Jurisdiction = "eu"
-	BucketLifecycleUpdateParamsCfR2JurisdictionUs      BucketLifecycleUpdateParamsCfR2Jurisdiction = "us"
-	BucketLifecycleUpdateParamsCfR2JurisdictionFedramp BucketLifecycleUpdateParamsCfR2Jurisdiction = "fedramp"
+	BucketLifecycleUpdateParamsCfR2JurisdictionDefault     BucketLifecycleUpdateParamsCfR2Jurisdiction = "default"
+	BucketLifecycleUpdateParamsCfR2JurisdictionEu          BucketLifecycleUpdateParamsCfR2Jurisdiction = "eu"
+	BucketLifecycleUpdateParamsCfR2JurisdictionUs          BucketLifecycleUpdateParamsCfR2Jurisdiction = "us"
+	BucketLifecycleUpdateParamsCfR2JurisdictionFedramp     BucketLifecycleUpdateParamsCfR2Jurisdiction = "fedramp"
+	BucketLifecycleUpdateParamsCfR2JurisdictionFedrampHigh BucketLifecycleUpdateParamsCfR2Jurisdiction = "fedramp-high"
 )
 
 func (r BucketLifecycleUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketLifecycleUpdateParamsCfR2JurisdictionDefault, BucketLifecycleUpdateParamsCfR2JurisdictionEu, BucketLifecycleUpdateParamsCfR2JurisdictionUs, BucketLifecycleUpdateParamsCfR2JurisdictionFedramp:
+	case BucketLifecycleUpdateParamsCfR2JurisdictionDefault, BucketLifecycleUpdateParamsCfR2JurisdictionEu, BucketLifecycleUpdateParamsCfR2JurisdictionUs, BucketLifecycleUpdateParamsCfR2JurisdictionFedramp, BucketLifecycleUpdateParamsCfR2JurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -1011,24 +1010,23 @@ func (r BucketLifecycleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketLifecycleGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketLifecycleGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	AccountID        param.Field[string]                                   `path:"account_id" api:"required"`
+	CfR2Jurisdiction param.Field[BucketLifecycleGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketLifecycleGetParamsCfR2Jurisdiction string
 
 const (
-	BucketLifecycleGetParamsCfR2JurisdictionDefault BucketLifecycleGetParamsCfR2Jurisdiction = "default"
-	BucketLifecycleGetParamsCfR2JurisdictionEu      BucketLifecycleGetParamsCfR2Jurisdiction = "eu"
-	BucketLifecycleGetParamsCfR2JurisdictionUs      BucketLifecycleGetParamsCfR2Jurisdiction = "us"
-	BucketLifecycleGetParamsCfR2JurisdictionFedramp BucketLifecycleGetParamsCfR2Jurisdiction = "fedramp"
+	BucketLifecycleGetParamsCfR2JurisdictionDefault     BucketLifecycleGetParamsCfR2Jurisdiction = "default"
+	BucketLifecycleGetParamsCfR2JurisdictionEu          BucketLifecycleGetParamsCfR2Jurisdiction = "eu"
+	BucketLifecycleGetParamsCfR2JurisdictionUs          BucketLifecycleGetParamsCfR2Jurisdiction = "us"
+	BucketLifecycleGetParamsCfR2JurisdictionFedramp     BucketLifecycleGetParamsCfR2Jurisdiction = "fedramp"
+	BucketLifecycleGetParamsCfR2JurisdictionFedrampHigh BucketLifecycleGetParamsCfR2Jurisdiction = "fedramp-high"
 )
 
 func (r BucketLifecycleGetParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketLifecycleGetParamsCfR2JurisdictionDefault, BucketLifecycleGetParamsCfR2JurisdictionEu, BucketLifecycleGetParamsCfR2JurisdictionUs, BucketLifecycleGetParamsCfR2JurisdictionFedramp:
+	case BucketLifecycleGetParamsCfR2JurisdictionDefault, BucketLifecycleGetParamsCfR2JurisdictionEu, BucketLifecycleGetParamsCfR2JurisdictionUs, BucketLifecycleGetParamsCfR2JurisdictionFedramp, BucketLifecycleGetParamsCfR2JurisdictionFedrampHigh:
 		return true
 	}
 	return false

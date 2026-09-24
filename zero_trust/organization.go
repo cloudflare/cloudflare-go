@@ -101,7 +101,7 @@ func (r *OrganizationService) Update(ctx context.Context, params OrganizationUpd
 }
 
 // Returns the configuration for your Zero Trust organization.
-func (r *OrganizationService) List(ctx context.Context, query OrganizationListParams, opts ...option.RequestOption) (res *Organization, err error) {
+func (r *OrganizationService) List(ctx context.Context, query OrganizationListParams, opts ...option.RequestOption) (res *OrganizationListResponse, err error) {
 	var env OrganizationListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	var accountOrZone string
@@ -249,6 +249,11 @@ type Organization struct {
 	MfaRequiredForAllApps bool `json:"mfa_required_for_all_apps"`
 	// The name of your Zero Trust organization.
 	Name string `json:"name"`
+	// Configures automatic enforcement for inactive service tokens. A service token is
+	// inactive if no policy references it, and it has not successfully authenticated
+	// with an Access application during the selected inactivity period. This setting
+	// applies to every service token in your Zero Trust account.
+	ServiceTokenInactivity OrganizationServiceTokenInactivity `json:"service_token_inactivity"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
 	// h.
@@ -284,6 +289,7 @@ type organizationJSON struct {
 	MfaPivKeyRequirements                  apijson.Field
 	MfaRequiredForAllApps                  apijson.Field
 	Name                                   apijson.Field
+	ServiceTokenInactivity                 apijson.Field
 	SessionDuration                        apijson.Field
 	UIReadOnlyToggleReason                 apijson.Field
 	UserSeatExpirationInactiveTime         apijson.Field
@@ -497,6 +503,400 @@ func (r OrganizationMfaPivKeyRequirementsTouchPolicy) IsKnown() bool {
 	return false
 }
 
+// Configures automatic enforcement for inactive service tokens. A service token is
+// inactive if no policy references it, and it has not successfully authenticated
+// with an Access application during the selected inactivity period. This setting
+// applies to every service token in your Zero Trust account.
+type OrganizationServiceTokenInactivity struct {
+	// The action applied to an inactive service token.
+	Action OrganizationServiceTokenInactivityAction `json:"action" api:"required"`
+	// Whether automatic enforcement for inactive service tokens is enabled.
+	Enabled bool `json:"enabled" api:"required"`
+	// The number of days a service token must be inactive before the configured action
+	// is applied.
+	InactivityThresholdDays int64                                  `json:"inactivity_threshold_days" api:"required"`
+	JSON                    organizationServiceTokenInactivityJSON `json:"-"`
+}
+
+// organizationServiceTokenInactivityJSON contains the JSON metadata for the struct
+// [OrganizationServiceTokenInactivity]
+type organizationServiceTokenInactivityJSON struct {
+	Action                  apijson.Field
+	Enabled                 apijson.Field
+	InactivityThresholdDays apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *OrganizationServiceTokenInactivity) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r organizationServiceTokenInactivityJSON) RawJSON() string {
+	return r.raw
+}
+
+// The action applied to an inactive service token.
+type OrganizationServiceTokenInactivityAction string
+
+const (
+	OrganizationServiceTokenInactivityActionDisable OrganizationServiceTokenInactivityAction = "disable"
+	OrganizationServiceTokenInactivityActionDelete  OrganizationServiceTokenInactivityAction = "delete"
+)
+
+func (r OrganizationServiceTokenInactivityAction) IsKnown() bool {
+	switch r {
+	case OrganizationServiceTokenInactivityActionDisable, OrganizationServiceTokenInactivityActionDelete:
+		return true
+	}
+	return false
+}
+
+type OrganizationListResponse struct {
+	// When set to true, users can authenticate via WARP for any application in your
+	// organization. Application settings will take precedence over this value.
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// The unique subdomain assigned to your Zero Trust organization.
+	AuthDomain string `json:"auth_domain"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login.
+	AutoRedirectToIdentity bool                                `json:"auto_redirect_to_identity"`
+	CustomPages            OrganizationListResponseCustomPages `json:"custom_pages"`
+	// Determines whether to deny all requests to Cloudflare-protected resources that
+	// lack an associated Access application. If enabled, you must explicitly configure
+	// an Access application and policy to allow traffic to your Cloudflare-protected
+	// resources. For domains you want to be public across all subdomains, add the
+	// domain to the `deny_unmatched_requests_exempted_zone_names` array.
+	DenyUnmatchedRequests bool `json:"deny_unmatched_requests"`
+	// Contains zone names to exempt from the `deny_unmatched_requests` feature.
+	// Requests to a subdomain in an exempted zone will block unauthenticated traffic
+	// by default if there is a configured Access application and policy that matches
+	// the request.
+	DenyUnmatchedRequestsExemptedZoneNames []string `json:"deny_unmatched_requests_exempted_zone_names"`
+	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
+	// Updates may only be made via the API or Terraform for this account when enabled.
+	IsUIReadOnly bool        `json:"is_ui_read_only"`
+	LoginDesign  LoginDesign `json:"login_design"`
+	// Configures multi-factor authentication (MFA) settings for an organization.
+	MfaConfig OrganizationListResponseMfaConfig `json:"mfa_config"`
+	// Configures PIV key requirements for MFA using hardware security keys.
+	MfaPivKeyRequirements OrganizationListResponseMfaPivKeyRequirements `json:"mfa_piv_key_requirements"`
+	// Determines whether global MFA settings apply to applications by default. The
+	// organization must have MFA enabled with at least one authentication method and a
+	// session duration configured. Note: 'allowed_authenticators' cannot contain only
+	// the infrastructure SSH authenticators ('piv_key' and 'ssh_fido2_key') if the
+	// organization has any non-infrastructure applications.
+	MfaRequiredForAllApps bool `json:"mfa_required_for_all_apps"`
+	// The name of your Zero Trust organization.
+	Name string `json:"name"`
+	// Configures automatic enforcement for inactive service tokens. A service token is
+	// inactive if no policy references it, and it has not successfully authenticated
+	// with an Access application during the selected inactivity period. This setting
+	// applies to every service token in your Zero Trust account.
+	ServiceTokenInactivity OrganizationListResponseServiceTokenInactivity `json:"service_token_inactivity"`
+	// The amount of time that tokens issued for applications will be valid. Must be in
+	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
+	// h.
+	SessionDuration string `json:"session_duration"`
+	// The account tags of organizations trusted by this organization for policy and
+	// device posture sharing.
+	TrustedAccounts []string `json:"trusted_accounts"`
+	// A description of the reason why the UI read only field is being toggled.
+	UIReadOnlyToggleReason string `json:"ui_read_only_toggle_reason"`
+	// The amount of time a user seat is inactive before it expires. When the user seat
+	// exceeds the set time of inactivity, the user is removed as an active seat and no
+	// longer counts against your Teams seat count. Minimum value for this setting is 1
+	// month (730h). Must be in the format `300ms` or `2h45m`. Valid time units are:
+	// `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
+	UserSeatExpirationInactiveTime string `json:"user_seat_expiration_inactive_time"`
+	// When enabled, unsuccessful WARP authentication requests with a non-HTML Accept
+	// header return a 401 response instead of redirecting to the login page.
+	WARPAuthNonBrowser401 bool `json:"warp_auth_non_browser_401"`
+	// The amount of time that tokens issued for applications will be valid. Must be in
+	// the format `30m` or `2h45m`. Valid time units are: m, h.
+	WARPAuthSessionDuration string                       `json:"warp_auth_session_duration"`
+	JSON                    organizationListResponseJSON `json:"-"`
+}
+
+// organizationListResponseJSON contains the JSON metadata for the struct
+// [OrganizationListResponse]
+type organizationListResponseJSON struct {
+	AllowAuthenticateViaWARP               apijson.Field
+	AuthDomain                             apijson.Field
+	AutoRedirectToIdentity                 apijson.Field
+	CustomPages                            apijson.Field
+	DenyUnmatchedRequests                  apijson.Field
+	DenyUnmatchedRequestsExemptedZoneNames apijson.Field
+	IsUIReadOnly                           apijson.Field
+	LoginDesign                            apijson.Field
+	MfaConfig                              apijson.Field
+	MfaPivKeyRequirements                  apijson.Field
+	MfaRequiredForAllApps                  apijson.Field
+	Name                                   apijson.Field
+	ServiceTokenInactivity                 apijson.Field
+	SessionDuration                        apijson.Field
+	TrustedAccounts                        apijson.Field
+	UIReadOnlyToggleReason                 apijson.Field
+	UserSeatExpirationInactiveTime         apijson.Field
+	WARPAuthNonBrowser401                  apijson.Field
+	WARPAuthSessionDuration                apijson.Field
+	raw                                    string
+	ExtraFields                            map[string]apijson.Field
+}
+
+func (r *OrganizationListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r organizationListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type OrganizationListResponseCustomPages struct {
+	// The uid of the custom page to use when a user is denied access after failing a
+	// non-identity rule.
+	Forbidden string `json:"forbidden"`
+	// The uid of the custom page to use when a user is denied access.
+	IdentityDenied string                                  `json:"identity_denied"`
+	JSON           organizationListResponseCustomPagesJSON `json:"-"`
+}
+
+// organizationListResponseCustomPagesJSON contains the JSON metadata for the
+// struct [OrganizationListResponseCustomPages]
+type organizationListResponseCustomPagesJSON struct {
+	Forbidden      apijson.Field
+	IdentityDenied apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *OrganizationListResponseCustomPages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r organizationListResponseCustomPagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Configures multi-factor authentication (MFA) settings for an organization.
+type OrganizationListResponseMfaConfig struct {
+	// Lists the MFA methods that users can authenticate with. The `piv_key` and
+	// `ssh_fido2_key` values are supported only for infrastructure applications.
+	AllowedAuthenticators []OrganizationListResponseMfaConfigAllowedAuthenticator `json:"allowed_authenticators"`
+	// Allows a user to skip MFA via Authentication Method Reference (AMR) matching
+	// when the AMR claim provided by the IdP the user used to authenticate contains
+	// "mfa". Must be in minutes (m) or hours (h). Minimum: 0m. Maximum: 720h (30
+	// days).
+	AmrMatchingSessionDuration string `json:"amr_matching_session_duration"`
+	// Specifies a Cloudflare List of required FIDO2 authenticator device AAGUIDs.
+	RequiredAaguids string `json:"required_aaguids" format:"uuid"`
+	// Defines the duration of an MFA session. Must be in minutes (m) or hours (h).
+	// Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.
+	SessionDuration string                                `json:"session_duration"`
+	JSON            organizationListResponseMfaConfigJSON `json:"-"`
+}
+
+// organizationListResponseMfaConfigJSON contains the JSON metadata for the struct
+// [OrganizationListResponseMfaConfig]
+type organizationListResponseMfaConfigJSON struct {
+	AllowedAuthenticators      apijson.Field
+	AmrMatchingSessionDuration apijson.Field
+	RequiredAaguids            apijson.Field
+	SessionDuration            apijson.Field
+	raw                        string
+	ExtraFields                map[string]apijson.Field
+}
+
+func (r *OrganizationListResponseMfaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r organizationListResponseMfaConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type OrganizationListResponseMfaConfigAllowedAuthenticator string
+
+const (
+	OrganizationListResponseMfaConfigAllowedAuthenticatorTotp        OrganizationListResponseMfaConfigAllowedAuthenticator = "totp"
+	OrganizationListResponseMfaConfigAllowedAuthenticatorBiometrics  OrganizationListResponseMfaConfigAllowedAuthenticator = "biometrics"
+	OrganizationListResponseMfaConfigAllowedAuthenticatorSecurityKey OrganizationListResponseMfaConfigAllowedAuthenticator = "security_key"
+	OrganizationListResponseMfaConfigAllowedAuthenticatorPivKey      OrganizationListResponseMfaConfigAllowedAuthenticator = "piv_key"
+	OrganizationListResponseMfaConfigAllowedAuthenticatorSSHFido2Key OrganizationListResponseMfaConfigAllowedAuthenticator = "ssh_fido2_key"
+)
+
+func (r OrganizationListResponseMfaConfigAllowedAuthenticator) IsKnown() bool {
+	switch r {
+	case OrganizationListResponseMfaConfigAllowedAuthenticatorTotp, OrganizationListResponseMfaConfigAllowedAuthenticatorBiometrics, OrganizationListResponseMfaConfigAllowedAuthenticatorSecurityKey, OrganizationListResponseMfaConfigAllowedAuthenticatorPivKey, OrganizationListResponseMfaConfigAllowedAuthenticatorSSHFido2Key:
+		return true
+	}
+	return false
+}
+
+// Configures PIV key requirements for MFA using hardware security keys.
+type OrganizationListResponseMfaPivKeyRequirements struct {
+	// Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
+	// required), `once` (PIN required once per session), `always` (PIN required for
+	// each use).
+	PinPolicy OrganizationListResponseMfaPivKeyRequirementsPinPolicy `json:"pin_policy"`
+	// Requires the PIV key to be stored on a FIPS 140-2 Level 1 or higher validated
+	// device.
+	RequireFipsDevice bool `json:"require_fips_device"`
+	// Specifies the allowed SSH key sizes in bits. Valid sizes depend on key type.
+	// Ed25519 has a fixed key size and does not accept this parameter.
+	SSHKeySize []OrganizationListResponseMfaPivKeyRequirementsSSHKeySize `json:"ssh_key_size"`
+	// Specifies the allowed SSH key types. Valid values are `ecdsa`, `ed25519`, and
+	// `rsa`.
+	SSHKeyType []OrganizationListResponseMfaPivKeyRequirementsSSHKeyType `json:"ssh_key_type"`
+	// Defines when physical touch is required to use the SSH key. Valid values:
+	// `never` (no touch required), `always` (touch required for each use), `cached`
+	// (touch cached for 15 seconds).
+	TouchPolicy OrganizationListResponseMfaPivKeyRequirementsTouchPolicy `json:"touch_policy"`
+	JSON        organizationListResponseMfaPivKeyRequirementsJSON        `json:"-"`
+}
+
+// organizationListResponseMfaPivKeyRequirementsJSON contains the JSON metadata for
+// the struct [OrganizationListResponseMfaPivKeyRequirements]
+type organizationListResponseMfaPivKeyRequirementsJSON struct {
+	PinPolicy         apijson.Field
+	RequireFipsDevice apijson.Field
+	SSHKeySize        apijson.Field
+	SSHKeyType        apijson.Field
+	TouchPolicy       apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *OrganizationListResponseMfaPivKeyRequirements) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r organizationListResponseMfaPivKeyRequirementsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Defines when a PIN is required to use the SSH key. Valid values: `never` (no PIN
+// required), `once` (PIN required once per session), `always` (PIN required for
+// each use).
+type OrganizationListResponseMfaPivKeyRequirementsPinPolicy string
+
+const (
+	OrganizationListResponseMfaPivKeyRequirementsPinPolicyNever  OrganizationListResponseMfaPivKeyRequirementsPinPolicy = "never"
+	OrganizationListResponseMfaPivKeyRequirementsPinPolicyOnce   OrganizationListResponseMfaPivKeyRequirementsPinPolicy = "once"
+	OrganizationListResponseMfaPivKeyRequirementsPinPolicyAlways OrganizationListResponseMfaPivKeyRequirementsPinPolicy = "always"
+)
+
+func (r OrganizationListResponseMfaPivKeyRequirementsPinPolicy) IsKnown() bool {
+	switch r {
+	case OrganizationListResponseMfaPivKeyRequirementsPinPolicyNever, OrganizationListResponseMfaPivKeyRequirementsPinPolicyOnce, OrganizationListResponseMfaPivKeyRequirementsPinPolicyAlways:
+		return true
+	}
+	return false
+}
+
+type OrganizationListResponseMfaPivKeyRequirementsSSHKeySize int64
+
+const (
+	OrganizationListResponseMfaPivKeyRequirementsSSHKeySize256  OrganizationListResponseMfaPivKeyRequirementsSSHKeySize = 256
+	OrganizationListResponseMfaPivKeyRequirementsSSHKeySize384  OrganizationListResponseMfaPivKeyRequirementsSSHKeySize = 384
+	OrganizationListResponseMfaPivKeyRequirementsSSHKeySize521  OrganizationListResponseMfaPivKeyRequirementsSSHKeySize = 521
+	OrganizationListResponseMfaPivKeyRequirementsSSHKeySize2048 OrganizationListResponseMfaPivKeyRequirementsSSHKeySize = 2048
+	OrganizationListResponseMfaPivKeyRequirementsSSHKeySize3072 OrganizationListResponseMfaPivKeyRequirementsSSHKeySize = 3072
+	OrganizationListResponseMfaPivKeyRequirementsSSHKeySize4096 OrganizationListResponseMfaPivKeyRequirementsSSHKeySize = 4096
+)
+
+func (r OrganizationListResponseMfaPivKeyRequirementsSSHKeySize) IsKnown() bool {
+	switch r {
+	case OrganizationListResponseMfaPivKeyRequirementsSSHKeySize256, OrganizationListResponseMfaPivKeyRequirementsSSHKeySize384, OrganizationListResponseMfaPivKeyRequirementsSSHKeySize521, OrganizationListResponseMfaPivKeyRequirementsSSHKeySize2048, OrganizationListResponseMfaPivKeyRequirementsSSHKeySize3072, OrganizationListResponseMfaPivKeyRequirementsSSHKeySize4096:
+		return true
+	}
+	return false
+}
+
+type OrganizationListResponseMfaPivKeyRequirementsSSHKeyType string
+
+const (
+	OrganizationListResponseMfaPivKeyRequirementsSSHKeyTypeEcdsa   OrganizationListResponseMfaPivKeyRequirementsSSHKeyType = "ecdsa"
+	OrganizationListResponseMfaPivKeyRequirementsSSHKeyTypeEd25519 OrganizationListResponseMfaPivKeyRequirementsSSHKeyType = "ed25519"
+	OrganizationListResponseMfaPivKeyRequirementsSSHKeyTypeRSA     OrganizationListResponseMfaPivKeyRequirementsSSHKeyType = "rsa"
+)
+
+func (r OrganizationListResponseMfaPivKeyRequirementsSSHKeyType) IsKnown() bool {
+	switch r {
+	case OrganizationListResponseMfaPivKeyRequirementsSSHKeyTypeEcdsa, OrganizationListResponseMfaPivKeyRequirementsSSHKeyTypeEd25519, OrganizationListResponseMfaPivKeyRequirementsSSHKeyTypeRSA:
+		return true
+	}
+	return false
+}
+
+// Defines when physical touch is required to use the SSH key. Valid values:
+// `never` (no touch required), `always` (touch required for each use), `cached`
+// (touch cached for 15 seconds).
+type OrganizationListResponseMfaPivKeyRequirementsTouchPolicy string
+
+const (
+	OrganizationListResponseMfaPivKeyRequirementsTouchPolicyNever  OrganizationListResponseMfaPivKeyRequirementsTouchPolicy = "never"
+	OrganizationListResponseMfaPivKeyRequirementsTouchPolicyAlways OrganizationListResponseMfaPivKeyRequirementsTouchPolicy = "always"
+	OrganizationListResponseMfaPivKeyRequirementsTouchPolicyCached OrganizationListResponseMfaPivKeyRequirementsTouchPolicy = "cached"
+)
+
+func (r OrganizationListResponseMfaPivKeyRequirementsTouchPolicy) IsKnown() bool {
+	switch r {
+	case OrganizationListResponseMfaPivKeyRequirementsTouchPolicyNever, OrganizationListResponseMfaPivKeyRequirementsTouchPolicyAlways, OrganizationListResponseMfaPivKeyRequirementsTouchPolicyCached:
+		return true
+	}
+	return false
+}
+
+// Configures automatic enforcement for inactive service tokens. A service token is
+// inactive if no policy references it, and it has not successfully authenticated
+// with an Access application during the selected inactivity period. This setting
+// applies to every service token in your Zero Trust account.
+type OrganizationListResponseServiceTokenInactivity struct {
+	// The action applied to an inactive service token.
+	Action OrganizationListResponseServiceTokenInactivityAction `json:"action" api:"required"`
+	// Whether automatic enforcement for inactive service tokens is enabled.
+	Enabled bool `json:"enabled" api:"required"`
+	// The number of days a service token must be inactive before the configured action
+	// is applied.
+	InactivityThresholdDays int64                                              `json:"inactivity_threshold_days" api:"required"`
+	JSON                    organizationListResponseServiceTokenInactivityJSON `json:"-"`
+}
+
+// organizationListResponseServiceTokenInactivityJSON contains the JSON metadata
+// for the struct [OrganizationListResponseServiceTokenInactivity]
+type organizationListResponseServiceTokenInactivityJSON struct {
+	Action                  apijson.Field
+	Enabled                 apijson.Field
+	InactivityThresholdDays apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *OrganizationListResponseServiceTokenInactivity) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r organizationListResponseServiceTokenInactivityJSON) RawJSON() string {
+	return r.raw
+}
+
+// The action applied to an inactive service token.
+type OrganizationListResponseServiceTokenInactivityAction string
+
+const (
+	OrganizationListResponseServiceTokenInactivityActionDisable OrganizationListResponseServiceTokenInactivityAction = "disable"
+	OrganizationListResponseServiceTokenInactivityActionDelete  OrganizationListResponseServiceTokenInactivityAction = "delete"
+)
+
+func (r OrganizationListResponseServiceTokenInactivityAction) IsKnown() bool {
+	switch r {
+	case OrganizationListResponseServiceTokenInactivityActionDisable, OrganizationListResponseServiceTokenInactivityActionDelete:
+		return true
+	}
+	return false
+}
+
 type OrganizationRevokeUsersResponse bool
 
 const (
@@ -552,6 +952,11 @@ type OrganizationNewParams struct {
 	// the infrastructure SSH authenticators ('piv_key' and 'ssh_fido2_key') if the
 	// organization has any non-infrastructure applications.
 	MfaRequiredForAllApps param.Field[bool] `json:"mfa_required_for_all_apps"`
+	// Configures automatic enforcement for inactive service tokens. A service token is
+	// inactive if no policy references it, and it has not successfully authenticated
+	// with an Access application during the selected inactivity period. This setting
+	// applies to every service token in your Zero Trust account.
+	ServiceTokenInactivity param.Field[OrganizationNewParamsServiceTokenInactivity] `json:"service_token_inactivity"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
 	// h.
@@ -708,6 +1113,40 @@ const (
 func (r OrganizationNewParamsMfaPivKeyRequirementsTouchPolicy) IsKnown() bool {
 	switch r {
 	case OrganizationNewParamsMfaPivKeyRequirementsTouchPolicyNever, OrganizationNewParamsMfaPivKeyRequirementsTouchPolicyAlways, OrganizationNewParamsMfaPivKeyRequirementsTouchPolicyCached:
+		return true
+	}
+	return false
+}
+
+// Configures automatic enforcement for inactive service tokens. A service token is
+// inactive if no policy references it, and it has not successfully authenticated
+// with an Access application during the selected inactivity period. This setting
+// applies to every service token in your Zero Trust account.
+type OrganizationNewParamsServiceTokenInactivity struct {
+	// The action applied to an inactive service token.
+	Action param.Field[OrganizationNewParamsServiceTokenInactivityAction] `json:"action" api:"required"`
+	// Whether automatic enforcement for inactive service tokens is enabled.
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
+	// The number of days a service token must be inactive before the configured action
+	// is applied.
+	InactivityThresholdDays param.Field[int64] `json:"inactivity_threshold_days" api:"required"`
+}
+
+func (r OrganizationNewParamsServiceTokenInactivity) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The action applied to an inactive service token.
+type OrganizationNewParamsServiceTokenInactivityAction string
+
+const (
+	OrganizationNewParamsServiceTokenInactivityActionDisable OrganizationNewParamsServiceTokenInactivityAction = "disable"
+	OrganizationNewParamsServiceTokenInactivityActionDelete  OrganizationNewParamsServiceTokenInactivityAction = "delete"
+)
+
+func (r OrganizationNewParamsServiceTokenInactivityAction) IsKnown() bool {
+	switch r {
+	case OrganizationNewParamsServiceTokenInactivityActionDisable, OrganizationNewParamsServiceTokenInactivityActionDelete:
 		return true
 	}
 	return false
@@ -893,6 +1332,11 @@ type OrganizationUpdateParams struct {
 	MfaRequiredForAllApps param.Field[bool] `json:"mfa_required_for_all_apps"`
 	// The name of your Zero Trust organization.
 	Name param.Field[string] `json:"name"`
+	// Configures automatic enforcement for inactive service tokens. A service token is
+	// inactive if no policy references it, and it has not successfully authenticated
+	// with an Access application during the selected inactivity period. This setting
+	// applies to every service token in your Zero Trust account.
+	ServiceTokenInactivity param.Field[OrganizationUpdateParamsServiceTokenInactivity] `json:"service_token_inactivity"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
 	// h.
@@ -1066,6 +1510,40 @@ func (r OrganizationUpdateParamsMfaPivKeyRequirementsTouchPolicy) IsKnown() bool
 	return false
 }
 
+// Configures automatic enforcement for inactive service tokens. A service token is
+// inactive if no policy references it, and it has not successfully authenticated
+// with an Access application during the selected inactivity period. This setting
+// applies to every service token in your Zero Trust account.
+type OrganizationUpdateParamsServiceTokenInactivity struct {
+	// The action applied to an inactive service token.
+	Action param.Field[OrganizationUpdateParamsServiceTokenInactivityAction] `json:"action" api:"required"`
+	// Whether automatic enforcement for inactive service tokens is enabled.
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
+	// The number of days a service token must be inactive before the configured action
+	// is applied.
+	InactivityThresholdDays param.Field[int64] `json:"inactivity_threshold_days" api:"required"`
+}
+
+func (r OrganizationUpdateParamsServiceTokenInactivity) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The action applied to an inactive service token.
+type OrganizationUpdateParamsServiceTokenInactivityAction string
+
+const (
+	OrganizationUpdateParamsServiceTokenInactivityActionDisable OrganizationUpdateParamsServiceTokenInactivityAction = "disable"
+	OrganizationUpdateParamsServiceTokenInactivityActionDelete  OrganizationUpdateParamsServiceTokenInactivityAction = "delete"
+)
+
+func (r OrganizationUpdateParamsServiceTokenInactivityAction) IsKnown() bool {
+	switch r {
+	case OrganizationUpdateParamsServiceTokenInactivityActionDisable, OrganizationUpdateParamsServiceTokenInactivityActionDelete:
+		return true
+	}
+	return false
+}
+
 type OrganizationUpdateResponseEnvelope struct {
 	Errors   []OrganizationUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
 	Messages []OrganizationUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
@@ -1217,7 +1695,7 @@ type OrganizationListResponseEnvelope struct {
 	Messages []OrganizationListResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Whether the API call was successful.
 	Success OrganizationListResponseEnvelopeSuccess `json:"success" api:"required"`
-	Result  Organization                            `json:"result"`
+	Result  OrganizationListResponse                `json:"result"`
 	JSON    organizationListResponseEnvelopeJSON    `json:"-"`
 }
 

@@ -240,6 +240,8 @@ func (r R2DataCatalogListResponseWarehousesCredentialStatus) IsKnown() bool {
 type R2DataCatalogListResponseWarehousesMaintenanceConfig struct {
 	// Configures compaction for catalog maintenance.
 	Compaction R2DataCatalogListResponseWarehousesMaintenanceConfigCompaction `json:"compaction"`
+	// Scheduling interval between normal table maintenance runs.
+	Interval string `json:"interval"`
 	// Configures snapshot expiration settings.
 	SnapshotExpiration R2DataCatalogListResponseWarehousesMaintenanceConfigSnapshotExpiration `json:"snapshot_expiration"`
 	JSON               r2DataCatalogListResponseWarehousesMaintenanceConfigJSON               `json:"-"`
@@ -249,6 +251,7 @@ type R2DataCatalogListResponseWarehousesMaintenanceConfig struct {
 // metadata for the struct [R2DataCatalogListResponseWarehousesMaintenanceConfig]
 type r2DataCatalogListResponseWarehousesMaintenanceConfigJSON struct {
 	Compaction         apijson.Field
+	Interval           apijson.Field
 	SnapshotExpiration apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
@@ -472,6 +475,8 @@ func (r R2DataCatalogGetResponseCredentialStatus) IsKnown() bool {
 type R2DataCatalogGetResponseMaintenanceConfig struct {
 	// Configures compaction for catalog maintenance.
 	Compaction R2DataCatalogGetResponseMaintenanceConfigCompaction `json:"compaction"`
+	// Scheduling interval between normal table maintenance runs.
+	Interval string `json:"interval"`
 	// Configures snapshot expiration settings.
 	SnapshotExpiration R2DataCatalogGetResponseMaintenanceConfigSnapshotExpiration `json:"snapshot_expiration"`
 	JSON               r2DataCatalogGetResponseMaintenanceConfigJSON               `json:"-"`
@@ -481,6 +486,7 @@ type R2DataCatalogGetResponseMaintenanceConfig struct {
 // struct [R2DataCatalogGetResponseMaintenanceConfig]
 type r2DataCatalogGetResponseMaintenanceConfigJSON struct {
 	Compaction         apijson.Field
+	Interval           apijson.Field
 	SnapshotExpiration apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field

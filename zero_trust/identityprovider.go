@@ -1387,9 +1387,12 @@ type IdentityProviderAccessGoogleAppsConfig struct {
 	ClientSecret string `json:"client_secret"`
 	// The claim name for email in the id_token response.
 	EmailClaimName string `json:"email_claim_name"`
-	// Configures the Google account chooser prompt.
+	// Configures the prompt behavior for Google authentication.
 	Prompt IdentityProviderAccessGoogleAppsConfigPrompt `json:"prompt"`
-	JSON   identityProviderAccessGoogleAppsConfigJSON   `json:"-"`
+	// Whether to use a previously authenticated Access email as a Google login hint
+	// when exactly one email matches the Workspace domain.
+	UseLoginHint bool                                       `json:"use_login_hint"`
+	JSON         identityProviderAccessGoogleAppsConfigJSON `json:"-"`
 }
 
 // identityProviderAccessGoogleAppsConfigJSON contains the JSON metadata for the
@@ -1401,6 +1404,7 @@ type identityProviderAccessGoogleAppsConfigJSON struct {
 	ClientSecret   apijson.Field
 	EmailClaimName apijson.Field
 	Prompt         apijson.Field
+	UseLoginHint   apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -1413,16 +1417,18 @@ func (r identityProviderAccessGoogleAppsConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// Configures the Google account chooser prompt.
+// Configures the prompt behavior for Google authentication.
 type IdentityProviderAccessGoogleAppsConfigPrompt string
 
 const (
+	IdentityProviderAccessGoogleAppsConfigPromptNone          IdentityProviderAccessGoogleAppsConfigPrompt = "none"
+	IdentityProviderAccessGoogleAppsConfigPromptConsent       IdentityProviderAccessGoogleAppsConfigPrompt = "consent"
 	IdentityProviderAccessGoogleAppsConfigPromptSelectAccount IdentityProviderAccessGoogleAppsConfigPrompt = "select_account"
 )
 
 func (r IdentityProviderAccessGoogleAppsConfigPrompt) IsKnown() bool {
 	switch r {
-	case IdentityProviderAccessGoogleAppsConfigPromptSelectAccount:
+	case IdentityProviderAccessGoogleAppsConfigPromptNone, IdentityProviderAccessGoogleAppsConfigPromptConsent, IdentityProviderAccessGoogleAppsConfigPromptSelectAccount:
 		return true
 	}
 	return false
@@ -2379,11 +2385,11 @@ type IdentityProviderAccessSAMLConfig struct {
 	//
 	// To enable encryption:
 	//
-	// 1. Create a certificate set via POST to
-	//    `/identity_providers/{id}/saml_certificate`
-	// 2. Set this field to `true` and include `saml_certificate_set_id` in the PUT
-	//    request
-	// 3. Configure the public certificate in your external Identity Provider
+	//  1. Create a certificate set via POST to
+	//     `/identity_providers/{id}/saml_certificate`
+	//  2. Set this field to `true` and include `saml_certificate_set_id` in the PUT
+	//     request
+	//  3. Configure the public certificate in your external Identity Provider
 	//
 	// Note: Requires `saml_certificate_set_id` to be set when `true`.
 	EnableEncryption bool `json:"enable_encryption"`
@@ -3345,8 +3351,11 @@ type IdentityProviderAccessGoogleAppsConfigParam struct {
 	ClientSecret param.Field[string] `json:"client_secret"`
 	// The claim name for email in the id_token response.
 	EmailClaimName param.Field[string] `json:"email_claim_name"`
-	// Configures the Google account chooser prompt.
+	// Configures the prompt behavior for Google authentication.
 	Prompt param.Field[IdentityProviderAccessGoogleAppsConfigPrompt] `json:"prompt"`
+	// Whether to use a previously authenticated Access email as a Google login hint
+	// when exactly one email matches the Workspace domain.
+	UseLoginHint param.Field[bool] `json:"use_login_hint"`
 }
 
 func (r IdentityProviderAccessGoogleAppsConfigParam) MarshalJSON() (data []byte, err error) {
@@ -3829,11 +3838,11 @@ type IdentityProviderAccessSAMLConfigParam struct {
 	//
 	// To enable encryption:
 	//
-	// 1. Create a certificate set via POST to
-	//    `/identity_providers/{id}/saml_certificate`
-	// 2. Set this field to `true` and include `saml_certificate_set_id` in the PUT
-	//    request
-	// 3. Configure the public certificate in your external Identity Provider
+	//  1. Create a certificate set via POST to
+	//     `/identity_providers/{id}/saml_certificate`
+	//  2. Set this field to `true` and include `saml_certificate_set_id` in the PUT
+	//     request
+	//  3. Configure the public certificate in your external Identity Provider
 	//
 	// Note: Requires `saml_certificate_set_id` to be set when `true`.
 	EnableEncryption param.Field[bool] `json:"enable_encryption"`
@@ -5099,9 +5108,12 @@ type IdentityProviderListResponseAccessGoogleAppsConfig struct {
 	ClientSecret string `json:"client_secret"`
 	// The claim name for email in the id_token response.
 	EmailClaimName string `json:"email_claim_name"`
-	// Configures the Google account chooser prompt.
+	// Configures the prompt behavior for Google authentication.
 	Prompt IdentityProviderListResponseAccessGoogleAppsConfigPrompt `json:"prompt"`
-	JSON   identityProviderListResponseAccessGoogleAppsConfigJSON   `json:"-"`
+	// Whether to use a previously authenticated Access email as a Google login hint
+	// when exactly one email matches the Workspace domain.
+	UseLoginHint bool                                                   `json:"use_login_hint"`
+	JSON         identityProviderListResponseAccessGoogleAppsConfigJSON `json:"-"`
 }
 
 // identityProviderListResponseAccessGoogleAppsConfigJSON contains the JSON
@@ -5113,6 +5125,7 @@ type identityProviderListResponseAccessGoogleAppsConfigJSON struct {
 	ClientSecret   apijson.Field
 	EmailClaimName apijson.Field
 	Prompt         apijson.Field
+	UseLoginHint   apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -5125,16 +5138,18 @@ func (r identityProviderListResponseAccessGoogleAppsConfigJSON) RawJSON() string
 	return r.raw
 }
 
-// Configures the Google account chooser prompt.
+// Configures the prompt behavior for Google authentication.
 type IdentityProviderListResponseAccessGoogleAppsConfigPrompt string
 
 const (
+	IdentityProviderListResponseAccessGoogleAppsConfigPromptNone          IdentityProviderListResponseAccessGoogleAppsConfigPrompt = "none"
+	IdentityProviderListResponseAccessGoogleAppsConfigPromptConsent       IdentityProviderListResponseAccessGoogleAppsConfigPrompt = "consent"
 	IdentityProviderListResponseAccessGoogleAppsConfigPromptSelectAccount IdentityProviderListResponseAccessGoogleAppsConfigPrompt = "select_account"
 )
 
 func (r IdentityProviderListResponseAccessGoogleAppsConfigPrompt) IsKnown() bool {
 	switch r {
-	case IdentityProviderListResponseAccessGoogleAppsConfigPromptSelectAccount:
+	case IdentityProviderListResponseAccessGoogleAppsConfigPromptNone, IdentityProviderListResponseAccessGoogleAppsConfigPromptConsent, IdentityProviderListResponseAccessGoogleAppsConfigPromptSelectAccount:
 		return true
 	}
 	return false
@@ -6097,11 +6112,11 @@ type IdentityProviderListResponseAccessSAMLConfig struct {
 	//
 	// To enable encryption:
 	//
-	// 1. Create a certificate set via POST to
-	//    `/identity_providers/{id}/saml_certificate`
-	// 2. Set this field to `true` and include `saml_certificate_set_id` in the PUT
-	//    request
-	// 3. Configure the public certificate in your external Identity Provider
+	//  1. Create a certificate set via POST to
+	//     `/identity_providers/{id}/saml_certificate`
+	//  2. Set this field to `true` and include `saml_certificate_set_id` in the PUT
+	//     request
+	//  3. Configure the public certificate in your external Identity Provider
 	//
 	// Note: Requires `saml_certificate_set_id` to be set when `true`.
 	EnableEncryption bool `json:"enable_encryption"`

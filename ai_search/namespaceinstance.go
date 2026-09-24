@@ -487,13 +487,17 @@ type NamespaceInstanceNewResponseIndexingOptions struct {
 	// enables character-level substring matching (good for partial matches, code,
 	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer NamespaceInstanceNewResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
-	JSON             namespaceInstanceNewResponseIndexingOptionsJSON             `json:"-"`
+	// Enables OCR ingestion for PDFs and images. Changing this triggers a full
+	// re-index. Defaults to false.
+	UseOCR bool                                            `json:"use_ocr"`
+	JSON   namespaceInstanceNewResponseIndexingOptionsJSON `json:"-"`
 }
 
 // namespaceInstanceNewResponseIndexingOptionsJSON contains the JSON metadata for
 // the struct [NamespaceInstanceNewResponseIndexingOptions]
 type namespaceInstanceNewResponseIndexingOptionsJSON struct {
 	KeywordTokenizer apijson.Field
+	UseOCR           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -1299,13 +1303,17 @@ type NamespaceInstanceUpdateResponseIndexingOptions struct {
 	// enables character-level substring matching (good for partial matches, code,
 	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer NamespaceInstanceUpdateResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
-	JSON             namespaceInstanceUpdateResponseIndexingOptionsJSON             `json:"-"`
+	// Enables OCR ingestion for PDFs and images. Changing this triggers a full
+	// re-index. Defaults to false.
+	UseOCR bool                                               `json:"use_ocr"`
+	JSON   namespaceInstanceUpdateResponseIndexingOptionsJSON `json:"-"`
 }
 
 // namespaceInstanceUpdateResponseIndexingOptionsJSON contains the JSON metadata
 // for the struct [NamespaceInstanceUpdateResponseIndexingOptions]
 type namespaceInstanceUpdateResponseIndexingOptionsJSON struct {
 	KeywordTokenizer apijson.Field
+	UseOCR           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -2098,6 +2106,7 @@ func (r namespaceInstanceListResponseIndexMethodJSON) RawJSON() string {
 
 type NamespaceInstanceListResponseIndexingOptions struct {
 	KeywordTokenizer NamespaceInstanceListResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
+	UseOCR           bool                                                         `json:"use_ocr"`
 	ExtraFields      map[string]interface{}                                       `json:"-" api:"extrafields"`
 	JSON             namespaceInstanceListResponseIndexingOptionsJSON             `json:"-"`
 }
@@ -2106,6 +2115,7 @@ type NamespaceInstanceListResponseIndexingOptions struct {
 // the struct [NamespaceInstanceListResponseIndexingOptions]
 type namespaceInstanceListResponseIndexingOptionsJSON struct {
 	KeywordTokenizer apijson.Field
+	UseOCR           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -2862,13 +2872,17 @@ type NamespaceInstanceDeleteResponseIndexingOptions struct {
 	// enables character-level substring matching (good for partial matches, code,
 	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer NamespaceInstanceDeleteResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
-	JSON             namespaceInstanceDeleteResponseIndexingOptionsJSON             `json:"-"`
+	// Enables OCR ingestion for PDFs and images. Changing this triggers a full
+	// re-index. Defaults to false.
+	UseOCR bool                                               `json:"use_ocr"`
+	JSON   namespaceInstanceDeleteResponseIndexingOptionsJSON `json:"-"`
 }
 
 // namespaceInstanceDeleteResponseIndexingOptionsJSON contains the JSON metadata
 // for the struct [NamespaceInstanceDeleteResponseIndexingOptions]
 type namespaceInstanceDeleteResponseIndexingOptionsJSON struct {
 	KeywordTokenizer apijson.Field
+	UseOCR           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -4037,13 +4051,17 @@ type NamespaceInstanceReadResponseIndexingOptions struct {
 	// enables character-level substring matching (good for partial matches, code,
 	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer NamespaceInstanceReadResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
-	JSON             namespaceInstanceReadResponseIndexingOptionsJSON             `json:"-"`
+	// Enables OCR ingestion for PDFs and images. Changing this triggers a full
+	// re-index. Defaults to false.
+	UseOCR bool                                             `json:"use_ocr"`
+	JSON   namespaceInstanceReadResponseIndexingOptionsJSON `json:"-"`
 }
 
 // namespaceInstanceReadResponseIndexingOptionsJSON contains the JSON metadata for
 // the struct [NamespaceInstanceReadResponseIndexingOptions]
 type namespaceInstanceReadResponseIndexingOptionsJSON struct {
 	KeywordTokenizer apijson.Field
+	UseOCR           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -5022,6 +5040,9 @@ type NamespaceInstanceNewParamsIndexingOptions struct {
 	// enables character-level substring matching (good for partial matches, code,
 	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer param.Field[NamespaceInstanceNewParamsIndexingOptionsKeywordTokenizer] `json:"keyword_tokenizer"`
+	// Enables OCR ingestion for PDFs and images. Changing this triggers a full
+	// re-index. Defaults to false.
+	UseOCR param.Field[bool] `json:"use_ocr"`
 }
 
 func (r NamespaceInstanceNewParamsIndexingOptions) MarshalJSON() (data []byte, err error) {
@@ -5551,6 +5572,9 @@ type NamespaceInstanceUpdateParamsIndexingOptions struct {
 	// enables character-level substring matching (good for partial matches, code,
 	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer param.Field[NamespaceInstanceUpdateParamsIndexingOptionsKeywordTokenizer] `json:"keyword_tokenizer"`
+	// Enables OCR ingestion for PDFs and images. Changing this triggers a full
+	// re-index. Defaults to false.
+	UseOCR param.Field[bool] `json:"use_ocr"`
 }
 
 func (r NamespaceInstanceUpdateParamsIndexingOptions) MarshalJSON() (data []byte, err error) {
@@ -6114,10 +6138,14 @@ func (r NamespaceInstanceChatCompletionsParamsMessagesRole) IsKnown() bool {
 }
 
 type NamespaceInstanceChatCompletionsParamsAISearchOptions struct {
-	Cache        param.Field[NamespaceInstanceChatCompletionsParamsAISearchOptionsCache]        `json:"cache"`
-	QueryRewrite param.Field[NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewrite] `json:"query_rewrite"`
-	Reranking    param.Field[NamespaceInstanceChatCompletionsParamsAISearchOptionsReranking]    `json:"reranking"`
-	Retrieval    param.Field[NamespaceInstanceChatCompletionsParamsAISearchOptionsRetrieval]    `json:"retrieval"`
+	Cache param.Field[NamespaceInstanceChatCompletionsParamsAISearchOptionsCache] `json:"cache"`
+	// Metadata added to AI Gateway logs for requests triggered by this operation.
+	// Accepts up to 2 string, number, or boolean entries. Keys 'ai-search', 'task',
+	// 'origin', and keys beginning with 'cf.' are reserved.
+	CustomMetadata param.Field[map[string]NamespaceInstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion] `json:"custom_metadata"`
+	QueryRewrite   param.Field[NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewrite]                   `json:"query_rewrite"`
+	Reranking      param.Field[NamespaceInstanceChatCompletionsParamsAISearchOptionsReranking]                      `json:"reranking"`
+	Retrieval      param.Field[NamespaceInstanceChatCompletionsParamsAISearchOptionsRetrieval]                      `json:"retrieval"`
 }
 
 func (r NamespaceInstanceChatCompletionsParamsAISearchOptions) MarshalJSON() (data []byte, err error) {
@@ -6148,6 +6176,11 @@ func (r NamespaceInstanceChatCompletionsParamsAISearchOptionsCacheCacheThreshold
 		return true
 	}
 	return false
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type NamespaceInstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion interface {
+	ImplementsNamespaceInstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion()
 }
 
 type NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewrite struct {
@@ -6330,10 +6363,14 @@ func (r NamespaceInstanceSearchParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceInstanceSearchParamsAISearchOptions struct {
-	Cache        param.Field[NamespaceInstanceSearchParamsAISearchOptionsCache]        `json:"cache"`
-	QueryRewrite param.Field[NamespaceInstanceSearchParamsAISearchOptionsQueryRewrite] `json:"query_rewrite"`
-	Reranking    param.Field[NamespaceInstanceSearchParamsAISearchOptionsReranking]    `json:"reranking"`
-	Retrieval    param.Field[NamespaceInstanceSearchParamsAISearchOptionsRetrieval]    `json:"retrieval"`
+	Cache param.Field[NamespaceInstanceSearchParamsAISearchOptionsCache] `json:"cache"`
+	// Metadata added to AI Gateway logs for requests triggered by this operation.
+	// Accepts up to 2 string, number, or boolean entries. Keys 'ai-search', 'task',
+	// 'origin', and keys beginning with 'cf.' are reserved.
+	CustomMetadata param.Field[map[string]NamespaceInstanceSearchParamsAISearchOptionsCustomMetadataUnion] `json:"custom_metadata"`
+	QueryRewrite   param.Field[NamespaceInstanceSearchParamsAISearchOptionsQueryRewrite]                   `json:"query_rewrite"`
+	Reranking      param.Field[NamespaceInstanceSearchParamsAISearchOptionsReranking]                      `json:"reranking"`
+	Retrieval      param.Field[NamespaceInstanceSearchParamsAISearchOptionsRetrieval]                      `json:"retrieval"`
 }
 
 func (r NamespaceInstanceSearchParamsAISearchOptions) MarshalJSON() (data []byte, err error) {
@@ -6364,6 +6401,11 @@ func (r NamespaceInstanceSearchParamsAISearchOptionsCacheCacheThreshold) IsKnown
 		return true
 	}
 	return false
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type NamespaceInstanceSearchParamsAISearchOptionsCustomMetadataUnion interface {
+	ImplementsNamespaceInstanceSearchParamsAISearchOptionsCustomMetadataUnion()
 }
 
 type NamespaceInstanceSearchParamsAISearchOptionsQueryRewrite struct {

@@ -99,6 +99,10 @@ func TestGatewayListListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Gateway.Lists.List(context.TODO(), zero_trust.GatewayListListParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		Direction: cloudflare.F(zero_trust.GatewayListListParamsDirectionAsc),
+		Filter:    cloudflare.F([]string{"string"}),
+		OrderBy:   cloudflare.F(zero_trust.GatewayListListParamsOrderByName),
+		Search:    cloudflare.F("search"),
 		Type:      cloudflare.F(zero_trust.GatewayListListParamsTypeSerial),
 	})
 	if err != nil {

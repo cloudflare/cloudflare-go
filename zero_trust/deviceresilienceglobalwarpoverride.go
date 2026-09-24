@@ -37,7 +37,7 @@ func NewDeviceResilienceGlobalWARPOverrideService(opts ...option.RequestOption) 
 	return
 }
 
-// Sets the Global WARP override state.
+// Sets the Global WARP disconnect state.
 func (r *DeviceResilienceGlobalWARPOverrideService) New(ctx context.Context, params DeviceResilienceGlobalWARPOverrideNewParams, opts ...option.RequestOption) (res *DeviceResilienceGlobalWARPOverrideNewResponse, err error) {
 	var env DeviceResilienceGlobalWARPOverrideNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -54,7 +54,7 @@ func (r *DeviceResilienceGlobalWARPOverrideService) New(ctx context.Context, par
 	return res, nil
 }
 
-// Fetch the Global WARP override state.
+// Fetch the Global WARP disconnect state.
 func (r *DeviceResilienceGlobalWARPOverrideService) Get(ctx context.Context, query DeviceResilienceGlobalWARPOverrideGetParams, opts ...option.RequestOption) (res *DeviceResilienceGlobalWARPOverrideGetResponse, err error) {
 	var env DeviceResilienceGlobalWARPOverrideGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

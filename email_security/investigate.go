@@ -125,12 +125,12 @@ type InvestigateListResponse struct {
 	// Deprecated: Use `scanned_at` instead.
 	Ts               string                                  `json:"ts" api:"required"`
 	AlertID          string                                  `json:"alert_id" api:"nullable"`
-	DeliveryMode     InvestigateListResponseDeliveryMode     `json:"delivery_mode"`
+	DeliveryMode     InvestigateListResponseDeliveryMode     `json:"delivery_mode" api:"nullable"`
 	DeliveryStatus   []InvestigateListResponseDeliveryStatus `json:"delivery_status" api:"nullable"`
 	EdfHash          string                                  `json:"edf_hash" api:"nullable"`
 	EnvelopeFrom     string                                  `json:"envelope_from" api:"nullable"`
 	EnvelopeTo       []string                                `json:"envelope_to" api:"nullable"`
-	FinalDisposition InvestigateListResponseFinalDisposition `json:"final_disposition"`
+	FinalDisposition InvestigateListResponseFinalDisposition `json:"final_disposition" api:"nullable"`
 	// Deprecated, use the `findings` field from
 	// `GET /investigate/{investigate_id}/detections` instead. End of life: November
 	// 1, 2026. Detection findings for this message.
@@ -157,7 +157,7 @@ type InvestigateListResponse struct {
 	ThreatCategories  []string                          `json:"threat_categories" api:"nullable"`
 	To                []string                          `json:"to" api:"nullable"`
 	ToName            []string                          `json:"to_name" api:"nullable"`
-	Validation        InvestigateListResponseValidation `json:"validation"`
+	Validation        InvestigateListResponseValidation `json:"validation" api:"nullable"`
 	XOriginatingIP    string                            `json:"x_originating_ip" api:"nullable"`
 	JSON              investigateListResponseJSON       `json:"-"`
 }
@@ -445,7 +445,7 @@ func (r InvestigateListResponseFinalDisposition) IsKnown() bool {
 type InvestigateListResponseFinding struct {
 	Attachment string                                   `json:"attachment" api:"nullable"`
 	Detail     string                                   `json:"detail" api:"nullable"`
-	Detection  InvestigateListResponseFindingsDetection `json:"detection"`
+	Detection  InvestigateListResponseFindingsDetection `json:"detection" api:"nullable"`
 	Field      string                                   `json:"field" api:"nullable"`
 	Name       string                                   `json:"name" api:"nullable"`
 	Portion    string                                   `json:"portion" api:"nullable"`
@@ -521,9 +521,9 @@ func (r InvestigateListResponsePostDeliveryOperation) IsKnown() bool {
 
 type InvestigateListResponseValidation struct {
 	Comment string                                 `json:"comment" api:"nullable"`
-	DKIM    InvestigateListResponseValidationDKIM  `json:"dkim"`
-	DMARC   InvestigateListResponseValidationDMARC `json:"dmarc"`
-	SPF     InvestigateListResponseValidationSPF   `json:"spf"`
+	DKIM    InvestigateListResponseValidationDKIM  `json:"dkim" api:"nullable"`
+	DMARC   InvestigateListResponseValidationDMARC `json:"dmarc" api:"nullable"`
+	SPF     InvestigateListResponseValidationSPF   `json:"spf" api:"nullable"`
 	JSON    investigateListResponseValidationJSON  `json:"-"`
 }
 
@@ -621,12 +621,12 @@ type InvestigateGetResponse struct {
 	// Deprecated: Use `scanned_at` instead.
 	Ts               string                                 `json:"ts" api:"required"`
 	AlertID          string                                 `json:"alert_id" api:"nullable"`
-	DeliveryMode     InvestigateGetResponseDeliveryMode     `json:"delivery_mode"`
+	DeliveryMode     InvestigateGetResponseDeliveryMode     `json:"delivery_mode" api:"nullable"`
 	DeliveryStatus   []InvestigateGetResponseDeliveryStatus `json:"delivery_status" api:"nullable"`
 	EdfHash          string                                 `json:"edf_hash" api:"nullable"`
 	EnvelopeFrom     string                                 `json:"envelope_from" api:"nullable"`
 	EnvelopeTo       []string                               `json:"envelope_to" api:"nullable"`
-	FinalDisposition InvestigateGetResponseFinalDisposition `json:"final_disposition"`
+	FinalDisposition InvestigateGetResponseFinalDisposition `json:"final_disposition" api:"nullable"`
 	// Deprecated, use the `findings` field from
 	// `GET /investigate/{investigate_id}/detections` instead. End of life: November
 	// 1, 2026. Detection findings for this message.
@@ -653,7 +653,7 @@ type InvestigateGetResponse struct {
 	ThreatCategories  []string                         `json:"threat_categories" api:"nullable"`
 	To                []string                         `json:"to" api:"nullable"`
 	ToName            []string                         `json:"to_name" api:"nullable"`
-	Validation        InvestigateGetResponseValidation `json:"validation"`
+	Validation        InvestigateGetResponseValidation `json:"validation" api:"nullable"`
 	XOriginatingIP    string                           `json:"x_originating_ip" api:"nullable"`
 	JSON              investigateGetResponseJSON       `json:"-"`
 }
@@ -941,7 +941,7 @@ func (r InvestigateGetResponseFinalDisposition) IsKnown() bool {
 type InvestigateGetResponseFinding struct {
 	Attachment string                                  `json:"attachment" api:"nullable"`
 	Detail     string                                  `json:"detail" api:"nullable"`
-	Detection  InvestigateGetResponseFindingsDetection `json:"detection"`
+	Detection  InvestigateGetResponseFindingsDetection `json:"detection" api:"nullable"`
 	Field      string                                  `json:"field" api:"nullable"`
 	Name       string                                  `json:"name" api:"nullable"`
 	Portion    string                                  `json:"portion" api:"nullable"`
@@ -1017,9 +1017,9 @@ func (r InvestigateGetResponsePostDeliveryOperation) IsKnown() bool {
 
 type InvestigateGetResponseValidation struct {
 	Comment string                                `json:"comment" api:"nullable"`
-	DKIM    InvestigateGetResponseValidationDKIM  `json:"dkim"`
-	DMARC   InvestigateGetResponseValidationDMARC `json:"dmarc"`
-	SPF     InvestigateGetResponseValidationSPF   `json:"spf"`
+	DKIM    InvestigateGetResponseValidationDKIM  `json:"dkim" api:"nullable"`
+	DMARC   InvestigateGetResponseValidationDMARC `json:"dmarc" api:"nullable"`
+	SPF     InvestigateGetResponseValidationSPF   `json:"spf" api:"nullable"`
 	JSON    investigateGetResponseValidationJSON  `json:"-"`
 }
 

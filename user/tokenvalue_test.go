@@ -11,7 +11,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/user"
 )
 
 func TestTokenValueUpdate(t *testing.T) {
@@ -29,13 +28,7 @@ func TestTokenValueUpdate(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.Tokens.Value.Update(
-		context.TODO(),
-		"ed17574386854bf78a67040be0a770b0",
-		user.TokenValueUpdateParams{
-			Body: map[string]interface{}{},
-		},
-	)
+	_, err := client.User.Tokens.Value.Update(context.TODO(), "ed17574386854bf78a67040be0a770b0")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

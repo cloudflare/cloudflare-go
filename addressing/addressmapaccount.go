@@ -35,23 +35,7 @@ func NewAddressMapAccountService(opts ...option.RequestOption) (r *AddressMapAcc
 }
 
 // Add an account as a member of a particular address map.
-func (r *AddressMapAccountService) Update(ctx context.Context, addressMapID string, params AddressMapAccountUpdateParams, opts ...option.RequestOption) (res *AddressMapAccountUpdateResponse, err error) {
-	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return nil, err
-	}
-	if addressMapID == "" {
-		err = errors.New("missing required address_map_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/%s", params.AccountID, addressMapID, params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
-	return res, err
-}
-
-// Remove an account as a member of a particular address map.
-func (r *AddressMapAccountService) Delete(ctx context.Context, addressMapID string, body AddressMapAccountDeleteParams, opts ...option.RequestOption) (res *AddressMapAccountDeleteResponse, err error) {
+func (r *AddressMapAccountService) Update(ctx context.Context, addressMapID string, memberAccountID string, body AddressMapAccountUpdateParams, opts ...option.RequestOption) (res *AddressMapAccountUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -61,7 +45,31 @@ func (r *AddressMapAccountService) Delete(ctx context.Context, addressMapID stri
 		err = errors.New("missing required address_map_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/%s", body.AccountID, addressMapID, body.AccountID)
+	if memberAccountID == "" {
+		err = errors.New("missing required member_account_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/%s", body.AccountID, addressMapID, memberAccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &res, opts...)
+	return res, err
+}
+
+// Remove an account as a member of a particular address map.
+func (r *AddressMapAccountService) Delete(ctx context.Context, addressMapID string, memberAccountID string, body AddressMapAccountDeleteParams, opts ...option.RequestOption) (res *AddressMapAccountDeleteResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if addressMapID == "" {
+		err = errors.New("missing required address_map_id parameter")
+		return nil, err
+	}
+	if memberAccountID == "" {
+		err = errors.New("missing required member_account_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/%s", body.AccountID, addressMapID, memberAccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return res, err
 }
@@ -415,11 +423,6 @@ func (r addressMapAccountDeleteResponseResultInfoJSON) RawJSON() string {
 type AddressMapAccountUpdateParams struct {
 	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Body      interface{}         `json:"body" api:"required"`
-}
-
-func (r AddressMapAccountUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type AddressMapAccountDeleteParams struct {

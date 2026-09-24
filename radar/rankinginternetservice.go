@@ -473,6 +473,7 @@ type RankingInternetServiceTopResponseMeta struct {
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
 	Normalization RankingInternetServiceTopResponseMetaNormalization `json:"normalization" api:"required"`
+	Top0          RankingInternetServiceTopResponseMetaTop0          `json:"top_0" api:"required"`
 	// Measurement units for the results.
 	Units []RankingInternetServiceTopResponseMetaUnit `json:"units" api:"required"`
 	JSON  rankingInternetServiceTopResponseMetaJSON   `json:"-"`
@@ -485,6 +486,7 @@ type rankingInternetServiceTopResponseMetaJSON struct {
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
+	Top0           apijson.Field
 	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
@@ -666,6 +668,29 @@ func (r RankingInternetServiceTopResponseMetaNormalization) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type RankingInternetServiceTopResponseMetaTop0 struct {
+	Date            time.Time                                     `json:"date" api:"required" format:"date"`
+	ServiceCategory string                                        `json:"serviceCategory" api:"required"`
+	JSON            rankingInternetServiceTopResponseMetaTop0JSON `json:"-"`
+}
+
+// rankingInternetServiceTopResponseMetaTop0JSON contains the JSON metadata for the
+// struct [RankingInternetServiceTopResponseMetaTop0]
+type rankingInternetServiceTopResponseMetaTop0JSON struct {
+	Date            apijson.Field
+	ServiceCategory apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RankingInternetServiceTopResponseMetaTop0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rankingInternetServiceTopResponseMetaTop0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RankingInternetServiceTopResponseMetaUnit struct {

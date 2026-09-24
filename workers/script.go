@@ -87,7 +87,7 @@ func (r *ScriptService) Update(ctx context.Context, scriptName string, params Sc
 	return res, nil
 }
 
-// Fetch a list of uploaded workers.
+// Fetch a list of uploaded Worker scripts.
 func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ScriptListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -109,7 +109,7 @@ func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts 
 	return res, nil
 }
 
-// Fetch a list of uploaded workers.
+// Fetch a list of uploaded Worker scripts.
 func (r *ScriptService) ListAutoPaging(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ScriptListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
@@ -135,8 +135,8 @@ func (r *ScriptService) Delete(ctx context.Context, scriptName string, params Sc
 	return res, nil
 }
 
-// Fetch raw script content for your worker. Note this is the original script
-// content, not JSON encoded.
+// Fetch raw content for a Worker script. Note this is the original script content,
+// not JSON encoded.
 func (r *ScriptService) Get(ctx context.Context, scriptName string, query ScriptGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/javascript")}, opts...)
@@ -153,7 +153,7 @@ func (r *ScriptService) Get(ctx context.Context, scriptName string, query Script
 	return res, err
 }
 
-// Search for Workers in an account.
+// Search for Worker scripts in an account.
 func (r *ScriptService) Search(ctx context.Context, params ScriptSearchParams, opts ...option.RequestOption) (res *[]ScriptSearchResponse, err error) {
 	var env ScriptSearchResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -984,6 +984,8 @@ type ScriptObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
+	// Real-time Issues settings for the Worker.
+	Issues ScriptObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs ScriptObservabilityLogs `json:"logs" api:"nullable"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -998,6 +1000,7 @@ type ScriptObservability struct {
 type scriptObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -1010,6 +1013,29 @@ func (r *ScriptObservability) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type ScriptObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                          `json:"enabled"`
+	JSON    scriptObservabilityIssuesJSON `json:"-"`
+}
+
+// scriptObservabilityIssuesJSON contains the JSON metadata for the struct
+// [ScriptObservabilityIssues]
+type scriptObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1377,6 +1403,8 @@ type ScriptSettingObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
+	// Real-time Issues settings for the Worker.
+	Issues ScriptSettingObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs ScriptSettingObservabilityLogs `json:"logs" api:"nullable"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -1391,6 +1419,7 @@ type ScriptSettingObservability struct {
 type scriptSettingObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -1403,6 +1432,29 @@ func (r *ScriptSettingObservability) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptSettingObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type ScriptSettingObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                                 `json:"enabled"`
+	JSON    scriptSettingObservabilityIssuesJSON `json:"-"`
+}
+
+// scriptSettingObservabilityIssuesJSON contains the JSON metadata for the struct
+// [ScriptSettingObservabilityIssues]
+type scriptSettingObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptSettingObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSettingObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1524,6 +1576,8 @@ type ScriptSettingObservabilityParam struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Real-time Issues settings for the Worker.
+	Issues param.Field[ScriptSettingObservabilityIssuesParam] `json:"issues"`
 	// Log settings for the Worker.
 	Logs param.Field[ScriptSettingObservabilityLogsParam] `json:"logs"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -1533,6 +1587,16 @@ type ScriptSettingObservabilityParam struct {
 }
 
 func (r ScriptSettingObservabilityParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Real-time Issues settings for the Worker.
+type ScriptSettingObservabilityIssuesParam struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r ScriptSettingObservabilityIssuesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2402,6 +2466,8 @@ type ScriptUpdateResponseObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
+	// Real-time Issues settings for the Worker.
+	Issues ScriptUpdateResponseObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs ScriptUpdateResponseObservabilityLogs `json:"logs" api:"nullable"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -2416,6 +2482,7 @@ type ScriptUpdateResponseObservability struct {
 type scriptUpdateResponseObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -2428,6 +2495,29 @@ func (r *ScriptUpdateResponseObservability) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r scriptUpdateResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type ScriptUpdateResponseObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                                        `json:"enabled"`
+	JSON    scriptUpdateResponseObservabilityIssuesJSON `json:"-"`
+}
+
+// scriptUpdateResponseObservabilityIssuesJSON contains the JSON metadata for the
+// struct [ScriptUpdateResponseObservabilityIssues]
+type scriptUpdateResponseObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptUpdateResponseObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptUpdateResponseObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3584,6 +3674,8 @@ type ScriptListResponseObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
+	// Real-time Issues settings for the Worker.
+	Issues ScriptListResponseObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs ScriptListResponseObservabilityLogs `json:"logs" api:"nullable"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -3598,6 +3690,7 @@ type ScriptListResponseObservability struct {
 type scriptListResponseObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -3610,6 +3703,29 @@ func (r *ScriptListResponseObservability) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r scriptListResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type ScriptListResponseObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                                      `json:"enabled"`
+	JSON    scriptListResponseObservabilityIssuesJSON `json:"-"`
+}
+
+// scriptListResponseObservabilityIssuesJSON contains the JSON metadata for the
+// struct [ScriptListResponseObservabilityIssues]
+type scriptListResponseObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptListResponseObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptListResponseObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -4153,6 +4269,11 @@ type ScriptUpdateParamsMetadataAssetsConfig struct {
 	// The contents of a \_redirects file (used to apply redirects or proxy paths ahead
 	// of asset serving).
 	Redirects param.Field[string] `json:"_redirects"`
+	// The public URL path prefix under which assets are served. A null request value
+	// resets it to `/`; responses represent the root as `/`. All versions in a gradual
+	// deployment must use the same canonical value. To change it, first deploy the
+	// version containing the change at 100%.
+	BasePath param.Field[string] `json:"base_path"`
 	// Determines the redirects and rewrites of requests for HTML content.
 	HTMLHandling param.Field[ScriptUpdateParamsMetadataAssetsConfigHTMLHandling] `json:"html_handling"`
 	// Determines the response when a request does not match a static asset, and there
@@ -4312,6 +4433,8 @@ type ScriptUpdateParamsMetadataBinding struct {
 	Simple    param.Field[interface{}] `json:"simple"`
 	// ID of the store containing the secret.
 	StoreID param.Field[string] `json:"store_id"`
+	// ID of a K2 stream owned by the account deploying the Worker.
+	Stream param.Field[string] `json:"stream"`
 	// The text value to use.
 	Text param.Field[string] `json:"text"`
 	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
@@ -4353,6 +4476,7 @@ func (r ScriptUpdateParamsMetadataBinding) implementsScriptUpdateParamsMetadataB
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificate],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelines],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindK2],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimit],
 // [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2Bucket],
@@ -5051,6 +5175,38 @@ func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelinesType) IsKno
 	return false
 }
 
+// A K2 stream binding. Available only to accounts enabled for K2.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindK2 struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name" api:"required"`
+	// ID of a K2 stream owned by the account deploying the Worker.
+	Stream param.Field[string] `json:"stream" api:"required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindK2Type] `json:"type" api:"required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindK2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindK2) implementsScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindK2Type string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindK2TypeK2 ScriptUpdateParamsMetadataBindingsWorkersBindingKindK2Type = "k2"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindK2Type) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindK2TypeK2:
+		return true
+	}
+	return false
+}
+
 type ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -5708,6 +5864,7 @@ const (
 	ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate        ScriptUpdateParamsMetadataBindingsType = "mtls_certificate"
 	ScriptUpdateParamsMetadataBindingsTypePlainText              ScriptUpdateParamsMetadataBindingsType = "plain_text"
 	ScriptUpdateParamsMetadataBindingsTypePipelines              ScriptUpdateParamsMetadataBindingsType = "pipelines"
+	ScriptUpdateParamsMetadataBindingsTypeK2                     ScriptUpdateParamsMetadataBindingsType = "k2"
 	ScriptUpdateParamsMetadataBindingsTypeQueue                  ScriptUpdateParamsMetadataBindingsType = "queue"
 	ScriptUpdateParamsMetadataBindingsTypeRatelimit              ScriptUpdateParamsMetadataBindingsType = "ratelimit"
 	ScriptUpdateParamsMetadataBindingsTypeR2Bucket               ScriptUpdateParamsMetadataBindingsType = "r2_bucket"
@@ -5728,7 +5885,7 @@ const (
 
 func (r ScriptUpdateParamsMetadataBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataBindingsTypeAI, ScriptUpdateParamsMetadataBindingsTypeAISearch, ScriptUpdateParamsMetadataBindingsTypeAISearchNamespace, ScriptUpdateParamsMetadataBindingsTypeMessaging, ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, ScriptUpdateParamsMetadataBindingsTypeAssets, ScriptUpdateParamsMetadataBindingsTypeBrowser, ScriptUpdateParamsMetadataBindingsTypeD1, ScriptUpdateParamsMetadataBindingsTypeDataBlob, ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, ScriptUpdateParamsMetadataBindingsTypeHyperdrive, ScriptUpdateParamsMetadataBindingsTypeInherit, ScriptUpdateParamsMetadataBindingsTypeImages, ScriptUpdateParamsMetadataBindingsTypeJson, ScriptUpdateParamsMetadataBindingsTypeKVNamespace, ScriptUpdateParamsMetadataBindingsTypeMedia, ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, ScriptUpdateParamsMetadataBindingsTypePlainText, ScriptUpdateParamsMetadataBindingsTypePipelines, ScriptUpdateParamsMetadataBindingsTypeQueue, ScriptUpdateParamsMetadataBindingsTypeRatelimit, ScriptUpdateParamsMetadataBindingsTypeR2Bucket, ScriptUpdateParamsMetadataBindingsTypeSecretText, ScriptUpdateParamsMetadataBindingsTypeSendEmail, ScriptUpdateParamsMetadataBindingsTypeService, ScriptUpdateParamsMetadataBindingsTypeTextBlob, ScriptUpdateParamsMetadataBindingsTypeVectorize, ScriptUpdateParamsMetadataBindingsTypeVersionMetadata, ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, ScriptUpdateParamsMetadataBindingsTypeFlagship, ScriptUpdateParamsMetadataBindingsTypeSecretKey, ScriptUpdateParamsMetadataBindingsTypeWorkflow, ScriptUpdateParamsMetadataBindingsTypeWasmModule, ScriptUpdateParamsMetadataBindingsTypeVPCService, ScriptUpdateParamsMetadataBindingsTypeVPCNetwork:
+	case ScriptUpdateParamsMetadataBindingsTypeAI, ScriptUpdateParamsMetadataBindingsTypeAISearch, ScriptUpdateParamsMetadataBindingsTypeAISearchNamespace, ScriptUpdateParamsMetadataBindingsTypeMessaging, ScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, ScriptUpdateParamsMetadataBindingsTypeAssets, ScriptUpdateParamsMetadataBindingsTypeBrowser, ScriptUpdateParamsMetadataBindingsTypeD1, ScriptUpdateParamsMetadataBindingsTypeDataBlob, ScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, ScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, ScriptUpdateParamsMetadataBindingsTypeHyperdrive, ScriptUpdateParamsMetadataBindingsTypeInherit, ScriptUpdateParamsMetadataBindingsTypeImages, ScriptUpdateParamsMetadataBindingsTypeJson, ScriptUpdateParamsMetadataBindingsTypeKVNamespace, ScriptUpdateParamsMetadataBindingsTypeMedia, ScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, ScriptUpdateParamsMetadataBindingsTypePlainText, ScriptUpdateParamsMetadataBindingsTypePipelines, ScriptUpdateParamsMetadataBindingsTypeK2, ScriptUpdateParamsMetadataBindingsTypeQueue, ScriptUpdateParamsMetadataBindingsTypeRatelimit, ScriptUpdateParamsMetadataBindingsTypeR2Bucket, ScriptUpdateParamsMetadataBindingsTypeSecretText, ScriptUpdateParamsMetadataBindingsTypeSendEmail, ScriptUpdateParamsMetadataBindingsTypeService, ScriptUpdateParamsMetadataBindingsTypeTextBlob, ScriptUpdateParamsMetadataBindingsTypeVectorize, ScriptUpdateParamsMetadataBindingsTypeVersionMetadata, ScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, ScriptUpdateParamsMetadataBindingsTypeFlagship, ScriptUpdateParamsMetadataBindingsTypeSecretKey, ScriptUpdateParamsMetadataBindingsTypeWorkflow, ScriptUpdateParamsMetadataBindingsTypeWasmModule, ScriptUpdateParamsMetadataBindingsTypeVPCService, ScriptUpdateParamsMetadataBindingsTypeVPCNetwork:
 		return true
 	}
 	return false
@@ -6592,6 +6749,8 @@ type ScriptUpdateParamsMetadataObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Real-time Issues settings for the Worker.
+	Issues param.Field[ScriptUpdateParamsMetadataObservabilityIssues] `json:"issues"`
 	// Log settings for the Worker.
 	Logs param.Field[ScriptUpdateParamsMetadataObservabilityLogs] `json:"logs"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -6601,6 +6760,16 @@ type ScriptUpdateParamsMetadataObservability struct {
 }
 
 func (r ScriptUpdateParamsMetadataObservability) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Real-time Issues settings for the Worker.
+type ScriptUpdateParamsMetadataObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r ScriptUpdateParamsMetadataObservabilityIssues) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -6992,9 +7161,10 @@ func (r ScriptListParams) URLQuery() (v url.Values) {
 type ScriptDeleteParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// If set to true, delete will not be stopped by associated service binding,
-	// durable object, or other binding. Any of these associated bindings/durable
-	// objects will be deleted along with the script.
+	// If true, delete the Worker even when other Workers still reference it. Service
+	// bindings in those Workers may be left broken. Durable Object namespaces
+	// implemented by the deleted Worker are deleted even if other Workers reference
+	// them.
 	Force param.Field[bool] `query:"force"`
 }
 

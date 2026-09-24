@@ -19,6 +19,7 @@ type CasbPostureService struct {
 	FindingTypes *CasbPostureFindingTypeService
 	Content      *CasbPostureContentService
 	Remediations *CasbPostureRemediationService
+	Policies     *CasbPosturePolicyService
 	Webhooks     *CasbPostureWebhookService
 }
 
@@ -33,6 +34,7 @@ func NewCasbPostureService(opts ...option.RequestOption) (r *CasbPostureService)
 	r.FindingTypes = NewCasbPostureFindingTypeService(opts...)
 	r.Content = NewCasbPostureContentService(opts...)
 	r.Remediations = NewCasbPostureRemediationService(opts...)
+	r.Policies = NewCasbPosturePolicyService(opts...)
 	r.Webhooks = NewCasbPostureWebhookService(opts...)
 	return
 }

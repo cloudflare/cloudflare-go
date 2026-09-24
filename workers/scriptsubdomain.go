@@ -34,7 +34,7 @@ func NewScriptSubdomainService(opts ...option.RequestOption) (r *ScriptSubdomain
 	return
 }
 
-// Enable or disable the Worker on the workers.dev subdomain.
+// Enable or disable a Worker script on the workers.dev subdomain.
 func (r *ScriptSubdomainService) New(ctx context.Context, scriptName string, params ScriptSubdomainNewParams, opts ...option.RequestOption) (res *ScriptSubdomainNewResponse, err error) {
 	var env ScriptSubdomainNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -55,7 +55,7 @@ func (r *ScriptSubdomainService) New(ctx context.Context, scriptName string, par
 	return res, nil
 }
 
-// Disable all workers.dev subdomains for a Worker.
+// Disable all workers.dev subdomains for a Worker script.
 func (r *ScriptSubdomainService) Delete(ctx context.Context, scriptName string, body ScriptSubdomainDeleteParams, opts ...option.RequestOption) (res *ScriptSubdomainDeleteResponse, err error) {
 	var env ScriptSubdomainDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -76,7 +76,7 @@ func (r *ScriptSubdomainService) Delete(ctx context.Context, scriptName string, 
 	return res, nil
 }
 
-// Get if the Worker is available on the workers.dev subdomain.
+// Get whether a Worker script is available on the workers.dev subdomain.
 func (r *ScriptSubdomainService) Get(ctx context.Context, scriptName string, query ScriptSubdomainGetParams, opts ...option.RequestOption) (res *ScriptSubdomainGetResponse, err error) {
 	var env ScriptSubdomainGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

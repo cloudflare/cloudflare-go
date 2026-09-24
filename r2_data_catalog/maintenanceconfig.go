@@ -82,6 +82,8 @@ func (r *MaintenanceConfigService) Get(ctx context.Context, bucketName string, q
 type MaintenanceConfigUpdateResponse struct {
 	// Configures compaction for catalog maintenance.
 	Compaction MaintenanceConfigUpdateResponseCompaction `json:"compaction"`
+	// Scheduling interval between normal table maintenance runs.
+	Interval string `json:"interval"`
 	// Configures snapshot expiration settings.
 	SnapshotExpiration MaintenanceConfigUpdateResponseSnapshotExpiration `json:"snapshot_expiration"`
 	JSON               maintenanceConfigUpdateResponseJSON               `json:"-"`
@@ -91,6 +93,7 @@ type MaintenanceConfigUpdateResponse struct {
 // [MaintenanceConfigUpdateResponse]
 type maintenanceConfigUpdateResponseJSON struct {
 	Compaction         apijson.Field
+	Interval           apijson.Field
 	SnapshotExpiration apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
@@ -258,6 +261,8 @@ func (r MaintenanceConfigGetResponseCredentialStatus) IsKnown() bool {
 type MaintenanceConfigGetResponseMaintenanceConfig struct {
 	// Configures compaction for catalog maintenance.
 	Compaction MaintenanceConfigGetResponseMaintenanceConfigCompaction `json:"compaction"`
+	// Scheduling interval between normal table maintenance runs.
+	Interval string `json:"interval"`
 	// Configures snapshot expiration settings.
 	SnapshotExpiration MaintenanceConfigGetResponseMaintenanceConfigSnapshotExpiration `json:"snapshot_expiration"`
 	JSON               maintenanceConfigGetResponseMaintenanceConfigJSON               `json:"-"`
@@ -267,6 +272,7 @@ type MaintenanceConfigGetResponseMaintenanceConfig struct {
 // the struct [MaintenanceConfigGetResponseMaintenanceConfig]
 type maintenanceConfigGetResponseMaintenanceConfigJSON struct {
 	Compaction         apijson.Field
+	Interval           apijson.Field
 	SnapshotExpiration apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field

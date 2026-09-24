@@ -41,7 +41,7 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 	return
 }
 
-// Create a new event subscription for a queue
+// Creates an event subscription for a Queue.
 func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewParams, opts ...option.RequestOption) (res *SubscriptionNewResponse, err error) {
 	var env SubscriptionNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -58,7 +58,7 @@ func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewPar
 	return res, nil
 }
 
-// Update an existing event subscription
+// Updates an existing Queue event subscription.
 func (r *SubscriptionService) Update(ctx context.Context, subscriptionID string, params SubscriptionUpdateParams, opts ...option.RequestOption) (res *SubscriptionUpdateResponse, err error) {
 	var env SubscriptionUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -79,7 +79,8 @@ func (r *SubscriptionService) Update(ctx context.Context, subscriptionID string,
 	return res, nil
 }
 
-// Get a paginated list of event subscriptions with optional sorting and filtering
+// Returns a paginated list of Queue event subscriptions with optional sorting and
+// filtering.
 func (r *SubscriptionService) List(ctx context.Context, params SubscriptionListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SubscriptionListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -101,12 +102,13 @@ func (r *SubscriptionService) List(ctx context.Context, params SubscriptionListP
 	return res, nil
 }
 
-// Get a paginated list of event subscriptions with optional sorting and filtering
+// Returns a paginated list of Queue event subscriptions with optional sorting and
+// filtering.
 func (r *SubscriptionService) ListAutoPaging(ctx context.Context, params SubscriptionListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[SubscriptionListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete an existing event subscription
+// Deletes an existing Queue event subscription.
 func (r *SubscriptionService) Delete(ctx context.Context, subscriptionID string, body SubscriptionDeleteParams, opts ...option.RequestOption) (res *SubscriptionDeleteResponse, err error) {
 	var env SubscriptionDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -127,7 +129,7 @@ func (r *SubscriptionService) Delete(ctx context.Context, subscriptionID string,
 	return res, nil
 }
 
-// Get details about an existing event subscription
+// Returns an existing Queue event subscription.
 func (r *SubscriptionService) Get(ctx context.Context, subscriptionID string, query SubscriptionGetParams, opts ...option.RequestOption) (res *SubscriptionGetResponse, err error) {
 	var env SubscriptionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

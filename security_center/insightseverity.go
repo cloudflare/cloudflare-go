@@ -96,18 +96,19 @@ type InsightSeverityGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID        param.Field[string]                     `path:"zone_id"`
-	Dismissed     param.Field[bool]                       `query:"dismissed"`
-	IssueClass    param.Field[[]string]                   `query:"issue_class"`
-	IssueClassNeq param.Field[[]string]                   `query:"issue_class~neq"`
-	IssueType     param.Field[[]intel.IssueType]          `query:"issue_type"`
-	IssueTypeNeq  param.Field[[]intel.IssueType]          `query:"issue_type~neq"`
-	Product       param.Field[[]string]                   `query:"product"`
-	ProductNeq    param.Field[[]string]                   `query:"product~neq"`
-	Severity      param.Field[[]intel.SeverityQueryParam] `query:"severity"`
-	SeverityNeq   param.Field[[]intel.SeverityQueryParam] `query:"severity~neq"`
-	Subject       param.Field[[]string]                   `query:"subject"`
-	SubjectNeq    param.Field[[]string]                   `query:"subject~neq"`
+	ZoneID        param.Field[string]                           `path:"zone_id"`
+	Dismissed     param.Field[bool]                             `query:"dismissed"`
+	IssueClass    param.Field[[]string]                         `query:"issue_class"`
+	IssueClassNeq param.Field[[]string]                         `query:"issue_class~neq"`
+	IssueType     param.Field[[]intel.IssueType]                `query:"issue_type"`
+	IssueTypeNeq  param.Field[[]intel.IssueType]                `query:"issue_type~neq"`
+	Product       param.Field[[]string]                         `query:"product"`
+	ProductNeq    param.Field[[]string]                         `query:"product~neq"`
+	Severity      param.Field[[]intel.SeverityQueryParam]       `query:"severity"`
+	SeverityNeq   param.Field[[]intel.SeverityQueryParam]       `query:"severity~neq"`
+	Source        param.Field[[]InsightSeverityGetParamsSource] `query:"source"`
+	Subject       param.Field[[]string]                         `query:"subject"`
+	SubjectNeq    param.Field[[]string]                         `query:"subject~neq"`
 }
 
 // URLQuery serializes [InsightSeverityGetParams]'s query parameters as
@@ -117,6 +118,21 @@ func (r InsightSeverityGetParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type InsightSeverityGetParamsSource string
+
+const (
+	InsightSeverityGetParamsSourceCloudflare InsightSeverityGetParamsSource = "cloudflare"
+	InsightSeverityGetParamsSourceRiskrecon  InsightSeverityGetParamsSource = "riskrecon"
+)
+
+func (r InsightSeverityGetParamsSource) IsKnown() bool {
+	switch r {
+	case InsightSeverityGetParamsSourceCloudflare, InsightSeverityGetParamsSourceRiskrecon:
+		return true
+	}
+	return false
 }
 
 type InsightSeverityGetResponseEnvelope struct {

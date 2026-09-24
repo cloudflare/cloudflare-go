@@ -34,7 +34,7 @@ func NewScriptScheduleService(opts ...option.RequestOption) (r *ScriptScheduleSe
 	return
 }
 
-// Updates Cron Triggers for a Worker.
+// Update the schedules (Cron Triggers) for a Worker script.
 func (r *ScriptScheduleService) Update(ctx context.Context, scriptName string, params ScriptScheduleUpdateParams, opts ...option.RequestOption) (res *ScriptScheduleUpdateResponse, err error) {
 	var env ScriptScheduleUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -55,7 +55,7 @@ func (r *ScriptScheduleService) Update(ctx context.Context, scriptName string, p
 	return res, nil
 }
 
-// Fetches Cron Triggers for a Worker.
+// Get the schedules (Cron Triggers) for a Worker script.
 func (r *ScriptScheduleService) Get(ctx context.Context, scriptName string, query ScriptScheduleGetParams, opts ...option.RequestOption) (res *ScriptScheduleGetResponse, err error) {
 	var env ScriptScheduleGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

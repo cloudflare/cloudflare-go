@@ -691,6 +691,9 @@ type ThreatEventNewParamsSource struct {
 	ResourceID   param.Field[string]                                 `json:"resourceId" api:"required" format:"uuid"`
 	ResourceType param.Field[ThreatEventNewParamsSourceResourceType] `json:"resourceType" api:"required"`
 	System       param.Field[ThreatEventNewParamsSourceSystem]       `json:"system" api:"required"`
+	// Threat Signals article title; null for historical provenance without a stored
+	// title.
+	Title param.Field[string] `json:"title"`
 }
 
 func (r ThreatEventNewParamsSource) MarshalJSON() (data []byte, err error) {

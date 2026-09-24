@@ -39,7 +39,7 @@ func NewScriptScriptAndVersionSettingService(opts ...option.RequestOption) (r *S
 	return
 }
 
-// Patch metadata or config, such as bindings or usage model.
+// Patch Worker script metadata or config, such as bindings or usage model.
 func (r *ScriptScriptAndVersionSettingService) Edit(ctx context.Context, scriptName string, params ScriptScriptAndVersionSettingEditParams, opts ...option.RequestOption) (res *ScriptScriptAndVersionSettingEditResponse, err error) {
 	var env ScriptScriptAndVersionSettingEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -60,7 +60,7 @@ func (r *ScriptScriptAndVersionSettingService) Edit(ctx context.Context, scriptN
 	return res, nil
 }
 
-// Get metadata and config, such as bindings or usage model.
+// Get Worker script metadata and config, such as bindings or usage model.
 func (r *ScriptScriptAndVersionSettingService) Get(ctx context.Context, scriptName string, query ScriptScriptAndVersionSettingGetParams, opts ...option.RequestOption) (res *ScriptScriptAndVersionSettingGetResponse, err error) {
 	var env ScriptScriptAndVersionSettingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -276,6 +276,8 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	Simple interface{} `json:"simple"`
 	// ID of the store containing the secret.
 	StoreID string `json:"store_id"`
+	// ID of a K2 stream owned by the account deploying the Worker.
+	Stream string `json:"stream"`
 	// The text value to use.
 	Text string `json:"text"`
 	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
@@ -333,6 +335,7 @@ type scriptScriptAndVersionSettingEditResponseBindingJSON struct {
 	ServiceID                   apijson.Field
 	Simple                      apijson.Field
 	StoreID                     apijson.Field
+	Stream                      apijson.Field
 	Text                        apijson.Field
 	TunnelID                    apijson.Field
 	Usages                      apijson.Field
@@ -379,6 +382,7 @@ func (r *ScriptScriptAndVersionSettingEditResponseBinding) UnmarshalJSON(data []
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPipelines],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindK2],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindRatelimit],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket],
@@ -422,6 +426,7 @@ func (r ScriptScriptAndVersionSettingEditResponseBinding) AsUnion() ScriptScript
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPlainText],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPipelines],
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindK2],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindRatelimit],
 // [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindR2Bucket],
@@ -546,6 +551,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPipelines{}),
 			DiscriminatorValue: "pipelines",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindK2{}),
+			DiscriminatorValue: "k2",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -1675,6 +1685,54 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindPipel
 	return false
 }
 
+// A K2 stream binding. Available only to accounts enabled for K2.
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindK2 struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name" api:"required"`
+	// ID of a K2 stream owned by the account deploying the Worker.
+	Stream string `json:"stream" api:"required"`
+	// The kind of resource that the binding provides.
+	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindK2Type `json:"type" api:"required"`
+	JSON scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindK2JSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindK2JSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindK2]
+type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindK2JSON struct {
+	Name        apijson.Field
+	Stream      apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindK2) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindK2JSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindK2) implementsScriptScriptAndVersionSettingEditResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindK2Type string
+
+const (
+	ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindK2TypeK2 ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindK2Type = "k2"
+)
+
+func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindK2Type) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindK2TypeK2:
+		return true
+	}
+	return false
+}
+
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name" api:"required"`
@@ -2607,6 +2665,7 @@ const (
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeMTLSCertificate        ScriptScriptAndVersionSettingEditResponseBindingsType = "mtls_certificate"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypePlainText              ScriptScriptAndVersionSettingEditResponseBindingsType = "plain_text"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypePipelines              ScriptScriptAndVersionSettingEditResponseBindingsType = "pipelines"
+	ScriptScriptAndVersionSettingEditResponseBindingsTypeK2                     ScriptScriptAndVersionSettingEditResponseBindingsType = "k2"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeQueue                  ScriptScriptAndVersionSettingEditResponseBindingsType = "queue"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeRatelimit              ScriptScriptAndVersionSettingEditResponseBindingsType = "ratelimit"
 	ScriptScriptAndVersionSettingEditResponseBindingsTypeR2Bucket               ScriptScriptAndVersionSettingEditResponseBindingsType = "r2_bucket"
@@ -2627,7 +2686,7 @@ const (
 
 func (r ScriptScriptAndVersionSettingEditResponseBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditResponseBindingsTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsTypeAISearch, ScriptScriptAndVersionSettingEditResponseBindingsTypeAISearchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeMessaging, ScriptScriptAndVersionSettingEditResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingEditResponseBindingsTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsTypeDataBlob, ScriptScriptAndVersionSettingEditResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsTypeInherit, ScriptScriptAndVersionSettingEditResponseBindingsTypeImages, ScriptScriptAndVersionSettingEditResponseBindingsTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeMedia, ScriptScriptAndVersionSettingEditResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsTypePipelines, ScriptScriptAndVersionSettingEditResponseBindingsTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsTypeRatelimit, ScriptScriptAndVersionSettingEditResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsTypeSendEmail, ScriptScriptAndVersionSettingEditResponseBindingsTypeService, ScriptScriptAndVersionSettingEditResponseBindingsTypeTextBlob, ScriptScriptAndVersionSettingEditResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditResponseBindingsTypeFlagship, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretKey, ScriptScriptAndVersionSettingEditResponseBindingsTypeWorkflow, ScriptScriptAndVersionSettingEditResponseBindingsTypeWasmModule, ScriptScriptAndVersionSettingEditResponseBindingsTypeVPCService, ScriptScriptAndVersionSettingEditResponseBindingsTypeVPCNetwork:
+	case ScriptScriptAndVersionSettingEditResponseBindingsTypeAI, ScriptScriptAndVersionSettingEditResponseBindingsTypeAISearch, ScriptScriptAndVersionSettingEditResponseBindingsTypeAISearchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeMessaging, ScriptScriptAndVersionSettingEditResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditResponseBindingsTypeAssets, ScriptScriptAndVersionSettingEditResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingEditResponseBindingsTypeD1, ScriptScriptAndVersionSettingEditResponseBindingsTypeDataBlob, ScriptScriptAndVersionSettingEditResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditResponseBindingsTypeInherit, ScriptScriptAndVersionSettingEditResponseBindingsTypeImages, ScriptScriptAndVersionSettingEditResponseBindingsTypeJson, ScriptScriptAndVersionSettingEditResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditResponseBindingsTypeMedia, ScriptScriptAndVersionSettingEditResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditResponseBindingsTypePlainText, ScriptScriptAndVersionSettingEditResponseBindingsTypePipelines, ScriptScriptAndVersionSettingEditResponseBindingsTypeK2, ScriptScriptAndVersionSettingEditResponseBindingsTypeQueue, ScriptScriptAndVersionSettingEditResponseBindingsTypeRatelimit, ScriptScriptAndVersionSettingEditResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingEditResponseBindingsTypeSendEmail, ScriptScriptAndVersionSettingEditResponseBindingsTypeService, ScriptScriptAndVersionSettingEditResponseBindingsTypeTextBlob, ScriptScriptAndVersionSettingEditResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingEditResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditResponseBindingsTypeFlagship, ScriptScriptAndVersionSettingEditResponseBindingsTypeSecretKey, ScriptScriptAndVersionSettingEditResponseBindingsTypeWorkflow, ScriptScriptAndVersionSettingEditResponseBindingsTypeWasmModule, ScriptScriptAndVersionSettingEditResponseBindingsTypeVPCService, ScriptScriptAndVersionSettingEditResponseBindingsTypeVPCNetwork:
 		return true
 	}
 	return false
@@ -3844,6 +3903,8 @@ type ScriptScriptAndVersionSettingEditResponseObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
+	// Real-time Issues settings for the Worker.
+	Issues ScriptScriptAndVersionSettingEditResponseObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs ScriptScriptAndVersionSettingEditResponseObservabilityLogs `json:"logs" api:"nullable"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -3858,6 +3919,7 @@ type ScriptScriptAndVersionSettingEditResponseObservability struct {
 type scriptScriptAndVersionSettingEditResponseObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -3870,6 +3932,30 @@ func (r *ScriptScriptAndVersionSettingEditResponseObservability) UnmarshalJSON(d
 }
 
 func (r scriptScriptAndVersionSettingEditResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type ScriptScriptAndVersionSettingEditResponseObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                                                             `json:"enabled"`
+	JSON    scriptScriptAndVersionSettingEditResponseObservabilityIssuesJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseObservabilityIssuesJSON contains the
+// JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseObservabilityIssues]
+type scriptScriptAndVersionSettingEditResponseObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -4462,6 +4548,8 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	Simple interface{} `json:"simple"`
 	// ID of the store containing the secret.
 	StoreID string `json:"store_id"`
+	// ID of a K2 stream owned by the account deploying the Worker.
+	Stream string `json:"stream"`
 	// The text value to use.
 	Text string `json:"text"`
 	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
@@ -4519,6 +4607,7 @@ type scriptScriptAndVersionSettingGetResponseBindingJSON struct {
 	ServiceID                   apijson.Field
 	Simple                      apijson.Field
 	StoreID                     apijson.Field
+	Stream                      apijson.Field
 	Text                        apijson.Field
 	TunnelID                    apijson.Field
 	Usages                      apijson.Field
@@ -4565,6 +4654,7 @@ func (r *ScriptScriptAndVersionSettingGetResponseBinding) UnmarshalJSON(data []b
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPipelines],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindK2],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindRatelimit],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket],
@@ -4608,6 +4698,7 @@ func (r ScriptScriptAndVersionSettingGetResponseBinding) AsUnion() ScriptScriptA
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPlainText],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPipelines],
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindK2],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindRatelimit],
 // [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindR2Bucket],
@@ -4732,6 +4823,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPipelines{}),
 			DiscriminatorValue: "pipelines",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindK2{}),
+			DiscriminatorValue: "k2",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -5861,6 +5957,54 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindPipeli
 	return false
 }
 
+// A K2 stream binding. Available only to accounts enabled for K2.
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindK2 struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name" api:"required"`
+	// ID of a K2 stream owned by the account deploying the Worker.
+	Stream string `json:"stream" api:"required"`
+	// The kind of resource that the binding provides.
+	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindK2Type `json:"type" api:"required"`
+	JSON scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindK2JSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindK2JSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindK2]
+type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindK2JSON struct {
+	Name        apijson.Field
+	Stream      apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindK2) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindK2JSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindK2) implementsScriptScriptAndVersionSettingGetResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindK2Type string
+
+const (
+	ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindK2TypeK2 ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindK2Type = "k2"
+)
+
+func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindK2Type) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindK2TypeK2:
+		return true
+	}
+	return false
+}
+
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name" api:"required"`
@@ -6793,6 +6937,7 @@ const (
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeMTLSCertificate        ScriptScriptAndVersionSettingGetResponseBindingsType = "mtls_certificate"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypePlainText              ScriptScriptAndVersionSettingGetResponseBindingsType = "plain_text"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypePipelines              ScriptScriptAndVersionSettingGetResponseBindingsType = "pipelines"
+	ScriptScriptAndVersionSettingGetResponseBindingsTypeK2                     ScriptScriptAndVersionSettingGetResponseBindingsType = "k2"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeQueue                  ScriptScriptAndVersionSettingGetResponseBindingsType = "queue"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeRatelimit              ScriptScriptAndVersionSettingGetResponseBindingsType = "ratelimit"
 	ScriptScriptAndVersionSettingGetResponseBindingsTypeR2Bucket               ScriptScriptAndVersionSettingGetResponseBindingsType = "r2_bucket"
@@ -6813,7 +6958,7 @@ const (
 
 func (r ScriptScriptAndVersionSettingGetResponseBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingGetResponseBindingsTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsTypeAISearch, ScriptScriptAndVersionSettingGetResponseBindingsTypeAISearchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeMessaging, ScriptScriptAndVersionSettingGetResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingGetResponseBindingsTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsTypeDataBlob, ScriptScriptAndVersionSettingGetResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsTypeInherit, ScriptScriptAndVersionSettingGetResponseBindingsTypeImages, ScriptScriptAndVersionSettingGetResponseBindingsTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeMedia, ScriptScriptAndVersionSettingGetResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsTypePipelines, ScriptScriptAndVersionSettingGetResponseBindingsTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsTypeRatelimit, ScriptScriptAndVersionSettingGetResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsTypeSendEmail, ScriptScriptAndVersionSettingGetResponseBindingsTypeService, ScriptScriptAndVersionSettingGetResponseBindingsTypeTextBlob, ScriptScriptAndVersionSettingGetResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingGetResponseBindingsTypeFlagship, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretKey, ScriptScriptAndVersionSettingGetResponseBindingsTypeWorkflow, ScriptScriptAndVersionSettingGetResponseBindingsTypeWasmModule, ScriptScriptAndVersionSettingGetResponseBindingsTypeVPCService, ScriptScriptAndVersionSettingGetResponseBindingsTypeVPCNetwork:
+	case ScriptScriptAndVersionSettingGetResponseBindingsTypeAI, ScriptScriptAndVersionSettingGetResponseBindingsTypeAISearch, ScriptScriptAndVersionSettingGetResponseBindingsTypeAISearchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeMessaging, ScriptScriptAndVersionSettingGetResponseBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingGetResponseBindingsTypeAssets, ScriptScriptAndVersionSettingGetResponseBindingsTypeBrowser, ScriptScriptAndVersionSettingGetResponseBindingsTypeD1, ScriptScriptAndVersionSettingGetResponseBindingsTypeDataBlob, ScriptScriptAndVersionSettingGetResponseBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeHyperdrive, ScriptScriptAndVersionSettingGetResponseBindingsTypeInherit, ScriptScriptAndVersionSettingGetResponseBindingsTypeImages, ScriptScriptAndVersionSettingGetResponseBindingsTypeJson, ScriptScriptAndVersionSettingGetResponseBindingsTypeKVNamespace, ScriptScriptAndVersionSettingGetResponseBindingsTypeMedia, ScriptScriptAndVersionSettingGetResponseBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingGetResponseBindingsTypePlainText, ScriptScriptAndVersionSettingGetResponseBindingsTypePipelines, ScriptScriptAndVersionSettingGetResponseBindingsTypeK2, ScriptScriptAndVersionSettingGetResponseBindingsTypeQueue, ScriptScriptAndVersionSettingGetResponseBindingsTypeRatelimit, ScriptScriptAndVersionSettingGetResponseBindingsTypeR2Bucket, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretText, ScriptScriptAndVersionSettingGetResponseBindingsTypeSendEmail, ScriptScriptAndVersionSettingGetResponseBindingsTypeService, ScriptScriptAndVersionSettingGetResponseBindingsTypeTextBlob, ScriptScriptAndVersionSettingGetResponseBindingsTypeVectorize, ScriptScriptAndVersionSettingGetResponseBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingGetResponseBindingsTypeFlagship, ScriptScriptAndVersionSettingGetResponseBindingsTypeSecretKey, ScriptScriptAndVersionSettingGetResponseBindingsTypeWorkflow, ScriptScriptAndVersionSettingGetResponseBindingsTypeWasmModule, ScriptScriptAndVersionSettingGetResponseBindingsTypeVPCService, ScriptScriptAndVersionSettingGetResponseBindingsTypeVPCNetwork:
 		return true
 	}
 	return false
@@ -8030,6 +8175,8 @@ type ScriptScriptAndVersionSettingGetResponseObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
+	// Real-time Issues settings for the Worker.
+	Issues ScriptScriptAndVersionSettingGetResponseObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs ScriptScriptAndVersionSettingGetResponseObservabilityLogs `json:"logs" api:"nullable"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -8044,6 +8191,7 @@ type ScriptScriptAndVersionSettingGetResponseObservability struct {
 type scriptScriptAndVersionSettingGetResponseObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -8056,6 +8204,30 @@ func (r *ScriptScriptAndVersionSettingGetResponseObservability) UnmarshalJSON(da
 }
 
 func (r scriptScriptAndVersionSettingGetResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type ScriptScriptAndVersionSettingGetResponseObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                                                            `json:"enabled"`
+	JSON    scriptScriptAndVersionSettingGetResponseObservabilityIssuesJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseObservabilityIssuesJSON contains the
+// JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseObservabilityIssues]
+type scriptScriptAndVersionSettingGetResponseObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -8619,6 +8791,8 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	Simple    param.Field[interface{}] `json:"simple"`
 	// ID of the store containing the secret.
 	StoreID param.Field[string] `json:"store_id"`
+	// ID of a K2 stream owned by the account deploying the Worker.
+	Stream param.Field[string] `json:"stream"`
 	// The text value to use.
 	Text param.Field[string] `json:"text"`
 	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
@@ -8662,6 +8836,7 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBinding) implementsScript
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificate],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPlainText],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindPipelines],
+// [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindK2],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueue],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindRatelimit],
 // [workers.ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindR2Bucket],
@@ -9360,6 +9535,38 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 	return false
 }
 
+// A K2 stream binding. Available only to accounts enabled for K2.
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindK2 struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name" api:"required"`
+	// ID of a K2 stream owned by the account deploying the Worker.
+	Stream param.Field[string] `json:"stream" api:"required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindK2Type] `json:"type" api:"required"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindK2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindK2) implementsScriptScriptAndVersionSettingEditParamsSettingsBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindK2Type string
+
+const (
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindK2TypeK2 ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindK2Type = "k2"
+)
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindK2Type) IsKnown() bool {
+	switch r {
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindK2TypeK2:
+		return true
+	}
+	return false
+}
+
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -10017,6 +10224,7 @@ const (
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMTLSCertificate        ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "mtls_certificate"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePlainText              ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "plain_text"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePipelines              ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "pipelines"
+	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeK2                     ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "k2"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeQueue                  ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "queue"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeRatelimit              ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "ratelimit"
 	ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeR2Bucket               ScriptScriptAndVersionSettingEditParamsSettingsBindingsType = "r2_bucket"
@@ -10037,7 +10245,7 @@ const (
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAISearch, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAISearchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMessaging, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeBrowser, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDataBlob, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeInherit, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeImages, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMedia, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePipelines, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeRatelimit, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSendEmail, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeTextBlob, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeFlagship, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretKey, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWorkflow, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWasmModule, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVPCService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVPCNetwork:
+	case ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAI, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAISearch, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAISearchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMessaging, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAnalyticsEngine, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeAssets, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeBrowser, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeD1, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDataBlob, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDispatchNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeHyperdrive, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeInherit, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeImages, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeJson, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeKVNamespace, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMedia, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeMTLSCertificate, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePlainText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypePipelines, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeK2, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeQueue, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeRatelimit, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeR2Bucket, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretText, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSendEmail, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeTextBlob, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVectorize, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVersionMetadata, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeFlagship, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeSecretKey, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWorkflow, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeWasmModule, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVPCService, ScriptScriptAndVersionSettingEditParamsSettingsBindingsTypeVPCNetwork:
 		return true
 	}
 	return false
@@ -10904,6 +11112,8 @@ type ScriptScriptAndVersionSettingEditParamsSettingsObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Real-time Issues settings for the Worker.
+	Issues param.Field[ScriptScriptAndVersionSettingEditParamsSettingsObservabilityIssues] `json:"issues"`
 	// Log settings for the Worker.
 	Logs param.Field[ScriptScriptAndVersionSettingEditParamsSettingsObservabilityLogs] `json:"logs"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -10913,6 +11123,16 @@ type ScriptScriptAndVersionSettingEditParamsSettingsObservability struct {
 }
 
 func (r ScriptScriptAndVersionSettingEditParamsSettingsObservability) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Real-time Issues settings for the Worker.
+type ScriptScriptAndVersionSettingEditParamsSettingsObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsObservabilityIssues) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

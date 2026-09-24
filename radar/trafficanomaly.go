@@ -78,7 +78,7 @@ type TrafficAnomalyGetResponseTrafficAnomaly struct {
 	EndDate              time.Time                                                `json:"endDate" api:"required,nullable" format:"date-time"`
 	LocationDetails      TrafficAnomalyGetResponseTrafficAnomaliesLocationDetails `json:"locationDetails" api:"required,nullable"`
 	OriginDetails        TrafficAnomalyGetResponseTrafficAnomaliesOriginDetails   `json:"originDetails" api:"required,nullable"`
-	StartDate            string                                                   `json:"startDate" api:"required"`
+	StartDate            time.Time                                                `json:"startDate" api:"required" format:"date-time"`
 	Status               string                                                   `json:"status" api:"required"`
 	Type                 string                                                   `json:"type" api:"required"`
 	UUID                 string                                                   `json:"uuid" api:"required"`

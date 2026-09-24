@@ -73,7 +73,8 @@ func (r *RuleCatchAllService) Get(ctx context.Context, query RuleCatchAllGetPara
 // Action for the catch-all routing rule.
 type CatchAllAction struct {
 	// Type of action for catch-all rule.
-	Type  CatchAllActionType `json:"type" api:"required"`
+	Type CatchAllActionType `json:"type" api:"required"`
+	// List of values for the action. Currently limited to a single value.
 	Value []string           `json:"value"`
 	JSON  catchAllActionJSON `json:"-"`
 }
@@ -114,8 +115,9 @@ func (r CatchAllActionType) IsKnown() bool {
 // Action for the catch-all routing rule.
 type CatchAllActionParam struct {
 	// Type of action for catch-all rule.
-	Type  param.Field[CatchAllActionType] `json:"type" api:"required"`
-	Value param.Field[[]string]           `json:"value"`
+	Type param.Field[CatchAllActionType] `json:"type" api:"required"`
+	// List of values for the action. Currently limited to a single value.
+	Value param.Field[[]string] `json:"value"`
 }
 
 func (r CatchAllActionParam) MarshalJSON() (data []byte, err error) {

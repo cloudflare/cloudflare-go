@@ -56,6 +56,7 @@ func TestNamespaceInstanceNewWithOptionalParams(t *testing.T) {
 			}),
 			IndexingOptions: cloudflare.F(ai_search.NamespaceInstanceNewParamsIndexingOptions{
 				KeywordTokenizer: cloudflare.F(ai_search.NamespaceInstanceNewParamsIndexingOptionsKeywordTokenizerPorter),
+				UseOCR:           cloudflare.F(true),
 			}),
 			MaxNumResults: cloudflare.F(int64(1)),
 			Metadata: cloudflare.F(ai_search.NamespaceInstanceNewParamsMetadata{
@@ -182,6 +183,7 @@ func TestNamespaceInstanceUpdateWithOptionalParams(t *testing.T) {
 			}),
 			IndexingOptions: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsIndexingOptions{
 				KeywordTokenizer: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsIndexingOptionsKeywordTokenizerPorter),
+				UseOCR:           cloudflare.F(true),
 			}),
 			MaxNumResults: cloudflare.F(int64(1)),
 			Metadata: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsMetadata{
@@ -369,6 +371,10 @@ func TestNamespaceInstanceChatCompletionsWithOptionalParams(t *testing.T) {
 					CacheThreshold: cloudflare.F(ai_search.NamespaceInstanceChatCompletionsParamsAISearchOptionsCacheCacheThresholdSuperStrictMatch),
 					Enabled:        cloudflare.F(true),
 				}),
+				CustomMetadata: cloudflare.F(map[string]ai_search.NamespaceInstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion{
+					"test":    shared.UnionBool(true),
+					"user_id": shared.UnionString("user-123"),
+				}),
 				QueryRewrite: cloudflare.F(ai_search.NamespaceInstanceChatCompletionsParamsAISearchOptionsQueryRewrite{
 					Enabled:       cloudflare.F(true),
 					Model:         cloudflare.F("model"),
@@ -464,6 +470,10 @@ func TestNamespaceInstanceSearchWithOptionalParams(t *testing.T) {
 				Cache: cloudflare.F(ai_search.NamespaceInstanceSearchParamsAISearchOptionsCache{
 					CacheThreshold: cloudflare.F(ai_search.NamespaceInstanceSearchParamsAISearchOptionsCacheCacheThresholdSuperStrictMatch),
 					Enabled:        cloudflare.F(true),
+				}),
+				CustomMetadata: cloudflare.F(map[string]ai_search.NamespaceInstanceSearchParamsAISearchOptionsCustomMetadataUnion{
+					"test":    shared.UnionBool(true),
+					"user_id": shared.UnionString("user-123"),
 				}),
 				QueryRewrite: cloudflare.F(ai_search.NamespaceInstanceSearchParamsAISearchOptionsQueryRewrite{
 					Enabled:       cloudflare.F(true),

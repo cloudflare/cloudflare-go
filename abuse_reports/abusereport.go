@@ -29,6 +29,7 @@ import (
 // the [NewAbuseReportService] method instead.
 type AbuseReportService struct {
 	Options     []option.RequestOption
+	Submitted   *SubmittedService
 	Mitigations *MitigationService
 }
 
@@ -38,6 +39,7 @@ type AbuseReportService struct {
 func NewAbuseReportService(opts ...option.RequestOption) (r *AbuseReportService) {
 	r = &AbuseReportService{}
 	r.Options = opts
+	r.Submitted = NewSubmittedService(opts...)
 	r.Mitigations = NewMitigationService(opts...)
 	return
 }

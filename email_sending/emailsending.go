@@ -156,11 +156,11 @@ type EmailSendingSendParams struct {
 	Subject param.Field[string] `json:"subject" api:"required"`
 	// File attachments and inline images.
 	Attachments param.Field[[]EmailSendingSendParamsAttachmentUnion] `json:"attachments"`
-	// Recipient(s). Optional if cc or bcc is provided. A single email string, a named
-	// address object, or an array of either.
+	// Blind carbon copy recipient(s). Optional. A single email string, a named address
+	// object, or an array of either.
 	Bcc param.Field[EmailSendingSendParamsBccUnion] `json:"bcc"`
-	// Recipient(s). Optional if cc or bcc is provided. A single email string, a named
-	// address object, or an array of either.
+	// Carbon copy recipient(s). Optional. A single email string, a named address
+	// object, or an array of either.
 	Cc param.Field[EmailSendingSendParamsCcUnion] `json:"cc"`
 	// Custom email headers as key-value pairs.
 	Headers param.Field[map[string]string] `json:"headers"`
@@ -315,8 +315,8 @@ func (r EmailSendingSendParamsAttachmentsDisposition) IsKnown() bool {
 	return false
 }
 
-// Recipient(s). Optional if cc or bcc is provided. A single email string, a named
-// address object, or an array of either.
+// Blind carbon copy recipient(s). Optional. A single email string, a named address
+// object, or an array of either.
 //
 // Satisfied by [shared.UnionString],
 // [email_sending.EmailSendingSendParamsBccEmailSendingEmailAddressObject],
@@ -367,8 +367,8 @@ func (r EmailSendingSendParamsBccArrayEmailSendingEmailAddressObject) MarshalJSO
 func (r EmailSendingSendParamsBccArrayEmailSendingEmailAddressObject) ImplementsEmailSendingSendParamsBccArrayItemUnion() {
 }
 
-// Recipient(s). Optional if cc or bcc is provided. A single email string, a named
-// address object, or an array of either.
+// Carbon copy recipient(s). Optional. A single email string, a named address
+// object, or an array of either.
 //
 // Satisfied by [shared.UnionString],
 // [email_sending.EmailSendingSendParamsCcEmailSendingEmailAddressObject],

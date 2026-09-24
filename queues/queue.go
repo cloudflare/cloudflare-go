@@ -46,7 +46,7 @@ func NewQueueService(opts ...option.RequestOption) (r *QueueService) {
 	return
 }
 
-// Create a new queue
+// Creates a Queue in the account.
 func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...option.RequestOption) (res *Queue, err error) {
 	var env QueueNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -63,9 +63,8 @@ func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...o
 	return res, nil
 }
 
-// Updates a Queue. Note that this endpoint does not support partial updates. If
-// successful, the Queue's configuration is overwritten with the supplied
-// configuration.
+// Replaces a Queue's configuration with the supplied configuration. This endpoint
+// does not support partial updates.
 func (r *QueueService) Update(ctx context.Context, queueID string, params QueueUpdateParams, opts ...option.RequestOption) (res *Queue, err error) {
 	var env QueueUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -113,7 +112,7 @@ func (r *QueueService) ListAutoPaging(ctx context.Context, query QueueListParams
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Deletes a queue
+// Deletes a Queue.
 func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDeleteParams, opts ...option.RequestOption) (res *QueueDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
@@ -129,7 +128,7 @@ func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDel
 	return res, err
 }
 
-// Updates a Queue.
+// Updates part of a Queue's configuration.
 func (r *QueueService) Edit(ctx context.Context, queueID string, params QueueEditParams, opts ...option.RequestOption) (res *Queue, err error) {
 	var env QueueEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -150,7 +149,7 @@ func (r *QueueService) Edit(ctx context.Context, queueID string, params QueueEdi
 	return res, nil
 }
 
-// Get details about a specific queue.
+// Returns details about a specific Queue.
 func (r *QueueService) Get(ctx context.Context, queueID string, query QueueGetParams, opts ...option.RequestOption) (res *Queue, err error) {
 	var env QueueGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -171,8 +170,8 @@ func (r *QueueService) Get(ctx context.Context, queueID string, query QueueGetPa
 	return res, nil
 }
 
-// Return best-effort metrics for a queue. Values may be approximate due to the
-// distributed nature of queues.
+// Returns best-effort metrics for a Queue. Values may be approximate due to the
+// distributed nature of Queues.
 func (r *QueueService) GetMetrics(ctx context.Context, queueID string, query QueueGetMetricsParams, opts ...option.RequestOption) (res *QueueGetMetricsResponse, err error) {
 	var env QueueGetMetricsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -194,16 +193,17 @@ func (r *QueueService) GetMetrics(ctx context.Context, queueID string, query Que
 }
 
 type Queue struct {
-	Consumers           []Consumer      `json:"consumers"`
-	ConsumersTotalCount float64         `json:"consumers_total_count"`
-	CreatedOn           string          `json:"created_on"`
-	ModifiedOn          string          `json:"modified_on"`
-	Producers           []QueueProducer `json:"producers"`
-	ProducersTotalCount float64         `json:"producers_total_count"`
-	QueueID             string          `json:"queue_id"`
-	QueueName           string          `json:"queue_name"`
-	Settings            QueueSettings   `json:"settings"`
-	JSON                queueJSON       `json:"-"`
+	Consumers           []Consumer        `json:"consumers"`
+	ConsumersTotalCount float64           `json:"consumers_total_count"`
+	CreatedOn           string            `json:"created_on"`
+	Jurisdiction        QueueJurisdiction `json:"jurisdiction"`
+	ModifiedOn          string            `json:"modified_on"`
+	Producers           []QueueProducer   `json:"producers"`
+	ProducersTotalCount float64           `json:"producers_total_count"`
+	QueueID             string            `json:"queue_id"`
+	QueueName           string            `json:"queue_name"`
+	Settings            QueueSettings     `json:"settings"`
+	JSON                queueJSON         `json:"-"`
 }
 
 // queueJSON contains the JSON metadata for the struct [Queue]
@@ -211,6 +211,7 @@ type queueJSON struct {
 	Consumers           apijson.Field
 	ConsumersTotalCount apijson.Field
 	CreatedOn           apijson.Field
+	Jurisdiction        apijson.Field
 	ModifiedOn          apijson.Field
 	Producers           apijson.Field
 	ProducersTotalCount apijson.Field
@@ -227,6 +228,22 @@ func (r *Queue) UnmarshalJSON(data []byte) (err error) {
 
 func (r queueJSON) RawJSON() string {
 	return r.raw
+}
+
+type QueueJurisdiction string
+
+const (
+	QueueJurisdictionEu      QueueJurisdiction = "eu"
+	QueueJurisdictionUs      QueueJurisdiction = "us"
+	QueueJurisdictionFedramp QueueJurisdiction = "fedramp"
+)
+
+func (r QueueJurisdiction) IsKnown() bool {
+	switch r {
+	case QueueJurisdictionEu, QueueJurisdictionUs, QueueJurisdictionFedramp:
+		return true
+	}
+	return false
 }
 
 type QueueProducer struct {
@@ -410,8 +427,9 @@ func (r queueSettingsJSON) RawJSON() string {
 }
 
 type QueueParam struct {
-	QueueName param.Field[string]             `json:"queue_name"`
-	Settings  param.Field[QueueSettingsParam] `json:"settings"`
+	Jurisdiction param.Field[QueueJurisdiction]  `json:"jurisdiction"`
+	QueueName    param.Field[string]             `json:"queue_name"`
+	Settings     param.Field[QueueSettingsParam] `json:"settings"`
 }
 
 func (r QueueParam) MarshalJSON() (data []byte, err error) {
@@ -545,12 +563,29 @@ func (r queueGetMetricsResponseJSON) RawJSON() string {
 
 type QueueNewParams struct {
 	// A Resource identifier.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	QueueName param.Field[string] `json:"queue_name" api:"required"`
+	AccountID    param.Field[string]                     `path:"account_id" api:"required"`
+	QueueName    param.Field[string]                     `json:"queue_name" api:"required"`
+	Jurisdiction param.Field[QueueNewParamsJurisdiction] `json:"jurisdiction"`
 }
 
 func (r QueueNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type QueueNewParamsJurisdiction string
+
+const (
+	QueueNewParamsJurisdictionEu      QueueNewParamsJurisdiction = "eu"
+	QueueNewParamsJurisdictionUs      QueueNewParamsJurisdiction = "us"
+	QueueNewParamsJurisdictionFedramp QueueNewParamsJurisdiction = "fedramp"
+)
+
+func (r QueueNewParamsJurisdiction) IsKnown() bool {
+	switch r {
+	case QueueNewParamsJurisdictionEu, QueueNewParamsJurisdictionUs, QueueNewParamsJurisdictionFedramp:
+		return true
+	}
+	return false
 }
 
 type QueueNewResponseEnvelope struct {

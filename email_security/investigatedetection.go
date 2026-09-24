@@ -65,7 +65,7 @@ type InvestigateDetectionGetResponse struct {
 	SenderInfo       InvestigateDetectionGetResponseSenderInfo       `json:"sender_info" api:"required"`
 	ThreatCategories []InvestigateDetectionGetResponseThreatCategory `json:"threat_categories" api:"required"`
 	Validation       InvestigateDetectionGetResponseValidation       `json:"validation" api:"required"`
-	FinalDisposition InvestigateDetectionGetResponseFinalDisposition `json:"final_disposition"`
+	FinalDisposition InvestigateDetectionGetResponseFinalDisposition `json:"final_disposition" api:"nullable"`
 	JSON             investigateDetectionGetResponseJSON             `json:"-"`
 }
 
@@ -330,9 +330,9 @@ func (r investigateDetectionGetResponseThreatCategoryJSON) RawJSON() string {
 
 type InvestigateDetectionGetResponseValidation struct {
 	Comment string                                         `json:"comment" api:"nullable"`
-	DKIM    InvestigateDetectionGetResponseValidationDKIM  `json:"dkim"`
-	DMARC   InvestigateDetectionGetResponseValidationDMARC `json:"dmarc"`
-	SPF     InvestigateDetectionGetResponseValidationSPF   `json:"spf"`
+	DKIM    InvestigateDetectionGetResponseValidationDKIM  `json:"dkim" api:"nullable"`
+	DMARC   InvestigateDetectionGetResponseValidationDMARC `json:"dmarc" api:"nullable"`
+	SPF     InvestigateDetectionGetResponseValidationSPF   `json:"spf" api:"nullable"`
 	JSON    investigateDetectionGetResponseValidationJSON  `json:"-"`
 }
 

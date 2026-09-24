@@ -38,7 +38,7 @@ func NewCustomPageService(opts ...option.RequestOption) (r *CustomPageService) {
 	return
 }
 
-// Updates the configuration of an existing custom page.
+// Updates the configuration for a custom page type.
 func (r *CustomPageService) Update(ctx context.Context, identifier CustomPageUpdateParamsIdentifier, params CustomPageUpdateParams, opts ...option.RequestOption) (res *CustomPageUpdateResponse, err error) {
 	var env CustomPageUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -69,7 +69,7 @@ func (r *CustomPageService) Update(ctx context.Context, identifier CustomPageUpd
 	return res, nil
 }
 
-// Fetches all the custom pages.
+// Lists all custom page configurations for an account or zone.
 func (r *CustomPageService) List(ctx context.Context, query CustomPageListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CustomPageListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -105,12 +105,12 @@ func (r *CustomPageService) List(ctx context.Context, query CustomPageListParams
 	return res, nil
 }
 
-// Fetches all the custom pages.
+// Lists all custom page configurations for an account or zone.
 func (r *CustomPageService) ListAutoPaging(ctx context.Context, query CustomPageListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CustomPageListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Fetches the details of a custom page.
+// Returns the configuration for a custom page type.
 func (r *CustomPageService) Get(ctx context.Context, identifier CustomPageGetParamsIdentifier, query CustomPageGetParams, opts ...option.RequestOption) (res *CustomPageGetResponse, err error) {
 	var env CustomPageGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -315,7 +315,7 @@ func (r CustomPageUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Error Page Types
+// Custom page type.
 type CustomPageUpdateParamsIdentifier string
 
 const (
@@ -508,7 +508,7 @@ type CustomPageGetParams struct {
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
-// Error Page Types
+// Custom page type.
 type CustomPageGetParamsIdentifier string
 
 const (

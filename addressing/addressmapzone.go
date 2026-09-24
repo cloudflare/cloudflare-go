@@ -35,13 +35,13 @@ func NewAddressMapZoneService(opts ...option.RequestOption) (r *AddressMapZoneSe
 }
 
 // Add a zone as a member of a particular address map.
-func (r *AddressMapZoneService) Update(ctx context.Context, addressMapID string, params AddressMapZoneUpdateParams, opts ...option.RequestOption) (res *AddressMapZoneUpdateResponse, err error) {
+func (r *AddressMapZoneService) Update(ctx context.Context, addressMapID string, body AddressMapZoneUpdateParams, opts ...option.RequestOption) (res *AddressMapZoneUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if params.ZoneID.Value == "" {
+	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
 	}
-	if params.AccountID.Value == "" {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -49,8 +49,8 @@ func (r *AddressMapZoneService) Update(ctx context.Context, addressMapID string,
 		err = errors.New("missing required address_map_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", params.AccountID, addressMapID, params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", body.AccountID, addressMapID, body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &res, opts...)
 	return res, err
 }
 
@@ -425,11 +425,6 @@ type AddressMapZoneUpdateParams struct {
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Body      interface{}         `json:"body" api:"required"`
-}
-
-func (r AddressMapZoneUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type AddressMapZoneDeleteParams struct {

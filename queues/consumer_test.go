@@ -34,17 +34,20 @@ func TestConsumerNewWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.ConsumerNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: queues.ConsumerNewParamsBodyMqWorkerConsumerRequest{
-				ScriptName:      cloudflare.F("my-consumer-worker"),
-				Type:            cloudflare.F(queues.ConsumerNewParamsBodyMqWorkerConsumerRequestTypeWorker),
-				DeadLetterQueue: cloudflare.F("example-queue"),
-				Settings: cloudflare.F(queues.ConsumerNewParamsBodyMqWorkerConsumerRequestSettings{
-					BatchSize:      cloudflare.F(50.000000),
-					MaxConcurrency: cloudflare.F(10.000000),
-					MaxRetries:     cloudflare.F(3.000000),
-					MaxWaitTimeMs:  cloudflare.F(5000.000000),
-					RetryDelay:     cloudflare.F(10.000000),
+			Body: queues.ConsumerNewParamsBodyMqNotificationConsumerRequest{
+				Settings: cloudflare.F[queues.ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsUnion](queues.ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObject{
+					Email: cloudflare.F([]queues.ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObjectEmail{{
+						ID: cloudflare.F("user@example.com"),
+					}}),
+					Pagerduty: cloudflare.F([]queues.ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObjectPagerduty{{
+						ID: cloudflare.F("fedcba9876543210fedcba9876543210"),
+					}}),
+					Webhooks: cloudflare.F([]queues.ConsumerNewParamsBodyMqNotificationConsumerRequestSettingsObjectWebhook{{
+						ID: cloudflare.F("0123456789abcdef0123456789abcdef"),
+					}}),
 				}),
+				Type:            cloudflare.F(queues.ConsumerNewParamsBodyMqNotificationConsumerRequestTypeNotification),
+				DeadLetterQueue: cloudflare.F("example-queue"),
 			},
 		},
 	)
@@ -78,17 +81,20 @@ func TestConsumerUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.ConsumerUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: queues.ConsumerUpdateParamsBodyMqWorkerConsumerRequest{
-				ScriptName:      cloudflare.F("my-consumer-worker"),
-				Type:            cloudflare.F(queues.ConsumerUpdateParamsBodyMqWorkerConsumerRequestTypeWorker),
-				DeadLetterQueue: cloudflare.F("example-queue"),
-				Settings: cloudflare.F(queues.ConsumerUpdateParamsBodyMqWorkerConsumerRequestSettings{
-					BatchSize:      cloudflare.F(50.000000),
-					MaxConcurrency: cloudflare.F(10.000000),
-					MaxRetries:     cloudflare.F(3.000000),
-					MaxWaitTimeMs:  cloudflare.F(5000.000000),
-					RetryDelay:     cloudflare.F(10.000000),
+			Body: queues.ConsumerUpdateParamsBodyMqNotificationConsumerRequest{
+				Settings: cloudflare.F[queues.ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsUnion](queues.ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObject{
+					Email: cloudflare.F([]queues.ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObjectEmail{{
+						ID: cloudflare.F("user@example.com"),
+					}}),
+					Pagerduty: cloudflare.F([]queues.ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObjectPagerduty{{
+						ID: cloudflare.F("fedcba9876543210fedcba9876543210"),
+					}}),
+					Webhooks: cloudflare.F([]queues.ConsumerUpdateParamsBodyMqNotificationConsumerRequestSettingsObjectWebhook{{
+						ID: cloudflare.F("0123456789abcdef0123456789abcdef"),
+					}}),
 				}),
+				Type:            cloudflare.F(queues.ConsumerUpdateParamsBodyMqNotificationConsumerRequestTypeNotification),
+				DeadLetterQueue: cloudflare.F("example-queue"),
 			},
 		},
 	)

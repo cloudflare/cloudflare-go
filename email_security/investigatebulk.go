@@ -135,12 +135,20 @@ func (r *InvestigateBulkService) Get(ctx context.Context, jobID string, query In
 }
 
 type InvestigateBulkNewResponse struct {
-	ActionParams            InvestigateBulkNewResponseActionParams `json:"action_params" api:"required"`
-	ActionType              InvestigateBulkNewResponseActionType   `json:"action_type" api:"required"`
-	CreatedAt               time.Time                              `json:"created_at" api:"required" format:"date-time"`
-	JobID                   string                                 `json:"job_id" api:"required" format:"uuid"`
-	MessagesFailed          int64                                  `json:"messages_failed" api:"required"`
-	MessagesPending         int64                                  `json:"messages_pending" api:"required"`
+	ActionParams InvestigateBulkNewResponseActionParams `json:"action_params" api:"required"`
+	ActionType   InvestigateBulkNewResponseActionType   `json:"action_type" api:"required"`
+	CreatedAt    time.Time                              `json:"created_at" api:"required" format:"date-time"`
+	JobID        string                                 `json:"job_id" api:"required" format:"uuid"`
+	// Messages that were cancelled: rows cancelled via the API before being claimed,
+	// and rows whose in-flight attempt ended when the job reached a terminal state.
+	// Together the counters satisfy total_messages_discovered = messages_pending +
+	// messages_successful + messages_failed + messages_skipped + messages_cancelled.
+	MessagesCancelled int64 `json:"messages_cancelled" api:"required"`
+	MessagesFailed    int64 `json:"messages_failed" api:"required"`
+	MessagesPending   int64 `json:"messages_pending" api:"required"`
+	// Messages that discovery skipped (for example, phish submissions, which the job
+	// cannot action).
+	MessagesSkipped         int64                                  `json:"messages_skipped" api:"required"`
 	MessagesSuccessful      int64                                  `json:"messages_successful" api:"required"`
 	SearchParams            InvestigateBulkNewResponseSearchParams `json:"search_params" api:"required"`
 	Status                  InvestigateBulkNewResponseStatus       `json:"status" api:"required"`
@@ -159,8 +167,10 @@ type investigateBulkNewResponseJSON struct {
 	ActionType              apijson.Field
 	CreatedAt               apijson.Field
 	JobID                   apijson.Field
+	MessagesCancelled       apijson.Field
 	MessagesFailed          apijson.Field
 	MessagesPending         apijson.Field
+	MessagesSkipped         apijson.Field
 	MessagesSuccessful      apijson.Field
 	SearchParams            apijson.Field
 	Status                  apijson.Field
@@ -182,9 +192,12 @@ func (r investigateBulkNewResponseJSON) RawJSON() string {
 }
 
 type InvestigateBulkNewResponseActionParams struct {
-	Type                InvestigateBulkNewResponseActionParamsType                `json:"type" api:"required"`
-	Destination         InvestigateBulkNewResponseActionParamsDestination         `json:"destination"`
-	ExpectedDisposition InvestigateBulkNewResponseActionParamsExpectedDisposition `json:"expected_disposition"`
+	Type        InvestigateBulkNewResponseActionParamsType        `json:"type" api:"required"`
+	Destination InvestigateBulkNewResponseActionParamsDestination `json:"destination"`
+	// Nonfunctional field. End of life: December 1, 2026.
+	//
+	// Deprecated: This field is nonfunctional.
+	ExpectedDisposition InvestigateBulkNewResponseActionParamsExpectedDisposition `json:"expected_disposition" api:"nullable"`
 	JSON                investigateBulkNewResponseActionParamsJSON                `json:"-"`
 	union               InvestigateBulkNewResponseActionParamsUnion
 }
@@ -246,9 +259,12 @@ func init() {
 }
 
 type InvestigateBulkNewResponseActionParamsMove struct {
-	Destination         InvestigateBulkNewResponseActionParamsMoveDestination         `json:"destination" api:"required"`
-	Type                InvestigateBulkNewResponseActionParamsMoveType                `json:"type" api:"required"`
-	ExpectedDisposition InvestigateBulkNewResponseActionParamsMoveExpectedDisposition `json:"expected_disposition"`
+	Destination InvestigateBulkNewResponseActionParamsMoveDestination `json:"destination" api:"required"`
+	Type        InvestigateBulkNewResponseActionParamsMoveType        `json:"type" api:"required"`
+	// Nonfunctional field. End of life: December 1, 2026.
+	//
+	// Deprecated: This field is nonfunctional.
+	ExpectedDisposition InvestigateBulkNewResponseActionParamsMoveExpectedDisposition `json:"expected_disposition" api:"nullable"`
 	JSON                investigateBulkNewResponseActionParamsMoveJSON                `json:"-"`
 }
 
@@ -305,6 +321,7 @@ func (r InvestigateBulkNewResponseActionParamsMoveType) IsKnown() bool {
 	return false
 }
 
+// Nonfunctional field. End of life: December 1, 2026.
 type InvestigateBulkNewResponseActionParamsMoveExpectedDisposition string
 
 const (
@@ -399,6 +416,7 @@ func (r InvestigateBulkNewResponseActionParamsDestination) IsKnown() bool {
 	return false
 }
 
+// Nonfunctional field. End of life: December 1, 2026.
 type InvestigateBulkNewResponseActionParamsExpectedDisposition string
 
 const (
@@ -445,13 +463,13 @@ type InvestigateBulkNewResponseSearchParams struct {
 	ActionLog bool   `json:"action_log"`
 	AlertID   string `json:"alert_id" api:"nullable"`
 	// Delivery status of the message.
-	DeliveryStatus InvestigateBulkNewResponseSearchParamsDeliveryStatus `json:"delivery_status"`
+	DeliveryStatus InvestigateBulkNewResponseSearchParamsDeliveryStatus `json:"delivery_status" api:"nullable"`
 	DetectionsOnly bool                                                 `json:"detections_only"`
 	Domain         string                                               `json:"domain" api:"nullable"`
 	// End of search date range.
 	End              time.Time                                              `json:"end" format:"date-time"`
 	ExactSubject     string                                                 `json:"exact_subject" api:"nullable"`
-	FinalDisposition InvestigateBulkNewResponseSearchParamsFinalDisposition `json:"final_disposition"`
+	FinalDisposition InvestigateBulkNewResponseSearchParamsFinalDisposition `json:"final_disposition" api:"nullable"`
 	MessageAction    InvestigateBulkNewResponseSearchParamsMessageAction    `json:"message_action" api:"nullable"`
 	MessageID        string                                                 `json:"message_id" api:"nullable"`
 	Metric           string                                                 `json:"metric" api:"nullable"`
@@ -582,12 +600,20 @@ func (r InvestigateBulkNewResponseStatus) IsKnown() bool {
 }
 
 type InvestigateBulkListResponse struct {
-	ActionParams            InvestigateBulkListResponseActionParams `json:"action_params" api:"required"`
-	ActionType              InvestigateBulkListResponseActionType   `json:"action_type" api:"required"`
-	CreatedAt               time.Time                               `json:"created_at" api:"required" format:"date-time"`
-	JobID                   string                                  `json:"job_id" api:"required" format:"uuid"`
-	MessagesFailed          int64                                   `json:"messages_failed" api:"required"`
-	MessagesPending         int64                                   `json:"messages_pending" api:"required"`
+	ActionParams InvestigateBulkListResponseActionParams `json:"action_params" api:"required"`
+	ActionType   InvestigateBulkListResponseActionType   `json:"action_type" api:"required"`
+	CreatedAt    time.Time                               `json:"created_at" api:"required" format:"date-time"`
+	JobID        string                                  `json:"job_id" api:"required" format:"uuid"`
+	// Messages that were cancelled: rows cancelled via the API before being claimed,
+	// and rows whose in-flight attempt ended when the job reached a terminal state.
+	// Together the counters satisfy total_messages_discovered = messages_pending +
+	// messages_successful + messages_failed + messages_skipped + messages_cancelled.
+	MessagesCancelled int64 `json:"messages_cancelled" api:"required"`
+	MessagesFailed    int64 `json:"messages_failed" api:"required"`
+	MessagesPending   int64 `json:"messages_pending" api:"required"`
+	// Messages that discovery skipped (for example, phish submissions, which the job
+	// cannot action).
+	MessagesSkipped         int64                                   `json:"messages_skipped" api:"required"`
 	MessagesSuccessful      int64                                   `json:"messages_successful" api:"required"`
 	SearchParams            InvestigateBulkListResponseSearchParams `json:"search_params" api:"required"`
 	Status                  InvestigateBulkListResponseStatus       `json:"status" api:"required"`
@@ -606,8 +632,10 @@ type investigateBulkListResponseJSON struct {
 	ActionType              apijson.Field
 	CreatedAt               apijson.Field
 	JobID                   apijson.Field
+	MessagesCancelled       apijson.Field
 	MessagesFailed          apijson.Field
 	MessagesPending         apijson.Field
+	MessagesSkipped         apijson.Field
 	MessagesSuccessful      apijson.Field
 	SearchParams            apijson.Field
 	Status                  apijson.Field
@@ -629,9 +657,12 @@ func (r investigateBulkListResponseJSON) RawJSON() string {
 }
 
 type InvestigateBulkListResponseActionParams struct {
-	Type                InvestigateBulkListResponseActionParamsType                `json:"type" api:"required"`
-	Destination         InvestigateBulkListResponseActionParamsDestination         `json:"destination"`
-	ExpectedDisposition InvestigateBulkListResponseActionParamsExpectedDisposition `json:"expected_disposition"`
+	Type        InvestigateBulkListResponseActionParamsType        `json:"type" api:"required"`
+	Destination InvestigateBulkListResponseActionParamsDestination `json:"destination"`
+	// Nonfunctional field. End of life: December 1, 2026.
+	//
+	// Deprecated: This field is nonfunctional.
+	ExpectedDisposition InvestigateBulkListResponseActionParamsExpectedDisposition `json:"expected_disposition" api:"nullable"`
 	JSON                investigateBulkListResponseActionParamsJSON                `json:"-"`
 	union               InvestigateBulkListResponseActionParamsUnion
 }
@@ -693,9 +724,12 @@ func init() {
 }
 
 type InvestigateBulkListResponseActionParamsMove struct {
-	Destination         InvestigateBulkListResponseActionParamsMoveDestination         `json:"destination" api:"required"`
-	Type                InvestigateBulkListResponseActionParamsMoveType                `json:"type" api:"required"`
-	ExpectedDisposition InvestigateBulkListResponseActionParamsMoveExpectedDisposition `json:"expected_disposition"`
+	Destination InvestigateBulkListResponseActionParamsMoveDestination `json:"destination" api:"required"`
+	Type        InvestigateBulkListResponseActionParamsMoveType        `json:"type" api:"required"`
+	// Nonfunctional field. End of life: December 1, 2026.
+	//
+	// Deprecated: This field is nonfunctional.
+	ExpectedDisposition InvestigateBulkListResponseActionParamsMoveExpectedDisposition `json:"expected_disposition" api:"nullable"`
 	JSON                investigateBulkListResponseActionParamsMoveJSON                `json:"-"`
 }
 
@@ -752,6 +786,7 @@ func (r InvestigateBulkListResponseActionParamsMoveType) IsKnown() bool {
 	return false
 }
 
+// Nonfunctional field. End of life: December 1, 2026.
 type InvestigateBulkListResponseActionParamsMoveExpectedDisposition string
 
 const (
@@ -846,6 +881,7 @@ func (r InvestigateBulkListResponseActionParamsDestination) IsKnown() bool {
 	return false
 }
 
+// Nonfunctional field. End of life: December 1, 2026.
 type InvestigateBulkListResponseActionParamsExpectedDisposition string
 
 const (
@@ -892,13 +928,13 @@ type InvestigateBulkListResponseSearchParams struct {
 	ActionLog bool   `json:"action_log"`
 	AlertID   string `json:"alert_id" api:"nullable"`
 	// Delivery status of the message.
-	DeliveryStatus InvestigateBulkListResponseSearchParamsDeliveryStatus `json:"delivery_status"`
+	DeliveryStatus InvestigateBulkListResponseSearchParamsDeliveryStatus `json:"delivery_status" api:"nullable"`
 	DetectionsOnly bool                                                  `json:"detections_only"`
 	Domain         string                                                `json:"domain" api:"nullable"`
 	// End of search date range.
 	End              time.Time                                               `json:"end" format:"date-time"`
 	ExactSubject     string                                                  `json:"exact_subject" api:"nullable"`
-	FinalDisposition InvestigateBulkListResponseSearchParamsFinalDisposition `json:"final_disposition"`
+	FinalDisposition InvestigateBulkListResponseSearchParamsFinalDisposition `json:"final_disposition" api:"nullable"`
 	MessageAction    InvestigateBulkListResponseSearchParamsMessageAction    `json:"message_action" api:"nullable"`
 	MessageID        string                                                  `json:"message_id" api:"nullable"`
 	Metric           string                                                  `json:"metric" api:"nullable"`
@@ -1050,12 +1086,20 @@ func (r investigateBulkDeleteResponseJSON) RawJSON() string {
 }
 
 type InvestigateBulkGetResponse struct {
-	ActionParams            InvestigateBulkGetResponseActionParams `json:"action_params" api:"required"`
-	ActionType              InvestigateBulkGetResponseActionType   `json:"action_type" api:"required"`
-	CreatedAt               time.Time                              `json:"created_at" api:"required" format:"date-time"`
-	JobID                   string                                 `json:"job_id" api:"required" format:"uuid"`
-	MessagesFailed          int64                                  `json:"messages_failed" api:"required"`
-	MessagesPending         int64                                  `json:"messages_pending" api:"required"`
+	ActionParams InvestigateBulkGetResponseActionParams `json:"action_params" api:"required"`
+	ActionType   InvestigateBulkGetResponseActionType   `json:"action_type" api:"required"`
+	CreatedAt    time.Time                              `json:"created_at" api:"required" format:"date-time"`
+	JobID        string                                 `json:"job_id" api:"required" format:"uuid"`
+	// Messages that were cancelled: rows cancelled via the API before being claimed,
+	// and rows whose in-flight attempt ended when the job reached a terminal state.
+	// Together the counters satisfy total_messages_discovered = messages_pending +
+	// messages_successful + messages_failed + messages_skipped + messages_cancelled.
+	MessagesCancelled int64 `json:"messages_cancelled" api:"required"`
+	MessagesFailed    int64 `json:"messages_failed" api:"required"`
+	MessagesPending   int64 `json:"messages_pending" api:"required"`
+	// Messages that discovery skipped (for example, phish submissions, which the job
+	// cannot action).
+	MessagesSkipped         int64                                  `json:"messages_skipped" api:"required"`
 	MessagesSuccessful      int64                                  `json:"messages_successful" api:"required"`
 	SearchParams            InvestigateBulkGetResponseSearchParams `json:"search_params" api:"required"`
 	Status                  InvestigateBulkGetResponseStatus       `json:"status" api:"required"`
@@ -1074,8 +1118,10 @@ type investigateBulkGetResponseJSON struct {
 	ActionType              apijson.Field
 	CreatedAt               apijson.Field
 	JobID                   apijson.Field
+	MessagesCancelled       apijson.Field
 	MessagesFailed          apijson.Field
 	MessagesPending         apijson.Field
+	MessagesSkipped         apijson.Field
 	MessagesSuccessful      apijson.Field
 	SearchParams            apijson.Field
 	Status                  apijson.Field
@@ -1097,9 +1143,12 @@ func (r investigateBulkGetResponseJSON) RawJSON() string {
 }
 
 type InvestigateBulkGetResponseActionParams struct {
-	Type                InvestigateBulkGetResponseActionParamsType                `json:"type" api:"required"`
-	Destination         InvestigateBulkGetResponseActionParamsDestination         `json:"destination"`
-	ExpectedDisposition InvestigateBulkGetResponseActionParamsExpectedDisposition `json:"expected_disposition"`
+	Type        InvestigateBulkGetResponseActionParamsType        `json:"type" api:"required"`
+	Destination InvestigateBulkGetResponseActionParamsDestination `json:"destination"`
+	// Nonfunctional field. End of life: December 1, 2026.
+	//
+	// Deprecated: This field is nonfunctional.
+	ExpectedDisposition InvestigateBulkGetResponseActionParamsExpectedDisposition `json:"expected_disposition" api:"nullable"`
 	JSON                investigateBulkGetResponseActionParamsJSON                `json:"-"`
 	union               InvestigateBulkGetResponseActionParamsUnion
 }
@@ -1161,9 +1210,12 @@ func init() {
 }
 
 type InvestigateBulkGetResponseActionParamsMove struct {
-	Destination         InvestigateBulkGetResponseActionParamsMoveDestination         `json:"destination" api:"required"`
-	Type                InvestigateBulkGetResponseActionParamsMoveType                `json:"type" api:"required"`
-	ExpectedDisposition InvestigateBulkGetResponseActionParamsMoveExpectedDisposition `json:"expected_disposition"`
+	Destination InvestigateBulkGetResponseActionParamsMoveDestination `json:"destination" api:"required"`
+	Type        InvestigateBulkGetResponseActionParamsMoveType        `json:"type" api:"required"`
+	// Nonfunctional field. End of life: December 1, 2026.
+	//
+	// Deprecated: This field is nonfunctional.
+	ExpectedDisposition InvestigateBulkGetResponseActionParamsMoveExpectedDisposition `json:"expected_disposition" api:"nullable"`
 	JSON                investigateBulkGetResponseActionParamsMoveJSON                `json:"-"`
 }
 
@@ -1220,6 +1272,7 @@ func (r InvestigateBulkGetResponseActionParamsMoveType) IsKnown() bool {
 	return false
 }
 
+// Nonfunctional field. End of life: December 1, 2026.
 type InvestigateBulkGetResponseActionParamsMoveExpectedDisposition string
 
 const (
@@ -1314,6 +1367,7 @@ func (r InvestigateBulkGetResponseActionParamsDestination) IsKnown() bool {
 	return false
 }
 
+// Nonfunctional field. End of life: December 1, 2026.
 type InvestigateBulkGetResponseActionParamsExpectedDisposition string
 
 const (
@@ -1360,13 +1414,13 @@ type InvestigateBulkGetResponseSearchParams struct {
 	ActionLog bool   `json:"action_log"`
 	AlertID   string `json:"alert_id" api:"nullable"`
 	// Delivery status of the message.
-	DeliveryStatus InvestigateBulkGetResponseSearchParamsDeliveryStatus `json:"delivery_status"`
+	DeliveryStatus InvestigateBulkGetResponseSearchParamsDeliveryStatus `json:"delivery_status" api:"nullable"`
 	DetectionsOnly bool                                                 `json:"detections_only"`
 	Domain         string                                               `json:"domain" api:"nullable"`
 	// End of search date range.
 	End              time.Time                                              `json:"end" format:"date-time"`
 	ExactSubject     string                                                 `json:"exact_subject" api:"nullable"`
-	FinalDisposition InvestigateBulkGetResponseSearchParamsFinalDisposition `json:"final_disposition"`
+	FinalDisposition InvestigateBulkGetResponseSearchParamsFinalDisposition `json:"final_disposition" api:"nullable"`
 	MessageAction    InvestigateBulkGetResponseSearchParamsMessageAction    `json:"message_action" api:"nullable"`
 	MessageID        string                                                 `json:"message_id" api:"nullable"`
 	Metric           string                                                 `json:"metric" api:"nullable"`
@@ -1498,11 +1552,13 @@ func (r InvestigateBulkGetResponseStatus) IsKnown() bool {
 
 type InvestigateBulkNewParams struct {
 	// Identifier.
-	AccountID           param.Field[string]                                      `path:"account_id" api:"required"`
-	Action              param.Field[InvestigateBulkNewParamsAction]              `json:"action" api:"required"`
-	SearchParams        param.Field[InvestigateBulkNewParamsSearchParams]        `json:"search_params" api:"required"`
-	Comment             param.Field[string]                                      `json:"comment"`
-	Destination         param.Field[InvestigateBulkNewParamsDestination]         `json:"destination"`
+	AccountID    param.Field[string]                               `path:"account_id" api:"required"`
+	Action       param.Field[InvestigateBulkNewParamsAction]       `json:"action" api:"required"`
+	SearchParams param.Field[InvestigateBulkNewParamsSearchParams] `json:"search_params" api:"required"`
+	Comment      param.Field[string]                               `json:"comment"`
+	// Required when action is 'MOVE'.
+	Destination param.Field[InvestigateBulkNewParamsDestination] `json:"destination"`
+	// Nonfunctional field. End of life: December 1, 2026.
 	ExpectedDisposition param.Field[InvestigateBulkNewParamsExpectedDisposition] `json:"expected_disposition"`
 }
 
@@ -1619,6 +1675,7 @@ func (r InvestigateBulkNewParamsSearchParamsMessageAction) IsKnown() bool {
 	return false
 }
 
+// Required when action is 'MOVE'.
 type InvestigateBulkNewParamsDestination string
 
 const (
@@ -1637,6 +1694,7 @@ func (r InvestigateBulkNewParamsDestination) IsKnown() bool {
 	return false
 }
 
+// Nonfunctional field. End of life: December 1, 2026.
 type InvestigateBulkNewParamsExpectedDisposition string
 
 const (

@@ -34,7 +34,7 @@ func NewScriptTailService(opts ...option.RequestOption) (r *ScriptTailService) {
 	return
 }
 
-// Starts a tail that receives logs and exception from a Worker.
+// Starts a tail that receives logs and exceptions from a Worker.
 func (r *ScriptTailService) New(ctx context.Context, scriptName string, body ScriptTailNewParams, opts ...option.RequestOption) (res *ScriptTailNewResponse, err error) {
 	var env ScriptTailNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -75,7 +75,7 @@ func (r *ScriptTailService) Delete(ctx context.Context, scriptName string, id st
 	return res, err
 }
 
-// Get list of tails currently deployed on a Worker.
+// Get a list of tails currently deployed on a Worker.
 func (r *ScriptTailService) Get(ctx context.Context, scriptName string, query ScriptTailGetParams, opts ...option.RequestOption) (res *ScriptTailGetResponse, err error) {
 	var env ScriptTailGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

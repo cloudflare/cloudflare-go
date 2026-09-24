@@ -40,7 +40,8 @@ func NewDispatchNamespaceScriptSettingService(opts ...option.RequestOption) (r *
 	return
 }
 
-// Patch script metadata, such as bindings.
+// Patch metadata for a script uploaded to a Workers for Platforms dispatch
+// namespace, such as bindings.
 func (r *DispatchNamespaceScriptSettingService) Edit(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptSettingEditParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSettingEditResponse, err error) {
 	var env DispatchNamespaceScriptSettingEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -65,7 +66,8 @@ func (r *DispatchNamespaceScriptSettingService) Edit(ctx context.Context, dispat
 	return res, nil
 }
 
-// Get script settings from a script uploaded to a Workers for Platforms namespace.
+// Get settings for a script uploaded to a Workers for Platforms dispatch
+// namespace.
 func (r *DispatchNamespaceScriptSettingService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptSettingGetParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSettingGetResponse, err error) {
 	var env DispatchNamespaceScriptSettingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -251,6 +253,8 @@ type DispatchNamespaceScriptSettingEditResponseBinding struct {
 	Simple interface{} `json:"simple"`
 	// ID of the store containing the secret.
 	StoreID string `json:"store_id"`
+	// ID of a K2 stream owned by the account deploying the Worker.
+	Stream string `json:"stream"`
 	// The text value to use.
 	Text string `json:"text"`
 	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
@@ -308,6 +312,7 @@ type dispatchNamespaceScriptSettingEditResponseBindingJSON struct {
 	ServiceID                   apijson.Field
 	Simple                      apijson.Field
 	StoreID                     apijson.Field
+	Stream                      apijson.Field
 	Text                        apijson.Field
 	TunnelID                    apijson.Field
 	Usages                      apijson.Field
@@ -354,6 +359,7 @@ func (r *DispatchNamespaceScriptSettingEditResponseBinding) UnmarshalJSON(data [
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlainText],
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelines],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindK2],
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindQueue],
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindRatelimit],
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2Bucket],
@@ -397,6 +403,7 @@ func (r DispatchNamespaceScriptSettingEditResponseBinding) AsUnion() DispatchNam
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMTLSCertificate],
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlainText],
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelines],
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindK2],
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindQueue],
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindRatelimit],
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindR2Bucket],
@@ -521,6 +528,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipelines{}),
 			DiscriminatorValue: "pipelines",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindK2{}),
+			DiscriminatorValue: "k2",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -1650,6 +1662,54 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPipe
 	return false
 }
 
+// A K2 stream binding. Available only to accounts enabled for K2.
+type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindK2 struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name" api:"required"`
+	// ID of a K2 stream owned by the account deploying the Worker.
+	Stream string `json:"stream" api:"required"`
+	// The kind of resource that the binding provides.
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindK2Type `json:"type" api:"required"`
+	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindK2JSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindK2JSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindK2]
+type dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindK2JSON struct {
+	Name        apijson.Field
+	Stream      apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindK2) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindK2JSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindK2) implementsDispatchNamespaceScriptSettingEditResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindK2Type string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindK2TypeK2 DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindK2Type = "k2"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindK2Type) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindK2TypeK2:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name" api:"required"`
@@ -2582,6 +2642,7 @@ const (
 	DispatchNamespaceScriptSettingEditResponseBindingsTypeMTLSCertificate        DispatchNamespaceScriptSettingEditResponseBindingsType = "mtls_certificate"
 	DispatchNamespaceScriptSettingEditResponseBindingsTypePlainText              DispatchNamespaceScriptSettingEditResponseBindingsType = "plain_text"
 	DispatchNamespaceScriptSettingEditResponseBindingsTypePipelines              DispatchNamespaceScriptSettingEditResponseBindingsType = "pipelines"
+	DispatchNamespaceScriptSettingEditResponseBindingsTypeK2                     DispatchNamespaceScriptSettingEditResponseBindingsType = "k2"
 	DispatchNamespaceScriptSettingEditResponseBindingsTypeQueue                  DispatchNamespaceScriptSettingEditResponseBindingsType = "queue"
 	DispatchNamespaceScriptSettingEditResponseBindingsTypeRatelimit              DispatchNamespaceScriptSettingEditResponseBindingsType = "ratelimit"
 	DispatchNamespaceScriptSettingEditResponseBindingsTypeR2Bucket               DispatchNamespaceScriptSettingEditResponseBindingsType = "r2_bucket"
@@ -2602,7 +2663,7 @@ const (
 
 func (r DispatchNamespaceScriptSettingEditResponseBindingsType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingEditResponseBindingsTypeAI, DispatchNamespaceScriptSettingEditResponseBindingsTypeAISearch, DispatchNamespaceScriptSettingEditResponseBindingsTypeAISearchNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeMessaging, DispatchNamespaceScriptSettingEditResponseBindingsTypeAnalyticsEngine, DispatchNamespaceScriptSettingEditResponseBindingsTypeAssets, DispatchNamespaceScriptSettingEditResponseBindingsTypeBrowser, DispatchNamespaceScriptSettingEditResponseBindingsTypeD1, DispatchNamespaceScriptSettingEditResponseBindingsTypeDataBlob, DispatchNamespaceScriptSettingEditResponseBindingsTypeDispatchNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeHyperdrive, DispatchNamespaceScriptSettingEditResponseBindingsTypeInherit, DispatchNamespaceScriptSettingEditResponseBindingsTypeImages, DispatchNamespaceScriptSettingEditResponseBindingsTypeJson, DispatchNamespaceScriptSettingEditResponseBindingsTypeKVNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeMedia, DispatchNamespaceScriptSettingEditResponseBindingsTypeMTLSCertificate, DispatchNamespaceScriptSettingEditResponseBindingsTypePlainText, DispatchNamespaceScriptSettingEditResponseBindingsTypePipelines, DispatchNamespaceScriptSettingEditResponseBindingsTypeQueue, DispatchNamespaceScriptSettingEditResponseBindingsTypeRatelimit, DispatchNamespaceScriptSettingEditResponseBindingsTypeR2Bucket, DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretText, DispatchNamespaceScriptSettingEditResponseBindingsTypeSendEmail, DispatchNamespaceScriptSettingEditResponseBindingsTypeService, DispatchNamespaceScriptSettingEditResponseBindingsTypeTextBlob, DispatchNamespaceScriptSettingEditResponseBindingsTypeVectorize, DispatchNamespaceScriptSettingEditResponseBindingsTypeVersionMetadata, DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptSettingEditResponseBindingsTypeFlagship, DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretKey, DispatchNamespaceScriptSettingEditResponseBindingsTypeWorkflow, DispatchNamespaceScriptSettingEditResponseBindingsTypeWasmModule, DispatchNamespaceScriptSettingEditResponseBindingsTypeVPCService, DispatchNamespaceScriptSettingEditResponseBindingsTypeVPCNetwork:
+	case DispatchNamespaceScriptSettingEditResponseBindingsTypeAI, DispatchNamespaceScriptSettingEditResponseBindingsTypeAISearch, DispatchNamespaceScriptSettingEditResponseBindingsTypeAISearchNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeMessaging, DispatchNamespaceScriptSettingEditResponseBindingsTypeAnalyticsEngine, DispatchNamespaceScriptSettingEditResponseBindingsTypeAssets, DispatchNamespaceScriptSettingEditResponseBindingsTypeBrowser, DispatchNamespaceScriptSettingEditResponseBindingsTypeD1, DispatchNamespaceScriptSettingEditResponseBindingsTypeDataBlob, DispatchNamespaceScriptSettingEditResponseBindingsTypeDispatchNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeHyperdrive, DispatchNamespaceScriptSettingEditResponseBindingsTypeInherit, DispatchNamespaceScriptSettingEditResponseBindingsTypeImages, DispatchNamespaceScriptSettingEditResponseBindingsTypeJson, DispatchNamespaceScriptSettingEditResponseBindingsTypeKVNamespace, DispatchNamespaceScriptSettingEditResponseBindingsTypeMedia, DispatchNamespaceScriptSettingEditResponseBindingsTypeMTLSCertificate, DispatchNamespaceScriptSettingEditResponseBindingsTypePlainText, DispatchNamespaceScriptSettingEditResponseBindingsTypePipelines, DispatchNamespaceScriptSettingEditResponseBindingsTypeK2, DispatchNamespaceScriptSettingEditResponseBindingsTypeQueue, DispatchNamespaceScriptSettingEditResponseBindingsTypeRatelimit, DispatchNamespaceScriptSettingEditResponseBindingsTypeR2Bucket, DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretText, DispatchNamespaceScriptSettingEditResponseBindingsTypeSendEmail, DispatchNamespaceScriptSettingEditResponseBindingsTypeService, DispatchNamespaceScriptSettingEditResponseBindingsTypeTextBlob, DispatchNamespaceScriptSettingEditResponseBindingsTypeVectorize, DispatchNamespaceScriptSettingEditResponseBindingsTypeVersionMetadata, DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptSettingEditResponseBindingsTypeFlagship, DispatchNamespaceScriptSettingEditResponseBindingsTypeSecretKey, DispatchNamespaceScriptSettingEditResponseBindingsTypeWorkflow, DispatchNamespaceScriptSettingEditResponseBindingsTypeWasmModule, DispatchNamespaceScriptSettingEditResponseBindingsTypeVPCService, DispatchNamespaceScriptSettingEditResponseBindingsTypeVPCNetwork:
 		return true
 	}
 	return false
@@ -3821,6 +3882,8 @@ type DispatchNamespaceScriptSettingEditResponseObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
+	// Real-time Issues settings for the Worker.
+	Issues DispatchNamespaceScriptSettingEditResponseObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs DispatchNamespaceScriptSettingEditResponseObservabilityLogs `json:"logs" api:"nullable"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -3836,6 +3899,7 @@ type DispatchNamespaceScriptSettingEditResponseObservability struct {
 type dispatchNamespaceScriptSettingEditResponseObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -3848,6 +3912,30 @@ func (r *DispatchNamespaceScriptSettingEditResponseObservability) UnmarshalJSON(
 }
 
 func (r dispatchNamespaceScriptSettingEditResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type DispatchNamespaceScriptSettingEditResponseObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                                                              `json:"enabled"`
+	JSON    dispatchNamespaceScriptSettingEditResponseObservabilityIssuesJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseObservabilityIssuesJSON contains the
+// JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseObservabilityIssues]
+type dispatchNamespaceScriptSettingEditResponseObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -4408,6 +4496,8 @@ type DispatchNamespaceScriptSettingGetResponseBinding struct {
 	Simple interface{} `json:"simple"`
 	// ID of the store containing the secret.
 	StoreID string `json:"store_id"`
+	// ID of a K2 stream owned by the account deploying the Worker.
+	Stream string `json:"stream"`
 	// The text value to use.
 	Text string `json:"text"`
 	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
@@ -4465,6 +4555,7 @@ type dispatchNamespaceScriptSettingGetResponseBindingJSON struct {
 	ServiceID                   apijson.Field
 	Simple                      apijson.Field
 	StoreID                     apijson.Field
+	Stream                      apijson.Field
 	Text                        apijson.Field
 	TunnelID                    apijson.Field
 	Usages                      apijson.Field
@@ -4511,6 +4602,7 @@ func (r *DispatchNamespaceScriptSettingGetResponseBinding) UnmarshalJSON(data []
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlainText],
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelines],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindK2],
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindQueue],
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindRatelimit],
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2Bucket],
@@ -4554,6 +4646,7 @@ func (r DispatchNamespaceScriptSettingGetResponseBinding) AsUnion() DispatchName
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMTLSCertificate],
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlainText],
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelines],
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindK2],
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindQueue],
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindRatelimit],
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindR2Bucket],
@@ -4678,6 +4771,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipelines{}),
 			DiscriminatorValue: "pipelines",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindK2{}),
+			DiscriminatorValue: "k2",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -5807,6 +5905,54 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPipel
 	return false
 }
 
+// A K2 stream binding. Available only to accounts enabled for K2.
+type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindK2 struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name" api:"required"`
+	// ID of a K2 stream owned by the account deploying the Worker.
+	Stream string `json:"stream" api:"required"`
+	// The kind of resource that the binding provides.
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindK2Type `json:"type" api:"required"`
+	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindK2JSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindK2JSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindK2]
+type dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindK2JSON struct {
+	Name        apijson.Field
+	Stream      apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindK2) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindK2JSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindK2) implementsDispatchNamespaceScriptSettingGetResponseBinding() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindK2Type string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindK2TypeK2 DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindK2Type = "k2"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindK2Type) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindK2TypeK2:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name" api:"required"`
@@ -6739,6 +6885,7 @@ const (
 	DispatchNamespaceScriptSettingGetResponseBindingsTypeMTLSCertificate        DispatchNamespaceScriptSettingGetResponseBindingsType = "mtls_certificate"
 	DispatchNamespaceScriptSettingGetResponseBindingsTypePlainText              DispatchNamespaceScriptSettingGetResponseBindingsType = "plain_text"
 	DispatchNamespaceScriptSettingGetResponseBindingsTypePipelines              DispatchNamespaceScriptSettingGetResponseBindingsType = "pipelines"
+	DispatchNamespaceScriptSettingGetResponseBindingsTypeK2                     DispatchNamespaceScriptSettingGetResponseBindingsType = "k2"
 	DispatchNamespaceScriptSettingGetResponseBindingsTypeQueue                  DispatchNamespaceScriptSettingGetResponseBindingsType = "queue"
 	DispatchNamespaceScriptSettingGetResponseBindingsTypeRatelimit              DispatchNamespaceScriptSettingGetResponseBindingsType = "ratelimit"
 	DispatchNamespaceScriptSettingGetResponseBindingsTypeR2Bucket               DispatchNamespaceScriptSettingGetResponseBindingsType = "r2_bucket"
@@ -6759,7 +6906,7 @@ const (
 
 func (r DispatchNamespaceScriptSettingGetResponseBindingsType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingGetResponseBindingsTypeAI, DispatchNamespaceScriptSettingGetResponseBindingsTypeAISearch, DispatchNamespaceScriptSettingGetResponseBindingsTypeAISearchNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeMessaging, DispatchNamespaceScriptSettingGetResponseBindingsTypeAnalyticsEngine, DispatchNamespaceScriptSettingGetResponseBindingsTypeAssets, DispatchNamespaceScriptSettingGetResponseBindingsTypeBrowser, DispatchNamespaceScriptSettingGetResponseBindingsTypeD1, DispatchNamespaceScriptSettingGetResponseBindingsTypeDataBlob, DispatchNamespaceScriptSettingGetResponseBindingsTypeDispatchNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeHyperdrive, DispatchNamespaceScriptSettingGetResponseBindingsTypeInherit, DispatchNamespaceScriptSettingGetResponseBindingsTypeImages, DispatchNamespaceScriptSettingGetResponseBindingsTypeJson, DispatchNamespaceScriptSettingGetResponseBindingsTypeKVNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeMedia, DispatchNamespaceScriptSettingGetResponseBindingsTypeMTLSCertificate, DispatchNamespaceScriptSettingGetResponseBindingsTypePlainText, DispatchNamespaceScriptSettingGetResponseBindingsTypePipelines, DispatchNamespaceScriptSettingGetResponseBindingsTypeQueue, DispatchNamespaceScriptSettingGetResponseBindingsTypeRatelimit, DispatchNamespaceScriptSettingGetResponseBindingsTypeR2Bucket, DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretText, DispatchNamespaceScriptSettingGetResponseBindingsTypeSendEmail, DispatchNamespaceScriptSettingGetResponseBindingsTypeService, DispatchNamespaceScriptSettingGetResponseBindingsTypeTextBlob, DispatchNamespaceScriptSettingGetResponseBindingsTypeVectorize, DispatchNamespaceScriptSettingGetResponseBindingsTypeVersionMetadata, DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptSettingGetResponseBindingsTypeFlagship, DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretKey, DispatchNamespaceScriptSettingGetResponseBindingsTypeWorkflow, DispatchNamespaceScriptSettingGetResponseBindingsTypeWasmModule, DispatchNamespaceScriptSettingGetResponseBindingsTypeVPCService, DispatchNamespaceScriptSettingGetResponseBindingsTypeVPCNetwork:
+	case DispatchNamespaceScriptSettingGetResponseBindingsTypeAI, DispatchNamespaceScriptSettingGetResponseBindingsTypeAISearch, DispatchNamespaceScriptSettingGetResponseBindingsTypeAISearchNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeMessaging, DispatchNamespaceScriptSettingGetResponseBindingsTypeAnalyticsEngine, DispatchNamespaceScriptSettingGetResponseBindingsTypeAssets, DispatchNamespaceScriptSettingGetResponseBindingsTypeBrowser, DispatchNamespaceScriptSettingGetResponseBindingsTypeD1, DispatchNamespaceScriptSettingGetResponseBindingsTypeDataBlob, DispatchNamespaceScriptSettingGetResponseBindingsTypeDispatchNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeHyperdrive, DispatchNamespaceScriptSettingGetResponseBindingsTypeInherit, DispatchNamespaceScriptSettingGetResponseBindingsTypeImages, DispatchNamespaceScriptSettingGetResponseBindingsTypeJson, DispatchNamespaceScriptSettingGetResponseBindingsTypeKVNamespace, DispatchNamespaceScriptSettingGetResponseBindingsTypeMedia, DispatchNamespaceScriptSettingGetResponseBindingsTypeMTLSCertificate, DispatchNamespaceScriptSettingGetResponseBindingsTypePlainText, DispatchNamespaceScriptSettingGetResponseBindingsTypePipelines, DispatchNamespaceScriptSettingGetResponseBindingsTypeK2, DispatchNamespaceScriptSettingGetResponseBindingsTypeQueue, DispatchNamespaceScriptSettingGetResponseBindingsTypeRatelimit, DispatchNamespaceScriptSettingGetResponseBindingsTypeR2Bucket, DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretText, DispatchNamespaceScriptSettingGetResponseBindingsTypeSendEmail, DispatchNamespaceScriptSettingGetResponseBindingsTypeService, DispatchNamespaceScriptSettingGetResponseBindingsTypeTextBlob, DispatchNamespaceScriptSettingGetResponseBindingsTypeVectorize, DispatchNamespaceScriptSettingGetResponseBindingsTypeVersionMetadata, DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptSettingGetResponseBindingsTypeFlagship, DispatchNamespaceScriptSettingGetResponseBindingsTypeSecretKey, DispatchNamespaceScriptSettingGetResponseBindingsTypeWorkflow, DispatchNamespaceScriptSettingGetResponseBindingsTypeWasmModule, DispatchNamespaceScriptSettingGetResponseBindingsTypeVPCService, DispatchNamespaceScriptSettingGetResponseBindingsTypeVPCNetwork:
 		return true
 	}
 	return false
@@ -7978,6 +8125,8 @@ type DispatchNamespaceScriptSettingGetResponseObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
+	// Real-time Issues settings for the Worker.
+	Issues DispatchNamespaceScriptSettingGetResponseObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs DispatchNamespaceScriptSettingGetResponseObservabilityLogs `json:"logs" api:"nullable"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -7992,6 +8141,7 @@ type DispatchNamespaceScriptSettingGetResponseObservability struct {
 type dispatchNamespaceScriptSettingGetResponseObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -8004,6 +8154,30 @@ func (r *DispatchNamespaceScriptSettingGetResponseObservability) UnmarshalJSON(d
 }
 
 func (r dispatchNamespaceScriptSettingGetResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type DispatchNamespaceScriptSettingGetResponseObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                                                             `json:"enabled"`
+	JSON    dispatchNamespaceScriptSettingGetResponseObservabilityIssuesJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseObservabilityIssuesJSON contains the
+// JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseObservabilityIssues]
+type dispatchNamespaceScriptSettingGetResponseObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -8555,6 +8729,8 @@ type DispatchNamespaceScriptSettingEditParamsSettingsBinding struct {
 	Simple    param.Field[interface{}] `json:"simple"`
 	// ID of the store containing the secret.
 	StoreID param.Field[string] `json:"store_id"`
+	// ID of a K2 stream owned by the account deploying the Worker.
+	Stream param.Field[string] `json:"stream"`
 	// The text value to use.
 	Text param.Field[string] `json:"text"`
 	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
@@ -8598,6 +8774,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBinding) implementsDispa
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCertificate],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPlainText],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPipelines],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindK2],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindQueue],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindRatelimit],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindR2Bucket],
@@ -9296,6 +9473,38 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return false
 }
 
+// A K2 stream binding. Available only to accounts enabled for K2.
+type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindK2 struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name" api:"required"`
+	// ID of a K2 stream owned by the account deploying the Worker.
+	Stream param.Field[string] `json:"stream" api:"required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindK2Type] `json:"type" api:"required"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindK2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindK2) implementsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindK2Type string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindK2TypeK2 DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindK2Type = "k2"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindK2Type) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindK2TypeK2:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -9953,6 +10162,7 @@ const (
 	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeMTLSCertificate        DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "mtls_certificate"
 	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypePlainText              DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "plain_text"
 	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypePipelines              DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "pipelines"
+	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeK2                     DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "k2"
 	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeQueue                  DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "queue"
 	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeRatelimit              DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "ratelimit"
 	DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeR2Bucket               DispatchNamespaceScriptSettingEditParamsSettingsBindingsType = "r2_bucket"
@@ -9973,7 +10183,7 @@ const (
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAI, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAISearch, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAISearchNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeMessaging, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAnalyticsEngine, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAssets, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeBrowser, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeD1, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeDataBlob, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeDispatchNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeHyperdrive, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeInherit, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeImages, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeJson, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeKVNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeMedia, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeMTLSCertificate, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypePlainText, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypePipelines, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeQueue, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeRatelimit, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeR2Bucket, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretText, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSendEmail, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeService, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeTextBlob, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVectorize, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVersionMetadata, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeFlagship, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretKey, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeWorkflow, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeWasmModule, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVPCService, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVPCNetwork:
+	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAI, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAISearch, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAISearchNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeMessaging, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAnalyticsEngine, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeAssets, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeBrowser, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeD1, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeDataBlob, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeDispatchNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeHyperdrive, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeInherit, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeImages, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeJson, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeKVNamespace, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeMedia, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeMTLSCertificate, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypePlainText, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypePipelines, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeK2, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeQueue, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeRatelimit, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeR2Bucket, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretText, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSendEmail, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeService, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeTextBlob, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVectorize, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVersionMetadata, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeFlagship, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeSecretKey, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeWorkflow, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeWasmModule, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVPCService, DispatchNamespaceScriptSettingEditParamsSettingsBindingsTypeVPCNetwork:
 		return true
 	}
 	return false
@@ -10840,6 +11050,8 @@ type DispatchNamespaceScriptSettingEditParamsSettingsObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Real-time Issues settings for the Worker.
+	Issues param.Field[DispatchNamespaceScriptSettingEditParamsSettingsObservabilityIssues] `json:"issues"`
 	// Log settings for the Worker.
 	Logs param.Field[DispatchNamespaceScriptSettingEditParamsSettingsObservabilityLogs] `json:"logs"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -10849,6 +11061,16 @@ type DispatchNamespaceScriptSettingEditParamsSettingsObservability struct {
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsObservability) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Real-time Issues settings for the Worker.
+type DispatchNamespaceScriptSettingEditParamsSettingsObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsObservabilityIssues) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

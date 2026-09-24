@@ -167,7 +167,8 @@ func (r *RuleService) Get(ctx context.Context, ruleIdentifier string, query Rule
 // Actions pattern.
 type Action struct {
 	// Type of supported action.
-	Type  ActionType `json:"type" api:"required"`
+	Type ActionType `json:"type" api:"required"`
+	// List of values for the action. Currently limited to a single value.
 	Value []string   `json:"value"`
 	JSON  actionJSON `json:"-"`
 }
@@ -208,8 +209,9 @@ func (r ActionType) IsKnown() bool {
 // Actions pattern.
 type ActionParam struct {
 	// Type of supported action.
-	Type  param.Field[ActionType] `json:"type" api:"required"`
-	Value param.Field[[]string]   `json:"value"`
+	Type param.Field[ActionType] `json:"type" api:"required"`
+	// List of values for the action. Currently limited to a single value.
+	Value param.Field[[]string] `json:"value"`
 }
 
 func (r ActionParam) MarshalJSON() (data []byte, err error) {

@@ -31,14 +31,19 @@ func TestBotManagementUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.BotManagement.Update(context.TODO(), bot_management.BotManagementUpdateParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Body: bot_management.BotFightModeConfigurationParam{
-			AIBotsProtection:         cloudflare.F(bot_management.BotFightModeConfigurationAIBotsProtectionDisabled),
+			AIBotsMigrationOptOut:    cloudflare.F(false),
+			AIBotsProtection:         cloudflare.F(bot_management.BotFightModeConfigurationAIBotsProtectionBlock),
+			AISearch:                 cloudflare.F(bot_management.BotFightModeConfigurationAISearchBlock),
+			AITraining:               cloudflare.F(bot_management.BotFightModeConfigurationAITrainingDisallow),
+			AIUser:                   cloudflare.F(bot_management.BotFightModeConfigurationAIUserOnlyOnADPages),
 			BotPreferenceSyncEnabled: cloudflare.F(true),
-			CfRobotsVariant:          cloudflare.F(bot_management.BotFightModeConfigurationCfRobotsVariantOff),
+			CfRobotsVariant:          cloudflare.F(bot_management.BotFightModeConfigurationCfRobotsVariantPolicyOnly),
 			ContentBotsProtection:    cloudflare.F(bot_management.BotFightModeConfigurationContentBotsProtectionDisabled),
-			CrawlerProtection:        cloudflare.F(bot_management.BotFightModeConfigurationCrawlerProtectionDisabled),
+			CrawlerProtection:        cloudflare.F(bot_management.BotFightModeConfigurationCrawlerProtectionEnabled),
 			EnableJS:                 cloudflare.F(true),
 			FightMode:                cloudflare.F(true),
 			IsRobotsTXTManaged:       cloudflare.F(false),
+			JsdAPIResultsEnabled:     cloudflare.F(true),
 		},
 	})
 	if err != nil {

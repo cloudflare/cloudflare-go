@@ -179,6 +179,11 @@ type AppNewResponse struct {
 	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
 	// range must match the number of ports specified in the "protocol" field.
 	OriginPort OriginPortUnion `json:"origin_port"`
+	// Optional Worker script tag (worker ID) to use as the application's origin. Only
+	// supported for TCP applications with traffic_type "worker"; mutually exclusive
+	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
+	// argo_smart_routing. tls may only be "off" or "flexible".
+	OriginWorkerID string `json:"origin_worker_id"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -190,7 +195,8 @@ type AppNewResponse struct {
 	// Spectrum will send traffic directly to your origin, and the application's type
 	// is derived from the `protocol`. When set to "http" or "https", Spectrum will
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-	// the application type matches this property exactly.
+	// the application type matches this property exactly. When set to "worker",
+	// traffic is sent to the Worker specified by `origin_worker_id`.
 	TrafficType AppNewResponseTrafficType `json:"traffic_type"`
 	// Optional UUID of a virtual network for routing origin traffic through tunnel
 	// virtual networks.
@@ -212,6 +218,7 @@ type appNewResponseJSON struct {
 	OriginDirect     apijson.Field
 	OriginDNS        apijson.Field
 	OriginPort       apijson.Field
+	OriginWorkerID   apijson.Field
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
 	TrafficType      apijson.Field
@@ -279,7 +286,8 @@ type AppNewResponseSpectrumConfigAppConfig struct {
 	// Spectrum will send traffic directly to your origin, and the application's type
 	// is derived from the `protocol`. When set to "http" or "https", Spectrum will
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-	// the application type matches this property exactly.
+	// the application type matches this property exactly. When set to "worker",
+	// traffic is sent to the Worker specified by `origin_worker_id`.
 	TrafficType AppNewResponseSpectrumConfigAppConfigTrafficType `json:"traffic_type" api:"required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
 	// or UDP applications with traffic_type set to "direct".
@@ -300,6 +308,11 @@ type AppNewResponseSpectrumConfigAppConfig struct {
 	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
 	// range must match the number of ports specified in the "protocol" field.
 	OriginPort OriginPortUnion `json:"origin_port"`
+	// Optional Worker script tag (worker ID) to use as the application's origin. Only
+	// supported for TCP applications with traffic_type "worker"; mutually exclusive
+	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
+	// argo_smart_routing. tls may only be "off" or "flexible".
+	OriginWorkerID string `json:"origin_worker_id"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -328,6 +341,7 @@ type appNewResponseSpectrumConfigAppConfigJSON struct {
 	OriginDirect     apijson.Field
 	OriginDNS        apijson.Field
 	OriginPort       apijson.Field
+	OriginWorkerID   apijson.Field
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
 	VirtualNetworkID apijson.Field
@@ -349,18 +363,20 @@ func (r AppNewResponseSpectrumConfigAppConfig) implementsAppNewResponse() {}
 // Spectrum will send traffic directly to your origin, and the application's type
 // is derived from the `protocol`. When set to "http" or "https", Spectrum will
 // apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-// the application type matches this property exactly.
+// the application type matches this property exactly. When set to "worker",
+// traffic is sent to the Worker specified by `origin_worker_id`.
 type AppNewResponseSpectrumConfigAppConfigTrafficType string
 
 const (
 	AppNewResponseSpectrumConfigAppConfigTrafficTypeDirect AppNewResponseSpectrumConfigAppConfigTrafficType = "direct"
 	AppNewResponseSpectrumConfigAppConfigTrafficTypeHTTP   AppNewResponseSpectrumConfigAppConfigTrafficType = "http"
 	AppNewResponseSpectrumConfigAppConfigTrafficTypeHTTPS  AppNewResponseSpectrumConfigAppConfigTrafficType = "https"
+	AppNewResponseSpectrumConfigAppConfigTrafficTypeWorker AppNewResponseSpectrumConfigAppConfigTrafficType = "worker"
 )
 
 func (r AppNewResponseSpectrumConfigAppConfigTrafficType) IsKnown() bool {
 	switch r {
-	case AppNewResponseSpectrumConfigAppConfigTrafficTypeDirect, AppNewResponseSpectrumConfigAppConfigTrafficTypeHTTP, AppNewResponseSpectrumConfigAppConfigTrafficTypeHTTPS:
+	case AppNewResponseSpectrumConfigAppConfigTrafficTypeDirect, AppNewResponseSpectrumConfigAppConfigTrafficTypeHTTP, AppNewResponseSpectrumConfigAppConfigTrafficTypeHTTPS, AppNewResponseSpectrumConfigAppConfigTrafficTypeWorker:
 		return true
 	}
 	return false
@@ -489,18 +505,20 @@ func (r AppNewResponseTLS) IsKnown() bool {
 // Spectrum will send traffic directly to your origin, and the application's type
 // is derived from the `protocol`. When set to "http" or "https", Spectrum will
 // apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-// the application type matches this property exactly.
+// the application type matches this property exactly. When set to "worker",
+// traffic is sent to the Worker specified by `origin_worker_id`.
 type AppNewResponseTrafficType string
 
 const (
 	AppNewResponseTrafficTypeDirect AppNewResponseTrafficType = "direct"
 	AppNewResponseTrafficTypeHTTP   AppNewResponseTrafficType = "http"
 	AppNewResponseTrafficTypeHTTPS  AppNewResponseTrafficType = "https"
+	AppNewResponseTrafficTypeWorker AppNewResponseTrafficType = "worker"
 )
 
 func (r AppNewResponseTrafficType) IsKnown() bool {
 	switch r {
-	case AppNewResponseTrafficTypeDirect, AppNewResponseTrafficTypeHTTP, AppNewResponseTrafficTypeHTTPS:
+	case AppNewResponseTrafficTypeDirect, AppNewResponseTrafficTypeHTTP, AppNewResponseTrafficTypeHTTPS, AppNewResponseTrafficTypeWorker:
 		return true
 	}
 	return false
@@ -536,6 +554,11 @@ type AppUpdateResponse struct {
 	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
 	// range must match the number of ports specified in the "protocol" field.
 	OriginPort OriginPortUnion `json:"origin_port"`
+	// Optional Worker script tag (worker ID) to use as the application's origin. Only
+	// supported for TCP applications with traffic_type "worker"; mutually exclusive
+	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
+	// argo_smart_routing. tls may only be "off" or "flexible".
+	OriginWorkerID string `json:"origin_worker_id"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -547,7 +570,8 @@ type AppUpdateResponse struct {
 	// Spectrum will send traffic directly to your origin, and the application's type
 	// is derived from the `protocol`. When set to "http" or "https", Spectrum will
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-	// the application type matches this property exactly.
+	// the application type matches this property exactly. When set to "worker",
+	// traffic is sent to the Worker specified by `origin_worker_id`.
 	TrafficType AppUpdateResponseTrafficType `json:"traffic_type"`
 	// Optional UUID of a virtual network for routing origin traffic through tunnel
 	// virtual networks.
@@ -570,6 +594,7 @@ type appUpdateResponseJSON struct {
 	OriginDirect     apijson.Field
 	OriginDNS        apijson.Field
 	OriginPort       apijson.Field
+	OriginWorkerID   apijson.Field
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
 	TrafficType      apijson.Field
@@ -638,7 +663,8 @@ type AppUpdateResponseSpectrumConfigAppConfig struct {
 	// Spectrum will send traffic directly to your origin, and the application's type
 	// is derived from the `protocol`. When set to "http" or "https", Spectrum will
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-	// the application type matches this property exactly.
+	// the application type matches this property exactly. When set to "worker",
+	// traffic is sent to the Worker specified by `origin_worker_id`.
 	TrafficType AppUpdateResponseSpectrumConfigAppConfigTrafficType `json:"traffic_type" api:"required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
 	// or UDP applications with traffic_type set to "direct".
@@ -659,6 +685,11 @@ type AppUpdateResponseSpectrumConfigAppConfig struct {
 	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
 	// range must match the number of ports specified in the "protocol" field.
 	OriginPort OriginPortUnion `json:"origin_port"`
+	// Optional Worker script tag (worker ID) to use as the application's origin. Only
+	// supported for TCP applications with traffic_type "worker"; mutually exclusive
+	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
+	// argo_smart_routing. tls may only be "off" or "flexible".
+	OriginWorkerID string `json:"origin_worker_id"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -687,6 +718,7 @@ type appUpdateResponseSpectrumConfigAppConfigJSON struct {
 	OriginDirect     apijson.Field
 	OriginDNS        apijson.Field
 	OriginPort       apijson.Field
+	OriginWorkerID   apijson.Field
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
 	VirtualNetworkID apijson.Field
@@ -708,18 +740,20 @@ func (r AppUpdateResponseSpectrumConfigAppConfig) implementsAppUpdateResponse() 
 // Spectrum will send traffic directly to your origin, and the application's type
 // is derived from the `protocol`. When set to "http" or "https", Spectrum will
 // apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-// the application type matches this property exactly.
+// the application type matches this property exactly. When set to "worker",
+// traffic is sent to the Worker specified by `origin_worker_id`.
 type AppUpdateResponseSpectrumConfigAppConfigTrafficType string
 
 const (
 	AppUpdateResponseSpectrumConfigAppConfigTrafficTypeDirect AppUpdateResponseSpectrumConfigAppConfigTrafficType = "direct"
 	AppUpdateResponseSpectrumConfigAppConfigTrafficTypeHTTP   AppUpdateResponseSpectrumConfigAppConfigTrafficType = "http"
 	AppUpdateResponseSpectrumConfigAppConfigTrafficTypeHTTPS  AppUpdateResponseSpectrumConfigAppConfigTrafficType = "https"
+	AppUpdateResponseSpectrumConfigAppConfigTrafficTypeWorker AppUpdateResponseSpectrumConfigAppConfigTrafficType = "worker"
 )
 
 func (r AppUpdateResponseSpectrumConfigAppConfigTrafficType) IsKnown() bool {
 	switch r {
-	case AppUpdateResponseSpectrumConfigAppConfigTrafficTypeDirect, AppUpdateResponseSpectrumConfigAppConfigTrafficTypeHTTP, AppUpdateResponseSpectrumConfigAppConfigTrafficTypeHTTPS:
+	case AppUpdateResponseSpectrumConfigAppConfigTrafficTypeDirect, AppUpdateResponseSpectrumConfigAppConfigTrafficTypeHTTP, AppUpdateResponseSpectrumConfigAppConfigTrafficTypeHTTPS, AppUpdateResponseSpectrumConfigAppConfigTrafficTypeWorker:
 		return true
 	}
 	return false
@@ -848,18 +882,20 @@ func (r AppUpdateResponseTLS) IsKnown() bool {
 // Spectrum will send traffic directly to your origin, and the application's type
 // is derived from the `protocol`. When set to "http" or "https", Spectrum will
 // apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-// the application type matches this property exactly.
+// the application type matches this property exactly. When set to "worker",
+// traffic is sent to the Worker specified by `origin_worker_id`.
 type AppUpdateResponseTrafficType string
 
 const (
 	AppUpdateResponseTrafficTypeDirect AppUpdateResponseTrafficType = "direct"
 	AppUpdateResponseTrafficTypeHTTP   AppUpdateResponseTrafficType = "http"
 	AppUpdateResponseTrafficTypeHTTPS  AppUpdateResponseTrafficType = "https"
+	AppUpdateResponseTrafficTypeWorker AppUpdateResponseTrafficType = "worker"
 )
 
 func (r AppUpdateResponseTrafficType) IsKnown() bool {
 	switch r {
-	case AppUpdateResponseTrafficTypeDirect, AppUpdateResponseTrafficTypeHTTP, AppUpdateResponseTrafficTypeHTTPS:
+	case AppUpdateResponseTrafficTypeDirect, AppUpdateResponseTrafficTypeHTTP, AppUpdateResponseTrafficTypeHTTPS, AppUpdateResponseTrafficTypeWorker:
 		return true
 	}
 	return false
@@ -895,6 +931,11 @@ type AppListResponse struct {
 	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
 	// range must match the number of ports specified in the "protocol" field.
 	OriginPort OriginPortUnion `json:"origin_port"`
+	// Optional Worker script tag (worker ID) to use as the application's origin. Only
+	// supported for TCP applications with traffic_type "worker"; mutually exclusive
+	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
+	// argo_smart_routing. tls may only be "off" or "flexible".
+	OriginWorkerID string `json:"origin_worker_id"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -906,7 +947,8 @@ type AppListResponse struct {
 	// Spectrum will send traffic directly to your origin, and the application's type
 	// is derived from the `protocol`. When set to "http" or "https", Spectrum will
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-	// the application type matches this property exactly.
+	// the application type matches this property exactly. When set to "worker",
+	// traffic is sent to the Worker specified by `origin_worker_id`.
 	TrafficType AppListResponseTrafficType `json:"traffic_type"`
 	// Optional UUID of a virtual network for routing origin traffic through tunnel
 	// virtual networks.
@@ -928,6 +970,7 @@ type appListResponseJSON struct {
 	OriginDirect     apijson.Field
 	OriginDNS        apijson.Field
 	OriginPort       apijson.Field
+	OriginWorkerID   apijson.Field
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
 	TrafficType      apijson.Field
@@ -996,7 +1039,8 @@ type AppListResponseSpectrumConfigAppConfig struct {
 	// Spectrum will send traffic directly to your origin, and the application's type
 	// is derived from the `protocol`. When set to "http" or "https", Spectrum will
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-	// the application type matches this property exactly.
+	// the application type matches this property exactly. When set to "worker",
+	// traffic is sent to the Worker specified by `origin_worker_id`.
 	TrafficType AppListResponseSpectrumConfigAppConfigTrafficType `json:"traffic_type" api:"required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
 	// or UDP applications with traffic_type set to "direct".
@@ -1017,6 +1061,11 @@ type AppListResponseSpectrumConfigAppConfig struct {
 	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
 	// range must match the number of ports specified in the "protocol" field.
 	OriginPort OriginPortUnion `json:"origin_port"`
+	// Optional Worker script tag (worker ID) to use as the application's origin. Only
+	// supported for TCP applications with traffic_type "worker"; mutually exclusive
+	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
+	// argo_smart_routing. tls may only be "off" or "flexible".
+	OriginWorkerID string `json:"origin_worker_id"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -1045,6 +1094,7 @@ type appListResponseSpectrumConfigAppConfigJSON struct {
 	OriginDirect     apijson.Field
 	OriginDNS        apijson.Field
 	OriginPort       apijson.Field
+	OriginWorkerID   apijson.Field
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
 	VirtualNetworkID apijson.Field
@@ -1066,18 +1116,20 @@ func (r AppListResponseSpectrumConfigAppConfig) implementsAppListResponse() {}
 // Spectrum will send traffic directly to your origin, and the application's type
 // is derived from the `protocol`. When set to "http" or "https", Spectrum will
 // apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-// the application type matches this property exactly.
+// the application type matches this property exactly. When set to "worker",
+// traffic is sent to the Worker specified by `origin_worker_id`.
 type AppListResponseSpectrumConfigAppConfigTrafficType string
 
 const (
 	AppListResponseSpectrumConfigAppConfigTrafficTypeDirect AppListResponseSpectrumConfigAppConfigTrafficType = "direct"
 	AppListResponseSpectrumConfigAppConfigTrafficTypeHTTP   AppListResponseSpectrumConfigAppConfigTrafficType = "http"
 	AppListResponseSpectrumConfigAppConfigTrafficTypeHTTPS  AppListResponseSpectrumConfigAppConfigTrafficType = "https"
+	AppListResponseSpectrumConfigAppConfigTrafficTypeWorker AppListResponseSpectrumConfigAppConfigTrafficType = "worker"
 )
 
 func (r AppListResponseSpectrumConfigAppConfigTrafficType) IsKnown() bool {
 	switch r {
-	case AppListResponseSpectrumConfigAppConfigTrafficTypeDirect, AppListResponseSpectrumConfigAppConfigTrafficTypeHTTP, AppListResponseSpectrumConfigAppConfigTrafficTypeHTTPS:
+	case AppListResponseSpectrumConfigAppConfigTrafficTypeDirect, AppListResponseSpectrumConfigAppConfigTrafficTypeHTTP, AppListResponseSpectrumConfigAppConfigTrafficTypeHTTPS, AppListResponseSpectrumConfigAppConfigTrafficTypeWorker:
 		return true
 	}
 	return false
@@ -1206,18 +1258,20 @@ func (r AppListResponseTLS) IsKnown() bool {
 // Spectrum will send traffic directly to your origin, and the application's type
 // is derived from the `protocol`. When set to "http" or "https", Spectrum will
 // apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-// the application type matches this property exactly.
+// the application type matches this property exactly. When set to "worker",
+// traffic is sent to the Worker specified by `origin_worker_id`.
 type AppListResponseTrafficType string
 
 const (
 	AppListResponseTrafficTypeDirect AppListResponseTrafficType = "direct"
 	AppListResponseTrafficTypeHTTP   AppListResponseTrafficType = "http"
 	AppListResponseTrafficTypeHTTPS  AppListResponseTrafficType = "https"
+	AppListResponseTrafficTypeWorker AppListResponseTrafficType = "worker"
 )
 
 func (r AppListResponseTrafficType) IsKnown() bool {
 	switch r {
-	case AppListResponseTrafficTypeDirect, AppListResponseTrafficTypeHTTP, AppListResponseTrafficTypeHTTPS:
+	case AppListResponseTrafficTypeDirect, AppListResponseTrafficTypeHTTP, AppListResponseTrafficTypeHTTPS, AppListResponseTrafficTypeWorker:
 		return true
 	}
 	return false
@@ -1275,6 +1329,11 @@ type AppGetResponse struct {
 	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
 	// range must match the number of ports specified in the "protocol" field.
 	OriginPort OriginPortUnion `json:"origin_port"`
+	// Optional Worker script tag (worker ID) to use as the application's origin. Only
+	// supported for TCP applications with traffic_type "worker"; mutually exclusive
+	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
+	// argo_smart_routing. tls may only be "off" or "flexible".
+	OriginWorkerID string `json:"origin_worker_id"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -1286,7 +1345,8 @@ type AppGetResponse struct {
 	// Spectrum will send traffic directly to your origin, and the application's type
 	// is derived from the `protocol`. When set to "http" or "https", Spectrum will
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-	// the application type matches this property exactly.
+	// the application type matches this property exactly. When set to "worker",
+	// traffic is sent to the Worker specified by `origin_worker_id`.
 	TrafficType AppGetResponseTrafficType `json:"traffic_type"`
 	// Optional UUID of a virtual network for routing origin traffic through tunnel
 	// virtual networks.
@@ -1308,6 +1368,7 @@ type appGetResponseJSON struct {
 	OriginDirect     apijson.Field
 	OriginDNS        apijson.Field
 	OriginPort       apijson.Field
+	OriginWorkerID   apijson.Field
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
 	TrafficType      apijson.Field
@@ -1375,7 +1436,8 @@ type AppGetResponseSpectrumConfigAppConfig struct {
 	// Spectrum will send traffic directly to your origin, and the application's type
 	// is derived from the `protocol`. When set to "http" or "https", Spectrum will
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-	// the application type matches this property exactly.
+	// the application type matches this property exactly. When set to "worker",
+	// traffic is sent to the Worker specified by `origin_worker_id`.
 	TrafficType AppGetResponseSpectrumConfigAppConfigTrafficType `json:"traffic_type" api:"required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
 	// or UDP applications with traffic_type set to "direct".
@@ -1396,6 +1458,11 @@ type AppGetResponseSpectrumConfigAppConfig struct {
 	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
 	// range must match the number of ports specified in the "protocol" field.
 	OriginPort OriginPortUnion `json:"origin_port"`
+	// Optional Worker script tag (worker ID) to use as the application's origin. Only
+	// supported for TCP applications with traffic_type "worker"; mutually exclusive
+	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
+	// argo_smart_routing. tls may only be "off" or "flexible".
+	OriginWorkerID string `json:"origin_worker_id"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -1424,6 +1491,7 @@ type appGetResponseSpectrumConfigAppConfigJSON struct {
 	OriginDirect     apijson.Field
 	OriginDNS        apijson.Field
 	OriginPort       apijson.Field
+	OriginWorkerID   apijson.Field
 	ProxyProtocol    apijson.Field
 	TLS              apijson.Field
 	VirtualNetworkID apijson.Field
@@ -1445,18 +1513,20 @@ func (r AppGetResponseSpectrumConfigAppConfig) implementsAppGetResponse() {}
 // Spectrum will send traffic directly to your origin, and the application's type
 // is derived from the `protocol`. When set to "http" or "https", Spectrum will
 // apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-// the application type matches this property exactly.
+// the application type matches this property exactly. When set to "worker",
+// traffic is sent to the Worker specified by `origin_worker_id`.
 type AppGetResponseSpectrumConfigAppConfigTrafficType string
 
 const (
 	AppGetResponseSpectrumConfigAppConfigTrafficTypeDirect AppGetResponseSpectrumConfigAppConfigTrafficType = "direct"
 	AppGetResponseSpectrumConfigAppConfigTrafficTypeHTTP   AppGetResponseSpectrumConfigAppConfigTrafficType = "http"
 	AppGetResponseSpectrumConfigAppConfigTrafficTypeHTTPS  AppGetResponseSpectrumConfigAppConfigTrafficType = "https"
+	AppGetResponseSpectrumConfigAppConfigTrafficTypeWorker AppGetResponseSpectrumConfigAppConfigTrafficType = "worker"
 )
 
 func (r AppGetResponseSpectrumConfigAppConfigTrafficType) IsKnown() bool {
 	switch r {
-	case AppGetResponseSpectrumConfigAppConfigTrafficTypeDirect, AppGetResponseSpectrumConfigAppConfigTrafficTypeHTTP, AppGetResponseSpectrumConfigAppConfigTrafficTypeHTTPS:
+	case AppGetResponseSpectrumConfigAppConfigTrafficTypeDirect, AppGetResponseSpectrumConfigAppConfigTrafficTypeHTTP, AppGetResponseSpectrumConfigAppConfigTrafficTypeHTTPS, AppGetResponseSpectrumConfigAppConfigTrafficTypeWorker:
 		return true
 	}
 	return false
@@ -1585,18 +1655,20 @@ func (r AppGetResponseTLS) IsKnown() bool {
 // Spectrum will send traffic directly to your origin, and the application's type
 // is derived from the `protocol`. When set to "http" or "https", Spectrum will
 // apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-// the application type matches this property exactly.
+// the application type matches this property exactly. When set to "worker",
+// traffic is sent to the Worker specified by `origin_worker_id`.
 type AppGetResponseTrafficType string
 
 const (
 	AppGetResponseTrafficTypeDirect AppGetResponseTrafficType = "direct"
 	AppGetResponseTrafficTypeHTTP   AppGetResponseTrafficType = "http"
 	AppGetResponseTrafficTypeHTTPS  AppGetResponseTrafficType = "https"
+	AppGetResponseTrafficTypeWorker AppGetResponseTrafficType = "worker"
 )
 
 func (r AppGetResponseTrafficType) IsKnown() bool {
 	switch r {
-	case AppGetResponseTrafficTypeDirect, AppGetResponseTrafficTypeHTTP, AppGetResponseTrafficTypeHTTPS:
+	case AppGetResponseTrafficTypeDirect, AppGetResponseTrafficTypeHTTP, AppGetResponseTrafficTypeHTTPS, AppGetResponseTrafficTypeWorker:
 		return true
 	}
 	return false
@@ -1635,6 +1707,11 @@ type AppNewParamsBody struct {
 	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
 	// range must match the number of ports specified in the "protocol" field.
 	OriginPort param.Field[OriginPortUnionParam] `json:"origin_port"`
+	// Optional Worker script tag (worker ID) to use as the application's origin. Only
+	// supported for TCP applications with traffic_type "worker"; mutually exclusive
+	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
+	// argo_smart_routing. tls may only be "off" or "flexible".
+	OriginWorkerID param.Field[string] `json:"origin_worker_id"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -1646,7 +1723,8 @@ type AppNewParamsBody struct {
 	// Spectrum will send traffic directly to your origin, and the application's type
 	// is derived from the `protocol`. When set to "http" or "https", Spectrum will
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-	// the application type matches this property exactly.
+	// the application type matches this property exactly. When set to "worker",
+	// traffic is sent to the Worker specified by `origin_worker_id`.
 	TrafficType param.Field[AppNewParamsBodyTrafficType] `json:"traffic_type"`
 	// Optional UUID of a virtual network for routing origin traffic through tunnel
 	// virtual networks.
@@ -1675,7 +1753,8 @@ type AppNewParamsBodySpectrumConfigAppConfig struct {
 	// Spectrum will send traffic directly to your origin, and the application's type
 	// is derived from the `protocol`. When set to "http" or "https", Spectrum will
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-	// the application type matches this property exactly.
+	// the application type matches this property exactly. When set to "worker",
+	// traffic is sent to the Worker specified by `origin_worker_id`.
 	TrafficType param.Field[AppNewParamsBodySpectrumConfigAppConfigTrafficType] `json:"traffic_type" api:"required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
 	// or UDP applications with traffic_type set to "direct".
@@ -1696,6 +1775,11 @@ type AppNewParamsBodySpectrumConfigAppConfig struct {
 	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
 	// range must match the number of ports specified in the "protocol" field.
 	OriginPort param.Field[OriginPortUnionParam] `json:"origin_port"`
+	// Optional Worker script tag (worker ID) to use as the application's origin. Only
+	// supported for TCP applications with traffic_type "worker"; mutually exclusive
+	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
+	// argo_smart_routing. tls may only be "off" or "flexible".
+	OriginWorkerID param.Field[string] `json:"origin_worker_id"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -1718,18 +1802,20 @@ func (r AppNewParamsBodySpectrumConfigAppConfig) implementsAppNewParamsBodyUnion
 // Spectrum will send traffic directly to your origin, and the application's type
 // is derived from the `protocol`. When set to "http" or "https", Spectrum will
 // apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-// the application type matches this property exactly.
+// the application type matches this property exactly. When set to "worker",
+// traffic is sent to the Worker specified by `origin_worker_id`.
 type AppNewParamsBodySpectrumConfigAppConfigTrafficType string
 
 const (
 	AppNewParamsBodySpectrumConfigAppConfigTrafficTypeDirect AppNewParamsBodySpectrumConfigAppConfigTrafficType = "direct"
 	AppNewParamsBodySpectrumConfigAppConfigTrafficTypeHTTP   AppNewParamsBodySpectrumConfigAppConfigTrafficType = "http"
 	AppNewParamsBodySpectrumConfigAppConfigTrafficTypeHTTPS  AppNewParamsBodySpectrumConfigAppConfigTrafficType = "https"
+	AppNewParamsBodySpectrumConfigAppConfigTrafficTypeWorker AppNewParamsBodySpectrumConfigAppConfigTrafficType = "worker"
 )
 
 func (r AppNewParamsBodySpectrumConfigAppConfigTrafficType) IsKnown() bool {
 	switch r {
-	case AppNewParamsBodySpectrumConfigAppConfigTrafficTypeDirect, AppNewParamsBodySpectrumConfigAppConfigTrafficTypeHTTP, AppNewParamsBodySpectrumConfigAppConfigTrafficTypeHTTPS:
+	case AppNewParamsBodySpectrumConfigAppConfigTrafficTypeDirect, AppNewParamsBodySpectrumConfigAppConfigTrafficTypeHTTP, AppNewParamsBodySpectrumConfigAppConfigTrafficTypeHTTPS, AppNewParamsBodySpectrumConfigAppConfigTrafficTypeWorker:
 		return true
 	}
 	return false
@@ -1834,18 +1920,20 @@ func (r AppNewParamsBodyTLS) IsKnown() bool {
 // Spectrum will send traffic directly to your origin, and the application's type
 // is derived from the `protocol`. When set to "http" or "https", Spectrum will
 // apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-// the application type matches this property exactly.
+// the application type matches this property exactly. When set to "worker",
+// traffic is sent to the Worker specified by `origin_worker_id`.
 type AppNewParamsBodyTrafficType string
 
 const (
 	AppNewParamsBodyTrafficTypeDirect AppNewParamsBodyTrafficType = "direct"
 	AppNewParamsBodyTrafficTypeHTTP   AppNewParamsBodyTrafficType = "http"
 	AppNewParamsBodyTrafficTypeHTTPS  AppNewParamsBodyTrafficType = "https"
+	AppNewParamsBodyTrafficTypeWorker AppNewParamsBodyTrafficType = "worker"
 )
 
 func (r AppNewParamsBodyTrafficType) IsKnown() bool {
 	switch r {
-	case AppNewParamsBodyTrafficTypeDirect, AppNewParamsBodyTrafficTypeHTTP, AppNewParamsBodyTrafficTypeHTTPS:
+	case AppNewParamsBodyTrafficTypeDirect, AppNewParamsBodyTrafficTypeHTTP, AppNewParamsBodyTrafficTypeHTTPS, AppNewParamsBodyTrafficTypeWorker:
 		return true
 	}
 	return false
@@ -2023,6 +2111,11 @@ type AppUpdateParamsBody struct {
 	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
 	// range must match the number of ports specified in the "protocol" field.
 	OriginPort param.Field[OriginPortUnionParam] `json:"origin_port"`
+	// Optional Worker script tag (worker ID) to use as the application's origin. Only
+	// supported for TCP applications with traffic_type "worker"; mutually exclusive
+	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
+	// argo_smart_routing. tls may only be "off" or "flexible".
+	OriginWorkerID param.Field[string] `json:"origin_worker_id"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -2034,7 +2127,8 @@ type AppUpdateParamsBody struct {
 	// Spectrum will send traffic directly to your origin, and the application's type
 	// is derived from the `protocol`. When set to "http" or "https", Spectrum will
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-	// the application type matches this property exactly.
+	// the application type matches this property exactly. When set to "worker",
+	// traffic is sent to the Worker specified by `origin_worker_id`.
 	TrafficType param.Field[AppUpdateParamsBodyTrafficType] `json:"traffic_type"`
 	// Optional UUID of a virtual network for routing origin traffic through tunnel
 	// virtual networks.
@@ -2064,7 +2158,8 @@ type AppUpdateParamsBodySpectrumConfigAppConfig struct {
 	// Spectrum will send traffic directly to your origin, and the application's type
 	// is derived from the `protocol`. When set to "http" or "https", Spectrum will
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-	// the application type matches this property exactly.
+	// the application type matches this property exactly. When set to "worker",
+	// traffic is sent to the Worker specified by `origin_worker_id`.
 	TrafficType param.Field[AppUpdateParamsBodySpectrumConfigAppConfigTrafficType] `json:"traffic_type" api:"required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
 	// or UDP applications with traffic_type set to "direct".
@@ -2085,6 +2180,11 @@ type AppUpdateParamsBodySpectrumConfigAppConfig struct {
 	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
 	// range must match the number of ports specified in the "protocol" field.
 	OriginPort param.Field[OriginPortUnionParam] `json:"origin_port"`
+	// Optional Worker script tag (worker ID) to use as the application's origin. Only
+	// supported for TCP applications with traffic_type "worker"; mutually exclusive
+	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
+	// argo_smart_routing. tls may only be "off" or "flexible".
+	OriginWorkerID param.Field[string] `json:"origin_worker_id"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -2107,18 +2207,20 @@ func (r AppUpdateParamsBodySpectrumConfigAppConfig) implementsAppUpdateParamsBod
 // Spectrum will send traffic directly to your origin, and the application's type
 // is derived from the `protocol`. When set to "http" or "https", Spectrum will
 // apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-// the application type matches this property exactly.
+// the application type matches this property exactly. When set to "worker",
+// traffic is sent to the Worker specified by `origin_worker_id`.
 type AppUpdateParamsBodySpectrumConfigAppConfigTrafficType string
 
 const (
 	AppUpdateParamsBodySpectrumConfigAppConfigTrafficTypeDirect AppUpdateParamsBodySpectrumConfigAppConfigTrafficType = "direct"
 	AppUpdateParamsBodySpectrumConfigAppConfigTrafficTypeHTTP   AppUpdateParamsBodySpectrumConfigAppConfigTrafficType = "http"
 	AppUpdateParamsBodySpectrumConfigAppConfigTrafficTypeHTTPS  AppUpdateParamsBodySpectrumConfigAppConfigTrafficType = "https"
+	AppUpdateParamsBodySpectrumConfigAppConfigTrafficTypeWorker AppUpdateParamsBodySpectrumConfigAppConfigTrafficType = "worker"
 )
 
 func (r AppUpdateParamsBodySpectrumConfigAppConfigTrafficType) IsKnown() bool {
 	switch r {
-	case AppUpdateParamsBodySpectrumConfigAppConfigTrafficTypeDirect, AppUpdateParamsBodySpectrumConfigAppConfigTrafficTypeHTTP, AppUpdateParamsBodySpectrumConfigAppConfigTrafficTypeHTTPS:
+	case AppUpdateParamsBodySpectrumConfigAppConfigTrafficTypeDirect, AppUpdateParamsBodySpectrumConfigAppConfigTrafficTypeHTTP, AppUpdateParamsBodySpectrumConfigAppConfigTrafficTypeHTTPS, AppUpdateParamsBodySpectrumConfigAppConfigTrafficTypeWorker:
 		return true
 	}
 	return false
@@ -2223,18 +2325,20 @@ func (r AppUpdateParamsBodyTLS) IsKnown() bool {
 // Spectrum will send traffic directly to your origin, and the application's type
 // is derived from the `protocol`. When set to "http" or "https", Spectrum will
 // apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-// the application type matches this property exactly.
+// the application type matches this property exactly. When set to "worker",
+// traffic is sent to the Worker specified by `origin_worker_id`.
 type AppUpdateParamsBodyTrafficType string
 
 const (
 	AppUpdateParamsBodyTrafficTypeDirect AppUpdateParamsBodyTrafficType = "direct"
 	AppUpdateParamsBodyTrafficTypeHTTP   AppUpdateParamsBodyTrafficType = "http"
 	AppUpdateParamsBodyTrafficTypeHTTPS  AppUpdateParamsBodyTrafficType = "https"
+	AppUpdateParamsBodyTrafficTypeWorker AppUpdateParamsBodyTrafficType = "worker"
 )
 
 func (r AppUpdateParamsBodyTrafficType) IsKnown() bool {
 	switch r {
-	case AppUpdateParamsBodyTrafficTypeDirect, AppUpdateParamsBodyTrafficTypeHTTP, AppUpdateParamsBodyTrafficTypeHTTPS:
+	case AppUpdateParamsBodyTrafficTypeDirect, AppUpdateParamsBodyTrafficTypeHTTP, AppUpdateParamsBodyTrafficTypeHTTPS, AppUpdateParamsBodyTrafficTypeWorker:
 		return true
 	}
 	return false

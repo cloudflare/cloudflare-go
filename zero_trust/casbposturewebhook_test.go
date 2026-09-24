@@ -41,6 +41,7 @@ func TestCasbPostureWebhookNewWithOptionalParams(t *testing.T) {
 			Value: cloudflare.F("value"),
 		}}),
 		SigningSecret: cloudflare.F("my-secret-key"),
+		Status:        cloudflare.F(zero_trust.CasbPostureWebhookNewParamsStatusEnabled),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

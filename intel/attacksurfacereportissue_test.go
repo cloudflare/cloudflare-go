@@ -41,6 +41,7 @@ func TestAttackSurfaceReportIssueListWithOptionalParams(t *testing.T) {
 		ProductNeq:    cloudflare.F([]string{"access", "dns"}),
 		Severity:      cloudflare.F([]intel.SeverityQueryParam{intel.SeverityQueryParamLow, intel.SeverityQueryParamModerate}),
 		SeverityNeq:   cloudflare.F([]intel.SeverityQueryParam{intel.SeverityQueryParamLow, intel.SeverityQueryParamModerate}),
+		Source:        cloudflare.F([]intel.AttackSurfaceReportIssueListParamsSource{intel.AttackSurfaceReportIssueListParamsSourceCloudflare}),
 		Subject:       cloudflare.F([]string{"example.com"}),
 		SubjectNeq:    cloudflare.F([]string{"example.com"}),
 	})
@@ -78,6 +79,7 @@ func TestAttackSurfaceReportIssueClassWithOptionalParams(t *testing.T) {
 		ProductNeq:    cloudflare.F([]string{"access", "dns"}),
 		Severity:      cloudflare.F([]intel.SeverityQueryParam{intel.SeverityQueryParamLow, intel.SeverityQueryParamModerate}),
 		SeverityNeq:   cloudflare.F([]intel.SeverityQueryParam{intel.SeverityQueryParamLow, intel.SeverityQueryParamModerate}),
+		Source:        cloudflare.F([]intel.AttackSurfaceReportIssueClassParamsSource{intel.AttackSurfaceReportIssueClassParamsSourceCloudflare}),
 		Subject:       cloudflare.F([]string{"example.com"}),
 		SubjectNeq:    cloudflare.F([]string{"example.com"}),
 	})
@@ -115,6 +117,7 @@ func TestAttackSurfaceReportIssueSeverityWithOptionalParams(t *testing.T) {
 		ProductNeq:    cloudflare.F([]string{"access", "dns"}),
 		Severity:      cloudflare.F([]intel.SeverityQueryParam{intel.SeverityQueryParamLow, intel.SeverityQueryParamModerate}),
 		SeverityNeq:   cloudflare.F([]intel.SeverityQueryParam{intel.SeverityQueryParamLow, intel.SeverityQueryParamModerate}),
+		Source:        cloudflare.F([]intel.AttackSurfaceReportIssueSeverityParamsSource{intel.AttackSurfaceReportIssueSeverityParamsSourceCloudflare}),
 		Subject:       cloudflare.F([]string{"example.com"}),
 		SubjectNeq:    cloudflare.F([]string{"example.com"}),
 	})
@@ -152,6 +155,7 @@ func TestAttackSurfaceReportIssueTypeWithOptionalParams(t *testing.T) {
 		ProductNeq:    cloudflare.F([]string{"access", "dns"}),
 		Severity:      cloudflare.F([]intel.SeverityQueryParam{intel.SeverityQueryParamLow, intel.SeverityQueryParamModerate}),
 		SeverityNeq:   cloudflare.F([]intel.SeverityQueryParam{intel.SeverityQueryParamLow, intel.SeverityQueryParamModerate}),
+		Source:        cloudflare.F([]intel.AttackSurfaceReportIssueTypeParamsSource{intel.AttackSurfaceReportIssueTypeParamsSourceCloudflare}),
 		Subject:       cloudflare.F([]string{"example.com"}),
 		SubjectNeq:    cloudflare.F([]string{"example.com"}),
 	})

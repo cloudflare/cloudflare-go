@@ -109,7 +109,7 @@ func (r entityGetResponseIPJSON) RawJSON() string {
 
 type EntityGetParams struct {
 	// IP address.
-	IP param.Field[string] `query:"ip" api:"required" format:"ip"`
+	IP param.Field[string] `query:"ip" api:"required" format:"ipv4"`
 	// Format in which results will be returned.
 	Format param.Field[EntityGetParamsFormat] `query:"format"`
 }

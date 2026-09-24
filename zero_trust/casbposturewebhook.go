@@ -830,6 +830,8 @@ type CasbPostureWebhookNewParams struct {
 	Headers param.Field[[]CasbPostureWebhookNewParamsHeader] `json:"headers"`
 	// Secret key used for HMAC signing when authentication_type is "HMAC-Signing".
 	SigningSecret param.Field[string] `json:"signing_secret"`
+	// Status of the webhook configuration. Defaults to enabled when omitted.
+	Status param.Field[CasbPostureWebhookNewParamsStatus] `json:"status"`
 }
 
 func (r CasbPostureWebhookNewParams) MarshalJSON() (data []byte, err error) {
@@ -867,6 +869,22 @@ type CasbPostureWebhookNewParamsHeader struct {
 
 func (r CasbPostureWebhookNewParamsHeader) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Status of the webhook configuration. Defaults to enabled when omitted.
+type CasbPostureWebhookNewParamsStatus string
+
+const (
+	CasbPostureWebhookNewParamsStatusEnabled  CasbPostureWebhookNewParamsStatus = "enabled"
+	CasbPostureWebhookNewParamsStatusDisabled CasbPostureWebhookNewParamsStatus = "disabled"
+)
+
+func (r CasbPostureWebhookNewParamsStatus) IsKnown() bool {
+	switch r {
+	case CasbPostureWebhookNewParamsStatusEnabled, CasbPostureWebhookNewParamsStatusDisabled:
+		return true
+	}
+	return false
 }
 
 // Common response structure for all API endpoints.

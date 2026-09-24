@@ -35,7 +35,7 @@ func NewTokenValueService(opts ...option.RequestOption) (r *TokenValueService) {
 }
 
 // Roll the token secret.
-func (r *TokenValueService) Update(ctx context.Context, tokenID string, body TokenValueUpdateParams, opts ...option.RequestOption) (res *shared.TokenValue, err error) {
+func (r *TokenValueService) Update(ctx context.Context, tokenID string, opts ...option.RequestOption) (res *shared.TokenValue, err error) {
 	var env TokenValueUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if tokenID == "" {
@@ -43,20 +43,12 @@ func (r *TokenValueService) Update(ctx context.Context, tokenID string, body Tok
 		return nil, err
 	}
 	path := fmt.Sprintf("user/tokens/%s/value", tokenID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
 	res = &env.Result
 	return res, nil
-}
-
-type TokenValueUpdateParams struct {
-	Body interface{} `json:"body" api:"required"`
-}
-
-func (r TokenValueUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type TokenValueUpdateResponseEnvelope struct {

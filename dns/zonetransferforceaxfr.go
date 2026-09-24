@@ -35,15 +35,15 @@ func NewZoneTransferForceAXFRService(opts ...option.RequestOption) (r *ZoneTrans
 }
 
 // Sends AXFR zone transfer request to primary nameserver(s).
-func (r *ZoneTransferForceAXFRService) New(ctx context.Context, params ZoneTransferForceAXFRNewParams, opts ...option.RequestOption) (res *ForceAXFR, err error) {
+func (r *ZoneTransferForceAXFRService) New(ctx context.Context, body ZoneTransferForceAXFRNewParams, opts ...option.RequestOption) (res *ForceAXFR, err error) {
 	var env ZoneTransferForceAXFRNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.ZoneID.Value == "" {
+	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("zones/%s/secondary_dns/force_axfr", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	path := fmt.Sprintf("zones/%s/secondary_dns/force_axfr", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -55,11 +55,6 @@ type ForceAXFR = string
 
 type ZoneTransferForceAXFRNewParams struct {
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-	Body   interface{}         `json:"body" api:"required"`
-}
-
-func (r ZoneTransferForceAXFRNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type ZoneTransferForceAXFRNewResponseEnvelope struct {

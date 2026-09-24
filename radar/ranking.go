@@ -423,6 +423,7 @@ type RankingTopResponseMeta struct {
 	// Normalization method applied to the results. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
 	Normalization RankingTopResponseMetaNormalization `json:"normalization" api:"required"`
+	Top0          RankingTopResponseMetaTop0          `json:"top_0" api:"required"`
 	// Measurement units for the results.
 	Units []RankingTopResponseMetaUnit `json:"units" api:"required"`
 	JSON  rankingTopResponseMetaJSON   `json:"-"`
@@ -435,6 +436,7 @@ type rankingTopResponseMetaJSON struct {
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
+	Top0           apijson.Field
 	Units          apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
@@ -617,6 +619,27 @@ func (r RankingTopResponseMetaNormalization) IsKnown() bool {
 	return false
 }
 
+type RankingTopResponseMetaTop0 struct {
+	Date time.Time                      `json:"date" api:"required" format:"date"`
+	JSON rankingTopResponseMetaTop0JSON `json:"-"`
+}
+
+// rankingTopResponseMetaTop0JSON contains the JSON metadata for the struct
+// [RankingTopResponseMetaTop0]
+type rankingTopResponseMetaTop0JSON struct {
+	Date        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RankingTopResponseMetaTop0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rankingTopResponseMetaTop0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RankingTopResponseMetaUnit struct {
 	Name  string                         `json:"name" api:"required"`
 	Value string                         `json:"value" api:"required"`
@@ -669,9 +692,9 @@ func (r rankingTopResponseTop0JSON) RawJSON() string {
 }
 
 type RankingTopResponseTop0Category struct {
-	ID              float64                            `json:"id" api:"required"`
+	ID              int64                              `json:"id" api:"required"`
 	Name            string                             `json:"name" api:"required"`
-	SuperCategoryID float64                            `json:"superCategoryId" api:"required"`
+	SuperCategoryID int64                              `json:"superCategoryId" api:"required"`
 	JSON            rankingTopResponseTop0CategoryJSON `json:"-"`
 }
 

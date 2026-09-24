@@ -125,14 +125,20 @@ type StatusGetParams struct {
 }
 
 type StatusGetResponseEnvelope struct {
-	Result StatusGetResponse             `json:"result" api:"required"`
-	JSON   statusGetResponseEnvelopeJSON `json:"-"`
+	Errors   []StatusGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []StatusGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   StatusGetResponse                   `json:"result" api:"required,nullable"`
+	Success  bool                                `json:"success" api:"required"`
+	JSON     statusGetResponseEnvelopeJSON       `json:"-"`
 }
 
 // statusGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [StatusGetResponseEnvelope]
 type statusGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -142,5 +148,101 @@ func (r *StatusGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r statusGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type StatusGetResponseEnvelopeErrors struct {
+	Code             int64                                 `json:"code" api:"required"`
+	Message          string                                `json:"message" api:"required"`
+	DocumentationURL string                                `json:"documentation_url"`
+	Source           StatusGetResponseEnvelopeErrorsSource `json:"source"`
+	JSON             statusGetResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// statusGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [StatusGetResponseEnvelopeErrors]
+type statusGetResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *StatusGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r statusGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type StatusGetResponseEnvelopeErrorsSource struct {
+	Pointer string                                    `json:"pointer"`
+	JSON    statusGetResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// statusGetResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [StatusGetResponseEnvelopeErrorsSource]
+type statusGetResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StatusGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r statusGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type StatusGetResponseEnvelopeMessages struct {
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           StatusGetResponseEnvelopeMessagesSource `json:"source"`
+	JSON             statusGetResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// statusGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [StatusGetResponseEnvelopeMessages]
+type statusGetResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *StatusGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r statusGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type StatusGetResponseEnvelopeMessagesSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    statusGetResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// statusGetResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [StatusGetResponseEnvelopeMessagesSource]
+type statusGetResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StatusGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r statusGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }

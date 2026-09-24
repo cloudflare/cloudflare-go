@@ -39,7 +39,10 @@ func NewScriptSecretService(opts ...option.RequestOption) (r *ScriptSecretServic
 	return
 }
 
-// Add a secret to a script.
+// Add a secret to a Worker script by creating a new version with that secret.
+//
+// When changing more than one secret at a time, prefer the "Patch multiple script
+// secrets" API instead of changing many secrets individually.
 func (r *ScriptSecretService) Update(ctx context.Context, scriptName string, params ScriptSecretUpdateParams, opts ...option.RequestOption) (res *ScriptSecretUpdateResponse, err error) {
 	var env ScriptSecretUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -60,7 +63,7 @@ func (r *ScriptSecretService) Update(ctx context.Context, scriptName string, par
 	return res, nil
 }
 
-// List secrets bound to a script.
+// List the names of secrets bound to a Worker script.
 func (r *ScriptSecretService) List(ctx context.Context, scriptName string, query ScriptSecretListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ScriptSecretListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -86,12 +89,16 @@ func (r *ScriptSecretService) List(ctx context.Context, scriptName string, query
 	return res, nil
 }
 
-// List secrets bound to a script.
+// List the names of secrets bound to a Worker script.
 func (r *ScriptSecretService) ListAutoPaging(ctx context.Context, scriptName string, query ScriptSecretListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ScriptSecretListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, scriptName, query, opts...))
 }
 
-// Remove a secret from a script.
+// Remove a secret from a Worker script by creating a new version without that
+// secret.
+//
+// When changing more than one secret at a time, prefer the "Patch multiple script
+// secrets" API instead of changing many secrets individually.
 func (r *ScriptSecretService) Delete(ctx context.Context, scriptName string, secretName string, params ScriptSecretDeleteParams, opts ...option.RequestOption) (res *ScriptSecretDeleteResponse, err error) {
 	var env ScriptSecretDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -116,8 +123,10 @@ func (r *ScriptSecretService) Delete(ctx context.Context, scriptName string, sec
 	return res, nil
 }
 
-// Create, update, or delete multiple secrets on a script in a single operation
-// using JSON Merge Patch (RFC 7396).
+// Create, update, or delete multiple secrets on a Worker script in a single
+// operation using JSON Merge Patch (RFC 7396). This operation creates a single
+// version with all changes included. Prefer this API instead of changing many
+// secrets individually.
 //
 // Usage:
 //
@@ -144,7 +153,7 @@ func (r *ScriptSecretService) BulkUpdate(ctx context.Context, scriptName string,
 	return res, nil
 }
 
-// Get a given secret binding (value omitted) on a script.
+// Get a given secret binding (value omitted) on a Worker script.
 func (r *ScriptSecretService) Get(ctx context.Context, scriptName string, secretName string, params ScriptSecretGetParams, opts ...option.RequestOption) (res *ScriptSecretGetResponse, err error) {
 	var env ScriptSecretGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

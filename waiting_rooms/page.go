@@ -117,18 +117,18 @@ type PagePreviewParams struct {
 	// https://mustache.github.io/ ). There are several variables that are evaluated by
 	// the Cloudflare edge:
 	//
-	// 1. {{`waitTimeKnown`}} Acts like a boolean value that indicates the behavior to
-	//    take when wait time is not available, for instance when queue_all is
-	//    **true**.
-	// 2. {{`waitTimeFormatted`}} Estimated wait time for the user. For example, five
-	//    minutes. Alternatively, you can use:
-	// 3. {{`waitTime`}} Number of minutes of estimated wait for a user.
-	// 4. {{`waitTimeHours`}} Number of hours of estimated wait for a user
-	//    (`Math.floor(waitTime/60)`).
-	// 5. {{`waitTimeHourMinutes`}} Number of minutes above the `waitTimeHours` value
-	//    (`waitTime%60`).
-	// 6. {{`queueIsFull`}} Changes to **true** when no more people can be added to the
-	//    queue.
+	//  1. {{`waitTimeKnown`}} Acts like a boolean value that indicates the behavior to
+	//     take when wait time is not available, for instance when queue_all is
+	//     **true**.
+	//  2. {{`waitTimeFormatted`}} Estimated wait time for the user. For example, five
+	//     minutes. Alternatively, you can use:
+	//  3. {{`waitTime`}} Number of minutes of estimated wait for a user.
+	//  4. {{`waitTimeHours`}} Number of hours of estimated wait for a user
+	//     (`Math.floor(waitTime/60)`).
+	//  5. {{`waitTimeHourMinutes`}} Number of minutes above the `waitTimeHours` value
+	//     (`waitTime%60`).
+	//  6. {{`queueIsFull`}} Changes to **true** when no more people can be added to the
+	//     queue.
 	//
 	// To view the full list of variables, look at the `cfWaitingRoom` object described
 	// under the `json_response_enabled` property in other Waiting Room API calls.
@@ -140,14 +140,20 @@ func (r PagePreviewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PagePreviewResponseEnvelope struct {
-	Result PagePreviewResponse             `json:"result" api:"required"`
-	JSON   pagePreviewResponseEnvelopeJSON `json:"-"`
+	Errors   []PagePreviewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []PagePreviewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   PagePreviewResponse                   `json:"result" api:"required,nullable"`
+	Success  bool                                  `json:"success" api:"required"`
+	JSON     pagePreviewResponseEnvelopeJSON       `json:"-"`
 }
 
 // pagePreviewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [PagePreviewResponseEnvelope]
 type pagePreviewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -157,5 +163,101 @@ func (r *PagePreviewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r pagePreviewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PagePreviewResponseEnvelopeErrors struct {
+	Code             int64                                   `json:"code" api:"required"`
+	Message          string                                  `json:"message" api:"required"`
+	DocumentationURL string                                  `json:"documentation_url"`
+	Source           PagePreviewResponseEnvelopeErrorsSource `json:"source"`
+	JSON             pagePreviewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// pagePreviewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PagePreviewResponseEnvelopeErrors]
+type pagePreviewResponseEnvelopeErrorsJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PagePreviewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pagePreviewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PagePreviewResponseEnvelopeErrorsSource struct {
+	Pointer string                                      `json:"pointer"`
+	JSON    pagePreviewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// pagePreviewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [PagePreviewResponseEnvelopeErrorsSource]
+type pagePreviewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PagePreviewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pagePreviewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type PagePreviewResponseEnvelopeMessages struct {
+	Code             int64                                     `json:"code" api:"required"`
+	Message          string                                    `json:"message" api:"required"`
+	DocumentationURL string                                    `json:"documentation_url"`
+	Source           PagePreviewResponseEnvelopeMessagesSource `json:"source"`
+	JSON             pagePreviewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// pagePreviewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [PagePreviewResponseEnvelopeMessages]
+type pagePreviewResponseEnvelopeMessagesJSON struct {
+	Code             apijson.Field
+	Message          apijson.Field
+	DocumentationURL apijson.Field
+	Source           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PagePreviewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pagePreviewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+type PagePreviewResponseEnvelopeMessagesSource struct {
+	Pointer string                                        `json:"pointer"`
+	JSON    pagePreviewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// pagePreviewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [PagePreviewResponseEnvelopeMessagesSource]
+type pagePreviewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PagePreviewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pagePreviewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
 	return r.raw
 }

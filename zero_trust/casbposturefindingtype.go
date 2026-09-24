@@ -95,7 +95,7 @@ type CasbPostureFindingTypeListResponse struct {
 	Category CasbPostureFindingTypeListResponseCategory `json:"category" api:"required"`
 	// The name of the finding.
 	Name string `json:"name" api:"required"`
-	// The severity level of a finding.
+	// Default severity used when no integration-specific severity override exists.
 	Severity CasbPostureFindingTypeListResponseSeverity `json:"severity" api:"required"`
 	// The SaaS/Cloud vendor of the platform with which the finding is associated.
 	Vendor string `json:"vendor" api:"required"`
@@ -203,7 +203,7 @@ func (r CasbPostureFindingTypeListResponseCategoryType) IsKnown() bool {
 	return false
 }
 
-// The severity level of a finding.
+// Default severity used when no integration-specific severity override exists.
 type CasbPostureFindingTypeListResponseSeverity string
 
 const (
@@ -229,7 +229,7 @@ type CasbPostureFindingTypeGetResponse struct {
 	Category CasbPostureFindingTypeGetResponseCategory `json:"category" api:"required"`
 	// The name of the finding.
 	Name string `json:"name" api:"required"`
-	// The severity level of a finding.
+	// Default severity used when no integration-specific severity override exists.
 	Severity CasbPostureFindingTypeGetResponseSeverity `json:"severity" api:"required"`
 	// The SaaS/Cloud vendor of the platform with which the finding is associated.
 	Vendor string `json:"vendor" api:"required"`
@@ -337,7 +337,7 @@ func (r CasbPostureFindingTypeGetResponseCategoryType) IsKnown() bool {
 	return false
 }
 
-// The severity level of a finding.
+// Default severity used when no integration-specific severity override exists.
 type CasbPostureFindingTypeGetResponseSeverity string
 
 const (
@@ -398,11 +398,12 @@ const (
 	CasbPostureFindingTypeListParamsVendorSalesforce          CasbPostureFindingTypeListParamsVendor = "SALESFORCE"
 	CasbPostureFindingTypeListParamsVendorServicenow          CasbPostureFindingTypeListParamsVendor = "SERVICENOW"
 	CasbPostureFindingTypeListParamsVendorSlack               CasbPostureFindingTypeListParamsVendor = "SLACK"
+	CasbPostureFindingTypeListParamsVendorZoom                CasbPostureFindingTypeListParamsVendor = "ZOOM"
 )
 
 func (r CasbPostureFindingTypeListParamsVendor) IsKnown() bool {
 	switch r {
-	case CasbPostureFindingTypeListParamsVendorAnthropic, CasbPostureFindingTypeListParamsVendorAws, CasbPostureFindingTypeListParamsVendorBitbucket, CasbPostureFindingTypeListParamsVendorBox, CasbPostureFindingTypeListParamsVendorConfluence, CasbPostureFindingTypeListParamsVendorDropbox, CasbPostureFindingTypeListParamsVendorGitHub, CasbPostureFindingTypeListParamsVendorGoogleCloudPlatform, CasbPostureFindingTypeListParamsVendorGoogleWorkspace, CasbPostureFindingTypeListParamsVendorJira, CasbPostureFindingTypeListParamsVendorMicrosoft, CasbPostureFindingTypeListParamsVendorMicrosoftInternal, CasbPostureFindingTypeListParamsVendorOpenAI, CasbPostureFindingTypeListParamsVendorSalesforce, CasbPostureFindingTypeListParamsVendorServicenow, CasbPostureFindingTypeListParamsVendorSlack:
+	case CasbPostureFindingTypeListParamsVendorAnthropic, CasbPostureFindingTypeListParamsVendorAws, CasbPostureFindingTypeListParamsVendorBitbucket, CasbPostureFindingTypeListParamsVendorBox, CasbPostureFindingTypeListParamsVendorConfluence, CasbPostureFindingTypeListParamsVendorDropbox, CasbPostureFindingTypeListParamsVendorGitHub, CasbPostureFindingTypeListParamsVendorGoogleCloudPlatform, CasbPostureFindingTypeListParamsVendorGoogleWorkspace, CasbPostureFindingTypeListParamsVendorJira, CasbPostureFindingTypeListParamsVendorMicrosoft, CasbPostureFindingTypeListParamsVendorMicrosoftInternal, CasbPostureFindingTypeListParamsVendorOpenAI, CasbPostureFindingTypeListParamsVendorSalesforce, CasbPostureFindingTypeListParamsVendorServicenow, CasbPostureFindingTypeListParamsVendorSlack, CasbPostureFindingTypeListParamsVendorZoom:
 		return true
 	}
 	return false

@@ -36,7 +36,7 @@ func NewTURNService(opts ...option.RequestOption) (r *TURNService) {
 	return
 }
 
-// Creates a new Cloudflare Calls TURN key.
+// Creates a new Realtime TURN key.
 func (r *TURNService) New(ctx context.Context, params TURNNewParams, opts ...option.RequestOption) (res *TURNNewResponse, err error) {
 	var env TURNNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -53,7 +53,7 @@ func (r *TURNService) New(ctx context.Context, params TURNNewParams, opts ...opt
 	return res, nil
 }
 
-// Edit details for a single TURN key.
+// Updates details for a single TURN key.
 func (r *TURNService) Update(ctx context.Context, keyID string, params TURNUpdateParams, opts ...option.RequestOption) (res *TURNUpdateResponse, err error) {
 	var env TURNUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -74,7 +74,7 @@ func (r *TURNService) Update(ctx context.Context, keyID string, params TURNUpdat
 	return res, nil
 }
 
-// Lists all TURN keys in the Cloudflare account
+// Lists all TURN keys in the Cloudflare account.
 func (r *TURNService) List(ctx context.Context, query TURNListParams, opts ...option.RequestOption) (res *pagination.SinglePage[TURNListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -96,12 +96,12 @@ func (r *TURNService) List(ctx context.Context, query TURNListParams, opts ...op
 	return res, nil
 }
 
-// Lists all TURN keys in the Cloudflare account
+// Lists all TURN keys in the Cloudflare account.
 func (r *TURNService) ListAutoPaging(ctx context.Context, query TURNListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TURNListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Deletes a TURN key from Cloudflare Calls
+// Deletes a Realtime TURN key.
 func (r *TURNService) Delete(ctx context.Context, keyID string, body TURNDeleteParams, opts ...option.RequestOption) (res *TURNDeleteResponse, err error) {
 	var env TURNDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -145,15 +145,15 @@ func (r *TURNService) Get(ctx context.Context, keyID string, query TURNGetParams
 
 type TURNNewResponse struct {
 	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// Bearer token
-	Key string `json:"key"`
+	Key string `json:"key" api:"required"`
 	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// A short description of a TURN key, not shown to end users.
-	Name string `json:"name"`
+	Name string `json:"name" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
-	UID  string              `json:"uid"`
+	UID  string              `json:"uid" api:"required"`
 	JSON turnNewResponseJSON `json:"-"`
 }
 
@@ -178,13 +178,13 @@ func (r turnNewResponseJSON) RawJSON() string {
 
 type TURNUpdateResponse struct {
 	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
-	// A short description of Calls app, not shown to end users.
-	Name string `json:"name"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
+	// A short description of a Realtime SFU app, not shown to end users.
+	Name string `json:"name" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
-	UID  string                 `json:"uid"`
+	UID  string                 `json:"uid" api:"required"`
 	JSON turnUpdateResponseJSON `json:"-"`
 }
 
@@ -209,13 +209,13 @@ func (r turnUpdateResponseJSON) RawJSON() string {
 
 type TURNListResponse struct {
 	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
-	// A short description of Calls app, not shown to end users.
-	Name string `json:"name"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
+	// A short description of a Realtime SFU app, not shown to end users.
+	Name string `json:"name" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
-	UID  string               `json:"uid"`
+	UID  string               `json:"uid" api:"required"`
 	JSON turnListResponseJSON `json:"-"`
 }
 
@@ -240,13 +240,13 @@ func (r turnListResponseJSON) RawJSON() string {
 
 type TURNDeleteResponse struct {
 	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
-	// A short description of Calls app, not shown to end users.
-	Name string `json:"name"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
+	// A short description of a Realtime SFU app, not shown to end users.
+	Name string `json:"name" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
-	UID  string                 `json:"uid"`
+	UID  string                 `json:"uid" api:"required"`
 	JSON turnDeleteResponseJSON `json:"-"`
 }
 
@@ -271,13 +271,13 @@ func (r turnDeleteResponseJSON) RawJSON() string {
 
 type TURNGetResponse struct {
 	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
+	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
-	// A short description of Calls app, not shown to end users.
-	Name string `json:"name"`
+	Modified time.Time `json:"modified" api:"required" format:"date-time"`
+	// A short description of a Realtime SFU app, not shown to end users.
+	Name string `json:"name" api:"required"`
 	// A Cloudflare-generated unique identifier for a item.
-	UID  string              `json:"uid"`
+	UID  string              `json:"uid" api:"required"`
 	JSON turnGetResponseJSON `json:"-"`
 }
 

@@ -207,7 +207,7 @@ func TestRuleBulkEdit(t *testing.T) {
 	)
 	_, err := client.Firewall.Rules.BulkEdit(context.TODO(), firewall.RuleBulkEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body:   map[string]interface{}{},
+		ID:     cloudflare.F("id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -235,7 +235,7 @@ func TestRuleBulkUpdate(t *testing.T) {
 	)
 	_, err := client.Firewall.Rules.BulkUpdate(context.TODO(), firewall.RuleBulkUpdateParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body:   map[string]interface{}{},
+		ID:     cloudflare.F("id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

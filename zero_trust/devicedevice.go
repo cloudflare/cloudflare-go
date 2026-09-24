@@ -106,7 +106,10 @@ func (r *DeviceDeviceService) Get(ctx context.Context, deviceID string, params D
 	return res, nil
 }
 
-// Revokes all WARP registrations associated with the specified device.
+// Revokes all WARP registrations associated with the specified device. Prefer
+// "delete" operation instead, "revoke" does not release virtual IPs.
+//
+// Deprecated: deprecated
 func (r *DeviceDeviceService) Revoke(ctx context.Context, deviceID string, body DeviceDeviceRevokeParams, opts ...option.RequestOption) (res *DeviceDeviceRevokeResponse, err error) {
 	var env DeviceDeviceRevokeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -140,6 +143,8 @@ type DeviceDeviceListResponse struct {
 	LastSeenAt string `json:"last_seen_at" api:"required,nullable"`
 	// The name of the device.
 	Name string `json:"name" api:"required"`
+	// Tags assigned to the device. An empty object if the device has no tags.
+	Tags map[string]string `json:"tags" api:"required"`
 	// The RFC3339 timestamp when the device was last updated.
 	UpdatedAt string `json:"updated_at" api:"required"`
 	// Version of the WARP client.
@@ -184,6 +189,7 @@ type deviceDeviceListResponseJSON struct {
 	CreatedAt            apijson.Field
 	LastSeenAt           apijson.Field
 	Name                 apijson.Field
+	Tags                 apijson.Field
 	UpdatedAt            apijson.Field
 	ClientVersion        apijson.Field
 	DeletedAt            apijson.Field
@@ -313,6 +319,8 @@ type DeviceDeviceGetResponse struct {
 	LastSeenAt string `json:"last_seen_at" api:"required,nullable"`
 	// The name of the device.
 	Name string `json:"name" api:"required"`
+	// Tags assigned to the device. An empty object if the device has no tags.
+	Tags map[string]string `json:"tags" api:"required"`
 	// The RFC3339 timestamp when the device was last updated.
 	UpdatedAt string `json:"updated_at" api:"required"`
 	// Version of the WARP client.
@@ -357,6 +365,7 @@ type deviceDeviceGetResponseJSON struct {
 	CreatedAt            apijson.Field
 	LastSeenAt           apijson.Field
 	Name                 apijson.Field
+	Tags                 apijson.Field
 	UpdatedAt            apijson.Field
 	ClientVersion        apijson.Field
 	DeletedAt            apijson.Field
@@ -484,6 +493,8 @@ type DeviceDeviceListParams struct {
 	// records. A cursor value can be obtained from the result_info.cursor field in the
 	// response.
 	Cursor param.Field[string] `query:"cursor"`
+	// Filter by the type of active registration associated with the device.
+	HasRegistrationType param.Field[DeviceDeviceListParamsHasRegistrationType] `query:"has_registration_type"`
 	// Comma-separated list of additional information that should be included in the
 	// device response. Supported values are: "last_seen_registration.policy".
 	Include              param.Field[string]                                     `query:"include"`
@@ -503,6 +514,9 @@ type DeviceDeviceListParams struct {
 	SortBy param.Field[DeviceDeviceListParamsSortBy] `query:"sort_by"`
 	// Sort direction.
 	SortOrder param.Field[DeviceDeviceListParamsSortOrder] `query:"sort_order"`
+	// Filter by one or more device tags in key:value format. Devices must match all
+	// provided tags.
+	Tag param.Field[[]string] `query:"tag"`
 }
 
 // URLQuery serializes [DeviceDeviceListParams]'s query parameters as `url.Values`.
@@ -526,6 +540,22 @@ const (
 func (r DeviceDeviceListParamsActiveRegistrations) IsKnown() bool {
 	switch r {
 	case DeviceDeviceListParamsActiveRegistrationsInclude, DeviceDeviceListParamsActiveRegistrationsOnly, DeviceDeviceListParamsActiveRegistrationsExclude:
+		return true
+	}
+	return false
+}
+
+// Filter by the type of active registration associated with the device.
+type DeviceDeviceListParamsHasRegistrationType string
+
+const (
+	DeviceDeviceListParamsHasRegistrationTypeWARP             DeviceDeviceListParamsHasRegistrationType = "warp"
+	DeviceDeviceListParamsHasRegistrationTypeBrowserExtension DeviceDeviceListParamsHasRegistrationType = "browser_extension"
+)
+
+func (r DeviceDeviceListParamsHasRegistrationType) IsKnown() bool {
+	switch r {
+	case DeviceDeviceListParamsHasRegistrationTypeWARP, DeviceDeviceListParamsHasRegistrationTypeBrowserExtension:
 		return true
 	}
 	return false

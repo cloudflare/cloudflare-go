@@ -998,7 +998,7 @@ func (r entityASNGetResponseEnvelopeJSON) RawJSON() string {
 
 type EntityASNIPParams struct {
 	// IP address.
-	IP param.Field[string] `query:"ip" api:"required" format:"ip"`
+	IP param.Field[string] `query:"ip" api:"required" format:"ipv4"`
 	// Format in which results will be returned.
 	Format param.Field[EntityAsnipParamsFormat] `query:"format"`
 }

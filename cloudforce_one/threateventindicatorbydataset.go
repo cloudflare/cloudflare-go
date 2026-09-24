@@ -149,7 +149,10 @@ type ThreatEventIndicatorByDatasetListResponseIndicatorsSource struct {
 	ResourceID   string                                                                 `json:"resourceId" api:"required" format:"uuid"`
 	ResourceType ThreatEventIndicatorByDatasetListResponseIndicatorsSourcesResourceType `json:"resourceType" api:"required"`
 	System       ThreatEventIndicatorByDatasetListResponseIndicatorsSourcesSystem       `json:"system" api:"required"`
-	JSON         threatEventIndicatorByDatasetListResponseIndicatorsSourceJSON          `json:"-"`
+	// Threat Signals article title; null for historical provenance without a stored
+	// title.
+	Title string                                                        `json:"title" api:"required,nullable"`
+	JSON  threatEventIndicatorByDatasetListResponseIndicatorsSourceJSON `json:"-"`
 }
 
 // threatEventIndicatorByDatasetListResponseIndicatorsSourceJSON contains the JSON
@@ -159,6 +162,7 @@ type threatEventIndicatorByDatasetListResponseIndicatorsSourceJSON struct {
 	ResourceID   apijson.Field
 	ResourceType apijson.Field
 	System       apijson.Field
+	Title        apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }

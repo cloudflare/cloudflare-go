@@ -36,6 +36,7 @@ type AccountService struct {
 	Subscriptions  *SubscriptionService
 	Tokens         *TokenService
 	Logs           *LogService
+	Entitlements   *EntitlementService
 	SpeedSettings  *SpeedSettingService
 	PaymentMethods *PaymentMethodService
 	PayInvoice     *PayInvoiceService
@@ -58,6 +59,7 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 	r.Subscriptions = NewSubscriptionService(opts...)
 	r.Tokens = NewTokenService(opts...)
 	r.Logs = NewLogService(opts...)
+	r.Entitlements = NewEntitlementService(opts...)
 	r.SpeedSettings = NewSpeedSettingService(opts...)
 	r.PaymentMethods = NewPaymentMethodService(opts...)
 	r.PayInvoice = NewPayInvoiceService(opts...)
@@ -68,12 +70,20 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 	return
 }
 
-// Create an account (only available for tenant admins at this time)
-func (r *AccountService) New(ctx context.Context, body AccountNewParams, opts ...option.RequestOption) (res *Account, err error) {
+// Create an Account. To create the Account within an Organization, provide
+// `unit.id` and omit `standalone`. To create a standalone Free Account, provide
+// `standalone: true` and omit `unit`. Providing both fields is invalid. If you
+// omit both fields, Cloudflare can determine the destination only when the User is
+// an administrator of exactly one Organization. Cloudflare creates the Account in
+// that Organization; otherwise, the request returns an error.
+func (r *AccountService) New(ctx context.Context, params AccountNewParams, opts ...option.RequestOption) (res *Account, err error) {
 	var env AccountNewResponseEnvelope
+	if params.IdempotencyKey.Present {
+		opts = append(opts, option.WithHeader("Idempotency-Key", fmt.Sprintf("%v", params.IdempotencyKey)))
+	}
 	opts = slices.Concat(r.Options, opts)
 	path := "accounts"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -320,16 +330,36 @@ func (r accountDeleteResponseJSON) RawJSON() string {
 
 type AccountNewParams struct {
 	// Account name
-	Name param.Field[string]               `json:"name" api:"required"`
-	Type param.Field[AccountNewParamsType] `json:"type"`
-	// information related to the tenant unit, and optionally, an id of the unit to
-	// create the account on. see
-	// https://developers.cloudflare.com/tenant/how-to/manage-accounts/
-	Unit param.Field[AccountNewParamsUnit] `json:"unit"`
+	Name param.Field[string] `json:"name" api:"required"`
+	// Set to `true` and omit `unit` to create a standalone Free Account. If provided,
+	// this field must be `true`.
+	Standalone param.Field[AccountNewParamsStandalone] `json:"standalone"`
+	Type       param.Field[AccountNewParamsType]       `json:"type"`
+	// Information related to the tenant unit. Provide its ID and omit `standalone` to
+	// create the Account within an Organization. See
+	// https://developers.cloudflare.com/tenant/how-to/manage-accounts/.
+	Unit           param.Field[AccountNewParamsUnit] `json:"unit"`
+	IdempotencyKey param.Field[string]               `header:"Idempotency-Key"`
 }
 
 func (r AccountNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Set to `true` and omit `unit` to create a standalone Free Account. If provided,
+// this field must be `true`.
+type AccountNewParamsStandalone bool
+
+const (
+	AccountNewParamsStandaloneTrue AccountNewParamsStandalone = true
+)
+
+func (r AccountNewParamsStandalone) IsKnown() bool {
+	switch r {
+	case AccountNewParamsStandaloneTrue:
+		return true
+	}
+	return false
 }
 
 type AccountNewParamsType string
@@ -347,9 +377,9 @@ func (r AccountNewParamsType) IsKnown() bool {
 	return false
 }
 
-// information related to the tenant unit, and optionally, an id of the unit to
-// create the account on. see
-// https://developers.cloudflare.com/tenant/how-to/manage-accounts/
+// Information related to the tenant unit. Provide its ID and omit `standalone` to
+// create the Account within an Organization. See
+// https://developers.cloudflare.com/tenant/how-to/manage-accounts/.
 type AccountNewParamsUnit struct {
 	// Tenant unit ID
 	ID param.Field[string] `json:"id"`

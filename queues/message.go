@@ -35,7 +35,8 @@ func NewMessageService(opts ...option.RequestOption) (r *MessageService) {
 	return
 }
 
-// Acknowledge + Retry messages from a Queue
+// Acknowledges successfully processed Queue messages and retries messages that
+// were not processed successfully.
 func (r *MessageService) Ack(ctx context.Context, queueID string, params MessageAckParams, opts ...option.RequestOption) (res *MessageAckResponse, err error) {
 	var env MessageAckResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,7 +57,7 @@ func (r *MessageService) Ack(ctx context.Context, queueID string, params Message
 	return res, nil
 }
 
-// Push a batch of message to a Queue
+// Pushes a batch of messages to a Queue.
 func (r *MessageService) BulkPush(ctx context.Context, queueID string, params MessageBulkPushParams, opts ...option.RequestOption) (res *MessageBulkPushResponse, err error) {
 	var env MessageBulkPushResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -77,8 +78,9 @@ func (r *MessageService) BulkPush(ctx context.Context, queueID string, params Me
 	return res, nil
 }
 
-// Peek messages from a Queue without leasing them. Messages remain available for
-// subsequent peek or pull operations.
+// Peek messages from a Queue without leasing them. Each message includes a ref
+// that can be passed to the purge endpoint, and remains available for subsequent
+// peek or pull operations until it is purged.
 func (r *MessageService) Peek(ctx context.Context, queueID string, params MessagePeekParams, opts ...option.RequestOption) (res *MessagePeekResponse, err error) {
 	var env MessagePeekResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -99,7 +101,7 @@ func (r *MessageService) Peek(ctx context.Context, queueID string, params Messag
 	return res, nil
 }
 
-// Pull a batch of messages from a Queue
+// Pulls a batch of messages from a Queue for an HTTP pull consumer.
 func (r *MessageService) Pull(ctx context.Context, queueID string, params MessagePullParams, opts ...option.RequestOption) (res *MessagePullResponse, err error) {
 	var env MessagePullResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -120,9 +122,8 @@ func (r *MessageService) Pull(ctx context.Context, queueID string, params Messag
 	return res, nil
 }
 
-// Delete peeked messages from a Queue by their ref. Purged messages aren't
-// considered delivered, they are instantly deleted from this queue and do not
-// affect metrics.
+// Delete messages from a Queue by using refs returned by the peek endpoint.
+// Purging messages does not count as delivery and does not affect metrics.
 func (r *MessageService) Purge(ctx context.Context, queueID string, params MessagePurgeParams, opts ...option.RequestOption) (res *MessagePurgeResponse, err error) {
 	var env MessagePurgeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -143,7 +144,7 @@ func (r *MessageService) Purge(ctx context.Context, queueID string, params Messa
 	return res, nil
 }
 
-// Push a message to a Queue
+// Pushes a message to a Queue.
 func (r *MessageService) Push(ctx context.Context, queueID string, params MessagePushParams, opts ...option.RequestOption) (res *MessagePushResponse, err error) {
 	var env MessagePushResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

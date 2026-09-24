@@ -147,6 +147,8 @@ type BillingTopupNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Top-up amount in cents (min 1000).
 	Amount param.Field[int64] `json:"amount" api:"required"`
+	// Stripe PaymentMethod to charge instead of the customer's default payment method.
+	PaymentMethodID param.Field[string] `json:"payment_method_id"`
 }
 
 func (r BillingTopupNewParams) MarshalJSON() (data []byte, err error) {

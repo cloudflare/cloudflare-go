@@ -64,7 +64,11 @@ func (r *ThreatEventCategoryService) List(ctx context.Context, params ThreatEven
 	return res, err
 }
 
-// Removes a threat event category from Cloudforce One.
+// Deprecated; use DELETE /events/event-categories/by-id/{category_id}. Available
+// through 2026-11-28.
+//
+// Deprecated: Use DELETE /events/event-categories/by-id/{category_id} before
+// 2026-11-28.
 func (r *ThreatEventCategoryService) Delete(ctx context.Context, categoryID string, body ThreatEventCategoryDeleteParams, opts ...option.RequestOption) (res *ThreatEventCategoryDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
@@ -80,8 +84,11 @@ func (r *ThreatEventCategoryService) Delete(ctx context.Context, categoryID stri
 	return res, err
 }
 
-// Partially updates a threat event category in Cloudforce One, modifying specific
-// fields without replacing the entire category.
+// Deprecated; use PATCH /events/event-categories/by-id/{category_id}. Available
+// through 2026-11-28.
+//
+// Deprecated: Use PATCH /events/event-categories/by-id/{category_id} before
+// 2026-11-28.
 func (r *ThreatEventCategoryService) Edit(ctx context.Context, categoryID string, params ThreatEventCategoryEditParams, opts ...option.RequestOption) (res *ThreatEventCategoryEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -97,7 +104,11 @@ func (r *ThreatEventCategoryService) Edit(ctx context.Context, categoryID string
 	return res, err
 }
 
-// Retrieves details for a specific threat event category.
+// Deprecated; use GET /events/event-categories/by-id/{category_id}. Available
+// through 2026-11-28.
+//
+// Deprecated: Use GET /events/event-categories/by-id/{category_id} before
+// 2026-11-28.
 func (r *ThreatEventCategoryService) Get(ctx context.Context, categoryID string, query ThreatEventCategoryGetParams, opts ...option.RequestOption) (res *ThreatEventCategoryGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

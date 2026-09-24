@@ -29,6 +29,7 @@ import (
 type ZoneService struct {
 	Options                       []option.RequestOption
 	ActivationCheck               *ActivationCheckService
+	Observability                 *ObservabilityService
 	Settings                      *SettingService
 	TransformationsAllowedOrigins *TransformationsAllowedOriginService
 	TransformationsC2pa           *TransformationsC2paService
@@ -40,6 +41,7 @@ type ZoneService struct {
 	Subscriptions     *SubscriptionService
 	Plans             *PlanService
 	RatePlans         *RatePlanService
+	Entitlements      *EntitlementService
 	CT                *CTService
 }
 
@@ -50,6 +52,7 @@ func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 	r = &ZoneService{}
 	r.Options = opts
 	r.ActivationCheck = NewActivationCheckService(opts...)
+	r.Observability = NewObservabilityService(opts...)
 	r.Settings = NewSettingService(opts...)
 	r.TransformationsAllowedOrigins = NewTransformationsAllowedOriginService(opts...)
 	r.TransformationsC2pa = NewTransformationsC2paService(opts...)
@@ -60,6 +63,7 @@ func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 	r.Subscriptions = NewSubscriptionService(opts...)
 	r.Plans = NewPlanService(opts...)
 	r.RatePlans = NewRatePlanService(opts...)
+	r.Entitlements = NewEntitlementService(opts...)
 	r.CT = NewCTService(opts...)
 	return
 }

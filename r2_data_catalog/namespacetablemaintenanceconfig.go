@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"slices"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
@@ -98,7 +99,8 @@ func (r *NamespaceTableMaintenanceConfigService) Get(ctx context.Context, bucket
 type NamespaceTableMaintenanceConfigUpdateResponse struct {
 	// Configures compaction settings for table optimization.
 	Compaction NamespaceTableMaintenanceConfigUpdateResponseCompaction `json:"compaction"`
-	// Configures snapshot expiration settings.
+	// Scheduling interval between normal table maintenance runs.
+	Interval           string                                                          `json:"interval"`
 	SnapshotExpiration NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpiration `json:"snapshot_expiration"`
 	JSON               namespaceTableMaintenanceConfigUpdateResponseJSON               `json:"-"`
 }
@@ -107,6 +109,7 @@ type NamespaceTableMaintenanceConfigUpdateResponse struct {
 // the struct [NamespaceTableMaintenanceConfigUpdateResponse]
 type namespaceTableMaintenanceConfigUpdateResponseJSON struct {
 	Compaction         apijson.Field
+	Interval           apijson.Field
 	SnapshotExpiration apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
@@ -126,17 +129,20 @@ type NamespaceTableMaintenanceConfigUpdateResponseCompaction struct {
 	State NamespaceTableMaintenanceConfigUpdateResponseCompactionState `json:"state" api:"required"`
 	// Sets the target file size for compaction in megabytes. Defaults to "128".
 	TargetSizeMB NamespaceTableMaintenanceConfigUpdateResponseCompactionTargetSizeMB `json:"target_size_mb" api:"required"`
-	JSON         namespaceTableMaintenanceConfigUpdateResponseCompactionJSON         `json:"-"`
+	// Earliest time when the scheduler can claim this operation. Null when disabled.
+	NextEligibleAt time.Time                                                   `json:"next_eligible_at" api:"nullable" format:"date-time"`
+	JSON           namespaceTableMaintenanceConfigUpdateResponseCompactionJSON `json:"-"`
 }
 
 // namespaceTableMaintenanceConfigUpdateResponseCompactionJSON contains the JSON
 // metadata for the struct
 // [NamespaceTableMaintenanceConfigUpdateResponseCompaction]
 type namespaceTableMaintenanceConfigUpdateResponseCompactionJSON struct {
-	State        apijson.Field
-	TargetSizeMB apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	State          apijson.Field
+	TargetSizeMB   apijson.Field
+	NextEligibleAt apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *NamespaceTableMaintenanceConfigUpdateResponseCompaction) UnmarshalJSON(data []byte) (err error) {
@@ -181,18 +187,16 @@ func (r NamespaceTableMaintenanceConfigUpdateResponseCompactionTargetSizeMB) IsK
 	return false
 }
 
-// Configures snapshot expiration settings.
 type NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpiration struct {
-	// Specifies the maximum age for snapshots. The system deletes snapshots older than
-	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
-	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
-	// minutes). Defaults to "7d".
+	// Specifies the maximum age for snapshots.
 	MaxSnapshotAge string `json:"max_snapshot_age" api:"required"`
 	// Specifies the minimum number of snapshots to retain. Defaults to 100.
 	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep" api:"required"`
 	// Specifies the state of maintenance operations.
 	State NamespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationState `json:"state" api:"required"`
-	JSON  namespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationJSON  `json:"-"`
+	// Earliest time when the scheduler can claim this operation. Null when disabled.
+	NextEligibleAt time.Time                                                           `json:"next_eligible_at" api:"nullable" format:"date-time"`
+	JSON           namespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationJSON `json:"-"`
 }
 
 // namespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationJSON contains the
@@ -202,6 +206,7 @@ type namespaceTableMaintenanceConfigUpdateResponseSnapshotExpirationJSON struct 
 	MaxSnapshotAge     apijson.Field
 	MinSnapshotsToKeep apijson.Field
 	State              apijson.Field
+	NextEligibleAt     apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -257,7 +262,8 @@ func (r namespaceTableMaintenanceConfigGetResponseJSON) RawJSON() string {
 type NamespaceTableMaintenanceConfigGetResponseMaintenanceConfig struct {
 	// Configures compaction settings for table optimization.
 	Compaction NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompaction `json:"compaction"`
-	// Configures snapshot expiration settings.
+	// Scheduling interval between normal table maintenance runs.
+	Interval           string                                                                        `json:"interval"`
 	SnapshotExpiration NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpiration `json:"snapshot_expiration"`
 	JSON               namespaceTableMaintenanceConfigGetResponseMaintenanceConfigJSON               `json:"-"`
 }
@@ -267,6 +273,7 @@ type NamespaceTableMaintenanceConfigGetResponseMaintenanceConfig struct {
 // [NamespaceTableMaintenanceConfigGetResponseMaintenanceConfig]
 type namespaceTableMaintenanceConfigGetResponseMaintenanceConfigJSON struct {
 	Compaction         apijson.Field
+	Interval           apijson.Field
 	SnapshotExpiration apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
@@ -286,17 +293,20 @@ type NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompaction struc
 	State NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompactionState `json:"state" api:"required"`
 	// Sets the target file size for compaction in megabytes. Defaults to "128".
 	TargetSizeMB NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompactionTargetSizeMB `json:"target_size_mb" api:"required"`
-	JSON         namespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompactionJSON         `json:"-"`
+	// Earliest time when the scheduler can claim this operation. Null when disabled.
+	NextEligibleAt time.Time                                                                 `json:"next_eligible_at" api:"nullable" format:"date-time"`
+	JSON           namespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompactionJSON `json:"-"`
 }
 
 // namespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompactionJSON
 // contains the JSON metadata for the struct
 // [NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompaction]
 type namespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompactionJSON struct {
-	State        apijson.Field
-	TargetSizeMB apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	State          apijson.Field
+	TargetSizeMB   apijson.Field
+	NextEligibleAt apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompaction) UnmarshalJSON(data []byte) (err error) {
@@ -341,18 +351,16 @@ func (r NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigCompactionTar
 	return false
 }
 
-// Configures snapshot expiration settings.
 type NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpiration struct {
-	// Specifies the maximum age for snapshots. The system deletes snapshots older than
-	// this age. Format: <number><unit> where unit is d (days), h (hours), m (minutes),
-	// or s (seconds). Examples: "7d" (7 days), "48h" (48 hours), "2880m" (2,880
-	// minutes). Defaults to "7d".
+	// Specifies the maximum age for snapshots.
 	MaxSnapshotAge string `json:"max_snapshot_age" api:"required"`
 	// Specifies the minimum number of snapshots to retain. Defaults to 100.
 	MinSnapshotsToKeep int64 `json:"min_snapshots_to_keep" api:"required"`
 	// Specifies the state of maintenance operations.
 	State NamespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationState `json:"state" api:"required"`
-	JSON  namespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationJSON  `json:"-"`
+	// Earliest time when the scheduler can claim this operation. Null when disabled.
+	NextEligibleAt time.Time                                                                         `json:"next_eligible_at" api:"nullable" format:"date-time"`
+	JSON           namespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationJSON `json:"-"`
 }
 
 // namespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirationJSON
@@ -362,6 +370,7 @@ type namespaceTableMaintenanceConfigGetResponseMaintenanceConfigSnapshotExpirati
 	MaxSnapshotAge     apijson.Field
 	MinSnapshotsToKeep apijson.Field
 	State              apijson.Field
+	NextEligibleAt     apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }

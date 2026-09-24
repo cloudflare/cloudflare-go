@@ -44,6 +44,11 @@ func NewInstanceService(opts ...option.RequestOption) (r *InstanceService) {
 }
 
 // Create a new AI Search instance with the given configuration.
+//
+// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
+// (and descendant paths) instead.
+//
+// Deprecated: deprecated
 func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opts ...option.RequestOption) (res *InstanceNewResponse, err error) {
 	var env InstanceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -61,6 +66,11 @@ func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opt
 }
 
 // Update the configuration of an AI Search instance.
+//
+// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
+// (and descendant paths) instead.
+//
+// Deprecated: deprecated
 func (r *InstanceService) Update(ctx context.Context, id string, params InstanceUpdateParams, opts ...option.RequestOption) (res *InstanceUpdateResponse, err error) {
 	var env InstanceUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -82,6 +92,11 @@ func (r *InstanceService) Update(ctx context.Context, id string, params Instance
 }
 
 // List all AI Search instances in the account.
+//
+// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
+// (and descendant paths) instead.
+//
+// Deprecated: deprecated
 func (r *InstanceService) List(ctx context.Context, params InstanceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InstanceListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -104,11 +119,21 @@ func (r *InstanceService) List(ctx context.Context, params InstanceListParams, o
 }
 
 // List all AI Search instances in the account.
+//
+// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
+// (and descendant paths) instead.
+//
+// Deprecated: deprecated
 func (r *InstanceService) ListAutoPaging(ctx context.Context, params InstanceListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[InstanceListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Permanently delete an AI Search instance and all its indexed data.
+//
+// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
+// (and descendant paths) instead.
+//
+// Deprecated: deprecated
 func (r *InstanceService) Delete(ctx context.Context, id string, body InstanceDeleteParams, opts ...option.RequestOption) (res *InstanceDeleteResponse, err error) {
 	var env InstanceDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -131,6 +156,11 @@ func (r *InstanceService) Delete(ctx context.Context, id string, body InstanceDe
 
 // Performs a chat completion request against an AI Search instance, using indexed
 // content as context for generating responses.
+//
+// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
+// (and descendant paths) instead.
+//
+// Deprecated: deprecated
 func (r *InstanceService) ChatCompletions(ctx context.Context, id string, params InstanceChatCompletionsParams, opts ...option.RequestOption) (res *InstanceChatCompletionsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -147,6 +177,11 @@ func (r *InstanceService) ChatCompletions(ctx context.Context, id string, params
 }
 
 // Retrieve the configuration and status of an AI Search instance.
+//
+// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
+// (and descendant paths) instead.
+//
+// Deprecated: deprecated
 func (r *InstanceService) Read(ctx context.Context, id string, query InstanceReadParams, opts ...option.RequestOption) (res *InstanceReadResponse, err error) {
 	var env InstanceReadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -169,6 +204,11 @@ func (r *InstanceService) Read(ctx context.Context, id string, query InstanceRea
 
 // Executes a semantic search query against an AI Search instance to find relevant
 // indexed content.
+//
+// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
+// (and descendant paths) instead.
+//
+// Deprecated: deprecated
 func (r *InstanceService) Search(ctx context.Context, id string, params InstanceSearchParams, opts ...option.RequestOption) (res *InstanceSearchResponse, err error) {
 	var env InstanceSearchResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -190,6 +230,11 @@ func (r *InstanceService) Search(ctx context.Context, id string, params Instance
 }
 
 // Retrieve usage and indexing statistics for an AI Search instance.
+//
+// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
+// (and descendant paths) instead.
+//
+// Deprecated: deprecated
 func (r *InstanceService) Stats(ctx context.Context, id string, query InstanceStatsParams, opts ...option.RequestOption) (res *InstanceStatsResponse, err error) {
 	var env InstanceStatsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -453,13 +498,17 @@ type InstanceNewResponseIndexingOptions struct {
 	// enables character-level substring matching (good for partial matches, code,
 	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer InstanceNewResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
-	JSON             instanceNewResponseIndexingOptionsJSON             `json:"-"`
+	// Enables OCR ingestion for PDFs and images. Changing this triggers a full
+	// re-index. Defaults to false.
+	UseOCR bool                                   `json:"use_ocr"`
+	JSON   instanceNewResponseIndexingOptionsJSON `json:"-"`
 }
 
 // instanceNewResponseIndexingOptionsJSON contains the JSON metadata for the struct
 // [InstanceNewResponseIndexingOptions]
 type instanceNewResponseIndexingOptionsJSON struct {
 	KeywordTokenizer apijson.Field
+	UseOCR           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -1262,13 +1311,17 @@ type InstanceUpdateResponseIndexingOptions struct {
 	// enables character-level substring matching (good for partial matches, code,
 	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer InstanceUpdateResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
-	JSON             instanceUpdateResponseIndexingOptionsJSON             `json:"-"`
+	// Enables OCR ingestion for PDFs and images. Changing this triggers a full
+	// re-index. Defaults to false.
+	UseOCR bool                                      `json:"use_ocr"`
+	JSON   instanceUpdateResponseIndexingOptionsJSON `json:"-"`
 }
 
 // instanceUpdateResponseIndexingOptionsJSON contains the JSON metadata for the
 // struct [InstanceUpdateResponseIndexingOptions]
 type instanceUpdateResponseIndexingOptionsJSON struct {
 	KeywordTokenizer apijson.Field
+	UseOCR           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -2060,6 +2113,7 @@ func (r instanceListResponseIndexMethodJSON) RawJSON() string {
 
 type InstanceListResponseIndexingOptions struct {
 	KeywordTokenizer InstanceListResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
+	UseOCR           bool                                                `json:"use_ocr"`
 	ExtraFields      map[string]interface{}                              `json:"-" api:"extrafields"`
 	JSON             instanceListResponseIndexingOptionsJSON             `json:"-"`
 }
@@ -2068,6 +2122,7 @@ type InstanceListResponseIndexingOptions struct {
 // struct [InstanceListResponseIndexingOptions]
 type instanceListResponseIndexingOptionsJSON struct {
 	KeywordTokenizer apijson.Field
+	UseOCR           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -2821,13 +2876,17 @@ type InstanceDeleteResponseIndexingOptions struct {
 	// enables character-level substring matching (good for partial matches, code,
 	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer InstanceDeleteResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
-	JSON             instanceDeleteResponseIndexingOptionsJSON             `json:"-"`
+	// Enables OCR ingestion for PDFs and images. Changing this triggers a full
+	// re-index. Defaults to false.
+	UseOCR bool                                      `json:"use_ocr"`
+	JSON   instanceDeleteResponseIndexingOptionsJSON `json:"-"`
 }
 
 // instanceDeleteResponseIndexingOptionsJSON contains the JSON metadata for the
 // struct [InstanceDeleteResponseIndexingOptions]
 type instanceDeleteResponseIndexingOptionsJSON struct {
 	KeywordTokenizer apijson.Field
+	UseOCR           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -3994,13 +4053,17 @@ type InstanceReadResponseIndexingOptions struct {
 	// enables character-level substring matching (good for partial matches, code,
 	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer InstanceReadResponseIndexingOptionsKeywordTokenizer `json:"keyword_tokenizer"`
-	JSON             instanceReadResponseIndexingOptionsJSON             `json:"-"`
+	// Enables OCR ingestion for PDFs and images. Changing this triggers a full
+	// re-index. Defaults to false.
+	UseOCR bool                                    `json:"use_ocr"`
+	JSON   instanceReadResponseIndexingOptionsJSON `json:"-"`
 }
 
 // instanceReadResponseIndexingOptionsJSON contains the JSON metadata for the
 // struct [InstanceReadResponseIndexingOptions]
 type instanceReadResponseIndexingOptionsJSON struct {
 	KeywordTokenizer apijson.Field
+	UseOCR           apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -4976,6 +5039,9 @@ type InstanceNewParamsIndexingOptions struct {
 	// enables character-level substring matching (good for partial matches, code,
 	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer param.Field[InstanceNewParamsIndexingOptionsKeywordTokenizer] `json:"keyword_tokenizer"`
+	// Enables OCR ingestion for PDFs and images. Changing this triggers a full
+	// re-index. Defaults to false.
+	UseOCR param.Field[bool] `json:"use_ocr"`
 }
 
 func (r InstanceNewParamsIndexingOptions) MarshalJSON() (data []byte, err error) {
@@ -5505,6 +5571,9 @@ type InstanceUpdateParamsIndexingOptions struct {
 	// enables character-level substring matching (good for partial matches, code,
 	// identifiers). Changing this triggers a full re-index. Defaults to porter.
 	KeywordTokenizer param.Field[InstanceUpdateParamsIndexingOptionsKeywordTokenizer] `json:"keyword_tokenizer"`
+	// Enables OCR ingestion for PDFs and images. Changing this triggers a full
+	// re-index. Defaults to false.
+	UseOCR param.Field[bool] `json:"use_ocr"`
 }
 
 func (r InstanceUpdateParamsIndexingOptions) MarshalJSON() (data []byte, err error) {
@@ -6067,10 +6136,14 @@ func (r InstanceChatCompletionsParamsMessagesRole) IsKnown() bool {
 }
 
 type InstanceChatCompletionsParamsAISearchOptions struct {
-	Cache        param.Field[InstanceChatCompletionsParamsAISearchOptionsCache]        `json:"cache"`
-	QueryRewrite param.Field[InstanceChatCompletionsParamsAISearchOptionsQueryRewrite] `json:"query_rewrite"`
-	Reranking    param.Field[InstanceChatCompletionsParamsAISearchOptionsReranking]    `json:"reranking"`
-	Retrieval    param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrieval]    `json:"retrieval"`
+	Cache param.Field[InstanceChatCompletionsParamsAISearchOptionsCache] `json:"cache"`
+	// Metadata added to AI Gateway logs for requests triggered by this operation.
+	// Accepts up to 2 string, number, or boolean entries. Keys 'ai-search', 'task',
+	// 'origin', and keys beginning with 'cf.' are reserved.
+	CustomMetadata param.Field[map[string]InstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion] `json:"custom_metadata"`
+	QueryRewrite   param.Field[InstanceChatCompletionsParamsAISearchOptionsQueryRewrite]                   `json:"query_rewrite"`
+	Reranking      param.Field[InstanceChatCompletionsParamsAISearchOptionsReranking]                      `json:"reranking"`
+	Retrieval      param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrieval]                      `json:"retrieval"`
 }
 
 func (r InstanceChatCompletionsParamsAISearchOptions) MarshalJSON() (data []byte, err error) {
@@ -6101,6 +6174,11 @@ func (r InstanceChatCompletionsParamsAISearchOptionsCacheCacheThreshold) IsKnown
 		return true
 	}
 	return false
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type InstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion interface {
+	ImplementsInstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion()
 }
 
 type InstanceChatCompletionsParamsAISearchOptionsQueryRewrite struct {
@@ -6283,10 +6361,14 @@ func (r InstanceSearchParams) MarshalJSON() (data []byte, err error) {
 }
 
 type InstanceSearchParamsAISearchOptions struct {
-	Cache        param.Field[InstanceSearchParamsAISearchOptionsCache]        `json:"cache"`
-	QueryRewrite param.Field[InstanceSearchParamsAISearchOptionsQueryRewrite] `json:"query_rewrite"`
-	Reranking    param.Field[InstanceSearchParamsAISearchOptionsReranking]    `json:"reranking"`
-	Retrieval    param.Field[InstanceSearchParamsAISearchOptionsRetrieval]    `json:"retrieval"`
+	Cache param.Field[InstanceSearchParamsAISearchOptionsCache] `json:"cache"`
+	// Metadata added to AI Gateway logs for requests triggered by this operation.
+	// Accepts up to 2 string, number, or boolean entries. Keys 'ai-search', 'task',
+	// 'origin', and keys beginning with 'cf.' are reserved.
+	CustomMetadata param.Field[map[string]InstanceSearchParamsAISearchOptionsCustomMetadataUnion] `json:"custom_metadata"`
+	QueryRewrite   param.Field[InstanceSearchParamsAISearchOptionsQueryRewrite]                   `json:"query_rewrite"`
+	Reranking      param.Field[InstanceSearchParamsAISearchOptionsReranking]                      `json:"reranking"`
+	Retrieval      param.Field[InstanceSearchParamsAISearchOptionsRetrieval]                      `json:"retrieval"`
 }
 
 func (r InstanceSearchParamsAISearchOptions) MarshalJSON() (data []byte, err error) {
@@ -6317,6 +6399,11 @@ func (r InstanceSearchParamsAISearchOptionsCacheCacheThreshold) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type InstanceSearchParamsAISearchOptionsCustomMetadataUnion interface {
+	ImplementsInstanceSearchParamsAISearchOptionsCustomMetadataUnion()
 }
 
 type InstanceSearchParamsAISearchOptionsQueryRewrite struct {

@@ -194,15 +194,15 @@ type SettingBlockSenderNewResponse struct {
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	// - EMAIL: matches a full email address (e.g. `user@example.com`)
-	// - DOMAIN: matches a domain name (e.g. `example.com`)
-	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//   link-local, unspecified, and IPv4 broadcast addresses, including their
-	//   IPv4-mapped IPv6 equivalents.
-	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//   but it may appear on existing entries.
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//     link-local, unspecified, and IPv4 broadcast addresses, including their
+	//     IPv4-mapped IPv6 equivalents.
+	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//     but it may appear on existing entries.
 	PatternType SettingBlockSenderNewResponsePatternType `json:"pattern_type"`
 	JSON        settingBlockSenderNewResponseJSON        `json:"-"`
 }
@@ -279,15 +279,15 @@ type SettingBlockSenderListResponse struct {
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	// - EMAIL: matches a full email address (e.g. `user@example.com`)
-	// - DOMAIN: matches a domain name (e.g. `example.com`)
-	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//   link-local, unspecified, and IPv4 broadcast addresses, including their
-	//   IPv4-mapped IPv6 equivalents.
-	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//   but it may appear on existing entries.
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//     link-local, unspecified, and IPv4 broadcast addresses, including their
+	//     IPv4-mapped IPv6 equivalents.
+	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//     but it may appear on existing entries.
 	PatternType SettingBlockSenderListResponsePatternType `json:"pattern_type"`
 	JSON        settingBlockSenderListResponseJSON        `json:"-"`
 }
@@ -435,15 +435,15 @@ type SettingBlockSenderBatchResponsePatch struct {
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	// - EMAIL: matches a full email address (e.g. `user@example.com`)
-	// - DOMAIN: matches a domain name (e.g. `example.com`)
-	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//   link-local, unspecified, and IPv4 broadcast addresses, including their
-	//   IPv4-mapped IPv6 equivalents.
-	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//   but it may appear on existing entries.
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//     link-local, unspecified, and IPv4 broadcast addresses, including their
+	//     IPv4-mapped IPv6 equivalents.
+	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//     but it may appear on existing entries.
 	PatternType SettingBlockSenderBatchResponsePatchesPatternType `json:"pattern_type"`
 	JSON        settingBlockSenderBatchResponsePatchJSON          `json:"-"`
 }
@@ -520,15 +520,15 @@ type SettingBlockSenderBatchResponsePost struct {
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	// - EMAIL: matches a full email address (e.g. `user@example.com`)
-	// - DOMAIN: matches a domain name (e.g. `example.com`)
-	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//   link-local, unspecified, and IPv4 broadcast addresses, including their
-	//   IPv4-mapped IPv6 equivalents.
-	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//   but it may appear on existing entries.
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//     link-local, unspecified, and IPv4 broadcast addresses, including their
+	//     IPv4-mapped IPv6 equivalents.
+	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//     but it may appear on existing entries.
 	PatternType SettingBlockSenderBatchResponsePostsPatternType `json:"pattern_type"`
 	JSON        settingBlockSenderBatchResponsePostJSON         `json:"-"`
 }
@@ -605,15 +605,15 @@ type SettingBlockSenderBatchResponsePut struct {
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	// - EMAIL: matches a full email address (e.g. `user@example.com`)
-	// - DOMAIN: matches a domain name (e.g. `example.com`)
-	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//   link-local, unspecified, and IPv4 broadcast addresses, including their
-	//   IPv4-mapped IPv6 equivalents.
-	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//   but it may appear on existing entries.
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//     link-local, unspecified, and IPv4 broadcast addresses, including their
+	//     IPv4-mapped IPv6 equivalents.
+	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//     but it may appear on existing entries.
 	PatternType SettingBlockSenderBatchResponsePutsPatternType `json:"pattern_type"`
 	JSON        settingBlockSenderBatchResponsePutJSON         `json:"-"`
 }
@@ -690,15 +690,15 @@ type SettingBlockSenderEditResponse struct {
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	// - EMAIL: matches a full email address (e.g. `user@example.com`)
-	// - DOMAIN: matches a domain name (e.g. `example.com`)
-	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//   link-local, unspecified, and IPv4 broadcast addresses, including their
-	//   IPv4-mapped IPv6 equivalents.
-	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//   but it may appear on existing entries.
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//     link-local, unspecified, and IPv4 broadcast addresses, including their
+	//     IPv4-mapped IPv6 equivalents.
+	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//     but it may appear on existing entries.
 	PatternType SettingBlockSenderEditResponsePatternType `json:"pattern_type"`
 	JSON        settingBlockSenderEditResponseJSON        `json:"-"`
 }
@@ -775,15 +775,15 @@ type SettingBlockSenderGetResponse struct {
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	// - EMAIL: matches a full email address (e.g. `user@example.com`)
-	// - DOMAIN: matches a domain name (e.g. `example.com`)
-	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//   link-local, unspecified, and IPv4 broadcast addresses, including their
-	//   IPv4-mapped IPv6 equivalents.
-	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//   but it may appear on existing entries.
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//     link-local, unspecified, and IPv4 broadcast addresses, including their
+	//     IPv4-mapped IPv6 equivalents.
+	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//     but it may appear on existing entries.
 	PatternType SettingBlockSenderGetResponsePatternType `json:"pattern_type"`
 	JSON        settingBlockSenderGetResponseJSON        `json:"-"`
 }
@@ -852,15 +852,15 @@ type SettingBlockSenderNewParams struct {
 	Pattern param.Field[string] `json:"pattern" api:"required"`
 	// Type of pattern matching.
 	//
-	// - EMAIL: matches a full email address (e.g. `user@example.com`)
-	// - DOMAIN: matches a domain name (e.g. `example.com`)
-	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//   link-local, unspecified, and IPv4 broadcast addresses, including their
-	//   IPv4-mapped IPv6 equivalents.
-	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//   but it may appear on existing entries.
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//     link-local, unspecified, and IPv4 broadcast addresses, including their
+	//     IPv4-mapped IPv6 equivalents.
+	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//     but it may appear on existing entries.
 	PatternType param.Field[SettingBlockSenderNewParamsPatternType] `json:"pattern_type" api:"required"`
 	Comments    param.Field[string]                                 `json:"comments"`
 }
@@ -1294,15 +1294,15 @@ type SettingBlockSenderBatchParamsPatch struct {
 	Pattern param.Field[string] `json:"pattern"`
 	// Type of pattern matching.
 	//
-	// - EMAIL: matches a full email address (e.g. `user@example.com`)
-	// - DOMAIN: matches a domain name (e.g. `example.com`)
-	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//   link-local, unspecified, and IPv4 broadcast addresses, including their
-	//   IPv4-mapped IPv6 equivalents.
-	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//   but it may appear on existing entries.
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//     link-local, unspecified, and IPv4 broadcast addresses, including their
+	//     IPv4-mapped IPv6 equivalents.
+	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//     but it may appear on existing entries.
 	PatternType param.Field[SettingBlockSenderBatchParamsPatchesPatternType] `json:"pattern_type"`
 }
 
@@ -1350,15 +1350,15 @@ type SettingBlockSenderBatchParamsPost struct {
 	Pattern param.Field[string] `json:"pattern" api:"required"`
 	// Type of pattern matching.
 	//
-	// - EMAIL: matches a full email address (e.g. `user@example.com`)
-	// - DOMAIN: matches a domain name (e.g. `example.com`)
-	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//   link-local, unspecified, and IPv4 broadcast addresses, including their
-	//   IPv4-mapped IPv6 equivalents.
-	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//   but it may appear on existing entries.
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//     link-local, unspecified, and IPv4 broadcast addresses, including their
+	//     IPv4-mapped IPv6 equivalents.
+	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//     but it may appear on existing entries.
 	PatternType param.Field[SettingBlockSenderBatchParamsPostsPatternType] `json:"pattern_type" api:"required"`
 	Comments    param.Field[string]                                        `json:"comments"`
 }
@@ -1407,15 +1407,15 @@ type SettingBlockSenderBatchParamsPut struct {
 	Pattern param.Field[string] `json:"pattern" api:"required"`
 	// Type of pattern matching.
 	//
-	// - EMAIL: matches a full email address (e.g. `user@example.com`)
-	// - DOMAIN: matches a domain name (e.g. `example.com`)
-	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//   link-local, unspecified, and IPv4 broadcast addresses, including their
-	//   IPv4-mapped IPv6 equivalents.
-	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//   but it may appear on existing entries.
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//     link-local, unspecified, and IPv4 broadcast addresses, including their
+	//     IPv4-mapped IPv6 equivalents.
+	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//     but it may appear on existing entries.
 	PatternType param.Field[SettingBlockSenderBatchParamsPutsPatternType] `json:"pattern_type" api:"required"`
 	Comments    param.Field[string]                                       `json:"comments"`
 }
@@ -1605,15 +1605,15 @@ type SettingBlockSenderEditParams struct {
 	Pattern param.Field[string] `json:"pattern"`
 	// Type of pattern matching.
 	//
-	// - EMAIL: matches a full email address (e.g. `user@example.com`)
-	// - DOMAIN: matches a domain name (e.g. `example.com`)
-	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//   link-local, unspecified, and IPv4 broadcast addresses, including their
-	//   IPv4-mapped IPv6 equivalents.
-	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//   but it may appear on existing entries.
+	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
+	//   - DOMAIN: matches a domain name (e.g. `example.com`)
+	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//     link-local, unspecified, and IPv4 broadcast addresses, including their
+	//     IPv4-mapped IPv6 equivalents.
+	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//     but it may appear on existing entries.
 	PatternType param.Field[SettingBlockSenderEditParamsPatternType] `json:"pattern_type"`
 }
 

@@ -101,6 +101,9 @@ func TestScriptScriptAndVersionSettingEditWithOptionalParams(t *testing.T) {
 				Observability: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsObservability{
 					Enabled:          cloudflare.F(true),
 					HeadSamplingRate: cloudflare.F(0.100000),
+					Issues: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsObservabilityIssues{
+						Enabled: cloudflare.F(true),
+					}),
 					Logs: cloudflare.F(workers.ScriptScriptAndVersionSettingEditParamsSettingsObservabilityLogs{
 						Enabled:          cloudflare.F(true),
 						InvocationLogs:   cloudflare.F(true),

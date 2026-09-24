@@ -35,7 +35,7 @@ func NewWebhookService(opts ...option.RequestOption) (r *WebhookService) {
 	return
 }
 
-// Creates a webhook notification.
+// Create a webhook for notifications about on-demand video uploads.
 func (r *WebhookService) Update(ctx context.Context, params WebhookUpdateParams, opts ...option.RequestOption) (res *WebhookUpdateResponse, err error) {
 	var env WebhookUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -52,7 +52,7 @@ func (r *WebhookService) Update(ctx context.Context, params WebhookUpdateParams,
 	return res, nil
 }
 
-// Deletes a webhook.
+// Deletes the on-demand video webhook.
 func (r *WebhookService) Delete(ctx context.Context, body WebhookDeleteParams, opts ...option.RequestOption) (res *string, err error) {
 	var env WebhookDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -69,7 +69,7 @@ func (r *WebhookService) Delete(ctx context.Context, body WebhookDeleteParams, o
 	return res, nil
 }
 
-// Retrieves a list of webhooks.
+// Retrieve current on-demand webhook information.
 func (r *WebhookService) Get(ctx context.Context, query WebhookGetParams, opts ...option.RequestOption) (res *WebhookGetResponse, err error) {
 	var env WebhookGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -90,9 +90,7 @@ type WebhookUpdateResponse struct {
 	// The date and time the webhook was last modified.
 	Modified time.Time `json:"modified" format:"date-time"`
 	// The URL where webhooks will be sent.
-	NotificationURL1 string `json:"notification_url" format:"uri"`
-	// The URL where webhooks will be sent.
-	NotificationURL2 string `json:"notificationUrl" format:"uri"`
+	NotificationURL string `json:"notificationUrl" format:"uri"`
 	// The secret used to verify webhook signatures.
 	Secret string                    `json:"secret"`
 	JSON   webhookUpdateResponseJSON `json:"-"`
@@ -101,12 +99,11 @@ type WebhookUpdateResponse struct {
 // webhookUpdateResponseJSON contains the JSON metadata for the struct
 // [WebhookUpdateResponse]
 type webhookUpdateResponseJSON struct {
-	Modified         apijson.Field
-	NotificationURL1 apijson.Field
-	NotificationURL2 apijson.Field
-	Secret           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Modified        apijson.Field
+	NotificationURL apijson.Field
+	Secret          apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *WebhookUpdateResponse) UnmarshalJSON(data []byte) (err error) {
@@ -121,9 +118,7 @@ type WebhookGetResponse struct {
 	// The date and time the webhook was last modified.
 	Modified time.Time `json:"modified" format:"date-time"`
 	// The URL where webhooks will be sent.
-	NotificationURL1 string `json:"notification_url" format:"uri"`
-	// The URL where webhooks will be sent.
-	NotificationURL2 string `json:"notificationUrl" format:"uri"`
+	NotificationURL string `json:"notificationUrl" format:"uri"`
 	// The secret used to verify webhook signatures.
 	Secret string                 `json:"secret"`
 	JSON   webhookGetResponseJSON `json:"-"`
@@ -132,12 +127,11 @@ type WebhookGetResponse struct {
 // webhookGetResponseJSON contains the JSON metadata for the struct
 // [WebhookGetResponse]
 type webhookGetResponseJSON struct {
-	Modified         apijson.Field
-	NotificationURL1 apijson.Field
-	NotificationURL2 apijson.Field
-	Secret           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Modified        apijson.Field
+	NotificationURL apijson.Field
+	Secret          apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *WebhookGetResponse) UnmarshalJSON(data []byte) (err error) {

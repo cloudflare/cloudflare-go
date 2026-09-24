@@ -28,11 +28,13 @@ func TestAccountNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.New(context.TODO(), accounts.AccountNewParams{
-		Name: cloudflare.F("name"),
-		Type: cloudflare.F(accounts.AccountNewParamsTypeStandard),
+		Name:       cloudflare.F("name"),
+		Standalone: cloudflare.F(accounts.AccountNewParamsStandaloneTrue),
+		Type:       cloudflare.F(accounts.AccountNewParamsTypeStandard),
 		Unit: cloudflare.F(accounts.AccountNewParamsUnit{
 			ID: cloudflare.F("f267e341f3dd4697bd3b9f71dd96247f"),
 		}),
+		IdempotencyKey: cloudflare.F("x"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

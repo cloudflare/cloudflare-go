@@ -41,6 +41,7 @@ func TestInsightTypeGetWithOptionalParams(t *testing.T) {
 		ProductNeq:    cloudflare.F([]string{"access", "dns"}),
 		Severity:      cloudflare.F([]intel.SeverityQueryParam{intel.SeverityQueryParamLow, intel.SeverityQueryParamModerate}),
 		SeverityNeq:   cloudflare.F([]intel.SeverityQueryParam{intel.SeverityQueryParamLow, intel.SeverityQueryParamModerate}),
+		Source:        cloudflare.F([]security_center.InsightTypeGetParamsSource{security_center.InsightTypeGetParamsSourceCloudflare}),
 		Subject:       cloudflare.F([]string{"example.com"}),
 		SubjectNeq:    cloudflare.F([]string{"example.com"}),
 	})

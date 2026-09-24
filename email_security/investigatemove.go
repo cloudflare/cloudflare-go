@@ -204,8 +204,9 @@ func (r investigateMoveBulkResponseJSON) RawJSON() string {
 
 type InvestigateMoveNewParams struct {
 	// Identifier.
-	AccountID           param.Field[string]                                      `path:"account_id" api:"required"`
-	Destination         param.Field[InvestigateMoveNewParamsDestination]         `json:"destination" api:"required"`
+	AccountID   param.Field[string]                              `path:"account_id" api:"required"`
+	Destination param.Field[InvestigateMoveNewParamsDestination] `json:"destination" api:"required"`
+	// Nonfunctional field. End of life: December 1, 2026.
 	ExpectedDisposition param.Field[InvestigateMoveNewParamsExpectedDisposition] `json:"expected_disposition"`
 }
 
@@ -231,6 +232,7 @@ func (r InvestigateMoveNewParamsDestination) IsKnown() bool {
 	return false
 }
 
+// Nonfunctional field. End of life: December 1, 2026.
 type InvestigateMoveNewParamsExpectedDisposition string
 
 const (
@@ -256,8 +258,9 @@ func (r InvestigateMoveNewParamsExpectedDisposition) IsKnown() bool {
 
 type InvestigateMoveBulkParams struct {
 	// Identifier.
-	AccountID           param.Field[string]                                       `path:"account_id" api:"required"`
-	Destination         param.Field[InvestigateMoveBulkParamsDestination]         `json:"destination" api:"required"`
+	AccountID   param.Field[string]                               `path:"account_id" api:"required"`
+	Destination param.Field[InvestigateMoveBulkParamsDestination] `json:"destination" api:"required"`
+	// Nonfunctional field. End of life: December 1, 2026.
 	ExpectedDisposition param.Field[InvestigateMoveBulkParamsExpectedDisposition] `json:"expected_disposition"`
 	// List of message IDs to move.
 	IDs param.Field[[]string] `json:"ids"`
@@ -287,6 +290,7 @@ func (r InvestigateMoveBulkParamsDestination) IsKnown() bool {
 	return false
 }
 
+// Nonfunctional field. End of life: December 1, 2026.
 type InvestigateMoveBulkParamsExpectedDisposition string
 
 const (

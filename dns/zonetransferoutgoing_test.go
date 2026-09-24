@@ -112,7 +112,6 @@ func TestZoneTransferOutgoingDisable(t *testing.T) {
 	)
 	_, err := client.DNS.ZoneTransfers.Outgoing.Disable(context.TODO(), dns.ZoneTransferOutgoingDisableParams{
 		ZoneID: cloudflare.F("269d8f4853475ca241c4e730be286b20"),
-		Body:   map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -139,7 +138,6 @@ func TestZoneTransferOutgoingEnable(t *testing.T) {
 	)
 	_, err := client.DNS.ZoneTransfers.Outgoing.Enable(context.TODO(), dns.ZoneTransferOutgoingEnableParams{
 		ZoneID: cloudflare.F("269d8f4853475ca241c4e730be286b20"),
-		Body:   map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -166,7 +164,6 @@ func TestZoneTransferOutgoingForceNotify(t *testing.T) {
 	)
 	_, err := client.DNS.ZoneTransfers.Outgoing.ForceNotify(context.TODO(), dns.ZoneTransferOutgoingForceNotifyParams{
 		ZoneID: cloudflare.F("269d8f4853475ca241c4e730be286b20"),
-		Body:   map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

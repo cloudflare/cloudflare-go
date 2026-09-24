@@ -38,7 +38,7 @@ func NewAssetService(opts ...option.RequestOption) (r *AssetService) {
 	return
 }
 
-// Creates a new custom asset.
+// Creates a custom asset for an account or zone.
 func (r *AssetService) New(ctx context.Context, params AssetNewParams, opts ...option.RequestOption) (res *AssetNewResponse, err error) {
 	var env AssetNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -69,7 +69,7 @@ func (r *AssetService) New(ctx context.Context, params AssetNewParams, opts ...o
 	return res, nil
 }
 
-// Updates the configuration of an existing custom asset.
+// Updates a custom asset for an account or zone.
 func (r *AssetService) Update(ctx context.Context, assetName string, params AssetUpdateParams, opts ...option.RequestOption) (res *AssetUpdateResponse, err error) {
 	var env AssetUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -104,7 +104,7 @@ func (r *AssetService) Update(ctx context.Context, assetName string, params Asse
 	return res, nil
 }
 
-// Fetches all the custom assets.
+// Lists custom assets for an account or zone.
 func (r *AssetService) List(ctx context.Context, params AssetListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AssetListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -140,12 +140,12 @@ func (r *AssetService) List(ctx context.Context, params AssetListParams, opts ..
 	return res, nil
 }
 
-// Fetches all the custom assets.
+// Lists custom assets for an account or zone.
 func (r *AssetService) ListAutoPaging(ctx context.Context, params AssetListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AssetListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Deletes an existing custom asset.
+// Deletes a custom asset from an account or zone.
 func (r *AssetService) Delete(ctx context.Context, assetName string, body AssetDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -176,7 +176,7 @@ func (r *AssetService) Delete(ctx context.Context, assetName string, body AssetD
 	return err
 }
 
-// Fetches the details of a custom asset.
+// Returns a custom asset for an account or zone.
 func (r *AssetService) Get(ctx context.Context, assetName string, query AssetGetParams, opts ...option.RequestOption) (res *AssetGetResponse, err error) {
 	var env AssetGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -662,9 +662,11 @@ type AssetListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID  param.Field[string] `path:"zone_id"`
-	Page    param.Field[int64]  `query:"page"`
-	PerPage param.Field[int64]  `query:"per_page"`
+	ZoneID param.Field[string] `path:"zone_id"`
+	// Page number of paginated results.
+	Page param.Field[int64] `query:"page"`
+	// Number of custom assets per page.
+	PerPage param.Field[int64] `query:"per_page"`
 }
 
 // URLQuery serializes [AssetListParams]'s query parameters as `url.Values`.

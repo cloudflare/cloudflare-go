@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/queues"
 )
 
-func TestQueueNew(t *testing.T) {
+func TestQueueNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,8 +29,9 @@ func TestQueueNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Queues.New(context.TODO(), queues.QueueNewParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		QueueName: cloudflare.F("example-queue"),
+		AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		QueueName:    cloudflare.F("example-queue"),
+		Jurisdiction: cloudflare.F(queues.QueueNewParamsJurisdictionEu),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -61,7 +62,8 @@ func TestQueueUpdateWithOptionalParams(t *testing.T) {
 		queues.QueueUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Queue: queues.QueueParam{
-				QueueName: cloudflare.F("example-queue"),
+				Jurisdiction: cloudflare.F(queues.QueueJurisdictionEu),
+				QueueName:    cloudflare.F("example-queue"),
 				Settings: cloudflare.F(queues.QueueSettingsParam{
 					DeliveryDelay:          cloudflare.F(5.000000),
 					DeliveryPaused:         cloudflare.F(true),
@@ -155,7 +157,8 @@ func TestQueueEditWithOptionalParams(t *testing.T) {
 		queues.QueueEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Queue: queues.QueueParam{
-				QueueName: cloudflare.F("example-queue"),
+				Jurisdiction: cloudflare.F(queues.QueueJurisdictionEu),
+				QueueName:    cloudflare.F("example-queue"),
 				Settings: cloudflare.F(queues.QueueSettingsParam{
 					DeliveryDelay:          cloudflare.F(5.000000),
 					DeliveryPaused:         cloudflare.F(true),

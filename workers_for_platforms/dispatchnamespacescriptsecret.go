@@ -39,7 +39,11 @@ func NewDispatchNamespaceScriptSecretService(opts ...option.RequestOption) (r *D
 	return
 }
 
-// Add a secret to a script uploaded to a Workers for Platforms namespace.
+// Add a secret to a Workers for Platforms script by creating a new version with
+// that secret.
+//
+// When changing more than one secret at a time, prefer the "Patch multiple script
+// secrets" API instead of changing many secrets individually.
 func (r *DispatchNamespaceScriptSecretService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptSecretUpdateParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretUpdateResponse, err error) {
 	var env DispatchNamespaceScriptSecretUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -64,7 +68,8 @@ func (r *DispatchNamespaceScriptSecretService) Update(ctx context.Context, dispa
 	return res, nil
 }
 
-// List secrets bound to a script uploaded to a Workers for Platforms namespace.
+// List secrets bound to a script uploaded to a Workers for Platforms dispatch
+// namespace.
 func (r *DispatchNamespaceScriptSecretService) List(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptSecretListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DispatchNamespaceScriptSecretListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -94,12 +99,17 @@ func (r *DispatchNamespaceScriptSecretService) List(ctx context.Context, dispatc
 	return res, nil
 }
 
-// List secrets bound to a script uploaded to a Workers for Platforms namespace.
+// List secrets bound to a script uploaded to a Workers for Platforms dispatch
+// namespace.
 func (r *DispatchNamespaceScriptSecretService) ListAutoPaging(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptSecretListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DispatchNamespaceScriptSecretListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, dispatchNamespace, scriptName, query, opts...))
 }
 
-// Remove a secret from a script uploaded to a Workers for Platforms namespace.
+// Remove a secret from a Workers for Platforms script by creating a new version
+// without that secret.
+//
+// When changing more than one secret at a time, prefer the "Patch multiple script
+// secrets" API instead of changing many secrets individually.
 func (r *DispatchNamespaceScriptSecretService) Delete(ctx context.Context, dispatchNamespace string, scriptName string, secretName string, params DispatchNamespaceScriptSecretDeleteParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretDeleteResponse, err error) {
 	var env DispatchNamespaceScriptSecretDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -128,8 +138,10 @@ func (r *DispatchNamespaceScriptSecretService) Delete(ctx context.Context, dispa
 	return res, nil
 }
 
-// Create, update, or delete multiple secrets on a script in a single operation
-// using JSON Merge Patch (RFC 7396).
+// Create, update, or delete multiple secrets on a Workers for Platforms script in
+// a single operation using JSON Merge Patch (RFC 7396). This operation creates a
+// single version with all changes included. Prefer this API instead of changing
+// many secrets individually.
 //
 // Usage:
 //
@@ -161,7 +173,7 @@ func (r *DispatchNamespaceScriptSecretService) BulkUpdate(ctx context.Context, d
 }
 
 // Get a given secret binding (value omitted) on a script uploaded to a Workers for
-// Platforms namespace.
+// Platforms dispatch namespace.
 func (r *DispatchNamespaceScriptSecretService) Get(ctx context.Context, dispatchNamespace string, scriptName string, secretName string, params DispatchNamespaceScriptSecretGetParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretGetResponse, err error) {
 	var env DispatchNamespaceScriptSecretGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

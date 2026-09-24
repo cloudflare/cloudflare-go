@@ -37,6 +37,7 @@ func TestAIGatewayNewWithOptionalParams(t *testing.T) {
 		RateLimitingInterval:    cloudflare.F(int64(0)),
 		RateLimitingLimit:       cloudflare.F(int64(0)),
 		Authentication:          cloudflare.F(true),
+		ByokOnly:                cloudflare.F(true),
 		LogManagement:           cloudflare.F(int64(10000)),
 		LogManagementStrategy:   cloudflare.F(ai_gateway.AIGatewayNewParamsLogManagementStrategyStopInserting),
 		Logpush:                 cloudflare.F(true),
@@ -83,6 +84,7 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 			RateLimitingInterval:    cloudflare.F(int64(0)),
 			RateLimitingLimit:       cloudflare.F(int64(0)),
 			Authentication:          cloudflare.F(true),
+			ByokOnly:                cloudflare.F(true),
 			DLP: cloudflare.F[ai_gateway.AIGatewayUpdateParamsDLPUnion](ai_gateway.AIGatewayUpdateParamsDLPObject{
 				Action:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsDLPObjectActionBlock),
 				Enabled:  cloudflare.F(true),

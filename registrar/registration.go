@@ -56,19 +56,13 @@ func NewRegistrationService(opts ...option.RequestOption) (r *RegistrationServic
 //
 // ### Supported extensions
 //
-// In this API, "extension" means the full registrable suffix after the domain
-// label. For example, in `example.co.uk`, the extension is `co.uk`.
+// This API supports programmatic registration for all extensions supported by the
+// dashboard experience, with the following exceptions:
 //
-// Programmatic registration is currently supported for:
+// `giving`, `mom`, `inc`, `lol`, `sh`, `link`, `cc`, `new`
 //
-// `com`, `org`, `net`, `app`, `dev`, `cc`, `xyz`, `info`, `cloud`, `studio`,
-// `live`, `link`, `pro`, `tech`, `fyi`, `shop`, `online`, `tools`, `run`, `games`,
-// `build`, `systems`, `world`, `news`, `site`, `network`, `chat`, `space`,
-// `family`, `page`, `life`, `group`, `email`, `solutions`, `day`, `blog`, `ing`,
-// `icu`, `academy`, `today`
-//
-// Cloudflare Registrar supports 400+ extensions in the dashboard. Extensions not
-// listed above can still be registered at
+// Cloudflare Registrar supports 400+ extensions in the dashboard. Extensions
+// listed above can be registered at
 // `https://dash.cloudflare.com/{account_id}/domains/registrations`.
 //
 // ### Express mode
@@ -273,9 +267,9 @@ type RegistrationNewParams struct {
 	Contacts param.Field[RegistrationNewParamsContacts] `json:"contacts"`
 	// Sets the WHOIS privacy mode for the registration. Defaults to `redaction`.
 	//
-	// - `off`: Disables WHOIS privacy.
-	// - `redaction`: Requests WHOIS redaction where the extension supports it. Some
-	//   extensions exclude privacy and redaction.
+	//   - `off`: Disables WHOIS privacy.
+	//   - `redaction`: Requests WHOIS redaction where the extension supports it. Some
+	//     extensions exclude privacy and redaction.
 	PrivacyMode param.Field[RegistrationNewParamsPrivacyMode] `json:"privacy_mode"`
 	// Sets the registration term from 1 to 10 years. When omitted, this field defaults
 	// to the registry's minimum registration period for the extension. Most extensions

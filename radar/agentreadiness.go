@@ -77,7 +77,7 @@ func (r agentReadinessSummaryResponseJSON) RawJSON() string {
 type AgentReadinessSummaryResponseMeta struct {
 	// Date of the returned scan (YYYY-MM-DD). May differ from the requested date if no
 	// scan exists for that exact date.
-	Date string `json:"date" api:"required"`
+	Date time.Time `json:"date" api:"required" format:"date"`
 	// Available domain sub-categories with their scan counts. Use as filter options
 	// for the domainCategory parameter.
 	DomainCategories []AgentReadinessSummaryResponseMetaDomainCategory `json:"domainCategories" api:"required"`

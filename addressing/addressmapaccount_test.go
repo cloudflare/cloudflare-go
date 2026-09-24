@@ -24,15 +24,16 @@ func TestAddressMapAccountUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.AddressMaps.Accounts.Update(
 		context.TODO(),
 		"055817b111884e0227e1be16a0be6ee0",
+		"258def64c72dae45f3e4c8516e2111f2",
 		addressing.AddressMapAccountUpdateParams{
 			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
-			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -54,12 +55,14 @@ func TestAddressMapAccountDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.AddressMaps.Accounts.Delete(
 		context.TODO(),
 		"055817b111884e0227e1be16a0be6ee0",
+		"258def64c72dae45f3e4c8516e2111f2",
 		addressing.AddressMapAccountDeleteParams{
 			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
 		},

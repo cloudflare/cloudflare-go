@@ -41,6 +41,7 @@ func TestBetaWorkerVersionNewWithOptionalParams(t *testing.T) {
 				}),
 				Assets: cloudflare.F(workers.VersionAssetsParam{
 					Config: cloudflare.F(workers.VersionAssetsConfigParam{
+						BasePath:         cloudflare.F("/docs/"),
 						HTMLHandling:     cloudflare.F(workers.VersionAssetsConfigHTMLHandlingAutoTrailingSlash),
 						NotFoundHandling: cloudflare.F(workers.VersionAssetsConfigNotFoundHandling404Page),
 						RunWorkerFirst:   cloudflare.F[workers.VersionAssetsConfigRunWorkerFirstUnionParam](shared.UnionBool(true)),

@@ -29,15 +29,16 @@ func TestOrganizationAccountGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Organizations.OrganizationAccounts.Get(
 		context.TODO(),
-		"a7b9c3d2e8f4g1h5i6j0k9l2m3n7o4p8",
+		"a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8",
 		organizations.OrganizationAccountGetParams{
 			AccountPubname: cloudflare.F(organizations.OrganizationAccountGetParamsAccountPubname{
 				Contains:   cloudflare.F("contains"),
 				EndsWith:   cloudflare.F("endsWith"),
 				StartsWith: cloudflare.F("startsWith"),
 			}),
-			Direction:   cloudflare.F(organizations.OrganizationAccountGetParamsDirectionAsc),
-			IncludeTags: cloudflare.F(true),
+			Direction:    cloudflare.F(organizations.OrganizationAccountGetParamsDirectionAsc),
+			IncludeTags:  cloudflare.F(true),
+			IncludeTotal: cloudflare.F(true),
 			Name: cloudflare.F(organizations.OrganizationAccountGetParamsName{
 				Contains:   cloudflare.F("contains"),
 				EndsWith:   cloudflare.F("endsWith"),

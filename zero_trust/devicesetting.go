@@ -35,7 +35,9 @@ func NewDeviceSettingService(opts ...option.RequestOption) (r *DeviceSettingServ
 	return
 }
 
-// Updates the current device settings for a Zero Trust account.
+// Deprecated: use "PATCH /accounts/{account_id}/devices/settings" instead
+//
+// Deprecated: deprecated
 func (r *DeviceSettingService) Update(ctx context.Context, params DeviceSettingUpdateParams, opts ...option.RequestOption) (res *DeviceSettings, err error) {
 	var env DeviceSettingUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -69,7 +71,7 @@ func (r *DeviceSettingService) Delete(ctx context.Context, body DeviceSettingDel
 	return res, nil
 }
 
-// Patches the current device settings for a Zero Trust account.
+// Updates the device settings for a Zero Trust account.
 func (r *DeviceSettingService) Edit(ctx context.Context, params DeviceSettingEditParams, opts ...option.RequestOption) (res *DeviceSettings, err error) {
 	var env DeviceSettingEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

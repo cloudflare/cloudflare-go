@@ -250,6 +250,927 @@ func (r *PipelineService) ValidateSql(ctx context.Context, params PipelineValida
 	return res, nil
 }
 
+type ListField struct {
+	Items SourceField   `json:"items" api:"required"`
+	JSON  listFieldJSON `json:"-"`
+}
+
+// listFieldJSON contains the JSON metadata for the struct [ListField]
+type listFieldJSON struct {
+	Items       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListField) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listFieldJSON) RawJSON() string {
+	return r.raw
+}
+
+type ListFieldParam struct {
+	Items param.Field[SourceFieldUnionParam] `json:"items" api:"required"`
+}
+
+func (r ListFieldParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SourceField struct {
+	// This field can have the runtime type of [[]SourceField].
+	Fields      interface{}     `json:"fields"`
+	// This field can have the runtime type of [SourceField].
+	Items       interface{}     `json:"items"`
+	MetadataKey string          `json:"metadata_key" api:"nullable"`
+	Name        string          `json:"name" api:"nullable"`
+	Required    bool            `json:"required"`
+	SqlName     string          `json:"sql_name"`
+	Type        SourceFieldType `json:"type"`
+	Unit        SourceFieldUnit `json:"unit"`
+	JSON        sourceFieldJSON `json:"-"`
+	union       SourceFieldUnion
+}
+
+// sourceFieldJSON contains the JSON metadata for the struct [SourceField]
+type sourceFieldJSON struct {
+	Fields      apijson.Field
+	Items       apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	Type        apijson.Field
+	Unit        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r sourceFieldJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *SourceField) UnmarshalJSON(data []byte) (err error) {
+	*r = SourceField{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [SourceFieldUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are [SourceFieldInt32], [SourceFieldInt64],
+// [SourceFieldFloat32], [SourceFieldFloat64], [SourceFieldBool],
+// [SourceFieldString], [SourceFieldBinary], [SourceFieldTimestamp],
+// [SourceFieldJson], [SourceFieldStruct], [SourceFieldList].
+func (r SourceField) AsUnion() SourceFieldUnion {
+	return r.union
+}
+
+// Union satisfied by [SourceFieldInt32], [SourceFieldInt64], [SourceFieldFloat32],
+// [SourceFieldFloat64], [SourceFieldBool], [SourceFieldString],
+// [SourceFieldBinary], [SourceFieldTimestamp], [SourceFieldJson],
+// [SourceFieldStruct] or [SourceFieldList].
+type SourceFieldUnion interface {
+	implementsSourceField()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SourceFieldUnion)(nil)).Elem(),
+		"type",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SourceFieldInt32{}),
+			DiscriminatorValue: "int32",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SourceFieldInt64{}),
+			DiscriminatorValue: "int64",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SourceFieldFloat32{}),
+			DiscriminatorValue: "float32",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SourceFieldFloat64{}),
+			DiscriminatorValue: "float64",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SourceFieldBool{}),
+			DiscriminatorValue: "bool",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SourceFieldString{}),
+			DiscriminatorValue: "string",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SourceFieldBinary{}),
+			DiscriminatorValue: "binary",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SourceFieldTimestamp{}),
+			DiscriminatorValue: "timestamp",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SourceFieldJson{}),
+			DiscriminatorValue: "json",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SourceFieldStruct{}),
+			DiscriminatorValue: "struct",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SourceFieldList{}),
+			DiscriminatorValue: "list",
+		},
+	)
+}
+
+type SourceFieldInt32 struct {
+	Type        SourceFieldInt32Type `json:"type" api:"required"`
+	MetadataKey string               `json:"metadata_key" api:"nullable"`
+	Name        string               `json:"name"`
+	Required    bool                 `json:"required"`
+	SqlName     string               `json:"sql_name"`
+	JSON        sourceFieldInt32JSON `json:"-"`
+}
+
+// sourceFieldInt32JSON contains the JSON metadata for the struct
+// [SourceFieldInt32]
+type sourceFieldInt32JSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SourceFieldInt32) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sourceFieldInt32JSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SourceFieldInt32) implementsSourceField() {}
+
+type SourceFieldInt32Type string
+
+const (
+	SourceFieldInt32TypeInt32 SourceFieldInt32Type = "int32"
+)
+
+func (r SourceFieldInt32Type) IsKnown() bool {
+	switch r {
+	case SourceFieldInt32TypeInt32:
+		return true
+	}
+	return false
+}
+
+type SourceFieldInt64 struct {
+	Type        SourceFieldInt64Type `json:"type" api:"required"`
+	MetadataKey string               `json:"metadata_key" api:"nullable"`
+	Name        string               `json:"name"`
+	Required    bool                 `json:"required"`
+	SqlName     string               `json:"sql_name"`
+	JSON        sourceFieldInt64JSON `json:"-"`
+}
+
+// sourceFieldInt64JSON contains the JSON metadata for the struct
+// [SourceFieldInt64]
+type sourceFieldInt64JSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SourceFieldInt64) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sourceFieldInt64JSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SourceFieldInt64) implementsSourceField() {}
+
+type SourceFieldInt64Type string
+
+const (
+	SourceFieldInt64TypeInt64 SourceFieldInt64Type = "int64"
+)
+
+func (r SourceFieldInt64Type) IsKnown() bool {
+	switch r {
+	case SourceFieldInt64TypeInt64:
+		return true
+	}
+	return false
+}
+
+type SourceFieldFloat32 struct {
+	Type        SourceFieldFloat32Type `json:"type" api:"required"`
+	MetadataKey string                 `json:"metadata_key" api:"nullable"`
+	Name        string                 `json:"name"`
+	Required    bool                   `json:"required"`
+	SqlName     string                 `json:"sql_name"`
+	JSON        sourceFieldFloat32JSON `json:"-"`
+}
+
+// sourceFieldFloat32JSON contains the JSON metadata for the struct
+// [SourceFieldFloat32]
+type sourceFieldFloat32JSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SourceFieldFloat32) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sourceFieldFloat32JSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SourceFieldFloat32) implementsSourceField() {}
+
+type SourceFieldFloat32Type string
+
+const (
+	SourceFieldFloat32TypeFloat32 SourceFieldFloat32Type = "float32"
+)
+
+func (r SourceFieldFloat32Type) IsKnown() bool {
+	switch r {
+	case SourceFieldFloat32TypeFloat32:
+		return true
+	}
+	return false
+}
+
+type SourceFieldFloat64 struct {
+	Type        SourceFieldFloat64Type `json:"type" api:"required"`
+	MetadataKey string                 `json:"metadata_key" api:"nullable"`
+	Name        string                 `json:"name"`
+	Required    bool                   `json:"required"`
+	SqlName     string                 `json:"sql_name"`
+	JSON        sourceFieldFloat64JSON `json:"-"`
+}
+
+// sourceFieldFloat64JSON contains the JSON metadata for the struct
+// [SourceFieldFloat64]
+type sourceFieldFloat64JSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SourceFieldFloat64) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sourceFieldFloat64JSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SourceFieldFloat64) implementsSourceField() {}
+
+type SourceFieldFloat64Type string
+
+const (
+	SourceFieldFloat64TypeFloat64 SourceFieldFloat64Type = "float64"
+)
+
+func (r SourceFieldFloat64Type) IsKnown() bool {
+	switch r {
+	case SourceFieldFloat64TypeFloat64:
+		return true
+	}
+	return false
+}
+
+type SourceFieldBool struct {
+	Type        SourceFieldBoolType `json:"type" api:"required"`
+	MetadataKey string              `json:"metadata_key" api:"nullable"`
+	Name        string              `json:"name"`
+	Required    bool                `json:"required"`
+	SqlName     string              `json:"sql_name"`
+	JSON        sourceFieldBoolJSON `json:"-"`
+}
+
+// sourceFieldBoolJSON contains the JSON metadata for the struct [SourceFieldBool]
+type sourceFieldBoolJSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SourceFieldBool) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sourceFieldBoolJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SourceFieldBool) implementsSourceField() {}
+
+type SourceFieldBoolType string
+
+const (
+	SourceFieldBoolTypeBool SourceFieldBoolType = "bool"
+)
+
+func (r SourceFieldBoolType) IsKnown() bool {
+	switch r {
+	case SourceFieldBoolTypeBool:
+		return true
+	}
+	return false
+}
+
+type SourceFieldString struct {
+	Type        SourceFieldStringType `json:"type" api:"required"`
+	MetadataKey string                `json:"metadata_key" api:"nullable"`
+	Name        string                `json:"name"`
+	Required    bool                  `json:"required"`
+	SqlName     string                `json:"sql_name"`
+	JSON        sourceFieldStringJSON `json:"-"`
+}
+
+// sourceFieldStringJSON contains the JSON metadata for the struct
+// [SourceFieldString]
+type sourceFieldStringJSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SourceFieldString) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sourceFieldStringJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SourceFieldString) implementsSourceField() {}
+
+type SourceFieldStringType string
+
+const (
+	SourceFieldStringTypeString SourceFieldStringType = "string"
+)
+
+func (r SourceFieldStringType) IsKnown() bool {
+	switch r {
+	case SourceFieldStringTypeString:
+		return true
+	}
+	return false
+}
+
+type SourceFieldBinary struct {
+	Type        SourceFieldBinaryType `json:"type" api:"required"`
+	MetadataKey string                `json:"metadata_key" api:"nullable"`
+	Name        string                `json:"name"`
+	Required    bool                  `json:"required"`
+	SqlName     string                `json:"sql_name"`
+	JSON        sourceFieldBinaryJSON `json:"-"`
+}
+
+// sourceFieldBinaryJSON contains the JSON metadata for the struct
+// [SourceFieldBinary]
+type sourceFieldBinaryJSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SourceFieldBinary) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sourceFieldBinaryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SourceFieldBinary) implementsSourceField() {}
+
+type SourceFieldBinaryType string
+
+const (
+	SourceFieldBinaryTypeBinary SourceFieldBinaryType = "binary"
+)
+
+func (r SourceFieldBinaryType) IsKnown() bool {
+	switch r {
+	case SourceFieldBinaryTypeBinary:
+		return true
+	}
+	return false
+}
+
+type SourceFieldTimestamp struct {
+	Type        SourceFieldTimestampType `json:"type" api:"required"`
+	MetadataKey string                   `json:"metadata_key" api:"nullable"`
+	Name        string                   `json:"name"`
+	Required    bool                     `json:"required"`
+	SqlName     string                   `json:"sql_name"`
+	Unit        SourceFieldTimestampUnit `json:"unit"`
+	JSON        sourceFieldTimestampJSON `json:"-"`
+}
+
+// sourceFieldTimestampJSON contains the JSON metadata for the struct
+// [SourceFieldTimestamp]
+type sourceFieldTimestampJSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	Unit        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SourceFieldTimestamp) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sourceFieldTimestampJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SourceFieldTimestamp) implementsSourceField() {}
+
+type SourceFieldTimestampType string
+
+const (
+	SourceFieldTimestampTypeTimestamp SourceFieldTimestampType = "timestamp"
+)
+
+func (r SourceFieldTimestampType) IsKnown() bool {
+	switch r {
+	case SourceFieldTimestampTypeTimestamp:
+		return true
+	}
+	return false
+}
+
+type SourceFieldTimestampUnit string
+
+const (
+	SourceFieldTimestampUnitSecond      SourceFieldTimestampUnit = "second"
+	SourceFieldTimestampUnitMillisecond SourceFieldTimestampUnit = "millisecond"
+	SourceFieldTimestampUnitMicrosecond SourceFieldTimestampUnit = "microsecond"
+	SourceFieldTimestampUnitNanosecond  SourceFieldTimestampUnit = "nanosecond"
+)
+
+func (r SourceFieldTimestampUnit) IsKnown() bool {
+	switch r {
+	case SourceFieldTimestampUnitSecond, SourceFieldTimestampUnitMillisecond, SourceFieldTimestampUnitMicrosecond, SourceFieldTimestampUnitNanosecond:
+		return true
+	}
+	return false
+}
+
+type SourceFieldJson struct {
+	Type        SourceFieldJsonType `json:"type" api:"required"`
+	MetadataKey string              `json:"metadata_key" api:"nullable"`
+	Name        string              `json:"name"`
+	Required    bool                `json:"required"`
+	SqlName     string              `json:"sql_name"`
+	JSON        sourceFieldJsonJSON `json:"-"`
+}
+
+// sourceFieldJsonJSON contains the JSON metadata for the struct [SourceFieldJson]
+type sourceFieldJsonJSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SourceFieldJson) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sourceFieldJsonJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SourceFieldJson) implementsSourceField() {}
+
+type SourceFieldJsonType string
+
+const (
+	SourceFieldJsonTypeJson SourceFieldJsonType = "json"
+)
+
+func (r SourceFieldJsonType) IsKnown() bool {
+	switch r {
+	case SourceFieldJsonTypeJson:
+		return true
+	}
+	return false
+}
+
+type SourceFieldStruct struct {
+	Type        SourceFieldStructType `json:"type" api:"required"`
+	MetadataKey string                `json:"metadata_key" api:"nullable"`
+	Name        string                `json:"name"`
+	Required    bool                  `json:"required"`
+	SqlName     string                `json:"sql_name"`
+	JSON        sourceFieldStructJSON `json:"-"`
+	StructField
+}
+
+// sourceFieldStructJSON contains the JSON metadata for the struct
+// [SourceFieldStruct]
+type sourceFieldStructJSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SourceFieldStruct) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sourceFieldStructJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SourceFieldStruct) implementsSourceField() {}
+
+type SourceFieldStructType string
+
+const (
+	SourceFieldStructTypeStruct SourceFieldStructType = "struct"
+)
+
+func (r SourceFieldStructType) IsKnown() bool {
+	switch r {
+	case SourceFieldStructTypeStruct:
+		return true
+	}
+	return false
+}
+
+type SourceFieldList struct {
+	Type        SourceFieldListType `json:"type" api:"required"`
+	MetadataKey string              `json:"metadata_key" api:"nullable"`
+	Name        string              `json:"name"`
+	Required    bool                `json:"required"`
+	SqlName     string              `json:"sql_name"`
+	JSON        sourceFieldListJSON `json:"-"`
+	ListField
+}
+
+// sourceFieldListJSON contains the JSON metadata for the struct [SourceFieldList]
+type sourceFieldListJSON struct {
+	Type        apijson.Field
+	MetadataKey apijson.Field
+	Name        apijson.Field
+	Required    apijson.Field
+	SqlName     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SourceFieldList) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sourceFieldListJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SourceFieldList) implementsSourceField() {}
+
+type SourceFieldListType string
+
+const (
+	SourceFieldListTypeList SourceFieldListType = "list"
+)
+
+func (r SourceFieldListType) IsKnown() bool {
+	switch r {
+	case SourceFieldListTypeList:
+		return true
+	}
+	return false
+}
+
+type SourceFieldType string
+
+const (
+	SourceFieldTypeInt32     SourceFieldType = "int32"
+	SourceFieldTypeInt64     SourceFieldType = "int64"
+	SourceFieldTypeFloat32   SourceFieldType = "float32"
+	SourceFieldTypeFloat64   SourceFieldType = "float64"
+	SourceFieldTypeBool      SourceFieldType = "bool"
+	SourceFieldTypeString    SourceFieldType = "string"
+	SourceFieldTypeBinary    SourceFieldType = "binary"
+	SourceFieldTypeTimestamp SourceFieldType = "timestamp"
+	SourceFieldTypeJson      SourceFieldType = "json"
+	SourceFieldTypeStruct    SourceFieldType = "struct"
+	SourceFieldTypeList      SourceFieldType = "list"
+)
+
+func (r SourceFieldType) IsKnown() bool {
+	switch r {
+	case SourceFieldTypeInt32, SourceFieldTypeInt64, SourceFieldTypeFloat32, SourceFieldTypeFloat64, SourceFieldTypeBool, SourceFieldTypeString, SourceFieldTypeBinary, SourceFieldTypeTimestamp, SourceFieldTypeJson, SourceFieldTypeStruct, SourceFieldTypeList:
+		return true
+	}
+	return false
+}
+
+type SourceFieldUnit string
+
+const (
+	SourceFieldUnitSecond      SourceFieldUnit = "second"
+	SourceFieldUnitMillisecond SourceFieldUnit = "millisecond"
+	SourceFieldUnitMicrosecond SourceFieldUnit = "microsecond"
+	SourceFieldUnitNanosecond  SourceFieldUnit = "nanosecond"
+)
+
+func (r SourceFieldUnit) IsKnown() bool {
+	switch r {
+	case SourceFieldUnitSecond, SourceFieldUnitMillisecond, SourceFieldUnitMicrosecond, SourceFieldUnitNanosecond:
+		return true
+	}
+	return false
+}
+
+type SourceFieldParam struct {
+	Fields      param.Field[interface{}]            `json:"fields"`
+	Items       param.Field[*SourceFieldUnionParam] `json:"items"`
+	MetadataKey param.Field[string]                 `json:"metadata_key"`
+	Name        param.Field[string]                 `json:"name"`
+	Required    param.Field[bool]                   `json:"required"`
+	SqlName     param.Field[string]                 `json:"sql_name"`
+	Type        param.Field[SourceFieldType]        `json:"type"`
+	Unit        param.Field[SourceFieldUnit]        `json:"unit"`
+}
+
+func (r SourceFieldParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SourceFieldParam) implementsSourceFieldUnionParam() {}
+
+// Satisfied by [pipelines.SourceFieldInt32Param],
+// [pipelines.SourceFieldInt64Param], [pipelines.SourceFieldFloat32Param],
+// [pipelines.SourceFieldFloat64Param], [pipelines.SourceFieldBoolParam],
+// [pipelines.SourceFieldStringParam], [pipelines.SourceFieldBinaryParam],
+// [pipelines.SourceFieldTimestampParam], [pipelines.SourceFieldJsonParam],
+// [pipelines.SourceFieldStructParam], [pipelines.SourceFieldListParam],
+// [SourceFieldParam].
+type SourceFieldUnionParam interface {
+	implementsSourceFieldUnionParam()
+}
+
+type SourceFieldInt32Param struct {
+	Type        param.Field[SourceFieldInt32Type] `json:"type" api:"required"`
+	MetadataKey param.Field[string]               `json:"metadata_key"`
+	Name        param.Field[string]               `json:"name"`
+	Required    param.Field[bool]                 `json:"required"`
+	SqlName     param.Field[string]               `json:"sql_name"`
+}
+
+func (r SourceFieldInt32Param) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SourceFieldInt32Param) implementsSourceFieldUnionParam() {}
+
+type SourceFieldInt64Param struct {
+	Type        param.Field[SourceFieldInt64Type] `json:"type" api:"required"`
+	MetadataKey param.Field[string]               `json:"metadata_key"`
+	Name        param.Field[string]               `json:"name"`
+	Required    param.Field[bool]                 `json:"required"`
+	SqlName     param.Field[string]               `json:"sql_name"`
+}
+
+func (r SourceFieldInt64Param) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SourceFieldInt64Param) implementsSourceFieldUnionParam() {}
+
+type SourceFieldFloat32Param struct {
+	Type        param.Field[SourceFieldFloat32Type] `json:"type" api:"required"`
+	MetadataKey param.Field[string]                 `json:"metadata_key"`
+	Name        param.Field[string]                 `json:"name"`
+	Required    param.Field[bool]                   `json:"required"`
+	SqlName     param.Field[string]                 `json:"sql_name"`
+}
+
+func (r SourceFieldFloat32Param) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SourceFieldFloat32Param) implementsSourceFieldUnionParam() {}
+
+type SourceFieldFloat64Param struct {
+	Type        param.Field[SourceFieldFloat64Type] `json:"type" api:"required"`
+	MetadataKey param.Field[string]                 `json:"metadata_key"`
+	Name        param.Field[string]                 `json:"name"`
+	Required    param.Field[bool]                   `json:"required"`
+	SqlName     param.Field[string]                 `json:"sql_name"`
+}
+
+func (r SourceFieldFloat64Param) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SourceFieldFloat64Param) implementsSourceFieldUnionParam() {}
+
+type SourceFieldBoolParam struct {
+	Type        param.Field[SourceFieldBoolType] `json:"type" api:"required"`
+	MetadataKey param.Field[string]              `json:"metadata_key"`
+	Name        param.Field[string]              `json:"name"`
+	Required    param.Field[bool]                `json:"required"`
+	SqlName     param.Field[string]              `json:"sql_name"`
+}
+
+func (r SourceFieldBoolParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SourceFieldBoolParam) implementsSourceFieldUnionParam() {}
+
+type SourceFieldStringParam struct {
+	Type        param.Field[SourceFieldStringType] `json:"type" api:"required"`
+	MetadataKey param.Field[string]                `json:"metadata_key"`
+	Name        param.Field[string]                `json:"name"`
+	Required    param.Field[bool]                  `json:"required"`
+	SqlName     param.Field[string]                `json:"sql_name"`
+}
+
+func (r SourceFieldStringParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SourceFieldStringParam) implementsSourceFieldUnionParam() {}
+
+type SourceFieldBinaryParam struct {
+	Type        param.Field[SourceFieldBinaryType] `json:"type" api:"required"`
+	MetadataKey param.Field[string]                `json:"metadata_key"`
+	Name        param.Field[string]                `json:"name"`
+	Required    param.Field[bool]                  `json:"required"`
+	SqlName     param.Field[string]                `json:"sql_name"`
+}
+
+func (r SourceFieldBinaryParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SourceFieldBinaryParam) implementsSourceFieldUnionParam() {}
+
+type SourceFieldTimestampParam struct {
+	Type        param.Field[SourceFieldTimestampType] `json:"type" api:"required"`
+	MetadataKey param.Field[string]                   `json:"metadata_key"`
+	Name        param.Field[string]                   `json:"name"`
+	Required    param.Field[bool]                     `json:"required"`
+	SqlName     param.Field[string]                   `json:"sql_name"`
+	Unit        param.Field[SourceFieldTimestampUnit] `json:"unit"`
+}
+
+func (r SourceFieldTimestampParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SourceFieldTimestampParam) implementsSourceFieldUnionParam() {}
+
+type SourceFieldJsonParam struct {
+	Type        param.Field[SourceFieldJsonType] `json:"type" api:"required"`
+	MetadataKey param.Field[string]              `json:"metadata_key"`
+	Name        param.Field[string]              `json:"name"`
+	Required    param.Field[bool]                `json:"required"`
+	SqlName     param.Field[string]              `json:"sql_name"`
+}
+
+func (r SourceFieldJsonParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SourceFieldJsonParam) implementsSourceFieldUnionParam() {}
+
+type SourceFieldStructParam struct {
+	Type        param.Field[SourceFieldStructType] `json:"type" api:"required"`
+	MetadataKey param.Field[string]                `json:"metadata_key"`
+	Name        param.Field[string]                `json:"name"`
+	Required    param.Field[bool]                  `json:"required"`
+	SqlName     param.Field[string]                `json:"sql_name"`
+	StructFieldParam
+}
+
+func (r SourceFieldStructParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SourceFieldStructParam) implementsSourceFieldUnionParam() {}
+
+type SourceFieldListParam struct {
+	Type        param.Field[SourceFieldListType] `json:"type" api:"required"`
+	MetadataKey param.Field[string]              `json:"metadata_key"`
+	Name        param.Field[string]              `json:"name"`
+	Required    param.Field[bool]                `json:"required"`
+	SqlName     param.Field[string]              `json:"sql_name"`
+	ListFieldParam
+}
+
+func (r SourceFieldListParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SourceFieldListParam) implementsSourceFieldUnionParam() {}
+
+type StructField struct {
+	Fields []SourceField   `json:"fields" api:"required"`
+	Name   string          `json:"name" api:"nullable"`
+	JSON   structFieldJSON `json:"-"`
+}
+
+// structFieldJSON contains the JSON metadata for the struct [StructField]
+type structFieldJSON struct {
+	Fields      apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StructField) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r structFieldJSON) RawJSON() string {
+	return r.raw
+}
+
+type StructFieldParam struct {
+	Fields param.Field[[]SourceFieldUnionParam] `json:"fields" api:"required"`
+	Name   param.Field[string]                  `json:"name"`
+}
+
+func (r StructFieldParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // [DEPRECATED] Describes the configuration of a pipeline. Use the new
 // streams/sinks/pipelines API instead.
 //
@@ -2919,11 +3840,9 @@ func (r pipelineGetV1ResponseEnvelopeJSON) RawJSON() string {
 
 type PipelineListV1Params struct {
 	// Specifies the public ID of the account.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Filters pipelines by name (case-insensitive substring).
-	Name    param.Field[string]  `query:"name"`
-	Page    param.Field[float64] `query:"page"`
-	PerPage param.Field[float64] `query:"per_page"`
+	AccountID param.Field[string]  `path:"account_id" api:"required"`
+	Page      param.Field[float64] `query:"page"`
+	PerPage   param.Field[float64] `query:"per_page"`
 }
 
 // URLQuery serializes [PipelineListV1Params]'s query parameters as `url.Values`.

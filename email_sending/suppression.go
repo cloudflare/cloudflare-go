@@ -168,6 +168,7 @@ func (r *SuppressionService) Import(ctx context.Context, params SuppressionImpor
 }
 
 type SuppressionNewResponse struct {
+	// The suppression's identifier.
 	ID   string                     `json:"id" api:"required" format:"uuid"`
 	JSON suppressionNewResponseJSON `json:"-"`
 }
@@ -189,16 +190,23 @@ func (r suppressionNewResponseJSON) RawJSON() string {
 }
 
 type SuppressionListResponse struct {
-	ID        string    `json:"id" api:"required" format:"uuid"`
+	// Unique identifier for this suppression.
+	ID string `json:"id" api:"required" format:"uuid"`
+	// When the suppression was created.
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	Email     string    `json:"email" api:"required" format:"email"`
+	// The suppressed email address.
+	Email string `json:"email" api:"required" format:"email"`
+	// When the suppression expires. Null for a permanent suppression.
 	ExpiresAt time.Time `json:"expires_at" api:"required,nullable" format:"date-time"`
 	// Whether clients may mutate this suppression. This is determined by the server
 	// and must not be inferred from `reason`.
-	ReadOnly bool                        `json:"read_only" api:"required"`
-	Reason   string                      `json:"reason" api:"required"`
-	Note     string                      `json:"note" api:"nullable"`
-	JSON     suppressionListResponseJSON `json:"-"`
+	ReadOnly bool `json:"read_only" api:"required"`
+	// Why the address is suppressed: `manual`, `complaint`, `hard_bounce`,
+	// `soft_bounce`, or `policy`.
+	Reason string `json:"reason" api:"required"`
+	// Advisory note for this suppression, if any.
+	Note string                      `json:"note" api:"nullable"`
+	JSON suppressionListResponseJSON `json:"-"`
 }
 
 // suppressionListResponseJSON contains the JSON metadata for the struct
@@ -224,6 +232,7 @@ func (r suppressionListResponseJSON) RawJSON() string {
 }
 
 type SuppressionDeleteResponse struct {
+	// The suppression's identifier.
 	ID   string                        `json:"id" api:"required" format:"uuid"`
 	JSON suppressionDeleteResponseJSON `json:"-"`
 }
@@ -245,16 +254,23 @@ func (r suppressionDeleteResponseJSON) RawJSON() string {
 }
 
 type SuppressionEditResponse struct {
-	ID        string    `json:"id" api:"required" format:"uuid"`
+	// Unique identifier for this suppression.
+	ID string `json:"id" api:"required" format:"uuid"`
+	// When the suppression was created.
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	Email     string    `json:"email" api:"required" format:"email"`
+	// The suppressed email address.
+	Email string `json:"email" api:"required" format:"email"`
+	// When the suppression expires. Null for a permanent suppression.
 	ExpiresAt time.Time `json:"expires_at" api:"required,nullable" format:"date-time"`
 	// Whether clients may mutate this suppression. This is determined by the server
 	// and must not be inferred from `reason`.
-	ReadOnly bool                        `json:"read_only" api:"required"`
-	Reason   string                      `json:"reason" api:"required"`
-	Note     string                      `json:"note" api:"nullable"`
-	JSON     suppressionEditResponseJSON `json:"-"`
+	ReadOnly bool `json:"read_only" api:"required"`
+	// Why the address is suppressed: `manual`, `complaint`, `hard_bounce`,
+	// `soft_bounce`, or `policy`.
+	Reason string `json:"reason" api:"required"`
+	// Advisory note for this suppression, if any.
+	Note string                      `json:"note" api:"nullable"`
+	JSON suppressionEditResponseJSON `json:"-"`
 }
 
 // suppressionEditResponseJSON contains the JSON metadata for the struct
@@ -280,16 +296,23 @@ func (r suppressionEditResponseJSON) RawJSON() string {
 }
 
 type SuppressionGetResponse struct {
-	ID        string    `json:"id" api:"required" format:"uuid"`
+	// Unique identifier for this suppression.
+	ID string `json:"id" api:"required" format:"uuid"`
+	// When the suppression was created.
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	Email     string    `json:"email" api:"required" format:"email"`
+	// The suppressed email address.
+	Email string `json:"email" api:"required" format:"email"`
+	// When the suppression expires. Null for a permanent suppression.
 	ExpiresAt time.Time `json:"expires_at" api:"required,nullable" format:"date-time"`
 	// Whether clients may mutate this suppression. This is determined by the server
 	// and must not be inferred from `reason`.
-	ReadOnly bool                       `json:"read_only" api:"required"`
-	Reason   string                     `json:"reason" api:"required"`
-	Note     string                     `json:"note" api:"nullable"`
-	JSON     suppressionGetResponseJSON `json:"-"`
+	ReadOnly bool `json:"read_only" api:"required"`
+	// Why the address is suppressed: `manual`, `complaint`, `hard_bounce`,
+	// `soft_bounce`, or `policy`.
+	Reason string `json:"reason" api:"required"`
+	// Advisory note for this suppression, if any.
+	Note string                     `json:"note" api:"nullable"`
+	JSON suppressionGetResponseJSON `json:"-"`
 }
 
 // suppressionGetResponseJSON contains the JSON metadata for the struct
@@ -315,14 +338,23 @@ func (r suppressionGetResponseJSON) RawJSON() string {
 }
 
 type SuppressionImportResponse struct {
-	Deduplicated int64                           `json:"deduplicated" api:"required"`
-	Errors       int64                           `json:"errors" api:"required"`
-	Invalid      int64                           `json:"invalid" api:"required"`
-	Items        []SuppressionImportResponseItem `json:"items" api:"required"`
-	Processed    int64                           `json:"processed" api:"required"`
-	Skipped      int64                           `json:"skipped" api:"required"`
-	Total        int64                           `json:"total" api:"required"`
-	JSON         suppressionImportResponseJSON   `json:"-"`
+	// Number of items dropped because their email address repeated an earlier item in
+	// this request. Counted once and excluded from `items`.
+	Deduplicated int64 `json:"deduplicated" api:"required"`
+	// Number of items that failed to import due to an unexpected error.
+	Errors int64 `json:"errors" api:"required"`
+	// Number of items with an invalid email address.
+	Invalid int64 `json:"invalid" api:"required"`
+	// Per-item results, in the same order as the request body.
+	Items []SuppressionImportResponseItem `json:"items" api:"required"`
+	// Number of items successfully created or promoted.
+	Processed int64 `json:"processed" api:"required"`
+	// Number of items skipped because the existing suppression is not customer-managed
+	// (for example, a read-only policy suppression).
+	Skipped int64 `json:"skipped" api:"required"`
+	// Total number of items in the request body, including duplicates.
+	Total int64                         `json:"total" api:"required"`
+	JSON  suppressionImportResponseJSON `json:"-"`
 }
 
 // suppressionImportResponseJSON contains the JSON metadata for the struct
@@ -348,12 +380,19 @@ func (r suppressionImportResponseJSON) RawJSON() string {
 }
 
 type SuppressionImportResponseItem struct {
-	Index  int64                                `json:"index" api:"required"`
+	// Zero-based index of this item in the request body.
+	Index int64 `json:"index" api:"required"`
+	// Outcome for this item.
 	Status SuppressionImportResponseItemsStatus `json:"status" api:"required"`
-	ID     string                               `json:"id" format:"uuid"`
-	Email  string                               `json:"email" format:"email"`
-	Error  string                               `json:"error"`
-	JSON   suppressionImportResponseItemJSON    `json:"-"`
+	// The created or promoted suppression's identifier. Present when `status` is
+	// `processed`.
+	ID string `json:"id" format:"uuid"`
+	// The submitted email address for this item.
+	Email string `json:"email" format:"email"`
+	// Human-readable error message. Present when `status` is `invalid`, `error`, or
+	// `skipped`.
+	Error string                            `json:"error"`
+	JSON  suppressionImportResponseItemJSON `json:"-"`
 }
 
 // suppressionImportResponseItemJSON contains the JSON metadata for the struct
@@ -376,6 +415,7 @@ func (r suppressionImportResponseItemJSON) RawJSON() string {
 	return r.raw
 }
 
+// Outcome for this item.
 type SuppressionImportResponseItemsStatus string
 
 const (
@@ -394,10 +434,15 @@ func (r SuppressionImportResponseItemsStatus) IsKnown() bool {
 }
 
 type SuppressionNewParams struct {
-	AccountID param.Field[string]    `path:"account_id" api:"required"`
-	Email     param.Field[string]    `json:"email" api:"required" format:"email"`
+	// Cloudflare account ID.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// The email address to suppress.
+	Email param.Field[string] `json:"email" api:"required" format:"email"`
+	// Expiration timestamp for the suppression. Omit or set to null for a permanent
+	// suppression that never expires.
 	ExpiresAt param.Field[time.Time] `json:"expires_at" format:"date-time"`
-	Note      param.Field[string]    `json:"note"`
+	// Advisory note for this suppression. Not enforced or validated beyond length.
+	Note param.Field[string] `json:"note"`
 }
 
 func (r SuppressionNewParams) MarshalJSON() (data []byte, err error) {
@@ -432,14 +477,17 @@ func (r suppressionNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SuppressionListParams struct {
+	// Cloudflare account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Opaque pagination cursor returned as `result_info.next_cursor`. It carries the
 	// filters that produced it.
 	Cursor param.Field[string] `query:"cursor"`
 	// Exact email-address filter.
-	Email   param.Field[string]                      `query:"email" format:"email"`
-	PerPage param.Field[int64]                       `query:"per_page"`
-	Reason  param.Field[SuppressionListParamsReason] `query:"reason"`
+	Email param.Field[string] `query:"email" format:"email"`
+	// Maximum number of suppressions to return per page.
+	PerPage param.Field[int64] `query:"per_page"`
+	// Filter to suppressions with this reason.
+	Reason param.Field[SuppressionListParamsReason] `query:"reason"`
 	// A complete address is an exact match; a value ending in `@` matches that
 	// username across every domain. Prefix searches may return short intermediate
 	// pages while the bounded account scan advances.
@@ -454,6 +502,7 @@ func (r SuppressionListParams) URLQuery() (v url.Values) {
 	})
 }
 
+// Filter to suppressions with this reason.
 type SuppressionListParamsReason string
 
 const (
@@ -473,6 +522,7 @@ func (r SuppressionListParamsReason) IsKnown() bool {
 }
 
 type SuppressionDeleteParams struct {
+	// Cloudflare account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -504,6 +554,7 @@ func (r suppressionDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SuppressionEditParams struct {
+	// Cloudflare account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// New expiry. Send `null` to make the suppression permanent; omit to leave it
 	// unchanged.
@@ -545,6 +596,7 @@ func (r suppressionEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SuppressionGetParams struct {
+	// Cloudflare account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -576,8 +628,11 @@ func (r suppressionGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type SuppressionImportParams struct {
-	AccountID param.Field[string]                        `path:"account_id" api:"required"`
-	Items     param.Field[[]SuppressionImportParamsItem] `json:"items" api:"required"`
+	// Cloudflare account ID.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Suppressions to import. Items with a duplicate email address are deduplicated
+	// before processing.
+	Items param.Field[[]SuppressionImportParamsItem] `json:"items" api:"required"`
 }
 
 func (r SuppressionImportParams) MarshalJSON() (data []byte, err error) {
@@ -585,9 +640,13 @@ func (r SuppressionImportParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SuppressionImportParamsItem struct {
-	Email     param.Field[string]    `json:"email" api:"required"`
+	// The email address to suppress.
+	Email param.Field[string] `json:"email" api:"required"`
+	// Expiration timestamp for the suppression. Omit or set to null for a permanent
+	// suppression that never expires.
 	ExpiresAt param.Field[time.Time] `json:"expires_at" format:"date-time"`
-	Note      param.Field[string]    `json:"note"`
+	// Advisory note for this suppression. Not enforced or validated beyond length.
+	Note param.Field[string] `json:"note"`
 }
 
 func (r SuppressionImportParamsItem) MarshalJSON() (data []byte, err error) {

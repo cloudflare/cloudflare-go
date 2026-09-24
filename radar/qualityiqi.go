@@ -314,8 +314,11 @@ func (r qualityIQISummaryResponseMetaUnitJSON) RawJSON() string {
 }
 
 type QualityIQISummaryResponseSummary0 struct {
-	P25  string                                `json:"p25" api:"required"`
-	P50  string                                `json:"p50" api:"required"`
+	// A numeric string.
+	P25 string `json:"p25" api:"required"`
+	// A numeric string.
+	P50 string `json:"p50" api:"required"`
+	// A numeric string.
 	P75  string                                `json:"p75" api:"required"`
 	JSON qualityIQISummaryResponseSummary0JSON `json:"-"`
 }

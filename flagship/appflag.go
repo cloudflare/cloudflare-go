@@ -42,8 +42,8 @@ func NewAppFlagService(opts ...option.RequestOption) (r *AppFlagService) {
 	return
 }
 
-// Creates a flag. Returns 409 if the key already exists. `type` is inferred from
-// variation values and may be omitted.
+// Creates a flag. Returns 409 if the key already exists. `type` is always inferred
+// from variation values; legacy request-side values are ignored.
 func (r *AppFlagService) New(ctx context.Context, appID string, params AppFlagNewParams, opts ...option.RequestOption) (res *AppFlagNewResponse, err error) {
 	var env AppFlagNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -186,16 +186,15 @@ type AppFlagNewResponse struct {
 	// Targeting rules evaluated in ascending `priority`; the first matching rule wins.
 	// An empty array means the flag always serves `default_variation`.
 	Rules []AppFlagNewResponseRule `json:"rules" api:"required"`
+	// Server-inferred value type shared by all of the flag's variations.
+	Type AppFlagNewResponseType `json:"type" api:"required"`
 	// Map of variation name to value. All values share the same type (boolean, string,
 	// number, or JSON object/array), and each serialized value stays within 10KB.
 	Variations  map[string]AppFlagNewResponseVariationsUnion `json:"variations" api:"required"`
 	Description string                                       `json:"description" api:"nullable"`
-	// Value type of the flag's variations. The API infers this from the variation
-	// values on write, so you can omit it in requests.
-	Type      AppFlagNewResponseType `json:"type"`
-	UpdatedAt string                 `json:"updated_at"`
-	UpdatedBy string                 `json:"updated_by"`
-	JSON      appFlagNewResponseJSON `json:"-"`
+	UpdatedAt   string                                       `json:"updated_at"`
+	UpdatedBy   string                                       `json:"updated_by"`
+	JSON        appFlagNewResponseJSON                       `json:"-"`
 }
 
 // appFlagNewResponseJSON contains the JSON metadata for the struct
@@ -205,9 +204,9 @@ type appFlagNewResponseJSON struct {
 	Enabled          apijson.Field
 	Key              apijson.Field
 	Rules            apijson.Field
+	Type             apijson.Field
 	Variations       apijson.Field
 	Description      apijson.Field
-	Type             apijson.Field
 	UpdatedAt        apijson.Field
 	UpdatedBy        apijson.Field
 	raw              string
@@ -489,6 +488,24 @@ func (r appFlagNewResponseRulesRolloutJSON) RawJSON() string {
 	return r.raw
 }
 
+// Server-inferred value type shared by all of the flag's variations.
+type AppFlagNewResponseType string
+
+const (
+	AppFlagNewResponseTypeBoolean AppFlagNewResponseType = "boolean"
+	AppFlagNewResponseTypeString  AppFlagNewResponseType = "string"
+	AppFlagNewResponseTypeNumber  AppFlagNewResponseType = "number"
+	AppFlagNewResponseTypeJson    AppFlagNewResponseType = "json"
+)
+
+func (r AppFlagNewResponseType) IsKnown() bool {
+	switch r {
+	case AppFlagNewResponseTypeBoolean, AppFlagNewResponseTypeString, AppFlagNewResponseTypeNumber, AppFlagNewResponseTypeJson:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [shared.UnionString], [shared.UnionFloat],
 // [shared.UnionBool], [AppFlagNewResponseVariationsMap] or
 // [AppFlagNewResponseVariationsArray].
@@ -535,25 +552,6 @@ type AppFlagNewResponseVariationsArray []interface{}
 
 func (r AppFlagNewResponseVariationsArray) ImplementsAppFlagNewResponseVariationsUnion() {}
 
-// Value type of the flag's variations. The API infers this from the variation
-// values on write, so you can omit it in requests.
-type AppFlagNewResponseType string
-
-const (
-	AppFlagNewResponseTypeBoolean AppFlagNewResponseType = "boolean"
-	AppFlagNewResponseTypeString  AppFlagNewResponseType = "string"
-	AppFlagNewResponseTypeNumber  AppFlagNewResponseType = "number"
-	AppFlagNewResponseTypeJson    AppFlagNewResponseType = "json"
-)
-
-func (r AppFlagNewResponseType) IsKnown() bool {
-	switch r {
-	case AppFlagNewResponseTypeBoolean, AppFlagNewResponseTypeString, AppFlagNewResponseTypeNumber, AppFlagNewResponseTypeJson:
-		return true
-	}
-	return false
-}
-
 type AppFlagUpdateResponse struct {
 	// Variation the API serves when the flag is off, or when it's on but no rule
 	// matches the context. Must be a key in `variations`.
@@ -566,16 +564,15 @@ type AppFlagUpdateResponse struct {
 	// Targeting rules evaluated in ascending `priority`; the first matching rule wins.
 	// An empty array means the flag always serves `default_variation`.
 	Rules []AppFlagUpdateResponseRule `json:"rules" api:"required"`
+	// Server-inferred value type shared by all of the flag's variations.
+	Type AppFlagUpdateResponseType `json:"type" api:"required"`
 	// Map of variation name to value. All values share the same type (boolean, string,
 	// number, or JSON object/array), and each serialized value stays within 10KB.
 	Variations  map[string]AppFlagUpdateResponseVariationsUnion `json:"variations" api:"required"`
 	Description string                                          `json:"description" api:"nullable"`
-	// Value type of the flag's variations. The API infers this from the variation
-	// values on write, so you can omit it in requests.
-	Type      AppFlagUpdateResponseType `json:"type"`
-	UpdatedAt string                    `json:"updated_at"`
-	UpdatedBy string                    `json:"updated_by"`
-	JSON      appFlagUpdateResponseJSON `json:"-"`
+	UpdatedAt   string                                          `json:"updated_at"`
+	UpdatedBy   string                                          `json:"updated_by"`
+	JSON        appFlagUpdateResponseJSON                       `json:"-"`
 }
 
 // appFlagUpdateResponseJSON contains the JSON metadata for the struct
@@ -585,9 +582,9 @@ type appFlagUpdateResponseJSON struct {
 	Enabled          apijson.Field
 	Key              apijson.Field
 	Rules            apijson.Field
+	Type             apijson.Field
 	Variations       apijson.Field
 	Description      apijson.Field
-	Type             apijson.Field
 	UpdatedAt        apijson.Field
 	UpdatedBy        apijson.Field
 	raw              string
@@ -869,6 +866,24 @@ func (r appFlagUpdateResponseRulesRolloutJSON) RawJSON() string {
 	return r.raw
 }
 
+// Server-inferred value type shared by all of the flag's variations.
+type AppFlagUpdateResponseType string
+
+const (
+	AppFlagUpdateResponseTypeBoolean AppFlagUpdateResponseType = "boolean"
+	AppFlagUpdateResponseTypeString  AppFlagUpdateResponseType = "string"
+	AppFlagUpdateResponseTypeNumber  AppFlagUpdateResponseType = "number"
+	AppFlagUpdateResponseTypeJson    AppFlagUpdateResponseType = "json"
+)
+
+func (r AppFlagUpdateResponseType) IsKnown() bool {
+	switch r {
+	case AppFlagUpdateResponseTypeBoolean, AppFlagUpdateResponseTypeString, AppFlagUpdateResponseTypeNumber, AppFlagUpdateResponseTypeJson:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [shared.UnionString], [shared.UnionFloat],
 // [shared.UnionBool], [AppFlagUpdateResponseVariationsMap] or
 // [AppFlagUpdateResponseVariationsArray].
@@ -915,25 +930,6 @@ type AppFlagUpdateResponseVariationsArray []interface{}
 
 func (r AppFlagUpdateResponseVariationsArray) ImplementsAppFlagUpdateResponseVariationsUnion() {}
 
-// Value type of the flag's variations. The API infers this from the variation
-// values on write, so you can omit it in requests.
-type AppFlagUpdateResponseType string
-
-const (
-	AppFlagUpdateResponseTypeBoolean AppFlagUpdateResponseType = "boolean"
-	AppFlagUpdateResponseTypeString  AppFlagUpdateResponseType = "string"
-	AppFlagUpdateResponseTypeNumber  AppFlagUpdateResponseType = "number"
-	AppFlagUpdateResponseTypeJson    AppFlagUpdateResponseType = "json"
-)
-
-func (r AppFlagUpdateResponseType) IsKnown() bool {
-	switch r {
-	case AppFlagUpdateResponseTypeBoolean, AppFlagUpdateResponseTypeString, AppFlagUpdateResponseTypeNumber, AppFlagUpdateResponseTypeJson:
-		return true
-	}
-	return false
-}
-
 type AppFlagListResponse struct {
 	// Variation the API serves when the flag is off, or when it's on but no rule
 	// matches the context. Must be a key in `variations`.
@@ -946,16 +942,15 @@ type AppFlagListResponse struct {
 	// Targeting rules evaluated in ascending `priority`; the first matching rule wins.
 	// An empty array means the flag always serves `default_variation`.
 	Rules []AppFlagListResponseRule `json:"rules" api:"required"`
+	// Server-inferred value type shared by all of the flag's variations.
+	Type AppFlagListResponseType `json:"type" api:"required"`
 	// Map of variation name to value. All values share the same type (boolean, string,
 	// number, or JSON object/array), and each serialized value stays within 10KB.
 	Variations  map[string]AppFlagListResponseVariationsUnion `json:"variations" api:"required"`
 	Description string                                        `json:"description" api:"nullable"`
-	// Value type of the flag's variations. The API infers this from the variation
-	// values on write, so you can omit it in requests.
-	Type      AppFlagListResponseType `json:"type"`
-	UpdatedAt string                  `json:"updated_at"`
-	UpdatedBy string                  `json:"updated_by"`
-	JSON      appFlagListResponseJSON `json:"-"`
+	UpdatedAt   string                                        `json:"updated_at"`
+	UpdatedBy   string                                        `json:"updated_by"`
+	JSON        appFlagListResponseJSON                       `json:"-"`
 }
 
 // appFlagListResponseJSON contains the JSON metadata for the struct
@@ -965,9 +960,9 @@ type appFlagListResponseJSON struct {
 	Enabled          apijson.Field
 	Key              apijson.Field
 	Rules            apijson.Field
+	Type             apijson.Field
 	Variations       apijson.Field
 	Description      apijson.Field
-	Type             apijson.Field
 	UpdatedAt        apijson.Field
 	UpdatedBy        apijson.Field
 	raw              string
@@ -1249,6 +1244,24 @@ func (r appFlagListResponseRulesRolloutJSON) RawJSON() string {
 	return r.raw
 }
 
+// Server-inferred value type shared by all of the flag's variations.
+type AppFlagListResponseType string
+
+const (
+	AppFlagListResponseTypeBoolean AppFlagListResponseType = "boolean"
+	AppFlagListResponseTypeString  AppFlagListResponseType = "string"
+	AppFlagListResponseTypeNumber  AppFlagListResponseType = "number"
+	AppFlagListResponseTypeJson    AppFlagListResponseType = "json"
+)
+
+func (r AppFlagListResponseType) IsKnown() bool {
+	switch r {
+	case AppFlagListResponseTypeBoolean, AppFlagListResponseTypeString, AppFlagListResponseTypeNumber, AppFlagListResponseTypeJson:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [shared.UnionString], [shared.UnionFloat],
 // [shared.UnionBool], [AppFlagListResponseVariationsMap] or
 // [AppFlagListResponseVariationsArray].
@@ -1295,25 +1308,6 @@ type AppFlagListResponseVariationsArray []interface{}
 
 func (r AppFlagListResponseVariationsArray) ImplementsAppFlagListResponseVariationsUnion() {}
 
-// Value type of the flag's variations. The API infers this from the variation
-// values on write, so you can omit it in requests.
-type AppFlagListResponseType string
-
-const (
-	AppFlagListResponseTypeBoolean AppFlagListResponseType = "boolean"
-	AppFlagListResponseTypeString  AppFlagListResponseType = "string"
-	AppFlagListResponseTypeNumber  AppFlagListResponseType = "number"
-	AppFlagListResponseTypeJson    AppFlagListResponseType = "json"
-)
-
-func (r AppFlagListResponseType) IsKnown() bool {
-	switch r {
-	case AppFlagListResponseTypeBoolean, AppFlagListResponseTypeString, AppFlagListResponseTypeNumber, AppFlagListResponseTypeJson:
-		return true
-	}
-	return false
-}
-
 type AppFlagDeleteResponse struct {
 	Key  string                    `json:"key" api:"required"`
 	JSON appFlagDeleteResponseJSON `json:"-"`
@@ -1347,16 +1341,15 @@ type AppFlagGetResponse struct {
 	// Targeting rules evaluated in ascending `priority`; the first matching rule wins.
 	// An empty array means the flag always serves `default_variation`.
 	Rules []AppFlagGetResponseRule `json:"rules" api:"required"`
+	// Server-inferred value type shared by all of the flag's variations.
+	Type AppFlagGetResponseType `json:"type" api:"required"`
 	// Map of variation name to value. All values share the same type (boolean, string,
 	// number, or JSON object/array), and each serialized value stays within 10KB.
 	Variations  map[string]AppFlagGetResponseVariationsUnion `json:"variations" api:"required"`
 	Description string                                       `json:"description" api:"nullable"`
-	// Value type of the flag's variations. The API infers this from the variation
-	// values on write, so you can omit it in requests.
-	Type      AppFlagGetResponseType `json:"type"`
-	UpdatedAt string                 `json:"updated_at"`
-	UpdatedBy string                 `json:"updated_by"`
-	JSON      appFlagGetResponseJSON `json:"-"`
+	UpdatedAt   string                                       `json:"updated_at"`
+	UpdatedBy   string                                       `json:"updated_by"`
+	JSON        appFlagGetResponseJSON                       `json:"-"`
 }
 
 // appFlagGetResponseJSON contains the JSON metadata for the struct
@@ -1366,9 +1359,9 @@ type appFlagGetResponseJSON struct {
 	Enabled          apijson.Field
 	Key              apijson.Field
 	Rules            apijson.Field
+	Type             apijson.Field
 	Variations       apijson.Field
 	Description      apijson.Field
-	Type             apijson.Field
 	UpdatedAt        apijson.Field
 	UpdatedBy        apijson.Field
 	raw              string
@@ -1650,6 +1643,24 @@ func (r appFlagGetResponseRulesRolloutJSON) RawJSON() string {
 	return r.raw
 }
 
+// Server-inferred value type shared by all of the flag's variations.
+type AppFlagGetResponseType string
+
+const (
+	AppFlagGetResponseTypeBoolean AppFlagGetResponseType = "boolean"
+	AppFlagGetResponseTypeString  AppFlagGetResponseType = "string"
+	AppFlagGetResponseTypeNumber  AppFlagGetResponseType = "number"
+	AppFlagGetResponseTypeJson    AppFlagGetResponseType = "json"
+)
+
+func (r AppFlagGetResponseType) IsKnown() bool {
+	switch r {
+	case AppFlagGetResponseTypeBoolean, AppFlagGetResponseTypeString, AppFlagGetResponseTypeNumber, AppFlagGetResponseTypeJson:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [shared.UnionString], [shared.UnionFloat],
 // [shared.UnionBool], [AppFlagGetResponseVariationsMap] or
 // [AppFlagGetResponseVariationsArray].
@@ -1696,25 +1707,6 @@ type AppFlagGetResponseVariationsArray []interface{}
 
 func (r AppFlagGetResponseVariationsArray) ImplementsAppFlagGetResponseVariationsUnion() {}
 
-// Value type of the flag's variations. The API infers this from the variation
-// values on write, so you can omit it in requests.
-type AppFlagGetResponseType string
-
-const (
-	AppFlagGetResponseTypeBoolean AppFlagGetResponseType = "boolean"
-	AppFlagGetResponseTypeString  AppFlagGetResponseType = "string"
-	AppFlagGetResponseTypeNumber  AppFlagGetResponseType = "number"
-	AppFlagGetResponseTypeJson    AppFlagGetResponseType = "json"
-)
-
-func (r AppFlagGetResponseType) IsKnown() bool {
-	switch r {
-	case AppFlagGetResponseTypeBoolean, AppFlagGetResponseTypeString, AppFlagGetResponseTypeNumber, AppFlagGetResponseTypeJson:
-		return true
-	}
-	return false
-}
-
 type AppFlagNewParams struct {
 	// Cloudflare account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -1733,8 +1725,8 @@ type AppFlagNewParams struct {
 	// number, or JSON object/array), and each serialized value stays within 10KB.
 	Variations  param.Field[map[string]AppFlagNewParamsVariationsUnion] `json:"variations" api:"required"`
 	Description param.Field[string]                                     `json:"description"`
-	// Value type of the flag's variations. The API infers this from the variation
-	// values on write, so you can omit it in requests.
+	// Deprecated compatibility field. Omit it; the API ignores this value and infers
+	// the type from the flag's variations.
 	Type param.Field[AppFlagNewParamsType] `json:"type"`
 }
 
@@ -1899,8 +1891,8 @@ type AppFlagNewParamsVariationsArray []interface{}
 
 func (r AppFlagNewParamsVariationsArray) ImplementsAppFlagNewParamsVariationsUnion() {}
 
-// Value type of the flag's variations. The API infers this from the variation
-// values on write, so you can omit it in requests.
+// Deprecated compatibility field. Omit it; the API ignores this value and infers
+// the type from the flag's variations.
 type AppFlagNewParamsType string
 
 const (
@@ -2005,8 +1997,8 @@ type AppFlagUpdateParams struct {
 	// number, or JSON object/array), and each serialized value stays within 10KB.
 	Variations  param.Field[map[string]AppFlagUpdateParamsVariationsUnion] `json:"variations" api:"required"`
 	Description param.Field[string]                                        `json:"description"`
-	// Value type of the flag's variations. The API infers this from the variation
-	// values on write, so you can omit it in requests.
+	// Deprecated compatibility field. Omit it; the API ignores this value and infers
+	// the type from the flag's variations.
 	Type param.Field[AppFlagUpdateParamsType] `json:"type"`
 }
 
@@ -2172,8 +2164,8 @@ type AppFlagUpdateParamsVariationsArray []interface{}
 
 func (r AppFlagUpdateParamsVariationsArray) ImplementsAppFlagUpdateParamsVariationsUnion() {}
 
-// Value type of the flag's variations. The API infers this from the variation
-// values on write, so you can omit it in requests.
+// Deprecated compatibility field. Omit it; the API ignores this value and infers
+// the type from the flag's variations.
 type AppFlagUpdateParamsType string
 
 const (

@@ -54,6 +54,9 @@ func NewBillingUsageService(opts ...option.RequestOption) (r *BillingUsageServic
 //
 // When `from` and `to` are omitted, defaults to the start of the current month
 // through today. The maximum date range is 31 days.
+//
+// An organization with no accounts, or an organization ID that does not exist,
+// returns a successful response with an empty result set rather than an error.
 func (r *BillingUsageService) Get(ctx context.Context, organizationID string, query BillingUsageGetParams, opts ...option.RequestOption) (res *[]BillingUsageGetResponse, err error) {
 	var env BillingUsageGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -73,10 +76,6 @@ func (r *BillingUsageService) Get(ctx context.Context, organizationID string, qu
 // A single cost and usage record for a metered product within a specific charge
 // period, aligned with the FinOps FOCUS v1.3 specification.
 type BillingUsageGetResponse struct {
-	// Public identifier of the Cloudflare account (account tag).
-	BillingAccountID string `json:"BillingAccountId" api:"required"`
-	// Display name of the Cloudflare account.
-	BillingAccountName string `json:"BillingAccountName" api:"required"`
 	// Highest-level classification of a charge based on the nature of how it gets
 	// billed. Currently only "Usage" is supported.
 	ChargeCategory BillingUsageGetResponseChargeCategory `json:"ChargeCategory" api:"required"`
@@ -103,13 +102,16 @@ type BillingUsageGetResponse struct {
 	// The unique identifier for the billable metric in the Cloudflare catalog.
 	// Cloudflare extension; replaces FOCUS SkuId.
 	XBillableMetricID string `json:"x_BillableMetricId" api:"required"`
-	// The display name of the billable metric. Cloudflare extension; replaces FOCUS
-	// SkuMeter.
-	XBillableMetricName string `json:"x_BillableMetricName" api:"required"`
 	// A charge serving as the basis for invoicing, inclusive of all reduced rates and
 	// discounts while excluding the amortization of upfront charges (one-time or
 	// recurring).
 	BilledCost float64 `json:"BilledCost" api:"nullable"`
+	// Public identifier of the Cloudflare account (account tag). Omitted when account
+	// is not part of the requested grouping.
+	BillingAccountID string `json:"BillingAccountId"`
+	// Display name of the Cloudflare account. Omitted when account is not part of the
+	// requested grouping.
+	BillingAccountName string `json:"BillingAccountName"`
 	// Currency that a charge was billed in (ISO 4217).
 	BillingCurrency string `json:"BillingCurrency" api:"nullable"`
 	// Exclusive end of the billing cycle that contains this usage record.
@@ -157,6 +159,9 @@ type BillingUsageGetResponse struct {
 	// provided. Missing keys are omitted, and key-only tags are returned as boolean
 	// `true`. All other tag values are strings.
 	Tags map[string]BillingUsageGetResponseTagsUnion `json:"Tags"`
+	// The display name of the billable metric. Cloudflare extension; replaces FOCUS
+	// SkuMeter.
+	XBillableMetricName string `json:"x_BillableMetricName"`
 	// The product category the charge belongs to (e.g., "Developer", "Cloudflare
 	// One"). Cloudflare extension; replaces FOCUS ServiceCategory.
 	XProductCategoryName string `json:"x_ProductCategoryName"`
@@ -176,8 +181,6 @@ type BillingUsageGetResponse struct {
 // billingUsageGetResponseJSON contains the JSON metadata for the struct
 // [BillingUsageGetResponse]
 type billingUsageGetResponseJSON struct {
-	BillingAccountID     apijson.Field
-	BillingAccountName   apijson.Field
 	ChargeCategory       apijson.Field
 	ChargeDescription    apijson.Field
 	ChargeFrequency      apijson.Field
@@ -189,8 +192,9 @@ type billingUsageGetResponseJSON struct {
 	InvoiceIssuerName    apijson.Field
 	ServiceProviderName  apijson.Field
 	XBillableMetricID    apijson.Field
-	XBillableMetricName  apijson.Field
 	BilledCost           apijson.Field
+	BillingAccountID     apijson.Field
+	BillingAccountName   apijson.Field
 	BillingCurrency      apijson.Field
 	BillingPeriodEnd     apijson.Field
 	BillingPeriodStart   apijson.Field
@@ -207,6 +211,7 @@ type billingUsageGetResponseJSON struct {
 	SubAccountID         apijson.Field
 	SubAccountName       apijson.Field
 	Tags                 apijson.Field
+	XBillableMetricName  apijson.Field
 	XProductCategoryName apijson.Field
 	XProductFamilyID     apijson.Field
 	XProductFamilyName   apijson.Field
@@ -317,8 +322,6 @@ type BillingUsageGetParams struct {
 	// period (when consumption happened), not billing period. The maximum date range
 	// is 31 days.
 	From param.Field[time.Time] `query:"from" format:"date"`
-	// Filter results by billable metric id (e.g., workers_standard_requests).
-	Metric param.Field[string] `query:"metric"`
 	// End date for the usage query (ISO 8601). Required if `from` is set. When omitted
 	// along with `from`, defaults to today. Filters by charge period (when consumption
 	// happened), not billing period. The maximum date range is 31 days.

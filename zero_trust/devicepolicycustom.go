@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
@@ -61,16 +63,16 @@ func (r *DevicePolicyCustomService) New(ctx context.Context, params DevicePolicy
 }
 
 // Fetches a list of the device settings profiles for an account.
-func (r *DevicePolicyCustomService) List(ctx context.Context, query DevicePolicyCustomListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SettingsPolicy], err error) {
+func (r *DevicePolicyCustomService) List(ctx context.Context, params DevicePolicyCustomListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SettingsPolicy], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/devices/policies", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/devices/policies", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -83,8 +85,8 @@ func (r *DevicePolicyCustomService) List(ctx context.Context, query DevicePolicy
 }
 
 // Fetches a list of the device settings profiles for an account.
-func (r *DevicePolicyCustomService) ListAutoPaging(ctx context.Context, query DevicePolicyCustomListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SettingsPolicy] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *DevicePolicyCustomService) ListAutoPaging(ctx context.Context, params DevicePolicyCustomListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SettingsPolicy] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes a device settings profile and fetches a list of the remaining profiles
@@ -164,16 +166,8 @@ func (r *DevicePolicyCustomService) Get(ctx context.Context, policyID string, qu
 
 type DevicePolicyCustomNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// The wirefilter expression to match devices. Available values: "identity.email",
-	// "identity.groups.id", "identity.groups.name", "identity.groups.email",
-	// "identity.service_token_uuid", "identity.saml_attributes", "network", "os.name",
-	// "os.version".
-	Match param.Field[string] `json:"match" api:"required"`
 	// The name of the device settings profile.
 	Name param.Field[string] `json:"name" api:"required"`
-	// The precedence of the policy. Lower values indicate higher precedence. Policies
-	// will be evaluated in ascending order of this field.
-	Precedence param.Field[float64] `json:"precedence" api:"required"`
 	// Whether to allow the user to switch WARP between modes.
 	AllowModeSwitch param.Field[bool] `json:"allow_mode_switch"`
 	// Whether to receive update notifications when a new version of the client is
@@ -183,8 +177,14 @@ type DevicePolicyCustomNewParams struct {
 	AllowedToLeave param.Field[bool] `json:"allowed_to_leave"`
 	// The amount of time in seconds to reconnect after having been disabled.
 	AutoConnect param.Field[float64] `json:"auto_connect"`
+	// Browser extension proxy settings. Required when profile_type is
+	// browser_extension and invalid for WARP profiles.
+	BrowserExtensionConfig param.Field[DevicePolicyCustomNewParamsBrowserExtensionConfig] `json:"browser_extension_config"`
 	// Turn on the captive portal after the specified amount of time.
 	CaptivePortal param.Field[float64] `json:"captive_portal"`
+	// Whether the policy is the account default. WARP group profiles cannot set this
+	// field.
+	Default param.Field[bool] `json:"default"`
 	// A description of the policy.
 	Description param.Field[string] `json:"description"`
 	// If the `dns_server` field of a fallback domain is not present, the client will
@@ -217,6 +217,16 @@ type DevicePolicyCustomNewParams struct {
 	// The size of the subnet for the local access network. Note that this field is
 	// omitted from the response if null or unset.
 	LANAllowSubnetSize param.Field[float64] `json:"lan_allow_subnet_size"`
+	// The wirefilter expression to match devices. Available values: "identity.email",
+	// "identity.groups.id", "identity.groups.name", "identity.groups.email",
+	// "identity.service_token_uuid", "identity.saml_attributes", "network", "os.name",
+	// "os.version".
+	Match param.Field[string] `json:"match"`
+	// The precedence of the policy. Lower values indicate higher precedence. Policies
+	// will be evaluated in ascending order of this field.
+	Precedence param.Field[float64] `json:"precedence"`
+	// The client type to which the device settings profile applies.
+	ProfileType param.Field[DevicePolicyCustomNewParamsProfileType] `json:"profile_type"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS param.Field[bool] `json:"register_interface_ip_with_dns"`
@@ -230,12 +240,44 @@ type DevicePolicyCustomNewParams struct {
 	SwitchLocked param.Field[bool] `json:"switch_locked"`
 	// Determines which tunnel protocol to use.
 	TunnelProtocol param.Field[string] `json:"tunnel_protocol"`
+	// Determines whether uninstalling the WARP client requires an override code.
+	// (Windows only).
+	UninstallProtection param.Field[bool] `json:"uninstall_protection"`
 	// Virtual network access settings for the device.
 	VirtualNetworks param.Field[DevicePolicyCustomNewParamsVirtualNetworks] `json:"virtual_networks"`
 }
 
 func (r DevicePolicyCustomNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Browser extension proxy settings. Required when profile_type is
+// browser_extension and invalid for WARP profiles.
+type DevicePolicyCustomNewParamsBrowserExtensionConfig struct {
+	// Whether the user may disable the browser extension proxy.
+	ProxyControl param.Field[DevicePolicyCustomNewParamsBrowserExtensionConfigProxyControl] `json:"proxy_control" api:"required"`
+	// Whether the browser extension proxy is active.
+	ProxyEnabled param.Field[bool] `json:"proxy_enabled" api:"required"`
+}
+
+func (r DevicePolicyCustomNewParamsBrowserExtensionConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether the user may disable the browser extension proxy.
+type DevicePolicyCustomNewParamsBrowserExtensionConfigProxyControl string
+
+const (
+	DevicePolicyCustomNewParamsBrowserExtensionConfigProxyControlUnlocked DevicePolicyCustomNewParamsBrowserExtensionConfigProxyControl = "unlocked"
+	DevicePolicyCustomNewParamsBrowserExtensionConfigProxyControlLocked   DevicePolicyCustomNewParamsBrowserExtensionConfigProxyControl = "locked"
+)
+
+func (r DevicePolicyCustomNewParamsBrowserExtensionConfigProxyControl) IsKnown() bool {
+	switch r {
+	case DevicePolicyCustomNewParamsBrowserExtensionConfigProxyControlUnlocked, DevicePolicyCustomNewParamsBrowserExtensionConfigProxyControlLocked:
+		return true
+	}
+	return false
 }
 
 type DevicePolicyCustomNewParamsDNSSearchSuffix struct {
@@ -264,10 +306,29 @@ type DevicePolicyCustomNewParamsGlobalAcceleration struct {
 	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
 	// or masque_endpoints must be provided.
 	WireguardEndpoints param.Field[[]string] `json:"wireguard_endpoints" api:"required"`
+	// Automatically switch Global Acceleration regions based on device location.
+	// Defaults to false when not provided.
+	Autoswitch param.Field[bool] `json:"autoswitch"`
 }
 
 func (r DevicePolicyCustomNewParamsGlobalAcceleration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// The client type to which the device settings profile applies.
+type DevicePolicyCustomNewParamsProfileType string
+
+const (
+	DevicePolicyCustomNewParamsProfileTypeWARP             DevicePolicyCustomNewParamsProfileType = "warp"
+	DevicePolicyCustomNewParamsProfileTypeBrowserExtension DevicePolicyCustomNewParamsProfileType = "browser_extension"
+)
+
+func (r DevicePolicyCustomNewParamsProfileType) IsKnown() bool {
+	switch r {
+	case DevicePolicyCustomNewParamsProfileTypeWARP, DevicePolicyCustomNewParamsProfileTypeBrowserExtension:
+		return true
+	}
+	return false
 }
 
 type DevicePolicyCustomNewParamsServiceModeV2 struct {
@@ -339,6 +400,33 @@ func (r DevicePolicyCustomNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DevicePolicyCustomListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Filter profiles by client type. When omitted, only WARP profiles are returned.
+	ProfileType param.Field[DevicePolicyCustomListParamsProfileType] `query:"profile_type"`
+}
+
+// URLQuery serializes [DevicePolicyCustomListParams]'s query parameters as
+// `url.Values`.
+func (r DevicePolicyCustomListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Filter profiles by client type. When omitted, only WARP profiles are returned.
+type DevicePolicyCustomListParamsProfileType string
+
+const (
+	DevicePolicyCustomListParamsProfileTypeWARP             DevicePolicyCustomListParamsProfileType = "warp"
+	DevicePolicyCustomListParamsProfileTypeBrowserExtension DevicePolicyCustomListParamsProfileType = "browser_extension"
+)
+
+func (r DevicePolicyCustomListParamsProfileType) IsKnown() bool {
+	switch r {
+	case DevicePolicyCustomListParamsProfileTypeWARP, DevicePolicyCustomListParamsProfileTypeBrowserExtension:
+		return true
+	}
+	return false
 }
 
 type DevicePolicyCustomDeleteParams struct {
@@ -356,8 +444,14 @@ type DevicePolicyCustomEditParams struct {
 	AllowedToLeave param.Field[bool] `json:"allowed_to_leave"`
 	// The amount of time in seconds to reconnect after having been disabled.
 	AutoConnect param.Field[float64] `json:"auto_connect"`
+	// Browser extension proxy settings. Required when profile_type is
+	// browser_extension and invalid for WARP profiles.
+	BrowserExtensionConfig param.Field[DevicePolicyCustomEditParamsBrowserExtensionConfig] `json:"browser_extension_config"`
 	// Turn on the captive portal after the specified amount of time.
 	CaptivePortal param.Field[float64] `json:"captive_portal"`
+	// Whether the policy is the account default. WARP group profiles cannot set this
+	// field.
+	Default param.Field[bool] `json:"default"`
 	// A description of the policy.
 	Description param.Field[string] `json:"description"`
 	// If the `dns_server` field of a fallback domain is not present, the client will
@@ -400,6 +494,8 @@ type DevicePolicyCustomEditParams struct {
 	// The precedence of the policy. Lower values indicate higher precedence. Policies
 	// will be evaluated in ascending order of this field.
 	Precedence param.Field[float64] `json:"precedence"`
+	// The client type to which the device settings profile applies.
+	ProfileType param.Field[DevicePolicyCustomEditParamsProfileType] `json:"profile_type"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS param.Field[bool] `json:"register_interface_ip_with_dns"`
@@ -413,12 +509,44 @@ type DevicePolicyCustomEditParams struct {
 	SwitchLocked param.Field[bool] `json:"switch_locked"`
 	// Determines which tunnel protocol to use.
 	TunnelProtocol param.Field[string] `json:"tunnel_protocol"`
+	// Determines whether uninstalling the WARP client requires an override code.
+	// (Windows only).
+	UninstallProtection param.Field[bool] `json:"uninstall_protection"`
 	// Virtual network access settings for the device.
 	VirtualNetworks param.Field[DevicePolicyCustomEditParamsVirtualNetworks] `json:"virtual_networks"`
 }
 
 func (r DevicePolicyCustomEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Browser extension proxy settings. Required when profile_type is
+// browser_extension and invalid for WARP profiles.
+type DevicePolicyCustomEditParamsBrowserExtensionConfig struct {
+	// Whether the user may disable the browser extension proxy.
+	ProxyControl param.Field[DevicePolicyCustomEditParamsBrowserExtensionConfigProxyControl] `json:"proxy_control" api:"required"`
+	// Whether the browser extension proxy is active.
+	ProxyEnabled param.Field[bool] `json:"proxy_enabled" api:"required"`
+}
+
+func (r DevicePolicyCustomEditParamsBrowserExtensionConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether the user may disable the browser extension proxy.
+type DevicePolicyCustomEditParamsBrowserExtensionConfigProxyControl string
+
+const (
+	DevicePolicyCustomEditParamsBrowserExtensionConfigProxyControlUnlocked DevicePolicyCustomEditParamsBrowserExtensionConfigProxyControl = "unlocked"
+	DevicePolicyCustomEditParamsBrowserExtensionConfigProxyControlLocked   DevicePolicyCustomEditParamsBrowserExtensionConfigProxyControl = "locked"
+)
+
+func (r DevicePolicyCustomEditParamsBrowserExtensionConfigProxyControl) IsKnown() bool {
+	switch r {
+	case DevicePolicyCustomEditParamsBrowserExtensionConfigProxyControlUnlocked, DevicePolicyCustomEditParamsBrowserExtensionConfigProxyControlLocked:
+		return true
+	}
+	return false
 }
 
 type DevicePolicyCustomEditParamsDNSSearchSuffix struct {
@@ -447,10 +575,29 @@ type DevicePolicyCustomEditParamsGlobalAcceleration struct {
 	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
 	// or masque_endpoints must be provided.
 	WireguardEndpoints param.Field[[]string] `json:"wireguard_endpoints" api:"required"`
+	// Automatically switch Global Acceleration regions based on device location.
+	// Defaults to false when not provided.
+	Autoswitch param.Field[bool] `json:"autoswitch"`
 }
 
 func (r DevicePolicyCustomEditParamsGlobalAcceleration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// The client type to which the device settings profile applies.
+type DevicePolicyCustomEditParamsProfileType string
+
+const (
+	DevicePolicyCustomEditParamsProfileTypeWARP             DevicePolicyCustomEditParamsProfileType = "warp"
+	DevicePolicyCustomEditParamsProfileTypeBrowserExtension DevicePolicyCustomEditParamsProfileType = "browser_extension"
+)
+
+func (r DevicePolicyCustomEditParamsProfileType) IsKnown() bool {
+	switch r {
+	case DevicePolicyCustomEditParamsProfileTypeWARP, DevicePolicyCustomEditParamsProfileTypeBrowserExtension:
+		return true
+	}
+	return false
 }
 
 type DevicePolicyCustomEditParamsServiceModeV2 struct {

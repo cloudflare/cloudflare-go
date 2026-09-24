@@ -56,8 +56,8 @@ func NewDispatchNamespaceScriptService(opts ...option.RequestOption) (r *Dispatc
 	return
 }
 
-// Upload a worker module to a Workers for Platforms namespace. You can find more
-// about the multipart metadata on our docs:
+// Upload a Workers for Platforms script module to a dispatch namespace. You can
+// find more about the multipart metadata on our docs:
 // https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/.
 func (r *DispatchNamespaceScriptService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptUpdateParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptUpdateResponse, err error) {
 	var env DispatchNamespaceScriptUpdateResponseEnvelope
@@ -83,8 +83,8 @@ func (r *DispatchNamespaceScriptService) Update(ctx context.Context, dispatchNam
 	return res, nil
 }
 
-// Delete a worker from a Workers for Platforms namespace. This call has no
-// response body on a successful delete.
+// Delete a script from a Workers for Platforms dispatch namespace. This call has
+// no response body on a successful delete.
 func (r *DispatchNamespaceScriptService) Delete(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptDeleteParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptDeleteResponse, err error) {
 	var env DispatchNamespaceScriptDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -109,7 +109,8 @@ func (r *DispatchNamespaceScriptService) Delete(ctx context.Context, dispatchNam
 	return res, nil
 }
 
-// Fetch information about a script uploaded to a Workers for Platforms namespace.
+// Fetch information about a script uploaded to a Workers for Platforms dispatch
+// namespace.
 func (r *DispatchNamespaceScriptService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptGetParams, opts ...option.RequestOption) (res *Script, err error) {
 	var env DispatchNamespaceScriptGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -994,6 +995,8 @@ type DispatchNamespaceScriptUpdateResponseObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate float64 `json:"head_sampling_rate" api:"nullable"`
+	// Real-time Issues settings for the Worker.
+	Issues DispatchNamespaceScriptUpdateResponseObservabilityIssues `json:"issues" api:"nullable"`
 	// Log settings for the Worker.
 	Logs DispatchNamespaceScriptUpdateResponseObservabilityLogs `json:"logs" api:"nullable"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -1008,6 +1011,7 @@ type DispatchNamespaceScriptUpdateResponseObservability struct {
 type dispatchNamespaceScriptUpdateResponseObservabilityJSON struct {
 	Enabled           apijson.Field
 	HeadSamplingRate  apijson.Field
+	Issues            apijson.Field
 	Logs              apijson.Field
 	RedactQueryString apijson.Field
 	Traces            apijson.Field
@@ -1020,6 +1024,30 @@ func (r *DispatchNamespaceScriptUpdateResponseObservability) UnmarshalJSON(data 
 }
 
 func (r dispatchNamespaceScriptUpdateResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
+// Real-time Issues settings for the Worker.
+type DispatchNamespaceScriptUpdateResponseObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled bool                                                         `json:"enabled"`
+	JSON    dispatchNamespaceScriptUpdateResponseObservabilityIssuesJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptUpdateResponseObservabilityIssuesJSON contains the JSON
+// metadata for the struct
+// [DispatchNamespaceScriptUpdateResponseObservabilityIssues]
+type dispatchNamespaceScriptUpdateResponseObservabilityIssuesJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptUpdateResponseObservabilityIssues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptUpdateResponseObservabilityIssuesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1490,6 +1518,11 @@ type DispatchNamespaceScriptUpdateParamsMetadataAssetsConfig struct {
 	// The contents of a \_redirects file (used to apply redirects or proxy paths ahead
 	// of asset serving).
 	Redirects param.Field[string] `json:"_redirects"`
+	// The public URL path prefix under which assets are served. A null request value
+	// resets it to `/`; responses represent the root as `/`. All versions in a gradual
+	// deployment must use the same canonical value. To change it, first deploy the
+	// version containing the change at 100%.
+	BasePath param.Field[string] `json:"base_path"`
 	// Determines the redirects and rewrites of requests for HTML content.
 	HTMLHandling param.Field[DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigHTMLHandling] `json:"html_handling"`
 	// Determines the response when a request does not match a static asset, and there
@@ -1649,6 +1682,8 @@ type DispatchNamespaceScriptUpdateParamsMetadataBinding struct {
 	Simple    param.Field[interface{}] `json:"simple"`
 	// ID of the store containing the secret.
 	StoreID param.Field[string] `json:"store_id"`
+	// ID of a K2 stream owned by the account deploying the Worker.
+	Stream param.Field[string] `json:"stream"`
 	// The text value to use.
 	Text param.Field[string] `json:"text"`
 	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
@@ -1692,6 +1727,7 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBinding) implementsDispatchNa
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCertificate],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPipelines],
+// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindK2],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindRatelimit],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindR2Bucket],
@@ -2390,6 +2426,38 @@ func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindPip
 	return false
 }
 
+// A K2 stream binding. Available only to accounts enabled for K2.
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindK2 struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name" api:"required"`
+	// ID of a K2 stream owned by the account deploying the Worker.
+	Stream param.Field[string] `json:"stream" api:"required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindK2Type] `json:"type" api:"required"`
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindK2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindK2) implementsDispatchNamespaceScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindK2Type string
+
+const (
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindK2TypeK2 DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindK2Type = "k2"
+)
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindK2Type) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindK2TypeK2:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -3047,6 +3115,7 @@ const (
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMTLSCertificate        DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "mtls_certificate"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePlainText              DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "plain_text"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePipelines              DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "pipelines"
+	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeK2                     DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "k2"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeQueue                  DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "queue"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeRatelimit              DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "ratelimit"
 	DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeR2Bucket               DispatchNamespaceScriptUpdateParamsMetadataBindingsType = "r2_bucket"
@@ -3067,7 +3136,7 @@ const (
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataBindingsType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAISearch, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAISearchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMessaging, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeBrowser, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDataBlob, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeInherit, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeImages, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMedia, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePipelines, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeRatelimit, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSendEmail, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeTextBlob, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVersionMetadata, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeFlagship, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretKey, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeWorkflow, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeWasmModule, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVPCService, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVPCNetwork:
+	case DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAI, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAISearch, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAISearchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMessaging, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAnalyticsEngine, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeAssets, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeBrowser, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeD1, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDataBlob, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDispatchNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeDurableObjectNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeHyperdrive, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeInherit, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeImages, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeJson, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeKVNamespace, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMedia, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeMTLSCertificate, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePlainText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypePipelines, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeK2, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeQueue, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeRatelimit, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeR2Bucket, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretText, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSendEmail, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeService, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeTextBlob, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVectorize, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVersionMetadata, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretsStoreSecret, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeFlagship, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeSecretKey, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeWorkflow, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeWasmModule, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVPCService, DispatchNamespaceScriptUpdateParamsMetadataBindingsTypeVPCNetwork:
 		return true
 	}
 	return false
@@ -3934,6 +4003,8 @@ type DispatchNamespaceScriptUpdateParamsMetadataObservability struct {
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+	// Real-time Issues settings for the Worker.
+	Issues param.Field[DispatchNamespaceScriptUpdateParamsMetadataObservabilityIssues] `json:"issues"`
 	// Log settings for the Worker.
 	Logs param.Field[DispatchNamespaceScriptUpdateParamsMetadataObservabilityLogs] `json:"logs"`
 	// Whether query strings are removed from request URLs in logs and traces.
@@ -3943,6 +4014,16 @@ type DispatchNamespaceScriptUpdateParamsMetadataObservability struct {
 }
 
 func (r DispatchNamespaceScriptUpdateParamsMetadataObservability) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Real-time Issues settings for the Worker.
+type DispatchNamespaceScriptUpdateParamsMetadataObservabilityIssues struct {
+	// Whether real-time Issues are enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataObservabilityIssues) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -4322,9 +4403,10 @@ func (r DispatchNamespaceScriptUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type DispatchNamespaceScriptDeleteParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// If set to true, delete will not be stopped by associated service binding,
-	// durable object, or other binding. Any of these associated bindings/durable
-	// objects will be deleted along with the script.
+	// If true, delete the script even when other Workers still reference it. Service
+	// bindings in those Workers may be left broken. Durable Object namespaces
+	// implemented by the deleted script are deleted even if other Workers reference
+	// them.
 	Force param.Field[bool] `query:"force"`
 }
 

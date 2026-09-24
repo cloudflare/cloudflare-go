@@ -182,23 +182,26 @@ type WorkflowListResponse struct {
 	ScriptName  string                         `json:"script_name" api:"required"`
 	TriggeredOn time.Time                      `json:"triggered_on" api:"required,nullable" format:"date-time"`
 	Schedules   []WorkflowListResponseSchedule `json:"schedules"`
-	JSON        workflowListResponseJSON       `json:"-"`
+	// Whether the bound Worker was deleted, leaving this Workflow inactive.
+	ScriptDeleted bool                     `json:"script_deleted"`
+	JSON          workflowListResponseJSON `json:"-"`
 }
 
 // workflowListResponseJSON contains the JSON metadata for the struct
 // [WorkflowListResponse]
 type workflowListResponseJSON struct {
-	ID          apijson.Field
-	ClassName   apijson.Field
-	CreatedOn   apijson.Field
-	Instances   apijson.Field
-	ModifiedOn  apijson.Field
-	Name        apijson.Field
-	ScriptName  apijson.Field
-	TriggeredOn apijson.Field
-	Schedules   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	ClassName     apijson.Field
+	CreatedOn     apijson.Field
+	Instances     apijson.Field
+	ModifiedOn    apijson.Field
+	Name          apijson.Field
+	ScriptName    apijson.Field
+	TriggeredOn   apijson.Field
+	Schedules     apijson.Field
+	ScriptDeleted apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *WorkflowListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -279,23 +282,26 @@ type WorkflowGetResponse struct {
 	ScriptName  string                        `json:"script_name" api:"required"`
 	TriggeredOn time.Time                     `json:"triggered_on" api:"required,nullable" format:"date-time"`
 	Schedules   []WorkflowGetResponseSchedule `json:"schedules"`
-	JSON        workflowGetResponseJSON       `json:"-"`
+	// Whether the bound Worker was deleted, leaving this Workflow inactive.
+	ScriptDeleted bool                    `json:"script_deleted"`
+	JSON          workflowGetResponseJSON `json:"-"`
 }
 
 // workflowGetResponseJSON contains the JSON metadata for the struct
 // [WorkflowGetResponse]
 type workflowGetResponseJSON struct {
-	ID          apijson.Field
-	ClassName   apijson.Field
-	CreatedOn   apijson.Field
-	Instances   apijson.Field
-	ModifiedOn  apijson.Field
-	Name        apijson.Field
-	ScriptName  apijson.Field
-	TriggeredOn apijson.Field
-	Schedules   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	ClassName     apijson.Field
+	CreatedOn     apijson.Field
+	Instances     apijson.Field
+	ModifiedOn    apijson.Field
+	Name          apijson.Field
+	ScriptName    apijson.Field
+	TriggeredOn   apijson.Field
+	Schedules     apijson.Field
+	ScriptDeleted apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *WorkflowGetResponse) UnmarshalJSON(data []byte) (err error) {

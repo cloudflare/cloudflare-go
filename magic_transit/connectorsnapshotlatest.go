@@ -771,7 +771,11 @@ type ConnectorSnapshotLatestListResponseItemsInterface struct {
 	// Name of the network interface
 	Name string `json:"name" api:"required"`
 	// UP/DOWN state of the network interface
-	Operstate   string                                                        `json:"operstate" api:"required"`
+	Operstate string `json:"operstate" api:"required"`
+	// Comma-separated list of reasons for health score
+	HealthReason string `json:"health_reason"`
+	// Aggregate health score (0-100)
+	HealthScore float64                                                       `json:"health_score"`
 	IPAddresses []ConnectorSnapshotLatestListResponseItemsInterfacesIPAddress `json:"ip_addresses"`
 	// Speed of the network interface (bits per second)
 	Speed float64                                               `json:"speed"`
@@ -781,12 +785,14 @@ type ConnectorSnapshotLatestListResponseItemsInterface struct {
 // connectorSnapshotLatestListResponseItemsInterfaceJSON contains the JSON metadata
 // for the struct [ConnectorSnapshotLatestListResponseItemsInterface]
 type connectorSnapshotLatestListResponseItemsInterfaceJSON struct {
-	Name        apijson.Field
-	Operstate   apijson.Field
-	IPAddresses apijson.Field
-	Speed       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Name         apijson.Field
+	Operstate    apijson.Field
+	HealthReason apijson.Field
+	HealthScore  apijson.Field
+	IPAddresses  apijson.Field
+	Speed        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *ConnectorSnapshotLatestListResponseItemsInterface) UnmarshalJSON(data []byte) (err error) {

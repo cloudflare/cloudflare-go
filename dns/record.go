@@ -282,15 +282,15 @@ func (r *RecordService) Import(ctx context.Context, params RecordImportParams, o
 // and
 // [/scan/review](https://developers.cloudflare.com/api/resources/dns/subresources/records/methods/scan/review)
 // endpoints instead.
-func (r *RecordService) Scan(ctx context.Context, params RecordScanParams, opts ...option.RequestOption) (res *RecordScanResponse, err error) {
+func (r *RecordService) Scan(ctx context.Context, body RecordScanParams, opts ...option.RequestOption) (res *RecordScanResponse, err error) {
 	var env RecordScanResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.ZoneID.Value == "" {
+	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("zones/%s/dns_records/scan", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	path := fmt.Sprintf("zones/%s/dns_records/scan", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -8873,11 +8873,6 @@ func (r RecordImportResponseEnvelopeSuccess) IsKnown() bool {
 type RecordScanParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-	Body   interface{}         `json:"body" api:"required"`
-}
-
-func (r RecordScanParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type RecordScanResponseEnvelope struct {

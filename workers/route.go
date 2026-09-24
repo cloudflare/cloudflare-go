@@ -52,7 +52,7 @@ func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...o
 	return res, nil
 }
 
-// Updates the URL pattern or Worker associated with a route.
+// Replaces the URL pattern or Worker associated with a Worker route.
 func (r *RouteService) Update(ctx context.Context, routeID string, params RouteUpdateParams, opts ...option.RequestOption) (res *RouteUpdateResponse, err error) {
 	var env RouteUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -73,7 +73,7 @@ func (r *RouteService) Update(ctx context.Context, routeID string, params RouteU
 	return res, nil
 }
 
-// Returns routes for a zone.
+// Returns Worker routes for a zone.
 func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RouteListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -95,12 +95,12 @@ func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...
 	return res, nil
 }
 
-// Returns routes for a zone.
+// Returns Worker routes for a zone.
 func (r *RouteService) ListAutoPaging(ctx context.Context, query RouteListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RouteListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Deletes a route.
+// Deletes a Worker route.
 func (r *RouteService) Delete(ctx context.Context, routeID string, body RouteDeleteParams, opts ...option.RequestOption) (res *RouteDeleteResponse, err error) {
 	var env RouteDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -121,7 +121,7 @@ func (r *RouteService) Delete(ctx context.Context, routeID string, body RouteDel
 	return res, nil
 }
 
-// Returns information about a route, including URL pattern and Worker.
+// Returns information about a Worker route, including URL pattern and Worker.
 func (r *RouteService) Get(ctx context.Context, routeID string, query RouteGetParams, opts ...option.RequestOption) (res *RouteGetResponse, err error) {
 	var env RouteGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

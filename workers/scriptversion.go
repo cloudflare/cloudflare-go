@@ -97,7 +97,7 @@ func (r *ScriptVersionService) ListAutoPaging(ctx context.Context, scriptName st
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, scriptName, params, opts...))
 }
 
-// Retrieves detailed information about a specific version of a Workers script.
+// Retrieves detailed information about a specific version of a Worker script.
 func (r *ScriptVersionService) Get(ctx context.Context, scriptName string, versionID string, query ScriptVersionGetParams, opts ...option.RequestOption) (res *ScriptVersionGetResponse, err error) {
 	var env ScriptVersionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -2630,6 +2630,8 @@ type ScriptVersionNewParamsMetadataBinding struct {
 	Simple    param.Field[interface{}] `json:"simple"`
 	// ID of the store containing the secret.
 	StoreID param.Field[string] `json:"store_id"`
+	// ID of a K2 stream owned by the account deploying the Worker.
+	Stream param.Field[string] `json:"stream"`
 	// The text value to use.
 	Text param.Field[string] `json:"text"`
 	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
@@ -2673,6 +2675,7 @@ func (r ScriptVersionNewParamsMetadataBinding) implementsScriptVersionNewParamsM
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCertificate],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainText],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPipelines],
+// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindK2],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueue],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindRatelimit],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindR2Bucket],
@@ -3371,6 +3374,38 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPipelinesType) I
 	return false
 }
 
+// A K2 stream binding. Available only to accounts enabled for K2.
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindK2 struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name" api:"required"`
+	// ID of a K2 stream owned by the account deploying the Worker.
+	Stream param.Field[string] `json:"stream" api:"required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindK2Type] `json:"type" api:"required"`
+}
+
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindK2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindK2) implementsScriptVersionNewParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindK2Type string
+
+const (
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindK2TypeK2 ScriptVersionNewParamsMetadataBindingsWorkersBindingKindK2Type = "k2"
+)
+
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindK2Type) IsKnown() bool {
+	switch r {
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindK2TypeK2:
+		return true
+	}
+	return false
+}
+
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindQueue struct {
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -4028,6 +4063,7 @@ const (
 	ScriptVersionNewParamsMetadataBindingsTypeMTLSCertificate        ScriptVersionNewParamsMetadataBindingsType = "mtls_certificate"
 	ScriptVersionNewParamsMetadataBindingsTypePlainText              ScriptVersionNewParamsMetadataBindingsType = "plain_text"
 	ScriptVersionNewParamsMetadataBindingsTypePipelines              ScriptVersionNewParamsMetadataBindingsType = "pipelines"
+	ScriptVersionNewParamsMetadataBindingsTypeK2                     ScriptVersionNewParamsMetadataBindingsType = "k2"
 	ScriptVersionNewParamsMetadataBindingsTypeQueue                  ScriptVersionNewParamsMetadataBindingsType = "queue"
 	ScriptVersionNewParamsMetadataBindingsTypeRatelimit              ScriptVersionNewParamsMetadataBindingsType = "ratelimit"
 	ScriptVersionNewParamsMetadataBindingsTypeR2Bucket               ScriptVersionNewParamsMetadataBindingsType = "r2_bucket"
@@ -4048,7 +4084,7 @@ const (
 
 func (r ScriptVersionNewParamsMetadataBindingsType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsTypeAI, ScriptVersionNewParamsMetadataBindingsTypeAISearch, ScriptVersionNewParamsMetadataBindingsTypeAISearchNamespace, ScriptVersionNewParamsMetadataBindingsTypeMessaging, ScriptVersionNewParamsMetadataBindingsTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsTypeAssets, ScriptVersionNewParamsMetadataBindingsTypeBrowser, ScriptVersionNewParamsMetadataBindingsTypeD1, ScriptVersionNewParamsMetadataBindingsTypeDataBlob, ScriptVersionNewParamsMetadataBindingsTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsTypeInherit, ScriptVersionNewParamsMetadataBindingsTypeImages, ScriptVersionNewParamsMetadataBindingsTypeJson, ScriptVersionNewParamsMetadataBindingsTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsTypeMedia, ScriptVersionNewParamsMetadataBindingsTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsTypePlainText, ScriptVersionNewParamsMetadataBindingsTypePipelines, ScriptVersionNewParamsMetadataBindingsTypeQueue, ScriptVersionNewParamsMetadataBindingsTypeRatelimit, ScriptVersionNewParamsMetadataBindingsTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsTypeSecretText, ScriptVersionNewParamsMetadataBindingsTypeSendEmail, ScriptVersionNewParamsMetadataBindingsTypeService, ScriptVersionNewParamsMetadataBindingsTypeTextBlob, ScriptVersionNewParamsMetadataBindingsTypeVectorize, ScriptVersionNewParamsMetadataBindingsTypeVersionMetadata, ScriptVersionNewParamsMetadataBindingsTypeSecretsStoreSecret, ScriptVersionNewParamsMetadataBindingsTypeFlagship, ScriptVersionNewParamsMetadataBindingsTypeSecretKey, ScriptVersionNewParamsMetadataBindingsTypeWorkflow, ScriptVersionNewParamsMetadataBindingsTypeWasmModule, ScriptVersionNewParamsMetadataBindingsTypeVPCService, ScriptVersionNewParamsMetadataBindingsTypeVPCNetwork:
+	case ScriptVersionNewParamsMetadataBindingsTypeAI, ScriptVersionNewParamsMetadataBindingsTypeAISearch, ScriptVersionNewParamsMetadataBindingsTypeAISearchNamespace, ScriptVersionNewParamsMetadataBindingsTypeMessaging, ScriptVersionNewParamsMetadataBindingsTypeAnalyticsEngine, ScriptVersionNewParamsMetadataBindingsTypeAssets, ScriptVersionNewParamsMetadataBindingsTypeBrowser, ScriptVersionNewParamsMetadataBindingsTypeD1, ScriptVersionNewParamsMetadataBindingsTypeDataBlob, ScriptVersionNewParamsMetadataBindingsTypeDispatchNamespace, ScriptVersionNewParamsMetadataBindingsTypeDurableObjectNamespace, ScriptVersionNewParamsMetadataBindingsTypeHyperdrive, ScriptVersionNewParamsMetadataBindingsTypeInherit, ScriptVersionNewParamsMetadataBindingsTypeImages, ScriptVersionNewParamsMetadataBindingsTypeJson, ScriptVersionNewParamsMetadataBindingsTypeKVNamespace, ScriptVersionNewParamsMetadataBindingsTypeMedia, ScriptVersionNewParamsMetadataBindingsTypeMTLSCertificate, ScriptVersionNewParamsMetadataBindingsTypePlainText, ScriptVersionNewParamsMetadataBindingsTypePipelines, ScriptVersionNewParamsMetadataBindingsTypeK2, ScriptVersionNewParamsMetadataBindingsTypeQueue, ScriptVersionNewParamsMetadataBindingsTypeRatelimit, ScriptVersionNewParamsMetadataBindingsTypeR2Bucket, ScriptVersionNewParamsMetadataBindingsTypeSecretText, ScriptVersionNewParamsMetadataBindingsTypeSendEmail, ScriptVersionNewParamsMetadataBindingsTypeService, ScriptVersionNewParamsMetadataBindingsTypeTextBlob, ScriptVersionNewParamsMetadataBindingsTypeVectorize, ScriptVersionNewParamsMetadataBindingsTypeVersionMetadata, ScriptVersionNewParamsMetadataBindingsTypeSecretsStoreSecret, ScriptVersionNewParamsMetadataBindingsTypeFlagship, ScriptVersionNewParamsMetadataBindingsTypeSecretKey, ScriptVersionNewParamsMetadataBindingsTypeWorkflow, ScriptVersionNewParamsMetadataBindingsTypeWasmModule, ScriptVersionNewParamsMetadataBindingsTypeVPCService, ScriptVersionNewParamsMetadataBindingsTypeVPCNetwork:
 		return true
 	}
 	return false

@@ -30,7 +30,6 @@ func TestZoneTransferForceAXFRNew(t *testing.T) {
 	)
 	_, err := client.DNS.ZoneTransfers.ForceAXFR.New(context.TODO(), dns.ZoneTransferForceAXFRNewParams{
 		ZoneID: cloudflare.F("269d8f4853475ca241c4e730be286b20"),
-		Body:   map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

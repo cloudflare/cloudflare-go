@@ -71,6 +71,7 @@ func (r *SettingAccountService) Get(ctx context.Context, query SettingAccountGet
 }
 
 type SettingAccountEditResponse struct {
+	// Default settings for new zones created in this account.
 	ZoneDefaults SettingAccountEditResponseZoneDefaults `json:"zone_defaults" api:"required"`
 	// When enabled, forces all proxied DNS records in the account to behave as
 	// DNS-only at the edge, regardless of each record's individual proxy setting. Note
@@ -98,6 +99,7 @@ func (r settingAccountEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Default settings for new zones created in this account.
 type SettingAccountEditResponseZoneDefaults struct {
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.
@@ -281,6 +283,7 @@ func (r SettingAccountEditResponseZoneDefaultsZoneMode) IsKnown() bool {
 }
 
 type SettingAccountGetResponse struct {
+	// Default settings for new zones created in this account.
 	ZoneDefaults SettingAccountGetResponseZoneDefaults `json:"zone_defaults" api:"required"`
 	// When enabled, forces all proxied DNS records in the account to behave as
 	// DNS-only at the edge, regardless of each record's individual proxy setting. Note
@@ -308,6 +311,7 @@ func (r settingAccountGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Default settings for new zones created in this account.
 type SettingAccountGetResponseZoneDefaults struct {
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.
@@ -498,14 +502,16 @@ type SettingAccountEditParams struct {
 	// that this account-level override does not modify the records themselves; it only
 	// affects how they are served at the edge. See more on
 	// [Enforce DNS-only](https://developers.cloudflare.com/dns/proxy-status/enforce-dns-only).
-	EnforceDNSOnly param.Field[bool]                                 `json:"enforce_dns_only"`
-	ZoneDefaults   param.Field[SettingAccountEditParamsZoneDefaults] `json:"zone_defaults"`
+	EnforceDNSOnly param.Field[bool] `json:"enforce_dns_only"`
+	// Default settings for new zones created in this account.
+	ZoneDefaults param.Field[SettingAccountEditParamsZoneDefaults] `json:"zone_defaults"`
 }
 
 func (r SettingAccountEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Default settings for new zones created in this account.
 type SettingAccountEditParamsZoneDefaults struct {
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.

@@ -35,9 +35,9 @@ func NewAddressMapIPService(opts ...option.RequestOption) (r *AddressMapIPServic
 }
 
 // Add an IP from a prefix owned by the account to a particular address map.
-func (r *AddressMapIPService) Update(ctx context.Context, addressMapID string, ipAddress string, params AddressMapIPUpdateParams, opts ...option.RequestOption) (res *AddressMapIPUpdateResponse, err error) {
+func (r *AddressMapIPService) Update(ctx context.Context, addressMapID string, ipAddress string, body AddressMapIPUpdateParams, opts ...option.RequestOption) (res *AddressMapIPUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -49,8 +49,8 @@ func (r *AddressMapIPService) Update(ctx context.Context, addressMapID string, i
 		err = errors.New("missing required ip_address parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", params.AccountID, addressMapID, ipAddress)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", body.AccountID, addressMapID, ipAddress)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &res, opts...)
 	return res, err
 }
 
@@ -423,11 +423,6 @@ func (r addressMapIPDeleteResponseResultInfoJSON) RawJSON() string {
 type AddressMapIPUpdateParams struct {
 	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Body      interface{}         `json:"body" api:"required"`
-}
-
-func (r AddressMapIPUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type AddressMapIPDeleteParams struct {

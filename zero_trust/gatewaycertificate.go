@@ -104,10 +104,10 @@ func (r *GatewayCertificateService) Delete(ctx context.Context, certificateID st
 }
 
 // Bind a single Zero Trust certificate to the edge.
-func (r *GatewayCertificateService) Activate(ctx context.Context, certificateID string, params GatewayCertificateActivateParams, opts ...option.RequestOption) (res *GatewayCertificateActivateResponse, err error) {
+func (r *GatewayCertificateService) Activate(ctx context.Context, certificateID string, body GatewayCertificateActivateParams, opts ...option.RequestOption) (res *GatewayCertificateActivateResponse, err error) {
 	var env GatewayCertificateActivateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -115,8 +115,8 @@ func (r *GatewayCertificateService) Activate(ctx context.Context, certificateID 
 		err = errors.New("missing required certificate_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/gateway/certificates/%s/activate", params.AccountID, certificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/gateway/certificates/%s/activate", body.AccountID, certificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -125,10 +125,10 @@ func (r *GatewayCertificateService) Activate(ctx context.Context, certificateID 
 }
 
 // Unbind a single Zero Trust certificate from the edge.
-func (r *GatewayCertificateService) Deactivate(ctx context.Context, certificateID string, params GatewayCertificateDeactivateParams, opts ...option.RequestOption) (res *GatewayCertificateDeactivateResponse, err error) {
+func (r *GatewayCertificateService) Deactivate(ctx context.Context, certificateID string, body GatewayCertificateDeactivateParams, opts ...option.RequestOption) (res *GatewayCertificateDeactivateResponse, err error) {
 	var env GatewayCertificateDeactivateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -136,8 +136,8 @@ func (r *GatewayCertificateService) Deactivate(ctx context.Context, certificateI
 		err = errors.New("missing required certificate_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/gateway/certificates/%s/deactivate", params.AccountID, certificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/gateway/certificates/%s/deactivate", body.AccountID, certificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -821,11 +821,6 @@ func (r GatewayCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayCertificateActivateParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Body      interface{}         `json:"body" api:"required"`
-}
-
-func (r GatewayCertificateActivateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type GatewayCertificateActivateResponseEnvelope struct {
@@ -873,11 +868,6 @@ func (r GatewayCertificateActivateResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayCertificateDeactivateParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Body      interface{}         `json:"body" api:"required"`
-}
-
-func (r GatewayCertificateDeactivateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type GatewayCertificateDeactivateResponseEnvelope struct {

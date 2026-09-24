@@ -45,8 +45,8 @@ func TestStreamNewWithOptionalParams(t *testing.T) {
 			}),
 		}),
 		Schema: cloudflare.F(pipelines.StreamNewParamsSchema{
-			Fields: cloudflare.F([]pipelines.StreamNewParamsSchemaFieldUnion{pipelines.StreamNewParamsSchemaFieldsInt32{
-				Type:        cloudflare.F(pipelines.StreamNewParamsSchemaFieldsInt32TypeInt32),
+			Fields: cloudflare.F([]pipelines.SourceFieldUnionParam{pipelines.SourceFieldInt32Param{
+				Type:        cloudflare.F(pipelines.SourceFieldInt32TypeInt32),
 				MetadataKey: cloudflare.F("metadata_key"),
 				Name:        cloudflare.F("name"),
 				Required:    cloudflare.F(true),

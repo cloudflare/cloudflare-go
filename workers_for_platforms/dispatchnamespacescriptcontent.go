@@ -39,7 +39,8 @@ func NewDispatchNamespaceScriptContentService(opts ...option.RequestOption) (r *
 	return
 }
 
-// Put script content for a script uploaded to a Workers for Platforms namespace.
+// Replace content for a script uploaded to a Workers for Platforms dispatch
+// namespace.
 func (r *DispatchNamespaceScriptContentService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptContentUpdateParams, opts ...option.RequestOption) (res *workers.Script, err error) {
 	var env DispatchNamespaceScriptContentUpdateResponseEnvelope
 	if params.CfWorkerBodyPart.Present {
@@ -70,7 +71,7 @@ func (r *DispatchNamespaceScriptContentService) Update(ctx context.Context, disp
 	return res, nil
 }
 
-// Fetch script content from a script uploaded to a Workers for Platforms
+// Fetch content from a script uploaded to a Workers for Platforms dispatch
 // namespace.
 func (r *DispatchNamespaceScriptContentService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptContentGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = slices.Concat(r.Options, opts)

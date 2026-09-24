@@ -21,6 +21,7 @@ TEST_PATHS=(
 	accounts/tokenpermissiongroup_test.go
 	accounts/tokenvalue_test.go
 	accounts/logaudit_test.go
+	accounts/entitlement_test.go
 	accounts/speedsettingtransformation_test.go
 	accounts/paymentmethod_test.go
 	accounts/payinvoice_test.go
@@ -56,6 +57,8 @@ TEST_PATHS=(
 	user/tokenvalue_test.go
 	zones/zone_test.go
 	zones/activationcheck_test.go
+	zones/observabilitytracingsetting_test.go
+	zones/observabilitytracingrule_test.go
 	zones/setting_test.go
 	zones/transformationsallowedorigin_test.go
 	zones/transformationsc2pa_test.go
@@ -66,6 +69,7 @@ TEST_PATHS=(
 	zones/subscription_test.go
 	zones/plan_test.go
 	zones/rateplan_test.go
+	zones/entitlement_test.go
 	zones/ctalerting_test.go
 	load_balancers/loadbalancer_test.go
 	load_balancers/monitor_test.go
@@ -342,6 +346,7 @@ TEST_PATHS=(
 	magic_transit/gretunnel_test.go
 	magic_transit/ipsectunnel_test.go
 	magic_transit/route_test.go
+	magic_transit/bgpfilterprofile_test.go
 	magic_transit/site_test.go
 	magic_transit/siteacl_test.go
 	magic_transit/sitelan_test.go
@@ -399,6 +404,8 @@ TEST_PATHS=(
 	registrar/registrationstatus_test.go
 	registrar/updatestatus_test.go
 	registrar/extension_test.go
+	registrar/transferin_test.go
+	registrar/transferinstatus_test.go
 	registrar_sandbox/registrarsandbox_test.go
 	registrar_sandbox/registration_test.go
 	registrar_sandbox/registrationstatus_test.go
@@ -531,6 +538,7 @@ TEST_PATHS=(
 	zero_trust/casbposturefindingtyperemediationtype_test.go
 	zero_trust/casbposturecontent_test.go
 	zero_trust/casbpostureremediationjob_test.go
+	zero_trust/casbposturepolicy_test.go
 	zero_trust/casbposturewebhook_test.go
 	zero_trust/casbposturewebhookjob_test.go
 	zero_trust/dexwarpchangeevent_test.go
@@ -770,6 +778,9 @@ TEST_PATHS=(
 	calls/turn_test.go
 	moq/relay_test.go
 	moq/relaytoken_test.go
+	managed_defense/vulnerabilitydiscoveryrepository_test.go
+	managed_defense/vulnerabilitydiscoveryscan_test.go
+	managed_defense/vulnerabilitydiscoveryreport_test.go
 	cloudforce_one/scanresult_test.go
 	cloudforce_one/scanconfig_test.go
 	cloudforce_one/binarystorage_test.go
@@ -855,6 +866,8 @@ TEST_PATHS=(
 	ai_security/customtopic_test.go
 	csam_scanner/csamscanner_test.go
 	abuse_reports/abusereport_test.go
+	abuse_reports/submitted_test.go
+	abuse_reports/submittedemail_test.go
 	abuse_reports/mitigation_test.go
 	ai/ai_test.go
 	ai/finetune_test.go
@@ -909,6 +922,7 @@ TEST_PATHS=(
 	token_validation/configuration_test.go
 	token_validation/configurationcredential_test.go
 	token_validation/rule_test.go
+	field_extractors/fieldextractor_test.go
 	usage_test.go
 	paginationauto_test.go
 	paginationmanual_test.go

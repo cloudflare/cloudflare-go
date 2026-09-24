@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
@@ -18,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v7/shared"
-	"github.com/tidwall/gjson"
 )
 
 // WAFPackageService contains methods and other services that help with interacting
@@ -87,7 +85,8 @@ func (r *WAFPackageService) ListAutoPaging(ctx context.Context, params WAFPackag
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
 //
 // Deprecated: deprecated
-func (r *WAFPackageService) Get(ctx context.Context, packageID string, query WAFPackageGetParams, opts ...option.RequestOption) (res *WAFPackageGetResponse, err error) {
+func (r *WAFPackageService) Get(ctx context.Context, packageID string, query WAFPackageGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
+	var env WAFPackageGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -98,161 +97,15 @@ func (r *WAFPackageService) Get(ctx context.Context, packageID string, query WAF
 		return nil, err
 	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s", query.ZoneID, packageID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return res, err
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
 }
 
 type WAFPackageListResponse = interface{}
-
-type WAFPackageGetResponse struct {
-	// This field can have the runtime type of [[]shared.ResponseInfo].
-	Errors interface{} `json:"errors"`
-	// This field can have the runtime type of [[]shared.ResponseInfo].
-	Messages interface{} `json:"messages"`
-	// This field can have the runtime type of [interface{}].
-	Result interface{} `json:"result"`
-	// Defines whether the API call was successful.
-	Success WAFPackageGetResponseSuccess `json:"success"`
-	JSON    wafPackageGetResponseJSON    `json:"-"`
-	union   WAFPackageGetResponseUnion
-}
-
-// wafPackageGetResponseJSON contains the JSON metadata for the struct
-// [WAFPackageGetResponse]
-type wafPackageGetResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r wafPackageGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *WAFPackageGetResponse) UnmarshalJSON(data []byte) (err error) {
-	*r = WAFPackageGetResponse{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [WAFPackageGetResponseUnion] interface which you can cast to
-// the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [WAFPackageGetResponseFirewallAPIResponseSingle], [WAFPackageGetResponseResult].
-func (r WAFPackageGetResponse) AsUnion() WAFPackageGetResponseUnion {
-	return r.union
-}
-
-// Union satisfied by [WAFPackageGetResponseFirewallAPIResponseSingle] or
-// [WAFPackageGetResponseResult].
-type WAFPackageGetResponseUnion interface {
-	implementsWAFPackageGetResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*WAFPackageGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(WAFPackageGetResponseFirewallAPIResponseSingle{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(WAFPackageGetResponseResult{}),
-		},
-	)
-}
-
-type WAFPackageGetResponseFirewallAPIResponseSingle struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	Result   interface{}           `json:"result" api:"required"`
-	// Defines whether the API call was successful.
-	Success WAFPackageGetResponseFirewallAPIResponseSingleSuccess `json:"success" api:"required"`
-	JSON    wafPackageGetResponseFirewallAPIResponseSingleJSON    `json:"-"`
-}
-
-// wafPackageGetResponseFirewallAPIResponseSingleJSON contains the JSON metadata
-// for the struct [WAFPackageGetResponseFirewallAPIResponseSingle]
-type wafPackageGetResponseFirewallAPIResponseSingleJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageGetResponseFirewallAPIResponseSingle) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageGetResponseFirewallAPIResponseSingleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r WAFPackageGetResponseFirewallAPIResponseSingle) implementsWAFPackageGetResponse() {}
-
-// Defines whether the API call was successful.
-type WAFPackageGetResponseFirewallAPIResponseSingleSuccess bool
-
-const (
-	WAFPackageGetResponseFirewallAPIResponseSingleSuccessTrue WAFPackageGetResponseFirewallAPIResponseSingleSuccess = true
-)
-
-func (r WAFPackageGetResponseFirewallAPIResponseSingleSuccess) IsKnown() bool {
-	switch r {
-	case WAFPackageGetResponseFirewallAPIResponseSingleSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type WAFPackageGetResponseResult struct {
-	Result interface{}                     `json:"result"`
-	JSON   wafPackageGetResponseResultJSON `json:"-"`
-}
-
-// wafPackageGetResponseResultJSON contains the JSON metadata for the struct
-// [WAFPackageGetResponseResult]
-type wafPackageGetResponseResultJSON struct {
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageGetResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageGetResponseResultJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r WAFPackageGetResponseResult) implementsWAFPackageGetResponse() {}
-
-// Defines whether the API call was successful.
-type WAFPackageGetResponseSuccess bool
-
-const (
-	WAFPackageGetResponseSuccessTrue WAFPackageGetResponseSuccess = true
-)
-
-func (r WAFPackageGetResponseSuccess) IsKnown() bool {
-	switch r {
-	case WAFPackageGetResponseSuccessTrue:
-		return true
-	}
-	return false
-}
 
 type WAFPackageListParams struct {
 	// Defines an identifier.
@@ -331,4 +184,47 @@ func (r WAFPackageListParamsOrder) IsKnown() bool {
 type WAFPackageGetParams struct {
 	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+}
+
+type WAFPackageGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Result   interface{}           `json:"result" api:"required"`
+	// Defines whether the API call was successful.
+	Success WAFPackageGetResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    wafPackageGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// wafPackageGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [WAFPackageGetResponseEnvelope]
+type wafPackageGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WAFPackageGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r wafPackageGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Defines whether the API call was successful.
+type WAFPackageGetResponseEnvelopeSuccess bool
+
+const (
+	WAFPackageGetResponseEnvelopeSuccessTrue WAFPackageGetResponseEnvelopeSuccess = true
+)
+
+func (r WAFPackageGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WAFPackageGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

@@ -163,8 +163,9 @@ type Profile struct {
 	Description string `json:"description" api:"nullable"`
 	// This field can have the runtime type of [[]ProfileCustomProfileEntry],
 	// [[]ProfilePredefinedProfileEntry], [[]ProfileIntegrationProfileEntry].
-	Entries    interface{} `json:"entries"`
-	OCREnabled bool        `json:"ocr_enabled"`
+	Entries       interface{} `json:"entries"`
+	IntegrationID string      `json:"integration_id" format:"uuid"`
+	OCREnabled    bool        `json:"ocr_enabled"`
 	// Whether this profile can be accessed by anyone.
 	OpenAccess bool `json:"open_access"`
 	// This field can have the runtime type of
@@ -193,6 +194,7 @@ type profileJSON struct {
 	DataTags            apijson.Field
 	Description         apijson.Field
 	Entries             apijson.Field
+	IntegrationID       apijson.Field
 	OCREnabled          apijson.Field
 	OpenAccess          apijson.Field
 	SensitivityLevels   apijson.Field
@@ -2564,6 +2566,7 @@ type ProfileIntegrationProfile struct {
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// Deprecated: deprecated
 	Entries       []ProfileIntegrationProfileEntry       `json:"entries" api:"required"`
+	IntegrationID string                                 `json:"integration_id" api:"required" format:"uuid"`
 	Name          string                                 `json:"name" api:"required"`
 	SharedEntries []ProfileIntegrationProfileSharedEntry `json:"shared_entries" api:"required"`
 	Type          ProfileIntegrationProfileType          `json:"type" api:"required"`
@@ -2579,6 +2582,7 @@ type profileIntegrationProfileJSON struct {
 	ID            apijson.Field
 	CreatedAt     apijson.Field
 	Entries       apijson.Field
+	IntegrationID apijson.Field
 	Name          apijson.Field
 	SharedEntries apijson.Field
 	Type          apijson.Field

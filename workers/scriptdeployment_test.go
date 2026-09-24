@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
@@ -37,7 +38,7 @@ func TestScriptDeploymentNewWithOptionalParams(t *testing.T) {
 				Strategy: cloudflare.F(workers.DeploymentStrategyPercentage),
 				Versions: cloudflare.F([]workers.DeploymentVersionParam{{
 					Percentage: cloudflare.F(100.000000),
-					VersionID:  cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+					VersionID:  cloudflare.F("023e105f-2a42-4f8b-a1c1-73f6a2a30c0f"),
 				}}),
 				Annotations: cloudflare.F(workers.DeploymentAnnotationsParam{
 					WorkersMessage: cloudflare.F("Deploy bug fix."),
@@ -55,7 +56,7 @@ func TestScriptDeploymentNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestScriptDeploymentList(t *testing.T) {
+func TestScriptDeploymentListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -74,6 +75,10 @@ func TestScriptDeploymentList(t *testing.T) {
 		"this-is_my_script-01",
 		workers.ScriptDeploymentListParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Page:      cloudflare.F(int64(1)),
+			PerPage:   cloudflare.F(int64(1)),
+			Since:     cloudflare.F(time.Now()),
+			Until:     cloudflare.F(time.Now()),
 		},
 	)
 	if err != nil {

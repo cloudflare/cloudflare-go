@@ -193,7 +193,7 @@ func (r *NamespaceService) Search(ctx context.Context, name string, params Names
 }
 
 type NamespaceNewResponse struct {
-	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required,nullable" format:"date-time"`
 	Name      string    `json:"name" api:"required"`
 	// Optional description for the namespace. Max 256 characters.
 	Description          string                                   `json:"description" api:"nullable"`
@@ -381,7 +381,7 @@ func (r namespaceNewResponsePublicEndpointParamsSearchEndpointJSON) RawJSON() st
 }
 
 type NamespaceUpdateResponse struct {
-	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required,nullable" format:"date-time"`
 	Name      string    `json:"name" api:"required"`
 	// Optional description for the namespace. Max 256 characters.
 	Description          string                                      `json:"description" api:"nullable"`
@@ -570,7 +570,7 @@ func (r namespaceUpdateResponsePublicEndpointParamsSearchEndpointJSON) RawJSON()
 }
 
 type NamespaceListResponse struct {
-	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required,nullable" format:"date-time"`
 	Name      string    `json:"name" api:"required"`
 	// Optional description for the namespace. Max 256 characters.
 	Description          string                                    `json:"description" api:"nullable"`
@@ -1150,7 +1150,7 @@ func (r namespaceChatCompletionsResponseErrorJSON) RawJSON() string {
 }
 
 type NamespaceReadResponse struct {
-	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" api:"required,nullable" format:"date-time"`
 	Name      string    `json:"name" api:"required"`
 	// Optional description for the namespace. Max 256 characters.
 	Description          string                                    `json:"description" api:"nullable"`
@@ -1842,11 +1842,15 @@ func (r NamespaceChatCompletionsParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceChatCompletionsParamsAISearchOptions struct {
-	InstanceIDs  param.Field[[]string]                                                  `json:"instance_ids" api:"required"`
-	Cache        param.Field[NamespaceChatCompletionsParamsAISearchOptionsCache]        `json:"cache"`
-	QueryRewrite param.Field[NamespaceChatCompletionsParamsAISearchOptionsQueryRewrite] `json:"query_rewrite"`
-	Reranking    param.Field[NamespaceChatCompletionsParamsAISearchOptionsReranking]    `json:"reranking"`
-	Retrieval    param.Field[NamespaceChatCompletionsParamsAISearchOptionsRetrieval]    `json:"retrieval"`
+	InstanceIDs param.Field[[]string]                                           `json:"instance_ids" api:"required"`
+	Cache       param.Field[NamespaceChatCompletionsParamsAISearchOptionsCache] `json:"cache"`
+	// Metadata added to AI Gateway logs for requests triggered by this operation.
+	// Accepts up to 2 string, number, or boolean entries. Keys 'ai-search', 'task',
+	// 'origin', and keys beginning with 'cf.' are reserved.
+	CustomMetadata param.Field[map[string]NamespaceChatCompletionsParamsAISearchOptionsCustomMetadataUnion] `json:"custom_metadata"`
+	QueryRewrite   param.Field[NamespaceChatCompletionsParamsAISearchOptionsQueryRewrite]                   `json:"query_rewrite"`
+	Reranking      param.Field[NamespaceChatCompletionsParamsAISearchOptionsReranking]                      `json:"reranking"`
+	Retrieval      param.Field[NamespaceChatCompletionsParamsAISearchOptionsRetrieval]                      `json:"retrieval"`
 }
 
 func (r NamespaceChatCompletionsParamsAISearchOptions) MarshalJSON() (data []byte, err error) {
@@ -1877,6 +1881,11 @@ func (r NamespaceChatCompletionsParamsAISearchOptionsCacheCacheThreshold) IsKnow
 		return true
 	}
 	return false
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type NamespaceChatCompletionsParamsAISearchOptionsCustomMetadataUnion interface {
+	ImplementsNamespaceChatCompletionsParamsAISearchOptionsCustomMetadataUnion()
 }
 
 type NamespaceChatCompletionsParamsAISearchOptionsQueryRewrite struct {
@@ -2178,11 +2187,15 @@ func (r NamespaceSearchParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceSearchParamsAISearchOptions struct {
-	InstanceIDs  param.Field[[]string]                                         `json:"instance_ids" api:"required"`
-	Cache        param.Field[NamespaceSearchParamsAISearchOptionsCache]        `json:"cache"`
-	QueryRewrite param.Field[NamespaceSearchParamsAISearchOptionsQueryRewrite] `json:"query_rewrite"`
-	Reranking    param.Field[NamespaceSearchParamsAISearchOptionsReranking]    `json:"reranking"`
-	Retrieval    param.Field[NamespaceSearchParamsAISearchOptionsRetrieval]    `json:"retrieval"`
+	InstanceIDs param.Field[[]string]                                  `json:"instance_ids" api:"required"`
+	Cache       param.Field[NamespaceSearchParamsAISearchOptionsCache] `json:"cache"`
+	// Metadata added to AI Gateway logs for requests triggered by this operation.
+	// Accepts up to 2 string, number, or boolean entries. Keys 'ai-search', 'task',
+	// 'origin', and keys beginning with 'cf.' are reserved.
+	CustomMetadata param.Field[map[string]NamespaceSearchParamsAISearchOptionsCustomMetadataUnion] `json:"custom_metadata"`
+	QueryRewrite   param.Field[NamespaceSearchParamsAISearchOptionsQueryRewrite]                   `json:"query_rewrite"`
+	Reranking      param.Field[NamespaceSearchParamsAISearchOptionsReranking]                      `json:"reranking"`
+	Retrieval      param.Field[NamespaceSearchParamsAISearchOptionsRetrieval]                      `json:"retrieval"`
 }
 
 func (r NamespaceSearchParamsAISearchOptions) MarshalJSON() (data []byte, err error) {
@@ -2213,6 +2226,11 @@ func (r NamespaceSearchParamsAISearchOptionsCacheCacheThreshold) IsKnown() bool 
 		return true
 	}
 	return false
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type NamespaceSearchParamsAISearchOptionsCustomMetadataUnion interface {
+	ImplementsNamespaceSearchParamsAISearchOptionsCustomMetadataUnion()
 }
 
 type NamespaceSearchParamsAISearchOptionsQueryRewrite struct {

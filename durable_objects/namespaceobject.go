@@ -37,7 +37,7 @@ func NewNamespaceObjectService(opts ...option.RequestOption) (r *NamespaceObject
 	return
 }
 
-// Returns the Durable Objects in a given namespace.
+// Returns the Durable Objects in a given Durable Object namespace.
 func (r *NamespaceObjectService) List(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) (res *pagination.CursorPaginationAfter[DurableObject], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -63,7 +63,7 @@ func (r *NamespaceObjectService) List(ctx context.Context, id string, params Nam
 	return res, nil
 }
 
-// Returns the Durable Objects in a given namespace.
+// Returns the Durable Objects in a given Durable Object namespace.
 func (r *NamespaceObjectService) ListAutoPaging(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) *pagination.CursorPaginationAfterAutoPager[DurableObject] {
 	return pagination.NewCursorPaginationAfterAutoPager(r.List(ctx, id, params, opts...))
 }

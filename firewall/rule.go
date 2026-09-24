@@ -47,6 +47,9 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 	return
 }
 
+// **This endpoint has been deprecated and returns 410 Gone. Please use the
+// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+//
 // Create one or more firewall rules.
 //
 // Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
@@ -74,6 +77,9 @@ func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...opt
 	return res, nil
 }
 
+// **This endpoint has been deprecated and returns 410 Gone. Please use the
+// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+//
 // Create one or more firewall rules.
 //
 // Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
@@ -84,6 +90,9 @@ func (r *RuleService) NewAutoPaging(ctx context.Context, params RuleNewParams, o
 	return pagination.NewSinglePageAutoPager(r.New(ctx, params, opts...))
 }
 
+// **This endpoint has been deprecated and returns 410 Gone. Please use the
+// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+//
 // Updates an existing firewall rule.
 //
 // Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
@@ -110,6 +119,9 @@ func (r *RuleService) Update(ctx context.Context, ruleID string, params RuleUpda
 	return res, nil
 }
 
+// **This endpoint has been deprecated and returns 410 Gone. Please use the
+// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+//
 // Fetches firewall rules in a zone. You can filter the results using several
 // optional parameters.
 //
@@ -138,6 +150,9 @@ func (r *RuleService) List(ctx context.Context, params RuleListParams, opts ...o
 	return res, nil
 }
 
+// **This endpoint has been deprecated and returns 410 Gone. Please use the
+// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+//
 // Fetches firewall rules in a zone. You can filter the results using several
 // optional parameters.
 //
@@ -149,6 +164,9 @@ func (r *RuleService) ListAutoPaging(ctx context.Context, params RuleListParams,
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
+// **This endpoint has been deprecated and returns 410 Gone. Please use the
+// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+//
 // Deletes an existing firewall rule.
 //
 // Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
@@ -175,6 +193,9 @@ func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDelete
 	return res, nil
 }
 
+// **This endpoint has been deprecated and returns 410 Gone. Please use the
+// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+//
 // Deletes existing firewall rules.
 //
 // Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
@@ -202,6 +223,9 @@ func (r *RuleService) BulkDelete(ctx context.Context, body RuleBulkDeleteParams,
 	return res, nil
 }
 
+// **This endpoint has been deprecated and returns 410 Gone. Please use the
+// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+//
 // Deletes existing firewall rules.
 //
 // Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
@@ -212,6 +236,9 @@ func (r *RuleService) BulkDeleteAutoPaging(ctx context.Context, body RuleBulkDel
 	return pagination.NewSinglePageAutoPager(r.BulkDelete(ctx, body, opts...))
 }
 
+// **This endpoint has been deprecated and returns 410 Gone. Please use the
+// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+//
 // Updates the priority of existing firewall rules.
 //
 // Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
@@ -239,6 +266,9 @@ func (r *RuleService) BulkEdit(ctx context.Context, params RuleBulkEditParams, o
 	return res, nil
 }
 
+// **This endpoint has been deprecated and returns 410 Gone. Please use the
+// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+//
 // Updates the priority of existing firewall rules.
 //
 // Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
@@ -249,6 +279,9 @@ func (r *RuleService) BulkEditAutoPaging(ctx context.Context, params RuleBulkEdi
 	return pagination.NewSinglePageAutoPager(r.BulkEdit(ctx, params, opts...))
 }
 
+// **This endpoint has been deprecated and returns 410 Gone. Please use the
+// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+//
 // Updates one or more existing firewall rules.
 //
 // Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
@@ -276,6 +309,9 @@ func (r *RuleService) BulkUpdate(ctx context.Context, params RuleBulkUpdateParam
 	return res, nil
 }
 
+// **This endpoint has been deprecated and returns 410 Gone. Please use the
+// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+//
 // Updates one or more existing firewall rules.
 //
 // Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
@@ -286,6 +322,9 @@ func (r *RuleService) BulkUpdateAutoPaging(ctx context.Context, params RuleBulkU
 	return pagination.NewSinglePageAutoPager(r.BulkUpdate(ctx, params, opts...))
 }
 
+// **This endpoint has been deprecated and returns 410 Gone. Please use the
+// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+//
 // Updates the priority of an existing firewall rule.
 //
 // Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
@@ -317,6 +356,9 @@ func (r *RuleService) Edit(ctx context.Context, ruleID string, body RuleEditPara
 	return res, nil
 }
 
+// **This endpoint has been deprecated and returns 410 Gone. Please use the
+// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+//
 // Updates the priority of an existing firewall rule.
 //
 // Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
@@ -327,6 +369,9 @@ func (r *RuleService) EditAutoPaging(ctx context.Context, ruleID string, body Ru
 	return pagination.NewSinglePageAutoPager(r.Edit(ctx, ruleID, body, opts...))
 }
 
+// **This endpoint has been deprecated and returns 410 Gone. Please use the
+// [Rulesets API](https://developers.cloudflare.com/ruleset-engine/) instead.**
+//
 // Fetches the details of a firewall rule.
 //
 // Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
@@ -788,21 +833,23 @@ type RuleBulkDeleteParams struct {
 type RuleBulkEditParams struct {
 	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-	Body   interface{}         `json:"body" api:"required"`
+	// The unique identifier of the firewall rule.
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r RuleBulkEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 type RuleBulkUpdateParams struct {
 	// Defines an identifier.
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
-	Body   interface{}         `json:"body" api:"required"`
+	// The unique identifier of the firewall rule.
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r RuleBulkUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 type RuleEditParams struct {

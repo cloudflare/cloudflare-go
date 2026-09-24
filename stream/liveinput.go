@@ -43,6 +43,9 @@ func NewLiveInputService(opts ...option.RequestOption) (r *LiveInputService) {
 // stream live video to Cloudflare Stream.
 func (r *LiveInputService) New(ctx context.Context, params LiveInputNewParams, opts ...option.RequestOption) (res *LiveInput, err error) {
 	var env LiveInputNewResponseEnvelope
+	if params.IdempotencyKey.Present {
+		opts = append(opts, option.WithHeader("Idempotency-Key", fmt.Sprintf("%v", params.IdempotencyKey)))
+	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -96,8 +99,8 @@ func (r *LiveInputService) List(ctx context.Context, params LiveInputListParams,
 	return res, nil
 }
 
-// Prevents a live input from being streamed to and makes the live input
-// inaccessible to any future API calls.
+// Permanently delete a live input, making it inaccessible and blocking current and
+// future broadcasts to it. Existing recordings will be retained.
 func (r *LiveInputService) Delete(ctx context.Context, liveInputIdentifier string, body LiveInputDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -574,7 +577,8 @@ type LiveInputNewParams struct {
 	// Records the input to a Cloudflare Stream video. Behavior depends on the mode. In
 	// most cases, the video will initially be viewable as a live video and transition
 	// to on-demand after a condition is satisfied.
-	Recording param.Field[LiveInputNewParamsRecording] `json:"recording"`
+	Recording      param.Field[LiveInputNewParamsRecording] `json:"recording"`
+	IdempotencyKey param.Field[string]                      `header:"Idempotency-Key"`
 }
 
 func (r LiveInputNewParams) MarshalJSON() (data []byte, err error) {

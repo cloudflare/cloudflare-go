@@ -203,7 +203,7 @@ func TestSessionGetSessionParticipantsWithOptionalParams(t *testing.T) {
 			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			IncludePeerEvents: cloudflare.F(true),
 			PageNo:            cloudflare.F(0.000000),
-			PerPage:           cloudflare.F(0.000000),
+			PerPage:           cloudflare.F(int64(1)),
 			Search:            cloudflare.F("search"),
 			SortBy:            cloudflare.F(realtime_kit.SessionGetSessionParticipantsParamsSortByJoinedAt),
 			SortOrder:         cloudflare.F(realtime_kit.SessionGetSessionParticipantsParamsSortOrderAsc),

@@ -189,16 +189,15 @@ type AppFlagChangelogListResponseObjectAfter struct {
 	// Targeting rules evaluated in ascending `priority`; the first matching rule wins.
 	// An empty array means the flag always serves `default_variation`.
 	Rules []AppFlagChangelogListResponseObjectAfterRule `json:"rules" api:"required"`
+	// Server-inferred value type shared by all of the flag's variations.
+	Type AppFlagChangelogListResponseObjectAfterType `json:"type" api:"required"`
 	// Map of variation name to value. All values share the same type (boolean, string,
 	// number, or JSON object/array), and each serialized value stays within 10KB.
 	Variations  map[string]AppFlagChangelogListResponseObjectAfterVariationsUnion `json:"variations" api:"required"`
 	Description string                                                            `json:"description" api:"nullable"`
-	// Value type of the flag's variations. The API infers this from the variation
-	// values on write, so you can omit it in requests.
-	Type      AppFlagChangelogListResponseObjectAfterType `json:"type"`
-	UpdatedAt string                                      `json:"updated_at"`
-	UpdatedBy string                                      `json:"updated_by"`
-	JSON      appFlagChangelogListResponseObjectAfterJSON `json:"-"`
+	UpdatedAt   string                                                            `json:"updated_at"`
+	UpdatedBy   string                                                            `json:"updated_by"`
+	JSON        appFlagChangelogListResponseObjectAfterJSON                       `json:"-"`
 }
 
 // appFlagChangelogListResponseObjectAfterJSON contains the JSON metadata for the
@@ -208,9 +207,9 @@ type appFlagChangelogListResponseObjectAfterJSON struct {
 	Enabled          apijson.Field
 	Key              apijson.Field
 	Rules            apijson.Field
+	Type             apijson.Field
 	Variations       apijson.Field
 	Description      apijson.Field
-	Type             apijson.Field
 	UpdatedAt        apijson.Field
 	UpdatedBy        apijson.Field
 	raw              string
@@ -496,6 +495,24 @@ func (r appFlagChangelogListResponseObjectAfterRulesRolloutJSON) RawJSON() strin
 	return r.raw
 }
 
+// Server-inferred value type shared by all of the flag's variations.
+type AppFlagChangelogListResponseObjectAfterType string
+
+const (
+	AppFlagChangelogListResponseObjectAfterTypeBoolean AppFlagChangelogListResponseObjectAfterType = "boolean"
+	AppFlagChangelogListResponseObjectAfterTypeString  AppFlagChangelogListResponseObjectAfterType = "string"
+	AppFlagChangelogListResponseObjectAfterTypeNumber  AppFlagChangelogListResponseObjectAfterType = "number"
+	AppFlagChangelogListResponseObjectAfterTypeJson    AppFlagChangelogListResponseObjectAfterType = "json"
+)
+
+func (r AppFlagChangelogListResponseObjectAfterType) IsKnown() bool {
+	switch r {
+	case AppFlagChangelogListResponseObjectAfterTypeBoolean, AppFlagChangelogListResponseObjectAfterTypeString, AppFlagChangelogListResponseObjectAfterTypeNumber, AppFlagChangelogListResponseObjectAfterTypeJson:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [shared.UnionString], [shared.UnionFloat],
 // [shared.UnionBool], [AppFlagChangelogListResponseObjectAfterVariationsMap] or
 // [AppFlagChangelogListResponseObjectAfterVariationsArray].
@@ -542,25 +559,6 @@ func (r AppFlagChangelogListResponseObjectAfterVariationsMap) ImplementsAppFlagC
 type AppFlagChangelogListResponseObjectAfterVariationsArray []interface{}
 
 func (r AppFlagChangelogListResponseObjectAfterVariationsArray) ImplementsAppFlagChangelogListResponseObjectAfterVariationsUnion() {
-}
-
-// Value type of the flag's variations. The API infers this from the variation
-// values on write, so you can omit it in requests.
-type AppFlagChangelogListResponseObjectAfterType string
-
-const (
-	AppFlagChangelogListResponseObjectAfterTypeBoolean AppFlagChangelogListResponseObjectAfterType = "boolean"
-	AppFlagChangelogListResponseObjectAfterTypeString  AppFlagChangelogListResponseObjectAfterType = "string"
-	AppFlagChangelogListResponseObjectAfterTypeNumber  AppFlagChangelogListResponseObjectAfterType = "number"
-	AppFlagChangelogListResponseObjectAfterTypeJson    AppFlagChangelogListResponseObjectAfterType = "json"
-)
-
-func (r AppFlagChangelogListResponseObjectAfterType) IsKnown() bool {
-	switch r {
-	case AppFlagChangelogListResponseObjectAfterTypeBoolean, AppFlagChangelogListResponseObjectAfterTypeString, AppFlagChangelogListResponseObjectAfterTypeNumber, AppFlagChangelogListResponseObjectAfterTypeJson:
-		return true
-	}
-	return false
 }
 
 type AppFlagChangelogListResponseObjectEvent string

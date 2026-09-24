@@ -38,8 +38,8 @@ func NewBucketEventNotificationService(opts ...option.RequestOption) (r *BucketE
 // Create event notification rule.
 func (r *BucketEventNotificationService) Update(ctx context.Context, bucketName string, queueID string, params BucketEventNotificationUpdateParams, opts ...option.RequestOption) (res *BucketEventNotificationUpdateResponse, err error) {
 	var env BucketEventNotificationUpdateResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -66,8 +66,8 @@ func (r *BucketEventNotificationService) Update(ctx context.Context, bucketName 
 // List all event notification rules for a bucket.
 func (r *BucketEventNotificationService) List(ctx context.Context, bucketName string, params BucketEventNotificationListParams, opts ...option.RequestOption) (res *BucketEventNotificationListResponse, err error) {
 	var env BucketEventNotificationListResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -91,8 +91,8 @@ func (r *BucketEventNotificationService) List(ctx context.Context, bucketName st
 // specified queue will be deleted**.
 func (r *BucketEventNotificationService) Delete(ctx context.Context, bucketName string, queueID string, params BucketEventNotificationDeleteParams, opts ...option.RequestOption) (res *BucketEventNotificationDeleteResponse, err error) {
 	var env BucketEventNotificationDeleteResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -119,8 +119,8 @@ func (r *BucketEventNotificationService) Delete(ctx context.Context, bucketName 
 // Get a single event notification rule.
 func (r *BucketEventNotificationService) Get(ctx context.Context, bucketName string, queueID string, params BucketEventNotificationGetParams, opts ...option.RequestOption) (res *BucketEventNotificationGetResponse, err error) {
 	var env BucketEventNotificationGetResponseEnvelope
-	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.Jurisdiction)))
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%v", params.CfR2Jurisdiction)))
 	}
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -343,9 +343,8 @@ type BucketEventNotificationUpdateParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Array of rules to drive notifications.
-	Rules param.Field[[]BucketEventNotificationUpdateParamsRule] `json:"rules" api:"required"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketEventNotificationUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	Rules            param.Field[[]BucketEventNotificationUpdateParamsRule]           `json:"rules" api:"required"`
+	CfR2Jurisdiction param.Field[BucketEventNotificationUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 func (r BucketEventNotificationUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -386,19 +385,19 @@ func (r BucketEventNotificationUpdateParamsRulesAction) IsKnown() bool {
 	return false
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketEventNotificationUpdateParamsCfR2Jurisdiction string
 
 const (
-	BucketEventNotificationUpdateParamsCfR2JurisdictionDefault BucketEventNotificationUpdateParamsCfR2Jurisdiction = "default"
-	BucketEventNotificationUpdateParamsCfR2JurisdictionEu      BucketEventNotificationUpdateParamsCfR2Jurisdiction = "eu"
-	BucketEventNotificationUpdateParamsCfR2JurisdictionUs      BucketEventNotificationUpdateParamsCfR2Jurisdiction = "us"
-	BucketEventNotificationUpdateParamsCfR2JurisdictionFedramp BucketEventNotificationUpdateParamsCfR2Jurisdiction = "fedramp"
+	BucketEventNotificationUpdateParamsCfR2JurisdictionDefault     BucketEventNotificationUpdateParamsCfR2Jurisdiction = "default"
+	BucketEventNotificationUpdateParamsCfR2JurisdictionEu          BucketEventNotificationUpdateParamsCfR2Jurisdiction = "eu"
+	BucketEventNotificationUpdateParamsCfR2JurisdictionUs          BucketEventNotificationUpdateParamsCfR2Jurisdiction = "us"
+	BucketEventNotificationUpdateParamsCfR2JurisdictionFedramp     BucketEventNotificationUpdateParamsCfR2Jurisdiction = "fedramp"
+	BucketEventNotificationUpdateParamsCfR2JurisdictionFedrampHigh BucketEventNotificationUpdateParamsCfR2Jurisdiction = "fedramp-high"
 )
 
 func (r BucketEventNotificationUpdateParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketEventNotificationUpdateParamsCfR2JurisdictionDefault, BucketEventNotificationUpdateParamsCfR2JurisdictionEu, BucketEventNotificationUpdateParamsCfR2JurisdictionUs, BucketEventNotificationUpdateParamsCfR2JurisdictionFedramp:
+	case BucketEventNotificationUpdateParamsCfR2JurisdictionDefault, BucketEventNotificationUpdateParamsCfR2JurisdictionEu, BucketEventNotificationUpdateParamsCfR2JurisdictionUs, BucketEventNotificationUpdateParamsCfR2JurisdictionFedramp, BucketEventNotificationUpdateParamsCfR2JurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -449,24 +448,23 @@ func (r BucketEventNotificationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketEventNotificationListParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketEventNotificationListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	AccountID        param.Field[string]                                            `path:"account_id" api:"required"`
+	CfR2Jurisdiction param.Field[BucketEventNotificationListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketEventNotificationListParamsCfR2Jurisdiction string
 
 const (
-	BucketEventNotificationListParamsCfR2JurisdictionDefault BucketEventNotificationListParamsCfR2Jurisdiction = "default"
-	BucketEventNotificationListParamsCfR2JurisdictionEu      BucketEventNotificationListParamsCfR2Jurisdiction = "eu"
-	BucketEventNotificationListParamsCfR2JurisdictionUs      BucketEventNotificationListParamsCfR2Jurisdiction = "us"
-	BucketEventNotificationListParamsCfR2JurisdictionFedramp BucketEventNotificationListParamsCfR2Jurisdiction = "fedramp"
+	BucketEventNotificationListParamsCfR2JurisdictionDefault     BucketEventNotificationListParamsCfR2Jurisdiction = "default"
+	BucketEventNotificationListParamsCfR2JurisdictionEu          BucketEventNotificationListParamsCfR2Jurisdiction = "eu"
+	BucketEventNotificationListParamsCfR2JurisdictionUs          BucketEventNotificationListParamsCfR2Jurisdiction = "us"
+	BucketEventNotificationListParamsCfR2JurisdictionFedramp     BucketEventNotificationListParamsCfR2Jurisdiction = "fedramp"
+	BucketEventNotificationListParamsCfR2JurisdictionFedrampHigh BucketEventNotificationListParamsCfR2Jurisdiction = "fedramp-high"
 )
 
 func (r BucketEventNotificationListParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketEventNotificationListParamsCfR2JurisdictionDefault, BucketEventNotificationListParamsCfR2JurisdictionEu, BucketEventNotificationListParamsCfR2JurisdictionUs, BucketEventNotificationListParamsCfR2JurisdictionFedramp:
+	case BucketEventNotificationListParamsCfR2JurisdictionDefault, BucketEventNotificationListParamsCfR2JurisdictionEu, BucketEventNotificationListParamsCfR2JurisdictionUs, BucketEventNotificationListParamsCfR2JurisdictionFedramp, BucketEventNotificationListParamsCfR2JurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -517,24 +515,23 @@ func (r BucketEventNotificationListResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketEventNotificationDeleteParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Jurisdiction where objects in this bucket are guaranteed to be stored.
-	Jurisdiction param.Field[BucketEventNotificationDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	AccountID        param.Field[string]                                              `path:"account_id" api:"required"`
+	CfR2Jurisdiction param.Field[BucketEventNotificationDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// Jurisdiction where objects in this bucket are guaranteed to be stored.
 type BucketEventNotificationDeleteParamsCfR2Jurisdiction string
 
 const (
-	BucketEventNotificationDeleteParamsCfR2JurisdictionDefault BucketEventNotificationDeleteParamsCfR2Jurisdiction = "default"
-	BucketEventNotificationDeleteParamsCfR2JurisdictionEu      BucketEventNotificationDeleteParamsCfR2Jurisdiction = "eu"
-	BucketEventNotificationDeleteParamsCfR2JurisdictionUs      BucketEventNotificationDeleteParamsCfR2Jurisdiction = "us"
-	BucketEventNotificationDeleteParamsCfR2JurisdictionFedramp BucketEventNotificationDeleteParamsCfR2Jurisdiction = "fedramp"
+	BucketEventNotificationDeleteParamsCfR2JurisdictionDefault     BucketEventNotificationDeleteParamsCfR2Jurisdiction = "default"
+	BucketEventNotificationDeleteParamsCfR2JurisdictionEu          BucketEventNotificationDeleteParamsCfR2Jurisdiction = "eu"
+	BucketEventNotificationDeleteParamsCfR2JurisdictionUs          BucketEventNotificationDeleteParamsCfR2Jurisdiction = "us"
+	BucketEventNotificationDeleteParamsCfR2JurisdictionFedramp     BucketEventNotificationDeleteParamsCfR2Jurisdiction = "fedramp"
+	BucketEventNotificationDeleteParamsCfR2JurisdictionFedrampHigh BucketEventNotificationDeleteParamsCfR2Jurisdiction = "fedramp-high"
 )
 
 func (r BucketEventNotificationDeleteParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketEventNotificationDeleteParamsCfR2JurisdictionDefault, BucketEventNotificationDeleteParamsCfR2JurisdictionEu, BucketEventNotificationDeleteParamsCfR2JurisdictionUs, BucketEventNotificationDeleteParamsCfR2JurisdictionFedramp:
+	case BucketEventNotificationDeleteParamsCfR2JurisdictionDefault, BucketEventNotificationDeleteParamsCfR2JurisdictionEu, BucketEventNotificationDeleteParamsCfR2JurisdictionUs, BucketEventNotificationDeleteParamsCfR2JurisdictionFedramp, BucketEventNotificationDeleteParamsCfR2JurisdictionFedrampHigh:
 		return true
 	}
 	return false
@@ -585,24 +582,23 @@ func (r BucketEventNotificationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type BucketEventNotificationGetParams struct {
 	// Account ID.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// The bucket jurisdiction.
-	Jurisdiction param.Field[BucketEventNotificationGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	AccountID        param.Field[string]                                           `path:"account_id" api:"required"`
+	CfR2Jurisdiction param.Field[BucketEventNotificationGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
-// The bucket jurisdiction.
 type BucketEventNotificationGetParamsCfR2Jurisdiction string
 
 const (
-	BucketEventNotificationGetParamsCfR2JurisdictionDefault BucketEventNotificationGetParamsCfR2Jurisdiction = "default"
-	BucketEventNotificationGetParamsCfR2JurisdictionEu      BucketEventNotificationGetParamsCfR2Jurisdiction = "eu"
-	BucketEventNotificationGetParamsCfR2JurisdictionUs      BucketEventNotificationGetParamsCfR2Jurisdiction = "us"
-	BucketEventNotificationGetParamsCfR2JurisdictionFedramp BucketEventNotificationGetParamsCfR2Jurisdiction = "fedramp"
+	BucketEventNotificationGetParamsCfR2JurisdictionDefault     BucketEventNotificationGetParamsCfR2Jurisdiction = "default"
+	BucketEventNotificationGetParamsCfR2JurisdictionEu          BucketEventNotificationGetParamsCfR2Jurisdiction = "eu"
+	BucketEventNotificationGetParamsCfR2JurisdictionUs          BucketEventNotificationGetParamsCfR2Jurisdiction = "us"
+	BucketEventNotificationGetParamsCfR2JurisdictionFedramp     BucketEventNotificationGetParamsCfR2Jurisdiction = "fedramp"
+	BucketEventNotificationGetParamsCfR2JurisdictionFedrampHigh BucketEventNotificationGetParamsCfR2Jurisdiction = "fedramp-high"
 )
 
 func (r BucketEventNotificationGetParamsCfR2Jurisdiction) IsKnown() bool {
 	switch r {
-	case BucketEventNotificationGetParamsCfR2JurisdictionDefault, BucketEventNotificationGetParamsCfR2JurisdictionEu, BucketEventNotificationGetParamsCfR2JurisdictionUs, BucketEventNotificationGetParamsCfR2JurisdictionFedramp:
+	case BucketEventNotificationGetParamsCfR2JurisdictionDefault, BucketEventNotificationGetParamsCfR2JurisdictionEu, BucketEventNotificationGetParamsCfR2JurisdictionUs, BucketEventNotificationGetParamsCfR2JurisdictionFedramp, BucketEventNotificationGetParamsCfR2JurisdictionFedrampHigh:
 		return true
 	}
 	return false

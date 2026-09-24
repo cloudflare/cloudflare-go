@@ -123,7 +123,10 @@ func (r *DeviceRegistrationService) Get(ctx context.Context, registrationID stri
 	return res, nil
 }
 
-// Revokes a list of WARP registrations.
+// Revokes a list of WARP registrations. Prefer "delete" operation instead,
+// "revoke" does not release virtual IPs.
+//
+// Deprecated: deprecated
 func (r *DeviceRegistrationService) Revoke(ctx context.Context, params DeviceRegistrationRevokeParams, opts ...option.RequestOption) (res *DeviceRegistrationRevokeResponse, err error) {
 	var env DeviceRegistrationRevokeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -141,6 +144,8 @@ func (r *DeviceRegistrationService) Revoke(ctx context.Context, params DeviceReg
 }
 
 // Unrevokes a list of WARP registrations.
+//
+// Deprecated: deprecated
 func (r *DeviceRegistrationService) Unrevoke(ctx context.Context, params DeviceRegistrationUnrevokeParams, opts ...option.RequestOption) (res *DeviceRegistrationUnrevokeResponse, err error) {
 	var env DeviceRegistrationUnrevokeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -170,6 +175,8 @@ type DeviceRegistrationListResponse struct {
 	Key string `json:"key" api:"required"`
 	// The RFC3339 timestamp when the registration was last seen.
 	LastSeenAt string `json:"last_seen_at" api:"required"`
+	// The registration client type, derived from device_type.
+	RegistrationType DeviceRegistrationListResponseRegistrationType `json:"registration_type" api:"required"`
 	// The RFC3339 timestamp when the registration was last updated.
 	UpdatedAt string `json:"updated_at" api:"required"`
 	// The RFC3339 timestamp when the registration was deleted.
@@ -196,22 +203,23 @@ type DeviceRegistrationListResponse struct {
 // deviceRegistrationListResponseJSON contains the JSON metadata for the struct
 // [DeviceRegistrationListResponse]
 type deviceRegistrationListResponseJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Device      apijson.Field
-	Key         apijson.Field
-	LastSeenAt  apijson.Field
-	UpdatedAt   apijson.Field
-	DeletedAt   apijson.Field
-	KeyType     apijson.Field
-	Policy      apijson.Field
-	RevokedAt   apijson.Field
-	TunnelType  apijson.Field
-	User        apijson.Field
-	VirtualIPV4 apijson.Field
-	VirtualIPV6 apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID               apijson.Field
+	CreatedAt        apijson.Field
+	Device           apijson.Field
+	Key              apijson.Field
+	LastSeenAt       apijson.Field
+	RegistrationType apijson.Field
+	UpdatedAt        apijson.Field
+	DeletedAt        apijson.Field
+	KeyType          apijson.Field
+	Policy           apijson.Field
+	RevokedAt        apijson.Field
+	TunnelType       apijson.Field
+	User             apijson.Field
+	VirtualIPV4      apijson.Field
+	VirtualIPV6      apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *DeviceRegistrationListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -249,6 +257,22 @@ func (r *DeviceRegistrationListResponseDevice) UnmarshalJSON(data []byte) (err e
 
 func (r deviceRegistrationListResponseDeviceJSON) RawJSON() string {
 	return r.raw
+}
+
+// The registration client type, derived from device_type.
+type DeviceRegistrationListResponseRegistrationType string
+
+const (
+	DeviceRegistrationListResponseRegistrationTypeWARP             DeviceRegistrationListResponseRegistrationType = "warp"
+	DeviceRegistrationListResponseRegistrationTypeBrowserExtension DeviceRegistrationListResponseRegistrationType = "browser_extension"
+)
+
+func (r DeviceRegistrationListResponseRegistrationType) IsKnown() bool {
+	switch r {
+	case DeviceRegistrationListResponseRegistrationTypeWARP, DeviceRegistrationListResponseRegistrationTypeBrowserExtension:
+		return true
+	}
+	return false
 }
 
 // The device settings profile assigned to this registration.
@@ -332,6 +356,8 @@ type DeviceRegistrationGetResponse struct {
 	Key string `json:"key" api:"required"`
 	// The RFC3339 timestamp when the registration was last seen.
 	LastSeenAt string `json:"last_seen_at" api:"required"`
+	// The registration client type, derived from device_type.
+	RegistrationType DeviceRegistrationGetResponseRegistrationType `json:"registration_type" api:"required"`
 	// The RFC3339 timestamp when the registration was last updated.
 	UpdatedAt string `json:"updated_at" api:"required"`
 	// The RFC3339 timestamp when the registration was deleted.
@@ -358,22 +384,23 @@ type DeviceRegistrationGetResponse struct {
 // deviceRegistrationGetResponseJSON contains the JSON metadata for the struct
 // [DeviceRegistrationGetResponse]
 type deviceRegistrationGetResponseJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Device      apijson.Field
-	Key         apijson.Field
-	LastSeenAt  apijson.Field
-	UpdatedAt   apijson.Field
-	DeletedAt   apijson.Field
-	KeyType     apijson.Field
-	Policy      apijson.Field
-	RevokedAt   apijson.Field
-	TunnelType  apijson.Field
-	User        apijson.Field
-	VirtualIPV4 apijson.Field
-	VirtualIPV6 apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID               apijson.Field
+	CreatedAt        apijson.Field
+	Device           apijson.Field
+	Key              apijson.Field
+	LastSeenAt       apijson.Field
+	RegistrationType apijson.Field
+	UpdatedAt        apijson.Field
+	DeletedAt        apijson.Field
+	KeyType          apijson.Field
+	Policy           apijson.Field
+	RevokedAt        apijson.Field
+	TunnelType       apijson.Field
+	User             apijson.Field
+	VirtualIPV4      apijson.Field
+	VirtualIPV6      apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *DeviceRegistrationGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -411,6 +438,22 @@ func (r *DeviceRegistrationGetResponseDevice) UnmarshalJSON(data []byte) (err er
 
 func (r deviceRegistrationGetResponseDeviceJSON) RawJSON() string {
 	return r.raw
+}
+
+// The registration client type, derived from device_type.
+type DeviceRegistrationGetResponseRegistrationType string
+
+const (
+	DeviceRegistrationGetResponseRegistrationTypeWARP             DeviceRegistrationGetResponseRegistrationType = "warp"
+	DeviceRegistrationGetResponseRegistrationTypeBrowserExtension DeviceRegistrationGetResponseRegistrationType = "browser_extension"
+)
+
+func (r DeviceRegistrationGetResponseRegistrationType) IsKnown() bool {
+	switch r {
+	case DeviceRegistrationGetResponseRegistrationTypeWARP, DeviceRegistrationGetResponseRegistrationTypeBrowserExtension:
+		return true
+	}
+	return false
 }
 
 // The device settings profile assigned to this registration.
@@ -496,6 +539,8 @@ type DeviceRegistrationListParams struct {
 	// The maximum number of devices to return in a single response.
 	PerPage param.Field[int64]                              `query:"per_page"`
 	Policy  param.Field[DeviceRegistrationListParamsPolicy] `query:"policy"`
+	// Filter by registration client type.
+	RegistrationType param.Field[DeviceRegistrationListParamsRegistrationType] `query:"registration_type"`
 	// Filter by registration details.
 	Search param.Field[string] `query:"search"`
 	// Filter by the last_seen timestamp - returns only registrations last seen after
@@ -548,6 +593,22 @@ func (r DeviceRegistrationListParamsPolicy) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Filter by registration client type.
+type DeviceRegistrationListParamsRegistrationType string
+
+const (
+	DeviceRegistrationListParamsRegistrationTypeWARP             DeviceRegistrationListParamsRegistrationType = "warp"
+	DeviceRegistrationListParamsRegistrationTypeBrowserExtension DeviceRegistrationListParamsRegistrationType = "browser_extension"
+)
+
+func (r DeviceRegistrationListParamsRegistrationType) IsKnown() bool {
+	switch r {
+	case DeviceRegistrationListParamsRegistrationTypeWARP, DeviceRegistrationListParamsRegistrationTypeBrowserExtension:
+		return true
+	}
+	return false
 }
 
 // The registration field to order results by.

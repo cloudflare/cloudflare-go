@@ -348,7 +348,7 @@ type CrawlNewParamsBodyObject struct {
 	// has loaded (such as taking screenshots, extracting content, or generating PDFs).
 	// If this time limit is exceeded, the action stops and returns a timeout error.
 	ActionTimeout param.Field[float64] `json:"actionTimeout"`
-	// Adds a `<script>` tag into the page with the desired URL or content.
+	// Adds a script element into the page with the desired URL or content.
 	AddScriptTag param.Field[[]CrawlNewParamsBodyObjectAddScriptTag] `json:"addScriptTag"`
 	// Adds a `<link rel="stylesheet">` tag into the page with the desired URL or a
 	// `<style type="text/css">` tag with the content.

@@ -139,8 +139,17 @@ func (r *BotManagementService) Get(ctx context.Context, query BotManagementGetPa
 }
 
 type BotFightModeConfiguration struct {
+	// Temporary migration flag tracking zones opted out of AI bots managed-rule
+	// updates.
+	AIBotsMigrationOptOut bool `json:"ai_bots_migration_opt_out"`
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection BotFightModeConfigurationAIBotsProtection `json:"ai_bots_protection"`
+	// Configure robots.txt policy for AI search bots.
+	AISearch BotFightModeConfigurationAISearch `json:"ai_search"`
+	// Configure robots.txt policy for AI model training bots.
+	AITraining BotFightModeConfigurationAITraining `json:"ai_training"`
+	// Configure robots.txt policy for AI assistant and agent bots.
+	AIUser BotFightModeConfigurationAIUser `json:"ai_user"`
 	// Enable Bot Preference Sync for this zone. When enabled, Cloudflare can serve
 	// robots.txt content derived from the zone's AI Search, AI User, and AI Training
 	// preferences.
@@ -161,6 +170,9 @@ type BotFightModeConfiguration struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged bool `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled bool `json:"jsd_api_results_enabled"`
 	// A read-only field that shows which unauthorized settings are currently active on
 	// the zone. These settings typically result from upgrades or downgrades.
 	StaleZoneConfiguration BotFightModeConfigurationStaleZoneConfiguration `json:"stale_zone_configuration"`
@@ -173,7 +185,11 @@ type BotFightModeConfiguration struct {
 // botFightModeConfigurationJSON contains the JSON metadata for the struct
 // [BotFightModeConfiguration]
 type botFightModeConfigurationJSON struct {
+	AIBotsMigrationOptOut    apijson.Field
 	AIBotsProtection         apijson.Field
+	AISearch                 apijson.Field
+	AITraining               apijson.Field
+	AIUser                   apijson.Field
 	BotPreferenceSyncEnabled apijson.Field
 	CfRobotsVariant          apijson.Field
 	ContentBotsProtection    apijson.Field
@@ -181,6 +197,7 @@ type botFightModeConfigurationJSON struct {
 	EnableJS                 apijson.Field
 	FightMode                apijson.Field
 	IsRobotsTXTManaged       apijson.Field
+	JsdAPIResultsEnabled     apijson.Field
 	StaleZoneConfiguration   apijson.Field
 	UsingLatestModel         apijson.Field
 	raw                      string
@@ -211,6 +228,58 @@ const (
 func (r BotFightModeConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
 	case BotFightModeConfigurationAIBotsProtectionBlock, BotFightModeConfigurationAIBotsProtectionDisabled, BotFightModeConfigurationAIBotsProtectionOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI search bots.
+type BotFightModeConfigurationAISearch string
+
+const (
+	BotFightModeConfigurationAISearchDisabled      BotFightModeConfigurationAISearch = "disabled"
+	BotFightModeConfigurationAISearchBlock         BotFightModeConfigurationAISearch = "block"
+	BotFightModeConfigurationAISearchOnlyOnADPages BotFightModeConfigurationAISearch = "only_on_ad_pages"
+)
+
+func (r BotFightModeConfigurationAISearch) IsKnown() bool {
+	switch r {
+	case BotFightModeConfigurationAISearchDisabled, BotFightModeConfigurationAISearchBlock, BotFightModeConfigurationAISearchOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI model training bots.
+type BotFightModeConfigurationAITraining string
+
+const (
+	BotFightModeConfigurationAITrainingDisabled      BotFightModeConfigurationAITraining = "disabled"
+	BotFightModeConfigurationAITrainingDisallow      BotFightModeConfigurationAITraining = "disallow"
+	BotFightModeConfigurationAITrainingBlock         BotFightModeConfigurationAITraining = "block"
+	BotFightModeConfigurationAITrainingOnlyOnADPages BotFightModeConfigurationAITraining = "only_on_ad_pages"
+)
+
+func (r BotFightModeConfigurationAITraining) IsKnown() bool {
+	switch r {
+	case BotFightModeConfigurationAITrainingDisabled, BotFightModeConfigurationAITrainingDisallow, BotFightModeConfigurationAITrainingBlock, BotFightModeConfigurationAITrainingOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI assistant and agent bots.
+type BotFightModeConfigurationAIUser string
+
+const (
+	BotFightModeConfigurationAIUserDisabled      BotFightModeConfigurationAIUser = "disabled"
+	BotFightModeConfigurationAIUserBlock         BotFightModeConfigurationAIUser = "block"
+	BotFightModeConfigurationAIUserOnlyOnADPages BotFightModeConfigurationAIUser = "only_on_ad_pages"
+)
+
+func (r BotFightModeConfigurationAIUser) IsKnown() bool {
+	switch r {
+	case BotFightModeConfigurationAIUserDisabled, BotFightModeConfigurationAIUserBlock, BotFightModeConfigurationAIUserOnlyOnADPages:
 		return true
 	}
 	return false
@@ -308,8 +377,17 @@ func (r botFightModeConfigurationStaleZoneConfigurationJSON) RawJSON() string {
 }
 
 type BotFightModeConfigurationParam struct {
+	// Temporary migration flag tracking zones opted out of AI bots managed-rule
+	// updates.
+	AIBotsMigrationOptOut param.Field[bool] `json:"ai_bots_migration_opt_out"`
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection param.Field[BotFightModeConfigurationAIBotsProtection] `json:"ai_bots_protection"`
+	// Configure robots.txt policy for AI search bots.
+	AISearch param.Field[BotFightModeConfigurationAISearch] `json:"ai_search"`
+	// Configure robots.txt policy for AI model training bots.
+	AITraining param.Field[BotFightModeConfigurationAITraining] `json:"ai_training"`
+	// Configure robots.txt policy for AI assistant and agent bots.
+	AIUser param.Field[BotFightModeConfigurationAIUser] `json:"ai_user"`
 	// Enable Bot Preference Sync for this zone. When enabled, Cloudflare can serve
 	// robots.txt content derived from the zone's AI Search, AI User, and AI Training
 	// preferences.
@@ -330,6 +408,9 @@ type BotFightModeConfigurationParam struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged param.Field[bool] `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled param.Field[bool] `json:"jsd_api_results_enabled"`
 }
 
 func (r BotFightModeConfigurationParam) MarshalJSON() (data []byte, err error) {
@@ -362,8 +443,17 @@ func (r BotFightModeConfigurationStaleZoneConfigurationParam) MarshalJSON() (dat
 }
 
 type SubscriptionConfiguration struct {
+	// Temporary migration flag tracking zones opted out of AI bots managed-rule
+	// updates.
+	AIBotsMigrationOptOut bool `json:"ai_bots_migration_opt_out"`
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection SubscriptionConfigurationAIBotsProtection `json:"ai_bots_protection"`
+	// Configure robots.txt policy for AI search bots.
+	AISearch SubscriptionConfigurationAISearch `json:"ai_search"`
+	// Configure robots.txt policy for AI model training bots.
+	AITraining SubscriptionConfigurationAITraining `json:"ai_training"`
+	// Configure robots.txt policy for AI assistant and agent bots.
+	AIUser SubscriptionConfigurationAIUser `json:"ai_user"`
 	// Automatically update to the newest bot detection models created by Cloudflare as
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
@@ -389,6 +479,9 @@ type SubscriptionConfiguration struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged bool `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled bool `json:"jsd_api_results_enabled"`
 	// A read-only field that shows which unauthorized settings are currently active on
 	// the zone. These settings typically result from upgrades or downgrades.
 	StaleZoneConfiguration SubscriptionConfigurationStaleZoneConfiguration `json:"stale_zone_configuration"`
@@ -404,7 +497,11 @@ type SubscriptionConfiguration struct {
 // subscriptionConfigurationJSON contains the JSON metadata for the struct
 // [SubscriptionConfiguration]
 type subscriptionConfigurationJSON struct {
+	AIBotsMigrationOptOut    apijson.Field
 	AIBotsProtection         apijson.Field
+	AISearch                 apijson.Field
+	AITraining               apijson.Field
+	AIUser                   apijson.Field
 	AutoUpdateModel          apijson.Field
 	BmCookieEnabled          apijson.Field
 	BotPreferenceSyncEnabled apijson.Field
@@ -413,6 +510,7 @@ type subscriptionConfigurationJSON struct {
 	CrawlerProtection        apijson.Field
 	EnableJS                 apijson.Field
 	IsRobotsTXTManaged       apijson.Field
+	JsdAPIResultsEnabled     apijson.Field
 	StaleZoneConfiguration   apijson.Field
 	SuppressSessionScore     apijson.Field
 	UsingLatestModel         apijson.Field
@@ -444,6 +542,58 @@ const (
 func (r SubscriptionConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
 	case SubscriptionConfigurationAIBotsProtectionBlock, SubscriptionConfigurationAIBotsProtectionDisabled, SubscriptionConfigurationAIBotsProtectionOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI search bots.
+type SubscriptionConfigurationAISearch string
+
+const (
+	SubscriptionConfigurationAISearchDisabled      SubscriptionConfigurationAISearch = "disabled"
+	SubscriptionConfigurationAISearchBlock         SubscriptionConfigurationAISearch = "block"
+	SubscriptionConfigurationAISearchOnlyOnADPages SubscriptionConfigurationAISearch = "only_on_ad_pages"
+)
+
+func (r SubscriptionConfigurationAISearch) IsKnown() bool {
+	switch r {
+	case SubscriptionConfigurationAISearchDisabled, SubscriptionConfigurationAISearchBlock, SubscriptionConfigurationAISearchOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI model training bots.
+type SubscriptionConfigurationAITraining string
+
+const (
+	SubscriptionConfigurationAITrainingDisabled      SubscriptionConfigurationAITraining = "disabled"
+	SubscriptionConfigurationAITrainingDisallow      SubscriptionConfigurationAITraining = "disallow"
+	SubscriptionConfigurationAITrainingBlock         SubscriptionConfigurationAITraining = "block"
+	SubscriptionConfigurationAITrainingOnlyOnADPages SubscriptionConfigurationAITraining = "only_on_ad_pages"
+)
+
+func (r SubscriptionConfigurationAITraining) IsKnown() bool {
+	switch r {
+	case SubscriptionConfigurationAITrainingDisabled, SubscriptionConfigurationAITrainingDisallow, SubscriptionConfigurationAITrainingBlock, SubscriptionConfigurationAITrainingOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI assistant and agent bots.
+type SubscriptionConfigurationAIUser string
+
+const (
+	SubscriptionConfigurationAIUserDisabled      SubscriptionConfigurationAIUser = "disabled"
+	SubscriptionConfigurationAIUserBlock         SubscriptionConfigurationAIUser = "block"
+	SubscriptionConfigurationAIUserOnlyOnADPages SubscriptionConfigurationAIUser = "only_on_ad_pages"
+)
+
+func (r SubscriptionConfigurationAIUser) IsKnown() bool {
+	switch r {
+	case SubscriptionConfigurationAIUserDisabled, SubscriptionConfigurationAIUserBlock, SubscriptionConfigurationAIUserOnlyOnADPages:
 		return true
 	}
 	return false
@@ -541,8 +691,17 @@ func (r subscriptionConfigurationStaleZoneConfigurationJSON) RawJSON() string {
 }
 
 type SubscriptionConfigurationParam struct {
+	// Temporary migration flag tracking zones opted out of AI bots managed-rule
+	// updates.
+	AIBotsMigrationOptOut param.Field[bool] `json:"ai_bots_migration_opt_out"`
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection param.Field[SubscriptionConfigurationAIBotsProtection] `json:"ai_bots_protection"`
+	// Configure robots.txt policy for AI search bots.
+	AISearch param.Field[SubscriptionConfigurationAISearch] `json:"ai_search"`
+	// Configure robots.txt policy for AI model training bots.
+	AITraining param.Field[SubscriptionConfigurationAITraining] `json:"ai_training"`
+	// Configure robots.txt policy for AI assistant and agent bots.
+	AIUser param.Field[SubscriptionConfigurationAIUser] `json:"ai_user"`
 	// Automatically update to the newest bot detection models created by Cloudflare as
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
@@ -568,6 +727,9 @@ type SubscriptionConfigurationParam struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged param.Field[bool] `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled param.Field[bool] `json:"jsd_api_results_enabled"`
 	// Whether to disable tracking the highest bot score for a session in the Bot
 	// Management cookie.
 	SuppressSessionScore param.Field[bool] `json:"suppress_session_score"`
@@ -603,8 +765,17 @@ func (r SubscriptionConfigurationStaleZoneConfigurationParam) MarshalJSON() (dat
 }
 
 type SuperBotFightModeDefinitelyConfiguration struct {
+	// Temporary migration flag tracking zones opted out of AI bots managed-rule
+	// updates.
+	AIBotsMigrationOptOut bool `json:"ai_bots_migration_opt_out"`
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection SuperBotFightModeDefinitelyConfigurationAIBotsProtection `json:"ai_bots_protection"`
+	// Configure robots.txt policy for AI search bots.
+	AISearch SuperBotFightModeDefinitelyConfigurationAISearch `json:"ai_search"`
+	// Configure robots.txt policy for AI model training bots.
+	AITraining SuperBotFightModeDefinitelyConfigurationAITraining `json:"ai_training"`
+	// Configure robots.txt policy for AI assistant and agent bots.
+	AIUser SuperBotFightModeDefinitelyConfigurationAIUser `json:"ai_user"`
 	// Enable Bot Preference Sync for this zone. When enabled, Cloudflare can serve
 	// robots.txt content derived from the zone's AI Search, AI User, and AI Training
 	// preferences.
@@ -623,6 +794,9 @@ type SuperBotFightModeDefinitelyConfiguration struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged bool `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled bool `json:"jsd_api_results_enabled"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress bool `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
@@ -645,13 +819,18 @@ type SuperBotFightModeDefinitelyConfiguration struct {
 // superBotFightModeDefinitelyConfigurationJSON contains the JSON metadata for the
 // struct [SuperBotFightModeDefinitelyConfiguration]
 type superBotFightModeDefinitelyConfigurationJSON struct {
+	AIBotsMigrationOptOut        apijson.Field
 	AIBotsProtection             apijson.Field
+	AISearch                     apijson.Field
+	AITraining                   apijson.Field
+	AIUser                       apijson.Field
 	BotPreferenceSyncEnabled     apijson.Field
 	CfRobotsVariant              apijson.Field
 	ContentBotsProtection        apijson.Field
 	CrawlerProtection            apijson.Field
 	EnableJS                     apijson.Field
 	IsRobotsTXTManaged           apijson.Field
+	JsdAPIResultsEnabled         apijson.Field
 	OptimizeWordpress            apijson.Field
 	SBFMDefinitelyAutomated      apijson.Field
 	SBFMStaticResourceProtection apijson.Field
@@ -686,6 +865,58 @@ const (
 func (r SuperBotFightModeDefinitelyConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
 	case SuperBotFightModeDefinitelyConfigurationAIBotsProtectionBlock, SuperBotFightModeDefinitelyConfigurationAIBotsProtectionDisabled, SuperBotFightModeDefinitelyConfigurationAIBotsProtectionOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI search bots.
+type SuperBotFightModeDefinitelyConfigurationAISearch string
+
+const (
+	SuperBotFightModeDefinitelyConfigurationAISearchDisabled      SuperBotFightModeDefinitelyConfigurationAISearch = "disabled"
+	SuperBotFightModeDefinitelyConfigurationAISearchBlock         SuperBotFightModeDefinitelyConfigurationAISearch = "block"
+	SuperBotFightModeDefinitelyConfigurationAISearchOnlyOnADPages SuperBotFightModeDefinitelyConfigurationAISearch = "only_on_ad_pages"
+)
+
+func (r SuperBotFightModeDefinitelyConfigurationAISearch) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeDefinitelyConfigurationAISearchDisabled, SuperBotFightModeDefinitelyConfigurationAISearchBlock, SuperBotFightModeDefinitelyConfigurationAISearchOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI model training bots.
+type SuperBotFightModeDefinitelyConfigurationAITraining string
+
+const (
+	SuperBotFightModeDefinitelyConfigurationAITrainingDisabled      SuperBotFightModeDefinitelyConfigurationAITraining = "disabled"
+	SuperBotFightModeDefinitelyConfigurationAITrainingDisallow      SuperBotFightModeDefinitelyConfigurationAITraining = "disallow"
+	SuperBotFightModeDefinitelyConfigurationAITrainingBlock         SuperBotFightModeDefinitelyConfigurationAITraining = "block"
+	SuperBotFightModeDefinitelyConfigurationAITrainingOnlyOnADPages SuperBotFightModeDefinitelyConfigurationAITraining = "only_on_ad_pages"
+)
+
+func (r SuperBotFightModeDefinitelyConfigurationAITraining) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeDefinitelyConfigurationAITrainingDisabled, SuperBotFightModeDefinitelyConfigurationAITrainingDisallow, SuperBotFightModeDefinitelyConfigurationAITrainingBlock, SuperBotFightModeDefinitelyConfigurationAITrainingOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI assistant and agent bots.
+type SuperBotFightModeDefinitelyConfigurationAIUser string
+
+const (
+	SuperBotFightModeDefinitelyConfigurationAIUserDisabled      SuperBotFightModeDefinitelyConfigurationAIUser = "disabled"
+	SuperBotFightModeDefinitelyConfigurationAIUserBlock         SuperBotFightModeDefinitelyConfigurationAIUser = "block"
+	SuperBotFightModeDefinitelyConfigurationAIUserOnlyOnADPages SuperBotFightModeDefinitelyConfigurationAIUser = "only_on_ad_pages"
+)
+
+func (r SuperBotFightModeDefinitelyConfigurationAIUser) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeDefinitelyConfigurationAIUserDisabled, SuperBotFightModeDefinitelyConfigurationAIUserBlock, SuperBotFightModeDefinitelyConfigurationAIUserOnlyOnADPages:
 		return true
 	}
 	return false
@@ -804,8 +1035,17 @@ func (r superBotFightModeDefinitelyConfigurationStaleZoneConfigurationJSON) RawJ
 }
 
 type SuperBotFightModeDefinitelyConfigurationParam struct {
+	// Temporary migration flag tracking zones opted out of AI bots managed-rule
+	// updates.
+	AIBotsMigrationOptOut param.Field[bool] `json:"ai_bots_migration_opt_out"`
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection param.Field[SuperBotFightModeDefinitelyConfigurationAIBotsProtection] `json:"ai_bots_protection"`
+	// Configure robots.txt policy for AI search bots.
+	AISearch param.Field[SuperBotFightModeDefinitelyConfigurationAISearch] `json:"ai_search"`
+	// Configure robots.txt policy for AI model training bots.
+	AITraining param.Field[SuperBotFightModeDefinitelyConfigurationAITraining] `json:"ai_training"`
+	// Configure robots.txt policy for AI assistant and agent bots.
+	AIUser param.Field[SuperBotFightModeDefinitelyConfigurationAIUser] `json:"ai_user"`
 	// Enable Bot Preference Sync for this zone. When enabled, Cloudflare can serve
 	// robots.txt content derived from the zone's AI Search, AI User, and AI Training
 	// preferences.
@@ -824,6 +1064,9 @@ type SuperBotFightModeDefinitelyConfigurationParam struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged param.Field[bool] `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled param.Field[bool] `json:"jsd_api_results_enabled"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress param.Field[bool] `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
@@ -858,8 +1101,17 @@ func (r SuperBotFightModeDefinitelyConfigurationStaleZoneConfigurationParam) Mar
 }
 
 type SuperBotFightModeLikelyConfiguration struct {
+	// Temporary migration flag tracking zones opted out of AI bots managed-rule
+	// updates.
+	AIBotsMigrationOptOut bool `json:"ai_bots_migration_opt_out"`
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection SuperBotFightModeLikelyConfigurationAIBotsProtection `json:"ai_bots_protection"`
+	// Configure robots.txt policy for AI search bots.
+	AISearch SuperBotFightModeLikelyConfigurationAISearch `json:"ai_search"`
+	// Configure robots.txt policy for AI model training bots.
+	AITraining SuperBotFightModeLikelyConfigurationAITraining `json:"ai_training"`
+	// Configure robots.txt policy for AI assistant and agent bots.
+	AIUser SuperBotFightModeLikelyConfigurationAIUser `json:"ai_user"`
 	// Enable Bot Preference Sync for this zone. When enabled, Cloudflare can serve
 	// robots.txt content derived from the zone's AI Search, AI User, and AI Training
 	// preferences.
@@ -878,6 +1130,9 @@ type SuperBotFightModeLikelyConfiguration struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged bool `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled bool `json:"jsd_api_results_enabled"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress bool `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
@@ -902,13 +1157,18 @@ type SuperBotFightModeLikelyConfiguration struct {
 // superBotFightModeLikelyConfigurationJSON contains the JSON metadata for the
 // struct [SuperBotFightModeLikelyConfiguration]
 type superBotFightModeLikelyConfigurationJSON struct {
+	AIBotsMigrationOptOut        apijson.Field
 	AIBotsProtection             apijson.Field
+	AISearch                     apijson.Field
+	AITraining                   apijson.Field
+	AIUser                       apijson.Field
 	BotPreferenceSyncEnabled     apijson.Field
 	CfRobotsVariant              apijson.Field
 	ContentBotsProtection        apijson.Field
 	CrawlerProtection            apijson.Field
 	EnableJS                     apijson.Field
 	IsRobotsTXTManaged           apijson.Field
+	JsdAPIResultsEnabled         apijson.Field
 	OptimizeWordpress            apijson.Field
 	SBFMDefinitelyAutomated      apijson.Field
 	SBFMLikelyAutomated          apijson.Field
@@ -944,6 +1204,58 @@ const (
 func (r SuperBotFightModeLikelyConfigurationAIBotsProtection) IsKnown() bool {
 	switch r {
 	case SuperBotFightModeLikelyConfigurationAIBotsProtectionBlock, SuperBotFightModeLikelyConfigurationAIBotsProtectionDisabled, SuperBotFightModeLikelyConfigurationAIBotsProtectionOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI search bots.
+type SuperBotFightModeLikelyConfigurationAISearch string
+
+const (
+	SuperBotFightModeLikelyConfigurationAISearchDisabled      SuperBotFightModeLikelyConfigurationAISearch = "disabled"
+	SuperBotFightModeLikelyConfigurationAISearchBlock         SuperBotFightModeLikelyConfigurationAISearch = "block"
+	SuperBotFightModeLikelyConfigurationAISearchOnlyOnADPages SuperBotFightModeLikelyConfigurationAISearch = "only_on_ad_pages"
+)
+
+func (r SuperBotFightModeLikelyConfigurationAISearch) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeLikelyConfigurationAISearchDisabled, SuperBotFightModeLikelyConfigurationAISearchBlock, SuperBotFightModeLikelyConfigurationAISearchOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI model training bots.
+type SuperBotFightModeLikelyConfigurationAITraining string
+
+const (
+	SuperBotFightModeLikelyConfigurationAITrainingDisabled      SuperBotFightModeLikelyConfigurationAITraining = "disabled"
+	SuperBotFightModeLikelyConfigurationAITrainingDisallow      SuperBotFightModeLikelyConfigurationAITraining = "disallow"
+	SuperBotFightModeLikelyConfigurationAITrainingBlock         SuperBotFightModeLikelyConfigurationAITraining = "block"
+	SuperBotFightModeLikelyConfigurationAITrainingOnlyOnADPages SuperBotFightModeLikelyConfigurationAITraining = "only_on_ad_pages"
+)
+
+func (r SuperBotFightModeLikelyConfigurationAITraining) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeLikelyConfigurationAITrainingDisabled, SuperBotFightModeLikelyConfigurationAITrainingDisallow, SuperBotFightModeLikelyConfigurationAITrainingBlock, SuperBotFightModeLikelyConfigurationAITrainingOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI assistant and agent bots.
+type SuperBotFightModeLikelyConfigurationAIUser string
+
+const (
+	SuperBotFightModeLikelyConfigurationAIUserDisabled      SuperBotFightModeLikelyConfigurationAIUser = "disabled"
+	SuperBotFightModeLikelyConfigurationAIUserBlock         SuperBotFightModeLikelyConfigurationAIUser = "block"
+	SuperBotFightModeLikelyConfigurationAIUserOnlyOnADPages SuperBotFightModeLikelyConfigurationAIUser = "only_on_ad_pages"
+)
+
+func (r SuperBotFightModeLikelyConfigurationAIUser) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeLikelyConfigurationAIUserDisabled, SuperBotFightModeLikelyConfigurationAIUserBlock, SuperBotFightModeLikelyConfigurationAIUserOnlyOnADPages:
 		return true
 	}
 	return false
@@ -1075,8 +1387,17 @@ func (r superBotFightModeLikelyConfigurationStaleZoneConfigurationJSON) RawJSON(
 }
 
 type SuperBotFightModeLikelyConfigurationParam struct {
+	// Temporary migration flag tracking zones opted out of AI bots managed-rule
+	// updates.
+	AIBotsMigrationOptOut param.Field[bool] `json:"ai_bots_migration_opt_out"`
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection param.Field[SuperBotFightModeLikelyConfigurationAIBotsProtection] `json:"ai_bots_protection"`
+	// Configure robots.txt policy for AI search bots.
+	AISearch param.Field[SuperBotFightModeLikelyConfigurationAISearch] `json:"ai_search"`
+	// Configure robots.txt policy for AI model training bots.
+	AITraining param.Field[SuperBotFightModeLikelyConfigurationAITraining] `json:"ai_training"`
+	// Configure robots.txt policy for AI assistant and agent bots.
+	AIUser param.Field[SuperBotFightModeLikelyConfigurationAIUser] `json:"ai_user"`
 	// Enable Bot Preference Sync for this zone. When enabled, Cloudflare can serve
 	// robots.txt content derived from the zone's AI Search, AI User, and AI Training
 	// preferences.
@@ -1095,6 +1416,9 @@ type SuperBotFightModeLikelyConfigurationParam struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged param.Field[bool] `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled param.Field[bool] `json:"jsd_api_results_enabled"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress param.Field[bool] `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
@@ -1127,8 +1451,17 @@ func (r SuperBotFightModeLikelyConfigurationStaleZoneConfigurationParam) Marshal
 }
 
 type BotManagementUpdateResponse struct {
+	// Temporary migration flag tracking zones opted out of AI bots managed-rule
+	// updates.
+	AIBotsMigrationOptOut bool `json:"ai_bots_migration_opt_out"`
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection BotManagementUpdateResponseAIBotsProtection `json:"ai_bots_protection"`
+	// Configure robots.txt policy for AI search bots.
+	AISearch BotManagementUpdateResponseAISearch `json:"ai_search"`
+	// Configure robots.txt policy for AI model training bots.
+	AITraining BotManagementUpdateResponseAITraining `json:"ai_training"`
+	// Configure robots.txt policy for AI assistant and agent bots.
+	AIUser BotManagementUpdateResponseAIUser `json:"ai_user"`
 	// Automatically update to the newest bot detection models created by Cloudflare as
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
@@ -1156,6 +1489,9 @@ type BotManagementUpdateResponse struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged bool `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled bool `json:"jsd_api_results_enabled"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress bool `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
@@ -1187,7 +1523,11 @@ type BotManagementUpdateResponse struct {
 // botManagementUpdateResponseJSON contains the JSON metadata for the struct
 // [BotManagementUpdateResponse]
 type botManagementUpdateResponseJSON struct {
+	AIBotsMigrationOptOut        apijson.Field
 	AIBotsProtection             apijson.Field
+	AISearch                     apijson.Field
+	AITraining                   apijson.Field
+	AIUser                       apijson.Field
 	AutoUpdateModel              apijson.Field
 	BmCookieEnabled              apijson.Field
 	BotPreferenceSyncEnabled     apijson.Field
@@ -1197,6 +1537,7 @@ type botManagementUpdateResponseJSON struct {
 	EnableJS                     apijson.Field
 	FightMode                    apijson.Field
 	IsRobotsTXTManaged           apijson.Field
+	JsdAPIResultsEnabled         apijson.Field
 	OptimizeWordpress            apijson.Field
 	SBFMDefinitelyAutomated      apijson.Field
 	SBFMLikelyAutomated          apijson.Field
@@ -1274,6 +1615,58 @@ const (
 func (r BotManagementUpdateResponseAIBotsProtection) IsKnown() bool {
 	switch r {
 	case BotManagementUpdateResponseAIBotsProtectionBlock, BotManagementUpdateResponseAIBotsProtectionDisabled, BotManagementUpdateResponseAIBotsProtectionOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI search bots.
+type BotManagementUpdateResponseAISearch string
+
+const (
+	BotManagementUpdateResponseAISearchDisabled      BotManagementUpdateResponseAISearch = "disabled"
+	BotManagementUpdateResponseAISearchBlock         BotManagementUpdateResponseAISearch = "block"
+	BotManagementUpdateResponseAISearchOnlyOnADPages BotManagementUpdateResponseAISearch = "only_on_ad_pages"
+)
+
+func (r BotManagementUpdateResponseAISearch) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateResponseAISearchDisabled, BotManagementUpdateResponseAISearchBlock, BotManagementUpdateResponseAISearchOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI model training bots.
+type BotManagementUpdateResponseAITraining string
+
+const (
+	BotManagementUpdateResponseAITrainingDisabled      BotManagementUpdateResponseAITraining = "disabled"
+	BotManagementUpdateResponseAITrainingDisallow      BotManagementUpdateResponseAITraining = "disallow"
+	BotManagementUpdateResponseAITrainingBlock         BotManagementUpdateResponseAITraining = "block"
+	BotManagementUpdateResponseAITrainingOnlyOnADPages BotManagementUpdateResponseAITraining = "only_on_ad_pages"
+)
+
+func (r BotManagementUpdateResponseAITraining) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateResponseAITrainingDisabled, BotManagementUpdateResponseAITrainingDisallow, BotManagementUpdateResponseAITrainingBlock, BotManagementUpdateResponseAITrainingOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI assistant and agent bots.
+type BotManagementUpdateResponseAIUser string
+
+const (
+	BotManagementUpdateResponseAIUserDisabled      BotManagementUpdateResponseAIUser = "disabled"
+	BotManagementUpdateResponseAIUserBlock         BotManagementUpdateResponseAIUser = "block"
+	BotManagementUpdateResponseAIUserOnlyOnADPages BotManagementUpdateResponseAIUser = "only_on_ad_pages"
+)
+
+func (r BotManagementUpdateResponseAIUser) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateResponseAIUserDisabled, BotManagementUpdateResponseAIUserBlock, BotManagementUpdateResponseAIUserOnlyOnADPages:
 		return true
 	}
 	return false
@@ -1380,8 +1773,17 @@ func (r BotManagementUpdateResponseSBFMVerifiedBots) IsKnown() bool {
 }
 
 type BotManagementGetResponse struct {
+	// Temporary migration flag tracking zones opted out of AI bots managed-rule
+	// updates.
+	AIBotsMigrationOptOut bool `json:"ai_bots_migration_opt_out"`
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection BotManagementGetResponseAIBotsProtection `json:"ai_bots_protection"`
+	// Configure robots.txt policy for AI search bots.
+	AISearch BotManagementGetResponseAISearch `json:"ai_search"`
+	// Configure robots.txt policy for AI model training bots.
+	AITraining BotManagementGetResponseAITraining `json:"ai_training"`
+	// Configure robots.txt policy for AI assistant and agent bots.
+	AIUser BotManagementGetResponseAIUser `json:"ai_user"`
 	// Automatically update to the newest bot detection models created by Cloudflare as
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
@@ -1409,6 +1811,9 @@ type BotManagementGetResponse struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged bool `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled bool `json:"jsd_api_results_enabled"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress bool `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
@@ -1440,7 +1845,11 @@ type BotManagementGetResponse struct {
 // botManagementGetResponseJSON contains the JSON metadata for the struct
 // [BotManagementGetResponse]
 type botManagementGetResponseJSON struct {
+	AIBotsMigrationOptOut        apijson.Field
 	AIBotsProtection             apijson.Field
+	AISearch                     apijson.Field
+	AITraining                   apijson.Field
+	AIUser                       apijson.Field
 	AutoUpdateModel              apijson.Field
 	BmCookieEnabled              apijson.Field
 	BotPreferenceSyncEnabled     apijson.Field
@@ -1450,6 +1859,7 @@ type botManagementGetResponseJSON struct {
 	EnableJS                     apijson.Field
 	FightMode                    apijson.Field
 	IsRobotsTXTManaged           apijson.Field
+	JsdAPIResultsEnabled         apijson.Field
 	OptimizeWordpress            apijson.Field
 	SBFMDefinitelyAutomated      apijson.Field
 	SBFMLikelyAutomated          apijson.Field
@@ -1527,6 +1937,58 @@ const (
 func (r BotManagementGetResponseAIBotsProtection) IsKnown() bool {
 	switch r {
 	case BotManagementGetResponseAIBotsProtectionBlock, BotManagementGetResponseAIBotsProtectionDisabled, BotManagementGetResponseAIBotsProtectionOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI search bots.
+type BotManagementGetResponseAISearch string
+
+const (
+	BotManagementGetResponseAISearchDisabled      BotManagementGetResponseAISearch = "disabled"
+	BotManagementGetResponseAISearchBlock         BotManagementGetResponseAISearch = "block"
+	BotManagementGetResponseAISearchOnlyOnADPages BotManagementGetResponseAISearch = "only_on_ad_pages"
+)
+
+func (r BotManagementGetResponseAISearch) IsKnown() bool {
+	switch r {
+	case BotManagementGetResponseAISearchDisabled, BotManagementGetResponseAISearchBlock, BotManagementGetResponseAISearchOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI model training bots.
+type BotManagementGetResponseAITraining string
+
+const (
+	BotManagementGetResponseAITrainingDisabled      BotManagementGetResponseAITraining = "disabled"
+	BotManagementGetResponseAITrainingDisallow      BotManagementGetResponseAITraining = "disallow"
+	BotManagementGetResponseAITrainingBlock         BotManagementGetResponseAITraining = "block"
+	BotManagementGetResponseAITrainingOnlyOnADPages BotManagementGetResponseAITraining = "only_on_ad_pages"
+)
+
+func (r BotManagementGetResponseAITraining) IsKnown() bool {
+	switch r {
+	case BotManagementGetResponseAITrainingDisabled, BotManagementGetResponseAITrainingDisallow, BotManagementGetResponseAITrainingBlock, BotManagementGetResponseAITrainingOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI assistant and agent bots.
+type BotManagementGetResponseAIUser string
+
+const (
+	BotManagementGetResponseAIUserDisabled      BotManagementGetResponseAIUser = "disabled"
+	BotManagementGetResponseAIUserBlock         BotManagementGetResponseAIUser = "block"
+	BotManagementGetResponseAIUserOnlyOnADPages BotManagementGetResponseAIUser = "only_on_ad_pages"
+)
+
+func (r BotManagementGetResponseAIUser) IsKnown() bool {
+	switch r {
+	case BotManagementGetResponseAIUserDisabled, BotManagementGetResponseAIUserBlock, BotManagementGetResponseAIUserOnlyOnADPages:
 		return true
 	}
 	return false
@@ -1643,8 +2105,17 @@ func (r BotManagementUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type BotManagementUpdateParamsBody struct {
+	// Temporary migration flag tracking zones opted out of AI bots managed-rule
+	// updates.
+	AIBotsMigrationOptOut param.Field[bool] `json:"ai_bots_migration_opt_out"`
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection param.Field[BotManagementUpdateParamsBodyAIBotsProtection] `json:"ai_bots_protection"`
+	// Configure robots.txt policy for AI search bots.
+	AISearch param.Field[BotManagementUpdateParamsBodyAISearch] `json:"ai_search"`
+	// Configure robots.txt policy for AI model training bots.
+	AITraining param.Field[BotManagementUpdateParamsBodyAITraining] `json:"ai_training"`
+	// Configure robots.txt policy for AI assistant and agent bots.
+	AIUser param.Field[BotManagementUpdateParamsBodyAIUser] `json:"ai_user"`
 	// Automatically update to the newest bot detection models created by Cloudflare as
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
@@ -1672,6 +2143,9 @@ type BotManagementUpdateParamsBody struct {
 	// Enable cloudflare managed robots.txt. If an existing robots.txt is detected,
 	// then managed robots.txt will be prepended to the existing robots.txt.
 	IsRobotsTXTManaged param.Field[bool] `json:"is_robots_txt_managed"`
+	// Whether to use JavaScript Detection results submitted through the API for this
+	// zone.
+	JsdAPIResultsEnabled param.Field[bool] `json:"jsd_api_results_enabled"`
 	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
 	OptimizeWordpress param.Field[bool] `json:"optimize_wordpress"`
 	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
@@ -1717,6 +2191,58 @@ const (
 func (r BotManagementUpdateParamsBodyAIBotsProtection) IsKnown() bool {
 	switch r {
 	case BotManagementUpdateParamsBodyAIBotsProtectionBlock, BotManagementUpdateParamsBodyAIBotsProtectionDisabled, BotManagementUpdateParamsBodyAIBotsProtectionOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI search bots.
+type BotManagementUpdateParamsBodyAISearch string
+
+const (
+	BotManagementUpdateParamsBodyAISearchDisabled      BotManagementUpdateParamsBodyAISearch = "disabled"
+	BotManagementUpdateParamsBodyAISearchBlock         BotManagementUpdateParamsBodyAISearch = "block"
+	BotManagementUpdateParamsBodyAISearchOnlyOnADPages BotManagementUpdateParamsBodyAISearch = "only_on_ad_pages"
+)
+
+func (r BotManagementUpdateParamsBodyAISearch) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateParamsBodyAISearchDisabled, BotManagementUpdateParamsBodyAISearchBlock, BotManagementUpdateParamsBodyAISearchOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI model training bots.
+type BotManagementUpdateParamsBodyAITraining string
+
+const (
+	BotManagementUpdateParamsBodyAITrainingDisabled      BotManagementUpdateParamsBodyAITraining = "disabled"
+	BotManagementUpdateParamsBodyAITrainingDisallow      BotManagementUpdateParamsBodyAITraining = "disallow"
+	BotManagementUpdateParamsBodyAITrainingBlock         BotManagementUpdateParamsBodyAITraining = "block"
+	BotManagementUpdateParamsBodyAITrainingOnlyOnADPages BotManagementUpdateParamsBodyAITraining = "only_on_ad_pages"
+)
+
+func (r BotManagementUpdateParamsBodyAITraining) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateParamsBodyAITrainingDisabled, BotManagementUpdateParamsBodyAITrainingDisallow, BotManagementUpdateParamsBodyAITrainingBlock, BotManagementUpdateParamsBodyAITrainingOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Configure robots.txt policy for AI assistant and agent bots.
+type BotManagementUpdateParamsBodyAIUser string
+
+const (
+	BotManagementUpdateParamsBodyAIUserDisabled      BotManagementUpdateParamsBodyAIUser = "disabled"
+	BotManagementUpdateParamsBodyAIUserBlock         BotManagementUpdateParamsBodyAIUser = "block"
+	BotManagementUpdateParamsBodyAIUserOnlyOnADPages BotManagementUpdateParamsBodyAIUser = "only_on_ad_pages"
+)
+
+func (r BotManagementUpdateParamsBodyAIUser) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateParamsBodyAIUserDisabled, BotManagementUpdateParamsBodyAIUserBlock, BotManagementUpdateParamsBodyAIUserOnlyOnADPages:
 		return true
 	}
 	return false

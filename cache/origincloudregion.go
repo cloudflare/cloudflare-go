@@ -47,7 +47,7 @@ func NewOriginCloudRegionService(opts ...option.RequestOption) (r *OriginCloudRe
 // Returns 400 if the `origin_ip` in the body does not match the URL path
 // parameter. Returns 403 (code 1164) when the zone has reached the limit of 3,500
 // IP mappings.
-func (r *OriginCloudRegionService) Update(ctx context.Context, originIP string, params OriginCloudRegionUpdateParams, opts ...option.RequestOption) (res *OriginCloudRegion, err error) {
+func (r *OriginCloudRegionService) Update(ctx context.Context, originIP string, params OriginCloudRegionUpdateParams, opts ...option.RequestOption) (res *OriginCloudRegionUpdateResponse, err error) {
 	var env OriginCloudRegionUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.ZoneID.Value == "" {
@@ -72,7 +72,7 @@ func (r *OriginCloudRegionService) Update(ctx context.Context, originIP string, 
 // origin at that IP, enabling the edge to route via the nearest Tiered Cache
 // upper-tier co-located with that cloud provider. Returns an empty array when no
 // mappings exist.
-func (r *OriginCloudRegionService) List(ctx context.Context, params OriginCloudRegionListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[OriginCloudRegion], err error) {
+func (r *OriginCloudRegionService) List(ctx context.Context, params OriginCloudRegionListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[OriginCloudRegionListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -98,7 +98,7 @@ func (r *OriginCloudRegionService) List(ctx context.Context, params OriginCloudR
 // origin at that IP, enabling the edge to route via the nearest Tiered Cache
 // upper-tier co-located with that cloud provider. Returns an empty array when no
 // mappings exist.
-func (r *OriginCloudRegionService) ListAutoPaging(ctx context.Context, params OriginCloudRegionListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[OriginCloudRegion] {
+func (r *OriginCloudRegionService) ListAutoPaging(ctx context.Context, params OriginCloudRegionListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[OriginCloudRegionListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -172,7 +172,7 @@ func (r *OriginCloudRegionService) BulkUpdate(ctx context.Context, params Origin
 // Returns the cloud region mapping for a single origin IP address. The IP path
 // parameter is normalized before lookup (RFC 5952 for IPv6). Returns 404 if the
 // zone has no mappings or if the specified IP has no mapping.
-func (r *OriginCloudRegionService) Get(ctx context.Context, originIP string, query OriginCloudRegionGetParams, opts ...option.RequestOption) (res *OriginCloudRegion, err error) {
+func (r *OriginCloudRegionService) Get(ctx context.Context, originIP string, query OriginCloudRegionGetParams, opts ...option.RequestOption) (res *OriginCloudRegionGetResponse, err error) {
 	var env OriginCloudRegionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.ZoneID.Value == "" {
@@ -213,22 +213,22 @@ func (r *OriginCloudRegionService) SupportedRegions(ctx context.Context, query O
 }
 
 // A single origin IP-to-cloud-region mapping.
-type OriginCloudRegion struct {
+type OriginCloudRegionUpdateResponse struct {
 	// The origin IP address (IPv4 or IPv6). Normalized to canonical form (RFC 5952 for
 	// IPv6).
 	OriginIP string `json:"origin_ip" api:"required"`
 	// Cloud vendor region identifier.
 	Region string `json:"region" api:"required"`
 	// Cloud vendor hosting the origin.
-	Vendor OriginCloudRegionVendor `json:"vendor" api:"required"`
+	Vendor OriginCloudRegionUpdateResponseVendor `json:"vendor" api:"required"`
 	// Time this mapping was last modified.
-	ModifiedOn time.Time             `json:"modified_on" format:"date-time"`
-	JSON       originCloudRegionJSON `json:"-"`
+	ModifiedOn time.Time                           `json:"modified_on" format:"date-time"`
+	JSON       originCloudRegionUpdateResponseJSON `json:"-"`
 }
 
-// originCloudRegionJSON contains the JSON metadata for the struct
-// [OriginCloudRegion]
-type originCloudRegionJSON struct {
+// originCloudRegionUpdateResponseJSON contains the JSON metadata for the struct
+// [OriginCloudRegionUpdateResponse]
+type originCloudRegionUpdateResponseJSON struct {
 	OriginIP    apijson.Field
 	Region      apijson.Field
 	Vendor      apijson.Field
@@ -237,27 +237,78 @@ type originCloudRegionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OriginCloudRegion) UnmarshalJSON(data []byte) (err error) {
+func (r *OriginCloudRegionUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r originCloudRegionJSON) RawJSON() string {
+func (r originCloudRegionUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // Cloud vendor hosting the origin.
-type OriginCloudRegionVendor string
+type OriginCloudRegionUpdateResponseVendor string
 
 const (
-	OriginCloudRegionVendorAws   OriginCloudRegionVendor = "aws"
-	OriginCloudRegionVendorAzure OriginCloudRegionVendor = "azure"
-	OriginCloudRegionVendorGcp   OriginCloudRegionVendor = "gcp"
-	OriginCloudRegionVendorOci   OriginCloudRegionVendor = "oci"
+	OriginCloudRegionUpdateResponseVendorAws   OriginCloudRegionUpdateResponseVendor = "aws"
+	OriginCloudRegionUpdateResponseVendorAzure OriginCloudRegionUpdateResponseVendor = "azure"
+	OriginCloudRegionUpdateResponseVendorGcp   OriginCloudRegionUpdateResponseVendor = "gcp"
+	OriginCloudRegionUpdateResponseVendorOci   OriginCloudRegionUpdateResponseVendor = "oci"
 )
 
-func (r OriginCloudRegionVendor) IsKnown() bool {
+func (r OriginCloudRegionUpdateResponseVendor) IsKnown() bool {
 	switch r {
-	case OriginCloudRegionVendorAws, OriginCloudRegionVendorAzure, OriginCloudRegionVendorGcp, OriginCloudRegionVendorOci:
+	case OriginCloudRegionUpdateResponseVendorAws, OriginCloudRegionUpdateResponseVendorAzure, OriginCloudRegionUpdateResponseVendorGcp, OriginCloudRegionUpdateResponseVendorOci:
+		return true
+	}
+	return false
+}
+
+// A single origin IP-to-cloud-region mapping.
+type OriginCloudRegionListResponse struct {
+	// The origin IP address (IPv4 or IPv6). Normalized to canonical form (RFC 5952 for
+	// IPv6).
+	OriginIP string `json:"origin_ip" api:"required"`
+	// Cloud vendor region identifier.
+	Region string `json:"region" api:"required"`
+	// Cloud vendor hosting the origin.
+	Vendor OriginCloudRegionListResponseVendor `json:"vendor" api:"required"`
+	// Time this mapping was last modified.
+	ModifiedOn time.Time                         `json:"modified_on" format:"date-time"`
+	JSON       originCloudRegionListResponseJSON `json:"-"`
+}
+
+// originCloudRegionListResponseJSON contains the JSON metadata for the struct
+// [OriginCloudRegionListResponse]
+type originCloudRegionListResponseJSON struct {
+	OriginIP    apijson.Field
+	Region      apijson.Field
+	Vendor      apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OriginCloudRegionListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originCloudRegionListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Cloud vendor hosting the origin.
+type OriginCloudRegionListResponseVendor string
+
+const (
+	OriginCloudRegionListResponseVendorAws   OriginCloudRegionListResponseVendor = "aws"
+	OriginCloudRegionListResponseVendorAzure OriginCloudRegionListResponseVendor = "azure"
+	OriginCloudRegionListResponseVendorGcp   OriginCloudRegionListResponseVendor = "gcp"
+	OriginCloudRegionListResponseVendorOci   OriginCloudRegionListResponseVendor = "oci"
+)
+
+func (r OriginCloudRegionListResponseVendor) IsKnown() bool {
+	switch r {
+	case OriginCloudRegionListResponseVendorAws, OriginCloudRegionListResponseVendorAzure, OriginCloudRegionListResponseVendorGcp, OriginCloudRegionListResponseVendorOci:
 		return true
 	}
 	return false
@@ -474,6 +525,57 @@ func (r originCloudRegionBulkUpdateResponseSucceededJSON) RawJSON() string {
 	return r.raw
 }
 
+// A single origin IP-to-cloud-region mapping.
+type OriginCloudRegionGetResponse struct {
+	// The origin IP address (IPv4 or IPv6). Normalized to canonical form (RFC 5952 for
+	// IPv6).
+	OriginIP string `json:"origin_ip" api:"required"`
+	// Cloud vendor region identifier.
+	Region string `json:"region" api:"required"`
+	// Cloud vendor hosting the origin.
+	Vendor OriginCloudRegionGetResponseVendor `json:"vendor" api:"required"`
+	// Time this mapping was last modified.
+	ModifiedOn time.Time                        `json:"modified_on" format:"date-time"`
+	JSON       originCloudRegionGetResponseJSON `json:"-"`
+}
+
+// originCloudRegionGetResponseJSON contains the JSON metadata for the struct
+// [OriginCloudRegionGetResponse]
+type originCloudRegionGetResponseJSON struct {
+	OriginIP    apijson.Field
+	Region      apijson.Field
+	Vendor      apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OriginCloudRegionGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originCloudRegionGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Cloud vendor hosting the origin.
+type OriginCloudRegionGetResponseVendor string
+
+const (
+	OriginCloudRegionGetResponseVendorAws   OriginCloudRegionGetResponseVendor = "aws"
+	OriginCloudRegionGetResponseVendorAzure OriginCloudRegionGetResponseVendor = "azure"
+	OriginCloudRegionGetResponseVendorGcp   OriginCloudRegionGetResponseVendor = "gcp"
+	OriginCloudRegionGetResponseVendorOci   OriginCloudRegionGetResponseVendor = "oci"
+)
+
+func (r OriginCloudRegionGetResponseVendor) IsKnown() bool {
+	switch r {
+	case OriginCloudRegionGetResponseVendorAws, OriginCloudRegionGetResponseVendorAzure, OriginCloudRegionGetResponseVendorGcp, OriginCloudRegionGetResponseVendorOci:
+		return true
+	}
+	return false
+}
+
 // Cloud vendors and their supported regions for origin cloud region mappings.
 type OriginCloudRegionSupportedRegionsResponse struct {
 	// Whether Cloudflare airport codes (IATA colo identifiers) were successfully
@@ -574,7 +676,7 @@ type OriginCloudRegionUpdateResponseEnvelope struct {
 	// Whether the API call was successful.
 	Success OriginCloudRegionUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A single origin IP-to-cloud-region mapping.
-	Result OriginCloudRegion                           `json:"result"`
+	Result OriginCloudRegionUpdateResponse             `json:"result"`
 	JSON   originCloudRegionUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -829,7 +931,7 @@ type OriginCloudRegionGetResponseEnvelope struct {
 	// Whether the API call was successful.
 	Success OriginCloudRegionGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	// A single origin IP-to-cloud-region mapping.
-	Result OriginCloudRegion                        `json:"result"`
+	Result OriginCloudRegionGetResponse             `json:"result"`
 	JSON   originCloudRegionGetResponseEnvelopeJSON `json:"-"`
 }
 
