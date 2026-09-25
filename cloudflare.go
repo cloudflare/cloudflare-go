@@ -431,6 +431,36 @@ type ResponseInfo struct {
 	Message string `json:"message"`
 }
 
+// UnmarshalJSON implements json.Unmarshaler.
+//
+// The v4 API envelope documents `errors` and `messages` as arrays of
+// {code, message} objects, but some services emit bare strings instead. The
+// custom hostname service, for example, declares `Messages []string` and
+// returns a plain string alongside an otherwise successful create when the
+// account is over its quota. Decoding strictly fails the whole response in
+// that case and discards a valid result.
+//
+// Accept either shape. A bare string is kept as the message with a zero code,
+// since no code is supplied.
+func (ri *ResponseInfo) UnmarshalJSON(data []byte) error {
+	var s string
+	if err := json.Unmarshal(data, &s); err == nil {
+		ri.Code = 0
+		ri.Message = s
+		return nil
+	}
+
+	// Alias prevents recursing back into this method.
+	type responseInfo ResponseInfo
+	var obj responseInfo
+	if err := json.Unmarshal(data, &obj); err != nil {
+		return err
+	}
+	*ri = ResponseInfo(obj)
+
+	return nil
+}
+
 // Response is a template.  There will also be a result struct.  There will be a
 // unique response type for each response, which will include this type.
 type Response struct {
