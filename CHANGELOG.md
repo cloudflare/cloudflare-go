@@ -1,3 +1,9 @@
+## 0.119.0 (Unreleased)
+
+BUG FIXES:
+
+* cloudflare: accept bare strings in the `errors` and `messages` response arrays instead of failing to unmarshal the entire response ([#4367](https://github.com/cloudflare/cloudflare-go/issues/4367))
+
 ## 0.118.0 (September 1st, 2026)
 
 ENHANCEMENTS:
