@@ -1,0 +1,20 @@
+CHANGELOG.md
+  s_e7c17b6b64d4fe::t_01b4d63709b119 3-16,18-562
+  s_e7c17b6b64d4fe::t_6f2bfc4db04ca4 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "cd3698de1aedf712e85feaf2f957b68ebdbf7bee",
+  "prompts": {},
+  "sessions": {
+    "s_e7c17b6b64d4fe": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f2b9041e7ffekbflWD3TayQF0W",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "rotem <rotem@cloudflare.com>"
+    }
+  }
+}
