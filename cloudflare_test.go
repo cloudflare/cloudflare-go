@@ -547,3 +547,57 @@ func TestCheckResultInfo(t *testing.T) {
 		})
 	}
 }
+
+func TestResponseInfoUnmarshalJSON(t *testing.T) {
+	for _, c := range []struct {
+		TestName string
+		Input    string
+		Expected ResponseInfo
+		WantErr  bool
+	}{
+		{"object form", `{"code":1234,"message":"all good"}`, ResponseInfo{Code: 1234, Message: "all good"}, false},
+		{"object form without code", `{"message":"no code"}`, ResponseInfo{Code: 0, Message: "no code"}, false},
+		{"bare string", `"You have exceeded your custom hostname quota."`, ResponseInfo{Code: 0, Message: "You have exceeded your custom hostname quota."}, false},
+		{"empty string", `""`, ResponseInfo{Code: 0, Message: ""}, false},
+		{"neither object nor string", `1234`, ResponseInfo{}, true},
+	} {
+		t.Run(c.TestName, func(t *testing.T) {
+			var actual ResponseInfo
+			err := json.Unmarshal([]byte(c.Input), &actual)
+			if c.WantErr {
+				assert.Error(t, err)
+				return
+			}
+			assert.NoError(t, err)
+			assert.Equal(t, c.Expected, actual)
+		})
+	}
+}
+
+// The custom hostname service returns `messages` as an array of plain strings
+// rather than the documented {code, message} objects. A quota warning arrives
+// alongside an otherwise successful create, which previously failed the whole
+// decode and discarded the result.
+func TestResponseInfoStringMessagesPreserveResult(t *testing.T) {
+	body := `{
+		"result": {
+			"id": "92f106a5-6c39-47da-8e2b-d90821675d7c",
+			"hostname": "app.example.com",
+			"status": "pending"
+		},
+		"success": true,
+		"errors": [],
+		"messages": [
+			"You have exceeded your custom hostname quota. Additional usage will be billed accordingly."
+		]
+	}`
+
+	var actual CustomHostnameResponse
+	err := json.Unmarshal([]byte(body), &actual)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "92f106a5-6c39-47da-8e2b-d90821675d7c", actual.Result.ID)
+	assert.Equal(t, "app.example.com", actual.Result.Hostname)
+	assert.Len(t, actual.Messages, 1)
+	assert.Equal(t, "You have exceeded your custom hostname quota. Additional usage will be billed accordingly.", actual.Messages[0].Message)
+}

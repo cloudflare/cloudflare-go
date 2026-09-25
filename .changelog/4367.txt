@@ -1,0 +1,3 @@
+```release-note:bug
+cloudflare: accept bare strings in the `errors` and `messages` response arrays instead of failing to unmarshal the entire response
+```
