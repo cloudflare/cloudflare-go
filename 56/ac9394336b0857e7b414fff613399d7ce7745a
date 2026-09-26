@@ -1,0 +1,19 @@
+pipelines/pipeline.go
+  s_11d1a6860ca1c7::t_b371086ad464aa 283-285
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "56ac9394336b0857e7b414fff613399d7ce7745a",
+  "prompts": {},
+  "sessions": {
+    "s_11d1a6860ca1c7": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f2a5db225ffesfvI3oFFZlvMIf",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Sarah Sicard <ssicard@cloudflare.com>"
+    }
+  }
+}
