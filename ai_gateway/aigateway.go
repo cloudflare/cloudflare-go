@@ -58,7 +58,9 @@ func NewAIGatewayService(opts ...option.RequestOption) (r *AIGatewayService) {
 	return
 }
 
-// Creates a new AI Gateway.
+// Creates an AI Gateway in the account with the specified caching, rate limiting,
+// logging, and authentication settings. The gateway ID appears in request URLs and
+// must be unique within the account.
 func (r *AIGatewayService) New(ctx context.Context, params AIGatewayNewParams, opts ...option.RequestOption) (res *AIGatewayNewResponse, err error) {
 	var env AIGatewayNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -75,7 +77,8 @@ func (r *AIGatewayService) New(ctx context.Context, params AIGatewayNewParams, o
 	return res, nil
 }
 
-// Updates an existing AI Gateway dataset.
+// Updates the configuration of an AI Gateway, such as its caching, rate limiting,
+// logging, and authentication settings.
 func (r *AIGatewayService) Update(ctx context.Context, id string, params AIGatewayUpdateParams, opts ...option.RequestOption) (res *AIGatewayUpdateResponse, err error) {
 	var env AIGatewayUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -96,7 +99,7 @@ func (r *AIGatewayService) Update(ctx context.Context, id string, params AIGatew
 	return res, nil
 }
 
-// Lists all AI Gateway evaluator types configured for the account.
+// Lists the AI Gateways in the account. Use `search` to filter by gateway ID.
 func (r *AIGatewayService) List(ctx context.Context, params AIGatewayListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AIGatewayListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -118,12 +121,12 @@ func (r *AIGatewayService) List(ctx context.Context, params AIGatewayListParams,
 	return res, nil
 }
 
-// Lists all AI Gateway evaluator types configured for the account.
+// Lists the AI Gateways in the account. Use `search` to filter by gateway ID.
 func (r *AIGatewayService) ListAutoPaging(ctx context.Context, params AIGatewayListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AIGatewayListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Deletes an AI Gateway dataset.
+// Permanently deletes an AI Gateway, its configuration, and its stored logs.
 func (r *AIGatewayService) Delete(ctx context.Context, id string, body AIGatewayDeleteParams, opts ...option.RequestOption) (res *AIGatewayDeleteResponse, err error) {
 	var env AIGatewayDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -144,7 +147,7 @@ func (r *AIGatewayService) Delete(ctx context.Context, id string, body AIGateway
 	return res, nil
 }
 
-// Retrieves details for a specific AI Gateway dataset.
+// Retrieves the configuration of an AI Gateway.
 func (r *AIGatewayService) Get(ctx context.Context, id string, query AIGatewayGetParams, opts ...option.RequestOption) (res *AIGatewayGetResponse, err error) {
 	var env AIGatewayGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -166,7 +169,7 @@ func (r *AIGatewayService) Get(ctx context.Context, id string, query AIGatewayGe
 }
 
 type AIGatewayNewResponse struct {
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	ID                      string    `json:"id" api:"required"`
 	CacheInvalidateOnUpdate bool      `json:"cache_invalidate_on_update" api:"required"`
 	CacheTTL                int64     `json:"cache_ttl" api:"required,nullable"`
@@ -1364,7 +1367,7 @@ func (r AIGatewayNewResponseWorkersAIBillingMode) IsKnown() bool {
 }
 
 type AIGatewayUpdateResponse struct {
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	ID                      string    `json:"id" api:"required"`
 	CacheInvalidateOnUpdate bool      `json:"cache_invalidate_on_update" api:"required"`
 	CacheTTL                int64     `json:"cache_ttl" api:"required,nullable"`
@@ -2563,7 +2566,7 @@ func (r AIGatewayUpdateResponseWorkersAIBillingMode) IsKnown() bool {
 }
 
 type AIGatewayListResponse struct {
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	ID                      string    `json:"id" api:"required"`
 	CacheInvalidateOnUpdate bool      `json:"cache_invalidate_on_update" api:"required"`
 	CacheTTL                int64     `json:"cache_ttl" api:"required,nullable"`
@@ -3762,7 +3765,7 @@ func (r AIGatewayListResponseWorkersAIBillingMode) IsKnown() bool {
 }
 
 type AIGatewayDeleteResponse struct {
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	ID                      string    `json:"id" api:"required"`
 	CacheInvalidateOnUpdate bool      `json:"cache_invalidate_on_update" api:"required"`
 	CacheTTL                int64     `json:"cache_ttl" api:"required,nullable"`
@@ -4961,7 +4964,7 @@ func (r AIGatewayDeleteResponseWorkersAIBillingMode) IsKnown() bool {
 }
 
 type AIGatewayGetResponse struct {
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	ID                      string    `json:"id" api:"required"`
 	CacheInvalidateOnUpdate bool      `json:"cache_invalidate_on_update" api:"required"`
 	CacheTTL                int64     `json:"cache_ttl" api:"required,nullable"`
@@ -6160,7 +6163,7 @@ func (r AIGatewayGetResponseWorkersAIBillingMode) IsKnown() bool {
 
 type AIGatewayNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	ID                      param.Field[string] `json:"id" api:"required"`
 	CacheInvalidateOnUpdate param.Field[bool]   `json:"cache_invalidate_on_update" api:"required"`
 	CacheTTL                param.Field[int64]  `json:"cache_ttl" api:"required"`

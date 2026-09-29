@@ -1034,6 +1034,7 @@ func (r gatewayConfigurationGetResponseJSON) RawJSON() string {
 }
 
 type GatewayConfigurationUpdateParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify account settings.
 	Settings param.Field[GatewayConfigurationSettingsParam] `json:"settings"`
@@ -1088,6 +1089,7 @@ func (r GatewayConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayConfigurationEditParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify account settings.
 	Settings param.Field[GatewayConfigurationSettingsParam] `json:"settings"`
@@ -1142,6 +1144,7 @@ func (r GatewayConfigurationEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayConfigurationGetParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

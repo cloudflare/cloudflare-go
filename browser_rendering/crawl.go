@@ -286,6 +286,9 @@ type CrawlNewParamsBody struct {
 	Authenticate        param.Field[interface{}] `json:"authenticate"`
 	// Attempt to proceed when 'awaited' events fail or timeout.
 	BestAttempt param.Field[bool] `json:"bestAttempt"`
+	// Rendering backend for this crawl. Set to `kitesurf` to render pages with
+	// Kitesurf (beta). Only valid when `render` is `true`.
+	Browser param.Field[CrawlNewParamsBodyBrowser] `json:"browser"`
 	// Intended content use level to respect the `use` Content-Signal directive in
 	// robots.txt. Levels (least to most permissive): 'reference', 'full'. A URL is
 	// disallowed when the publisher's declared `use` level is lower than this intent.
@@ -363,6 +366,9 @@ type CrawlNewParamsBodyObject struct {
 	Authenticate param.Field[CrawlNewParamsBodyObjectAuthenticate] `json:"authenticate"`
 	// Attempt to proceed when 'awaited' events fail or timeout.
 	BestAttempt param.Field[bool] `json:"bestAttempt"`
+	// Rendering backend for this crawl. Set to `kitesurf` to render pages with
+	// Kitesurf (beta). Only valid when `render` is `true`.
+	Browser param.Field[CrawlNewParamsBodyObjectBrowser] `json:"browser"`
 	// Intended content use level to respect the `use` Content-Signal directive in
 	// robots.txt. Levels (least to most permissive): 'reference', 'full'. A URL is
 	// disallowed when the publisher's declared `use` level is lower than this intent.
@@ -486,6 +492,22 @@ type CrawlNewParamsBodyObjectAuthenticate struct {
 
 func (r CrawlNewParamsBodyObjectAuthenticate) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Rendering backend for this crawl. Set to `kitesurf` to render pages with
+// Kitesurf (beta). Only valid when `render` is `true`.
+type CrawlNewParamsBodyObjectBrowser string
+
+const (
+	CrawlNewParamsBodyObjectBrowserKitesurf CrawlNewParamsBodyObjectBrowser = "kitesurf"
+)
+
+func (r CrawlNewParamsBodyObjectBrowser) IsKnown() bool {
+	switch r {
+	case CrawlNewParamsBodyObjectBrowserKitesurf:
+		return true
+	}
+	return false
 }
 
 // Intended content use level to respect the `use` Content-Signal directive in
@@ -845,6 +867,22 @@ const (
 func (r CrawlNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 	switch r {
 	case CrawlNewParamsBodyObjectWaitForSelectorVisibleTrue:
+		return true
+	}
+	return false
+}
+
+// Rendering backend for this crawl. Set to `kitesurf` to render pages with
+// Kitesurf (beta). Only valid when `render` is `true`.
+type CrawlNewParamsBodyBrowser string
+
+const (
+	CrawlNewParamsBodyBrowserKitesurf CrawlNewParamsBodyBrowser = "kitesurf"
+)
+
+func (r CrawlNewParamsBodyBrowser) IsKnown() bool {
+	switch r {
+	case CrawlNewParamsBodyBrowserKitesurf:
 		return true
 	}
 	return false

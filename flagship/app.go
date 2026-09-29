@@ -78,8 +78,8 @@ func (r *AppService) Update(ctx context.Context, appID string, params AppUpdateP
 	return res, nil
 }
 
-// Lists all apps in the account. Returns identity and audit fields only — flag
-// definitions are not included.
+// Lists all Flagship apps in the account. Returns identity and audit fields only;
+// flag definitions are not included.
 func (r *AppService) List(ctx context.Context, query AppListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AppListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -101,8 +101,8 @@ func (r *AppService) List(ctx context.Context, query AppListParams, opts ...opti
 	return res, nil
 }
 
-// Lists all apps in the account. Returns identity and audit fields only — flag
-// definitions are not included.
+// Lists all Flagship apps in the account. Returns identity and audit fields only;
+// flag definitions are not included.
 func (r *AppService) ListAutoPaging(ctx context.Context, query AppListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AppListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
@@ -289,9 +289,10 @@ func (r appGetResponseJSON) RawJSON() string {
 }
 
 type AppNewParams struct {
-	// Cloudflare account ID.
+	// Cloudflare account ID that owns the Flagship app.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Name      param.Field[string] `json:"name" api:"required"`
+	// Name of the Flagship app (1–64 letters, numbers, hyphens, or underscores).
+	Name param.Field[string] `json:"name" api:"required"`
 }
 
 func (r AppNewParams) MarshalJSON() (data []byte, err error) {
@@ -368,9 +369,10 @@ func (r appNewResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type AppUpdateParams struct {
-	// Cloudflare account ID.
+	// Cloudflare account ID that owns the Flagship app.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Name      param.Field[string] `json:"name"`
+	// Name of the Flagship app (1–64 letters, numbers, hyphens, or underscores).
+	Name param.Field[string] `json:"name"`
 }
 
 func (r AppUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -447,12 +449,12 @@ func (r appUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type AppListParams struct {
-	// Cloudflare account ID.
+	// Cloudflare account ID that owns the Flagship app.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type AppDeleteParams struct {
-	// Cloudflare account ID.
+	// Cloudflare account ID that owns the Flagship app.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -526,7 +528,7 @@ func (r appDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type AppGetParams struct {
-	// Cloudflare account ID.
+	// Cloudflare account ID that owns the Flagship app.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

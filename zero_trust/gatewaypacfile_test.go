@@ -77,7 +77,7 @@ func TestGatewayPacfileUpdate(t *testing.T) {
 	}
 }
 
-func TestGatewayPacfileList(t *testing.T) {
+func TestGatewayPacfileListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -93,6 +93,8 @@ func TestGatewayPacfileList(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Gateway.Pacfiles.List(context.TODO(), zero_trust.GatewayPacfileListParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		Page:      cloudflare.F(int64(1)),
+		PerPage:   cloudflare.F(int64(1)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -65,7 +65,8 @@ func (r *AppFlagService) New(ctx context.Context, appID string, params AppFlagNe
 }
 
 // Replaces the entire flag definition. Omitted fields are dropped, not preserved —
-// read before writing. Each update appends a changelog entry.
+// read before writing. The path key identifies the flag and cannot be renamed by
+// changing the body `key`. Each update appends a changelog entry.
 func (r *AppFlagService) Update(ctx context.Context, appID string, flagKey string, params AppFlagUpdateParams, opts ...option.RequestOption) (res *AppFlagUpdateResponse, err error) {
 	var env AppFlagUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -123,8 +124,9 @@ func (r *AppFlagService) ListAutoPaging(ctx context.Context, appID string, param
 	return pagination.NewCursorPaginationAfterAutoPager(r.List(ctx, appID, params, opts...))
 }
 
-// Deletes a flag permanently. Subsequent evaluations fall back to the
-// caller-supplied default. Cannot be undone.
+// Deletes a flag permanently. After deletion propagates, direct evaluations return
+// not found; typed binding accessors may return the caller-supplied default.
+// Cannot be undone.
 func (r *AppFlagService) Delete(ctx context.Context, appID string, flagKey string, body AppFlagDeleteParams, opts ...option.RequestOption) (res *AppFlagDeleteResponse, err error) {
 	var env AppFlagDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -190,11 +192,12 @@ type AppFlagNewResponse struct {
 	Type AppFlagNewResponseType `json:"type" api:"required"`
 	// Map of variation name to value. All values share the same type (boolean, string,
 	// number, or JSON object/array), and each serialized value stays within 10KB.
-	Variations  map[string]AppFlagNewResponseVariationsUnion `json:"variations" api:"required"`
-	Description string                                       `json:"description" api:"nullable"`
-	UpdatedAt   string                                       `json:"updated_at"`
-	UpdatedBy   string                                       `json:"updated_by"`
-	JSON        appFlagNewResponseJSON                       `json:"-"`
+	Variations map[string]AppFlagNewResponseVariationsUnion `json:"variations" api:"required"`
+	// Optional operator-facing description. It does not affect flag evaluation.
+	Description string                 `json:"description" api:"nullable"`
+	UpdatedAt   string                 `json:"updated_at"`
+	UpdatedBy   string                 `json:"updated_by"`
+	JSON        appFlagNewResponseJSON `json:"-"`
 }
 
 // appFlagNewResponseJSON contains the JSON metadata for the struct
@@ -364,11 +367,13 @@ const (
 	AppFlagNewResponseRulesConditionsObjectOperatorEndsWith            AppFlagNewResponseRulesConditionsObjectOperator = "ends_with"
 	AppFlagNewResponseRulesConditionsObjectOperatorIn                  AppFlagNewResponseRulesConditionsObjectOperator = "in"
 	AppFlagNewResponseRulesConditionsObjectOperatorNotIn               AppFlagNewResponseRulesConditionsObjectOperator = "not_in"
+	AppFlagNewResponseRulesConditionsObjectOperatorHas                 AppFlagNewResponseRulesConditionsObjectOperator = "has"
+	AppFlagNewResponseRulesConditionsObjectOperatorNotHas              AppFlagNewResponseRulesConditionsObjectOperator = "not_has"
 )
 
 func (r AppFlagNewResponseRulesConditionsObjectOperator) IsKnown() bool {
 	switch r {
-	case AppFlagNewResponseRulesConditionsObjectOperatorEquals, AppFlagNewResponseRulesConditionsObjectOperatorNotEquals, AppFlagNewResponseRulesConditionsObjectOperatorGreaterThan, AppFlagNewResponseRulesConditionsObjectOperatorLessThan, AppFlagNewResponseRulesConditionsObjectOperatorGreaterThanOrEquals, AppFlagNewResponseRulesConditionsObjectOperatorLessThanOrEquals, AppFlagNewResponseRulesConditionsObjectOperatorContains, AppFlagNewResponseRulesConditionsObjectOperatorStartsWith, AppFlagNewResponseRulesConditionsObjectOperatorEndsWith, AppFlagNewResponseRulesConditionsObjectOperatorIn, AppFlagNewResponseRulesConditionsObjectOperatorNotIn:
+	case AppFlagNewResponseRulesConditionsObjectOperatorEquals, AppFlagNewResponseRulesConditionsObjectOperatorNotEquals, AppFlagNewResponseRulesConditionsObjectOperatorGreaterThan, AppFlagNewResponseRulesConditionsObjectOperatorLessThan, AppFlagNewResponseRulesConditionsObjectOperatorGreaterThanOrEquals, AppFlagNewResponseRulesConditionsObjectOperatorLessThanOrEquals, AppFlagNewResponseRulesConditionsObjectOperatorContains, AppFlagNewResponseRulesConditionsObjectOperatorStartsWith, AppFlagNewResponseRulesConditionsObjectOperatorEndsWith, AppFlagNewResponseRulesConditionsObjectOperatorIn, AppFlagNewResponseRulesConditionsObjectOperatorNotIn, AppFlagNewResponseRulesConditionsObjectOperatorHas, AppFlagNewResponseRulesConditionsObjectOperatorNotHas:
 		return true
 	}
 	return false
@@ -451,19 +456,22 @@ const (
 	AppFlagNewResponseRulesConditionsOperatorEndsWith            AppFlagNewResponseRulesConditionsOperator = "ends_with"
 	AppFlagNewResponseRulesConditionsOperatorIn                  AppFlagNewResponseRulesConditionsOperator = "in"
 	AppFlagNewResponseRulesConditionsOperatorNotIn               AppFlagNewResponseRulesConditionsOperator = "not_in"
+	AppFlagNewResponseRulesConditionsOperatorHas                 AppFlagNewResponseRulesConditionsOperator = "has"
+	AppFlagNewResponseRulesConditionsOperatorNotHas              AppFlagNewResponseRulesConditionsOperator = "not_has"
 )
 
 func (r AppFlagNewResponseRulesConditionsOperator) IsKnown() bool {
 	switch r {
-	case AppFlagNewResponseRulesConditionsOperatorEquals, AppFlagNewResponseRulesConditionsOperatorNotEquals, AppFlagNewResponseRulesConditionsOperatorGreaterThan, AppFlagNewResponseRulesConditionsOperatorLessThan, AppFlagNewResponseRulesConditionsOperatorGreaterThanOrEquals, AppFlagNewResponseRulesConditionsOperatorLessThanOrEquals, AppFlagNewResponseRulesConditionsOperatorContains, AppFlagNewResponseRulesConditionsOperatorStartsWith, AppFlagNewResponseRulesConditionsOperatorEndsWith, AppFlagNewResponseRulesConditionsOperatorIn, AppFlagNewResponseRulesConditionsOperatorNotIn:
+	case AppFlagNewResponseRulesConditionsOperatorEquals, AppFlagNewResponseRulesConditionsOperatorNotEquals, AppFlagNewResponseRulesConditionsOperatorGreaterThan, AppFlagNewResponseRulesConditionsOperatorLessThan, AppFlagNewResponseRulesConditionsOperatorGreaterThanOrEquals, AppFlagNewResponseRulesConditionsOperatorLessThanOrEquals, AppFlagNewResponseRulesConditionsOperatorContains, AppFlagNewResponseRulesConditionsOperatorStartsWith, AppFlagNewResponseRulesConditionsOperatorEndsWith, AppFlagNewResponseRulesConditionsOperatorIn, AppFlagNewResponseRulesConditionsOperatorNotIn, AppFlagNewResponseRulesConditionsOperatorHas, AppFlagNewResponseRulesConditionsOperatorNotHas:
 		return true
 	}
 	return false
 }
 
 type AppFlagNewResponseRulesRollout struct {
-	// Percentage of matching traffic (0–100) served this variation. For multi-way
-	// splits, use cumulative upper bounds across rules (e.g. 30, 70, 100).
+	// Percentage of matching traffic (0–100, up to 2 decimal places) served this
+	// variation. For multi-way splits, use cumulative upper bounds across rules (e.g.
+	// 30, 70, 100).
 	Percentage float64 `json:"percentage" api:"required"`
 	// Context attribute used for sticky bucketing. Defaults to `targetingKey`. If
 	// absent at evaluation time, bucketing is random per request.
@@ -568,11 +576,12 @@ type AppFlagUpdateResponse struct {
 	Type AppFlagUpdateResponseType `json:"type" api:"required"`
 	// Map of variation name to value. All values share the same type (boolean, string,
 	// number, or JSON object/array), and each serialized value stays within 10KB.
-	Variations  map[string]AppFlagUpdateResponseVariationsUnion `json:"variations" api:"required"`
-	Description string                                          `json:"description" api:"nullable"`
-	UpdatedAt   string                                          `json:"updated_at"`
-	UpdatedBy   string                                          `json:"updated_by"`
-	JSON        appFlagUpdateResponseJSON                       `json:"-"`
+	Variations map[string]AppFlagUpdateResponseVariationsUnion `json:"variations" api:"required"`
+	// Optional operator-facing description. It does not affect flag evaluation.
+	Description string                    `json:"description" api:"nullable"`
+	UpdatedAt   string                    `json:"updated_at"`
+	UpdatedBy   string                    `json:"updated_by"`
+	JSON        appFlagUpdateResponseJSON `json:"-"`
 }
 
 // appFlagUpdateResponseJSON contains the JSON metadata for the struct
@@ -742,11 +751,13 @@ const (
 	AppFlagUpdateResponseRulesConditionsObjectOperatorEndsWith            AppFlagUpdateResponseRulesConditionsObjectOperator = "ends_with"
 	AppFlagUpdateResponseRulesConditionsObjectOperatorIn                  AppFlagUpdateResponseRulesConditionsObjectOperator = "in"
 	AppFlagUpdateResponseRulesConditionsObjectOperatorNotIn               AppFlagUpdateResponseRulesConditionsObjectOperator = "not_in"
+	AppFlagUpdateResponseRulesConditionsObjectOperatorHas                 AppFlagUpdateResponseRulesConditionsObjectOperator = "has"
+	AppFlagUpdateResponseRulesConditionsObjectOperatorNotHas              AppFlagUpdateResponseRulesConditionsObjectOperator = "not_has"
 )
 
 func (r AppFlagUpdateResponseRulesConditionsObjectOperator) IsKnown() bool {
 	switch r {
-	case AppFlagUpdateResponseRulesConditionsObjectOperatorEquals, AppFlagUpdateResponseRulesConditionsObjectOperatorNotEquals, AppFlagUpdateResponseRulesConditionsObjectOperatorGreaterThan, AppFlagUpdateResponseRulesConditionsObjectOperatorLessThan, AppFlagUpdateResponseRulesConditionsObjectOperatorGreaterThanOrEquals, AppFlagUpdateResponseRulesConditionsObjectOperatorLessThanOrEquals, AppFlagUpdateResponseRulesConditionsObjectOperatorContains, AppFlagUpdateResponseRulesConditionsObjectOperatorStartsWith, AppFlagUpdateResponseRulesConditionsObjectOperatorEndsWith, AppFlagUpdateResponseRulesConditionsObjectOperatorIn, AppFlagUpdateResponseRulesConditionsObjectOperatorNotIn:
+	case AppFlagUpdateResponseRulesConditionsObjectOperatorEquals, AppFlagUpdateResponseRulesConditionsObjectOperatorNotEquals, AppFlagUpdateResponseRulesConditionsObjectOperatorGreaterThan, AppFlagUpdateResponseRulesConditionsObjectOperatorLessThan, AppFlagUpdateResponseRulesConditionsObjectOperatorGreaterThanOrEquals, AppFlagUpdateResponseRulesConditionsObjectOperatorLessThanOrEquals, AppFlagUpdateResponseRulesConditionsObjectOperatorContains, AppFlagUpdateResponseRulesConditionsObjectOperatorStartsWith, AppFlagUpdateResponseRulesConditionsObjectOperatorEndsWith, AppFlagUpdateResponseRulesConditionsObjectOperatorIn, AppFlagUpdateResponseRulesConditionsObjectOperatorNotIn, AppFlagUpdateResponseRulesConditionsObjectOperatorHas, AppFlagUpdateResponseRulesConditionsObjectOperatorNotHas:
 		return true
 	}
 	return false
@@ -829,19 +840,22 @@ const (
 	AppFlagUpdateResponseRulesConditionsOperatorEndsWith            AppFlagUpdateResponseRulesConditionsOperator = "ends_with"
 	AppFlagUpdateResponseRulesConditionsOperatorIn                  AppFlagUpdateResponseRulesConditionsOperator = "in"
 	AppFlagUpdateResponseRulesConditionsOperatorNotIn               AppFlagUpdateResponseRulesConditionsOperator = "not_in"
+	AppFlagUpdateResponseRulesConditionsOperatorHas                 AppFlagUpdateResponseRulesConditionsOperator = "has"
+	AppFlagUpdateResponseRulesConditionsOperatorNotHas              AppFlagUpdateResponseRulesConditionsOperator = "not_has"
 )
 
 func (r AppFlagUpdateResponseRulesConditionsOperator) IsKnown() bool {
 	switch r {
-	case AppFlagUpdateResponseRulesConditionsOperatorEquals, AppFlagUpdateResponseRulesConditionsOperatorNotEquals, AppFlagUpdateResponseRulesConditionsOperatorGreaterThan, AppFlagUpdateResponseRulesConditionsOperatorLessThan, AppFlagUpdateResponseRulesConditionsOperatorGreaterThanOrEquals, AppFlagUpdateResponseRulesConditionsOperatorLessThanOrEquals, AppFlagUpdateResponseRulesConditionsOperatorContains, AppFlagUpdateResponseRulesConditionsOperatorStartsWith, AppFlagUpdateResponseRulesConditionsOperatorEndsWith, AppFlagUpdateResponseRulesConditionsOperatorIn, AppFlagUpdateResponseRulesConditionsOperatorNotIn:
+	case AppFlagUpdateResponseRulesConditionsOperatorEquals, AppFlagUpdateResponseRulesConditionsOperatorNotEquals, AppFlagUpdateResponseRulesConditionsOperatorGreaterThan, AppFlagUpdateResponseRulesConditionsOperatorLessThan, AppFlagUpdateResponseRulesConditionsOperatorGreaterThanOrEquals, AppFlagUpdateResponseRulesConditionsOperatorLessThanOrEquals, AppFlagUpdateResponseRulesConditionsOperatorContains, AppFlagUpdateResponseRulesConditionsOperatorStartsWith, AppFlagUpdateResponseRulesConditionsOperatorEndsWith, AppFlagUpdateResponseRulesConditionsOperatorIn, AppFlagUpdateResponseRulesConditionsOperatorNotIn, AppFlagUpdateResponseRulesConditionsOperatorHas, AppFlagUpdateResponseRulesConditionsOperatorNotHas:
 		return true
 	}
 	return false
 }
 
 type AppFlagUpdateResponseRulesRollout struct {
-	// Percentage of matching traffic (0–100) served this variation. For multi-way
-	// splits, use cumulative upper bounds across rules (e.g. 30, 70, 100).
+	// Percentage of matching traffic (0–100, up to 2 decimal places) served this
+	// variation. For multi-way splits, use cumulative upper bounds across rules (e.g.
+	// 30, 70, 100).
 	Percentage float64 `json:"percentage" api:"required"`
 	// Context attribute used for sticky bucketing. Defaults to `targetingKey`. If
 	// absent at evaluation time, bucketing is random per request.
@@ -946,11 +960,12 @@ type AppFlagListResponse struct {
 	Type AppFlagListResponseType `json:"type" api:"required"`
 	// Map of variation name to value. All values share the same type (boolean, string,
 	// number, or JSON object/array), and each serialized value stays within 10KB.
-	Variations  map[string]AppFlagListResponseVariationsUnion `json:"variations" api:"required"`
-	Description string                                        `json:"description" api:"nullable"`
-	UpdatedAt   string                                        `json:"updated_at"`
-	UpdatedBy   string                                        `json:"updated_by"`
-	JSON        appFlagListResponseJSON                       `json:"-"`
+	Variations map[string]AppFlagListResponseVariationsUnion `json:"variations" api:"required"`
+	// Optional operator-facing description. It does not affect flag evaluation.
+	Description string                  `json:"description" api:"nullable"`
+	UpdatedAt   string                  `json:"updated_at"`
+	UpdatedBy   string                  `json:"updated_by"`
+	JSON        appFlagListResponseJSON `json:"-"`
 }
 
 // appFlagListResponseJSON contains the JSON metadata for the struct
@@ -1120,11 +1135,13 @@ const (
 	AppFlagListResponseRulesConditionsObjectOperatorEndsWith            AppFlagListResponseRulesConditionsObjectOperator = "ends_with"
 	AppFlagListResponseRulesConditionsObjectOperatorIn                  AppFlagListResponseRulesConditionsObjectOperator = "in"
 	AppFlagListResponseRulesConditionsObjectOperatorNotIn               AppFlagListResponseRulesConditionsObjectOperator = "not_in"
+	AppFlagListResponseRulesConditionsObjectOperatorHas                 AppFlagListResponseRulesConditionsObjectOperator = "has"
+	AppFlagListResponseRulesConditionsObjectOperatorNotHas              AppFlagListResponseRulesConditionsObjectOperator = "not_has"
 )
 
 func (r AppFlagListResponseRulesConditionsObjectOperator) IsKnown() bool {
 	switch r {
-	case AppFlagListResponseRulesConditionsObjectOperatorEquals, AppFlagListResponseRulesConditionsObjectOperatorNotEquals, AppFlagListResponseRulesConditionsObjectOperatorGreaterThan, AppFlagListResponseRulesConditionsObjectOperatorLessThan, AppFlagListResponseRulesConditionsObjectOperatorGreaterThanOrEquals, AppFlagListResponseRulesConditionsObjectOperatorLessThanOrEquals, AppFlagListResponseRulesConditionsObjectOperatorContains, AppFlagListResponseRulesConditionsObjectOperatorStartsWith, AppFlagListResponseRulesConditionsObjectOperatorEndsWith, AppFlagListResponseRulesConditionsObjectOperatorIn, AppFlagListResponseRulesConditionsObjectOperatorNotIn:
+	case AppFlagListResponseRulesConditionsObjectOperatorEquals, AppFlagListResponseRulesConditionsObjectOperatorNotEquals, AppFlagListResponseRulesConditionsObjectOperatorGreaterThan, AppFlagListResponseRulesConditionsObjectOperatorLessThan, AppFlagListResponseRulesConditionsObjectOperatorGreaterThanOrEquals, AppFlagListResponseRulesConditionsObjectOperatorLessThanOrEquals, AppFlagListResponseRulesConditionsObjectOperatorContains, AppFlagListResponseRulesConditionsObjectOperatorStartsWith, AppFlagListResponseRulesConditionsObjectOperatorEndsWith, AppFlagListResponseRulesConditionsObjectOperatorIn, AppFlagListResponseRulesConditionsObjectOperatorNotIn, AppFlagListResponseRulesConditionsObjectOperatorHas, AppFlagListResponseRulesConditionsObjectOperatorNotHas:
 		return true
 	}
 	return false
@@ -1207,19 +1224,22 @@ const (
 	AppFlagListResponseRulesConditionsOperatorEndsWith            AppFlagListResponseRulesConditionsOperator = "ends_with"
 	AppFlagListResponseRulesConditionsOperatorIn                  AppFlagListResponseRulesConditionsOperator = "in"
 	AppFlagListResponseRulesConditionsOperatorNotIn               AppFlagListResponseRulesConditionsOperator = "not_in"
+	AppFlagListResponseRulesConditionsOperatorHas                 AppFlagListResponseRulesConditionsOperator = "has"
+	AppFlagListResponseRulesConditionsOperatorNotHas              AppFlagListResponseRulesConditionsOperator = "not_has"
 )
 
 func (r AppFlagListResponseRulesConditionsOperator) IsKnown() bool {
 	switch r {
-	case AppFlagListResponseRulesConditionsOperatorEquals, AppFlagListResponseRulesConditionsOperatorNotEquals, AppFlagListResponseRulesConditionsOperatorGreaterThan, AppFlagListResponseRulesConditionsOperatorLessThan, AppFlagListResponseRulesConditionsOperatorGreaterThanOrEquals, AppFlagListResponseRulesConditionsOperatorLessThanOrEquals, AppFlagListResponseRulesConditionsOperatorContains, AppFlagListResponseRulesConditionsOperatorStartsWith, AppFlagListResponseRulesConditionsOperatorEndsWith, AppFlagListResponseRulesConditionsOperatorIn, AppFlagListResponseRulesConditionsOperatorNotIn:
+	case AppFlagListResponseRulesConditionsOperatorEquals, AppFlagListResponseRulesConditionsOperatorNotEquals, AppFlagListResponseRulesConditionsOperatorGreaterThan, AppFlagListResponseRulesConditionsOperatorLessThan, AppFlagListResponseRulesConditionsOperatorGreaterThanOrEquals, AppFlagListResponseRulesConditionsOperatorLessThanOrEquals, AppFlagListResponseRulesConditionsOperatorContains, AppFlagListResponseRulesConditionsOperatorStartsWith, AppFlagListResponseRulesConditionsOperatorEndsWith, AppFlagListResponseRulesConditionsOperatorIn, AppFlagListResponseRulesConditionsOperatorNotIn, AppFlagListResponseRulesConditionsOperatorHas, AppFlagListResponseRulesConditionsOperatorNotHas:
 		return true
 	}
 	return false
 }
 
 type AppFlagListResponseRulesRollout struct {
-	// Percentage of matching traffic (0–100) served this variation. For multi-way
-	// splits, use cumulative upper bounds across rules (e.g. 30, 70, 100).
+	// Percentage of matching traffic (0–100, up to 2 decimal places) served this
+	// variation. For multi-way splits, use cumulative upper bounds across rules (e.g.
+	// 30, 70, 100).
 	Percentage float64 `json:"percentage" api:"required"`
 	// Context attribute used for sticky bucketing. Defaults to `targetingKey`. If
 	// absent at evaluation time, bucketing is random per request.
@@ -1345,11 +1365,12 @@ type AppFlagGetResponse struct {
 	Type AppFlagGetResponseType `json:"type" api:"required"`
 	// Map of variation name to value. All values share the same type (boolean, string,
 	// number, or JSON object/array), and each serialized value stays within 10KB.
-	Variations  map[string]AppFlagGetResponseVariationsUnion `json:"variations" api:"required"`
-	Description string                                       `json:"description" api:"nullable"`
-	UpdatedAt   string                                       `json:"updated_at"`
-	UpdatedBy   string                                       `json:"updated_by"`
-	JSON        appFlagGetResponseJSON                       `json:"-"`
+	Variations map[string]AppFlagGetResponseVariationsUnion `json:"variations" api:"required"`
+	// Optional operator-facing description. It does not affect flag evaluation.
+	Description string                 `json:"description" api:"nullable"`
+	UpdatedAt   string                 `json:"updated_at"`
+	UpdatedBy   string                 `json:"updated_by"`
+	JSON        appFlagGetResponseJSON `json:"-"`
 }
 
 // appFlagGetResponseJSON contains the JSON metadata for the struct
@@ -1519,11 +1540,13 @@ const (
 	AppFlagGetResponseRulesConditionsObjectOperatorEndsWith            AppFlagGetResponseRulesConditionsObjectOperator = "ends_with"
 	AppFlagGetResponseRulesConditionsObjectOperatorIn                  AppFlagGetResponseRulesConditionsObjectOperator = "in"
 	AppFlagGetResponseRulesConditionsObjectOperatorNotIn               AppFlagGetResponseRulesConditionsObjectOperator = "not_in"
+	AppFlagGetResponseRulesConditionsObjectOperatorHas                 AppFlagGetResponseRulesConditionsObjectOperator = "has"
+	AppFlagGetResponseRulesConditionsObjectOperatorNotHas              AppFlagGetResponseRulesConditionsObjectOperator = "not_has"
 )
 
 func (r AppFlagGetResponseRulesConditionsObjectOperator) IsKnown() bool {
 	switch r {
-	case AppFlagGetResponseRulesConditionsObjectOperatorEquals, AppFlagGetResponseRulesConditionsObjectOperatorNotEquals, AppFlagGetResponseRulesConditionsObjectOperatorGreaterThan, AppFlagGetResponseRulesConditionsObjectOperatorLessThan, AppFlagGetResponseRulesConditionsObjectOperatorGreaterThanOrEquals, AppFlagGetResponseRulesConditionsObjectOperatorLessThanOrEquals, AppFlagGetResponseRulesConditionsObjectOperatorContains, AppFlagGetResponseRulesConditionsObjectOperatorStartsWith, AppFlagGetResponseRulesConditionsObjectOperatorEndsWith, AppFlagGetResponseRulesConditionsObjectOperatorIn, AppFlagGetResponseRulesConditionsObjectOperatorNotIn:
+	case AppFlagGetResponseRulesConditionsObjectOperatorEquals, AppFlagGetResponseRulesConditionsObjectOperatorNotEquals, AppFlagGetResponseRulesConditionsObjectOperatorGreaterThan, AppFlagGetResponseRulesConditionsObjectOperatorLessThan, AppFlagGetResponseRulesConditionsObjectOperatorGreaterThanOrEquals, AppFlagGetResponseRulesConditionsObjectOperatorLessThanOrEquals, AppFlagGetResponseRulesConditionsObjectOperatorContains, AppFlagGetResponseRulesConditionsObjectOperatorStartsWith, AppFlagGetResponseRulesConditionsObjectOperatorEndsWith, AppFlagGetResponseRulesConditionsObjectOperatorIn, AppFlagGetResponseRulesConditionsObjectOperatorNotIn, AppFlagGetResponseRulesConditionsObjectOperatorHas, AppFlagGetResponseRulesConditionsObjectOperatorNotHas:
 		return true
 	}
 	return false
@@ -1606,19 +1629,22 @@ const (
 	AppFlagGetResponseRulesConditionsOperatorEndsWith            AppFlagGetResponseRulesConditionsOperator = "ends_with"
 	AppFlagGetResponseRulesConditionsOperatorIn                  AppFlagGetResponseRulesConditionsOperator = "in"
 	AppFlagGetResponseRulesConditionsOperatorNotIn               AppFlagGetResponseRulesConditionsOperator = "not_in"
+	AppFlagGetResponseRulesConditionsOperatorHas                 AppFlagGetResponseRulesConditionsOperator = "has"
+	AppFlagGetResponseRulesConditionsOperatorNotHas              AppFlagGetResponseRulesConditionsOperator = "not_has"
 )
 
 func (r AppFlagGetResponseRulesConditionsOperator) IsKnown() bool {
 	switch r {
-	case AppFlagGetResponseRulesConditionsOperatorEquals, AppFlagGetResponseRulesConditionsOperatorNotEquals, AppFlagGetResponseRulesConditionsOperatorGreaterThan, AppFlagGetResponseRulesConditionsOperatorLessThan, AppFlagGetResponseRulesConditionsOperatorGreaterThanOrEquals, AppFlagGetResponseRulesConditionsOperatorLessThanOrEquals, AppFlagGetResponseRulesConditionsOperatorContains, AppFlagGetResponseRulesConditionsOperatorStartsWith, AppFlagGetResponseRulesConditionsOperatorEndsWith, AppFlagGetResponseRulesConditionsOperatorIn, AppFlagGetResponseRulesConditionsOperatorNotIn:
+	case AppFlagGetResponseRulesConditionsOperatorEquals, AppFlagGetResponseRulesConditionsOperatorNotEquals, AppFlagGetResponseRulesConditionsOperatorGreaterThan, AppFlagGetResponseRulesConditionsOperatorLessThan, AppFlagGetResponseRulesConditionsOperatorGreaterThanOrEquals, AppFlagGetResponseRulesConditionsOperatorLessThanOrEquals, AppFlagGetResponseRulesConditionsOperatorContains, AppFlagGetResponseRulesConditionsOperatorStartsWith, AppFlagGetResponseRulesConditionsOperatorEndsWith, AppFlagGetResponseRulesConditionsOperatorIn, AppFlagGetResponseRulesConditionsOperatorNotIn, AppFlagGetResponseRulesConditionsOperatorHas, AppFlagGetResponseRulesConditionsOperatorNotHas:
 		return true
 	}
 	return false
 }
 
 type AppFlagGetResponseRulesRollout struct {
-	// Percentage of matching traffic (0–100) served this variation. For multi-way
-	// splits, use cumulative upper bounds across rules (e.g. 30, 70, 100).
+	// Percentage of matching traffic (0–100, up to 2 decimal places) served this
+	// variation. For multi-way splits, use cumulative upper bounds across rules (e.g.
+	// 30, 70, 100).
 	Percentage float64 `json:"percentage" api:"required"`
 	// Context attribute used for sticky bucketing. Defaults to `targetingKey`. If
 	// absent at evaluation time, bucketing is random per request.
@@ -1708,7 +1734,7 @@ type AppFlagGetResponseVariationsArray []interface{}
 func (r AppFlagGetResponseVariationsArray) ImplementsAppFlagGetResponseVariationsUnion() {}
 
 type AppFlagNewParams struct {
-	// Cloudflare account ID.
+	// Cloudflare account ID that owns the Flagship app.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Variation the API serves when the flag is off, or when it's on but no rule
 	// matches the context. Must be a key in `variations`.
@@ -1723,8 +1749,9 @@ type AppFlagNewParams struct {
 	Rules param.Field[[]AppFlagNewParamsRule] `json:"rules" api:"required"`
 	// Map of variation name to value. All values share the same type (boolean, string,
 	// number, or JSON object/array), and each serialized value stays within 10KB.
-	Variations  param.Field[map[string]AppFlagNewParamsVariationsUnion] `json:"variations" api:"required"`
-	Description param.Field[string]                                     `json:"description"`
+	Variations param.Field[map[string]AppFlagNewParamsVariationsUnion] `json:"variations" api:"required"`
+	// Optional operator-facing description. It does not affect flag evaluation.
+	Description param.Field[string] `json:"description"`
 	// Deprecated compatibility field. Omit it; the API ignores this value and infers
 	// the type from the flag's variations.
 	Type param.Field[AppFlagNewParamsType] `json:"type"`
@@ -1797,11 +1824,13 @@ const (
 	AppFlagNewParamsRulesConditionsObjectOperatorEndsWith            AppFlagNewParamsRulesConditionsObjectOperator = "ends_with"
 	AppFlagNewParamsRulesConditionsObjectOperatorIn                  AppFlagNewParamsRulesConditionsObjectOperator = "in"
 	AppFlagNewParamsRulesConditionsObjectOperatorNotIn               AppFlagNewParamsRulesConditionsObjectOperator = "not_in"
+	AppFlagNewParamsRulesConditionsObjectOperatorHas                 AppFlagNewParamsRulesConditionsObjectOperator = "has"
+	AppFlagNewParamsRulesConditionsObjectOperatorNotHas              AppFlagNewParamsRulesConditionsObjectOperator = "not_has"
 )
 
 func (r AppFlagNewParamsRulesConditionsObjectOperator) IsKnown() bool {
 	switch r {
-	case AppFlagNewParamsRulesConditionsObjectOperatorEquals, AppFlagNewParamsRulesConditionsObjectOperatorNotEquals, AppFlagNewParamsRulesConditionsObjectOperatorGreaterThan, AppFlagNewParamsRulesConditionsObjectOperatorLessThan, AppFlagNewParamsRulesConditionsObjectOperatorGreaterThanOrEquals, AppFlagNewParamsRulesConditionsObjectOperatorLessThanOrEquals, AppFlagNewParamsRulesConditionsObjectOperatorContains, AppFlagNewParamsRulesConditionsObjectOperatorStartsWith, AppFlagNewParamsRulesConditionsObjectOperatorEndsWith, AppFlagNewParamsRulesConditionsObjectOperatorIn, AppFlagNewParamsRulesConditionsObjectOperatorNotIn:
+	case AppFlagNewParamsRulesConditionsObjectOperatorEquals, AppFlagNewParamsRulesConditionsObjectOperatorNotEquals, AppFlagNewParamsRulesConditionsObjectOperatorGreaterThan, AppFlagNewParamsRulesConditionsObjectOperatorLessThan, AppFlagNewParamsRulesConditionsObjectOperatorGreaterThanOrEquals, AppFlagNewParamsRulesConditionsObjectOperatorLessThanOrEquals, AppFlagNewParamsRulesConditionsObjectOperatorContains, AppFlagNewParamsRulesConditionsObjectOperatorStartsWith, AppFlagNewParamsRulesConditionsObjectOperatorEndsWith, AppFlagNewParamsRulesConditionsObjectOperatorIn, AppFlagNewParamsRulesConditionsObjectOperatorNotIn, AppFlagNewParamsRulesConditionsObjectOperatorHas, AppFlagNewParamsRulesConditionsObjectOperatorNotHas:
 		return true
 	}
 	return false
@@ -1853,19 +1882,22 @@ const (
 	AppFlagNewParamsRulesConditionsOperatorEndsWith            AppFlagNewParamsRulesConditionsOperator = "ends_with"
 	AppFlagNewParamsRulesConditionsOperatorIn                  AppFlagNewParamsRulesConditionsOperator = "in"
 	AppFlagNewParamsRulesConditionsOperatorNotIn               AppFlagNewParamsRulesConditionsOperator = "not_in"
+	AppFlagNewParamsRulesConditionsOperatorHas                 AppFlagNewParamsRulesConditionsOperator = "has"
+	AppFlagNewParamsRulesConditionsOperatorNotHas              AppFlagNewParamsRulesConditionsOperator = "not_has"
 )
 
 func (r AppFlagNewParamsRulesConditionsOperator) IsKnown() bool {
 	switch r {
-	case AppFlagNewParamsRulesConditionsOperatorEquals, AppFlagNewParamsRulesConditionsOperatorNotEquals, AppFlagNewParamsRulesConditionsOperatorGreaterThan, AppFlagNewParamsRulesConditionsOperatorLessThan, AppFlagNewParamsRulesConditionsOperatorGreaterThanOrEquals, AppFlagNewParamsRulesConditionsOperatorLessThanOrEquals, AppFlagNewParamsRulesConditionsOperatorContains, AppFlagNewParamsRulesConditionsOperatorStartsWith, AppFlagNewParamsRulesConditionsOperatorEndsWith, AppFlagNewParamsRulesConditionsOperatorIn, AppFlagNewParamsRulesConditionsOperatorNotIn:
+	case AppFlagNewParamsRulesConditionsOperatorEquals, AppFlagNewParamsRulesConditionsOperatorNotEquals, AppFlagNewParamsRulesConditionsOperatorGreaterThan, AppFlagNewParamsRulesConditionsOperatorLessThan, AppFlagNewParamsRulesConditionsOperatorGreaterThanOrEquals, AppFlagNewParamsRulesConditionsOperatorLessThanOrEquals, AppFlagNewParamsRulesConditionsOperatorContains, AppFlagNewParamsRulesConditionsOperatorStartsWith, AppFlagNewParamsRulesConditionsOperatorEndsWith, AppFlagNewParamsRulesConditionsOperatorIn, AppFlagNewParamsRulesConditionsOperatorNotIn, AppFlagNewParamsRulesConditionsOperatorHas, AppFlagNewParamsRulesConditionsOperatorNotHas:
 		return true
 	}
 	return false
 }
 
 type AppFlagNewParamsRulesRollout struct {
-	// Percentage of matching traffic (0–100) served this variation. For multi-way
-	// splits, use cumulative upper bounds across rules (e.g. 30, 70, 100).
+	// Percentage of matching traffic (0–100, up to 2 decimal places) served this
+	// variation. For multi-way splits, use cumulative upper bounds across rules (e.g.
+	// 30, 70, 100).
 	Percentage param.Field[float64] `json:"percentage" api:"required"`
 	// Context attribute used for sticky bucketing. Defaults to `targetingKey`. If
 	// absent at evaluation time, bucketing is random per request.
@@ -1980,7 +2012,7 @@ func (r appFlagNewResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type AppFlagUpdateParams struct {
-	// Cloudflare account ID.
+	// Cloudflare account ID that owns the Flagship app.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Variation the API serves when the flag is off, or when it's on but no rule
 	// matches the context. Must be a key in `variations`.
@@ -1995,8 +2027,9 @@ type AppFlagUpdateParams struct {
 	Rules param.Field[[]AppFlagUpdateParamsRule] `json:"rules" api:"required"`
 	// Map of variation name to value. All values share the same type (boolean, string,
 	// number, or JSON object/array), and each serialized value stays within 10KB.
-	Variations  param.Field[map[string]AppFlagUpdateParamsVariationsUnion] `json:"variations" api:"required"`
-	Description param.Field[string]                                        `json:"description"`
+	Variations param.Field[map[string]AppFlagUpdateParamsVariationsUnion] `json:"variations" api:"required"`
+	// Optional operator-facing description. It does not affect flag evaluation.
+	Description param.Field[string] `json:"description"`
 	// Deprecated compatibility field. Omit it; the API ignores this value and infers
 	// the type from the flag's variations.
 	Type param.Field[AppFlagUpdateParamsType] `json:"type"`
@@ -2070,11 +2103,13 @@ const (
 	AppFlagUpdateParamsRulesConditionsObjectOperatorEndsWith            AppFlagUpdateParamsRulesConditionsObjectOperator = "ends_with"
 	AppFlagUpdateParamsRulesConditionsObjectOperatorIn                  AppFlagUpdateParamsRulesConditionsObjectOperator = "in"
 	AppFlagUpdateParamsRulesConditionsObjectOperatorNotIn               AppFlagUpdateParamsRulesConditionsObjectOperator = "not_in"
+	AppFlagUpdateParamsRulesConditionsObjectOperatorHas                 AppFlagUpdateParamsRulesConditionsObjectOperator = "has"
+	AppFlagUpdateParamsRulesConditionsObjectOperatorNotHas              AppFlagUpdateParamsRulesConditionsObjectOperator = "not_has"
 )
 
 func (r AppFlagUpdateParamsRulesConditionsObjectOperator) IsKnown() bool {
 	switch r {
-	case AppFlagUpdateParamsRulesConditionsObjectOperatorEquals, AppFlagUpdateParamsRulesConditionsObjectOperatorNotEquals, AppFlagUpdateParamsRulesConditionsObjectOperatorGreaterThan, AppFlagUpdateParamsRulesConditionsObjectOperatorLessThan, AppFlagUpdateParamsRulesConditionsObjectOperatorGreaterThanOrEquals, AppFlagUpdateParamsRulesConditionsObjectOperatorLessThanOrEquals, AppFlagUpdateParamsRulesConditionsObjectOperatorContains, AppFlagUpdateParamsRulesConditionsObjectOperatorStartsWith, AppFlagUpdateParamsRulesConditionsObjectOperatorEndsWith, AppFlagUpdateParamsRulesConditionsObjectOperatorIn, AppFlagUpdateParamsRulesConditionsObjectOperatorNotIn:
+	case AppFlagUpdateParamsRulesConditionsObjectOperatorEquals, AppFlagUpdateParamsRulesConditionsObjectOperatorNotEquals, AppFlagUpdateParamsRulesConditionsObjectOperatorGreaterThan, AppFlagUpdateParamsRulesConditionsObjectOperatorLessThan, AppFlagUpdateParamsRulesConditionsObjectOperatorGreaterThanOrEquals, AppFlagUpdateParamsRulesConditionsObjectOperatorLessThanOrEquals, AppFlagUpdateParamsRulesConditionsObjectOperatorContains, AppFlagUpdateParamsRulesConditionsObjectOperatorStartsWith, AppFlagUpdateParamsRulesConditionsObjectOperatorEndsWith, AppFlagUpdateParamsRulesConditionsObjectOperatorIn, AppFlagUpdateParamsRulesConditionsObjectOperatorNotIn, AppFlagUpdateParamsRulesConditionsObjectOperatorHas, AppFlagUpdateParamsRulesConditionsObjectOperatorNotHas:
 		return true
 	}
 	return false
@@ -2126,19 +2161,22 @@ const (
 	AppFlagUpdateParamsRulesConditionsOperatorEndsWith            AppFlagUpdateParamsRulesConditionsOperator = "ends_with"
 	AppFlagUpdateParamsRulesConditionsOperatorIn                  AppFlagUpdateParamsRulesConditionsOperator = "in"
 	AppFlagUpdateParamsRulesConditionsOperatorNotIn               AppFlagUpdateParamsRulesConditionsOperator = "not_in"
+	AppFlagUpdateParamsRulesConditionsOperatorHas                 AppFlagUpdateParamsRulesConditionsOperator = "has"
+	AppFlagUpdateParamsRulesConditionsOperatorNotHas              AppFlagUpdateParamsRulesConditionsOperator = "not_has"
 )
 
 func (r AppFlagUpdateParamsRulesConditionsOperator) IsKnown() bool {
 	switch r {
-	case AppFlagUpdateParamsRulesConditionsOperatorEquals, AppFlagUpdateParamsRulesConditionsOperatorNotEquals, AppFlagUpdateParamsRulesConditionsOperatorGreaterThan, AppFlagUpdateParamsRulesConditionsOperatorLessThan, AppFlagUpdateParamsRulesConditionsOperatorGreaterThanOrEquals, AppFlagUpdateParamsRulesConditionsOperatorLessThanOrEquals, AppFlagUpdateParamsRulesConditionsOperatorContains, AppFlagUpdateParamsRulesConditionsOperatorStartsWith, AppFlagUpdateParamsRulesConditionsOperatorEndsWith, AppFlagUpdateParamsRulesConditionsOperatorIn, AppFlagUpdateParamsRulesConditionsOperatorNotIn:
+	case AppFlagUpdateParamsRulesConditionsOperatorEquals, AppFlagUpdateParamsRulesConditionsOperatorNotEquals, AppFlagUpdateParamsRulesConditionsOperatorGreaterThan, AppFlagUpdateParamsRulesConditionsOperatorLessThan, AppFlagUpdateParamsRulesConditionsOperatorGreaterThanOrEquals, AppFlagUpdateParamsRulesConditionsOperatorLessThanOrEquals, AppFlagUpdateParamsRulesConditionsOperatorContains, AppFlagUpdateParamsRulesConditionsOperatorStartsWith, AppFlagUpdateParamsRulesConditionsOperatorEndsWith, AppFlagUpdateParamsRulesConditionsOperatorIn, AppFlagUpdateParamsRulesConditionsOperatorNotIn, AppFlagUpdateParamsRulesConditionsOperatorHas, AppFlagUpdateParamsRulesConditionsOperatorNotHas:
 		return true
 	}
 	return false
 }
 
 type AppFlagUpdateParamsRulesRollout struct {
-	// Percentage of matching traffic (0–100) served this variation. For multi-way
-	// splits, use cumulative upper bounds across rules (e.g. 30, 70, 100).
+	// Percentage of matching traffic (0–100, up to 2 decimal places) served this
+	// variation. For multi-way splits, use cumulative upper bounds across rules (e.g.
+	// 30, 70, 100).
 	Percentage param.Field[float64] `json:"percentage" api:"required"`
 	// Context attribute used for sticky bucketing. Defaults to `targetingKey`. If
 	// absent at evaluation time, bucketing is random per request.
@@ -2253,12 +2291,12 @@ func (r appFlagUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type AppFlagListParams struct {
-	// Cloudflare account ID.
+	// Cloudflare account ID that owns the Flagship app.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Pagination cursor from a previous response.
 	Cursor param.Field[string] `query:"cursor"`
 	// Max items to return (1–200).
-	Limit param.Field[string] `query:"limit"`
+	Limit param.Field[int64] `query:"limit"`
 }
 
 // URLQuery serializes [AppFlagListParams]'s query parameters as `url.Values`.
@@ -2270,7 +2308,7 @@ func (r AppFlagListParams) URLQuery() (v url.Values) {
 }
 
 type AppFlagDeleteParams struct {
-	// Cloudflare account ID.
+	// Cloudflare account ID that owns the Flagship app.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -2344,7 +2382,7 @@ func (r appFlagDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type AppFlagGetParams struct {
-	// Cloudflare account ID.
+	// Cloudflare account ID that owns the Flagship app.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

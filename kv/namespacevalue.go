@@ -40,14 +40,14 @@ func NewNamespaceValueService(opts ...option.RequestOption) (r *NamespaceValueSe
 	return
 }
 
-// Write a value identified by a key. Use URL-encoding to use special characters
-// (for example, `:`, `!`, `%`) in the key name. Body should be the value to be
-// stored. If JSON metadata to be associated with the key/value pair is needed, use
-// `multipart/form-data` content type for your PUT request (see dropdown below in
-// `REQUEST BODY SCHEMA`). Existing values, expirations, and metadata will be
-// overwritten. If neither `expiration` nor `expiration_ttl` is specified, the
-// key-value pair will never expire. If both are set, `expiration_ttl` is used and
-// `expiration` is ignored.
+// Writes a value under the specified key in the Workers KV namespace, creating the
+// key-value pair or replacing its existing value, expiration, and metadata. Send
+// the value as an `application/octet-stream` request body, or use
+// `multipart/form-data` with a `value` part and an optional JSON `metadata` part.
+// Use URL-encoding for special characters (for example, `:`, `!`, `%`) in the key
+// name when constructing the request URL. If neither `expiration` nor
+// `expiration_ttl` is specified, the key-value pair will not expire. If both are
+// set, `expiration_ttl` takes precedence.
 func (r *NamespaceValueService) Update(ctx context.Context, namespaceID string, keyName string, params NamespaceValueUpdateParams, opts ...option.RequestOption) (res *NamespaceValueUpdateResponse, err error) {
 	var env NamespaceValueUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -72,8 +72,9 @@ func (r *NamespaceValueService) Update(ctx context.Context, namespaceID string, 
 	return res, nil
 }
 
-// Remove a KV pair from the namespace. Use URL-encoding to use special characters
-// (for example, `:`, `!`, `%`) in the key name.
+// Deletes the specified key and its value from the Workers KV namespace. Use
+// URL-encoding for special characters (for example, `:`, `!`, `%`) in the key name
+// when constructing the request URL.
 func (r *NamespaceValueService) Delete(ctx context.Context, namespaceID string, keyName string, body NamespaceValueDeleteParams, opts ...option.RequestOption) (res *NamespaceValueDeleteResponse, err error) {
 	var env NamespaceValueDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -98,11 +99,11 @@ func (r *NamespaceValueService) Delete(ctx context.Context, namespaceID string, 
 	return res, nil
 }
 
-// Returns the value associated with the given key in the given namespace. Use
-// URL-encoding to use special characters (for example, `:`, `!`, `%`) in the key
-// name. If the KV-pair is set to expire at some point, the expiration time as
-// measured in seconds since the UNIX epoch will be returned in the `expiration`
-// response header.
+// Returns the value stored under the specified key in the Workers KV namespace as
+// raw bytes. Use URL-encoding for special characters (for example, `:`, `!`, `%`)
+// in the key name when constructing the request URL. If the key-value pair
+// expires, the `expiration` response header contains its expiration time in
+// seconds since the UNIX epoch.
 func (r *NamespaceValueService) Get(ctx context.Context, namespaceID string, keyName string, query NamespaceValueGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/octet-stream")}, opts...)
@@ -162,14 +163,15 @@ func (r namespaceValueDeleteResponseJSON) RawJSON() string {
 }
 
 type NamespaceValueUpdateParams struct {
-	// Identifier.
+	// ID of the Cloudflare account that owns the Workers KV namespaces.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// A byte sequence to be stored, up to 25 MiB in length.
 	Value param.Field[NamespaceValueUpdateParamsValueUnion] `json:"value" api:"required" format:"binary"`
 	// Expires the key at a certain time, measured in number of seconds since the UNIX
 	// epoch.
 	Expiration param.Field[float64] `query:"expiration"`
-	// Expires the key after a number of seconds. Must be at least 60.
+	// Number of seconds until the key expires. Must be at least 60. Takes precedence
+	// over `expiration` when both are specified.
 	ExpirationTTL param.Field[float64] `query:"expiration_ttl"`
 	// Associates arbitrary JSON data with a key/value pair.
 	Metadata param.Field[interface{}] `json:"metadata"`
@@ -250,7 +252,7 @@ func (r NamespaceValueUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type NamespaceValueDeleteParams struct {
-	// Identifier.
+	// ID of the Cloudflare account that owns the Workers KV namespaces.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -298,6 +300,6 @@ func (r NamespaceValueDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type NamespaceValueGetParams struct {
-	// Identifier.
+	// ID of the Cloudflare account that owns the Workers KV namespaces.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

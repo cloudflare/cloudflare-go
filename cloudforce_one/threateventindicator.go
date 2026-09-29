@@ -420,9 +420,16 @@ type ThreatEventIndicatorListResponsePropertiesIndicatorsItems struct {
 	UUID      string                                                            `json:"uuid" api:"required"`
 	Value     string                                                            `json:"value" api:"required"`
 	// The dataset ID this indicator belongs to. Included in list responses.
-	DatasetID     string                                                                  `json:"datasetId"`
+	DatasetID string `json:"datasetId"`
+	// Related events, capped by `relatedEventsLimit` (default 2). Check
+	// `relatedEventsHasMore` to detect a capped list; pass `relatedEventsLimit=-1` to
+	// retrieve all of them.
 	RelatedEvents []ThreatEventIndicatorListResponsePropertiesIndicatorsItemsRelatedEvent `json:"relatedEvents"`
-	Tags          []ThreatEventIndicatorListResponsePropertiesIndicatorsItemsTag          `json:"tags"`
+	// True when this indicator appears in more events than `relatedEvents` contains
+	// because `relatedEventsLimit` capped the list. Pass `relatedEventsLimit=-1` to
+	// retrieve every related event.
+	RelatedEventsHasMore bool                                                           `json:"relatedEventsHasMore"`
+	Tags                 []ThreatEventIndicatorListResponsePropertiesIndicatorsItemsTag `json:"tags"`
 	// Traffic Light Protocol designation. UPPERCASE. Possible values: CLEAR, GREEN,
 	// AMBER, AMBER-STRICT, RED, PURPLE. Null when not set.
 	TLP  string                                                        `json:"tlp" api:"nullable"`
@@ -433,18 +440,19 @@ type ThreatEventIndicatorListResponsePropertiesIndicatorsItems struct {
 // metadata for the struct
 // [ThreatEventIndicatorListResponsePropertiesIndicatorsItems]
 type threatEventIndicatorListResponsePropertiesIndicatorsItemsJSON struct {
-	CreatedAt     apijson.Field
-	IndicatorType apijson.Field
-	Sources       apijson.Field
-	UpdatedAt     apijson.Field
-	UUID          apijson.Field
-	Value         apijson.Field
-	DatasetID     apijson.Field
-	RelatedEvents apijson.Field
-	Tags          apijson.Field
-	TLP           apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	CreatedAt            apijson.Field
+	IndicatorType        apijson.Field
+	Sources              apijson.Field
+	UpdatedAt            apijson.Field
+	UUID                 apijson.Field
+	Value                apijson.Field
+	DatasetID            apijson.Field
+	RelatedEvents        apijson.Field
+	RelatedEventsHasMore apijson.Field
+	Tags                 apijson.Field
+	TLP                  apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *ThreatEventIndicatorListResponsePropertiesIndicatorsItems) UnmarshalJSON(data []byte) (err error) {
@@ -838,7 +846,10 @@ type ThreatEventIndicatorListParams struct {
 	// Filter by related event IDs
 	RelatedEvents param.Field[[]string] `query:"relatedEvents"`
 	// Limit the number of related events returned per indicator. Default: 2. Set to 0
-	// for none, -1 for all events.
+	// for none, -1 for all events. For JSON responses, when the limit hides events,
+	// the indicator carries `relatedEventsHasMore: true` and the response includes an
+	// advisory message — the cap is never applied silently. STIX and TAXII
+	// representations do not include related-event data.
 	RelatedEventsLimit param.Field[float64] `query:"relatedEventsLimit"`
 	// Structured search as a JSON array of {field, op, value} objects. Searchable
 	// fields: value, indicatorType, uuid. Supports operators: equals, not, contains,

@@ -246,7 +246,7 @@ func (r RuleListResponseProvider) IsKnown() bool {
 type RuleUpdateParams struct {
 	// Identifier.
 	ZoneID param.Field[string]    `path:"zone_id" api:"required"`
-	Rules  []RuleUpdateParamsRule `json:"rules"`
+	Rules  []RuleUpdateParamsRule `json:"rules" api:"required"`
 }
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {

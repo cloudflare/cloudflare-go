@@ -50,7 +50,8 @@ func NewOrganizationService(opts ...option.RequestOption) (r *OrganizationServic
 	return
 }
 
-// Create a new organization for a user. (Currently in Public Beta - see
+// Create a new organization for a user. Sub-organization creation availability
+// depends on the organization's capabilities. (Currently in Public Beta - see
 // https://developers.cloudflare.com/fundamentals/organizations/)
 func (r *OrganizationService) New(ctx context.Context, body OrganizationNewParams, opts ...option.RequestOption) (res *Organization, err error) {
 	var env OrganizationNewResponseEnvelope
@@ -64,7 +65,7 @@ func (r *OrganizationService) New(ctx context.Context, body OrganizationNewParam
 	return res, nil
 }
 
-// Modify organization. (Currently in Public Beta - see
+// Update an organization's name. (Currently in Public Beta - see
 // https://developers.cloudflare.com/fundamentals/organizations/)
 func (r *OrganizationService) Update(ctx context.Context, organizationID string, body OrganizationUpdateParams, opts ...option.RequestOption) (res *Organization, err error) {
 	var env OrganizationUpdateResponseEnvelope
@@ -108,7 +109,8 @@ func (r *OrganizationService) ListAutoPaging(ctx context.Context, query Organiza
 }
 
 // Delete an organization. The organization MUST be empty before deleting. It must
-// not contain any sub-organizations, accounts, members or users. (Currently in
+// not contain any sub-organizations, accounts, members or users. Sub-organization
+// deletion availability depends on the organization's capabilities. (Currently in
 // Public Beta - see https://developers.cloudflare.com/fundamentals/organizations/)
 //
 // **Access Control:** Restricted to enterprise organizations.

@@ -68,9 +68,16 @@ func (r *MitigationService) ListAutoPaging(ctx context.Context, reportID string,
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, reportID, params, opts...))
 }
 
-// Request a review for mitigations on an account. Repeating a request for a
-// mitigation with an unresolved appeal is idempotent and returns that mitigation
-// in the in-review state.
+// Request a review of mitigations applied because of an abuse report, or submit a
+// report-level appeal.
+//
+//   - To request a review of specific mitigations, send `appeals` with the
+//     mitigation IDs and reasons. Repeating a request for a mitigation with an
+//     unresolved appeal is idempotent and returns that mitigation in the in-review
+//     state.
+//   - To submit a report-level appeal, send `type` and, for a `counter_notice`, the
+//     counter-notice details in `data`. Report-level appeals are currently available
+//     only for DMCA (copyright) reports.
 func (r *MitigationService) Review(ctx context.Context, reportID string, params MitigationReviewParams, opts ...option.RequestOption) (res *pagination.SinglePage[MitigationReviewResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -96,9 +103,16 @@ func (r *MitigationService) Review(ctx context.Context, reportID string, params 
 	return res, nil
 }
 
-// Request a review for mitigations on an account. Repeating a request for a
-// mitigation with an unresolved appeal is idempotent and returns that mitigation
-// in the in-review state.
+// Request a review of mitigations applied because of an abuse report, or submit a
+// report-level appeal.
+//
+//   - To request a review of specific mitigations, send `appeals` with the
+//     mitigation IDs and reasons. Repeating a request for a mitigation with an
+//     unresolved appeal is idempotent and returns that mitigation in the in-review
+//     state.
+//   - To submit a report-level appeal, send `type` and, for a `counter_notice`, the
+//     counter-notice details in `data`. Report-level appeals are currently available
+//     only for DMCA (copyright) reports.
 func (r *MitigationService) ReviewAutoPaging(ctx context.Context, reportID string, params MitigationReviewParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[MitigationReviewResponse] {
 	return pagination.NewSinglePageAutoPager(r.Review(ctx, reportID, params, opts...))
 }

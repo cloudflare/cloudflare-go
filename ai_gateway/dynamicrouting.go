@@ -39,7 +39,8 @@ func NewDynamicRoutingService(opts ...option.RequestOption) (r *DynamicRoutingSe
 	return
 }
 
-// Create a new AI Gateway Dynamic Route.
+// Creates a dynamic route on an AI Gateway from the specified routing elements.
+// Clients call the route by using `dynamic/{name}` as the model name.
 func (r *DynamicRoutingService) New(ctx context.Context, gatewayID string, params DynamicRoutingNewParams, opts ...option.RequestOption) (res *DynamicRoutingNewResponse, err error) {
 	var env DynamicRoutingNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -60,7 +61,8 @@ func (r *DynamicRoutingService) New(ctx context.Context, gatewayID string, param
 	return res, nil
 }
 
-// Update an AI Gateway Dynamic Route.
+// Updates the name of a dynamic route. To change routing behaviour, create and
+// deploy a new version.
 func (r *DynamicRoutingService) Update(ctx context.Context, gatewayID string, id string, params DynamicRoutingUpdateParams, opts ...option.RequestOption) (res *DynamicRoutingUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -80,7 +82,7 @@ func (r *DynamicRoutingService) Update(ctx context.Context, gatewayID string, id
 	return res, err
 }
 
-// List all AI Gateway Dynamic Routes.
+// Lists the dynamic routes configured on an AI Gateway.
 func (r *DynamicRoutingService) List(ctx context.Context, gatewayID string, params DynamicRoutingListParams, opts ...option.RequestOption) (res *DynamicRoutingListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -96,7 +98,7 @@ func (r *DynamicRoutingService) List(ctx context.Context, gatewayID string, para
 	return res, err
 }
 
-// Delete an AI Gateway Dynamic Route.
+// Deletes a dynamic route from an AI Gateway.
 func (r *DynamicRoutingService) Delete(ctx context.Context, gatewayID string, id string, body DynamicRoutingDeleteParams, opts ...option.RequestOption) (res *DynamicRoutingDeleteResponse, err error) {
 	var env DynamicRoutingDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -121,7 +123,8 @@ func (r *DynamicRoutingService) Delete(ctx context.Context, gatewayID string, id
 	return res, nil
 }
 
-// Create a new AI Gateway Dynamic Route Deployment.
+// Deploys the specified version of a dynamic route so that it serves traffic.
+// Deploy an earlier version to roll back.
 func (r *DynamicRoutingService) NewDeployment(ctx context.Context, gatewayID string, id string, params DynamicRoutingNewDeploymentParams, opts ...option.RequestOption) (res *DynamicRoutingNewDeploymentResponse, err error) {
 	var env DynamicRoutingNewDeploymentResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -146,7 +149,8 @@ func (r *DynamicRoutingService) NewDeployment(ctx context.Context, gatewayID str
 	return res, nil
 }
 
-// Create a new AI Gateway Dynamic Route Version.
+// Creates a new version of a dynamic route from the specified routing elements.
+// The version does not serve traffic until you deploy it.
 func (r *DynamicRoutingService) NewVersion(ctx context.Context, gatewayID string, id string, params DynamicRoutingNewVersionParams, opts ...option.RequestOption) (res *DynamicRoutingNewVersionResponse, err error) {
 	var env DynamicRoutingNewVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -171,7 +175,8 @@ func (r *DynamicRoutingService) NewVersion(ctx context.Context, gatewayID string
 	return res, nil
 }
 
-// Get an AI Gateway Dynamic Route.
+// Retrieves a dynamic route with its routing elements, active version, and current
+// deployment.
 func (r *DynamicRoutingService) Get(ctx context.Context, gatewayID string, id string, query DynamicRoutingGetParams, opts ...option.RequestOption) (res *DynamicRoutingGetResponse, err error) {
 	var env DynamicRoutingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -196,7 +201,7 @@ func (r *DynamicRoutingService) Get(ctx context.Context, gatewayID string, id st
 	return res, nil
 }
 
-// Get an AI Gateway Dynamic Route Version.
+// Retrieves a saved version of a dynamic route, including its routing elements.
 func (r *DynamicRoutingService) GetVersion(ctx context.Context, gatewayID string, id string, versionID string, query DynamicRoutingGetVersionParams, opts ...option.RequestOption) (res *DynamicRoutingGetVersionResponse, err error) {
 	var env DynamicRoutingGetVersionResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -225,7 +230,7 @@ func (r *DynamicRoutingService) GetVersion(ctx context.Context, gatewayID string
 	return res, nil
 }
 
-// List all AI Gateway Dynamic Route Deployments.
+// Lists the deployment history of a dynamic route.
 func (r *DynamicRoutingService) ListDeployments(ctx context.Context, gatewayID string, id string, query DynamicRoutingListDeploymentsParams, opts ...option.RequestOption) (res *DynamicRoutingListDeploymentsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
@@ -245,7 +250,7 @@ func (r *DynamicRoutingService) ListDeployments(ctx context.Context, gatewayID s
 	return res, err
 }
 
-// List all AI Gateway Dynamic Route Versions.
+// Lists the saved versions of a dynamic route.
 func (r *DynamicRoutingService) ListVersions(ctx context.Context, gatewayID string, id string, query DynamicRoutingListVersionsParams, opts ...option.RequestOption) (res *DynamicRoutingListVersionsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

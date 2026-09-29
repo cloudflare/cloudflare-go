@@ -41,6 +41,9 @@ func NewNamespaceService(opts ...option.RequestOption) (r *NamespaceService) {
 
 // Returns a list of namespaces in the specified R2 catalog. Supports hierarchical
 // filtering and pagination for efficient traversal of large namespace hierarchies.
+//
+// Deprecated: Use
+// `GET /accounts/{account_id}/basin-catalog/{bucket_name}/namespaces` instead.
 func (r *NamespaceService) List(ctx context.Context, bucketName string, params NamespaceListParams, opts ...option.RequestOption) (res *NamespaceListResponse, err error) {
 	var env NamespaceListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

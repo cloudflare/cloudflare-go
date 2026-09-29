@@ -539,6 +539,7 @@ func (r locationNetworkJSON) RawJSON() string {
 type GatewayLocationDeleteResponse = interface{}
 
 type GatewayLocationNewParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the location name.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -655,6 +656,7 @@ func (r GatewayLocationNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayLocationUpdateParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the location name.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -771,6 +773,7 @@ func (r GatewayLocationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayLocationListParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sort direction. Only takes effect when `order_by` is also provided; it is
 	// ignored otherwise. When `direction` is omitted the effective direction is
@@ -799,11 +802,11 @@ type GatewayLocationListParams struct {
 	// Field to sort the returned locations by. When omitted, the order of results is
 	// unspecified. Supported values:
 	//
-	//   - `name` — sort alphabetically by location name.
-	//   - `created_at` — sort by creation time; defaults to descending unless
-	//     `direction` is set.
-	//   - `updated_at` — sort by last-modified time; defaults to descending unless
-	//     `direction` is set.
+	// - `name` — sort alphabetically by location name.
+	// - `created_at` — sort by creation time; defaults to descending unless
+	//   `direction` is set.
+	// - `updated_at` — sort by last-modified time; defaults to descending unless
+	//   `direction` is set.
 	OrderBy param.Field[GatewayLocationListParamsOrderBy] `query:"order_by"`
 	// Case-insensitive substring match on the location name. When combined with
 	// `filter`, both must match (logical AND).
@@ -866,6 +869,7 @@ func (r GatewayLocationListParamsOrderBy) IsKnown() bool {
 }
 
 type GatewayLocationDeleteParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -913,6 +917,7 @@ func (r GatewayLocationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayLocationGetParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

@@ -37,7 +37,9 @@ func NewTokenPermissionGroupService(opts ...option.RequestOption) (r *TokenPermi
 	return
 }
 
-// Find all available permission groups for Account Owned API Tokens
+// Find all available permission groups for Account Owned API Tokens. Each
+// permission group indicates whether the caller can select it when creating a
+// token. Token creation performs the authoritative permission check.
 func (r *TokenPermissionGroupService) List(ctx context.Context, params TokenPermissionGroupListParams, opts ...option.RequestOption) (res *pagination.SinglePage[TokenPermissionGroupListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -59,12 +61,16 @@ func (r *TokenPermissionGroupService) List(ctx context.Context, params TokenPerm
 	return res, nil
 }
 
-// Find all available permission groups for Account Owned API Tokens
+// Find all available permission groups for Account Owned API Tokens. Each
+// permission group indicates whether the caller can select it when creating a
+// token. Token creation performs the authoritative permission check.
 func (r *TokenPermissionGroupService) ListAutoPaging(ctx context.Context, params TokenPermissionGroupListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TokenPermissionGroupListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
-// Find all available permission groups for Account Owned API Tokens
+// Find all available permission groups for Account Owned API Tokens. Each
+// permission group indicates whether the caller can select it when creating a
+// token. Token creation performs the authoritative permission check.
 func (r *TokenPermissionGroupService) Get(ctx context.Context, params TokenPermissionGroupGetParams, opts ...option.RequestOption) (res *[]TokenPermissionGroupGetResponse, err error) {
 	var env TokenPermissionGroupGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -86,6 +92,8 @@ type TokenPermissionGroupListResponse struct {
 	ID string `json:"id"`
 	// Product category that this permission group belongs to.
 	Category TokenPermissionGroupListResponseCategory `json:"category"`
+	// Whether the caller can select this permission group when creating a token.
+	IsSelectable bool `json:"is_selectable"`
 	// Permission Group Name
 	Name string `json:"name"`
 	// Resources to which the Permission Group is scoped
@@ -96,12 +104,13 @@ type TokenPermissionGroupListResponse struct {
 // tokenPermissionGroupListResponseJSON contains the JSON metadata for the struct
 // [TokenPermissionGroupListResponse]
 type tokenPermissionGroupListResponseJSON struct {
-	ID          apijson.Field
-	Category    apijson.Field
-	Name        apijson.Field
-	Scopes      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID           apijson.Field
+	Category     apijson.Field
+	IsSelectable apijson.Field
+	Name         apijson.Field
+	Scopes       apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *TokenPermissionGroupListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -161,6 +170,8 @@ type TokenPermissionGroupGetResponse struct {
 	ID string `json:"id"`
 	// Product category that this permission group belongs to.
 	Category TokenPermissionGroupGetResponseCategory `json:"category"`
+	// Whether the caller can select this permission group when creating a token.
+	IsSelectable bool `json:"is_selectable"`
 	// Permission Group Name
 	Name string `json:"name"`
 	// Resources to which the Permission Group is scoped
@@ -171,12 +182,13 @@ type TokenPermissionGroupGetResponse struct {
 // tokenPermissionGroupGetResponseJSON contains the JSON metadata for the struct
 // [TokenPermissionGroupGetResponse]
 type tokenPermissionGroupGetResponseJSON struct {
-	ID          apijson.Field
-	Category    apijson.Field
-	Name        apijson.Field
-	Scopes      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID           apijson.Field
+	Category     apijson.Field
+	IsSelectable apijson.Field
+	Name         apijson.Field
+	Scopes       apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *TokenPermissionGroupGetResponse) UnmarshalJSON(data []byte) (err error) {

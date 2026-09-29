@@ -34,7 +34,7 @@ func NewInvestigateRawService(opts ...option.RequestOption) (r *InvestigateRawSe
 	return
 }
 
-// Returns the raw eml of any non-benign message.
+// Returns the raw EML content of any message with a detection.
 func (r *InvestigateRawService) Get(ctx context.Context, investigateID string, query InvestigateRawGetParams, opts ...option.RequestOption) (res *InvestigateRawGetResponse, err error) {
 	var env InvestigateRawGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

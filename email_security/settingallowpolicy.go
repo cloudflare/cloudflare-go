@@ -110,9 +110,10 @@ func (r *SettingAllowPolicyService) Delete(ctx context.Context, policyID string,
 	return res, nil
 }
 
-// Executes multiple operations atomically. All four operation arrays (deletes,
-// patches, puts, posts) are required and executed in order. Send empty arrays for
-// unused operations.
+// Executes multiple allow policy operations atomically: delete, partially update,
+// replace, and create allow policies in a single request. All four operation
+// arrays (deletes, patches, puts, posts) are required and executed in order. Send
+// empty arrays for unused operations.
 func (r *SettingAllowPolicyService) Batch(ctx context.Context, params SettingAllowPolicyBatchParams, opts ...option.RequestOption) (res *SettingAllowPolicyBatchResponse, err error) {
 	var env SettingAllowPolicyBatchResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -216,15 +217,15 @@ type SettingAllowPolicyNewResponse struct {
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType SettingAllowPolicyNewResponsePatternType `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -333,15 +334,15 @@ type SettingAllowPolicyListResponse struct {
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType SettingAllowPolicyListResponsePatternType `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -521,15 +522,15 @@ type SettingAllowPolicyBatchResponsePatch struct {
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType SettingAllowPolicyBatchResponsePatchesPatternType `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -638,15 +639,15 @@ type SettingAllowPolicyBatchResponsePost struct {
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType SettingAllowPolicyBatchResponsePostsPatternType `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -755,15 +756,15 @@ type SettingAllowPolicyBatchResponsePut struct {
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType SettingAllowPolicyBatchResponsePutsPatternType `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -872,15 +873,15 @@ type SettingAllowPolicyEditResponse struct {
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType SettingAllowPolicyEditResponsePatternType `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -989,15 +990,15 @@ type SettingAllowPolicyGetResponse struct {
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType SettingAllowPolicyGetResponsePatternType `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -1083,15 +1084,15 @@ type SettingAllowPolicyNewParams struct {
 	Pattern param.Field[string] `json:"pattern" api:"required"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType param.Field[SettingAllowPolicyNewParamsPatternType] `json:"pattern_type" api:"required"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -1297,19 +1298,10 @@ type SettingAllowPolicyListParams struct {
 	// Field to sort by.
 	Order param.Field[SettingAllowPolicyListParamsOrder] `query:"order"`
 	// Current page within paginated list of results.
-	Page    param.Field[int64]  `query:"page"`
+	Page param.Field[int64] `query:"page"`
+	// Filter by exact pattern value.
 	Pattern param.Field[string] `query:"pattern"`
-	// Type of pattern matching.
-	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// Filter by pattern type.
 	PatternType param.Field[SettingAllowPolicyListParamsPatternType] `query:"pattern_type"`
 	// The number of results per page. Maximum value is 1000.
 	PerPage param.Field[int64] `query:"per_page"`
@@ -1360,17 +1352,7 @@ func (r SettingAllowPolicyListParamsOrder) IsKnown() bool {
 	return false
 }
 
-// Type of pattern matching.
-//
-//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-//   - DOMAIN: matches a domain name (e.g. `example.com`)
-//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-//     link-local, unspecified, and IPv4 broadcast addresses, including their
-//     IPv4-mapped IPv6 equivalents.
-//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-//     but it may appear on existing entries.
+// Filter by pattern type.
 type SettingAllowPolicyListParamsPatternType string
 
 const (
@@ -1534,11 +1516,17 @@ func (r SettingAllowPolicyDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingAllowPolicyBatchParams struct {
 	// Identifier.
-	AccountID param.Field[string]                                `path:"account_id" api:"required"`
-	Deletes   param.Field[[]SettingAllowPolicyBatchParamsDelete] `json:"deletes" api:"required"`
-	Patches   param.Field[[]SettingAllowPolicyBatchParamsPatch]  `json:"patches" api:"required"`
-	Posts     param.Field[[]SettingAllowPolicyBatchParamsPost]   `json:"posts" api:"required"`
-	Puts      param.Field[[]SettingAllowPolicyBatchParamsPut]    `json:"puts" api:"required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// IDs of the allow policies to delete.
+	Deletes param.Field[[]SettingAllowPolicyBatchParamsDelete] `json:"deletes" api:"required"`
+	// Partial updates to apply — each entry carries the policy's ID and only the
+	// fields to change.
+	Patches param.Field[[]SettingAllowPolicyBatchParamsPatch] `json:"patches" api:"required"`
+	// Allow policies to create.
+	Posts param.Field[[]SettingAllowPolicyBatchParamsPost] `json:"posts" api:"required"`
+	// Full replacements to apply — each entry carries the policy's ID and every field
+	// of its new value.
+	Puts param.Field[[]SettingAllowPolicyBatchParamsPut] `json:"puts" api:"required"`
 }
 
 func (r SettingAllowPolicyBatchParams) MarshalJSON() (data []byte, err error) {
@@ -1589,15 +1577,15 @@ type SettingAllowPolicyBatchParamsPatch struct {
 	Pattern param.Field[string] `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType param.Field[SettingAllowPolicyBatchParamsPatchesPatternType] `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -1655,15 +1643,15 @@ type SettingAllowPolicyBatchParamsPost struct {
 	Pattern param.Field[string] `json:"pattern" api:"required"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType param.Field[SettingAllowPolicyBatchParamsPostsPatternType] `json:"pattern_type" api:"required"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -1753,15 +1741,15 @@ type SettingAllowPolicyBatchParamsPut struct {
 	Pattern param.Field[string] `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType param.Field[SettingAllowPolicyBatchParamsPutsPatternType] `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -1969,15 +1957,15 @@ type SettingAllowPolicyEditParams struct {
 	Pattern param.Field[string] `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType param.Field[SettingAllowPolicyEditParamsPatternType] `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.

@@ -38,7 +38,9 @@ func NewCustomProviderService(opts ...option.RequestOption) (r *CustomProviderSe
 	return
 }
 
-// Creates a new AI Gateway.
+// Creates an account-level custom provider that forwards AI Gateway requests to
+// the HTTPS base URL you supply. Requests reference the provider as
+// `custom-{slug}`, so the slug must be unique within the account.
 func (r *CustomProviderService) New(ctx context.Context, params CustomProviderNewParams, opts ...option.RequestOption) (res *CustomProviderNewResponse, err error) {
 	var env CustomProviderNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -55,7 +57,8 @@ func (r *CustomProviderService) New(ctx context.Context, params CustomProviderNe
 	return res, nil
 }
 
-// Lists all AI Gateway evaluator types configured for the account.
+// Lists the custom providers configured for the account, ordered by position and
+// then name.
 func (r *CustomProviderService) List(ctx context.Context, params CustomProviderListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[CustomProviderListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -77,12 +80,13 @@ func (r *CustomProviderService) List(ctx context.Context, params CustomProviderL
 	return res, nil
 }
 
-// Lists all AI Gateway evaluator types configured for the account.
+// Lists the custom providers configured for the account, ordered by position and
+// then name.
 func (r *CustomProviderService) ListAutoPaging(ctx context.Context, params CustomProviderListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[CustomProviderListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Deletes an AI Gateway dataset.
+// Deletes a custom provider and every pricing rule that belongs to it.
 func (r *CustomProviderService) Delete(ctx context.Context, id string, body CustomProviderDeleteParams, opts ...option.RequestOption) (res *CustomProviderDeleteResponse, err error) {
 	var env CustomProviderDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -103,7 +107,7 @@ func (r *CustomProviderService) Delete(ctx context.Context, id string, body Cust
 	return res, nil
 }
 
-// Retrieves details for a specific AI Gateway dataset.
+// Retrieves a custom provider, including its slug, base URL, and custom headers.
 func (r *CustomProviderService) Get(ctx context.Context, id string, query CustomProviderGetParams, opts ...option.RequestOption) (res *CustomProviderGetResponse, err error) {
 	var env CustomProviderGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -125,22 +129,24 @@ func (r *CustomProviderService) Get(ctx context.Context, id string, query Custom
 }
 
 type CustomProviderNewResponse struct {
-	ID          string                        `json:"id" api:"required" format:"uuid"`
-	BaseURL     string                        `json:"base_url" api:"required" format:"uri"`
-	CreatedAt   time.Time                     `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt  time.Time                     `json:"modified_at" api:"required" format:"date-time"`
-	Name        string                        `json:"name" api:"required"`
-	Slug        string                        `json:"slug" api:"required"`
-	Beta        bool                          `json:"beta"`
-	CurlExample string                        `json:"curl_example"`
-	Description string                        `json:"description"`
-	Enable      bool                          `json:"enable"`
-	Headers     string                        `json:"headers"`
-	JSExample   string                        `json:"js_example"`
-	Link        string                        `json:"link"`
-	Logo        string                        `json:"logo"`
-	Position    int64                         `json:"position"`
-	JSON        customProviderNewResponseJSON `json:"-"`
+	ID          string    `json:"id" api:"required" format:"uuid"`
+	BaseURL     string    `json:"base_url" api:"required" format:"uri"`
+	CreatedAt   time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt  time.Time `json:"modified_at" api:"required" format:"date-time"`
+	Name        string    `json:"name" api:"required"`
+	Slug        string    `json:"slug" api:"required"`
+	Beta        bool      `json:"beta"`
+	CurlExample string    `json:"curl_example"`
+	Description string    `json:"description"`
+	Enable      bool      `json:"enable"`
+	// JSON object of extra HTTP headers that AI Gateway sends to the provider. Values
+	// can contain credentials.
+	Headers   string                        `json:"headers"`
+	JSExample string                        `json:"js_example"`
+	Link      string                        `json:"link"`
+	Logo      string                        `json:"logo"`
+	Position  int64                         `json:"position"`
+	JSON      customProviderNewResponseJSON `json:"-"`
 }
 
 // customProviderNewResponseJSON contains the JSON metadata for the struct
@@ -174,22 +180,24 @@ func (r customProviderNewResponseJSON) RawJSON() string {
 }
 
 type CustomProviderListResponse struct {
-	ID          string                         `json:"id" api:"required" format:"uuid"`
-	BaseURL     string                         `json:"base_url" api:"required" format:"uri"`
-	CreatedAt   time.Time                      `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt  time.Time                      `json:"modified_at" api:"required" format:"date-time"`
-	Name        string                         `json:"name" api:"required"`
-	Slug        string                         `json:"slug" api:"required"`
-	Beta        bool                           `json:"beta"`
-	CurlExample string                         `json:"curl_example"`
-	Description string                         `json:"description"`
-	Enable      bool                           `json:"enable"`
-	Headers     string                         `json:"headers"`
-	JSExample   string                         `json:"js_example"`
-	Link        string                         `json:"link"`
-	Logo        string                         `json:"logo"`
-	Position    int64                          `json:"position"`
-	JSON        customProviderListResponseJSON `json:"-"`
+	ID          string    `json:"id" api:"required" format:"uuid"`
+	BaseURL     string    `json:"base_url" api:"required" format:"uri"`
+	CreatedAt   time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt  time.Time `json:"modified_at" api:"required" format:"date-time"`
+	Name        string    `json:"name" api:"required"`
+	Slug        string    `json:"slug" api:"required"`
+	Beta        bool      `json:"beta"`
+	CurlExample string    `json:"curl_example"`
+	Description string    `json:"description"`
+	Enable      bool      `json:"enable"`
+	// JSON object of extra HTTP headers that AI Gateway sends to the provider. Values
+	// can contain credentials.
+	Headers   string                         `json:"headers"`
+	JSExample string                         `json:"js_example"`
+	Link      string                         `json:"link"`
+	Logo      string                         `json:"logo"`
+	Position  int64                          `json:"position"`
+	JSON      customProviderListResponseJSON `json:"-"`
 }
 
 // customProviderListResponseJSON contains the JSON metadata for the struct
@@ -223,22 +231,24 @@ func (r customProviderListResponseJSON) RawJSON() string {
 }
 
 type CustomProviderDeleteResponse struct {
-	ID          string                           `json:"id" api:"required" format:"uuid"`
-	BaseURL     string                           `json:"base_url" api:"required" format:"uri"`
-	CreatedAt   time.Time                        `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt  time.Time                        `json:"modified_at" api:"required" format:"date-time"`
-	Name        string                           `json:"name" api:"required"`
-	Slug        string                           `json:"slug" api:"required"`
-	Beta        bool                             `json:"beta"`
-	CurlExample string                           `json:"curl_example"`
-	Description string                           `json:"description"`
-	Enable      bool                             `json:"enable"`
-	Headers     string                           `json:"headers"`
-	JSExample   string                           `json:"js_example"`
-	Link        string                           `json:"link"`
-	Logo        string                           `json:"logo"`
-	Position    int64                            `json:"position"`
-	JSON        customProviderDeleteResponseJSON `json:"-"`
+	ID          string    `json:"id" api:"required" format:"uuid"`
+	BaseURL     string    `json:"base_url" api:"required" format:"uri"`
+	CreatedAt   time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt  time.Time `json:"modified_at" api:"required" format:"date-time"`
+	Name        string    `json:"name" api:"required"`
+	Slug        string    `json:"slug" api:"required"`
+	Beta        bool      `json:"beta"`
+	CurlExample string    `json:"curl_example"`
+	Description string    `json:"description"`
+	Enable      bool      `json:"enable"`
+	// JSON object of extra HTTP headers that AI Gateway sends to the provider. Values
+	// can contain credentials.
+	Headers   string                           `json:"headers"`
+	JSExample string                           `json:"js_example"`
+	Link      string                           `json:"link"`
+	Logo      string                           `json:"logo"`
+	Position  int64                            `json:"position"`
+	JSON      customProviderDeleteResponseJSON `json:"-"`
 }
 
 // customProviderDeleteResponseJSON contains the JSON metadata for the struct
@@ -272,22 +282,24 @@ func (r customProviderDeleteResponseJSON) RawJSON() string {
 }
 
 type CustomProviderGetResponse struct {
-	ID          string                        `json:"id" api:"required" format:"uuid"`
-	BaseURL     string                        `json:"base_url" api:"required" format:"uri"`
-	CreatedAt   time.Time                     `json:"created_at" api:"required" format:"date-time"`
-	ModifiedAt  time.Time                     `json:"modified_at" api:"required" format:"date-time"`
-	Name        string                        `json:"name" api:"required"`
-	Slug        string                        `json:"slug" api:"required"`
-	Beta        bool                          `json:"beta"`
-	CurlExample string                        `json:"curl_example"`
-	Description string                        `json:"description"`
-	Enable      bool                          `json:"enable"`
-	Headers     string                        `json:"headers"`
-	JSExample   string                        `json:"js_example"`
-	Link        string                        `json:"link"`
-	Logo        string                        `json:"logo"`
-	Position    int64                         `json:"position"`
-	JSON        customProviderGetResponseJSON `json:"-"`
+	ID          string    `json:"id" api:"required" format:"uuid"`
+	BaseURL     string    `json:"base_url" api:"required" format:"uri"`
+	CreatedAt   time.Time `json:"created_at" api:"required" format:"date-time"`
+	ModifiedAt  time.Time `json:"modified_at" api:"required" format:"date-time"`
+	Name        string    `json:"name" api:"required"`
+	Slug        string    `json:"slug" api:"required"`
+	Beta        bool      `json:"beta"`
+	CurlExample string    `json:"curl_example"`
+	Description string    `json:"description"`
+	Enable      bool      `json:"enable"`
+	// JSON object of extra HTTP headers that AI Gateway sends to the provider. Values
+	// can contain credentials.
+	Headers   string                        `json:"headers"`
+	JSExample string                        `json:"js_example"`
+	Link      string                        `json:"link"`
+	Logo      string                        `json:"logo"`
+	Position  int64                         `json:"position"`
+	JSON      customProviderGetResponseJSON `json:"-"`
 }
 
 // customProviderGetResponseJSON contains the JSON metadata for the struct
@@ -329,10 +341,12 @@ type CustomProviderNewParams struct {
 	CurlExample param.Field[string] `json:"curl_example"`
 	Description param.Field[string] `json:"description"`
 	Enable      param.Field[bool]   `json:"enable"`
-	Headers     param.Field[string] `json:"headers"`
-	JSExample   param.Field[string] `json:"js_example"`
-	Link        param.Field[string] `json:"link"`
-	Position    param.Field[int64]  `json:"position"`
+	// JSON object of extra HTTP headers that AI Gateway sends to the provider. Values
+	// can contain credentials.
+	Headers   param.Field[string] `json:"headers"`
+	JSExample param.Field[string] `json:"js_example"`
+	Link      param.Field[string] `json:"link"`
+	Position  param.Field[int64]  `json:"position"`
 }
 
 func (r CustomProviderNewParams) MarshalJSON() (data []byte, err error) {

@@ -93,9 +93,9 @@ func (r *CasbPostureFindingInstanceService) Archive(ctx context.Context, finding
 // Creates a CSV export for Finding instances and accepts optional filters in the
 // payload.
 //
-// The `storage_namespace_id` path parameter is derived from the finding ID by
-// base64-decoding it (which yields `integration_id:finding_type_id`) and replacing
-// the colon with a hyphen.
+// Identify the finding as `<integration_id>-<finding_type_id>`: join the
+// `integration.id` and `finding.id` of the finding (from the List posture findings
+// response) with a hyphen.
 func (r *CasbPostureFindingInstanceService) Export(ctx context.Context, storageNamespaceID string, params CasbPostureFindingInstanceExportParams, opts ...option.RequestOption) (res *CasbPostureFindingInstanceExportResponse, err error) {
 	var env CasbPostureFindingInstanceExportResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

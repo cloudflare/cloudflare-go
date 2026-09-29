@@ -42,7 +42,7 @@ func NewListItemService(opts ...option.RequestOption) (r *ListItemService) {
 
 // Appends new items to the list.
 //
-// This operation is asynchronous. To get current the operation status, invoke the
+// This operation is asynchronous. To get the current operation status, invoke the
 // `Get bulk operation status` endpoint with the returned `operation_id`.
 //
 // There is a limit of 1 pending bulk operation per account. If an outstanding bulk
@@ -70,7 +70,7 @@ func (r *ListItemService) New(ctx context.Context, listID string, params ListIte
 // Removes all existing items from the list and adds the provided items to the
 // list.
 //
-// This operation is asynchronous. To get current the operation status, invoke the
+// This operation is asynchronous. To get the current operation status, invoke the
 // `Get bulk operation status` endpoint with the returned `operation_id`.
 //
 // There is a limit of 1 pending bulk operation per account. If an outstanding bulk
@@ -128,7 +128,7 @@ func (r *ListItemService) ListAutoPaging(ctx context.Context, listID string, par
 
 // Removes one or more items from a list.
 //
-// This operation is asynchronous. To get current the operation status, invoke the
+// This operation is asynchronous. To get the current operation status, invoke the
 // `Get bulk operation status` endpoint with the returned `operation_id`.
 //
 // There is a limit of 1 pending bulk operation per account. If an outstanding bulk
@@ -1049,8 +1049,9 @@ func (r ListItemListParams) URLQuery() (v url.Values) {
 
 type ListItemDeleteParams struct {
 	// The Account ID for this resource.
-	AccountID param.Field[string]                     `path:"account_id" api:"required"`
-	Items     param.Field[[]ListItemDeleteParamsItem] `json:"items"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// The list items to delete, identified by their unique IDs.
+	Items param.Field[[]ListItemDeleteParamsItem] `json:"items"`
 }
 
 func (r ListItemDeleteParams) MarshalJSON() (data []byte, err error) {

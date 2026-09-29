@@ -31,7 +31,7 @@ func TestProjectDeploymentHistoryLogGet(t *testing.T) {
 	_, err := client.Pages.Projects.Deployments.History.Logs.Get(
 		context.TODO(),
 		"this-is-my-project-01",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"f64788e9-fccd-4d4a-a28a-cb84f88f6e12",
 		pages.ProjectDeploymentHistoryLogGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

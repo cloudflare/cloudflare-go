@@ -43,7 +43,8 @@ func NewEmailRoutingService(opts ...option.RequestOption) (r *EmailRoutingServic
 	return
 }
 
-// Update the settings for your Email Routing zone.
+// Apply the provided settings to your Email Routing zone. Omitted settings retain
+// their current values, as with PATCH.
 func (r *EmailRoutingService) Update(ctx context.Context, params EmailRoutingUpdateParams, opts ...option.RequestOption) (res *Settings, err error) {
 	var env EmailRoutingUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

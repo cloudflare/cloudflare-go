@@ -138,7 +138,7 @@ func TestAppFlagListWithOptionalParams(t *testing.T) {
 		flagship.AppFlagListParams{
 			AccountID: cloudflare.F("account_id"),
 			Cursor:    cloudflare.F("cursor"),
-			Limit:     cloudflare.F("limit"),
+			Limit:     cloudflare.F(int64(1)),
 		},
 	)
 	if err != nil {

@@ -45,67 +45,150 @@ func NewCacheService(opts ...option.RequestOption) (r *CacheService) {
 	return
 }
 
-// ### Purge All Cached Content
+// Marks cached content as stale in every Cloudflare data center and cache tier,
+// including Cache Reserve. The content stays in cache. The next request for it
+// makes Cloudflare revalidate it with your origin, using the `ETag` and
+// `Last-Modified` values it was cached with:
 //
-// Removes ALL files from Cloudflare's cache. All tiers can purge everything.
+//   - If your origin answers `304 Not Modified`, Cloudflare serves the cached copy
+//     without downloading it again, and `CF-Cache-Status` is `REVALIDATED`.
+//   - If your origin sends a full response, Cloudflare serves and caches the new
+//     content, and `CF-Cache-Status` is `EXPIRED`.
 //
-// ```
-// {"purge_everything": true}
-// ```
+// With Tiered Cache, each tier revalidates with the tier above it, so a visitor
+// can see `EXPIRED` even when your origin answered `304`.
 //
-// ### Purge Cached Content by URL
+// Until content is revalidated, your `stale-while-revalidate` and `stale-if-error`
+// directives still apply, counted from the time you invalidated it. For example,
+// if your origin fails during revalidation, Cloudflare can keep serving the stale
+// copy for the `stale-if-error` window.
 //
-// Granularly removes one or more files from Cloudflare's cache by specifying URLs.
-// All tiers can purge by URL.
+// ### Invalidate or purge?
 //
-// To purge files with custom cache keys, include the headers used to compute the
-// cache key as in the example. If you have a device type or geo in your cache key,
-// you will need to include the CF-Device-Type or CF-IPCountry headers. If you have
-// lang in your cache key, you will need to include the Accept-Language header.
+//   - **Invalidate** when content may not have changed, for example after a deploy.
+//     Unchanged content costs your origin a `304` instead of a full response. That
+//     saving needs an origin that sends `ETag` or `Last-Modified` and answers
+//     conditional requests. Otherwise, every revalidation downloads the full
+//     response.
+//   - **Purge**, with `POST /zones/{zone_id}/purge_cache`, when content must not be
+//     served again, for example content you removed for legal or security reasons.
 //
-// **NB:** When including the Origin header, be sure to include the **scheme** and
-// **hostname**. The port number can be omitted if it is the default port (80 for
-// http, 443 for https), but must be included otherwise.
+// Invalidating takes the same request bodies as purging, needs the same
+// permission, and counts against the same rate limits. After a broad invalidation,
+// such as `purge_everything`, expect more conditional requests to your origin
+// while visitors request the invalidated content again.
 //
-// Single file purge example with files:
+// ### Choose what to invalidate
 //
-// ```
-// {"files": ["http://www.example.com/css/styles.css", "http://www.example.com/js/index.js"]}
-// ```
+// Send one of these fields in the request body:
 //
-// Single file purge example with url and header pairs:
+//   - `files`: specific URLs. If your cache key includes request headers, send each
+//     URL with the header values it was cached with.
+//   - `tags`: all content whose `Cache-Tag` response header contains one of the
+//     tags.
+//   - `hosts`: all content cached for the hostnames.
+//   - `prefixes`: all content whose URL starts with one of the prefixes.
+//   - `purge_everything`: all cached content in the zone.
 //
-// ```
-// {"files": [{"url": "http://www.example.com/cat_picture.jpg", "headers": {"CF-IPCountry": "US", "CF-Device-Type": "desktop", "Accept-Language": "zh-CN"}}, {"url": "http://www.example.com/dog_picture.jpg", "headers": {"CF-IPCountry": "EU", "CF-Device-Type": "mobile", "Accept-Language": "en-US"}}]}
-// ```
+// ### Check the result
 //
-// ### Purge Cached Content by Tag, Host or Prefix
-//
-// Granularly removes one or more files from Cloudflare's cache either by
-// specifying the host, the associated Cache-Tag, or a Prefix.
-//
-// Flex purge with tags:
-//
-// ```
-// {"tags": ["a-cache-tag", "another-cache-tag"]}
-// ```
-//
-// Flex purge with hosts:
-//
-// ```
-// {"hosts": ["www.example.com", "images.example.com"]}
-// ```
-//
-// Flex purge with prefixes:
-//
-// ```
-// {"prefixes": ["www.example.com/foo", "images.example.com/bar/baz"]}
-// ```
+// A `200` response with `success: true` means Cloudflare accepted the request. To
+// check, request an invalidated URL and confirm that the `CF-Cache-Status`
+// response header is `REVALIDATED` or `EXPIRED`.
 //
 // ### Availability and limits
 //
-// Please refer to
-// [purge cache availability and limits documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/#availability-and-limits).
+// Rate limits and the number of items you can send in one request depend on your
+// plan. See
+// [Purge cache: availability and limits](https://developers.cloudflare.com/cache/how-to/purge-cache/#availability-and-limits).
+func (r *CacheService) Invalidate(ctx context.Context, params CacheInvalidateParams, opts ...option.RequestOption) (res *CacheInvalidateResponse, err error) {
+	var env CacheInvalidateResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("zones/%s/invalidate_cache", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
+// Marks cached content as stale for one environment of the zone. Content cached
+// for the zone's other environments, including production, is not affected.
+// Otherwise this works like `POST /zones/{zone_id}/invalidate_cache`: the next
+// request for invalidated content makes Cloudflare revalidate it with your origin,
+// and the request body takes the same fields.
+//
+// Environments are part of
+// [Version Management](https://developers.cloudflare.com/version-management/). To
+// delete the content instead, use
+// `POST /zones/{zone_id}/environments/{environment_id}/purge_cache`.
+//
+// Invalidating by URL (`files`) does not work for environments that select
+// requests by IP address, country, ASN, or threat score, and fails with error
+// `1136`. Use `tags`, `hosts`, `prefixes`, or `purge_everything` for those
+// environments.
+//
+// ### Availability and limits
+//
+// Rate limits and the number of items you can send in one request depend on your
+// plan. See
+// [Purge cache: availability and limits](https://developers.cloudflare.com/cache/how-to/purge-cache/#availability-and-limits).
+func (r *CacheService) InvalidateEnvironment(ctx context.Context, environmentID string, params CacheInvalidateEnvironmentParams, opts ...option.RequestOption) (res *CacheInvalidateEnvironmentResponse, err error) {
+	var env CacheInvalidateEnvironmentResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return nil, err
+	}
+	if environmentID == "" {
+		err = errors.New("missing required environment_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("zones/%s/environments/%s/invalidate_cache", params.ZoneID, environmentID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
+// Deletes cached content in every Cloudflare data center and cache tier, including
+// Cache Reserve. The next request for purged content is a cache `MISS`: Cloudflare
+// fetches the full response from your origin and caches it again. Cloudflare does
+// not serve purged content from cache again, even if your origin is unavailable.
+//
+// To keep content cached and have Cloudflare revalidate it with your origin
+// instead, use `POST /zones/{zone_id}/invalidate_cache`.
+//
+// ### Choose what to purge
+//
+// Send one of these fields in the request body:
+//
+//   - `files`: specific URLs. If your cache key includes request headers, send each
+//     URL with the header values it was cached with.
+//   - `tags`: all content whose `Cache-Tag` response header contains one of the
+//     tags.
+//   - `hosts`: all content cached for the hostnames.
+//   - `prefixes`: all content whose URL starts with one of the prefixes.
+//   - `purge_everything`: all cached content in the zone.
+//
+// ### Check the result
+//
+// A `200` response with `success: true` means Cloudflare accepted the request. It
+// does not confirm that any content was cached or removed. To check, request a
+// purged URL and confirm that the `CF-Cache-Status` response header is `MISS`.
+//
+// ### Availability and limits
+//
+// Rate limits and the number of items you can send in one request depend on your
+// plan. See
+// [Purge cache: availability and limits](https://developers.cloudflare.com/cache/how-to/purge-cache/#availability-and-limits).
 func (r *CacheService) Purge(ctx context.Context, params CachePurgeParams, opts ...option.RequestOption) (res *CachePurgeResponse, err error) {
 	var env CachePurgeResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -122,14 +205,25 @@ func (r *CacheService) Purge(ctx context.Context, params CachePurgeParams, opts 
 	return res, nil
 }
 
-// Purge cached content scoped to a specific environment. Supports the same purge
-// types as the zone-level endpoint (purge everything, by URL, by tag, host, or
-// prefix).
+// Deletes cached content for one environment of the zone. Content cached for the
+// zone's other environments, including production, is not affected. Otherwise this
+// works like `POST /zones/{zone_id}/purge_cache`: the next request for purged
+// content is a cache `MISS`, and the request body takes the same fields.
+//
+// Environments are part of
+// [Version Management](https://developers.cloudflare.com/version-management/). To
+// keep content cached and have Cloudflare revalidate it instead, use
+// `POST /zones/{zone_id}/environments/{environment_id}/invalidate_cache`.
+//
+// Purging by URL (`files`) does not work for environments that select requests by
+// IP address, country, ASN, or threat score, and fails with error `1136`. Use
+// `tags`, `hosts`, `prefixes`, or `purge_everything` for those environments.
 //
 // ### Availability and limits
 //
-// Please refer to
-// [purge cache availability and limits documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/#availability-and-limits).
+// Rate limits and the number of items you can send in one request depend on your
+// plan. See
+// [Purge cache: availability and limits](https://developers.cloudflare.com/cache/how-to/purge-cache/#availability-and-limits).
 func (r *CacheService) PurgeEnvironment(ctx context.Context, environmentID string, params CachePurgeEnvironmentParams, opts ...option.RequestOption) (res *CachePurgeEnvironmentResponse, err error) {
 	var env CachePurgeEnvironmentResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -148,6 +242,48 @@ func (r *CacheService) PurgeEnvironment(ctx context.Context, environmentID strin
 	}
 	res = &env.Result
 	return res, nil
+}
+
+type CacheInvalidateResponse struct {
+	ID   string                      `json:"id" api:"required"`
+	JSON cacheInvalidateResponseJSON `json:"-"`
+}
+
+// cacheInvalidateResponseJSON contains the JSON metadata for the struct
+// [CacheInvalidateResponse]
+type cacheInvalidateResponseJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheInvalidateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheInvalidateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type CacheInvalidateEnvironmentResponse struct {
+	ID   string                                 `json:"id" api:"required"`
+	JSON cacheInvalidateEnvironmentResponseJSON `json:"-"`
+}
+
+// cacheInvalidateEnvironmentResponseJSON contains the JSON metadata for the struct
+// [CacheInvalidateEnvironmentResponse]
+type cacheInvalidateEnvironmentResponseJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheInvalidateEnvironmentResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheInvalidateEnvironmentResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type CachePurgeResponse struct {
@@ -192,6 +328,343 @@ func (r cachePurgeEnvironmentResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type CacheInvalidateParams struct {
+	ZoneID param.Field[string]            `path:"zone_id" api:"required"`
+	Body   CacheInvalidateParamsBodyUnion `json:"body" api:"required"`
+}
+
+func (r CacheInvalidateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type CacheInvalidateParamsBody struct {
+	Files    param.Field[interface{}] `json:"files"`
+	Hosts    param.Field[interface{}] `json:"hosts"`
+	Prefixes param.Field[interface{}] `json:"prefixes"`
+	// Set to `true` to target all cached content in the zone, or in the environment
+	// for the environment endpoints. Must be the only field in the request. See
+	// [Purge everything](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-everything/).
+	PurgeEverything param.Field[bool]        `json:"purge_everything"`
+	Tags            param.Field[interface{}] `json:"tags"`
+}
+
+func (r CacheInvalidateParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CacheInvalidateParamsBody) implementsCacheInvalidateParamsBodyUnion() {}
+
+// Satisfied by [cache.CacheInvalidateParamsBodyCachePurgeFlexPurgeByTags],
+// [cache.CacheInvalidateParamsBodyCachePurgeFlexPurgeByHostnames],
+// [cache.CacheInvalidateParamsBodyCachePurgeFlexPurgeByPrefixes],
+// [cache.CacheInvalidateParamsBodyCachePurgeEverything],
+// [cache.CacheInvalidateParamsBodyCachePurgeSingleFile],
+// [cache.CacheInvalidateParamsBodyCachePurgeSingleFileWithURLAndHeaders],
+// [CacheInvalidateParamsBody].
+type CacheInvalidateParamsBodyUnion interface {
+	implementsCacheInvalidateParamsBodyUnion()
+}
+
+type CacheInvalidateParamsBodyCachePurgeFlexPurgeByTags struct {
+	// Cache tags. Targets all content whose `Cache-Tag` response header contains at
+	// least one of these tags. See
+	// [Purge cache by cache-tags](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-tags/).
+	Tags param.Field[[]string] `json:"tags"`
+}
+
+func (r CacheInvalidateParamsBodyCachePurgeFlexPurgeByTags) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CacheInvalidateParamsBodyCachePurgeFlexPurgeByTags) implementsCacheInvalidateParamsBodyUnion() {
+}
+
+type CacheInvalidateParamsBodyCachePurgeFlexPurgeByHostnames struct {
+	// Hostnames, such as `www.example.com`. Targets all content cached for these
+	// hostnames. See
+	// [Purge cache by hostname](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-hostname/).
+	Hosts param.Field[[]string] `json:"hosts"`
+}
+
+func (r CacheInvalidateParamsBodyCachePurgeFlexPurgeByHostnames) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CacheInvalidateParamsBodyCachePurgeFlexPurgeByHostnames) implementsCacheInvalidateParamsBodyUnion() {
+}
+
+type CacheInvalidateParamsBodyCachePurgeFlexPurgeByPrefixes struct {
+	// URL prefixes, each a hostname followed by a path, such as
+	// `www.example.com/blog/`. Targets all content whose URL starts with one of these
+	// prefixes. Do not include a scheme, query string, or fragment. See
+	// [Purge cache by prefix](https://developers.cloudflare.com/cache/how-to/purge-cache/purge_by_prefix/).
+	Prefixes param.Field[[]string] `json:"prefixes"`
+}
+
+func (r CacheInvalidateParamsBodyCachePurgeFlexPurgeByPrefixes) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CacheInvalidateParamsBodyCachePurgeFlexPurgeByPrefixes) implementsCacheInvalidateParamsBodyUnion() {
+}
+
+type CacheInvalidateParamsBodyCachePurgeEverything struct {
+	// Set to `true` to target all cached content in the zone, or in the environment
+	// for the environment endpoints. Must be the only field in the request. See
+	// [Purge everything](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-everything/).
+	PurgeEverything param.Field[bool] `json:"purge_everything"`
+}
+
+func (r CacheInvalidateParamsBodyCachePurgeEverything) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CacheInvalidateParamsBodyCachePurgeEverything) implementsCacheInvalidateParamsBodyUnion() {}
+
+type CacheInvalidateParamsBodyCachePurgeSingleFile struct {
+	// Full URLs, such as `https://www.example.com/css/styles.css`. Targets the content
+	// cached for each URL. If your cache key includes request headers, send objects
+	// with `url` and `headers` instead. See
+	// [Purge by single-file](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-single-file/).
+	Files param.Field[[]string] `json:"files"`
+}
+
+func (r CacheInvalidateParamsBodyCachePurgeSingleFile) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CacheInvalidateParamsBodyCachePurgeSingleFile) implementsCacheInvalidateParamsBodyUnion() {}
+
+type CacheInvalidateParamsBodyCachePurgeSingleFileWithURLAndHeaders struct {
+	// URLs with the request headers your cache key uses. Use this form when your cache
+	// key includes request headers, or the visitor's device type, country, or
+	// language: send the header values each URL was cached with, such as
+	// `CF-Device-Type`, `CF-IPCountry`, or `Accept-Language`.
+	//
+	// When you send the `Origin` header, include the scheme and hostname. Include the
+	// port unless it is the default for the scheme: 80 for `http`, 443 for `https`.
+	//
+	// See
+	// [Purge by single-file](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-single-file/).
+	Files param.Field[[]CacheInvalidateParamsBodyCachePurgeSingleFileWithURLAndHeadersFile] `json:"files"`
+}
+
+func (r CacheInvalidateParamsBodyCachePurgeSingleFileWithURLAndHeaders) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CacheInvalidateParamsBodyCachePurgeSingleFileWithURLAndHeaders) implementsCacheInvalidateParamsBodyUnion() {
+}
+
+type CacheInvalidateParamsBodyCachePurgeSingleFileWithURLAndHeadersFile struct {
+	// Request headers and the values the content was cached with.
+	Headers param.Field[map[string]string] `json:"headers"`
+	// Full URL of the content.
+	URL param.Field[string] `json:"url"`
+}
+
+func (r CacheInvalidateParamsBodyCachePurgeSingleFileWithURLAndHeadersFile) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type CacheInvalidateResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	// Indicates the API call's success or failure.
+	Success bool                                `json:"success" api:"required"`
+	Result  CacheInvalidateResponse             `json:"result" api:"nullable"`
+	JSON    cacheInvalidateResponseEnvelopeJSON `json:"-"`
+}
+
+// cacheInvalidateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [CacheInvalidateResponseEnvelope]
+type cacheInvalidateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheInvalidateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheInvalidateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type CacheInvalidateEnvironmentParams struct {
+	ZoneID param.Field[string]                       `path:"zone_id" api:"required"`
+	Body   CacheInvalidateEnvironmentParamsBodyUnion `json:"body" api:"required"`
+}
+
+func (r CacheInvalidateEnvironmentParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type CacheInvalidateEnvironmentParamsBody struct {
+	Files    param.Field[interface{}] `json:"files"`
+	Hosts    param.Field[interface{}] `json:"hosts"`
+	Prefixes param.Field[interface{}] `json:"prefixes"`
+	// Set to `true` to target all cached content in the zone, or in the environment
+	// for the environment endpoints. Must be the only field in the request. See
+	// [Purge everything](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-everything/).
+	PurgeEverything param.Field[bool]        `json:"purge_everything"`
+	Tags            param.Field[interface{}] `json:"tags"`
+}
+
+func (r CacheInvalidateEnvironmentParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CacheInvalidateEnvironmentParamsBody) implementsCacheInvalidateEnvironmentParamsBodyUnion() {}
+
+// Satisfied by
+// [cache.CacheInvalidateEnvironmentParamsBodyCachePurgeFlexPurgeByTags],
+// [cache.CacheInvalidateEnvironmentParamsBodyCachePurgeFlexPurgeByHostnames],
+// [cache.CacheInvalidateEnvironmentParamsBodyCachePurgeFlexPurgeByPrefixes],
+// [cache.CacheInvalidateEnvironmentParamsBodyCachePurgeEverything],
+// [cache.CacheInvalidateEnvironmentParamsBodyCachePurgeSingleFile],
+// [cache.CacheInvalidateEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeaders],
+// [CacheInvalidateEnvironmentParamsBody].
+type CacheInvalidateEnvironmentParamsBodyUnion interface {
+	implementsCacheInvalidateEnvironmentParamsBodyUnion()
+}
+
+type CacheInvalidateEnvironmentParamsBodyCachePurgeFlexPurgeByTags struct {
+	// Cache tags. Targets all content whose `Cache-Tag` response header contains at
+	// least one of these tags. See
+	// [Purge cache by cache-tags](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-tags/).
+	Tags param.Field[[]string] `json:"tags"`
+}
+
+func (r CacheInvalidateEnvironmentParamsBodyCachePurgeFlexPurgeByTags) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CacheInvalidateEnvironmentParamsBodyCachePurgeFlexPurgeByTags) implementsCacheInvalidateEnvironmentParamsBodyUnion() {
+}
+
+type CacheInvalidateEnvironmentParamsBodyCachePurgeFlexPurgeByHostnames struct {
+	// Hostnames, such as `www.example.com`. Targets all content cached for these
+	// hostnames. See
+	// [Purge cache by hostname](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-hostname/).
+	Hosts param.Field[[]string] `json:"hosts"`
+}
+
+func (r CacheInvalidateEnvironmentParamsBodyCachePurgeFlexPurgeByHostnames) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CacheInvalidateEnvironmentParamsBodyCachePurgeFlexPurgeByHostnames) implementsCacheInvalidateEnvironmentParamsBodyUnion() {
+}
+
+type CacheInvalidateEnvironmentParamsBodyCachePurgeFlexPurgeByPrefixes struct {
+	// URL prefixes, each a hostname followed by a path, such as
+	// `www.example.com/blog/`. Targets all content whose URL starts with one of these
+	// prefixes. Do not include a scheme, query string, or fragment. See
+	// [Purge cache by prefix](https://developers.cloudflare.com/cache/how-to/purge-cache/purge_by_prefix/).
+	Prefixes param.Field[[]string] `json:"prefixes"`
+}
+
+func (r CacheInvalidateEnvironmentParamsBodyCachePurgeFlexPurgeByPrefixes) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CacheInvalidateEnvironmentParamsBodyCachePurgeFlexPurgeByPrefixes) implementsCacheInvalidateEnvironmentParamsBodyUnion() {
+}
+
+type CacheInvalidateEnvironmentParamsBodyCachePurgeEverything struct {
+	// Set to `true` to target all cached content in the zone, or in the environment
+	// for the environment endpoints. Must be the only field in the request. See
+	// [Purge everything](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-everything/).
+	PurgeEverything param.Field[bool] `json:"purge_everything"`
+}
+
+func (r CacheInvalidateEnvironmentParamsBodyCachePurgeEverything) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CacheInvalidateEnvironmentParamsBodyCachePurgeEverything) implementsCacheInvalidateEnvironmentParamsBodyUnion() {
+}
+
+type CacheInvalidateEnvironmentParamsBodyCachePurgeSingleFile struct {
+	// Full URLs, such as `https://www.example.com/css/styles.css`. Targets the content
+	// cached for each URL. If your cache key includes request headers, send objects
+	// with `url` and `headers` instead. See
+	// [Purge by single-file](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-single-file/).
+	Files param.Field[[]string] `json:"files"`
+}
+
+func (r CacheInvalidateEnvironmentParamsBodyCachePurgeSingleFile) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CacheInvalidateEnvironmentParamsBodyCachePurgeSingleFile) implementsCacheInvalidateEnvironmentParamsBodyUnion() {
+}
+
+type CacheInvalidateEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeaders struct {
+	// URLs with the request headers your cache key uses. Use this form when your cache
+	// key includes request headers, or the visitor's device type, country, or
+	// language: send the header values each URL was cached with, such as
+	// `CF-Device-Type`, `CF-IPCountry`, or `Accept-Language`.
+	//
+	// When you send the `Origin` header, include the scheme and hostname. Include the
+	// port unless it is the default for the scheme: 80 for `http`, 443 for `https`.
+	//
+	// See
+	// [Purge by single-file](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-single-file/).
+	Files param.Field[[]CacheInvalidateEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeadersFile] `json:"files"`
+}
+
+func (r CacheInvalidateEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeaders) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CacheInvalidateEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeaders) implementsCacheInvalidateEnvironmentParamsBodyUnion() {
+}
+
+type CacheInvalidateEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeadersFile struct {
+	// Request headers and the values the content was cached with.
+	Headers param.Field[map[string]string] `json:"headers"`
+	// Full URL of the content.
+	URL param.Field[string] `json:"url"`
+}
+
+func (r CacheInvalidateEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeadersFile) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type CacheInvalidateEnvironmentResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	// Indicates the API call's success or failure.
+	Success bool                                           `json:"success" api:"required"`
+	Result  CacheInvalidateEnvironmentResponse             `json:"result" api:"nullable"`
+	JSON    cacheInvalidateEnvironmentResponseEnvelopeJSON `json:"-"`
+}
+
+// cacheInvalidateEnvironmentResponseEnvelopeJSON contains the JSON metadata for
+// the struct [CacheInvalidateEnvironmentResponseEnvelope]
+type cacheInvalidateEnvironmentResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheInvalidateEnvironmentResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheInvalidateEnvironmentResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CachePurgeParams struct {
 	ZoneID param.Field[string]       `path:"zone_id" api:"required"`
 	Body   CachePurgeParamsBodyUnion `json:"body" api:"required"`
@@ -205,8 +678,9 @@ type CachePurgeParamsBody struct {
 	Files    param.Field[interface{}] `json:"files"`
 	Hosts    param.Field[interface{}] `json:"hosts"`
 	Prefixes param.Field[interface{}] `json:"prefixes"`
-	// For more information, please refer to
-	// [purge everything documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-everything/).
+	// Set to `true` to target all cached content in the zone, or in the environment
+	// for the environment endpoints. Must be the only field in the request. See
+	// [Purge everything](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-everything/).
 	PurgeEverything param.Field[bool]        `json:"purge_everything"`
 	Tags            param.Field[interface{}] `json:"tags"`
 }
@@ -229,8 +703,9 @@ type CachePurgeParamsBodyUnion interface {
 }
 
 type CachePurgeParamsBodyCachePurgeFlexPurgeByTags struct {
-	// For more information on cache tags and purging by tags, please refer to
-	// [purge by cache-tags documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-tags/).
+	// Cache tags. Targets all content whose `Cache-Tag` response header contains at
+	// least one of these tags. See
+	// [Purge cache by cache-tags](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-tags/).
 	Tags param.Field[[]string] `json:"tags"`
 }
 
@@ -241,8 +716,9 @@ func (r CachePurgeParamsBodyCachePurgeFlexPurgeByTags) MarshalJSON() (data []byt
 func (r CachePurgeParamsBodyCachePurgeFlexPurgeByTags) implementsCachePurgeParamsBodyUnion() {}
 
 type CachePurgeParamsBodyCachePurgeFlexPurgeByHostnames struct {
-	// For more information purging by hostnames, please refer to
-	// [purge by hostname documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-hostname/).
+	// Hostnames, such as `www.example.com`. Targets all content cached for these
+	// hostnames. See
+	// [Purge cache by hostname](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-hostname/).
 	Hosts param.Field[[]string] `json:"hosts"`
 }
 
@@ -253,8 +729,10 @@ func (r CachePurgeParamsBodyCachePurgeFlexPurgeByHostnames) MarshalJSON() (data 
 func (r CachePurgeParamsBodyCachePurgeFlexPurgeByHostnames) implementsCachePurgeParamsBodyUnion() {}
 
 type CachePurgeParamsBodyCachePurgeFlexPurgeByPrefixes struct {
-	// For more information on purging by prefixes, please refer to
-	// [purge by prefix documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge_by_prefix/).
+	// URL prefixes, each a hostname followed by a path, such as
+	// `www.example.com/blog/`. Targets all content whose URL starts with one of these
+	// prefixes. Do not include a scheme, query string, or fragment. See
+	// [Purge cache by prefix](https://developers.cloudflare.com/cache/how-to/purge-cache/purge_by_prefix/).
 	Prefixes param.Field[[]string] `json:"prefixes"`
 }
 
@@ -265,8 +743,9 @@ func (r CachePurgeParamsBodyCachePurgeFlexPurgeByPrefixes) MarshalJSON() (data [
 func (r CachePurgeParamsBodyCachePurgeFlexPurgeByPrefixes) implementsCachePurgeParamsBodyUnion() {}
 
 type CachePurgeParamsBodyCachePurgeEverything struct {
-	// For more information, please refer to
-	// [purge everything documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-everything/).
+	// Set to `true` to target all cached content in the zone, or in the environment
+	// for the environment endpoints. Must be the only field in the request. See
+	// [Purge everything](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-everything/).
 	PurgeEverything param.Field[bool] `json:"purge_everything"`
 }
 
@@ -277,8 +756,10 @@ func (r CachePurgeParamsBodyCachePurgeEverything) MarshalJSON() (data []byte, er
 func (r CachePurgeParamsBodyCachePurgeEverything) implementsCachePurgeParamsBodyUnion() {}
 
 type CachePurgeParamsBodyCachePurgeSingleFile struct {
-	// For more information on purging files, please refer to
-	// [purge by single-file documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-single-file/).
+	// Full URLs, such as `https://www.example.com/css/styles.css`. Targets the content
+	// cached for each URL. If your cache key includes request headers, send objects
+	// with `url` and `headers` instead. See
+	// [Purge by single-file](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-single-file/).
 	Files param.Field[[]string] `json:"files"`
 }
 
@@ -289,8 +770,16 @@ func (r CachePurgeParamsBodyCachePurgeSingleFile) MarshalJSON() (data []byte, er
 func (r CachePurgeParamsBodyCachePurgeSingleFile) implementsCachePurgeParamsBodyUnion() {}
 
 type CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeaders struct {
-	// For more information on purging files with URL and headers, please refer to
-	// [purge by single-file documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-single-file/).
+	// URLs with the request headers your cache key uses. Use this form when your cache
+	// key includes request headers, or the visitor's device type, country, or
+	// language: send the header values each URL was cached with, such as
+	// `CF-Device-Type`, `CF-IPCountry`, or `Accept-Language`.
+	//
+	// When you send the `Origin` header, include the scheme and hostname. Include the
+	// port unless it is the default for the scheme: 80 for `http`, 443 for `https`.
+	//
+	// See
+	// [Purge by single-file](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-single-file/).
 	Files param.Field[[]CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeadersFile] `json:"files"`
 }
 
@@ -302,8 +791,10 @@ func (r CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeaders) implementsCac
 }
 
 type CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeadersFile struct {
+	// Request headers and the values the content was cached with.
 	Headers param.Field[map[string]string] `json:"headers"`
-	URL     param.Field[string]            `json:"url"`
+	// Full URL of the content.
+	URL param.Field[string] `json:"url"`
 }
 
 func (r CachePurgeParamsBodyCachePurgeSingleFileWithURLAndHeadersFile) MarshalJSON() (data []byte, err error) {
@@ -351,8 +842,9 @@ type CachePurgeEnvironmentParamsBody struct {
 	Files    param.Field[interface{}] `json:"files"`
 	Hosts    param.Field[interface{}] `json:"hosts"`
 	Prefixes param.Field[interface{}] `json:"prefixes"`
-	// For more information, please refer to
-	// [purge everything documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-everything/).
+	// Set to `true` to target all cached content in the zone, or in the environment
+	// for the environment endpoints. Must be the only field in the request. See
+	// [Purge everything](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-everything/).
 	PurgeEverything param.Field[bool]        `json:"purge_everything"`
 	Tags            param.Field[interface{}] `json:"tags"`
 }
@@ -375,8 +867,9 @@ type CachePurgeEnvironmentParamsBodyUnion interface {
 }
 
 type CachePurgeEnvironmentParamsBodyCachePurgeFlexPurgeByTags struct {
-	// For more information on cache tags and purging by tags, please refer to
-	// [purge by cache-tags documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-tags/).
+	// Cache tags. Targets all content whose `Cache-Tag` response header contains at
+	// least one of these tags. See
+	// [Purge cache by cache-tags](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-tags/).
 	Tags param.Field[[]string] `json:"tags"`
 }
 
@@ -388,8 +881,9 @@ func (r CachePurgeEnvironmentParamsBodyCachePurgeFlexPurgeByTags) implementsCach
 }
 
 type CachePurgeEnvironmentParamsBodyCachePurgeFlexPurgeByHostnames struct {
-	// For more information purging by hostnames, please refer to
-	// [purge by hostname documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-hostname/).
+	// Hostnames, such as `www.example.com`. Targets all content cached for these
+	// hostnames. See
+	// [Purge cache by hostname](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-hostname/).
 	Hosts param.Field[[]string] `json:"hosts"`
 }
 
@@ -401,8 +895,10 @@ func (r CachePurgeEnvironmentParamsBodyCachePurgeFlexPurgeByHostnames) implement
 }
 
 type CachePurgeEnvironmentParamsBodyCachePurgeFlexPurgeByPrefixes struct {
-	// For more information on purging by prefixes, please refer to
-	// [purge by prefix documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge_by_prefix/).
+	// URL prefixes, each a hostname followed by a path, such as
+	// `www.example.com/blog/`. Targets all content whose URL starts with one of these
+	// prefixes. Do not include a scheme, query string, or fragment. See
+	// [Purge cache by prefix](https://developers.cloudflare.com/cache/how-to/purge-cache/purge_by_prefix/).
 	Prefixes param.Field[[]string] `json:"prefixes"`
 }
 
@@ -414,8 +910,9 @@ func (r CachePurgeEnvironmentParamsBodyCachePurgeFlexPurgeByPrefixes) implements
 }
 
 type CachePurgeEnvironmentParamsBodyCachePurgeEverything struct {
-	// For more information, please refer to
-	// [purge everything documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-everything/).
+	// Set to `true` to target all cached content in the zone, or in the environment
+	// for the environment endpoints. Must be the only field in the request. See
+	// [Purge everything](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-everything/).
 	PurgeEverything param.Field[bool] `json:"purge_everything"`
 }
 
@@ -427,8 +924,10 @@ func (r CachePurgeEnvironmentParamsBodyCachePurgeEverything) implementsCachePurg
 }
 
 type CachePurgeEnvironmentParamsBodyCachePurgeSingleFile struct {
-	// For more information on purging files, please refer to
-	// [purge by single-file documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-single-file/).
+	// Full URLs, such as `https://www.example.com/css/styles.css`. Targets the content
+	// cached for each URL. If your cache key includes request headers, send objects
+	// with `url` and `headers` instead. See
+	// [Purge by single-file](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-single-file/).
 	Files param.Field[[]string] `json:"files"`
 }
 
@@ -440,8 +939,16 @@ func (r CachePurgeEnvironmentParamsBodyCachePurgeSingleFile) implementsCachePurg
 }
 
 type CachePurgeEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeaders struct {
-	// For more information on purging files with URL and headers, please refer to
-	// [purge by single-file documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-single-file/).
+	// URLs with the request headers your cache key uses. Use this form when your cache
+	// key includes request headers, or the visitor's device type, country, or
+	// language: send the header values each URL was cached with, such as
+	// `CF-Device-Type`, `CF-IPCountry`, or `Accept-Language`.
+	//
+	// When you send the `Origin` header, include the scheme and hostname. Include the
+	// port unless it is the default for the scheme: 80 for `http`, 443 for `https`.
+	//
+	// See
+	// [Purge by single-file](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-by-single-file/).
 	Files param.Field[[]CachePurgeEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeadersFile] `json:"files"`
 }
 
@@ -453,8 +960,10 @@ func (r CachePurgeEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeaders) im
 }
 
 type CachePurgeEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeadersFile struct {
+	// Request headers and the values the content was cached with.
 	Headers param.Field[map[string]string] `json:"headers"`
-	URL     param.Field[string]            `json:"url"`
+	// Full URL of the content.
+	URL param.Field[string] `json:"url"`
 }
 
 func (r CachePurgeEnvironmentParamsBodyCachePurgeSingleFileWithURLAndHeadersFile) MarshalJSON() (data []byte, err error) {

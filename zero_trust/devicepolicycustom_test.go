@@ -209,7 +209,6 @@ func TestDevicePolicyCustomEditWithOptionalParams(t *testing.T) {
 			Match:                      cloudflare.F(`identity.email == "test@cloudflare.com"`),
 			Name:                       cloudflare.F("Allow Developers"),
 			Precedence:                 cloudflare.F(100.000000),
-			ProfileType:                cloudflare.F(zero_trust.DevicePolicyCustomEditParamsProfileTypeWARP),
 			RegisterInterfaceIPWithDNS: cloudflare.F(true),
 			SccmVpnBoundarySupport:     cloudflare.F(false),
 			ServiceModeV2: cloudflare.F(zero_trust.DevicePolicyCustomEditParamsServiceModeV2{

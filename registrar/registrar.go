@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"slices"
 	"time"
 
@@ -16,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/tidwall/gjson"
 )
 
 // Registrar API for searching, checking, registering, and managing domains through
@@ -258,6 +260,53 @@ func (r *RegistrarService) Search(ctx context.Context, params RegistrarSearchPar
 	return res, nil
 }
 
+// Performs real-time, authoritative eligibility checks directly against needed
+// requirements. Use this endpoint to verify a domain is available before
+// attempting a transfer via `POST /registrations/:domain_name/transfer-in`.
+//
+// **Note:** This endpoint uses POST to accept a list of domains in the request
+// body. It is a read-only operation — it does not create, modify, or reserve any
+// domains.
+//
+// ### Behavior
+//
+//   - Maximum 10 domains per request
+//   - Pricing is only returned for domains where `transferable: true`
+//   - Results are not cached; each request queries the registry & other needed
+//     upstreams
+//
+// ## Extension Support
+//
+// All `.uk` extensions (`.uk`, `.co.uk`, etc) do not support auth codes. As such,
+// Cloudflare will ignore the `auth_code` section of this request for `.uk`
+// domains.
+//
+// This means that a `.uk` domain depends on public data to obtain domain
+// information, so it might be a few minutes outdated.
+//
+// ### Workflow
+//
+//  1. Call this endpoint with domains the user wants to transfer.
+//  2. For each domain where `transferable: true`, present pricing to the user.
+//  3. For each domain where `transferable: false`, present reasons to the user
+//  4. Proceed to `POST /registrations/:domain_name/transfer-in` only for the
+//     `transferable: true` domains.
+func (r *RegistrarService) TransferCheck(ctx context.Context, params RegistrarTransferCheckParams, opts ...option.RequestOption) (res *RegistrarTransferCheckResponse, err error) {
+	var env RegistrarTransferCheckResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/registrar/domain-transfer-check", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
 // A domain registration resource representing the current state of a registered
 // domain.
 type Registration struct {
@@ -366,21 +415,21 @@ type WorkflowStatus struct {
 	Links     WorkflowStatusLinks `json:"links" api:"required"`
 	// Describes the workflow lifecycle state.
 	//
-	//   - `pending`: The workflow awaits processing.
-	//   - `in_progress`: Processing started. Continue polling `links.self`. An internal
-	//     deadline limits the duration of this state.
-	//   - `action_required`: The workflow pauses for user action. See `context.action`
-	//     for details. Stop automated polling until the user completes the required
-	//     action.
-	//   - `blocked`: A third party, such as the domain extension's registry or a losing
-	//     registrar, prevents progress. Continue polling because the block may resolve
-	//     when the third party responds.
-	//   - `succeeded`: Terminal state. The operation completed successfully. `completed`
-	//     equals `true`. For registrations, `context.registration` contains the
-	//     resulting registration resource.
-	//   - `failed`: Terminal state. The operation failed. `completed` equals `true`. See
-	//     `error.code` and `error.message` for the reason. Require user review before
-	//     retrying.
+	// - `pending`: The workflow awaits processing.
+	// - `in_progress`: Processing started. Continue polling `links.self`. An internal
+	//   deadline limits the duration of this state.
+	// - `action_required`: The workflow pauses for user action. See `context.action`
+	//   for details. Stop automated polling until the user completes the required
+	//   action.
+	// - `blocked`: A third party, such as the domain extension's registry or a losing
+	//   registrar, prevents progress. Continue polling because the block may resolve
+	//   when the third party responds.
+	// - `succeeded`: Terminal state. The operation completed successfully. `completed`
+	//   equals `true`. For registrations, `context.registration` contains the
+	//   resulting registration resource.
+	// - `failed`: Terminal state. The operation failed. `completed` equals `true`. See
+	//   `error.code` and `error.message` for the reason. Require user review before
+	//   retrying.
 	State     WorkflowStatusState `json:"state" api:"required"`
 	UpdatedAt time.Time           `json:"updated_at" api:"required" format:"date-time"`
 	// Provides workflow-specific data.
@@ -545,38 +594,36 @@ type RegistrarCheckResponseDomain struct {
 	// Indicates programmatic registration eligibility according to a real-time
 	// registry check.
 	//
-	//   - `true`: The domain is available for registration. The response includes the
-	//     `pricing` object.
-	//   - `false`: A restriction prevents registration. See the `reason` field for
-	//     details. Some results, such as premium domains, may still include `tier`.
+	// - `true`: The domain is available for registration. The response includes the
+	//   `pricing` object.
+	// - `false`: A restriction prevents registration. See the `reason` field for
+	//   details. Some results, such as premium domains, may still include `tier`.
 	Registrable bool `json:"registrable" api:"required"`
-	// Provides annual pricing information for a registrable domain. This object
-	// appears only when `registrable` is `true`. The API returns all per-year prices
-	// as strings to preserve decimal precision.
+	// Provides annual pricing information for a given domain. The API returns all
+	// per-year prices as strings to preserve decimal precision.
 	//
-	// `registration_cost` and `renewal_cost` frequently have the same value, but may
-	// differ, especially when registries set different premium rates for initial
-	// registration and renewal. For a multi-year registration (e.g., 4 years),
-	// `registration_cost` applies to the first year and `renewal_cost` applies to each
-	// subsequent year. The values reflect the current registry rate, which may change
-	// over time. Search and Check may surface premium pricing, but this API currently
-	// supports standard registrations only.
+	// `renewal_cost` and `registration_cost` or `transfer_cost` are frequently the
+	// same value, but may differ due to premium rates for certain domains.
+	//
+	// For a multi-year operations, the operation's cost applies to the first year and
+	// `renewal_cost` applies to each subsequent year. The values reflect the current
+	// registry rate, which can change over time.
 	Pricing RegistrarCheckResponseDomainsPricing `json:"pricing"`
 	// Appears only when `registrable` is `false` and explains the result.
 	//
-	//   - `extension_not_supported_via_api`: Cloudflare Registrar supports this
-	//     extension in the dashboard but currently excludes it from programmatic
-	//     registration through this API. The user can register via
-	//     `https://dash.cloudflare.com/{account_id}/domains/registrations`.
-	//   - `extension_not_supported`: Cloudflare Registrar excludes this extension
-	//     entirely.
-	//   - `extension_disallows_registration`: The extension's registry temporarily or
-	//     permanently freezes new registrations. Registrars currently cannot register
-	//     domains on this extension.
-	//   - `domain_premium`: The domain carries premium pricing. This API currently
-	//     supports standard registrations only.
-	//   - `domain_unavailable`: An existing registration, reservation, or other registry
-	//     restriction makes the domain unavailable on a supported extension.
+	// - `extension_not_supported_via_api`: Cloudflare Registrar supports this
+	//   extension in the dashboard but currently excludes it from programmatic
+	//   registration through this API. The user can register via
+	//   `https://dash.cloudflare.com/{account_id}/domains/registrations`.
+	// - `extension_not_supported`: Cloudflare Registrar excludes this extension
+	//   entirely.
+	// - `extension_disallows_registration`: The extension's registry temporarily or
+	//   permanently freezes new registrations. Registrars currently cannot register
+	//   domains on this extension.
+	// - `domain_premium`: The domain carries premium pricing. This API currently
+	//   supports standard registrations only.
+	// - `domain_unavailable`: An existing registration, reservation, or other registry
+	//   restriction makes the domain unavailable on a supported extension.
 	Reason RegistrarCheckResponseDomainsReason `json:"reason"`
 	// The pricing tier for this domain. A `registrable` value of `true` always
 	// includes this field, which defaults to `standard` for most domains. A
@@ -608,24 +655,19 @@ func (r registrarCheckResponseDomainJSON) RawJSON() string {
 	return r.raw
 }
 
-// Provides annual pricing information for a registrable domain. This object
-// appears only when `registrable` is `true`. The API returns all per-year prices
-// as strings to preserve decimal precision.
+// Provides annual pricing information for a given domain. The API returns all
+// per-year prices as strings to preserve decimal precision.
 //
-// `registration_cost` and `renewal_cost` frequently have the same value, but may
-// differ, especially when registries set different premium rates for initial
-// registration and renewal. For a multi-year registration (e.g., 4 years),
-// `registration_cost` applies to the first year and `renewal_cost` applies to each
-// subsequent year. The values reflect the current registry rate, which may change
-// over time. Search and Check may surface premium pricing, but this API currently
-// supports standard registrations only.
+// `renewal_cost` and `registration_cost` or `transfer_cost` are frequently the
+// same value, but may differ due to premium rates for certain domains.
+//
+// For a multi-year operations, the operation's cost applies to the first year and
+// `renewal_cost` applies to each subsequent year. The values reflect the current
+// registry rate, which can change over time.
 type RegistrarCheckResponseDomainsPricing struct {
 	// ISO-4217 currency code for the prices (e.g., "USD", "EUR", "GBP").
 	Currency string `json:"currency" api:"required"`
-	// The first-year cost to register this domain. For premium domains
-	// (`tier: premium`), the registry sets this price, which may significantly exceed
-	// standard pricing. For multi-year registrations, this cost applies to the first
-	// year only; `renewal_cost` applies to subsequent years.
+	// The first-year cost to register this domain.
 	RegistrationCost string `json:"registration_cost" api:"required"`
 	// Per-year renewal cost for this domain. Applied to each year beyond the first
 	// year of a multi-year registration, and to each annual auto-renewal thereafter.
@@ -741,36 +783,34 @@ type RegistrarSearchResponseDomain struct {
 	// Indicates domain availability according to potentially stale, non-authoritative
 	// search data.
 	//
-	//   - `true`: The domain appears available. Use POST /domain-check to confirm before
-	//     registration.
-	//   - `false`: Search results mark the domain ineligible for registration through
-	//     this API. See `reason` for details.
+	// - `true`: The domain appears available. Use POST /domain-check to confirm before
+	//   registration.
+	// - `false`: Search results mark the domain ineligible for registration through
+	//   this API. See `reason` for details.
 	Registrable bool `json:"registrable" api:"required"`
-	// Provides annual pricing information for a registrable domain. This object
-	// appears only when `registrable` is `true`. The API returns all per-year prices
-	// as strings to preserve decimal precision.
+	// Provides annual pricing information for a given domain. The API returns all
+	// per-year prices as strings to preserve decimal precision.
 	//
-	// `registration_cost` and `renewal_cost` frequently have the same value, but may
-	// differ, especially when registries set different premium rates for initial
-	// registration and renewal. For a multi-year registration (e.g., 4 years),
-	// `registration_cost` applies to the first year and `renewal_cost` applies to each
-	// subsequent year. The values reflect the current registry rate, which may change
-	// over time. Search and Check may surface premium pricing, but this API currently
-	// supports standard registrations only.
+	// `renewal_cost` and `registration_cost` or `transfer_cost` are frequently the
+	// same value, but may differ due to premium rates for certain domains.
+	//
+	// For a multi-year operations, the operation's cost applies to the first year and
+	// `renewal_cost` applies to each subsequent year. The values reflect the current
+	// registry rate, which can change over time.
 	Pricing RegistrarSearchResponseDomainsPricing `json:"pricing"`
 	// Appears only when `registrable` is `false` and explains the advisory search
 	// result. Use POST /domain-check for authoritative status.
 	//
-	//   - `extension_not_supported_via_api`: Cloudflare Registrar supports this
-	//     extension in the dashboard but currently excludes it from programmatic
-	//     registration through this API.
-	//   - `extension_not_supported`: Cloudflare Registrar excludes this extension
-	//     entirely.
-	//   - `extension_disallows_registration`: The extension's registry temporarily or
-	//     permanently freezes new registrations.
-	//   - `domain_premium`: The domain carries premium pricing. This API currently
-	//     supports standard registrations only.
-	//   - `domain_unavailable`: The domain appears unavailable.
+	// - `extension_not_supported_via_api`: Cloudflare Registrar supports this
+	//   extension in the dashboard but currently excludes it from programmatic
+	//   registration through this API.
+	// - `extension_not_supported`: Cloudflare Registrar excludes this extension
+	//   entirely.
+	// - `extension_disallows_registration`: The extension's registry temporarily or
+	//   permanently freezes new registrations.
+	// - `domain_premium`: The domain carries premium pricing. This API currently
+	//   supports standard registrations only.
+	// - `domain_unavailable`: The domain appears unavailable.
 	Reason RegistrarSearchResponseDomainsReason `json:"reason"`
 	// The pricing tier for this domain. A `registrable` value of `true` always
 	// includes this field, which defaults to `standard` for most domains. A
@@ -802,24 +842,19 @@ func (r registrarSearchResponseDomainJSON) RawJSON() string {
 	return r.raw
 }
 
-// Provides annual pricing information for a registrable domain. This object
-// appears only when `registrable` is `true`. The API returns all per-year prices
-// as strings to preserve decimal precision.
+// Provides annual pricing information for a given domain. The API returns all
+// per-year prices as strings to preserve decimal precision.
 //
-// `registration_cost` and `renewal_cost` frequently have the same value, but may
-// differ, especially when registries set different premium rates for initial
-// registration and renewal. For a multi-year registration (e.g., 4 years),
-// `registration_cost` applies to the first year and `renewal_cost` applies to each
-// subsequent year. The values reflect the current registry rate, which may change
-// over time. Search and Check may surface premium pricing, but this API currently
-// supports standard registrations only.
+// `renewal_cost` and `registration_cost` or `transfer_cost` are frequently the
+// same value, but may differ due to premium rates for certain domains.
+//
+// For a multi-year operations, the operation's cost applies to the first year and
+// `renewal_cost` applies to each subsequent year. The values reflect the current
+// registry rate, which can change over time.
 type RegistrarSearchResponseDomainsPricing struct {
 	// ISO-4217 currency code for the prices (e.g., "USD", "EUR", "GBP").
 	Currency string `json:"currency" api:"required"`
-	// The first-year cost to register this domain. For premium domains
-	// (`tier: premium`), the registry sets this price, which may significantly exceed
-	// standard pricing. For multi-year registrations, this cost applies to the first
-	// year only; `renewal_cost` applies to subsequent years.
+	// The first-year cost to register this domain.
 	RegistrationCost string `json:"registration_cost" api:"required"`
 	// Per-year renewal cost for this domain. Applied to each year beyond the first
 	// year of a multi-year registration, and to each annual auto-renewal thereafter.
@@ -899,18 +934,529 @@ func (r RegistrarSearchResponseDomainsTier) IsKnown() bool {
 	return false
 }
 
+// Contains the transfer eligibility results.
+type RegistrarTransferCheckResponse struct {
+	// Maps domain names to transfer eligibility results. Each value contains `name`,
+	// `transferable`, and `reasons`.
+	Domains map[string]RegistrarTransferCheckResponseDomain `json:"domains" api:"required"`
+	JSON    registrarTransferCheckResponseJSON              `json:"-"`
+}
+
+// registrarTransferCheckResponseJSON contains the JSON metadata for the struct
+// [RegistrarTransferCheckResponse]
+type registrarTransferCheckResponseJSON struct {
+	Domains     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrarTransferCheckResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrarTransferCheckResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Transfer eligibility for a single domain. `reasons` is always present:
+//
+// - Empty when `transferable` is `true`.
+// - One or more reason objects when `transferable` is `false`.
+type RegistrarTransferCheckResponseDomain struct {
+	Transferable RegistrarTransferCheckResponseDomainsTransferable `json:"transferable" api:"required"`
+	// The check evaluates this domain name.
+	Name string `json:"name"`
+	// This field can have the runtime type of
+	// [RegistrarTransferCheckResponseDomainsTransferableResultPricing],
+	// [RegistrarTransferCheckResponseDomainsNonTransferableResultPricing].
+	Pricing interface{} `json:"pricing"`
+	// This field can have the runtime type of
+	// [[]RegistrarTransferCheckResponseDomainsTransferableResultReason],
+	// [[]RegistrarTransferCheckResponseDomainsNonTransferableResultReason].
+	Reasons interface{}                              `json:"reasons"`
+	JSON    registrarTransferCheckResponseDomainJSON `json:"-"`
+	union   RegistrarTransferCheckResponseDomainsUnion
+}
+
+// registrarTransferCheckResponseDomainJSON contains the JSON metadata for the
+// struct [RegistrarTransferCheckResponseDomain]
+type registrarTransferCheckResponseDomainJSON struct {
+	Transferable apijson.Field
+	Name         apijson.Field
+	Pricing      apijson.Field
+	Reasons      apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r registrarTransferCheckResponseDomainJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RegistrarTransferCheckResponseDomain) UnmarshalJSON(data []byte) (err error) {
+	*r = RegistrarTransferCheckResponseDomain{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [RegistrarTransferCheckResponseDomainsUnion] interface which
+// you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [RegistrarTransferCheckResponseDomainsTransferableResult],
+// [RegistrarTransferCheckResponseDomainsNonTransferableResult].
+func (r RegistrarTransferCheckResponseDomain) AsUnion() RegistrarTransferCheckResponseDomainsUnion {
+	return r.union
+}
+
+// Transfer eligibility for a single domain. `reasons` is always present:
+//
+// - Empty when `transferable` is `true`.
+// - One or more reason objects when `transferable` is `false`.
+//
+// Union satisfied by [RegistrarTransferCheckResponseDomainsTransferableResult] or
+// [RegistrarTransferCheckResponseDomainsNonTransferableResult].
+type RegistrarTransferCheckResponseDomainsUnion interface {
+	implementsRegistrarTransferCheckResponseDomain()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RegistrarTransferCheckResponseDomainsUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RegistrarTransferCheckResponseDomainsTransferableResult{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RegistrarTransferCheckResponseDomainsNonTransferableResult{}),
+		},
+	)
+}
+
+type RegistrarTransferCheckResponseDomainsTransferableResult struct {
+	// Provides annual pricing information for a given domain. The API returns all
+	// per-year prices as strings to preserve decimal precision.
+	//
+	// `renewal_cost` and `registration_cost` or `transfer_cost` are frequently the
+	// same value, but may differ due to premium rates for certain domains.
+	//
+	// For a multi-year operations, the operation's cost applies to the first year and
+	// `renewal_cost` applies to each subsequent year. The values reflect the current
+	// registry rate, which can change over time.
+	Pricing      RegistrarTransferCheckResponseDomainsTransferableResultPricing      `json:"pricing" api:"required"`
+	Transferable RegistrarTransferCheckResponseDomainsTransferableResultTransferable `json:"transferable" api:"required"`
+	// The check evaluates this domain name.
+	Name    string                                                          `json:"name"`
+	Reasons []RegistrarTransferCheckResponseDomainsTransferableResultReason `json:"reasons"`
+	JSON    registrarTransferCheckResponseDomainsTransferableResultJSON     `json:"-"`
+}
+
+// registrarTransferCheckResponseDomainsTransferableResultJSON contains the JSON
+// metadata for the struct
+// [RegistrarTransferCheckResponseDomainsTransferableResult]
+type registrarTransferCheckResponseDomainsTransferableResultJSON struct {
+	Pricing      apijson.Field
+	Transferable apijson.Field
+	Name         apijson.Field
+	Reasons      apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *RegistrarTransferCheckResponseDomainsTransferableResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrarTransferCheckResponseDomainsTransferableResultJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RegistrarTransferCheckResponseDomainsTransferableResult) implementsRegistrarTransferCheckResponseDomain() {
+}
+
+// Provides annual pricing information for a given domain. The API returns all
+// per-year prices as strings to preserve decimal precision.
+//
+// `renewal_cost` and `registration_cost` or `transfer_cost` are frequently the
+// same value, but may differ due to premium rates for certain domains.
+//
+// For a multi-year operations, the operation's cost applies to the first year and
+// `renewal_cost` applies to each subsequent year. The values reflect the current
+// registry rate, which can change over time.
+type RegistrarTransferCheckResponseDomainsTransferableResultPricing struct {
+	// ISO-4217 currency code for the prices (e.g., "USD", "EUR", "GBP").
+	Currency string `json:"currency" api:"required"`
+	// Per-year renewal cost for this domain. Applied to each year beyond the first
+	// year of a multi-year registration, and to each annual auto-renewal thereafter.
+	// May differ from `registration_cost`, especially for premium domains where
+	// initial registration often costs more than renewals.
+	RenewalCost string `json:"renewal_cost" api:"required"`
+	// The first-year cost to transfer this domain.
+	TransferCost string                                                             `json:"transfer_cost" api:"required"`
+	JSON         registrarTransferCheckResponseDomainsTransferableResultPricingJSON `json:"-"`
+}
+
+// registrarTransferCheckResponseDomainsTransferableResultPricingJSON contains the
+// JSON metadata for the struct
+// [RegistrarTransferCheckResponseDomainsTransferableResultPricing]
+type registrarTransferCheckResponseDomainsTransferableResultPricingJSON struct {
+	Currency     apijson.Field
+	RenewalCost  apijson.Field
+	TransferCost apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *RegistrarTransferCheckResponseDomainsTransferableResultPricing) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrarTransferCheckResponseDomainsTransferableResultPricingJSON) RawJSON() string {
+	return r.raw
+}
+
+type RegistrarTransferCheckResponseDomainsTransferableResultTransferable bool
+
+const (
+	RegistrarTransferCheckResponseDomainsTransferableResultTransferableTrue RegistrarTransferCheckResponseDomainsTransferableResultTransferable = true
+)
+
+func (r RegistrarTransferCheckResponseDomainsTransferableResultTransferable) IsKnown() bool {
+	switch r {
+	case RegistrarTransferCheckResponseDomainsTransferableResultTransferableTrue:
+		return true
+	}
+	return false
+}
+
+type RegistrarTransferCheckResponseDomainsTransferableResultReason struct {
+	// Transfer eligibility reason code.
+	//
+	// - `extension_not_supported_via_api`: This API excludes the extension; dashboard
+	//   flows support it.
+	// - `extension_not_supported`: Cloudflare Registrar excludes the extension.
+	// - `domain_premium`: This API currently excludes premium transfers.
+	// - `extension_disallows_transfer`: Extension currently blocks transfer
+	//   operations.
+	// - `domain_not_exists`: No registration record exists for the domain.
+	// - `domain_on_cloudflare`: Cloudflare already serves as the domain's registrar.
+	// - `domain_locked`: Losing registrar reports transfer-prohibited lock status.
+	// - `registry_status`: Registry status currently blocks transfer (for example,
+	//   pending transfer or deletion state).
+	// - `domain_outside_transfer_window`: Domain is within a transfer wait window (for
+	//   example, recently registered).
+	// - `domain_max_term`: Completing transfer would exceed the registry maximum term.
+	// - `invalid_auth_code`: The provided auth code is incorrect.
+	// - `invalid_auth_code_format`: Auth code fails Base64 validation.
+	// - `dnssec_enabled`: DNSSEC is enabled. It must be disabled before transfer.
+	// - `zone_not_found`: The target account lacks a Cloudflare zone for the domain.
+	// - `zone_status_invalid`: The Cloudflare zone cannot transfer in its current
+	//   state.
+	// - `invalid_zone_plan`: The zone plan fails transfer requirements.
+	// - `domain_unsupported`: This endpoint rejects the domain name format.
+	Code RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode `json:"code" api:"required"`
+	JSON registrarTransferCheckResponseDomainsTransferableResultReasonJSON  `json:"-"`
+}
+
+// registrarTransferCheckResponseDomainsTransferableResultReasonJSON contains the
+// JSON metadata for the struct
+// [RegistrarTransferCheckResponseDomainsTransferableResultReason]
+type registrarTransferCheckResponseDomainsTransferableResultReasonJSON struct {
+	Code        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrarTransferCheckResponseDomainsTransferableResultReason) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrarTransferCheckResponseDomainsTransferableResultReasonJSON) RawJSON() string {
+	return r.raw
+}
+
+// Transfer eligibility reason code.
+//
+//   - `extension_not_supported_via_api`: This API excludes the extension; dashboard
+//     flows support it.
+//   - `extension_not_supported`: Cloudflare Registrar excludes the extension.
+//   - `domain_premium`: This API currently excludes premium transfers.
+//   - `extension_disallows_transfer`: Extension currently blocks transfer
+//     operations.
+//   - `domain_not_exists`: No registration record exists for the domain.
+//   - `domain_on_cloudflare`: Cloudflare already serves as the domain's registrar.
+//   - `domain_locked`: Losing registrar reports transfer-prohibited lock status.
+//   - `registry_status`: Registry status currently blocks transfer (for example,
+//     pending transfer or deletion state).
+//   - `domain_outside_transfer_window`: Domain is within a transfer wait window (for
+//     example, recently registered).
+//   - `domain_max_term`: Completing transfer would exceed the registry maximum term.
+//   - `invalid_auth_code`: The provided auth code is incorrect.
+//   - `invalid_auth_code_format`: Auth code fails Base64 validation.
+//   - `dnssec_enabled`: DNSSEC is enabled. It must be disabled before transfer.
+//   - `zone_not_found`: The target account lacks a Cloudflare zone for the domain.
+//   - `zone_status_invalid`: The Cloudflare zone cannot transfer in its current
+//     state.
+//   - `invalid_zone_plan`: The zone plan fails transfer requirements.
+//   - `domain_unsupported`: This endpoint rejects the domain name format.
+type RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode string
+
+const (
+	RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeExtensionNotSupportedViaAPI RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode = "extension_not_supported_via_api"
+	RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeExtensionNotSupported       RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode = "extension_not_supported"
+	RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeDomainPremium               RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode = "domain_premium"
+	RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeExtensionDisallowsTransfer  RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode = "extension_disallows_transfer"
+	RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeDomainNotExists             RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode = "domain_not_exists"
+	RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeDomainOnCloudflare          RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode = "domain_on_cloudflare"
+	RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeDomainLocked                RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode = "domain_locked"
+	RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeRegistryStatus              RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode = "registry_status"
+	RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeDomainOutsideTransferWindow RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode = "domain_outside_transfer_window"
+	RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeDomainMaxTerm               RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode = "domain_max_term"
+	RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeInvalidAuthCode             RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode = "invalid_auth_code"
+	RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeInvalidAuthCodeFormat       RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode = "invalid_auth_code_format"
+	RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeDNSSECEnabled               RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode = "dnssec_enabled"
+	RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeZoneNotFound                RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode = "zone_not_found"
+	RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeZoneStatusInvalid           RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode = "zone_status_invalid"
+	RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeInvalidZonePlan             RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode = "invalid_zone_plan"
+	RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeDomainUnsupported           RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode = "domain_unsupported"
+)
+
+func (r RegistrarTransferCheckResponseDomainsTransferableResultReasonsCode) IsKnown() bool {
+	switch r {
+	case RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeExtensionNotSupportedViaAPI, RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeExtensionNotSupported, RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeDomainPremium, RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeExtensionDisallowsTransfer, RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeDomainNotExists, RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeDomainOnCloudflare, RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeDomainLocked, RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeRegistryStatus, RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeDomainOutsideTransferWindow, RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeDomainMaxTerm, RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeInvalidAuthCode, RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeInvalidAuthCodeFormat, RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeDNSSECEnabled, RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeZoneNotFound, RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeZoneStatusInvalid, RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeInvalidZonePlan, RegistrarTransferCheckResponseDomainsTransferableResultReasonsCodeDomainUnsupported:
+		return true
+	}
+	return false
+}
+
+type RegistrarTransferCheckResponseDomainsNonTransferableResult struct {
+	Transferable RegistrarTransferCheckResponseDomainsNonTransferableResultTransferable `json:"transferable" api:"required"`
+	// The check evaluates this domain name.
+	Name string `json:"name"`
+	// Provides annual pricing information for a given domain. The API returns all
+	// per-year prices as strings to preserve decimal precision.
+	//
+	// `renewal_cost` and `registration_cost` or `transfer_cost` are frequently the
+	// same value, but may differ due to premium rates for certain domains.
+	//
+	// For a multi-year operations, the operation's cost applies to the first year and
+	// `renewal_cost` applies to each subsequent year. The values reflect the current
+	// registry rate, which can change over time.
+	Pricing RegistrarTransferCheckResponseDomainsNonTransferableResultPricing  `json:"pricing"`
+	Reasons []RegistrarTransferCheckResponseDomainsNonTransferableResultReason `json:"reasons"`
+	JSON    registrarTransferCheckResponseDomainsNonTransferableResultJSON     `json:"-"`
+}
+
+// registrarTransferCheckResponseDomainsNonTransferableResultJSON contains the JSON
+// metadata for the struct
+// [RegistrarTransferCheckResponseDomainsNonTransferableResult]
+type registrarTransferCheckResponseDomainsNonTransferableResultJSON struct {
+	Transferable apijson.Field
+	Name         apijson.Field
+	Pricing      apijson.Field
+	Reasons      apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *RegistrarTransferCheckResponseDomainsNonTransferableResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrarTransferCheckResponseDomainsNonTransferableResultJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RegistrarTransferCheckResponseDomainsNonTransferableResult) implementsRegistrarTransferCheckResponseDomain() {
+}
+
+type RegistrarTransferCheckResponseDomainsNonTransferableResultTransferable bool
+
+const (
+	RegistrarTransferCheckResponseDomainsNonTransferableResultTransferableFalse RegistrarTransferCheckResponseDomainsNonTransferableResultTransferable = false
+)
+
+func (r RegistrarTransferCheckResponseDomainsNonTransferableResultTransferable) IsKnown() bool {
+	switch r {
+	case RegistrarTransferCheckResponseDomainsNonTransferableResultTransferableFalse:
+		return true
+	}
+	return false
+}
+
+// Provides annual pricing information for a given domain. The API returns all
+// per-year prices as strings to preserve decimal precision.
+//
+// `renewal_cost` and `registration_cost` or `transfer_cost` are frequently the
+// same value, but may differ due to premium rates for certain domains.
+//
+// For a multi-year operations, the operation's cost applies to the first year and
+// `renewal_cost` applies to each subsequent year. The values reflect the current
+// registry rate, which can change over time.
+type RegistrarTransferCheckResponseDomainsNonTransferableResultPricing struct {
+	// ISO-4217 currency code for the prices (e.g., "USD", "EUR", "GBP").
+	Currency string `json:"currency" api:"required"`
+	// Per-year renewal cost for this domain. Applied to each year beyond the first
+	// year of a multi-year registration, and to each annual auto-renewal thereafter.
+	// May differ from `registration_cost`, especially for premium domains where
+	// initial registration often costs more than renewals.
+	RenewalCost string `json:"renewal_cost" api:"required"`
+	// The first-year cost to transfer this domain.
+	TransferCost string                                                                `json:"transfer_cost" api:"required"`
+	JSON         registrarTransferCheckResponseDomainsNonTransferableResultPricingJSON `json:"-"`
+}
+
+// registrarTransferCheckResponseDomainsNonTransferableResultPricingJSON contains
+// the JSON metadata for the struct
+// [RegistrarTransferCheckResponseDomainsNonTransferableResultPricing]
+type registrarTransferCheckResponseDomainsNonTransferableResultPricingJSON struct {
+	Currency     apijson.Field
+	RenewalCost  apijson.Field
+	TransferCost apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *RegistrarTransferCheckResponseDomainsNonTransferableResultPricing) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrarTransferCheckResponseDomainsNonTransferableResultPricingJSON) RawJSON() string {
+	return r.raw
+}
+
+type RegistrarTransferCheckResponseDomainsNonTransferableResultReason struct {
+	// Transfer eligibility reason code.
+	//
+	// - `extension_not_supported_via_api`: This API excludes the extension; dashboard
+	//   flows support it.
+	// - `extension_not_supported`: Cloudflare Registrar excludes the extension.
+	// - `domain_premium`: This API currently excludes premium transfers.
+	// - `extension_disallows_transfer`: Extension currently blocks transfer
+	//   operations.
+	// - `domain_not_exists`: No registration record exists for the domain.
+	// - `domain_on_cloudflare`: Cloudflare already serves as the domain's registrar.
+	// - `domain_locked`: Losing registrar reports transfer-prohibited lock status.
+	// - `registry_status`: Registry status currently blocks transfer (for example,
+	//   pending transfer or deletion state).
+	// - `domain_outside_transfer_window`: Domain is within a transfer wait window (for
+	//   example, recently registered).
+	// - `domain_max_term`: Completing transfer would exceed the registry maximum term.
+	// - `invalid_auth_code`: The provided auth code is incorrect.
+	// - `invalid_auth_code_format`: Auth code fails Base64 validation.
+	// - `dnssec_enabled`: DNSSEC is enabled. It must be disabled before transfer.
+	// - `zone_not_found`: The target account lacks a Cloudflare zone for the domain.
+	// - `zone_status_invalid`: The Cloudflare zone cannot transfer in its current
+	//   state.
+	// - `invalid_zone_plan`: The zone plan fails transfer requirements.
+	// - `domain_unsupported`: This endpoint rejects the domain name format.
+	Code RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode `json:"code" api:"required"`
+	JSON registrarTransferCheckResponseDomainsNonTransferableResultReasonJSON  `json:"-"`
+}
+
+// registrarTransferCheckResponseDomainsNonTransferableResultReasonJSON contains
+// the JSON metadata for the struct
+// [RegistrarTransferCheckResponseDomainsNonTransferableResultReason]
+type registrarTransferCheckResponseDomainsNonTransferableResultReasonJSON struct {
+	Code        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrarTransferCheckResponseDomainsNonTransferableResultReason) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrarTransferCheckResponseDomainsNonTransferableResultReasonJSON) RawJSON() string {
+	return r.raw
+}
+
+// Transfer eligibility reason code.
+//
+//   - `extension_not_supported_via_api`: This API excludes the extension; dashboard
+//     flows support it.
+//   - `extension_not_supported`: Cloudflare Registrar excludes the extension.
+//   - `domain_premium`: This API currently excludes premium transfers.
+//   - `extension_disallows_transfer`: Extension currently blocks transfer
+//     operations.
+//   - `domain_not_exists`: No registration record exists for the domain.
+//   - `domain_on_cloudflare`: Cloudflare already serves as the domain's registrar.
+//   - `domain_locked`: Losing registrar reports transfer-prohibited lock status.
+//   - `registry_status`: Registry status currently blocks transfer (for example,
+//     pending transfer or deletion state).
+//   - `domain_outside_transfer_window`: Domain is within a transfer wait window (for
+//     example, recently registered).
+//   - `domain_max_term`: Completing transfer would exceed the registry maximum term.
+//   - `invalid_auth_code`: The provided auth code is incorrect.
+//   - `invalid_auth_code_format`: Auth code fails Base64 validation.
+//   - `dnssec_enabled`: DNSSEC is enabled. It must be disabled before transfer.
+//   - `zone_not_found`: The target account lacks a Cloudflare zone for the domain.
+//   - `zone_status_invalid`: The Cloudflare zone cannot transfer in its current
+//     state.
+//   - `invalid_zone_plan`: The zone plan fails transfer requirements.
+//   - `domain_unsupported`: This endpoint rejects the domain name format.
+type RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode string
+
+const (
+	RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeExtensionNotSupportedViaAPI RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode = "extension_not_supported_via_api"
+	RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeExtensionNotSupported       RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode = "extension_not_supported"
+	RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeDomainPremium               RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode = "domain_premium"
+	RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeExtensionDisallowsTransfer  RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode = "extension_disallows_transfer"
+	RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeDomainNotExists             RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode = "domain_not_exists"
+	RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeDomainOnCloudflare          RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode = "domain_on_cloudflare"
+	RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeDomainLocked                RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode = "domain_locked"
+	RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeRegistryStatus              RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode = "registry_status"
+	RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeDomainOutsideTransferWindow RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode = "domain_outside_transfer_window"
+	RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeDomainMaxTerm               RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode = "domain_max_term"
+	RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeInvalidAuthCode             RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode = "invalid_auth_code"
+	RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeInvalidAuthCodeFormat       RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode = "invalid_auth_code_format"
+	RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeDNSSECEnabled               RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode = "dnssec_enabled"
+	RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeZoneNotFound                RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode = "zone_not_found"
+	RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeZoneStatusInvalid           RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode = "zone_status_invalid"
+	RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeInvalidZonePlan             RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode = "invalid_zone_plan"
+	RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeDomainUnsupported           RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode = "domain_unsupported"
+)
+
+func (r RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCode) IsKnown() bool {
+	switch r {
+	case RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeExtensionNotSupportedViaAPI, RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeExtensionNotSupported, RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeDomainPremium, RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeExtensionDisallowsTransfer, RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeDomainNotExists, RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeDomainOnCloudflare, RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeDomainLocked, RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeRegistryStatus, RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeDomainOutsideTransferWindow, RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeDomainMaxTerm, RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeInvalidAuthCode, RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeInvalidAuthCodeFormat, RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeDNSSECEnabled, RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeZoneNotFound, RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeZoneStatusInvalid, RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeInvalidZonePlan, RegistrarTransferCheckResponseDomainsNonTransferableResultReasonsCodeDomainUnsupported:
+		return true
+	}
+	return false
+}
+
+type RegistrarTransferCheckResponseDomainsTransferable bool
+
+const (
+	RegistrarTransferCheckResponseDomainsTransferableTrue  RegistrarTransferCheckResponseDomainsTransferable = true
+	RegistrarTransferCheckResponseDomainsTransferableFalse RegistrarTransferCheckResponseDomainsTransferable = false
+)
+
+func (r RegistrarTransferCheckResponseDomainsTransferable) IsKnown() bool {
+	switch r {
+	case RegistrarTransferCheckResponseDomainsTransferableTrue, RegistrarTransferCheckResponseDomainsTransferableFalse:
+		return true
+	}
+	return false
+}
+
 type RegistrarCheckParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// List of fully qualified domain names (FQDNs) to check for availability. Each
 	// domain must include the extension.
 	//
-	//   - Minimum: 1 domain.
-	//   - Maximum: 20 domains per request.
-	//   - The response returns domains on unsupported extensions with
-	//     `registrable: false` and a `reason` field.
-	//   - The response may omit malformed domain names (e.g., names missing an
-	//     extension).
+	// - Minimum: 1 domain.
+	// - Maximum: 20 domains per request.
+	// - The response returns domains on unsupported extensions with
+	//   `registrable: false` and a `reason` field.
+	// - The response may omit malformed domain names (e.g., names missing an
+	//   extension).
 	Domains param.Field[[]string] `json:"domains" api:"required"`
 }
 
@@ -1066,9 +1612,9 @@ type RegistrarSearchParams struct {
 	// The search term to find domain suggestions. Accepts keywords, phrases, or full
 	// domain names.
 	//
-	//   - Phrases: "coffee shop" returns coffeeshop.com, mycoffeeshop.net, etc.
-	//   - Domain names: "example.com" returns example.com and variations across
-	//     extensions
+	// - Phrases: "coffee shop" returns coffeeshop.com, mycoffeeshop.net, etc.
+	// - Domain names: "example.com" returns example.com and variations across
+	//   extensions
 	Q param.Field[string] `query:"q" api:"required"`
 	// Limits results to specific domain extensions from the supported set. If not
 	// specified, returns results across all supported extensions. Extensions not in
@@ -1223,6 +1769,171 @@ const (
 func (r RegistrarSearchResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case RegistrarSearchResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type RegistrarTransferCheckParams struct {
+	// Identifier.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// List of domain objects to evaluate for transfer eligibility.
+	Domains param.Field[[]RegistrarTransferCheckParamsDomain] `json:"domains" api:"required"`
+}
+
+func (r RegistrarTransferCheckParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RegistrarTransferCheckParamsDomain struct {
+	// Fully qualified domain name (FQDN) to check for transfer eligibility.
+	DomainName param.Field[string] `json:"domain_name" api:"required"`
+	// Base64-encoded auth/EPP code from the current registrar. Required for most TLDs.
+	// `.uk` namespaces do not use auth codes.
+	AuthCode param.Field[string] `json:"auth_code" format:"byte"`
+}
+
+func (r RegistrarTransferCheckParamsDomain) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RegistrarTransferCheckResponseEnvelope struct {
+	Errors   []RegistrarTransferCheckResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []RegistrarTransferCheckResponseEnvelopeMessages `json:"messages" api:"required"`
+	// Contains the transfer eligibility results.
+	Result RegistrarTransferCheckResponse `json:"result" api:"required"`
+	// Whether the API call was successful.
+	Success RegistrarTransferCheckResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    registrarTransferCheckResponseEnvelopeJSON    `json:"-"`
+}
+
+// registrarTransferCheckResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RegistrarTransferCheckResponseEnvelope]
+type registrarTransferCheckResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrarTransferCheckResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrarTransferCheckResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type RegistrarTransferCheckResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source RegistrarTransferCheckResponseEnvelopeErrorsSource `json:"source"`
+	JSON   registrarTransferCheckResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// registrarTransferCheckResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [RegistrarTransferCheckResponseEnvelopeErrors]
+type registrarTransferCheckResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrarTransferCheckResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrarTransferCheckResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type RegistrarTransferCheckResponseEnvelopeErrorsSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                                 `json:"pointer" api:"required"`
+	JSON    registrarTransferCheckResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// registrarTransferCheckResponseEnvelopeErrorsSourceJSON contains the JSON
+// metadata for the struct [RegistrarTransferCheckResponseEnvelopeErrorsSource]
+type registrarTransferCheckResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrarTransferCheckResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrarTransferCheckResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+type RegistrarTransferCheckResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Location of the invalid value that caused the error.
+	Source RegistrarTransferCheckResponseEnvelopeMessagesSource `json:"source"`
+	JSON   registrarTransferCheckResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// registrarTransferCheckResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [RegistrarTransferCheckResponseEnvelopeMessages]
+type registrarTransferCheckResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrarTransferCheckResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrarTransferCheckResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of the invalid value that caused the error.
+type RegistrarTransferCheckResponseEnvelopeMessagesSource struct {
+	// JSON Pointer to the invalid or missing request value.
+	Pointer string                                                   `json:"pointer" api:"required"`
+	JSON    registrarTransferCheckResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// registrarTransferCheckResponseEnvelopeMessagesSourceJSON contains the JSON
+// metadata for the struct [RegistrarTransferCheckResponseEnvelopeMessagesSource]
+type registrarTransferCheckResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrarTransferCheckResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrarTransferCheckResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type RegistrarTransferCheckResponseEnvelopeSuccess bool
+
+const (
+	RegistrarTransferCheckResponseEnvelopeSuccessTrue RegistrarTransferCheckResponseEnvelopeSuccess = true
+)
+
+func (r RegistrarTransferCheckResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RegistrarTransferCheckResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

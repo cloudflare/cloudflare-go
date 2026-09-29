@@ -39,7 +39,9 @@ func NewAIToMarkdownService(opts ...option.RequestOption) (r *AIToMarkdownServic
 	return
 }
 
-// Converts uploaded files into Markdown format using Workers AI.
+// Converts files uploaded as multipart form data into Markdown using Workers AI.
+// Returns a conversion result for each file. Use the supported-formats endpoint to
+// check accepted file types.
 //
 // Deprecated: Use
 // [AI > To Markdown](https://developers.cloudflare.com/api/resources/ai/subresources/to_markdown/)
@@ -65,7 +67,9 @@ func (r *AIToMarkdownService) New(ctx context.Context, params AIToMarkdownNewPar
 	return res, nil
 }
 
-// Converts uploaded files into Markdown format using Workers AI.
+// Converts files uploaded as multipart form data into Markdown using Workers AI.
+// Returns a conversion result for each file. Use the supported-formats endpoint to
+// check accepted file types.
 //
 // Deprecated: Use
 // [AI > To Markdown](https://developers.cloudflare.com/api/resources/ai/subresources/to_markdown/)
@@ -104,8 +108,10 @@ func (r aiToMarkdownNewResponseJSON) RawJSON() string {
 }
 
 type AIToMarkdownNewParams struct {
-	AccountID param.Field[string]      `path:"account_id" api:"required"`
-	Files     param.Field[[]io.Reader] `json:"files" api:"required" format:"binary"`
+	// Cloudflare account ID used for this AI model request.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Files to convert, supplied as multipart file uploads.
+	Files param.Field[[]io.Reader] `json:"files" api:"required" format:"binary"`
 }
 
 func (r AIToMarkdownNewParams) MarshalMultipart() (data []byte, contentType string, err error) {

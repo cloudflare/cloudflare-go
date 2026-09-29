@@ -30,7 +30,7 @@ func TestModelSchemaGet(t *testing.T) {
 	)
 	_, err := client.AI.Models.Schema.Get(context.TODO(), ai.ModelSchemaGetParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Model:     cloudflare.F("model"),
+		Model:     cloudflare.F("@cf/meta/llama-3.1-8b-instruct"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

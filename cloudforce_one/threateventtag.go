@@ -40,7 +40,8 @@ func NewThreatEventTagService(opts ...option.RequestOption) (r *ThreatEventTagSe
 	return
 }
 
-// Creates a new tag to be used accross threat events.
+// Creates an account-owned tag for threat events and returns its complete owner
+// projection.
 func (r *ThreatEventTagService) New(ctx context.Context, params ThreatEventTagNewParams, opts ...option.RequestOption) (res *ThreatEventTagNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -55,8 +56,10 @@ func (r *ThreatEventTagService) New(ctx context.Context, params ThreatEventTagNe
 // Returns all Source-of-Truth tags for an account. Supports legacy free-text
 // `search` on tag value and `categoryUuid` exact match, plus a structured
 // `filters` JSON array for filtering by metadata fields (originCountryISO,
-// actorCategory, motive, priority, etc.). Country values may be passed as alpha-2,
-// alpha-3, name, or common alias.
+// actorCategory, motive, priority, etc.). The authenticated account owns these
+// account-scoped tags and receives their complete owner projection. Country values
+// may be passed as alpha-2, alpha-3, name, or common alias. Purple TLP remains
+// CFONE-only.
 func (r *ThreatEventTagService) List(ctx context.Context, params ThreatEventTagListParams, opts ...option.RequestOption) (res *ThreatEventTagListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -84,7 +87,8 @@ func (r *ThreatEventTagService) Delete(ctx context.Context, tagUUID string, body
 	return res, err
 }
 
-// Updates a Source-of-Truth tag by UUID.
+// Updates an account-owned Source-of-Truth tag by UUID and returns its complete
+// owner projection.
 func (r *ThreatEventTagService) Edit(ctx context.Context, tagUUID string, params ThreatEventTagEditParams, opts ...option.RequestOption) (res *ThreatEventTagEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -127,8 +131,8 @@ type ThreatEventTagNewResponse struct {
 	// accounts.
 	ExternalReferences          []ThreatEventTagNewResponseExternalReference           `json:"externalReferences"`
 	ExternalReferencesAnnotated []ThreatEventTagNewResponseExternalReferencesAnnotated `json:"externalReferences_annotated" api:"nullable"`
-	// Internal structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: never
-	// returned to non-CFONE accounts.
+	// Owner-private structured aliases ({ value, confidence 1-10, tlp }). Returned to
+	// the owning account and omitted from shared-catalog non-owner responses.
 	InternalAliases     []ThreatEventTagNewResponseInternalAlias     `json:"internalAliases"`
 	InternalDescription string                                       `json:"internalDescription"`
 	LastSeen            string                                       `json:"lastSeen"`
@@ -816,8 +820,8 @@ type ThreatEventTagListResponseTag struct {
 	// accounts.
 	ExternalReferences          []ThreatEventTagListResponseTagsExternalReference           `json:"externalReferences"`
 	ExternalReferencesAnnotated []ThreatEventTagListResponseTagsExternalReferencesAnnotated `json:"externalReferences_annotated" api:"nullable"`
-	// Internal structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: never
-	// returned to non-CFONE accounts.
+	// Owner-private structured aliases ({ value, confidence 1-10, tlp }). Returned to
+	// the owning account and omitted from shared-catalog non-owner responses.
 	InternalAliases     []ThreatEventTagListResponseTagsInternalAlias     `json:"internalAliases"`
 	InternalDescription string                                            `json:"internalDescription"`
 	LastSeen            string                                            `json:"lastSeen"`
@@ -1479,8 +1483,8 @@ type ThreatEventTagEditResponse struct {
 	// accounts.
 	ExternalReferences          []ThreatEventTagEditResponseExternalReference           `json:"externalReferences"`
 	ExternalReferencesAnnotated []ThreatEventTagEditResponseExternalReferencesAnnotated `json:"externalReferences_annotated" api:"nullable"`
-	// Internal structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: never
-	// returned to non-CFONE accounts.
+	// Owner-private structured aliases ({ value, confidence 1-10, tlp }). Returned to
+	// the owning account and omitted from shared-catalog non-owner responses.
 	InternalAliases     []ThreatEventTagEditResponseInternalAlias     `json:"internalAliases"`
 	InternalDescription string                                        `json:"internalDescription"`
 	LastSeen            string                                        `json:"lastSeen"`
@@ -2117,8 +2121,8 @@ type ThreatEventTagNewParams struct {
 	// Structured external references ({ url, description }). Public: returned to all
 	// accounts.
 	ExternalReferences param.Field[[]ThreatEventTagNewParamsExternalReference] `json:"externalReferences"`
-	// Internal structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: never
-	// returned to non-CFONE accounts.
+	// Owner-private structured aliases ({ value, confidence 1-10, tlp }). Returned to
+	// the owning account and omitted from shared-catalog non-owner responses.
 	InternalAliases     param.Field[[]ThreatEventTagNewParamsInternalAlias]       `json:"internalAliases"`
 	InternalDescription param.Field[string]                                       `json:"internalDescription"`
 	LastSeen            param.Field[string]                                       `json:"lastSeen"`
@@ -2704,8 +2708,8 @@ type ThreatEventTagEditParams struct {
 	// Structured external references ({ url, description }). Public: returned to all
 	// accounts.
 	ExternalReferences param.Field[[]ThreatEventTagEditParamsExternalReference] `json:"externalReferences"`
-	// Internal structured aliases ({ value, confidence 1-10, tlp }). CFONE-only: never
-	// returned to non-CFONE accounts.
+	// Owner-private structured aliases ({ value, confidence 1-10, tlp }). Returned to
+	// the owning account and omitted from shared-catalog non-owner responses.
 	InternalAliases     param.Field[[]ThreatEventTagEditParamsInternalAlias]       `json:"internalAliases"`
 	InternalDescription param.Field[string]                                        `json:"internalDescription"`
 	LastSeen            param.Field[string]                                        `json:"lastSeen"`

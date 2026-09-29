@@ -4239,12 +4239,6 @@ func (r RulesetGetResponseRulesAction) IsKnown() bool {
 }
 
 type RulesetNewParams struct {
-	// The kind of the ruleset.
-	Kind param.Field[Kind] `json:"kind" api:"required"`
-	// The human-readable name of the ruleset.
-	Name param.Field[string] `json:"name" api:"required"`
-	// The phase of the ruleset.
-	Phase param.Field[Phase] `json:"phase" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -4255,6 +4249,12 @@ type RulesetNewParams struct {
 	DryRun param.Field[bool] `query:"dry_run"`
 	// An informative description of the ruleset.
 	Description param.Field[string] `json:"description"`
+	// The kind of the ruleset.
+	Kind param.Field[Kind] `json:"kind"`
+	// The human-readable name of the ruleset.
+	Name param.Field[string] `json:"name"`
+	// The phase of the ruleset.
+	Phase param.Field[Phase] `json:"phase"`
 	// The list of rules in the ruleset.
 	Rules param.Field[[]RulesetNewParamsRuleUnion] `json:"rules"`
 }

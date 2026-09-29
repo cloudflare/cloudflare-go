@@ -286,6 +286,7 @@ func TestInstanceListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.AISearch.Instances.List(context.TODO(), ai_search.InstanceListParams{
 		AccountID:        cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
+		Hostname:         cloudflare.F("x"),
 		Namespace:        cloudflare.F("namespace"),
 		OrderBy:          cloudflare.F(ai_search.InstanceListParamsOrderByCreatedAt),
 		OrderByDirection: cloudflare.F(ai_search.InstanceListParamsOrderByDirectionAsc),

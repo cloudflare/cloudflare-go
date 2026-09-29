@@ -248,7 +248,7 @@ func (r bucketMetricListResponseStandardUploadedJSON) RawJSON() string {
 }
 
 type BucketMetricListParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

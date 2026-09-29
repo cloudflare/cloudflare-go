@@ -111,7 +111,7 @@ func TestInvestigateBulkDelete(t *testing.T) {
 	)
 	_, err := client.EmailSecurity.Investigate.Bulk.Delete(
 		context.TODO(),
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		email_security.InvestigateBulkDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -141,7 +141,7 @@ func TestInvestigateBulkGet(t *testing.T) {
 	)
 	_, err := client.EmailSecurity.Investigate.Bulk.Get(
 		context.TODO(),
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		email_security.InvestigateBulkGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

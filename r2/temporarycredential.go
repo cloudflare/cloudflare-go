@@ -56,11 +56,12 @@ func (r *TemporaryCredentialService) New(ctx context.Context, params TemporaryCr
 type TemporaryCredentialParam struct {
 	// Name of the R2 bucket.
 	Bucket param.Field[string] `json:"bucket" api:"required"`
-	// The parent access key id to use for signing.
+	// Access key ID of the parent R2 API token. The temporary credentials cannot
+	// exceed this token's permissions.
 	ParentAccessKeyID param.Field[string] `json:"parentAccessKeyId" api:"required"`
 	// Permissions allowed on the credentials.
 	Permission param.Field[TemporaryCredentialPermission] `json:"permission" api:"required"`
-	// How long the credentials will live for in seconds.
+	// Lifetime of the temporary credentials in seconds, up to 604800 seconds (7 days).
 	TTLSeconds param.Field[float64] `json:"ttlSeconds" api:"required"`
 	// Optional object paths to scope the credentials to.
 	Objects param.Field[[]string] `json:"objects"`
@@ -119,7 +120,7 @@ func (r temporaryCredentialNewResponseJSON) RawJSON() string {
 }
 
 type TemporaryCredentialNewParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID           param.Field[string]      `path:"account_id" api:"required"`
 	TemporaryCredential TemporaryCredentialParam `json:"temporary_credential" api:"required"`
 }

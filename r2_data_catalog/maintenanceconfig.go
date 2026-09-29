@@ -36,6 +36,10 @@ func NewMaintenanceConfigService(opts ...option.RequestOption) (r *MaintenanceCo
 
 // Update the maintenance configuration for a catalog. This allows you to enable or
 // disable compaction and adjust target file sizes for optimization.
+//
+// Deprecated: Use
+// `POST /accounts/{account_id}/basin-catalog/{bucket_name}/maintenance-configs`
+// instead.
 func (r *MaintenanceConfigService) Update(ctx context.Context, bucketName string, params MaintenanceConfigUpdateParams, opts ...option.RequestOption) (res *MaintenanceConfigUpdateResponse, err error) {
 	var env MaintenanceConfigUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -58,6 +62,10 @@ func (r *MaintenanceConfigService) Update(ctx context.Context, bucketName string
 
 // Retrieve the maintenance configuration for a specific catalog, including
 // compaction settings and credential status.
+//
+// Deprecated: Use
+// `GET /accounts/{account_id}/basin-catalog/{bucket_name}/maintenance-configs`
+// instead.
 func (r *MaintenanceConfigService) Get(ctx context.Context, bucketName string, query MaintenanceConfigGetParams, opts ...option.RequestOption) (res *MaintenanceConfigGetResponse, err error) {
 	var env MaintenanceConfigGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

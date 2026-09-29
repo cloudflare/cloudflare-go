@@ -71,9 +71,10 @@ func (r *InvestigateMoveService) NewAutoPaging(ctx context.Context, investigateI
 	return pagination.NewSinglePageAutoPager(r.New(ctx, investigateID, params, opts...))
 }
 
-// Moves multiple messages to a specified mailbox folder (Inbox, JunkEmail,
+// Moves one or more messages to a specified mailbox folder (Inbox, JunkEmail,
 // DeletedItems, RecoverableItemsDeletions, or RecoverableItemsPurges). Requires
-// active integration.
+// active integration. Operates on an explicit list of messages; to move all
+// messages matching a search, create a bulk action job instead.
 func (r *InvestigateMoveService) Bulk(ctx context.Context, params InvestigateMoveBulkParams, opts ...option.RequestOption) (res *pagination.SinglePage[InvestigateMoveBulkResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -95,9 +96,10 @@ func (r *InvestigateMoveService) Bulk(ctx context.Context, params InvestigateMov
 	return res, nil
 }
 
-// Moves multiple messages to a specified mailbox folder (Inbox, JunkEmail,
+// Moves one or more messages to a specified mailbox folder (Inbox, JunkEmail,
 // DeletedItems, RecoverableItemsDeletions, or RecoverableItemsPurges). Requires
-// active integration.
+// active integration. Operates on an explicit list of messages; to move all
+// messages matching a search, create a bulk action job instead.
 func (r *InvestigateMoveService) BulkAutoPaging(ctx context.Context, params InvestigateMoveBulkParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[InvestigateMoveBulkResponse] {
 	return pagination.NewSinglePageAutoPager(r.Bulk(ctx, params, opts...))
 }
@@ -204,7 +206,8 @@ func (r investigateMoveBulkResponseJSON) RawJSON() string {
 
 type InvestigateMoveNewParams struct {
 	// Identifier.
-	AccountID   param.Field[string]                              `path:"account_id" api:"required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// The mailbox folder to move messages to.
 	Destination param.Field[InvestigateMoveNewParamsDestination] `json:"destination" api:"required"`
 	// Nonfunctional field. End of life: December 1, 2026.
 	ExpectedDisposition param.Field[InvestigateMoveNewParamsExpectedDisposition] `json:"expected_disposition"`
@@ -214,6 +217,7 @@ func (r InvestigateMoveNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// The mailbox folder to move messages to.
 type InvestigateMoveNewParamsDestination string
 
 const (
@@ -258,12 +262,13 @@ func (r InvestigateMoveNewParamsExpectedDisposition) IsKnown() bool {
 
 type InvestigateMoveBulkParams struct {
 	// Identifier.
-	AccountID   param.Field[string]                               `path:"account_id" api:"required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// The mailbox folder to move messages to.
 	Destination param.Field[InvestigateMoveBulkParamsDestination] `json:"destination" api:"required"`
+	// List of message IDs to move.
+	IDs param.Field[[]string] `json:"ids" api:"required"`
 	// Nonfunctional field. End of life: December 1, 2026.
 	ExpectedDisposition param.Field[InvestigateMoveBulkParamsExpectedDisposition] `json:"expected_disposition"`
-	// List of message IDs to move.
-	IDs param.Field[[]string] `json:"ids"`
 	// Deprecated, use `ids` instead. End of life: November 1, 2026.
 	PostfixIDs param.Field[[]string] `json:"postfix_ids"`
 }
@@ -272,6 +277,7 @@ func (r InvestigateMoveBulkParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// The mailbox folder to move messages to.
 type InvestigateMoveBulkParamsDestination string
 
 const (

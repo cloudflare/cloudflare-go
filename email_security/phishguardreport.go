@@ -41,7 +41,7 @@ func NewPhishguardReportService(opts ...option.RequestOption) (r *PhishguardRepo
 // Retrieves PhishGuard security alert reports for a specified date range. Reports
 // include detected threats, dispositions, and contextual information. Use for
 // security monitoring and threat analysis.
-func (r *PhishguardReportService) List(ctx context.Context, params PhishguardReportListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PhishguardReportListResponse], err error) {
+func (r *PhishguardReportService) List(ctx context.Context, params PhishguardReportListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[PhishguardReportListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -65,13 +65,14 @@ func (r *PhishguardReportService) List(ctx context.Context, params PhishguardRep
 // Retrieves PhishGuard security alert reports for a specified date range. Reports
 // include detected threats, dispositions, and contextual information. Use for
 // security monitoring and threat analysis.
-func (r *PhishguardReportService) ListAutoPaging(ctx context.Context, params PhishguardReportListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PhishguardReportListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *PhishguardReportService) ListAutoPaging(ctx context.Context, params PhishguardReportListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[PhishguardReportListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 type PhishguardReportListResponse struct {
-	ID          int64                                   `json:"id" api:"required"`
-	Content     string                                  `json:"content" api:"required"`
+	ID      int64  `json:"id" api:"required"`
+	Content string `json:"content" api:"required"`
+	// The verdict Email Security assigns to a message.
 	Disposition PhishguardReportListResponseDisposition `json:"disposition" api:"required"`
 	Fields      PhishguardReportListResponseFields      `json:"fields" api:"required"`
 	Priority    string                                  `json:"priority" api:"required"`
@@ -111,6 +112,7 @@ func (r phishguardReportListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// The verdict Email Security assigns to a message.
 type PhishguardReportListResponseDisposition string
 
 const (
@@ -196,6 +198,10 @@ type PhishguardReportListParams struct {
 	End param.Field[time.Time] `query:"end" format:"date-time"`
 	// Deprecated, use `start` instead. Start date in YYYY-MM-DD format.
 	FromDate param.Field[time.Time] `query:"from_date" format:"date"`
+	// Current page within paginated list of results.
+	Page param.Field[int64] `query:"page"`
+	// The number of results per page. Maximum value is 1000.
+	PerPage param.Field[int64] `query:"per_page"`
 	// Start of the time range (RFC3339). Takes precedence over from_date.
 	Start param.Field[time.Time] `query:"start" format:"date-time"`
 	// Deprecated, use `end` instead. End date in YYYY-MM-DD format.

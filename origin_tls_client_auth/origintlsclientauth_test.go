@@ -84,7 +84,7 @@ func TestOriginTLSClientAuthDelete(t *testing.T) {
 	)
 	_, err := client.OriginTLSClientAuth.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"2458ce5a-0c35-4c7f-82c7-8e9487d3ff60",
 		origin_tls_client_auth.OriginTLSClientAuthDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -114,7 +114,7 @@ func TestOriginTLSClientAuthGet(t *testing.T) {
 	)
 	_, err := client.OriginTLSClientAuth.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"2458ce5a-0c35-4c7f-82c7-8e9487d3ff60",
 		origin_tls_client_auth.OriginTLSClientAuthGetParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

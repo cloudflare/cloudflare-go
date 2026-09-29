@@ -81,9 +81,10 @@ func (r *TokenService) Update(ctx context.Context, tokenID string, params TokenU
 	return res, nil
 }
 
-// List all Account Owned API tokens created for this account. Results include
-// active, disabled, and recently-expired tokens when include_expired is set to
-// true.
+// List Account Owned API tokens created for this account. Callers with
+// `com.cloudflare.api.account.token.list_self` permission only receive tokens they
+// created. Results include active, disabled, and recently-expired tokens when
+// `include_expired` is set to true.
 func (r *TokenService) List(ctx context.Context, params TokenListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[shared.Token], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -105,9 +106,10 @@ func (r *TokenService) List(ctx context.Context, params TokenListParams, opts ..
 	return res, nil
 }
 
-// List all Account Owned API tokens created for this account. Results include
-// active, disabled, and recently-expired tokens when include_expired is set to
-// true.
+// List Account Owned API tokens created for this account. Callers with
+// `com.cloudflare.api.account.token.list_self` permission only receive tokens they
+// created. Results include active, disabled, and recently-expired tokens when
+// `include_expired` is set to true.
 func (r *TokenService) ListAutoPaging(ctx context.Context, params TokenListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[shared.Token] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -175,6 +177,9 @@ type TokenNewResponse struct {
 	// Token identifier tag.
 	ID        string                    `json:"id"`
 	Condition TokenNewResponseCondition `json:"condition"`
+	// The email address of the user who created the token at the time of creation.
+	// Only present for Account Owned API Tokens when a creator email was available.
+	CreatorEmailAtCreation string `json:"creator_email_at_creation"`
 	// The expiration time on or after which the JWT MUST NOT be accepted for
 	// processing.
 	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
@@ -190,6 +195,13 @@ type TokenNewResponse struct {
 	NotBefore time.Time `json:"not_before" format:"date-time"`
 	// List of access policies assigned to the token.
 	Policies []shared.TokenPolicy `json:"policies"`
+	// The identifier of the service that provisioned the token. For an
+	// OAuth-provisioned token, this is the OAuth client identifier. Present when
+	// `provisioner_type` is present and null when the identifier is unavailable.
+	ProvisionerID string `json:"provisioner_id" api:"nullable"`
+	// The type of service that provisioned the token. Only present for provisioned
+	// Account Owned API Tokens.
+	ProvisionerType string `json:"provisioner_type"`
 	// Status of the token.
 	Status TokenNewResponseStatus `json:"status"`
 	// The token value.
@@ -200,19 +212,22 @@ type TokenNewResponse struct {
 // tokenNewResponseJSON contains the JSON metadata for the struct
 // [TokenNewResponse]
 type tokenNewResponseJSON struct {
-	ID          apijson.Field
-	Condition   apijson.Field
-	ExpiresOn   apijson.Field
-	IssuedOn    apijson.Field
-	LastUsedOn  apijson.Field
-	ModifiedOn  apijson.Field
-	Name        apijson.Field
-	NotBefore   apijson.Field
-	Policies    apijson.Field
-	Status      apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                     apijson.Field
+	Condition              apijson.Field
+	CreatorEmailAtCreation apijson.Field
+	ExpiresOn              apijson.Field
+	IssuedOn               apijson.Field
+	LastUsedOn             apijson.Field
+	ModifiedOn             apijson.Field
+	Name                   apijson.Field
+	NotBefore              apijson.Field
+	Policies               apijson.Field
+	ProvisionerID          apijson.Field
+	ProvisionerType        apijson.Field
+	Status                 apijson.Field
+	Value                  apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
 }
 
 func (r *TokenNewResponse) UnmarshalJSON(data []byte) (err error) {

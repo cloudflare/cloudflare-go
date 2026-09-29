@@ -7,10 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"slices"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
@@ -76,16 +78,16 @@ func (r *GatewayPacfileService) Update(ctx context.Context, pacfileID string, pa
 }
 
 // List all Zero Trust Gateway PAC files for an account.
-func (r *GatewayPacfileService) List(ctx context.Context, query GatewayPacfileListParams, opts ...option.RequestOption) (res *pagination.SinglePage[GatewayPacfileListResponse], err error) {
+func (r *GatewayPacfileService) List(ctx context.Context, params GatewayPacfileListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[GatewayPacfileListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/gateway/pacfiles", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/gateway/pacfiles", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -98,8 +100,8 @@ func (r *GatewayPacfileService) List(ctx context.Context, query GatewayPacfileLi
 }
 
 // List all Zero Trust Gateway PAC files for an account.
-func (r *GatewayPacfileService) ListAutoPaging(ctx context.Context, query GatewayPacfileListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[GatewayPacfileListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *GatewayPacfileService) ListAutoPaging(ctx context.Context, params GatewayPacfileListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[GatewayPacfileListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a configured Zero Trust Gateway PAC file.
@@ -304,6 +306,7 @@ func (r gatewayPacfileGetResponseJSON) RawJSON() string {
 }
 
 type GatewayPacfileNewParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Actual contents of the PAC file
 	Contents param.Field[string] `json:"contents" api:"required"`
@@ -364,6 +367,7 @@ func (r GatewayPacfileNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayPacfileUpdateParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Actual contents of the PAC file
 	Contents param.Field[string] `json:"contents" api:"required"`
@@ -421,10 +425,25 @@ func (r GatewayPacfileUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayPacfileListParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Page number of paginated results.
+	Page param.Field[int64] `query:"page"`
+	// Number of items per page.
+	PerPage param.Field[int64] `query:"per_page"`
+}
+
+// URLQuery serializes [GatewayPacfileListParams]'s query parameters as
+// `url.Values`.
+func (r GatewayPacfileListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type GatewayPacfileDeleteParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -472,6 +491,7 @@ func (r GatewayPacfileDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayPacfileGetParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

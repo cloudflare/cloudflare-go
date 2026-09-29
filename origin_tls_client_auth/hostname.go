@@ -94,7 +94,7 @@ func (r *HostnameService) Get(ctx context.Context, hostname string, query Hostna
 }
 
 type AuthenticatedOriginPull struct {
-	// Identifier.
+	// Certificate identifier tag.
 	CERTID string `json:"cert_id"`
 	// Status of the certificate or the association.
 	CERTStatus AuthenticatedOriginPullCERTStatus `json:"cert_status"`
@@ -199,9 +199,9 @@ func (r AuthenticatedOriginPullStatus) IsKnown() bool {
 }
 
 type HostnameUpdateResponse struct {
-	// Identifier.
+	// Certificate identifier tag.
 	ID string `json:"id"`
-	// Identifier.
+	// Certificate identifier tag.
 	CERTID string `json:"cert_id"`
 	// The hostname certificate.
 	Certificate string `json:"certificate"`

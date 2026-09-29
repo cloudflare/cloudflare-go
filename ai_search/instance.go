@@ -43,7 +43,10 @@ func NewInstanceService(opts ...option.RequestOption) (r *InstanceService) {
 	return
 }
 
-// Create a new AI Search instance with the given configuration.
+// Create a new AI Search instance with the given configuration. If type is omitted
+// or null, a non-blank HTTP(S) source infers web-crawler and an existing R2 bucket
+// source infers r2. A missing or blank source without a type creates a managed
+// upload-only instance. Search for Agents instances require the default namespace.
 //
 // Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
 // (and descendant paths) instead.
@@ -65,7 +68,10 @@ func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opt
 	return res, nil
 }
 
-// Update the configuration of an AI Search instance.
+// Update an AI Search instance. Submitting Search for Agents metadata requires the
+// default namespace; omitting or removing it is allowed elsewhere. Submit Search
+// for Agents metadata and restrictive or unknown public endpoint changes or custom
+// domains in separate PUT requests, even when resubmitting unchanged metadata.
 //
 // Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
 // (and descendant paths) instead.
@@ -278,12 +284,13 @@ type InstanceNewResponse struct {
 	Enable         bool                                `json:"enable"`
 	EngineVersion  float64                             `json:"engine_version"`
 	FusionMethod   InstanceNewResponseFusionMethod     `json:"fusion_method"`
-	// Deprecated — use index_method instead.
+	// Deprecated — use index_method instead. Defaults to true for new instances; set
+	// false to create a vector-only instance.
 	//
 	// Deprecated: deprecated
 	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
-	// Controls which storage backends are used during indexing. Defaults to
-	// vector-only.
+	// Controls which storage backends are used during indexing. Defaults to vector and
+	// keyword indexing for new instances.
 	IndexMethod          InstanceNewResponseIndexMethod          `json:"index_method"`
 	IndexingOptions      InstanceNewResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
 	LastActivity         time.Time                               `json:"last_activity" api:"nullable" format:"date-time"`
@@ -309,8 +316,11 @@ type InstanceNewResponse struct {
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval InstanceNewResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                          `json:"token_id" format:"uuid"`
-	Type         InstanceNewResponseType         `json:"type" api:"nullable"`
-	JSON         instanceNewResponseJSON         `json:"-"`
+	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
+	// web-crawler and existing R2 bucket names infer r2. A missing or blank source
+	// without a type uses managed upload-only storage.
+	Type InstanceNewResponseType `json:"type" api:"nullable"`
+	JSON instanceNewResponseJSON `json:"-"`
 }
 
 // instanceNewResponseJSON contains the JSON metadata for the struct
@@ -465,8 +475,8 @@ func (r InstanceNewResponseFusionMethod) IsKnown() bool {
 	return false
 }
 
-// Controls which storage backends are used during indexing. Defaults to
-// vector-only.
+// Controls which storage backends are used during indexing. Defaults to vector and
+// keyword indexing for new instances.
 type InstanceNewResponseIndexMethod struct {
 	// Enable keyword (BM25) storage backend.
 	Keyword bool `json:"keyword" api:"required"`
@@ -1053,6 +1063,9 @@ func (r InstanceNewResponseSyncInterval) IsKnown() bool {
 	return false
 }
 
+// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
+// web-crawler and existing R2 bucket names infer r2. A missing or blank source
+// without a type uses managed upload-only storage.
 type InstanceNewResponseType string
 
 const (
@@ -1091,12 +1104,13 @@ type InstanceUpdateResponse struct {
 	Enable         bool                                   `json:"enable"`
 	EngineVersion  float64                                `json:"engine_version"`
 	FusionMethod   InstanceUpdateResponseFusionMethod     `json:"fusion_method"`
-	// Deprecated — use index_method instead.
+	// Deprecated — use index_method instead. Defaults to true for new instances; set
+	// false to create a vector-only instance.
 	//
 	// Deprecated: deprecated
 	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
-	// Controls which storage backends are used during indexing. Defaults to
-	// vector-only.
+	// Controls which storage backends are used during indexing. Defaults to vector and
+	// keyword indexing for new instances.
 	IndexMethod          InstanceUpdateResponseIndexMethod          `json:"index_method"`
 	IndexingOptions      InstanceUpdateResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
 	LastActivity         time.Time                                  `json:"last_activity" api:"nullable" format:"date-time"`
@@ -1122,8 +1136,11 @@ type InstanceUpdateResponse struct {
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval InstanceUpdateResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                             `json:"token_id" format:"uuid"`
-	Type         InstanceUpdateResponseType         `json:"type" api:"nullable"`
-	JSON         instanceUpdateResponseJSON         `json:"-"`
+	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
+	// web-crawler and existing R2 bucket names infer r2. A missing or blank source
+	// without a type uses managed upload-only storage.
+	Type InstanceUpdateResponseType `json:"type" api:"nullable"`
+	JSON instanceUpdateResponseJSON `json:"-"`
 }
 
 // instanceUpdateResponseJSON contains the JSON metadata for the struct
@@ -1278,8 +1295,8 @@ func (r InstanceUpdateResponseFusionMethod) IsKnown() bool {
 	return false
 }
 
-// Controls which storage backends are used during indexing. Defaults to
-// vector-only.
+// Controls which storage backends are used during indexing. Defaults to vector and
+// keyword indexing for new instances.
 type InstanceUpdateResponseIndexMethod struct {
 	// Enable keyword (BM25) storage backend.
 	Keyword bool `json:"keyword" api:"required"`
@@ -1868,6 +1885,9 @@ func (r InstanceUpdateResponseSyncInterval) IsKnown() bool {
 	return false
 }
 
+// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
+// web-crawler and existing R2 bucket names infer r2. A missing or blank source
+// without a type uses managed upload-only storage.
 type InstanceUpdateResponseType string
 
 const (
@@ -2656,12 +2676,13 @@ type InstanceDeleteResponse struct {
 	Enable         bool                                   `json:"enable"`
 	EngineVersion  float64                                `json:"engine_version"`
 	FusionMethod   InstanceDeleteResponseFusionMethod     `json:"fusion_method"`
-	// Deprecated — use index_method instead.
+	// Deprecated — use index_method instead. Defaults to true for new instances; set
+	// false to create a vector-only instance.
 	//
 	// Deprecated: deprecated
 	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
-	// Controls which storage backends are used during indexing. Defaults to
-	// vector-only.
+	// Controls which storage backends are used during indexing. Defaults to vector and
+	// keyword indexing for new instances.
 	IndexMethod          InstanceDeleteResponseIndexMethod          `json:"index_method"`
 	IndexingOptions      InstanceDeleteResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
 	LastActivity         time.Time                                  `json:"last_activity" api:"nullable" format:"date-time"`
@@ -2687,8 +2708,11 @@ type InstanceDeleteResponse struct {
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval InstanceDeleteResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                             `json:"token_id" format:"uuid"`
-	Type         InstanceDeleteResponseType         `json:"type" api:"nullable"`
-	JSON         instanceDeleteResponseJSON         `json:"-"`
+	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
+	// web-crawler and existing R2 bucket names infer r2. A missing or blank source
+	// without a type uses managed upload-only storage.
+	Type InstanceDeleteResponseType `json:"type" api:"nullable"`
+	JSON instanceDeleteResponseJSON `json:"-"`
 }
 
 // instanceDeleteResponseJSON contains the JSON metadata for the struct
@@ -2843,8 +2867,8 @@ func (r InstanceDeleteResponseFusionMethod) IsKnown() bool {
 	return false
 }
 
-// Controls which storage backends are used during indexing. Defaults to
-// vector-only.
+// Controls which storage backends are used during indexing. Defaults to vector and
+// keyword indexing for new instances.
 type InstanceDeleteResponseIndexMethod struct {
 	// Enable keyword (BM25) storage backend.
 	Keyword bool `json:"keyword" api:"required"`
@@ -3433,6 +3457,9 @@ func (r InstanceDeleteResponseSyncInterval) IsKnown() bool {
 	return false
 }
 
+// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
+// web-crawler and existing R2 bucket names infer r2. A missing or blank source
+// without a type uses managed upload-only storage.
 type InstanceDeleteResponseType string
 
 const (
@@ -3833,12 +3860,13 @@ type InstanceReadResponse struct {
 	Enable         bool                                 `json:"enable"`
 	EngineVersion  float64                              `json:"engine_version"`
 	FusionMethod   InstanceReadResponseFusionMethod     `json:"fusion_method"`
-	// Deprecated — use index_method instead.
+	// Deprecated — use index_method instead. Defaults to true for new instances; set
+	// false to create a vector-only instance.
 	//
 	// Deprecated: deprecated
 	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
-	// Controls which storage backends are used during indexing. Defaults to
-	// vector-only.
+	// Controls which storage backends are used during indexing. Defaults to vector and
+	// keyword indexing for new instances.
 	IndexMethod          InstanceReadResponseIndexMethod          `json:"index_method"`
 	IndexingOptions      InstanceReadResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
 	LastActivity         time.Time                                `json:"last_activity" api:"nullable" format:"date-time"`
@@ -3864,8 +3892,11 @@ type InstanceReadResponse struct {
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval InstanceReadResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                           `json:"token_id" format:"uuid"`
-	Type         InstanceReadResponseType         `json:"type" api:"nullable"`
-	JSON         instanceReadResponseJSON         `json:"-"`
+	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
+	// web-crawler and existing R2 bucket names infer r2. A missing or blank source
+	// without a type uses managed upload-only storage.
+	Type InstanceReadResponseType `json:"type" api:"nullable"`
+	JSON instanceReadResponseJSON `json:"-"`
 }
 
 // instanceReadResponseJSON contains the JSON metadata for the struct
@@ -4020,8 +4051,8 @@ func (r InstanceReadResponseFusionMethod) IsKnown() bool {
 	return false
 }
 
-// Controls which storage backends are used during indexing. Defaults to
-// vector-only.
+// Controls which storage backends are used during indexing. Defaults to vector and
+// keyword indexing for new instances.
 type InstanceReadResponseIndexMethod struct {
 	// Enable keyword (BM25) storage backend.
 	Keyword bool `json:"keyword" api:"required"`
@@ -4608,6 +4639,9 @@ func (r InstanceReadResponseSyncInterval) IsKnown() bool {
 	return false
 }
 
+// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
+// web-crawler and existing R2 bucket names infer r2. A missing or blank source
+// without a type uses managed upload-only storage.
 type InstanceReadResponseType string
 
 const (
@@ -4906,10 +4940,11 @@ type InstanceNewParams struct {
 	CustomMetadata param.Field[[]InstanceNewParamsCustomMetadata] `json:"custom_metadata"`
 	EmbeddingModel param.Field[string]                            `json:"embedding_model"`
 	FusionMethod   param.Field[InstanceNewParamsFusionMethod]     `json:"fusion_method"`
-	// Deprecated — use index_method instead.
+	// Deprecated — use index_method instead. Defaults to true for new instances; set
+	// false to create a vector-only instance.
 	HybridSearchEnabled param.Field[bool] `json:"hybrid_search_enabled"`
-	// Controls which storage backends are used during indexing. Defaults to
-	// vector-only.
+	// Controls which storage backends are used during indexing. Defaults to vector and
+	// keyword indexing for new instances.
 	IndexMethod          param.Field[InstanceNewParamsIndexMethod]          `json:"index_method"`
 	IndexingOptions      param.Field[InstanceNewParamsIndexingOptions]      `json:"indexing_options"`
 	MaxNumResults        param.Field[int64]                                 `json:"max_num_results"`
@@ -4929,7 +4964,10 @@ type InstanceNewParams struct {
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
 	SyncInterval param.Field[InstanceNewParamsSyncInterval] `json:"sync_interval"`
 	TokenID      param.Field[string]                        `json:"token_id" format:"uuid"`
-	Type         param.Field[InstanceNewParamsType]         `json:"type"`
+	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
+	// web-crawler and existing R2 bucket names infer r2. A missing or blank source
+	// without a type uses managed upload-only storage.
+	Type param.Field[InstanceNewParamsType] `json:"type"`
 }
 
 func (r InstanceNewParams) MarshalJSON() (data []byte, err error) {
@@ -5020,8 +5058,8 @@ func (r InstanceNewParamsFusionMethod) IsKnown() bool {
 	return false
 }
 
-// Controls which storage backends are used during indexing. Defaults to
-// vector-only.
+// Controls which storage backends are used during indexing. Defaults to vector and
+// keyword indexing for new instances.
 type InstanceNewParamsIndexMethod struct {
 	// Enable keyword (BM25) storage backend.
 	Keyword param.Field[bool] `json:"keyword" api:"required"`
@@ -5379,6 +5417,9 @@ func (r InstanceNewParamsSyncInterval) IsKnown() bool {
 	return false
 }
 
+// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
+// web-crawler and existing R2 bucket names infer r2. A missing or blank source
+// without a type uses managed upload-only storage.
 type InstanceNewParamsType string
 
 const (
@@ -5435,8 +5476,8 @@ type InstanceUpdateParams struct {
 	CustomMetadata param.Field[[]InstanceUpdateParamsCustomMetadata] `json:"custom_metadata"`
 	EmbeddingModel param.Field[string]                               `json:"embedding_model"`
 	FusionMethod   param.Field[InstanceUpdateParamsFusionMethod]     `json:"fusion_method"`
-	// Controls which storage backends are used during indexing. Defaults to
-	// vector-only.
+	// Controls which storage backends are used during indexing. Defaults to vector and
+	// keyword indexing for new instances.
 	IndexMethod          param.Field[InstanceUpdateParamsIndexMethod]          `json:"index_method"`
 	IndexingOptions      param.Field[InstanceUpdateParamsIndexingOptions]      `json:"indexing_options"`
 	MaxNumResults        param.Field[int64]                                    `json:"max_num_results"`
@@ -5552,8 +5593,8 @@ func (r InstanceUpdateParamsFusionMethod) IsKnown() bool {
 	return false
 }
 
-// Controls which storage backends are used during indexing. Defaults to
-// vector-only.
+// Controls which storage backends are used during indexing. Defaults to vector and
+// keyword indexing for new instances.
 type InstanceUpdateParamsIndexMethod struct {
 	// Enable keyword (BM25) storage backend.
 	Keyword param.Field[bool] `json:"keyword" api:"required"`
@@ -5936,6 +5977,8 @@ func (r instanceUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type InstanceListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Filter by exact Search for Agents hostname (case-insensitive).
+	Hostname param.Field[string] `query:"hostname"`
 	// Filter by namespace.
 	Namespace param.Field[string] `query:"namespace"`
 	// Field to order results by.

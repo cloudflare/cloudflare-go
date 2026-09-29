@@ -63,6 +63,8 @@ type TokenPermissionGroupListResponse struct {
 	ID string `json:"id"`
 	// Product category that this permission group belongs to.
 	Category TokenPermissionGroupListResponseCategory `json:"category"`
+	// Whether the caller can select this permission group when creating a token.
+	IsSelectable bool `json:"is_selectable"`
 	// Permission Group Name
 	Name string `json:"name"`
 	// Resources to which the Permission Group is scoped
@@ -73,12 +75,13 @@ type TokenPermissionGroupListResponse struct {
 // tokenPermissionGroupListResponseJSON contains the JSON metadata for the struct
 // [TokenPermissionGroupListResponse]
 type tokenPermissionGroupListResponseJSON struct {
-	ID          apijson.Field
-	Category    apijson.Field
-	Name        apijson.Field
-	Scopes      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID           apijson.Field
+	Category     apijson.Field
+	IsSelectable apijson.Field
+	Name         apijson.Field
+	Scopes       apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *TokenPermissionGroupListResponse) UnmarshalJSON(data []byte) (err error) {

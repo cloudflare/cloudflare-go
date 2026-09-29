@@ -136,7 +136,7 @@ type OriginCACertificate struct {
 	RequestType shared.CertificateRequestType `json:"request_type" api:"required"`
 	// The number of days for which the certificate should be valid.
 	RequestedValidity ssl.RequestValidity `json:"requested_validity" api:"required"`
-	// Identifier.
+	// The x509 serial number of the Origin CA certificate.
 	ID string `json:"id"`
 	// The Origin CA certificate. Will be newline-encoded.
 	Certificate string `json:"certificate"`
@@ -168,7 +168,7 @@ func (r originCACertificateJSON) RawJSON() string {
 }
 
 type OriginCACertificateDeleteResponse struct {
-	// Identifier.
+	// The x509 serial number of the Origin CA certificate.
 	ID string `json:"id"`
 	// When the certificate was revoked.
 	RevokedAt time.Time                             `json:"revoked_at" format:"date-time"`

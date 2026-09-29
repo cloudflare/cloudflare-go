@@ -133,10 +133,10 @@ type CNINewResponse struct {
 	//
 	// Controls the customer-facing data path:
 	//
-	//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
-	//     bgp-bridge / bgp-bridge-receiver.
-	//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
-	//     Conduit
+	// - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
+	//   bgp-bridge / bgp-bridge-receiver.
+	// - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
+	//   Conduit
 	BGPMode CNINewResponseBGPMode `json:"bgp_mode"`
 	JSON    cniNewResponseJSON    `json:"-"`
 }
@@ -274,10 +274,10 @@ type CNIUpdateResponse struct {
 	//
 	// Controls the customer-facing data path:
 	//
-	//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
-	//     bgp-bridge / bgp-bridge-receiver.
-	//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
-	//     Conduit
+	// - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
+	//   bgp-bridge / bgp-bridge-receiver.
+	// - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
+	//   Conduit
 	BGPMode CNIUpdateResponseBGPMode `json:"bgp_mode"`
 	JSON    cniUpdateResponseJSON    `json:"-"`
 }
@@ -438,10 +438,10 @@ type CNIListResponseItem struct {
 	//
 	// Controls the customer-facing data path:
 	//
-	//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
-	//     bgp-bridge / bgp-bridge-receiver.
-	//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
-	//     Conduit
+	// - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
+	//   bgp-bridge / bgp-bridge-receiver.
+	// - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
+	//   Conduit
 	BGPMode CNIListResponseItemsBGPMode `json:"bgp_mode"`
 	JSON    cniListResponseItemJSON     `json:"-"`
 }
@@ -580,10 +580,10 @@ type CNIGetResponse struct {
 	//
 	// Controls the customer-facing data path:
 	//
-	//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
-	//     bgp-bridge / bgp-bridge-receiver.
-	//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
-	//     Conduit
+	// - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
+	//   bgp-bridge / bgp-bridge-receiver.
+	// - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
+	//   Conduit
 	BGPMode CNIGetResponseBGPMode `json:"bgp_mode"`
 	JSON    cniGetResponseJSON    `json:"-"`
 }
@@ -777,10 +777,10 @@ type CNIUpdateParams struct {
 	//
 	// Controls the customer-facing data path:
 	//
-	//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
-	//     bgp-bridge / bgp-bridge-receiver.
-	//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
-	//     Conduit
+	// - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
+	//   bgp-bridge / bgp-bridge-receiver.
+	// - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
+	//   Conduit
 	BGPMode param.Field[CNIUpdateParamsBGPMode] `json:"bgp_mode"`
 }
 

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package addressing_test
+package cloudforce_one_test
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v7"
-	"github.com/cloudflare/cloudflare-go/v7/addressing"
+	"github.com/cloudflare/cloudflare-go/v7/cloudforce_one"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
-func TestAddressMapZoneUpdate(t *testing.T) {
+func TestThreatSignalFeedSkillUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,12 +28,12 @@ func TestAddressMapZoneUpdate(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Addressing.AddressMaps.Zones.Update(
+	_, err := client.CloudforceOne.ThreatSignals.Feeds.Skills.Update(
 		context.TODO(),
-		"055817b111884e0227e1be16a0be6ee0",
-		addressing.AddressMapZoneUpdateParams{
-			ZoneID:    cloudflare.F("8ac8489932db6327334c9b6d58544cfe"),
-			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		cloudforce_one.ThreatSignalFeedSkillUpdateParams{
+			AccountID: cloudflare.F("account_id"),
+			SkillIDs:  cloudflare.F([]string{"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"}),
 		},
 	)
 	if err != nil {
@@ -45,7 +45,7 @@ func TestAddressMapZoneUpdate(t *testing.T) {
 	}
 }
 
-func TestAddressMapZoneDelete(t *testing.T) {
+func TestThreatSignalFeedSkillGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -59,12 +59,11 @@ func TestAddressMapZoneDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Addressing.AddressMaps.Zones.Delete(
+	_, err := client.CloudforceOne.ThreatSignals.Feeds.Skills.Get(
 		context.TODO(),
-		"055817b111884e0227e1be16a0be6ee0",
-		addressing.AddressMapZoneDeleteParams{
-			ZoneID:    cloudflare.F("8ac8489932db6327334c9b6d58544cfe"),
-			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		cloudforce_one.ThreatSignalFeedSkillGetParams{
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

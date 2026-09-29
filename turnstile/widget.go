@@ -39,7 +39,7 @@ func NewWidgetService(opts ...option.RequestOption) (r *WidgetService) {
 	return
 }
 
-// Lists challenge widgets.
+// Creates a Turnstile widget for an account.
 func (r *WidgetService) New(ctx context.Context, params WidgetNewParams, opts ...option.RequestOption) (res *Widget, err error) {
 	var env WidgetNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,7 +56,7 @@ func (r *WidgetService) New(ctx context.Context, params WidgetNewParams, opts ..
 	return res, nil
 }
 
-// Update the configuration of a widget.
+// Updates the configuration of a Turnstile widget.
 func (r *WidgetService) Update(ctx context.Context, sitekey string, params WidgetUpdateParams, opts ...option.RequestOption) (res *Widget, err error) {
 	var env WidgetUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -77,7 +77,7 @@ func (r *WidgetService) Update(ctx context.Context, sitekey string, params Widge
 	return res, nil
 }
 
-// Lists all turnstile widgets of an account.
+// Lists Turnstile widgets for an account.
 func (r *WidgetService) List(ctx context.Context, params WidgetListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WidgetListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -99,12 +99,12 @@ func (r *WidgetService) List(ctx context.Context, params WidgetListParams, opts 
 	return res, nil
 }
 
-// Lists all turnstile widgets of an account.
+// Lists Turnstile widgets for an account.
 func (r *WidgetService) ListAutoPaging(ctx context.Context, params WidgetListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WidgetListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Destroy a Turnstile Widget.
+// Deletes a Turnstile widget from an account.
 func (r *WidgetService) Delete(ctx context.Context, sitekey string, body WidgetDeleteParams, opts ...option.RequestOption) (res *Widget, err error) {
 	var env WidgetDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -125,7 +125,7 @@ func (r *WidgetService) Delete(ctx context.Context, sitekey string, body WidgetD
 	return res, nil
 }
 
-// Show a single challenge widget configuration.
+// Returns the configuration of a Turnstile widget.
 func (r *WidgetService) Get(ctx context.Context, sitekey string, query WidgetGetParams, opts ...option.RequestOption) (res *Widget, err error) {
 	var env WidgetGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -146,8 +146,8 @@ func (r *WidgetService) Get(ctx context.Context, sitekey string, query WidgetGet
 	return res, nil
 }
 
-// Generate a new secret key for this widget. If `invalidate_immediately` is set to
-// `false`, the previous secret remains valid for 2 hours.
+// Generates a new secret key for this widget. If `invalidate_immediately` is set
+// to `false`, the previous secret remains valid for 2 hours.
 //
 // Note that secrets cannot be rotated again during the grace period.
 func (r *WidgetService) RotateSecret(ctx context.Context, sitekey string, params WidgetRotateSecretParams, opts ...option.RequestOption) (res *Widget, err error) {
@@ -197,7 +197,7 @@ type Widget struct {
 	Region WidgetRegion `json:"region" api:"required"`
 	// Secret key for this widget.
 	Secret string `json:"secret" api:"required"`
-	// Widget item identifier tag.
+	// Unique identifier for a Turnstile widget.
 	Sitekey string `json:"sitekey" api:"required"`
 	// Origin that created this widget, recorded at creation time and immutable
 	// afterward. Server-derived from the create request; not client-settable. Omitted
@@ -361,7 +361,7 @@ type WidgetListResponse struct {
 	Offlabel bool `json:"offlabel" api:"required"`
 	// Region where this widget can be used. This cannot be changed after creation.
 	Region WidgetListResponseRegion `json:"region" api:"required"`
-	// Widget item identifier tag.
+	// Unique identifier for a Turnstile widget.
 	Sitekey string `json:"sitekey" api:"required"`
 	// Origin that created this widget, recorded at creation time and immutable
 	// afterward. Server-derived from the create request; not client-settable. Omitted
@@ -508,8 +508,8 @@ type WidgetNewParams struct {
 	Name param.Field[string] `json:"name" api:"required"`
 	// Direction to order widgets.
 	Direction param.Field[WidgetNewParamsDirection] `query:"direction"`
-	// Filter widgets by field using case-insensitive substring matching. Format:
-	// `field:value`
+	// Filter widgets by field. The `name` field uses case-insensitive substring
+	// matching; `sitekey` uses exact matching. Format: `field:value`
 	//
 	// Supported fields:
 	//
@@ -814,8 +814,8 @@ type WidgetListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Direction to order widgets.
 	Direction param.Field[WidgetListParamsDirection] `query:"direction"`
-	// Filter widgets by field using case-insensitive substring matching. Format:
-	// `field:value`
+	// Filter widgets by field. The `name` field uses case-insensitive substring
+	// matching; `sitekey` uses exact matching. Format: `field:value`
 	//
 	// Supported fields:
 	//

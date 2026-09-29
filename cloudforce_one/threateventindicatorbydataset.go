@@ -111,9 +111,16 @@ type ThreatEventIndicatorByDatasetListResponseIndicator struct {
 	UUID      string                                                      `json:"uuid" api:"required"`
 	Value     string                                                      `json:"value" api:"required"`
 	// The dataset ID this indicator belongs to. Included in list responses.
-	DatasetID     string                                                            `json:"datasetId"`
+	DatasetID string `json:"datasetId"`
+	// Related events, capped by `relatedEventsLimit` (default 2). Check
+	// `relatedEventsHasMore` to detect a capped list; pass `relatedEventsLimit=-1` to
+	// retrieve all of them.
 	RelatedEvents []ThreatEventIndicatorByDatasetListResponseIndicatorsRelatedEvent `json:"relatedEvents"`
-	Tags          []ThreatEventIndicatorByDatasetListResponseIndicatorsTag          `json:"tags"`
+	// True when this indicator appears in more events than `relatedEvents` contains
+	// because `relatedEventsLimit` capped the list. Pass `relatedEventsLimit=-1` to
+	// retrieve every related event.
+	RelatedEventsHasMore bool                                                     `json:"relatedEventsHasMore"`
+	Tags                 []ThreatEventIndicatorByDatasetListResponseIndicatorsTag `json:"tags"`
 	// Traffic Light Protocol designation. UPPERCASE. Possible values: CLEAR, GREEN,
 	// AMBER, AMBER-STRICT, RED, PURPLE. Null when not set.
 	TLP  string                                                 `json:"tlp" api:"nullable"`
@@ -123,18 +130,19 @@ type ThreatEventIndicatorByDatasetListResponseIndicator struct {
 // threatEventIndicatorByDatasetListResponseIndicatorJSON contains the JSON
 // metadata for the struct [ThreatEventIndicatorByDatasetListResponseIndicator]
 type threatEventIndicatorByDatasetListResponseIndicatorJSON struct {
-	CreatedAt     apijson.Field
-	IndicatorType apijson.Field
-	Sources       apijson.Field
-	UpdatedAt     apijson.Field
-	UUID          apijson.Field
-	Value         apijson.Field
-	DatasetID     apijson.Field
-	RelatedEvents apijson.Field
-	Tags          apijson.Field
-	TLP           apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	CreatedAt            apijson.Field
+	IndicatorType        apijson.Field
+	Sources              apijson.Field
+	UpdatedAt            apijson.Field
+	UUID                 apijson.Field
+	Value                apijson.Field
+	DatasetID            apijson.Field
+	RelatedEvents        apijson.Field
+	RelatedEventsHasMore apijson.Field
+	Tags                 apijson.Field
+	TLP                  apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *ThreatEventIndicatorByDatasetListResponseIndicator) UnmarshalJSON(data []byte) (err error) {
@@ -293,9 +301,16 @@ type ThreatEventIndicatorByDatasetGetResponse struct {
 	UUID          string    `json:"uuid" api:"required"`
 	Value         string    `json:"value" api:"required"`
 	// The dataset ID this indicator belongs to. Included in list responses.
-	DatasetID     string                                                 `json:"datasetId"`
+	DatasetID string `json:"datasetId"`
+	// Related events, capped by `relatedEventsLimit` (default 2). Check
+	// `relatedEventsHasMore` to detect a capped list; pass `relatedEventsLimit=-1` to
+	// retrieve all of them.
 	RelatedEvents []ThreatEventIndicatorByDatasetGetResponseRelatedEvent `json:"relatedEvents"`
-	Tags          []ThreatEventIndicatorByDatasetGetResponseTag          `json:"tags"`
+	// True when this indicator appears in more events than `relatedEvents` contains
+	// because `relatedEventsLimit` capped the list. Pass `relatedEventsLimit=-1` to
+	// retrieve every related event.
+	RelatedEventsHasMore bool                                          `json:"relatedEventsHasMore"`
+	Tags                 []ThreatEventIndicatorByDatasetGetResponseTag `json:"tags"`
 	// Traffic Light Protocol designation. UPPERCASE. Possible values: CLEAR, GREEN,
 	// AMBER, AMBER-STRICT, RED, PURPLE. Null when not set.
 	TLP  string                                       `json:"tlp" api:"nullable"`
@@ -305,17 +320,18 @@ type ThreatEventIndicatorByDatasetGetResponse struct {
 // threatEventIndicatorByDatasetGetResponseJSON contains the JSON metadata for the
 // struct [ThreatEventIndicatorByDatasetGetResponse]
 type threatEventIndicatorByDatasetGetResponseJSON struct {
-	CreatedAt     apijson.Field
-	IndicatorType apijson.Field
-	UpdatedAt     apijson.Field
-	UUID          apijson.Field
-	Value         apijson.Field
-	DatasetID     apijson.Field
-	RelatedEvents apijson.Field
-	Tags          apijson.Field
-	TLP           apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	CreatedAt            apijson.Field
+	IndicatorType        apijson.Field
+	UpdatedAt            apijson.Field
+	UUID                 apijson.Field
+	Value                apijson.Field
+	DatasetID            apijson.Field
+	RelatedEvents        apijson.Field
+	RelatedEventsHasMore apijson.Field
+	Tags                 apijson.Field
+	TLP                  apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *ThreatEventIndicatorByDatasetGetResponse) UnmarshalJSON(data []byte) (err error) {

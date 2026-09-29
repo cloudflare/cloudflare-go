@@ -34,7 +34,7 @@ func NewMembershipService(opts ...option.RequestOption) (r *MembershipService) {
 	return
 }
 
-// List of active members (Cloudflare users) for the Tenant.
+// Lists active Cloudflare users with memberships in this tenant.
 func (r *MembershipService) List(ctx context.Context, tenantID string, opts ...option.RequestOption) (res *pagination.SinglePage[TenantMembership], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -56,7 +56,7 @@ func (r *MembershipService) List(ctx context.Context, tenantID string, opts ...o
 	return res, nil
 }
 
-// List of active members (Cloudflare users) for the Tenant.
+// Lists active Cloudflare users with memberships in this tenant.
 func (r *MembershipService) ListAutoPaging(ctx context.Context, tenantID string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TenantMembership] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, tenantID, opts...))
 }

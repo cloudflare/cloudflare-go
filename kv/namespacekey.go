@@ -40,7 +40,9 @@ func NewNamespaceKeyService(opts ...option.RequestOption) (r *NamespaceKeyServic
 	return
 }
 
-// Lists a namespace's keys.
+// Lists key names in the specified Workers KV namespace, with expiration times and
+// metadata when present. Use `prefix` to filter names and `cursor` to request the
+// next page. Values are not included.
 func (r *NamespaceKeyService) List(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) (res *pagination.CursorLimitPagination[Key], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -66,13 +68,16 @@ func (r *NamespaceKeyService) List(ctx context.Context, namespaceID string, para
 	return res, nil
 }
 
-// Lists a namespace's keys.
+// Lists key names in the specified Workers KV namespace, with expiration times and
+// metadata when present. Use `prefix` to filter names and `cursor` to request the
+// next page. Values are not included.
 func (r *NamespaceKeyService) ListAutoPaging(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) *pagination.CursorLimitPaginationAutoPager[Key] {
 	return pagination.NewCursorLimitPaginationAutoPager(r.List(ctx, namespaceID, params, opts...))
 }
 
-// Remove multiple KV pairs from the namespace. Body should be an array of up to
-// 10,000 keys to be removed.
+// Deletes up to 10,000 key-value pairs from the specified Workers KV namespace.
+// Send a JSON array of the key names to delete. The result reports the number of
+// successful deletions and any keys that failed and should be retried.
 //
 // Deprecated: Please use kv.namespaces.bulk_delete instead
 func (r *NamespaceKeyService) BulkDelete(ctx context.Context, namespaceID string, params NamespaceKeyBulkDeleteParams, opts ...option.RequestOption) (res *NamespaceKeyBulkDeleteResponse, err error) {
@@ -95,9 +100,11 @@ func (r *NamespaceKeyService) BulkDelete(ctx context.Context, namespaceID string
 	return res, nil
 }
 
-// Retrieve up to 100 KV pairs from the namespace. Keys must contain text-based
-// values. JSON values can optionally be parsed instead of being returned as a
-// string value. Metadata can be included if `withMetadata` is true.
+// Retrieves the text-based values of up to 100 keys from the specified Workers KV
+// namespace. The result maps each requested key to its value. Set `type` to `json`
+// to parse JSON values instead of returning strings, and set `withMetadata` to
+// `true` to include metadata with each value. Binary values are not supported by
+// this operation.
 //
 // Deprecated: Please use kv.namespaces.bulk_get instead
 func (r *NamespaceKeyService) BulkGet(ctx context.Context, namespaceID string, params NamespaceKeyBulkGetParams, opts ...option.RequestOption) (res *NamespaceKeyBulkGetResponse, err error) {
@@ -120,12 +127,13 @@ func (r *NamespaceKeyService) BulkGet(ctx context.Context, namespaceID string, p
 	return res, nil
 }
 
-// Write multiple keys and values at once. Body should be an array of up to 10,000
-// key-value pairs to be stored, along with optional expiration information.
-// Existing values and expirations will be overwritten. If neither `expiration` nor
-// `expiration_ttl` is specified, the key-value pair will never expire. If both are
-// set, `expiration_ttl` is used and `expiration` is ignored. The entire request
-// size must be 100 megabytes or less.
+// Writes up to 10,000 key-value pairs to the specified Workers KV namespace from a
+// JSON array, with optional metadata and expiration settings for each pair.
+// Existing values and expirations are overwritten. If neither `expiration` nor
+// `expiration_ttl` is specified, the key-value pair will not expire. If both are
+// set, `expiration_ttl` takes precedence. The entire request must be 100 megabytes
+// or less. The result reports the number of successful writes and any keys that
+// failed and should be retried.
 //
 // Deprecated: Please use kv.namespaces.bulk_update instead
 func (r *NamespaceKeyService) BulkUpdate(ctx context.Context, namespaceID string, params NamespaceKeyBulkUpdateParams, opts ...option.RequestOption) (res *NamespaceKeyBulkUpdateResponse, err error) {
@@ -180,9 +188,10 @@ func (r keyJSON) RawJSON() string {
 }
 
 type NamespaceKeyBulkDeleteResponse struct {
-	// Number of keys successfully updated.
+	// Number of keys successfully written or deleted by the bulk operation.
 	SuccessfulKeyCount float64 `json:"successful_key_count"`
-	// Name of the keys that failed to be fully updated. They should be retried.
+	// Names of keys that failed to be written or deleted. Retry the operation for
+	// these keys.
 	UnsuccessfulKeys []string                           `json:"unsuccessful_keys"`
 	JSON             namespaceKeyBulkDeleteResponseJSON `json:"-"`
 }
@@ -386,9 +395,10 @@ func (r namespaceKeyBulkGetResponseWorkersKVBulkGetResultWithMetadataValueJSON) 
 }
 
 type NamespaceKeyBulkUpdateResponse struct {
-	// Number of keys successfully updated.
+	// Number of keys successfully written or deleted by the bulk operation.
 	SuccessfulKeyCount float64 `json:"successful_key_count"`
-	// Name of the keys that failed to be fully updated. They should be retried.
+	// Names of keys that failed to be written or deleted. Retry the operation for
+	// these keys.
 	UnsuccessfulKeys []string                           `json:"unsuccessful_keys"`
 	JSON             namespaceKeyBulkUpdateResponseJSON `json:"-"`
 }
@@ -411,15 +421,13 @@ func (r namespaceKeyBulkUpdateResponseJSON) RawJSON() string {
 }
 
 type NamespaceKeyListParams struct {
-	// Identifier.
+	// ID of the Cloudflare account that owns the Workers KV namespaces.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Opaque token indicating the position from which to continue when requesting the
-	// next set of records if the amount of list results was limited by the limit
-	// parameter. A valid value for the cursor can be obtained from the `cursors`
-	// object in the `result_info` structure.
+	// Opaque pagination token from `result_info.cursor` in the previous response. Pass
+	// it unchanged to request the next page of keys.
 	Cursor param.Field[string] `query:"cursor"`
-	// Limits the number of keys returned in the response. The cursor attribute may be
-	// used to iterate over the next batch of keys if there are more than the limit.
+	// Maximum number of keys to return in one response. Pass `result_info.cursor` from
+	// the response as `cursor` to request the next page.
 	Limit param.Field[float64] `query:"limit"`
 	// Filters returned keys by a name prefix. Exact matches and any key names that
 	// begin with the prefix will be returned.
@@ -435,7 +443,7 @@ func (r NamespaceKeyListParams) URLQuery() (v url.Values) {
 }
 
 type NamespaceKeyBulkDeleteParams struct {
-	// Identifier.
+	// ID of the Cloudflare account that owns the Workers KV namespaces.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Body      []string            `json:"body" api:"required"`
 }
@@ -488,11 +496,11 @@ func (r NamespaceKeyBulkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type NamespaceKeyBulkGetParams struct {
-	// Identifier.
+	// ID of the Cloudflare account that owns the Workers KV namespaces.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Array of keys to retrieve (maximum of 100).
 	Keys param.Field[[]string] `json:"keys" api:"required"`
-	// Whether to parse JSON values in the response.
+	// Return values as strings with `text`, or parse stored JSON values with `json`.
 	Type param.Field[NamespaceKeyBulkGetParamsType] `json:"type"`
 	// Whether to include metadata in the response.
 	WithMetadata param.Field[bool] `json:"withMetadata"`
@@ -502,7 +510,7 @@ func (r NamespaceKeyBulkGetParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Whether to parse JSON values in the response.
+// Return values as strings with `text`, or parse stored JSON values with `json`.
 type NamespaceKeyBulkGetParamsType string
 
 const (
@@ -562,7 +570,7 @@ func (r NamespaceKeyBulkGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type NamespaceKeyBulkUpdateParams struct {
-	// Identifier.
+	// ID of the Cloudflare account that owns the Workers KV namespaces.
 	AccountID param.Field[string]                `path:"account_id" api:"required"`
 	Body      []NamespaceKeyBulkUpdateParamsBody `json:"body" api:"required"`
 }
@@ -584,7 +592,8 @@ type NamespaceKeyBulkUpdateParamsBody struct {
 	// Expires the key at a certain time, measured in number of seconds since the UNIX
 	// epoch.
 	Expiration param.Field[float64] `json:"expiration"`
-	// Expires the key after a number of seconds. Must be at least 60.
+	// Number of seconds until the key expires. Must be at least 60. Takes precedence
+	// over `expiration` when both are specified.
 	ExpirationTTL param.Field[float64] `json:"expiration_ttl"`
 	// Arbitrary JSON that is associated with a key.
 	Metadata param.Field[interface{}] `json:"metadata"`

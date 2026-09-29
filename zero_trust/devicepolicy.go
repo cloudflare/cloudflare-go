@@ -168,7 +168,8 @@ type SettingsPolicy struct {
 	// The precedence of the policy. Lower values indicate higher precedence. Policies
 	// will be evaluated in ascending order of this field.
 	Precedence float64 `json:"precedence"`
-	// The client type to which the device settings profile applies.
+	// The client type to which the device settings profile applies. This field is set
+	// when the profile is created and cannot be changed.
 	ProfileType SettingsPolicyProfileType `json:"profile_type"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
@@ -348,7 +349,8 @@ func (r settingsPolicyGlobalAccelerationJSON) RawJSON() string {
 	return r.raw
 }
 
-// The client type to which the device settings profile applies.
+// The client type to which the device settings profile applies. This field is set
+// when the profile is created and cannot be changed.
 type SettingsPolicyProfileType string
 
 const (

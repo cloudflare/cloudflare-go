@@ -53,7 +53,8 @@ func NewBucketService(opts ...option.RequestOption) (r *BucketService) {
 	return
 }
 
-// Creates a new R2 bucket.
+// Creates an R2 bucket in the account and selected jurisdiction, with an optional
+// location hint and default storage class.
 func (r *BucketService) New(ctx context.Context, params BucketNewParams, opts ...option.RequestOption) (res *Bucket, err error) {
 	var env BucketNewResponseEnvelope
 	if params.CfR2Jurisdiction.Present {
@@ -73,7 +74,8 @@ func (r *BucketService) New(ctx context.Context, params BucketNewParams, opts ..
 	return res, nil
 }
 
-// Lists all R2 buckets on your account.
+// Lists a page of R2 buckets in the account and selected jurisdiction. Use the
+// returned cursor to retrieve the next page.
 func (r *BucketService) List(ctx context.Context, params BucketListParams, opts ...option.RequestOption) (res *BucketListResponse, err error) {
 	var env BucketListResponseEnvelope
 	if params.CfR2Jurisdiction.Present {
@@ -93,7 +95,9 @@ func (r *BucketService) List(ctx context.Context, params BucketListParams, opts 
 	return res, nil
 }
 
-// Deletes an existing R2 bucket.
+// Deletes an empty R2 bucket and its configuration. The bucket must have no
+// objects, no in-progress multipart uploads, and no event notification rules;
+// otherwise the request fails.
 func (r *BucketService) Delete(ctx context.Context, bucketName string, params BucketDeleteParams, opts ...option.RequestOption) (res *BucketDeleteResponse, err error) {
 	var env BucketDeleteResponseEnvelope
 	if params.CfR2Jurisdiction.Present {
@@ -117,7 +121,9 @@ func (r *BucketService) Delete(ctx context.Context, bucketName string, params Bu
 	return res, nil
 }
 
-// Updates properties of an existing R2 bucket.
+// Changes the default storage class for newly uploaded objects in an existing R2
+// bucket. Existing objects retain their storage class, and individual uploads can
+// override the bucket default.
 func (r *BucketService) Edit(ctx context.Context, bucketName string, params BucketEditParams, opts ...option.RequestOption) (res *Bucket, err error) {
 	var env BucketEditResponseEnvelope
 	if params.StorageClass.Present {
@@ -281,7 +287,7 @@ func (r bucketListResponseJSON) RawJSON() string {
 type BucketDeleteResponse = interface{}
 
 type BucketNewParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Name of the bucket.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -395,7 +401,7 @@ func (r BucketNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketListParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Pagination cursor received during the last List Buckets call. R2 buckets are
 	// paginated using cursors instead of page numbers.
@@ -542,7 +548,7 @@ func (r bucketListResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type BucketDeleteParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                             `path:"account_id" api:"required"`
 	CfR2Jurisdiction param.Field[BucketDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -609,7 +615,7 @@ func (r BucketDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketEditParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Storage class for newly uploaded objects, unless specified otherwise.
 	StorageClass     param.Field[BucketEditParamsCfR2StorageClass] `header:"cf-r2-storage-class" api:"required"`
@@ -695,7 +701,7 @@ func (r BucketEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketGetParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                          `path:"account_id" api:"required"`
 	CfR2Jurisdiction param.Field[BucketGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }

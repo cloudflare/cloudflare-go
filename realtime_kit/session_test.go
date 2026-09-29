@@ -32,7 +32,7 @@ func TestSessionGenerateSummaryOfTranscripts(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Sessions.GenerateSummaryOfTranscripts(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.SessionGenerateSummaryOfTranscriptsParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -64,7 +64,7 @@ func TestSessionGetParticipantDataFromPeerIDWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Sessions.GetParticipantDataFromPeerID(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.SessionGetParticipantDataFromPeerIDParams{
 			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -98,7 +98,7 @@ func TestSessionGetSessionChat(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Sessions.GetSessionChat(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.SessionGetSessionChatParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -130,7 +130,7 @@ func TestSessionGetSessionDetailsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Sessions.GetSessionDetails(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.SessionGetSessionDetailsParams{
 			AccountID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -163,7 +163,7 @@ func TestSessionGetSessionParticipantDetailsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Sessions.GetSessionParticipantDetails(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.SessionGetSessionParticipantDetailsParams{
@@ -197,7 +197,7 @@ func TestSessionGetSessionParticipantsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Sessions.GetSessionParticipants(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.SessionGetSessionParticipantsParams{
 			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -236,7 +236,7 @@ func TestSessionGetSessionSummary(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Sessions.GetSessionSummary(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.SessionGetSessionSummaryParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -268,7 +268,7 @@ func TestSessionGetSessionTranscriptsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Sessions.GetSessionTranscripts(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.SessionGetSessionTranscriptsParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -301,7 +301,7 @@ func TestSessionGetSessionsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Sessions.GetSessions(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		realtime_kit.SessionGetSessionsParams{
 			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AssociatedID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),

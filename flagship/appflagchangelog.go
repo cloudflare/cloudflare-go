@@ -193,11 +193,12 @@ type AppFlagChangelogListResponseObjectAfter struct {
 	Type AppFlagChangelogListResponseObjectAfterType `json:"type" api:"required"`
 	// Map of variation name to value. All values share the same type (boolean, string,
 	// number, or JSON object/array), and each serialized value stays within 10KB.
-	Variations  map[string]AppFlagChangelogListResponseObjectAfterVariationsUnion `json:"variations" api:"required"`
-	Description string                                                            `json:"description" api:"nullable"`
-	UpdatedAt   string                                                            `json:"updated_at"`
-	UpdatedBy   string                                                            `json:"updated_by"`
-	JSON        appFlagChangelogListResponseObjectAfterJSON                       `json:"-"`
+	Variations map[string]AppFlagChangelogListResponseObjectAfterVariationsUnion `json:"variations" api:"required"`
+	// Optional operator-facing description. It does not affect flag evaluation.
+	Description string                                      `json:"description" api:"nullable"`
+	UpdatedAt   string                                      `json:"updated_at"`
+	UpdatedBy   string                                      `json:"updated_by"`
+	JSON        appFlagChangelogListResponseObjectAfterJSON `json:"-"`
 }
 
 // appFlagChangelogListResponseObjectAfterJSON contains the JSON metadata for the
@@ -370,11 +371,13 @@ const (
 	AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorEndsWith            AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperator = "ends_with"
 	AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorIn                  AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperator = "in"
 	AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorNotIn               AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperator = "not_in"
+	AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorHas                 AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperator = "has"
+	AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorNotHas              AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperator = "not_has"
 )
 
 func (r AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperator) IsKnown() bool {
 	switch r {
-	case AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorEquals, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorNotEquals, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorGreaterThan, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorLessThan, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorGreaterThanOrEquals, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorLessThanOrEquals, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorContains, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorStartsWith, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorEndsWith, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorIn, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorNotIn:
+	case AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorEquals, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorNotEquals, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorGreaterThan, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorLessThan, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorGreaterThanOrEquals, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorLessThanOrEquals, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorContains, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorStartsWith, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorEndsWith, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorIn, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorNotIn, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorHas, AppFlagChangelogListResponseObjectAfterRulesConditionsObjectOperatorNotHas:
 		return true
 	}
 	return false
@@ -458,19 +461,22 @@ const (
 	AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorEndsWith            AppFlagChangelogListResponseObjectAfterRulesConditionsOperator = "ends_with"
 	AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorIn                  AppFlagChangelogListResponseObjectAfterRulesConditionsOperator = "in"
 	AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorNotIn               AppFlagChangelogListResponseObjectAfterRulesConditionsOperator = "not_in"
+	AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorHas                 AppFlagChangelogListResponseObjectAfterRulesConditionsOperator = "has"
+	AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorNotHas              AppFlagChangelogListResponseObjectAfterRulesConditionsOperator = "not_has"
 )
 
 func (r AppFlagChangelogListResponseObjectAfterRulesConditionsOperator) IsKnown() bool {
 	switch r {
-	case AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorEquals, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorNotEquals, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorGreaterThan, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorLessThan, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorGreaterThanOrEquals, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorLessThanOrEquals, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorContains, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorStartsWith, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorEndsWith, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorIn, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorNotIn:
+	case AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorEquals, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorNotEquals, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorGreaterThan, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorLessThan, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorGreaterThanOrEquals, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorLessThanOrEquals, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorContains, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorStartsWith, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorEndsWith, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorIn, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorNotIn, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorHas, AppFlagChangelogListResponseObjectAfterRulesConditionsOperatorNotHas:
 		return true
 	}
 	return false
 }
 
 type AppFlagChangelogListResponseObjectAfterRulesRollout struct {
-	// Percentage of matching traffic (0–100) served this variation. For multi-way
-	// splits, use cumulative upper bounds across rules (e.g. 30, 70, 100).
+	// Percentage of matching traffic (0–100, up to 2 decimal places) served this
+	// variation. For multi-way splits, use cumulative upper bounds across rules (e.g.
+	// 30, 70, 100).
 	Percentage float64 `json:"percentage" api:"required"`
 	// Context attribute used for sticky bucketing. Defaults to `targetingKey`. If
 	// absent at evaluation time, bucketing is random per request.
@@ -592,12 +598,12 @@ func (r AppFlagChangelogListResponseEvent) IsKnown() bool {
 }
 
 type AppFlagChangelogListParams struct {
-	// Cloudflare account ID.
+	// Cloudflare account ID that owns the Flagship app.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Pagination cursor from a previous response.
 	Cursor param.Field[string] `query:"cursor"`
 	// Max items to return (1–200).
-	Limit param.Field[string] `query:"limit"`
+	Limit param.Field[int64] `query:"limit"`
 }
 
 // URLQuery serializes [AppFlagChangelogListParams]'s query parameters as

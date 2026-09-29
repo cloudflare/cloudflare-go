@@ -67,8 +67,8 @@ func TestSettingAccountViewListWithOptionalParams(t *testing.T) {
 			Startswith: cloudflare.F("my"),
 		}),
 		Order:    cloudflare.F(dns.SettingAccountViewListParamsOrderName),
-		Page:     cloudflare.F(1.000000),
-		PerPage:  cloudflare.F(5.000000),
+		Page:     cloudflare.F(int64(1)),
+		PerPage:  cloudflare.F(int64(5)),
 		ZoneID:   cloudflare.F("ae29bea30e2e427ba9cd8d78b628177b"),
 		ZoneName: cloudflare.F("www.example.com"),
 	})

@@ -14,10 +14,21 @@ import (
 // the [NewCloudforceOneService] method instead.
 type CloudforceOneService struct {
 	Options       []option.RequestOption
-	Scans         *ScanService
 	BinaryStorage *BinaryStorageService
 	Requests      *RequestService
+	Scans         *ScanService
 	ThreatEvents  *ThreatEventService
+	// Threat Signals API for managing threat intelligence feeds, articles, indicators,
+	// and AI skills in Cloudforce One.
+	//
+	// ## Prerequisites
+	//
+	// 1. **API token** — requests must use an API token with Cloudforce One
+	//    permissions; write operations (creating, editing, or deleting feeds, skills,
+	//    and tags) require write access.
+	// 2. **Plan limits** — access on the Free plan is limited; feed quotas and managed
+	//    default skills apply.
+	ThreatSignals *ThreatSignalService
 }
 
 // NewCloudforceOneService generates a new service that applies the given options
@@ -26,9 +37,10 @@ type CloudforceOneService struct {
 func NewCloudforceOneService(opts ...option.RequestOption) (r *CloudforceOneService) {
 	r = &CloudforceOneService{}
 	r.Options = opts
-	r.Scans = NewScanService(opts...)
 	r.BinaryStorage = NewBinaryStorageService(opts...)
 	r.Requests = NewRequestService(opts...)
+	r.Scans = NewScanService(opts...)
 	r.ThreatEvents = NewThreatEventService(opts...)
+	r.ThreatSignals = NewThreatSignalService(opts...)
 	return
 }

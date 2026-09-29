@@ -56,7 +56,7 @@ func (r *AddressService) New(ctx context.Context, params AddressNewParams, opts 
 	return res, nil
 }
 
-// Lists existing destination addresses.
+// Lists destination addresses configured for Email Routing in an account.
 func (r *AddressService) List(ctx context.Context, params AddressListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Address], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -78,7 +78,7 @@ func (r *AddressService) List(ctx context.Context, params AddressListParams, opt
 	return res, nil
 }
 
-// Lists existing destination addresses.
+// Lists destination addresses configured for Email Routing in an account.
 func (r *AddressService) ListAutoPaging(ctx context.Context, params AddressListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Address] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }

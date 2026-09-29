@@ -323,6 +323,7 @@ func (r GatewayListNewResponseType) IsKnown() bool {
 type GatewayListDeleteResponse = interface{}
 
 type GatewayListNewParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the list name.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -416,6 +417,7 @@ func (r GatewayListNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListUpdateParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the list name.
 	Name param.Field[string] `json:"name" api:"required"`
@@ -484,6 +486,7 @@ func (r GatewayListUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListListParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sort direction. Applies to the field named in `order_by`; when `order_by` is
 	// omitted it applies to the default `created_at` ordering. When `direction` is
@@ -501,11 +504,11 @@ type GatewayListListParams struct {
 	//
 	// Supported fields and their matching behaviour:
 	//
-	//   - `name` — case-insensitive substring match on the list name.
-	//   - `id` — substring match on the list ID (UUID), with or without dashes.
-	//   - `type` — exact match on the list type. Supersedes the legacy `type` query
-	//     parameter when both are supplied. Must be one of the valid type values.
-	//   - `item_count` — exact integer match on the number of items in the list.
+	// - `name` — case-insensitive substring match on the list name.
+	// - `id` — substring match on the list ID (UUID), with or without dashes.
+	// - `type` — exact match on the list type. Supersedes the legacy `type` query
+	//   parameter when both are supplied. Must be one of the valid type values.
+	// - `item_count` — exact integer match on the number of items in the list.
 	//
 	// Each entry must match one of the per-field patterns below: the field must be one
 	// of `name`, `id`, `type`, or `item_count`; `name`/`id` accept any value, `type`
@@ -516,12 +519,12 @@ type GatewayListListParams struct {
 	// `created_at` in ascending order (i.e. creation order) for backwards
 	// compatibility. Supported values:
 	//
-	//   - `name` — sort alphabetically by list name.
-	//   - `created_at` — sort by creation time; defaults to descending unless
-	//     `direction` is set.
-	//   - `updated_at` — sort by last-modified time; defaults to descending unless
-	//     `direction` is set.
-	//   - `item_count` — sort by number of items in the list.
+	// - `name` — sort alphabetically by list name.
+	// - `created_at` — sort by creation time; defaults to descending unless
+	//   `direction` is set.
+	// - `updated_at` — sort by last-modified time; defaults to descending unless
+	//   `direction` is set.
+	// - `item_count` — sort by number of items in the list.
 	OrderBy param.Field[GatewayListListParamsOrderBy] `query:"order_by"`
 	// Case-insensitive substring match on the list name or description. When combined
 	// with `filter`, both must match (logical AND).
@@ -613,6 +616,7 @@ func (r GatewayListListParamsType) IsKnown() bool {
 }
 
 type GatewayListDeleteParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -660,6 +664,7 @@ func (r GatewayListDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListEditParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Add items to the list.
 	Append param.Field[[]GatewayListEditParamsAppend] `json:"append"`
@@ -726,6 +731,7 @@ func (r GatewayListEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListGetParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

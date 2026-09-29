@@ -34,7 +34,7 @@ func NewProjectDeploymentHistoryLogService(opts ...option.RequestOption) (r *Pro
 	return
 }
 
-// Fetch deployment logs for a project.
+// Retrieve the build logs for a Cloudflare Pages deployment.
 func (r *ProjectDeploymentHistoryLogService) Get(ctx context.Context, projectName string, deploymentID string, query ProjectDeploymentHistoryLogGetParams, opts ...option.RequestOption) (res *ProjectDeploymentHistoryLogGetResponse, err error) {
 	var env ProjectDeploymentHistoryLogGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

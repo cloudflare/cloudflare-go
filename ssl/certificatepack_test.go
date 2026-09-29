@@ -92,7 +92,7 @@ func TestCertificatePackDelete(t *testing.T) {
 	)
 	_, err := client.SSL.CertificatePacks.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"3822ff90-ea29-44df-9e55-21300bb9419b",
 		ssl.CertificatePackDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -122,7 +122,7 @@ func TestCertificatePackEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.SSL.CertificatePacks.Edit(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"3822ff90-ea29-44df-9e55-21300bb9419b",
 		ssl.CertificatePackEditParams{
 			ZoneID:             cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			CloudflareBranding: cloudflare.F(false),
@@ -153,7 +153,7 @@ func TestCertificatePackGet(t *testing.T) {
 	)
 	_, err := client.SSL.CertificatePacks.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"3822ff90-ea29-44df-9e55-21300bb9419b",
 		ssl.CertificatePackGetParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

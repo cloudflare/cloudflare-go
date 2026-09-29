@@ -242,10 +242,11 @@ type SettingDomainNewResponse struct {
 	Domain               string                                        `json:"domain"`
 	DropDispositions     []SettingDomainNewResponseDropDisposition     `json:"drop_dispositions"`
 	EmailsProcessed      SettingDomainNewResponseEmailsProcessed       `json:"emails_processed" api:"nullable"`
-	Folder               SettingDomainNewResponseFolder                `json:"folder" api:"nullable"`
-	InboxProvider        SettingDomainNewResponseInboxProvider         `json:"inbox_provider" api:"nullable"`
-	IntegrationID        string                                        `json:"integration_id" api:"nullable" format:"uuid"`
-	IPRestrictions       []string                                      `json:"ip_restrictions"`
+	// The mailbox folder to scan, for API-scanning domains.
+	Folder         SettingDomainNewResponseFolder        `json:"folder" api:"nullable"`
+	InboxProvider  SettingDomainNewResponseInboxProvider `json:"inbox_provider" api:"nullable"`
+	IntegrationID  string                                `json:"integration_id" api:"nullable" format:"uuid"`
+	IPRestrictions []string                              `json:"ip_restrictions"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
@@ -358,6 +359,7 @@ func (r SettingDomainNewResponseDMARCStatus) IsKnown() bool {
 	return false
 }
 
+// The verdict Email Security assigns to a message.
 type SettingDomainNewResponseDropDisposition string
 
 const (
@@ -406,6 +408,7 @@ func (r settingDomainNewResponseEmailsProcessedJSON) RawJSON() string {
 	return r.raw
 }
 
+// The mailbox folder to scan, for API-scanning domains.
 type SettingDomainNewResponseFolder string
 
 const (
@@ -436,6 +439,7 @@ func (r SettingDomainNewResponseInboxProvider) IsKnown() bool {
 	return false
 }
 
+// The region that processes messages for this domain.
 type SettingDomainNewResponseRegion string
 
 const (
@@ -499,10 +503,11 @@ type SettingDomainUpdateResponse struct {
 	Domain               string                                           `json:"domain"`
 	DropDispositions     []SettingDomainUpdateResponseDropDisposition     `json:"drop_dispositions"`
 	EmailsProcessed      SettingDomainUpdateResponseEmailsProcessed       `json:"emails_processed" api:"nullable"`
-	Folder               SettingDomainUpdateResponseFolder                `json:"folder" api:"nullable"`
-	InboxProvider        SettingDomainUpdateResponseInboxProvider         `json:"inbox_provider" api:"nullable"`
-	IntegrationID        string                                           `json:"integration_id" api:"nullable" format:"uuid"`
-	IPRestrictions       []string                                         `json:"ip_restrictions"`
+	// The mailbox folder to scan, for API-scanning domains.
+	Folder         SettingDomainUpdateResponseFolder        `json:"folder" api:"nullable"`
+	InboxProvider  SettingDomainUpdateResponseInboxProvider `json:"inbox_provider" api:"nullable"`
+	IntegrationID  string                                   `json:"integration_id" api:"nullable" format:"uuid"`
+	IPRestrictions []string                                 `json:"ip_restrictions"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
@@ -615,6 +620,7 @@ func (r SettingDomainUpdateResponseDMARCStatus) IsKnown() bool {
 	return false
 }
 
+// The verdict Email Security assigns to a message.
 type SettingDomainUpdateResponseDropDisposition string
 
 const (
@@ -663,6 +669,7 @@ func (r settingDomainUpdateResponseEmailsProcessedJSON) RawJSON() string {
 	return r.raw
 }
 
+// The mailbox folder to scan, for API-scanning domains.
 type SettingDomainUpdateResponseFolder string
 
 const (
@@ -693,6 +700,7 @@ func (r SettingDomainUpdateResponseInboxProvider) IsKnown() bool {
 	return false
 }
 
+// The region that processes messages for this domain.
 type SettingDomainUpdateResponseRegion string
 
 const (
@@ -756,10 +764,11 @@ type SettingDomainListResponse struct {
 	Domain               string                                         `json:"domain"`
 	DropDispositions     []SettingDomainListResponseDropDisposition     `json:"drop_dispositions"`
 	EmailsProcessed      SettingDomainListResponseEmailsProcessed       `json:"emails_processed" api:"nullable"`
-	Folder               SettingDomainListResponseFolder                `json:"folder" api:"nullable"`
-	InboxProvider        SettingDomainListResponseInboxProvider         `json:"inbox_provider" api:"nullable"`
-	IntegrationID        string                                         `json:"integration_id" api:"nullable" format:"uuid"`
-	IPRestrictions       []string                                       `json:"ip_restrictions"`
+	// The mailbox folder to scan, for API-scanning domains.
+	Folder         SettingDomainListResponseFolder        `json:"folder" api:"nullable"`
+	InboxProvider  SettingDomainListResponseInboxProvider `json:"inbox_provider" api:"nullable"`
+	IntegrationID  string                                 `json:"integration_id" api:"nullable" format:"uuid"`
+	IPRestrictions []string                               `json:"ip_restrictions"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
@@ -872,6 +881,7 @@ func (r SettingDomainListResponseDMARCStatus) IsKnown() bool {
 	return false
 }
 
+// The verdict Email Security assigns to a message.
 type SettingDomainListResponseDropDisposition string
 
 const (
@@ -920,6 +930,7 @@ func (r settingDomainListResponseEmailsProcessedJSON) RawJSON() string {
 	return r.raw
 }
 
+// The mailbox folder to scan, for API-scanning domains.
 type SettingDomainListResponseFolder string
 
 const (
@@ -950,6 +961,7 @@ func (r SettingDomainListResponseInboxProvider) IsKnown() bool {
 	return false
 }
 
+// The region that processes messages for this domain.
 type SettingDomainListResponseRegion string
 
 const (
@@ -1084,10 +1096,11 @@ type SettingDomainBatchResponsePatch struct {
 	Domain               string                                                 `json:"domain"`
 	DropDispositions     []SettingDomainBatchResponsePatchesDropDisposition     `json:"drop_dispositions"`
 	EmailsProcessed      SettingDomainBatchResponsePatchesEmailsProcessed       `json:"emails_processed" api:"nullable"`
-	Folder               SettingDomainBatchResponsePatchesFolder                `json:"folder" api:"nullable"`
-	InboxProvider        SettingDomainBatchResponsePatchesInboxProvider         `json:"inbox_provider" api:"nullable"`
-	IntegrationID        string                                                 `json:"integration_id" api:"nullable" format:"uuid"`
-	IPRestrictions       []string                                               `json:"ip_restrictions"`
+	// The mailbox folder to scan, for API-scanning domains.
+	Folder         SettingDomainBatchResponsePatchesFolder        `json:"folder" api:"nullable"`
+	InboxProvider  SettingDomainBatchResponsePatchesInboxProvider `json:"inbox_provider" api:"nullable"`
+	IntegrationID  string                                         `json:"integration_id" api:"nullable" format:"uuid"`
+	IPRestrictions []string                                       `json:"ip_restrictions"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
@@ -1200,6 +1213,7 @@ func (r SettingDomainBatchResponsePatchesDMARCStatus) IsKnown() bool {
 	return false
 }
 
+// The verdict Email Security assigns to a message.
 type SettingDomainBatchResponsePatchesDropDisposition string
 
 const (
@@ -1248,6 +1262,7 @@ func (r settingDomainBatchResponsePatchesEmailsProcessedJSON) RawJSON() string {
 	return r.raw
 }
 
+// The mailbox folder to scan, for API-scanning domains.
 type SettingDomainBatchResponsePatchesFolder string
 
 const (
@@ -1278,6 +1293,7 @@ func (r SettingDomainBatchResponsePatchesInboxProvider) IsKnown() bool {
 	return false
 }
 
+// The region that processes messages for this domain.
 type SettingDomainBatchResponsePatchesRegion string
 
 const (
@@ -1341,10 +1357,11 @@ type SettingDomainBatchResponsePost struct {
 	Domain               string                                               `json:"domain"`
 	DropDispositions     []SettingDomainBatchResponsePostsDropDisposition     `json:"drop_dispositions"`
 	EmailsProcessed      SettingDomainBatchResponsePostsEmailsProcessed       `json:"emails_processed" api:"nullable"`
-	Folder               SettingDomainBatchResponsePostsFolder                `json:"folder" api:"nullable"`
-	InboxProvider        SettingDomainBatchResponsePostsInboxProvider         `json:"inbox_provider" api:"nullable"`
-	IntegrationID        string                                               `json:"integration_id" api:"nullable" format:"uuid"`
-	IPRestrictions       []string                                             `json:"ip_restrictions"`
+	// The mailbox folder to scan, for API-scanning domains.
+	Folder         SettingDomainBatchResponsePostsFolder        `json:"folder" api:"nullable"`
+	InboxProvider  SettingDomainBatchResponsePostsInboxProvider `json:"inbox_provider" api:"nullable"`
+	IntegrationID  string                                       `json:"integration_id" api:"nullable" format:"uuid"`
+	IPRestrictions []string                                     `json:"ip_restrictions"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
@@ -1457,6 +1474,7 @@ func (r SettingDomainBatchResponsePostsDMARCStatus) IsKnown() bool {
 	return false
 }
 
+// The verdict Email Security assigns to a message.
 type SettingDomainBatchResponsePostsDropDisposition string
 
 const (
@@ -1505,6 +1523,7 @@ func (r settingDomainBatchResponsePostsEmailsProcessedJSON) RawJSON() string {
 	return r.raw
 }
 
+// The mailbox folder to scan, for API-scanning domains.
 type SettingDomainBatchResponsePostsFolder string
 
 const (
@@ -1535,6 +1554,7 @@ func (r SettingDomainBatchResponsePostsInboxProvider) IsKnown() bool {
 	return false
 }
 
+// The region that processes messages for this domain.
 type SettingDomainBatchResponsePostsRegion string
 
 const (
@@ -1598,10 +1618,11 @@ type SettingDomainBatchResponsePut struct {
 	Domain               string                                              `json:"domain"`
 	DropDispositions     []SettingDomainBatchResponsePutsDropDisposition     `json:"drop_dispositions"`
 	EmailsProcessed      SettingDomainBatchResponsePutsEmailsProcessed       `json:"emails_processed" api:"nullable"`
-	Folder               SettingDomainBatchResponsePutsFolder                `json:"folder" api:"nullable"`
-	InboxProvider        SettingDomainBatchResponsePutsInboxProvider         `json:"inbox_provider" api:"nullable"`
-	IntegrationID        string                                              `json:"integration_id" api:"nullable" format:"uuid"`
-	IPRestrictions       []string                                            `json:"ip_restrictions"`
+	// The mailbox folder to scan, for API-scanning domains.
+	Folder         SettingDomainBatchResponsePutsFolder        `json:"folder" api:"nullable"`
+	InboxProvider  SettingDomainBatchResponsePutsInboxProvider `json:"inbox_provider" api:"nullable"`
+	IntegrationID  string                                      `json:"integration_id" api:"nullable" format:"uuid"`
+	IPRestrictions []string                                    `json:"ip_restrictions"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
@@ -1714,6 +1735,7 @@ func (r SettingDomainBatchResponsePutsDMARCStatus) IsKnown() bool {
 	return false
 }
 
+// The verdict Email Security assigns to a message.
 type SettingDomainBatchResponsePutsDropDisposition string
 
 const (
@@ -1762,6 +1784,7 @@ func (r settingDomainBatchResponsePutsEmailsProcessedJSON) RawJSON() string {
 	return r.raw
 }
 
+// The mailbox folder to scan, for API-scanning domains.
 type SettingDomainBatchResponsePutsFolder string
 
 const (
@@ -1792,6 +1815,7 @@ func (r SettingDomainBatchResponsePutsInboxProvider) IsKnown() bool {
 	return false
 }
 
+// The region that processes messages for this domain.
 type SettingDomainBatchResponsePutsRegion string
 
 const (
@@ -1877,10 +1901,11 @@ type SettingDomainEditResponse struct {
 	Domain               string                                         `json:"domain"`
 	DropDispositions     []SettingDomainEditResponseDropDisposition     `json:"drop_dispositions"`
 	EmailsProcessed      SettingDomainEditResponseEmailsProcessed       `json:"emails_processed" api:"nullable"`
-	Folder               SettingDomainEditResponseFolder                `json:"folder" api:"nullable"`
-	InboxProvider        SettingDomainEditResponseInboxProvider         `json:"inbox_provider" api:"nullable"`
-	IntegrationID        string                                         `json:"integration_id" api:"nullable" format:"uuid"`
-	IPRestrictions       []string                                       `json:"ip_restrictions"`
+	// The mailbox folder to scan, for API-scanning domains.
+	Folder         SettingDomainEditResponseFolder        `json:"folder" api:"nullable"`
+	InboxProvider  SettingDomainEditResponseInboxProvider `json:"inbox_provider" api:"nullable"`
+	IntegrationID  string                                 `json:"integration_id" api:"nullable" format:"uuid"`
+	IPRestrictions []string                               `json:"ip_restrictions"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
@@ -1993,6 +2018,7 @@ func (r SettingDomainEditResponseDMARCStatus) IsKnown() bool {
 	return false
 }
 
+// The verdict Email Security assigns to a message.
 type SettingDomainEditResponseDropDisposition string
 
 const (
@@ -2041,6 +2067,7 @@ func (r settingDomainEditResponseEmailsProcessedJSON) RawJSON() string {
 	return r.raw
 }
 
+// The mailbox folder to scan, for API-scanning domains.
 type SettingDomainEditResponseFolder string
 
 const (
@@ -2071,6 +2098,7 @@ func (r SettingDomainEditResponseInboxProvider) IsKnown() bool {
 	return false
 }
 
+// The region that processes messages for this domain.
 type SettingDomainEditResponseRegion string
 
 const (
@@ -2134,10 +2162,11 @@ type SettingDomainGetResponse struct {
 	Domain               string                                        `json:"domain"`
 	DropDispositions     []SettingDomainGetResponseDropDisposition     `json:"drop_dispositions"`
 	EmailsProcessed      SettingDomainGetResponseEmailsProcessed       `json:"emails_processed" api:"nullable"`
-	Folder               SettingDomainGetResponseFolder                `json:"folder" api:"nullable"`
-	InboxProvider        SettingDomainGetResponseInboxProvider         `json:"inbox_provider" api:"nullable"`
-	IntegrationID        string                                        `json:"integration_id" api:"nullable" format:"uuid"`
-	IPRestrictions       []string                                      `json:"ip_restrictions"`
+	// The mailbox folder to scan, for API-scanning domains.
+	Folder         SettingDomainGetResponseFolder        `json:"folder" api:"nullable"`
+	InboxProvider  SettingDomainGetResponseInboxProvider `json:"inbox_provider" api:"nullable"`
+	IntegrationID  string                                `json:"integration_id" api:"nullable" format:"uuid"`
+	IPRestrictions []string                              `json:"ip_restrictions"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
@@ -2250,6 +2279,7 @@ func (r SettingDomainGetResponseDMARCStatus) IsKnown() bool {
 	return false
 }
 
+// The verdict Email Security assigns to a message.
 type SettingDomainGetResponseDropDisposition string
 
 const (
@@ -2298,6 +2328,7 @@ func (r settingDomainGetResponseEmailsProcessedJSON) RawJSON() string {
 	return r.raw
 }
 
+// The mailbox folder to scan, for API-scanning domains.
 type SettingDomainGetResponseFolder string
 
 const (
@@ -2328,6 +2359,7 @@ func (r SettingDomainGetResponseInboxProvider) IsKnown() bool {
 	return false
 }
 
+// The region that processes messages for this domain.
 type SettingDomainGetResponseRegion string
 
 const (
@@ -2383,18 +2415,32 @@ func (r SettingDomainGetResponseStatus) IsKnown() bool {
 
 type SettingDomainNewParams struct {
 	// Identifier.
-	AccountID            param.Field[string]                                      `path:"account_id" api:"required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Delivery modes to onboard the domain through.
 	AllowedDeliveryModes param.Field[[]SettingDomainNewParamsAllowedDeliveryMode] `json:"allowed_delivery_modes" api:"required"`
-	Domain               param.Field[string]                                      `json:"domain" api:"required"`
-	DropDispositions     param.Field[[]SettingDomainNewParamsDropDisposition]     `json:"drop_dispositions" api:"required"`
-	IPRestrictions       param.Field[[]string]                                    `json:"ip_restrictions" api:"required"`
-	Regions              param.Field[[]SettingDomainNewParamsRegion]              `json:"regions" api:"required"`
-	Folder               param.Field[SettingDomainNewParamsFolder]                `json:"folder"`
-	IntegrationID        param.Field[string]                                      `json:"integration_id" format:"uuid"`
-	LookbackHops         param.Field[int64]                                       `json:"lookback_hops"`
-	RequireTLSInbound    param.Field[bool]                                        `json:"require_tls_inbound"`
-	RequireTLSOutbound   param.Field[bool]                                        `json:"require_tls_outbound"`
-	Transport            param.Field[string]                                      `json:"transport"`
+	// The email domain to protect.
+	Domain param.Field[string] `json:"domain" api:"required"`
+	// Dispositions to drop instead of delivering, e.g. `["MALICIOUS", "SPAM"]`.
+	DropDispositions param.Field[[]SettingDomainNewParamsDropDisposition] `json:"drop_dispositions" api:"required"`
+	// Source IP ranges mail is accepted from. Any other source is rejected.
+	IPRestrictions param.Field[[]string] `json:"ip_restrictions" api:"required"`
+	// Regions that process messages for this domain, e.g. `["GLOBAL"]` or `["US"]`.
+	Regions param.Field[[]SettingDomainNewParamsRegion] `json:"regions" api:"required"`
+	// The mailbox folder to scan, for API-scanning domains.
+	Folder param.Field[SettingDomainNewParamsFolder] `json:"folder"`
+	// Identifier of the CASB integration that authorizes this domain. The integration
+	// also enables API scanning, post-delivery actions, and directory sync.
+	IntegrationID param.Field[string] `json:"integration_id" format:"uuid"`
+	// Number of hops to trace back through received headers when reconstructing the
+	// original message (1-20).
+	LookbackHops param.Field[int64] `json:"lookback_hops"`
+	// Require TLS on inbound connections.
+	RequireTLSInbound param.Field[bool] `json:"require_tls_inbound"`
+	// Require TLS on outbound connections.
+	RequireTLSOutbound param.Field[bool] `json:"require_tls_outbound"`
+	// The mail transport hostname for MX/Inline delivery — the MX record Cloudflare
+	// delivers email to (e.g. `mx.example.com`).
+	Transport param.Field[string] `json:"transport"`
 }
 
 func (r SettingDomainNewParams) MarshalJSON() (data []byte, err error) {
@@ -2419,6 +2465,7 @@ func (r SettingDomainNewParamsAllowedDeliveryMode) IsKnown() bool {
 	return false
 }
 
+// The verdict Email Security assigns to a message.
 type SettingDomainNewParamsDropDisposition string
 
 const (
@@ -2442,6 +2489,7 @@ func (r SettingDomainNewParamsDropDisposition) IsKnown() bool {
 	return false
 }
 
+// The region that processes messages for this domain.
 type SettingDomainNewParamsRegion string
 
 const (
@@ -2460,6 +2508,7 @@ func (r SettingDomainNewParamsRegion) IsKnown() bool {
 	return false
 }
 
+// The mailbox folder to scan, for API-scanning domains.
 type SettingDomainNewParamsFolder string
 
 const (
@@ -2616,17 +2665,30 @@ func (r SettingDomainNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingDomainUpdateParams struct {
 	// Identifier.
-	AccountID            param.Field[string]                                         `path:"account_id" api:"required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Delivery modes to onboard the domain through.
 	AllowedDeliveryModes param.Field[[]SettingDomainUpdateParamsAllowedDeliveryMode] `json:"allowed_delivery_modes" api:"required"`
-	DropDispositions     param.Field[[]SettingDomainUpdateParamsDropDisposition]     `json:"drop_dispositions" api:"required"`
-	IPRestrictions       param.Field[[]string]                                       `json:"ip_restrictions" api:"required"`
-	Regions              param.Field[[]SettingDomainUpdateParamsRegion]              `json:"regions" api:"required"`
-	Folder               param.Field[SettingDomainUpdateParamsFolder]                `json:"folder"`
-	IntegrationID        param.Field[string]                                         `json:"integration_id" format:"uuid"`
-	LookbackHops         param.Field[int64]                                          `json:"lookback_hops"`
-	RequireTLSInbound    param.Field[bool]                                           `json:"require_tls_inbound"`
-	RequireTLSOutbound   param.Field[bool]                                           `json:"require_tls_outbound"`
-	Transport            param.Field[string]                                         `json:"transport"`
+	// Dispositions to drop instead of delivering, e.g. `["MALICIOUS", "SPAM"]`.
+	DropDispositions param.Field[[]SettingDomainUpdateParamsDropDisposition] `json:"drop_dispositions" api:"required"`
+	// Source IP ranges mail is accepted from. Any other source is rejected.
+	IPRestrictions param.Field[[]string] `json:"ip_restrictions" api:"required"`
+	// Regions that process messages for this domain, e.g. `["GLOBAL"]` or `["US"]`.
+	Regions param.Field[[]SettingDomainUpdateParamsRegion] `json:"regions" api:"required"`
+	// The mailbox folder to scan, for API-scanning domains.
+	Folder param.Field[SettingDomainUpdateParamsFolder] `json:"folder"`
+	// Identifier of the CASB integration that authorizes this domain. The integration
+	// also enables API scanning, post-delivery actions, and directory sync.
+	IntegrationID param.Field[string] `json:"integration_id" format:"uuid"`
+	// Number of hops to trace back through received headers when reconstructing the
+	// original message (1-20).
+	LookbackHops param.Field[int64] `json:"lookback_hops"`
+	// Require TLS on inbound connections.
+	RequireTLSInbound param.Field[bool] `json:"require_tls_inbound"`
+	// Require TLS on outbound connections.
+	RequireTLSOutbound param.Field[bool] `json:"require_tls_outbound"`
+	// The mail transport hostname for MX/Inline delivery — the MX record Cloudflare
+	// delivers email to (e.g. `mx.example.com`).
+	Transport param.Field[string] `json:"transport"`
 }
 
 func (r SettingDomainUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -2651,6 +2713,7 @@ func (r SettingDomainUpdateParamsAllowedDeliveryMode) IsKnown() bool {
 	return false
 }
 
+// The verdict Email Security assigns to a message.
 type SettingDomainUpdateParamsDropDisposition string
 
 const (
@@ -2674,6 +2737,7 @@ func (r SettingDomainUpdateParamsDropDisposition) IsKnown() bool {
 	return false
 }
 
+// The region that processes messages for this domain.
 type SettingDomainUpdateParamsRegion string
 
 const (
@@ -2692,6 +2756,7 @@ func (r SettingDomainUpdateParamsRegion) IsKnown() bool {
 	return false
 }
 
+// The mailbox folder to scan, for API-scanning domains.
 type SettingDomainUpdateParamsFolder string
 
 const (
@@ -3114,11 +3179,17 @@ func (r SettingDomainDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingDomainBatchParams struct {
 	// Identifier.
-	AccountID param.Field[string]                           `path:"account_id" api:"required"`
-	Deletes   param.Field[[]SettingDomainBatchParamsDelete] `json:"deletes" api:"required"`
-	Patches   param.Field[[]SettingDomainBatchParamsPatch]  `json:"patches" api:"required"`
-	Posts     param.Field[[]SettingDomainBatchParamsPost]   `json:"posts" api:"required"`
-	Puts      param.Field[[]SettingDomainBatchParamsPut]    `json:"puts" api:"required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// IDs of the domains to remove protection from.
+	Deletes param.Field[[]SettingDomainBatchParamsDelete] `json:"deletes" api:"required"`
+	// Partial updates to apply — each entry carries the domain's ID and only the
+	// fields to change.
+	Patches param.Field[[]SettingDomainBatchParamsPatch] `json:"patches" api:"required"`
+	// Domains to add protection for.
+	Posts param.Field[[]SettingDomainBatchParamsPost] `json:"posts" api:"required"`
+	// Full replacements to apply — each entry carries the domain's ID and every field
+	// of its new value.
+	Puts param.Field[[]SettingDomainBatchParamsPut] `json:"puts" api:"required"`
 }
 
 func (r SettingDomainBatchParams) MarshalJSON() (data []byte, err error) {
@@ -3136,17 +3207,30 @@ func (r SettingDomainBatchParamsDelete) MarshalJSON() (data []byte, err error) {
 
 type SettingDomainBatchParamsPatch struct {
 	// Domain identifier.
-	ID                   param.Field[string]                                               `json:"id" api:"required" format:"uuid"`
+	ID param.Field[string] `json:"id" api:"required" format:"uuid"`
+	// Delivery modes to onboard the domain through.
 	AllowedDeliveryModes param.Field[[]SettingDomainBatchParamsPatchesAllowedDeliveryMode] `json:"allowed_delivery_modes"`
-	DropDispositions     param.Field[[]SettingDomainBatchParamsPatchesDropDisposition]     `json:"drop_dispositions"`
-	Folder               param.Field[SettingDomainBatchParamsPatchesFolder]                `json:"folder"`
-	IntegrationID        param.Field[string]                                               `json:"integration_id" format:"uuid"`
-	IPRestrictions       param.Field[[]string]                                             `json:"ip_restrictions"`
-	LookbackHops         param.Field[int64]                                                `json:"lookback_hops"`
-	Regions              param.Field[[]SettingDomainBatchParamsPatchesRegion]              `json:"regions"`
-	RequireTLSInbound    param.Field[bool]                                                 `json:"require_tls_inbound"`
-	RequireTLSOutbound   param.Field[bool]                                                 `json:"require_tls_outbound"`
-	Transport            param.Field[string]                                               `json:"transport"`
+	// Dispositions to drop instead of delivering, e.g. `["MALICIOUS", "SPAM"]`.
+	DropDispositions param.Field[[]SettingDomainBatchParamsPatchesDropDisposition] `json:"drop_dispositions"`
+	// The mailbox folder to scan, for API-scanning domains.
+	Folder param.Field[SettingDomainBatchParamsPatchesFolder] `json:"folder"`
+	// Identifier of the CASB integration that authorizes this domain. The integration
+	// also enables API scanning, post-delivery actions, and directory sync.
+	IntegrationID param.Field[string] `json:"integration_id" format:"uuid"`
+	// Source IP ranges mail is accepted from. Any other source is rejected.
+	IPRestrictions param.Field[[]string] `json:"ip_restrictions"`
+	// Number of hops to trace back through received headers when reconstructing the
+	// original message (1-20).
+	LookbackHops param.Field[int64] `json:"lookback_hops"`
+	// Regions that process messages for this domain, e.g. `["GLOBAL"]` or `["US"]`.
+	Regions param.Field[[]SettingDomainBatchParamsPatchesRegion] `json:"regions"`
+	// Require TLS on inbound connections.
+	RequireTLSInbound param.Field[bool] `json:"require_tls_inbound"`
+	// Require TLS on outbound connections.
+	RequireTLSOutbound param.Field[bool] `json:"require_tls_outbound"`
+	// The mail transport hostname for MX/Inline delivery — the MX record Cloudflare
+	// delivers email to (e.g. `mx.example.com`).
+	Transport param.Field[string] `json:"transport"`
 }
 
 func (r SettingDomainBatchParamsPatch) MarshalJSON() (data []byte, err error) {
@@ -3171,6 +3255,7 @@ func (r SettingDomainBatchParamsPatchesAllowedDeliveryMode) IsKnown() bool {
 	return false
 }
 
+// The verdict Email Security assigns to a message.
 type SettingDomainBatchParamsPatchesDropDisposition string
 
 const (
@@ -3194,6 +3279,7 @@ func (r SettingDomainBatchParamsPatchesDropDisposition) IsKnown() bool {
 	return false
 }
 
+// The mailbox folder to scan, for API-scanning domains.
 type SettingDomainBatchParamsPatchesFolder string
 
 const (
@@ -3209,6 +3295,7 @@ func (r SettingDomainBatchParamsPatchesFolder) IsKnown() bool {
 	return false
 }
 
+// The region that processes messages for this domain.
 type SettingDomainBatchParamsPatchesRegion string
 
 const (
@@ -3228,17 +3315,31 @@ func (r SettingDomainBatchParamsPatchesRegion) IsKnown() bool {
 }
 
 type SettingDomainBatchParamsPost struct {
+	// Delivery modes to onboard the domain through.
 	AllowedDeliveryModes param.Field[[]SettingDomainBatchParamsPostsAllowedDeliveryMode] `json:"allowed_delivery_modes" api:"required"`
-	Domain               param.Field[string]                                             `json:"domain" api:"required"`
-	DropDispositions     param.Field[[]SettingDomainBatchParamsPostsDropDisposition]     `json:"drop_dispositions" api:"required"`
-	IPRestrictions       param.Field[[]string]                                           `json:"ip_restrictions" api:"required"`
-	Regions              param.Field[[]SettingDomainBatchParamsPostsRegion]              `json:"regions" api:"required"`
-	Folder               param.Field[SettingDomainBatchParamsPostsFolder]                `json:"folder"`
-	IntegrationID        param.Field[string]                                             `json:"integration_id" format:"uuid"`
-	LookbackHops         param.Field[int64]                                              `json:"lookback_hops"`
-	RequireTLSInbound    param.Field[bool]                                               `json:"require_tls_inbound"`
-	RequireTLSOutbound   param.Field[bool]                                               `json:"require_tls_outbound"`
-	Transport            param.Field[string]                                             `json:"transport"`
+	// The email domain to protect.
+	Domain param.Field[string] `json:"domain" api:"required"`
+	// Dispositions to drop instead of delivering, e.g. `["MALICIOUS", "SPAM"]`.
+	DropDispositions param.Field[[]SettingDomainBatchParamsPostsDropDisposition] `json:"drop_dispositions" api:"required"`
+	// Source IP ranges mail is accepted from. Any other source is rejected.
+	IPRestrictions param.Field[[]string] `json:"ip_restrictions" api:"required"`
+	// Regions that process messages for this domain, e.g. `["GLOBAL"]` or `["US"]`.
+	Regions param.Field[[]SettingDomainBatchParamsPostsRegion] `json:"regions" api:"required"`
+	// The mailbox folder to scan, for API-scanning domains.
+	Folder param.Field[SettingDomainBatchParamsPostsFolder] `json:"folder"`
+	// Identifier of the CASB integration that authorizes this domain. The integration
+	// also enables API scanning, post-delivery actions, and directory sync.
+	IntegrationID param.Field[string] `json:"integration_id" format:"uuid"`
+	// Number of hops to trace back through received headers when reconstructing the
+	// original message (1-20).
+	LookbackHops param.Field[int64] `json:"lookback_hops"`
+	// Require TLS on inbound connections.
+	RequireTLSInbound param.Field[bool] `json:"require_tls_inbound"`
+	// Require TLS on outbound connections.
+	RequireTLSOutbound param.Field[bool] `json:"require_tls_outbound"`
+	// The mail transport hostname for MX/Inline delivery — the MX record Cloudflare
+	// delivers email to (e.g. `mx.example.com`).
+	Transport param.Field[string] `json:"transport"`
 }
 
 func (r SettingDomainBatchParamsPost) MarshalJSON() (data []byte, err error) {
@@ -3263,6 +3364,7 @@ func (r SettingDomainBatchParamsPostsAllowedDeliveryMode) IsKnown() bool {
 	return false
 }
 
+// The verdict Email Security assigns to a message.
 type SettingDomainBatchParamsPostsDropDisposition string
 
 const (
@@ -3286,6 +3388,7 @@ func (r SettingDomainBatchParamsPostsDropDisposition) IsKnown() bool {
 	return false
 }
 
+// The region that processes messages for this domain.
 type SettingDomainBatchParamsPostsRegion string
 
 const (
@@ -3304,6 +3407,7 @@ func (r SettingDomainBatchParamsPostsRegion) IsKnown() bool {
 	return false
 }
 
+// The mailbox folder to scan, for API-scanning domains.
 type SettingDomainBatchParamsPostsFolder string
 
 const (
@@ -3323,17 +3427,30 @@ func (r SettingDomainBatchParamsPostsFolder) IsKnown() bool {
 // absent — the domain name is immutable after creation.
 type SettingDomainBatchParamsPut struct {
 	// Domain identifier.
-	ID                   param.Field[string]                                            `json:"id" api:"required" format:"uuid"`
+	ID param.Field[string] `json:"id" api:"required" format:"uuid"`
+	// Delivery modes to onboard the domain through.
 	AllowedDeliveryModes param.Field[[]SettingDomainBatchParamsPutsAllowedDeliveryMode] `json:"allowed_delivery_modes" api:"required"`
-	DropDispositions     param.Field[[]SettingDomainBatchParamsPutsDropDisposition]     `json:"drop_dispositions" api:"required"`
-	IPRestrictions       param.Field[[]string]                                          `json:"ip_restrictions" api:"required"`
-	Regions              param.Field[[]SettingDomainBatchParamsPutsRegion]              `json:"regions" api:"required"`
-	Folder               param.Field[SettingDomainBatchParamsPutsFolder]                `json:"folder"`
-	IntegrationID        param.Field[string]                                            `json:"integration_id" format:"uuid"`
-	LookbackHops         param.Field[int64]                                             `json:"lookback_hops"`
-	RequireTLSInbound    param.Field[bool]                                              `json:"require_tls_inbound"`
-	RequireTLSOutbound   param.Field[bool]                                              `json:"require_tls_outbound"`
-	Transport            param.Field[string]                                            `json:"transport"`
+	// Dispositions to drop instead of delivering, e.g. `["MALICIOUS", "SPAM"]`.
+	DropDispositions param.Field[[]SettingDomainBatchParamsPutsDropDisposition] `json:"drop_dispositions" api:"required"`
+	// Source IP ranges mail is accepted from. Any other source is rejected.
+	IPRestrictions param.Field[[]string] `json:"ip_restrictions" api:"required"`
+	// Regions that process messages for this domain, e.g. `["GLOBAL"]` or `["US"]`.
+	Regions param.Field[[]SettingDomainBatchParamsPutsRegion] `json:"regions" api:"required"`
+	// The mailbox folder to scan, for API-scanning domains.
+	Folder param.Field[SettingDomainBatchParamsPutsFolder] `json:"folder"`
+	// Identifier of the CASB integration that authorizes this domain. The integration
+	// also enables API scanning, post-delivery actions, and directory sync.
+	IntegrationID param.Field[string] `json:"integration_id" format:"uuid"`
+	// Number of hops to trace back through received headers when reconstructing the
+	// original message (1-20).
+	LookbackHops param.Field[int64] `json:"lookback_hops"`
+	// Require TLS on inbound connections.
+	RequireTLSInbound param.Field[bool] `json:"require_tls_inbound"`
+	// Require TLS on outbound connections.
+	RequireTLSOutbound param.Field[bool] `json:"require_tls_outbound"`
+	// The mail transport hostname for MX/Inline delivery — the MX record Cloudflare
+	// delivers email to (e.g. `mx.example.com`).
+	Transport param.Field[string] `json:"transport"`
 }
 
 func (r SettingDomainBatchParamsPut) MarshalJSON() (data []byte, err error) {
@@ -3358,6 +3475,7 @@ func (r SettingDomainBatchParamsPutsAllowedDeliveryMode) IsKnown() bool {
 	return false
 }
 
+// The verdict Email Security assigns to a message.
 type SettingDomainBatchParamsPutsDropDisposition string
 
 const (
@@ -3381,6 +3499,7 @@ func (r SettingDomainBatchParamsPutsDropDisposition) IsKnown() bool {
 	return false
 }
 
+// The region that processes messages for this domain.
 type SettingDomainBatchParamsPutsRegion string
 
 const (
@@ -3399,6 +3518,7 @@ func (r SettingDomainBatchParamsPutsRegion) IsKnown() bool {
 	return false
 }
 
+// The mailbox folder to scan, for API-scanning domains.
 type SettingDomainBatchParamsPutsFolder string
 
 const (
@@ -3560,17 +3680,30 @@ type SettingDomainBulkDeleteParams struct {
 
 type SettingDomainEditParams struct {
 	// Identifier.
-	AccountID            param.Field[string]                                       `path:"account_id" api:"required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Delivery modes to onboard the domain through.
 	AllowedDeliveryModes param.Field[[]SettingDomainEditParamsAllowedDeliveryMode] `json:"allowed_delivery_modes"`
-	DropDispositions     param.Field[[]SettingDomainEditParamsDropDisposition]     `json:"drop_dispositions"`
-	Folder               param.Field[SettingDomainEditParamsFolder]                `json:"folder"`
-	IntegrationID        param.Field[string]                                       `json:"integration_id" format:"uuid"`
-	IPRestrictions       param.Field[[]string]                                     `json:"ip_restrictions"`
-	LookbackHops         param.Field[int64]                                        `json:"lookback_hops"`
-	Regions              param.Field[[]SettingDomainEditParamsRegion]              `json:"regions"`
-	RequireTLSInbound    param.Field[bool]                                         `json:"require_tls_inbound"`
-	RequireTLSOutbound   param.Field[bool]                                         `json:"require_tls_outbound"`
-	Transport            param.Field[string]                                       `json:"transport"`
+	// Dispositions to drop instead of delivering, e.g. `["MALICIOUS", "SPAM"]`.
+	DropDispositions param.Field[[]SettingDomainEditParamsDropDisposition] `json:"drop_dispositions"`
+	// The mailbox folder to scan, for API-scanning domains.
+	Folder param.Field[SettingDomainEditParamsFolder] `json:"folder"`
+	// Identifier of the CASB integration that authorizes this domain. The integration
+	// also enables API scanning, post-delivery actions, and directory sync.
+	IntegrationID param.Field[string] `json:"integration_id" format:"uuid"`
+	// Source IP ranges mail is accepted from. Any other source is rejected.
+	IPRestrictions param.Field[[]string] `json:"ip_restrictions"`
+	// Number of hops to trace back through received headers when reconstructing the
+	// original message (1-20).
+	LookbackHops param.Field[int64] `json:"lookback_hops"`
+	// Regions that process messages for this domain, e.g. `["GLOBAL"]` or `["US"]`.
+	Regions param.Field[[]SettingDomainEditParamsRegion] `json:"regions"`
+	// Require TLS on inbound connections.
+	RequireTLSInbound param.Field[bool] `json:"require_tls_inbound"`
+	// Require TLS on outbound connections.
+	RequireTLSOutbound param.Field[bool] `json:"require_tls_outbound"`
+	// The mail transport hostname for MX/Inline delivery — the MX record Cloudflare
+	// delivers email to (e.g. `mx.example.com`).
+	Transport param.Field[string] `json:"transport"`
 }
 
 func (r SettingDomainEditParams) MarshalJSON() (data []byte, err error) {
@@ -3595,6 +3728,7 @@ func (r SettingDomainEditParamsAllowedDeliveryMode) IsKnown() bool {
 	return false
 }
 
+// The verdict Email Security assigns to a message.
 type SettingDomainEditParamsDropDisposition string
 
 const (
@@ -3618,6 +3752,7 @@ func (r SettingDomainEditParamsDropDisposition) IsKnown() bool {
 	return false
 }
 
+// The mailbox folder to scan, for API-scanning domains.
 type SettingDomainEditParamsFolder string
 
 const (
@@ -3633,6 +3768,7 @@ func (r SettingDomainEditParamsFolder) IsKnown() bool {
 	return false
 }
 
+// The region that processes messages for this domain.
 type SettingDomainEditParamsRegion string
 
 const (

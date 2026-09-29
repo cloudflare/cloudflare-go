@@ -6809,8 +6809,16 @@ type SetConfigRuleActionParameters struct {
 	// Whether to enable Signed Exchanges (SXG).
 	//
 	// Deprecated: Signed Exchanges (SXG) is deprecated.
-	SXG  bool                              `json:"sxg"`
-	JSON setConfigRuleActionParametersJSON `json:"-"`
+	SXG bool `json:"sxg"`
+	// Whether to serve the WebMCP bridge script, which exposes the page's tools to
+	// browser AI agents.
+	WebmcpEnabled bool `json:"webmcp_enabled"`
+	// Bundled WebMCP tool packs to activate for matching requests. An empty array
+	// disables all packs. Omitting this parameter leaves the pack selection unchanged.
+	// Does not enable the WebMCP bridge itself. Non-empty selections require the
+	// WebMCP Configuration Rules entitlement.
+	WebmcpPacks []string                          `json:"webmcp_packs"`
+	JSON        setConfigRuleActionParametersJSON `json:"-"`
 }
 
 // setConfigRuleActionParametersJSON contains the JSON metadata for the struct
@@ -6838,6 +6846,8 @@ type setConfigRuleActionParametersJSON struct {
 	ServerSideExcludes      apijson.Field
 	SSL                     apijson.Field
 	SXG                     apijson.Field
+	WebmcpEnabled           apijson.Field
+	WebmcpPacks             apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -7192,6 +7202,14 @@ type SetConfigRuleActionParametersParam struct {
 	//
 	// Deprecated: Signed Exchanges (SXG) is deprecated.
 	SXG param.Field[bool] `json:"sxg"`
+	// Whether to serve the WebMCP bridge script, which exposes the page's tools to
+	// browser AI agents.
+	WebmcpEnabled param.Field[bool] `json:"webmcp_enabled"`
+	// Bundled WebMCP tool packs to activate for matching requests. An empty array
+	// disables all packs. Omitting this parameter leaves the pack selection unchanged.
+	// Does not enable the WebMCP bridge itself. Non-empty selections require the
+	// WebMCP Configuration Rules entitlement.
+	WebmcpPacks param.Field[[]string] `json:"webmcp_packs"`
 }
 
 func (r SetConfigRuleActionParametersParam) MarshalJSON() (data []byte, err error) {

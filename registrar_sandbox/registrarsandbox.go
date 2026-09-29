@@ -297,38 +297,36 @@ type RegistrarSandboxCheckResponseDomain struct {
 	// Indicates programmatic registration eligibility according to a real-time
 	// registry check.
 	//
-	//   - `true`: The domain is available for registration. The response includes the
-	//     `pricing` object.
-	//   - `false`: A restriction prevents registration. See the `reason` field for
-	//     details. Some results, such as premium domains, may still include `tier`.
+	// - `true`: The domain is available for registration. The response includes the
+	//   `pricing` object.
+	// - `false`: A restriction prevents registration. See the `reason` field for
+	//   details. Some results, such as premium domains, may still include `tier`.
 	Registrable bool `json:"registrable" api:"required"`
-	// Provides annual pricing information for a registrable domain. This object
-	// appears only when `registrable` is `true`. The API returns all per-year prices
-	// as strings to preserve decimal precision.
+	// Provides annual pricing information for a given domain. The API returns all
+	// per-year prices as strings to preserve decimal precision.
 	//
-	// `registration_cost` and `renewal_cost` frequently have the same value, but may
-	// differ, especially when registries set different premium rates for initial
-	// registration and renewal. For a multi-year registration (e.g., 4 years),
-	// `registration_cost` applies to the first year and `renewal_cost` applies to each
-	// subsequent year. The values reflect the current registry rate, which may change
-	// over time. Search and Check may surface premium pricing, but this API currently
-	// supports standard registrations only.
+	// `renewal_cost` and `registration_cost` or `transfer_cost` are frequently the
+	// same value, but may differ due to premium rates for certain domains.
+	//
+	// For a multi-year operations, the operation's cost applies to the first year and
+	// `renewal_cost` applies to each subsequent year. The values reflect the current
+	// registry rate, which can change over time.
 	Pricing RegistrarSandboxCheckResponseDomainsPricing `json:"pricing"`
 	// Appears only when `registrable` is `false` and explains the result.
 	//
-	//   - `extension_not_supported_via_api`: Cloudflare Registrar supports this
-	//     extension in the dashboard but currently excludes it from programmatic
-	//     registration through this API. The user can register via
-	//     `https://dash.cloudflare.com/{account_id}/domains/registrations`.
-	//   - `extension_not_supported`: Cloudflare Registrar excludes this extension
-	//     entirely.
-	//   - `extension_disallows_registration`: The extension's registry temporarily or
-	//     permanently freezes new registrations. Registrars currently cannot register
-	//     domains on this extension.
-	//   - `domain_premium`: The domain carries premium pricing. This API currently
-	//     supports standard registrations only.
-	//   - `domain_unavailable`: An existing registration, reservation, or other registry
-	//     restriction makes the domain unavailable on a supported extension.
+	// - `extension_not_supported_via_api`: Cloudflare Registrar supports this
+	//   extension in the dashboard but currently excludes it from programmatic
+	//   registration through this API. The user can register via
+	//   `https://dash.cloudflare.com/{account_id}/domains/registrations`.
+	// - `extension_not_supported`: Cloudflare Registrar excludes this extension
+	//   entirely.
+	// - `extension_disallows_registration`: The extension's registry temporarily or
+	//   permanently freezes new registrations. Registrars currently cannot register
+	//   domains on this extension.
+	// - `domain_premium`: The domain carries premium pricing. This API currently
+	//   supports standard registrations only.
+	// - `domain_unavailable`: An existing registration, reservation, or other registry
+	//   restriction makes the domain unavailable on a supported extension.
 	Reason RegistrarSandboxCheckResponseDomainsReason `json:"reason"`
 	// The pricing tier for this domain. A `registrable` value of `true` always
 	// includes this field, which defaults to `standard` for most domains. A
@@ -360,24 +358,19 @@ func (r registrarSandboxCheckResponseDomainJSON) RawJSON() string {
 	return r.raw
 }
 
-// Provides annual pricing information for a registrable domain. This object
-// appears only when `registrable` is `true`. The API returns all per-year prices
-// as strings to preserve decimal precision.
+// Provides annual pricing information for a given domain. The API returns all
+// per-year prices as strings to preserve decimal precision.
 //
-// `registration_cost` and `renewal_cost` frequently have the same value, but may
-// differ, especially when registries set different premium rates for initial
-// registration and renewal. For a multi-year registration (e.g., 4 years),
-// `registration_cost` applies to the first year and `renewal_cost` applies to each
-// subsequent year. The values reflect the current registry rate, which may change
-// over time. Search and Check may surface premium pricing, but this API currently
-// supports standard registrations only.
+// `renewal_cost` and `registration_cost` or `transfer_cost` are frequently the
+// same value, but may differ due to premium rates for certain domains.
+//
+// For a multi-year operations, the operation's cost applies to the first year and
+// `renewal_cost` applies to each subsequent year. The values reflect the current
+// registry rate, which can change over time.
 type RegistrarSandboxCheckResponseDomainsPricing struct {
 	// ISO-4217 currency code for the prices (e.g., "USD", "EUR", "GBP").
 	Currency string `json:"currency" api:"required"`
-	// The first-year cost to register this domain. For premium domains
-	// (`tier: premium`), the registry sets this price, which may significantly exceed
-	// standard pricing. For multi-year registrations, this cost applies to the first
-	// year only; `renewal_cost` applies to subsequent years.
+	// The first-year cost to register this domain.
 	RegistrationCost string `json:"registration_cost" api:"required"`
 	// Per-year renewal cost for this domain. Applied to each year beyond the first
 	// year of a multi-year registration, and to each annual auto-renewal thereafter.
@@ -493,36 +486,34 @@ type RegistrarSandboxSearchResponseDomain struct {
 	// Indicates domain availability according to potentially stale, non-authoritative
 	// search data.
 	//
-	//   - `true`: The domain appears available. Use POST /domain-check to confirm before
-	//     registration.
-	//   - `false`: Search results mark the domain ineligible for registration through
-	//     this API. See `reason` for details.
+	// - `true`: The domain appears available. Use POST /domain-check to confirm before
+	//   registration.
+	// - `false`: Search results mark the domain ineligible for registration through
+	//   this API. See `reason` for details.
 	Registrable bool `json:"registrable" api:"required"`
-	// Provides annual pricing information for a registrable domain. This object
-	// appears only when `registrable` is `true`. The API returns all per-year prices
-	// as strings to preserve decimal precision.
+	// Provides annual pricing information for a given domain. The API returns all
+	// per-year prices as strings to preserve decimal precision.
 	//
-	// `registration_cost` and `renewal_cost` frequently have the same value, but may
-	// differ, especially when registries set different premium rates for initial
-	// registration and renewal. For a multi-year registration (e.g., 4 years),
-	// `registration_cost` applies to the first year and `renewal_cost` applies to each
-	// subsequent year. The values reflect the current registry rate, which may change
-	// over time. Search and Check may surface premium pricing, but this API currently
-	// supports standard registrations only.
+	// `renewal_cost` and `registration_cost` or `transfer_cost` are frequently the
+	// same value, but may differ due to premium rates for certain domains.
+	//
+	// For a multi-year operations, the operation's cost applies to the first year and
+	// `renewal_cost` applies to each subsequent year. The values reflect the current
+	// registry rate, which can change over time.
 	Pricing RegistrarSandboxSearchResponseDomainsPricing `json:"pricing"`
 	// Appears only when `registrable` is `false` and explains the advisory search
 	// result. Use POST /domain-check for authoritative status.
 	//
-	//   - `extension_not_supported_via_api`: Cloudflare Registrar supports this
-	//     extension in the dashboard but currently excludes it from programmatic
-	//     registration through this API.
-	//   - `extension_not_supported`: Cloudflare Registrar excludes this extension
-	//     entirely.
-	//   - `extension_disallows_registration`: The extension's registry temporarily or
-	//     permanently freezes new registrations.
-	//   - `domain_premium`: The domain carries premium pricing. This API currently
-	//     supports standard registrations only.
-	//   - `domain_unavailable`: The domain appears unavailable.
+	// - `extension_not_supported_via_api`: Cloudflare Registrar supports this
+	//   extension in the dashboard but currently excludes it from programmatic
+	//   registration through this API.
+	// - `extension_not_supported`: Cloudflare Registrar excludes this extension
+	//   entirely.
+	// - `extension_disallows_registration`: The extension's registry temporarily or
+	//   permanently freezes new registrations.
+	// - `domain_premium`: The domain carries premium pricing. This API currently
+	//   supports standard registrations only.
+	// - `domain_unavailable`: The domain appears unavailable.
 	Reason RegistrarSandboxSearchResponseDomainsReason `json:"reason"`
 	// The pricing tier for this domain. A `registrable` value of `true` always
 	// includes this field, which defaults to `standard` for most domains. A
@@ -554,24 +545,19 @@ func (r registrarSandboxSearchResponseDomainJSON) RawJSON() string {
 	return r.raw
 }
 
-// Provides annual pricing information for a registrable domain. This object
-// appears only when `registrable` is `true`. The API returns all per-year prices
-// as strings to preserve decimal precision.
+// Provides annual pricing information for a given domain. The API returns all
+// per-year prices as strings to preserve decimal precision.
 //
-// `registration_cost` and `renewal_cost` frequently have the same value, but may
-// differ, especially when registries set different premium rates for initial
-// registration and renewal. For a multi-year registration (e.g., 4 years),
-// `registration_cost` applies to the first year and `renewal_cost` applies to each
-// subsequent year. The values reflect the current registry rate, which may change
-// over time. Search and Check may surface premium pricing, but this API currently
-// supports standard registrations only.
+// `renewal_cost` and `registration_cost` or `transfer_cost` are frequently the
+// same value, but may differ due to premium rates for certain domains.
+//
+// For a multi-year operations, the operation's cost applies to the first year and
+// `renewal_cost` applies to each subsequent year. The values reflect the current
+// registry rate, which can change over time.
 type RegistrarSandboxSearchResponseDomainsPricing struct {
 	// ISO-4217 currency code for the prices (e.g., "USD", "EUR", "GBP").
 	Currency string `json:"currency" api:"required"`
-	// The first-year cost to register this domain. For premium domains
-	// (`tier: premium`), the registry sets this price, which may significantly exceed
-	// standard pricing. For multi-year registrations, this cost applies to the first
-	// year only; `renewal_cost` applies to subsequent years.
+	// The first-year cost to register this domain.
 	RegistrationCost string `json:"registration_cost" api:"required"`
 	// Per-year renewal cost for this domain. Applied to each year beyond the first
 	// year of a multi-year registration, and to each annual auto-renewal thereafter.
@@ -657,12 +643,12 @@ type RegistrarSandboxCheckParams struct {
 	// List of fully qualified domain names (FQDNs) to check for availability. Each
 	// domain must include the extension.
 	//
-	//   - Minimum: 1 domain.
-	//   - Maximum: 20 domains per request.
-	//   - The response returns domains on unsupported extensions with
-	//     `registrable: false` and a `reason` field.
-	//   - The response may omit malformed domain names (e.g., names missing an
-	//     extension).
+	// - Minimum: 1 domain.
+	// - Maximum: 20 domains per request.
+	// - The response returns domains on unsupported extensions with
+	//   `registrable: false` and a `reason` field.
+	// - The response may omit malformed domain names (e.g., names missing an
+	//   extension).
 	Domains param.Field[[]string] `json:"domains" api:"required"`
 }
 
@@ -818,9 +804,9 @@ type RegistrarSandboxSearchParams struct {
 	// The search term to find domain suggestions. Accepts keywords, phrases, or full
 	// domain names.
 	//
-	//   - Phrases: "coffee shop" returns coffeeshop.com, mycoffeeshop.net, etc.
-	//   - Domain names: "example.com" returns example.com and variations across
-	//     extensions
+	// - Phrases: "coffee shop" returns coffeeshop.com, mycoffeeshop.net, etc.
+	// - Domain names: "example.com" returns example.com and variations across
+	//   extensions
 	Q param.Field[string] `query:"q" api:"required"`
 	// Limits results to specific domain extensions from the supported set. If not
 	// specified, returns results across all supported extensions. Extensions not in

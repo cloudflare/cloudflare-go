@@ -45,8 +45,8 @@ func NewProjectDeploymentService(opts ...option.RequestOption) (r *ProjectDeploy
 	return
 }
 
-// Start a new deployment from production. The repository and account must have
-// already been authorized on the Cloudflare Pages dashboard.
+// Create a Cloudflare Pages deployment from a Git branch or Direct Upload
+// manifest. Git repositories must already be authorized in Cloudflare Pages.
 func (r *ProjectDeploymentService) New(ctx context.Context, projectName string, params ProjectDeploymentNewParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	var env ProjectDeploymentNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -67,7 +67,7 @@ func (r *ProjectDeploymentService) New(ctx context.Context, projectName string, 
 	return res, nil
 }
 
-// Fetch a list of project deployments.
+// List the production or preview deployments for a Cloudflare Pages project.
 func (r *ProjectDeploymentService) List(ctx context.Context, projectName string, params ProjectDeploymentListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Deployment], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -93,12 +93,12 @@ func (r *ProjectDeploymentService) List(ctx context.Context, projectName string,
 	return res, nil
 }
 
-// Fetch a list of project deployments.
+// List the production or preview deployments for a Cloudflare Pages project.
 func (r *ProjectDeploymentService) ListAutoPaging(ctx context.Context, projectName string, params ProjectDeploymentListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Deployment] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, projectName, params, opts...))
 }
 
-// Delete a deployment.
+// Remove a deployment from a Cloudflare Pages project.
 func (r *ProjectDeploymentService) Delete(ctx context.Context, projectName string, deploymentID string, params ProjectDeploymentDeleteParams, opts ...option.RequestOption) (res *ProjectDeploymentDeleteResponse, err error) {
 	var env ProjectDeploymentDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -123,7 +123,7 @@ func (r *ProjectDeploymentService) Delete(ctx context.Context, projectName strin
 	return res, nil
 }
 
-// Fetch information about a deployment.
+// Retrieve the status and details of a Cloudflare Pages deployment.
 func (r *ProjectDeploymentService) Get(ctx context.Context, projectName string, deploymentID string, query ProjectDeploymentGetParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	var env ProjectDeploymentGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -148,7 +148,7 @@ func (r *ProjectDeploymentService) Get(ctx context.Context, projectName string, 
 	return res, nil
 }
 
-// Retry a previous deployment.
+// Retry a previous Cloudflare Pages deployment.
 func (r *ProjectDeploymentService) Retry(ctx context.Context, projectName string, deploymentID string, body ProjectDeploymentRetryParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	var env ProjectDeploymentRetryResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -173,8 +173,7 @@ func (r *ProjectDeploymentService) Retry(ctx context.Context, projectName string
 	return res, nil
 }
 
-// Rollback the production deployment to a previous deployment. You can only
-// rollback to succesful builds on production.
+// Roll back production to a previous successful Cloudflare Pages deployment.
 func (r *ProjectDeploymentService) Rollback(ctx context.Context, projectName string, deploymentID string, body ProjectDeploymentRollbackParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	var env ProjectDeploymentRollbackResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -217,19 +216,20 @@ type ProjectDeploymentNewParams struct {
 	// Worker JavaScript file. Mutually exclusive with `_worker.bundle`. Cannot specify
 	// both `_worker.js` and `_worker.bundle` in the same request.
 	WorkerJS param.Field[io.Reader] `json:"_worker.js" format:"binary"`
-	// The branch to build the new deployment from. The `HEAD` of the branch will be
-	// used. If omitted, the production branch will be used by default.
+	// Git branch to deploy. Uses the branch's `HEAD`; defaults to the project's
+	// production branch.
 	Branch param.Field[string] `json:"branch"`
-	// Boolean string indicating if the working directory has uncommitted changes.
+	// Whether the associated Git working tree has uncommitted changes. Provide `true`
+	// or `false`.
 	CommitDirty param.Field[ProjectDeploymentNewParamsCommitDirty] `json:"commit_dirty"`
-	// Git commit SHA associated with this deployment.
+	// Git commit SHA associated with the deployment.
 	CommitHash param.Field[string] `json:"commit_hash"`
-	// Git commit message associated with this deployment.
+	// Git commit message associated with the deployment.
 	CommitMessage param.Field[string] `json:"commit_message"`
 	// Functions routing configuration file.
 	FunctionsFilepathRoutingConfigJson param.Field[io.Reader] `json:"functions-filepath-routing-config.json" format:"binary"`
-	// JSON string containing a manifest of files to deploy. Maps file paths to their
-	// content hashes. Required for direct upload deployments. Maximum 20,000 entries.
+	// JSON-encoded object mapping deployment file paths to their uploaded content
+	// hashes. Required for Direct Upload deployments. Maximum 20,000 entries.
 	Manifest param.Field[string] `json:"manifest"`
 	// The build output directory path.
 	PagesBuildOutputDir param.Field[string] `json:"pages_build_output_dir"`
@@ -252,7 +252,8 @@ func (r ProjectDeploymentNewParams) MarshalMultipart() (data []byte, contentType
 	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
-// Boolean string indicating if the working directory has uncommitted changes.
+// Whether the associated Git working tree has uncommitted changes. Provide `true`
+// or `false`.
 type ProjectDeploymentNewParamsCommitDirty string
 
 const (
@@ -410,11 +411,11 @@ func (r ProjectDeploymentNewResponseEnvelopeSuccess) IsKnown() bool {
 type ProjectDeploymentListParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// What type of deployments to fetch.
+	// Deployment environment to return. Valid values are `production` and `preview`.
 	Env param.Field[ProjectDeploymentListParamsEnv] `query:"env"`
-	// Which page of deployments to fetch.
+	// Page number of results to return.
 	Page param.Field[int64] `query:"page"`
-	// How many deployments to return per page.
+	// Number of results to return per page.
 	PerPage param.Field[int64] `query:"per_page"`
 }
 
@@ -427,7 +428,7 @@ func (r ProjectDeploymentListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// What type of deployments to fetch.
+// Deployment environment to return. Valid values are `production` and `preview`.
 type ProjectDeploymentListParamsEnv string
 
 const (
@@ -446,8 +447,7 @@ func (r ProjectDeploymentListParamsEnv) IsKnown() bool {
 type ProjectDeploymentDeleteParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Allow deletion of aliased non-production deployments when a normal delete would
-	// be rejected.
+	// Allow deletion when a non-production deployment has an active alias.
 	Force param.Field[bool] `query:"force"`
 }
 

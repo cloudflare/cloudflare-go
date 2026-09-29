@@ -105,6 +105,7 @@ func TestSiteLANUpdateWithOptionalParams(t *testing.T) {
 		magic_transit.SiteLANUpdateParams{
 			AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			BondID:        cloudflare.F(int64(2)),
+			HaLink:        cloudflare.F(true),
 			IsBreakout:    cloudflare.F(true),
 			IsPrioritized: cloudflare.F(true),
 			Name:          cloudflare.F("name"),
@@ -236,6 +237,7 @@ func TestSiteLANEditWithOptionalParams(t *testing.T) {
 		magic_transit.SiteLANEditParams{
 			AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			BondID:        cloudflare.F(int64(2)),
+			HaLink:        cloudflare.F(true),
 			IsBreakout:    cloudflare.F(true),
 			IsPrioritized: cloudflare.F(true),
 			Name:          cloudflare.F("name"),

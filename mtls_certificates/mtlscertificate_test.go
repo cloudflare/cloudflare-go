@@ -87,7 +87,7 @@ func TestMTLSCertificateDelete(t *testing.T) {
 	)
 	_, err := client.MTLSCertificates.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"2458ce5a-0c35-4c7f-82c7-8e9487d3ff60",
 		mtls_certificates.MTLSCertificateDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -117,7 +117,7 @@ func TestMTLSCertificateGet(t *testing.T) {
 	)
 	_, err := client.MTLSCertificates.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"2458ce5a-0c35-4c7f-82c7-8e9487d3ff60",
 		mtls_certificates.MTLSCertificateGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

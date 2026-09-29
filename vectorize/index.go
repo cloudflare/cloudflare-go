@@ -281,7 +281,7 @@ func (r *IndexService) Upsert(ctx context.Context, indexName string, params Inde
 }
 
 type CreateIndex struct {
-	Config IndexDimensionConfiguration `json:"config"`
+	Config CreateIndexConfig `json:"config"`
 	// Specifies the timestamp the resource was created as an ISO8601 string.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Specifies the description of the index.
@@ -311,43 +311,65 @@ func (r createIndexJSON) RawJSON() string {
 	return r.raw
 }
 
-type IndexDimensionConfiguration struct {
+type CreateIndexConfig struct {
 	// Specifies the number of dimensions for the index
 	Dimensions int64 `json:"dimensions" api:"required"`
 	// Specifies the type of metric to use calculating distance.
-	Metric IndexDimensionConfigurationMetric `json:"metric" api:"required"`
-	JSON   indexDimensionConfigurationJSON   `json:"-"`
+	Metric CreateIndexConfigMetric `json:"metric" api:"required"`
+	// Specifies the preset to use for the index.
+	Preset CreateIndexConfigPreset `json:"preset"`
+	JSON   createIndexConfigJSON   `json:"-"`
 }
 
-// indexDimensionConfigurationJSON contains the JSON metadata for the struct
-// [IndexDimensionConfiguration]
-type indexDimensionConfigurationJSON struct {
+// createIndexConfigJSON contains the JSON metadata for the struct
+// [CreateIndexConfig]
+type createIndexConfigJSON struct {
 	Dimensions  apijson.Field
 	Metric      apijson.Field
+	Preset      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IndexDimensionConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *CreateIndexConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r indexDimensionConfigurationJSON) RawJSON() string {
+func (r createIndexConfigJSON) RawJSON() string {
 	return r.raw
 }
 
 // Specifies the type of metric to use calculating distance.
-type IndexDimensionConfigurationMetric string
+type CreateIndexConfigMetric string
 
 const (
-	IndexDimensionConfigurationMetricCosine     IndexDimensionConfigurationMetric = "cosine"
-	IndexDimensionConfigurationMetricEuclidean  IndexDimensionConfigurationMetric = "euclidean"
-	IndexDimensionConfigurationMetricDOTProduct IndexDimensionConfigurationMetric = "dot-product"
+	CreateIndexConfigMetricCosine     CreateIndexConfigMetric = "cosine"
+	CreateIndexConfigMetricEuclidean  CreateIndexConfigMetric = "euclidean"
+	CreateIndexConfigMetricDOTProduct CreateIndexConfigMetric = "dot-product"
 )
 
-func (r IndexDimensionConfigurationMetric) IsKnown() bool {
+func (r CreateIndexConfigMetric) IsKnown() bool {
 	switch r {
-	case IndexDimensionConfigurationMetricCosine, IndexDimensionConfigurationMetricEuclidean, IndexDimensionConfigurationMetricDOTProduct:
+	case CreateIndexConfigMetricCosine, CreateIndexConfigMetricEuclidean, CreateIndexConfigMetricDOTProduct:
+		return true
+	}
+	return false
+}
+
+// Specifies the preset to use for the index.
+type CreateIndexConfigPreset string
+
+const (
+	CreateIndexConfigPresetCfBaaiBgeSmallEnV1_5        CreateIndexConfigPreset = "@cf/baai/bge-small-en-v1.5"
+	CreateIndexConfigPresetCfBaaiBgeBaseEnV1_5         CreateIndexConfigPreset = "@cf/baai/bge-base-en-v1.5"
+	CreateIndexConfigPresetCfBaaiBgeLargeEnV1_5        CreateIndexConfigPreset = "@cf/baai/bge-large-en-v1.5"
+	CreateIndexConfigPresetOpenAITextEmbeddingAda002   CreateIndexConfigPreset = "openai/text-embedding-ada-002"
+	CreateIndexConfigPresetCohereEmbedMultilingualV2_0 CreateIndexConfigPreset = "cohere/embed-multilingual-v2.0"
+)
+
+func (r CreateIndexConfigPreset) IsKnown() bool {
+	switch r {
+	case CreateIndexConfigPresetCfBaaiBgeSmallEnV1_5, CreateIndexConfigPresetCfBaaiBgeBaseEnV1_5, CreateIndexConfigPresetCfBaaiBgeLargeEnV1_5, CreateIndexConfigPresetOpenAITextEmbeddingAda002, CreateIndexConfigPresetCohereEmbedMultilingualV2_0:
 		return true
 	}
 	return false
@@ -365,6 +387,23 @@ func (r IndexDimensionConfigurationParam) MarshalJSON() (data []byte, err error)
 }
 
 func (r IndexDimensionConfigurationParam) implementsIndexNewParamsConfigUnion() {}
+
+// Specifies the type of metric to use calculating distance.
+type IndexDimensionConfigurationMetric string
+
+const (
+	IndexDimensionConfigurationMetricCosine     IndexDimensionConfigurationMetric = "cosine"
+	IndexDimensionConfigurationMetricEuclidean  IndexDimensionConfigurationMetric = "euclidean"
+	IndexDimensionConfigurationMetricDOTProduct IndexDimensionConfigurationMetric = "dot-product"
+)
+
+func (r IndexDimensionConfigurationMetric) IsKnown() bool {
+	switch r {
+	case IndexDimensionConfigurationMetricCosine, IndexDimensionConfigurationMetricEuclidean, IndexDimensionConfigurationMetricDOTProduct:
+		return true
+	}
+	return false
+}
 
 type IndexDeleteByIDsResponse struct {
 	// The unique identifier for the async mutation operation containing the changeset.

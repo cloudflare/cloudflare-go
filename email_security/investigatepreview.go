@@ -34,9 +34,11 @@ func NewInvestigatePreviewService(opts ...option.RequestOption) (r *InvestigateP
 	return
 }
 
-// Generates a preview image for a message that was not flagged as a detection.
-// Useful for investigating benign messages. Returns a base64-encoded PNG
-// screenshot of the email body.
+// Generates a preview image for a message that was not flagged as a detection. The
+// message is rendered from the copy in the recipient's mailbox, so this requires
+// an active integration and only works while the message is still in the
+// recipient's inbox. Returns a base64-encoded PNG screenshot of the email body.
+// For messages with a detection, use the detection preview endpoint instead.
 func (r *InvestigatePreviewService) New(ctx context.Context, params InvestigatePreviewNewParams, opts ...option.RequestOption) (res *InvestigatePreviewNewResponse, err error) {
 	var env InvestigatePreviewNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -53,8 +55,9 @@ func (r *InvestigatePreviewService) New(ctx context.Context, params InvestigateP
 	return res, nil
 }
 
-// Returns a preview of the message body as a base64 encoded PNG image for
-// non-benign messages.
+// Returns a preview of the message body as a base64-encoded PNG image for any
+// message with a detection. For messages without a detection, use the
+// non-detection preview endpoint instead.
 func (r *InvestigatePreviewService) Get(ctx context.Context, investigateID string, query InvestigatePreviewGetParams, opts ...option.RequestOption) (res *InvestigatePreviewGetResponse, err error) {
 	var env InvestigatePreviewGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -122,8 +125,8 @@ func (r investigatePreviewGetResponseJSON) RawJSON() string {
 type InvestigatePreviewNewParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// The identifier of the message.
-	PostfixID param.Field[string] `json:"postfix_id" api:"required"`
+	// Unique identifier for a message retrieved from investigation.
+	ID param.Field[string] `json:"id" api:"required"`
 }
 
 func (r InvestigatePreviewNewParams) MarshalJSON() (data []byte, err error) {

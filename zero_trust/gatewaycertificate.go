@@ -713,6 +713,7 @@ func (r GatewayCertificateGetResponseType) IsKnown() bool {
 }
 
 type GatewayCertificateNewParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sets the certificate validity period in days (range: 1-10,950 days / ~30 years).
 	// Defaults to 1,825 days (5 years). **Important**: This field is only settable
@@ -769,10 +770,12 @@ func (r GatewayCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayCertificateListParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayCertificateDeleteParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -820,6 +823,7 @@ func (r GatewayCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayCertificateActivateParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -867,6 +871,7 @@ func (r GatewayCertificateActivateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayCertificateDeactivateParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -914,6 +919,7 @@ func (r GatewayCertificateDeactivateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayCertificateGetParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

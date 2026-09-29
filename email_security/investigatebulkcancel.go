@@ -73,16 +73,17 @@ type InvestigateBulkCancelNewResponse struct {
 	MessagesPending   int64 `json:"messages_pending" api:"required"`
 	// Messages that discovery skipped (for example, phish submissions, which the job
 	// cannot action).
-	MessagesSkipped         int64                                        `json:"messages_skipped" api:"required"`
-	MessagesSuccessful      int64                                        `json:"messages_successful" api:"required"`
-	SearchParams            InvestigateBulkCancelNewResponseSearchParams `json:"search_params" api:"required"`
-	Status                  InvestigateBulkCancelNewResponseStatus       `json:"status" api:"required"`
-	TotalMessagesDiscovered int64                                        `json:"total_messages_discovered" api:"required"`
-	Comment                 string                                       `json:"comment" api:"nullable"`
-	CompletedAt             time.Time                                    `json:"completed_at" api:"nullable" format:"date-time"`
-	StartedAt               time.Time                                    `json:"started_at" api:"nullable" format:"date-time"`
-	StatusMessage           string                                       `json:"status_message" api:"nullable"`
-	JSON                    investigateBulkCancelNewResponseJSON         `json:"-"`
+	MessagesSkipped    int64                                        `json:"messages_skipped" api:"required"`
+	MessagesSuccessful int64                                        `json:"messages_successful" api:"required"`
+	SearchParams       InvestigateBulkCancelNewResponseSearchParams `json:"search_params" api:"required"`
+	// Status of a bulk action job.
+	Status                  InvestigateBulkCancelNewResponseStatus `json:"status" api:"required"`
+	TotalMessagesDiscovered int64                                  `json:"total_messages_discovered" api:"required"`
+	Comment                 string                                 `json:"comment" api:"nullable"`
+	CompletedAt             time.Time                              `json:"completed_at" api:"nullable" format:"date-time"`
+	StartedAt               time.Time                              `json:"started_at" api:"nullable" format:"date-time"`
+	StatusMessage           string                                 `json:"status_message" api:"nullable"`
+	JSON                    investigateBulkCancelNewResponseJSON   `json:"-"`
 }
 
 // investigateBulkCancelNewResponseJSON contains the JSON metadata for the struct
@@ -117,7 +118,8 @@ func (r investigateBulkCancelNewResponseJSON) RawJSON() string {
 }
 
 type InvestigateBulkCancelNewResponseActionParams struct {
-	Type        InvestigateBulkCancelNewResponseActionParamsType        `json:"type" api:"required"`
+	Type InvestigateBulkCancelNewResponseActionParamsType `json:"type" api:"required"`
+	// The mailbox folder to move messages to.
 	Destination InvestigateBulkCancelNewResponseActionParamsDestination `json:"destination"`
 	// Nonfunctional field. End of life: December 1, 2026.
 	//
@@ -184,6 +186,7 @@ func init() {
 }
 
 type InvestigateBulkCancelNewResponseActionParamsMove struct {
+	// The mailbox folder to move messages to.
 	Destination InvestigateBulkCancelNewResponseActionParamsMoveDestination `json:"destination" api:"required"`
 	Type        InvestigateBulkCancelNewResponseActionParamsMoveType        `json:"type" api:"required"`
 	// Nonfunctional field. End of life: December 1, 2026.
@@ -214,6 +217,7 @@ func (r investigateBulkCancelNewResponseActionParamsMoveJSON) RawJSON() string {
 func (r InvestigateBulkCancelNewResponseActionParamsMove) implementsInvestigateBulkCancelNewResponseActionParams() {
 }
 
+// The mailbox folder to move messages to.
 type InvestigateBulkCancelNewResponseActionParamsMoveDestination string
 
 const (
@@ -323,6 +327,7 @@ func (r InvestigateBulkCancelNewResponseActionParamsType) IsKnown() bool {
 	return false
 }
 
+// The mailbox folder to move messages to.
 type InvestigateBulkCancelNewResponseActionParamsDestination string
 
 const (
@@ -385,27 +390,41 @@ type InvestigateBulkCancelNewResponseSearchParams struct {
 	// life: November 1, 2026.
 	//
 	// Deprecated: Use GET /investigate/{investigate_id}/action_log instead.
-	ActionLog bool   `json:"action_log"`
-	AlertID   string `json:"alert_id" api:"nullable"`
-	// Delivery status of the message.
+	ActionLog bool `json:"action_log"`
+	// Alert ID of the detection to filter by.
+	AlertID string `json:"alert_id" api:"nullable"`
+	// Delivery status to filter by.
 	DeliveryStatus InvestigateBulkCancelNewResponseSearchParamsDeliveryStatus `json:"delivery_status" api:"nullable"`
-	DetectionsOnly bool                                                       `json:"detections_only"`
-	Domain         string                                                     `json:"domain" api:"nullable"`
+	// Whether to include only detections in search results.
+	DetectionsOnly bool `json:"detections_only"`
+	// Match messages that mention this domain — sender domain, recipient domain, or a
+	// domain in a link.
+	Domain string `json:"domain" api:"nullable"`
 	// End of search date range.
-	End              time.Time                                                    `json:"end" format:"date-time"`
-	ExactSubject     string                                                       `json:"exact_subject" api:"nullable"`
+	End time.Time `json:"end" format:"date-time"`
+	// Match messages whose subject line equals this value exactly.
+	ExactSubject string `json:"exact_subject" api:"nullable"`
+	// Dispositions to filter by.
 	FinalDisposition InvestigateBulkCancelNewResponseSearchParamsFinalDisposition `json:"final_disposition" api:"nullable"`
-	MessageAction    InvestigateBulkCancelNewResponseSearchParamsMessageAction    `json:"message_action" api:"nullable"`
-	MessageID        string                                                       `json:"message_id" api:"nullable"`
-	Metric           string                                                       `json:"metric" api:"nullable"`
-	Query            string                                                       `json:"query" api:"nullable"`
-	Recipient        string                                                       `json:"recipient" api:"nullable"`
-	Sender           string                                                       `json:"sender" api:"nullable"`
+	// Message actions to filter by.
+	MessageAction InvestigateBulkCancelNewResponseSearchParamsMessageAction `json:"message_action" api:"nullable"`
+	// Message-ID header value to filter by.
+	MessageID string `json:"message_id" api:"nullable"`
+	// Metric name to filter the search by.
+	Metric string `json:"metric" api:"nullable"`
+	// Space-delimited search term. Case-insensitive.
+	Query string `json:"query" api:"nullable"`
+	// Match messages whose recipient is this email address or domain.
+	Recipient string `json:"recipient" api:"nullable"`
+	// Match messages whose sender is this email address or domain.
+	Sender string `json:"sender" api:"nullable"`
 	// Matches messages whose SMTP HELO server IP address equals this value.
 	SmtpHeloIP string `json:"smtp_helo_ip" api:"nullable"`
 	// Beginning of search date range.
-	Start       time.Time                                        `json:"start" format:"date-time"`
-	Subject     string                                           `json:"subject" api:"nullable"`
+	Start time.Time `json:"start" format:"date-time"`
+	// Match messages whose subject contains these keywords, in any order.
+	Subject string `json:"subject" api:"nullable"`
+	// Whether to search reclassification submissions instead of original messages.
 	Submissions bool                                             `json:"submissions"`
 	JSON        investigateBulkCancelNewResponseSearchParamsJSON `json:"-"`
 }
@@ -443,7 +462,7 @@ func (r investigateBulkCancelNewResponseSearchParamsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Delivery status of the message.
+// Delivery status to filter by.
 type InvestigateBulkCancelNewResponseSearchParamsDeliveryStatus string
 
 const (
@@ -465,6 +484,7 @@ func (r InvestigateBulkCancelNewResponseSearchParamsDeliveryStatus) IsKnown() bo
 	return false
 }
 
+// Dispositions to filter by.
 type InvestigateBulkCancelNewResponseSearchParamsFinalDisposition string
 
 const (
@@ -488,6 +508,7 @@ func (r InvestigateBulkCancelNewResponseSearchParamsFinalDisposition) IsKnown() 
 	return false
 }
 
+// Message actions to filter by.
 type InvestigateBulkCancelNewResponseSearchParamsMessageAction string
 
 const (
@@ -504,6 +525,7 @@ func (r InvestigateBulkCancelNewResponseSearchParamsMessageAction) IsKnown() boo
 	return false
 }
 
+// Status of a bulk action job.
 type InvestigateBulkCancelNewResponseStatus string
 
 const (
@@ -513,12 +535,11 @@ const (
 	InvestigateBulkCancelNewResponseStatusCompleted   InvestigateBulkCancelNewResponseStatus = "COMPLETED"
 	InvestigateBulkCancelNewResponseStatusFailed      InvestigateBulkCancelNewResponseStatus = "FAILED"
 	InvestigateBulkCancelNewResponseStatusCancelled   InvestigateBulkCancelNewResponseStatus = "CANCELLED"
-	InvestigateBulkCancelNewResponseStatusSkipped     InvestigateBulkCancelNewResponseStatus = "SKIPPED"
 )
 
 func (r InvestigateBulkCancelNewResponseStatus) IsKnown() bool {
 	switch r {
-	case InvestigateBulkCancelNewResponseStatusPending, InvestigateBulkCancelNewResponseStatusDiscovering, InvestigateBulkCancelNewResponseStatusProcessing, InvestigateBulkCancelNewResponseStatusCompleted, InvestigateBulkCancelNewResponseStatusFailed, InvestigateBulkCancelNewResponseStatusCancelled, InvestigateBulkCancelNewResponseStatusSkipped:
+	case InvestigateBulkCancelNewResponseStatusPending, InvestigateBulkCancelNewResponseStatusDiscovering, InvestigateBulkCancelNewResponseStatusProcessing, InvestigateBulkCancelNewResponseStatusCompleted, InvestigateBulkCancelNewResponseStatusFailed, InvestigateBulkCancelNewResponseStatusCancelled:
 		return true
 	}
 	return false

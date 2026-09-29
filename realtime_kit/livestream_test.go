@@ -32,7 +32,7 @@ func TestLivestreamGetActiveLivestreamsForLivestreamID(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Livestreams.GetActiveLivestreamsForLivestreamID(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"livestream_id",
 		realtime_kit.LivestreamGetActiveLivestreamsForLivestreamIDParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -64,7 +64,7 @@ func TestLivestreamGetAllLivestreamsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Livestreams.GetAllLivestreams(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		realtime_kit.LivestreamGetAllLivestreamsParams{
 			AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			EndTime:         cloudflare.F(time.Now()),
@@ -102,7 +102,7 @@ func TestLivestreamGetLivestreamAnalyticsCompleteWithOptionalParams(t *testing.T
 	)
 	_, err := client.RealtimeKit.Livestreams.GetLivestreamAnalyticsComplete(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		realtime_kit.LivestreamGetLivestreamAnalyticsCompleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			EndTime:   cloudflare.F(int64(0)),
@@ -136,7 +136,7 @@ func TestLivestreamGetLivestreamAnalyticsDaywiseWithOptionalParams(t *testing.T)
 	)
 	_, err := client.RealtimeKit.Livestreams.GetLivestreamAnalyticsDaywise(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		realtime_kit.LivestreamGetLivestreamAnalyticsDaywiseParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			EndTime:   cloudflare.F(int64(0)),
@@ -170,7 +170,7 @@ func TestLivestreamGetLivestreamSessionDetailsForSessionID(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Livestreams.GetLivestreamSessionDetailsForSessionID(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"livestream-session-id",
 		realtime_kit.LivestreamGetLivestreamSessionDetailsForSessionIDParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -202,7 +202,7 @@ func TestLivestreamGetLivestreamSessionForLivestreamIDWithOptionalParams(t *test
 	)
 	_, err := client.RealtimeKit.Livestreams.GetLivestreamSessionForLivestreamID(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"livestream_id",
 		realtime_kit.LivestreamGetLivestreamSessionForLivestreamIDParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -236,7 +236,7 @@ func TestLivestreamGetMeetingActiveLivestreams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Livestreams.GetMeetingActiveLivestreams(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.LivestreamGetMeetingActiveLivestreamsParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -268,7 +268,7 @@ func TestLivestreamGetOrgAnalyticsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Livestreams.GetOrgAnalytics(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		realtime_kit.LivestreamGetOrgAnalyticsParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			EndDate:   cloudflare.F("2022-09-22T00:00:00Z"),
@@ -301,7 +301,7 @@ func TestLivestreamStartLivestreamingAMeetingWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Livestreams.StartLivestreamingAMeeting(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.LivestreamStartLivestreamingAMeetingParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -338,7 +338,7 @@ func TestLivestreamStopLivestreamingAMeeting(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Livestreams.StopLivestreamingAMeeting(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.LivestreamStopLivestreamingAMeetingParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),

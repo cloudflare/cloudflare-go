@@ -4099,7 +4099,7 @@ type ScriptSearchResponse struct {
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
 	// When the script was last modified.
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
-	// Name of the script, used in URLs and route configuration.
+	// Name of the script.
 	ScriptName string `json:"script_name" api:"required"`
 	// Whether the environment is the default environment.
 	EnvironmentIsDefault bool `json:"environment_is_default"`

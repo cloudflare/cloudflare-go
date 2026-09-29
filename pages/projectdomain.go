@@ -35,7 +35,7 @@ func NewProjectDomainService(opts ...option.RequestOption) (r *ProjectDomainServ
 	return
 }
 
-// Add a new domain for the Pages project.
+// Attach a custom domain to a Cloudflare Pages project.
 func (r *ProjectDomainService) New(ctx context.Context, projectName string, params ProjectDomainNewParams, opts ...option.RequestOption) (res *ProjectDomainNewResponse, err error) {
 	var env ProjectDomainNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,7 +56,7 @@ func (r *ProjectDomainService) New(ctx context.Context, projectName string, para
 	return res, nil
 }
 
-// Fetch a list of all domains associated with a Pages project.
+// List the custom domains associated with a Cloudflare Pages project.
 func (r *ProjectDomainService) List(ctx context.Context, projectName string, query ProjectDomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ProjectDomainListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -82,12 +82,12 @@ func (r *ProjectDomainService) List(ctx context.Context, projectName string, que
 	return res, nil
 }
 
-// Fetch a list of all domains associated with a Pages project.
+// List the custom domains associated with a Cloudflare Pages project.
 func (r *ProjectDomainService) ListAutoPaging(ctx context.Context, projectName string, query ProjectDomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ProjectDomainListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, projectName, query, opts...))
 }
 
-// Delete a Pages project's domain.
+// Remove a custom domain from a Cloudflare Pages project.
 func (r *ProjectDomainService) Delete(ctx context.Context, projectName string, domainName string, body ProjectDomainDeleteParams, opts ...option.RequestOption) (res *ProjectDomainDeleteResponse, err error) {
 	var env ProjectDomainDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -112,7 +112,7 @@ func (r *ProjectDomainService) Delete(ctx context.Context, projectName string, d
 	return res, nil
 }
 
-// Retry the validation status of a single domain.
+// Retry validation for a custom domain attached to a Cloudflare Pages project.
 func (r *ProjectDomainService) Edit(ctx context.Context, projectName string, domainName string, body ProjectDomainEditParams, opts ...option.RequestOption) (res *ProjectDomainEditResponse, err error) {
 	var env ProjectDomainEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -137,7 +137,8 @@ func (r *ProjectDomainService) Edit(ctx context.Context, projectName string, dom
 	return res, nil
 }
 
-// Fetch a single domain.
+// Retrieve the configuration and validation status of a custom domain attached to
+// a Cloudflare Pages project.
 func (r *ProjectDomainService) Get(ctx context.Context, projectName string, domainName string, query ProjectDomainGetParams, opts ...option.RequestOption) (res *ProjectDomainGetResponse, err error) {
 	var env ProjectDomainGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -167,7 +168,7 @@ type ProjectDomainNewResponse struct {
 	CertificateAuthority ProjectDomainNewResponseCertificateAuthority `json:"certificate_authority" api:"required"`
 	CreatedOn            string                                       `json:"created_on" api:"required"`
 	DomainID             string                                       `json:"domain_id" api:"required"`
-	// The domain name.
+	// Fully qualified domain name for the Pages project, such as `example.com`.
 	Name             string                                   `json:"name" api:"required"`
 	Status           ProjectDomainNewResponseStatus           `json:"status" api:"required"`
 	ValidationData   ProjectDomainNewResponseValidationData   `json:"validation_data" api:"required"`
@@ -342,7 +343,7 @@ type ProjectDomainListResponse struct {
 	CertificateAuthority ProjectDomainListResponseCertificateAuthority `json:"certificate_authority" api:"required"`
 	CreatedOn            string                                        `json:"created_on" api:"required"`
 	DomainID             string                                        `json:"domain_id" api:"required"`
-	// The domain name.
+	// Fully qualified domain name for the Pages project, such as `example.com`.
 	Name             string                                    `json:"name" api:"required"`
 	Status           ProjectDomainListResponseStatus           `json:"status" api:"required"`
 	ValidationData   ProjectDomainListResponseValidationData   `json:"validation_data" api:"required"`
@@ -519,7 +520,7 @@ type ProjectDomainEditResponse struct {
 	CertificateAuthority ProjectDomainEditResponseCertificateAuthority `json:"certificate_authority" api:"required"`
 	CreatedOn            string                                        `json:"created_on" api:"required"`
 	DomainID             string                                        `json:"domain_id" api:"required"`
-	// The domain name.
+	// Fully qualified domain name for the Pages project, such as `example.com`.
 	Name             string                                    `json:"name" api:"required"`
 	Status           ProjectDomainEditResponseStatus           `json:"status" api:"required"`
 	ValidationData   ProjectDomainEditResponseValidationData   `json:"validation_data" api:"required"`
@@ -694,7 +695,7 @@ type ProjectDomainGetResponse struct {
 	CertificateAuthority ProjectDomainGetResponseCertificateAuthority `json:"certificate_authority" api:"required"`
 	CreatedOn            string                                       `json:"created_on" api:"required"`
 	DomainID             string                                       `json:"domain_id" api:"required"`
-	// The domain name.
+	// Fully qualified domain name for the Pages project, such as `example.com`.
 	Name             string                                   `json:"name" api:"required"`
 	Status           ProjectDomainGetResponseStatus           `json:"status" api:"required"`
 	ValidationData   ProjectDomainGetResponseValidationData   `json:"validation_data" api:"required"`
@@ -867,7 +868,7 @@ func (r ProjectDomainGetResponseVerificationDataStatus) IsKnown() bool {
 type ProjectDomainNewParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// The domain name.
+	// Fully qualified domain name for the Pages project, such as `example.com`.
 	Name param.Field[string] `json:"name" api:"required"`
 }
 

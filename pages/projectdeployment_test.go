@@ -110,7 +110,7 @@ func TestProjectDeploymentDeleteWithOptionalParams(t *testing.T) {
 	_, err := client.Pages.Projects.Deployments.Delete(
 		context.TODO(),
 		"this-is-my-project-01",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"f64788e9-fccd-4d4a-a28a-cb84f88f6e12",
 		pages.ProjectDeploymentDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Force:     cloudflare.F(true),
@@ -142,7 +142,7 @@ func TestProjectDeploymentGet(t *testing.T) {
 	_, err := client.Pages.Projects.Deployments.Get(
 		context.TODO(),
 		"this-is-my-project-01",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"f64788e9-fccd-4d4a-a28a-cb84f88f6e12",
 		pages.ProjectDeploymentGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -173,7 +173,7 @@ func TestProjectDeploymentRetry(t *testing.T) {
 	_, err := client.Pages.Projects.Deployments.Retry(
 		context.TODO(),
 		"this-is-my-project-01",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"f64788e9-fccd-4d4a-a28a-cb84f88f6e12",
 		pages.ProjectDeploymentRetryParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -204,7 +204,7 @@ func TestProjectDeploymentRollback(t *testing.T) {
 	_, err := client.Pages.Projects.Deployments.Rollback(
 		context.TODO(),
 		"this-is-my-project-01",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"f64788e9-fccd-4d4a-a28a-cb84f88f6e12",
 		pages.ProjectDeploymentRollbackParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

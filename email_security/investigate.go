@@ -54,7 +54,7 @@ func NewInvestigateService(opts ...option.RequestOption) (r *InvestigateService)
 	return
 }
 
-// Returns information for each email that matches the search parameter(s).
+// Returns information for each email that matches the provided search parameters.
 func (r *InvestigateService) List(ctx context.Context, params InvestigateListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InvestigateListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -76,7 +76,7 @@ func (r *InvestigateService) List(ctx context.Context, params InvestigateListPar
 	return res, nil
 }
 
-// Returns information for each email that matches the search parameter(s).
+// Returns information for each email that matches the provided search parameters.
 func (r *InvestigateService) ListAutoPaging(ctx context.Context, params InvestigateListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[InvestigateListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -123,13 +123,14 @@ type InvestigateListResponse struct {
 	// Deprecated, use `scanned_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `scanned_at` instead.
-	Ts               string                                  `json:"ts" api:"required"`
-	AlertID          string                                  `json:"alert_id" api:"nullable"`
-	DeliveryMode     InvestigateListResponseDeliveryMode     `json:"delivery_mode" api:"nullable"`
-	DeliveryStatus   []InvestigateListResponseDeliveryStatus `json:"delivery_status" api:"nullable"`
-	EdfHash          string                                  `json:"edf_hash" api:"nullable"`
-	EnvelopeFrom     string                                  `json:"envelope_from" api:"nullable"`
-	EnvelopeTo       []string                                `json:"envelope_to" api:"nullable"`
+	Ts             string                                  `json:"ts" api:"required"`
+	AlertID        string                                  `json:"alert_id" api:"nullable"`
+	DeliveryMode   InvestigateListResponseDeliveryMode     `json:"delivery_mode" api:"nullable"`
+	DeliveryStatus []InvestigateListResponseDeliveryStatus `json:"delivery_status" api:"nullable"`
+	EdfHash        string                                  `json:"edf_hash" api:"nullable"`
+	EnvelopeFrom   string                                  `json:"envelope_from" api:"nullable"`
+	EnvelopeTo     []string                                `json:"envelope_to" api:"nullable"`
+	// The verdict Email Security assigns to a message.
 	FinalDisposition InvestigateListResponseFinalDisposition `json:"final_disposition" api:"nullable"`
 	// Deprecated, use the `findings` field from
 	// `GET /investigate/{investigate_id}/detections` instead. End of life: November
@@ -419,6 +420,7 @@ func (r InvestigateListResponseDeliveryStatus) IsKnown() bool {
 	return false
 }
 
+// The verdict Email Security assigns to a message.
 type InvestigateListResponseFinalDisposition string
 
 const (
@@ -443,16 +445,17 @@ func (r InvestigateListResponseFinalDisposition) IsKnown() bool {
 }
 
 type InvestigateListResponseFinding struct {
-	Attachment string                                   `json:"attachment" api:"nullable"`
-	Detail     string                                   `json:"detail" api:"nullable"`
-	Detection  InvestigateListResponseFindingsDetection `json:"detection" api:"nullable"`
-	Field      string                                   `json:"field" api:"nullable"`
-	Name       string                                   `json:"name" api:"nullable"`
-	Portion    string                                   `json:"portion" api:"nullable"`
-	Reason     string                                   `json:"reason" api:"nullable"`
-	Score      float64                                  `json:"score" api:"nullable"`
-	Value      string                                   `json:"value" api:"nullable"`
-	JSON       investigateListResponseFindingJSON       `json:"-"`
+	Attachment string `json:"attachment" api:"nullable"`
+	Detail     string `json:"detail" api:"nullable"`
+	// The verdict Email Security assigns to a message.
+	Detection InvestigateListResponseFindingsDetection `json:"detection" api:"nullable"`
+	Field     string                                   `json:"field" api:"nullable"`
+	Name      string                                   `json:"name" api:"nullable"`
+	Portion   string                                   `json:"portion" api:"nullable"`
+	Reason    string                                   `json:"reason" api:"nullable"`
+	Score     float64                                  `json:"score" api:"nullable"`
+	Value     string                                   `json:"value" api:"nullable"`
+	JSON      investigateListResponseFindingJSON       `json:"-"`
 }
 
 // investigateListResponseFindingJSON contains the JSON metadata for the struct
@@ -479,6 +482,7 @@ func (r investigateListResponseFindingJSON) RawJSON() string {
 	return r.raw
 }
 
+// The verdict Email Security assigns to a message.
 type InvestigateListResponseFindingsDetection string
 
 const (
@@ -619,13 +623,14 @@ type InvestigateGetResponse struct {
 	// Deprecated, use `scanned_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `scanned_at` instead.
-	Ts               string                                 `json:"ts" api:"required"`
-	AlertID          string                                 `json:"alert_id" api:"nullable"`
-	DeliveryMode     InvestigateGetResponseDeliveryMode     `json:"delivery_mode" api:"nullable"`
-	DeliveryStatus   []InvestigateGetResponseDeliveryStatus `json:"delivery_status" api:"nullable"`
-	EdfHash          string                                 `json:"edf_hash" api:"nullable"`
-	EnvelopeFrom     string                                 `json:"envelope_from" api:"nullable"`
-	EnvelopeTo       []string                               `json:"envelope_to" api:"nullable"`
+	Ts             string                                 `json:"ts" api:"required"`
+	AlertID        string                                 `json:"alert_id" api:"nullable"`
+	DeliveryMode   InvestigateGetResponseDeliveryMode     `json:"delivery_mode" api:"nullable"`
+	DeliveryStatus []InvestigateGetResponseDeliveryStatus `json:"delivery_status" api:"nullable"`
+	EdfHash        string                                 `json:"edf_hash" api:"nullable"`
+	EnvelopeFrom   string                                 `json:"envelope_from" api:"nullable"`
+	EnvelopeTo     []string                               `json:"envelope_to" api:"nullable"`
+	// The verdict Email Security assigns to a message.
 	FinalDisposition InvestigateGetResponseFinalDisposition `json:"final_disposition" api:"nullable"`
 	// Deprecated, use the `findings` field from
 	// `GET /investigate/{investigate_id}/detections` instead. End of life: November
@@ -915,6 +920,7 @@ func (r InvestigateGetResponseDeliveryStatus) IsKnown() bool {
 	return false
 }
 
+// The verdict Email Security assigns to a message.
 type InvestigateGetResponseFinalDisposition string
 
 const (
@@ -939,16 +945,17 @@ func (r InvestigateGetResponseFinalDisposition) IsKnown() bool {
 }
 
 type InvestigateGetResponseFinding struct {
-	Attachment string                                  `json:"attachment" api:"nullable"`
-	Detail     string                                  `json:"detail" api:"nullable"`
-	Detection  InvestigateGetResponseFindingsDetection `json:"detection" api:"nullable"`
-	Field      string                                  `json:"field" api:"nullable"`
-	Name       string                                  `json:"name" api:"nullable"`
-	Portion    string                                  `json:"portion" api:"nullable"`
-	Reason     string                                  `json:"reason" api:"nullable"`
-	Score      float64                                 `json:"score" api:"nullable"`
-	Value      string                                  `json:"value" api:"nullable"`
-	JSON       investigateGetResponseFindingJSON       `json:"-"`
+	Attachment string `json:"attachment" api:"nullable"`
+	Detail     string `json:"detail" api:"nullable"`
+	// The verdict Email Security assigns to a message.
+	Detection InvestigateGetResponseFindingsDetection `json:"detection" api:"nullable"`
+	Field     string                                  `json:"field" api:"nullable"`
+	Name      string                                  `json:"name" api:"nullable"`
+	Portion   string                                  `json:"portion" api:"nullable"`
+	Reason    string                                  `json:"reason" api:"nullable"`
+	Score     float64                                 `json:"score" api:"nullable"`
+	Value     string                                  `json:"value" api:"nullable"`
+	JSON      investigateGetResponseFindingJSON       `json:"-"`
 }
 
 // investigateGetResponseFindingJSON contains the JSON metadata for the struct
@@ -975,6 +982,7 @@ func (r investigateGetResponseFindingJSON) RawJSON() string {
 	return r.raw
 }
 
+// The verdict Email Security assigns to a message.
 type InvestigateGetResponseFindingsDetection string
 
 const (
@@ -1099,13 +1107,16 @@ func (r InvestigateGetResponseValidationSPF) IsKnown() bool {
 type InvestigateListParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	AlertID   param.Field[string] `query:"alert_id"`
-	Cursor    param.Field[string] `query:"cursor"`
+	// Filter by alert ID.
+	AlertID param.Field[string] `query:"alert_id"`
+	// Pagination cursor from the previous response's `result_info`.
+	Cursor param.Field[string] `query:"cursor"`
 	// Delivery status to filter by.
 	DeliveryStatus param.Field[InvestigateListParamsDeliveryStatus] `query:"delivery_status"`
 	// Whether to include only detections in search results.
 	DetectionsOnly param.Field[bool] `query:"detections_only"`
-	// Sender domains to filter by.
+	// Filter by a domain found in the email — sender domain, recipient domain, or a
+	// domain in a link.
 	Domain param.Field[string] `query:"domain"`
 	// The end of the search date range. Defaults to `now`.
 	End param.Field[time.Time] `query:"end" format:"date-time"`
@@ -1113,22 +1124,29 @@ type InvestigateListParams struct {
 	FinalDisposition param.Field[InvestigateListParamsFinalDisposition] `query:"final_disposition"`
 	// Message actions to filter by.
 	MessageAction param.Field[InvestigateListParamsMessageAction] `query:"message_action"`
-	MessageID     param.Field[string]                             `query:"message_id"`
-	Metric        param.Field[string]                             `query:"metric"`
+	// Filter by the RFC 5322 Message-ID header.
+	MessageID param.Field[string] `query:"message_id"`
+	// Metric to aggregate the results by.
+	Metric param.Field[string] `query:"metric"`
 	// Deprecated: Use cursor pagination instead. End of life: November 1, 2026.
 	Page param.Field[int64] `query:"page"`
 	// The number of results per page. Maximum value is 1000.
 	PerPage param.Field[int64] `query:"per_page"`
-	// Space-delimited search term. Case-insensitive.
-	Query     param.Field[string] `query:"query"`
+	// Space-delimited term matched case-insensitively against message metadata —
+	// sender, recipient, subject, attachment names and hashes, and message ID.
+	Query param.Field[string] `query:"query"`
+	// Filter by recipient. Matches an email address or a domain.
 	Recipient param.Field[string] `query:"recipient"`
-	Sender    param.Field[string] `query:"sender"`
+	// Filter by sender. Matches an email address or a domain.
+	Sender param.Field[string] `query:"sender"`
 	// Matches messages whose SMTP HELO server IP address equals this value.
 	SmtpHeloIP param.Field[string] `query:"smtp_helo_ip"`
 	// The beginning of the search date range. Defaults to `now - 30 days`. Must not be
 	// in the future.
-	Start   param.Field[time.Time] `query:"start" format:"date-time"`
-	Subject param.Field[string]    `query:"subject"`
+	Start param.Field[time.Time] `query:"start" format:"date-time"`
+	// Search for messages containing individual keywords in any order within the
+	// subject.
+	Subject param.Field[string] `query:"subject"`
 }
 
 // URLQuery serializes [InvestigateListParams]'s query parameters as `url.Values`.

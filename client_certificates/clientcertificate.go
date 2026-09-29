@@ -150,7 +150,7 @@ func (r *ClientCertificateService) Get(ctx context.Context, clientCertificateID 
 }
 
 type ClientCertificate struct {
-	// Identifier.
+	// Client Certificate Tag
 	ID string `json:"id"`
 	// The Client Certificate PEM.
 	Certificate string `json:"certificate"`

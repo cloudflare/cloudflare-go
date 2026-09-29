@@ -218,7 +218,7 @@ func (r DomainValidationType) IsKnown() bool {
 }
 
 type CustomHostnameNewResponse struct {
-	// Identifier.
+	// Custom hostname identifier tag.
 	ID string `json:"id" api:"required"`
 	// The custom hostname that will point to your hostname via CNAME.
 	Hostname string `json:"hostname" api:"required"`
@@ -712,7 +712,7 @@ func (r CustomHostnameNewResponseStatus) IsKnown() bool {
 }
 
 type CustomHostnameListResponse struct {
-	// Identifier.
+	// Custom hostname identifier tag.
 	ID string `json:"id" api:"required"`
 	// The custom hostname that will point to your hostname via CNAME.
 	Hostname string `json:"hostname" api:"required"`
@@ -1206,7 +1206,7 @@ func (r CustomHostnameListResponseStatus) IsKnown() bool {
 }
 
 type CustomHostnameDeleteResponse struct {
-	// Identifier.
+	// Custom hostname identifier tag.
 	ID   string                           `json:"id"`
 	JSON customHostnameDeleteResponseJSON `json:"-"`
 }
@@ -1228,7 +1228,7 @@ func (r customHostnameDeleteResponseJSON) RawJSON() string {
 }
 
 type CustomHostnameEditResponse struct {
-	// Identifier.
+	// Custom hostname identifier tag.
 	ID string `json:"id" api:"required"`
 	// The custom hostname that will point to your hostname via CNAME.
 	Hostname string `json:"hostname" api:"required"`
@@ -1722,7 +1722,7 @@ func (r CustomHostnameEditResponseStatus) IsKnown() bool {
 }
 
 type CustomHostnameGetResponse struct {
-	// Identifier.
+	// Custom hostname identifier tag.
 	ID string `json:"id" api:"required"`
 	// The custom hostname that will point to your hostname via CNAME.
 	Hostname string `json:"hostname" api:"required"`

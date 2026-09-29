@@ -96,7 +96,7 @@ func (r *CertificatePackCertificateService) Delete(ctx context.Context, customHo
 }
 
 type CertificatePackCertificateUpdateResponse struct {
-	// Identifier.
+	// Custom hostname identifier tag.
 	ID string `json:"id" api:"required"`
 	// The custom hostname that will point to your hostname via CNAME.
 	Hostname string `json:"hostname" api:"required"`
@@ -595,7 +595,7 @@ func (r CertificatePackCertificateUpdateResponseStatus) IsKnown() bool {
 }
 
 type CertificatePackCertificateDeleteResponse struct {
-	// Identifier.
+	// Custom hostname identifier tag.
 	ID   string                                       `json:"id"`
 	JSON certificatePackCertificateDeleteResponseJSON `json:"-"`
 }

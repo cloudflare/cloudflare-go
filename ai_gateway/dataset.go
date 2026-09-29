@@ -41,7 +41,9 @@ func NewDatasetService(opts ...option.RequestOption) (r *DatasetService) {
 	return
 }
 
-// Creates a new AI Gateway.
+// Creates a dataset that selects gateway logs matching the specified filters for
+// use in evaluations. Evaluations and datasets are deprecated and unavailable to
+// new accounts.
 func (r *DatasetService) New(ctx context.Context, gatewayID string, params DatasetNewParams, opts ...option.RequestOption) (res *DatasetNewResponse, err error) {
 	var env DatasetNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -62,7 +64,8 @@ func (r *DatasetService) New(ctx context.Context, gatewayID string, params Datas
 	return res, nil
 }
 
-// Updates an existing AI Gateway dataset.
+// Replaces the name, log filters, and enabled state of a dataset. Evaluations and
+// datasets are deprecated and unavailable to new accounts.
 func (r *DatasetService) Update(ctx context.Context, gatewayID string, id string, params DatasetUpdateParams, opts ...option.RequestOption) (res *DatasetUpdateResponse, err error) {
 	var env DatasetUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -87,7 +90,8 @@ func (r *DatasetService) Update(ctx context.Context, gatewayID string, id string
 	return res, nil
 }
 
-// Lists all AI Gateway evaluator types configured for the account.
+// Lists the datasets defined for an AI Gateway. Evaluations and datasets are
+// deprecated and unavailable to new accounts.
 func (r *DatasetService) List(ctx context.Context, gatewayID string, params DatasetListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DatasetListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -113,12 +117,14 @@ func (r *DatasetService) List(ctx context.Context, gatewayID string, params Data
 	return res, nil
 }
 
-// Lists all AI Gateway evaluator types configured for the account.
+// Lists the datasets defined for an AI Gateway. Evaluations and datasets are
+// deprecated and unavailable to new accounts.
 func (r *DatasetService) ListAutoPaging(ctx context.Context, gatewayID string, params DatasetListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[DatasetListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, gatewayID, params, opts...))
 }
 
-// Deletes an AI Gateway dataset.
+// Deletes a dataset. Evaluations and datasets are deprecated and unavailable to
+// new accounts.
 func (r *DatasetService) Delete(ctx context.Context, gatewayID string, id string, body DatasetDeleteParams, opts ...option.RequestOption) (res *DatasetDeleteResponse, err error) {
 	var env DatasetDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -143,7 +149,8 @@ func (r *DatasetService) Delete(ctx context.Context, gatewayID string, id string
 	return res, nil
 }
 
-// Retrieves details for a specific AI Gateway dataset.
+// Retrieves a dataset and its log filters. Evaluations and datasets are deprecated
+// and unavailable to new accounts.
 func (r *DatasetService) Get(ctx context.Context, gatewayID string, id string, query DatasetGetParams, opts ...option.RequestOption) (res *DatasetGetResponse, err error) {
 	var env DatasetGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -173,7 +180,7 @@ type DatasetNewResponse struct {
 	CreatedAt time.Time                  `json:"created_at" api:"required" format:"date-time"`
 	Enable    bool                       `json:"enable" api:"required"`
 	Filters   []DatasetNewResponseFilter `json:"filters" api:"required"`
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	GatewayID  string                 `json:"gateway_id" api:"required"`
 	ModifiedAt time.Time              `json:"modified_at" api:"required" format:"date-time"`
 	Name       string                 `json:"name" api:"required"`
@@ -304,7 +311,7 @@ type DatasetUpdateResponse struct {
 	CreatedAt time.Time                     `json:"created_at" api:"required" format:"date-time"`
 	Enable    bool                          `json:"enable" api:"required"`
 	Filters   []DatasetUpdateResponseFilter `json:"filters" api:"required"`
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	GatewayID  string                    `json:"gateway_id" api:"required"`
 	ModifiedAt time.Time                 `json:"modified_at" api:"required" format:"date-time"`
 	Name       string                    `json:"name" api:"required"`
@@ -435,7 +442,7 @@ type DatasetListResponse struct {
 	CreatedAt time.Time                   `json:"created_at" api:"required" format:"date-time"`
 	Enable    bool                        `json:"enable" api:"required"`
 	Filters   []DatasetListResponseFilter `json:"filters" api:"required"`
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	GatewayID  string                  `json:"gateway_id" api:"required"`
 	ModifiedAt time.Time               `json:"modified_at" api:"required" format:"date-time"`
 	Name       string                  `json:"name" api:"required"`
@@ -566,7 +573,7 @@ type DatasetDeleteResponse struct {
 	CreatedAt time.Time                     `json:"created_at" api:"required" format:"date-time"`
 	Enable    bool                          `json:"enable" api:"required"`
 	Filters   []DatasetDeleteResponseFilter `json:"filters" api:"required"`
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	GatewayID  string                    `json:"gateway_id" api:"required"`
 	ModifiedAt time.Time                 `json:"modified_at" api:"required" format:"date-time"`
 	Name       string                    `json:"name" api:"required"`
@@ -697,7 +704,7 @@ type DatasetGetResponse struct {
 	CreatedAt time.Time                  `json:"created_at" api:"required" format:"date-time"`
 	Enable    bool                       `json:"enable" api:"required"`
 	Filters   []DatasetGetResponseFilter `json:"filters" api:"required"`
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	GatewayID  string                 `json:"gateway_id" api:"required"`
 	ModifiedAt time.Time              `json:"modified_at" api:"required" format:"date-time"`
 	Name       string                 `json:"name" api:"required"`

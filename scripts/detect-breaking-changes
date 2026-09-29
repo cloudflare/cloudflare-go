@@ -287,7 +287,6 @@ TEST_PATHS=(
 	addressing/addressmap_test.go
 	addressing/addressmapaccount_test.go
 	addressing/addressmapip_test.go
-	addressing/addressmapzone_test.go
 	addressing/loadocument_test.go
 	addressing/prefix_test.go
 	addressing/prefixservicebinding_test.go
@@ -781,13 +780,13 @@ TEST_PATHS=(
 	managed_defense/vulnerabilitydiscoveryrepository_test.go
 	managed_defense/vulnerabilitydiscoveryscan_test.go
 	managed_defense/vulnerabilitydiscoveryreport_test.go
-	cloudforce_one/scanresult_test.go
-	cloudforce_one/scanconfig_test.go
 	cloudforce_one/binarystorage_test.go
 	cloudforce_one/request_test.go
 	cloudforce_one/requestmessage_test.go
 	cloudforce_one/requestpriority_test.go
 	cloudforce_one/requestasset_test.go
+	cloudforce_one/scanresult_test.go
+	cloudforce_one/scanconfig_test.go
 	cloudforce_one/threatevent_test.go
 	cloudforce_one/threateventaggregate_test.go
 	cloudforce_one/threateventgraphql_test.go
@@ -815,6 +814,18 @@ TEST_PATHS=(
 	cloudforce_one/threateventtargetindustry_test.go
 	cloudforce_one/threateventtargetindustrybydataset_test.go
 	cloudforce_one/threateventtargetindustrycatalog_test.go
+	cloudforce_one/threatsignalsearch_test.go
+	cloudforce_one/threatsignalcategory_test.go
+	cloudforce_one/threatsignalfeed_test.go
+	cloudforce_one/threatsignalfeedraw_test.go
+	cloudforce_one/threatsignalfeedskill_test.go
+	cloudforce_one/threatsignalarticle_test.go
+	cloudforce_one/threatsignalarticlecontent_test.go
+	cloudforce_one/threatsignalarticletag_test.go
+	cloudforce_one/threatsignalarticleskilloutput_test.go
+	cloudforce_one/threatsignalindicator_test.go
+	cloudforce_one/threatsignalskill_test.go
+	cloudforce_one/threatsignalskilltagcategory_test.go
 	ai_gateway/aigateway_test.go
 	ai_gateway/evaluationtype_test.go
 	ai_gateway/customprovider_test.go

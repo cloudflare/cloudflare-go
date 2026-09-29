@@ -78,7 +78,7 @@ func (r PrioritizeUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrioritizeUpdateParamsCertificate struct {
-	// Identifier.
+	// Custom certificate identifier tag.
 	ID param.Field[string] `json:"id"`
 	// The order/priority in which the certificate will be used in a request. The
 	// higher priority will break ties across overlapping 'legacy_custom' certificates,

@@ -106,15 +106,15 @@ func (r spfInspectGetResponseJSON) RawJSON() string {
 type SPFInspectGetResponseError struct {
 	// Error code. Known values:
 	//
-	//   - `lookup_failed` — DNS TXT lookup failed
-	//   - `spf_not_found` — no SPF record found
-	//   - `invalid_spf` — record does not start with `v=spf1`
-	//   - `invalid_domain` — PSL validation failed
-	//   - `loop_detected` — include/redirect cycle detected
-	//   - `invalid_mechanism` — unrecognised or malformed mechanism
-	//   - `resource_limit_exceeded` — internal resource protection limits exceeded
-	//     (recursion depth or query budget)
-	//   - `max_lookups` — RFC 7208 10-lookup limit exceeded
+	// - `lookup_failed` — DNS TXT lookup failed
+	// - `spf_not_found` — no SPF record found
+	// - `invalid_spf` — record does not start with `v=spf1`
+	// - `invalid_domain` — PSL validation failed
+	// - `loop_detected` — include/redirect cycle detected
+	// - `invalid_mechanism` — unrecognised or malformed mechanism
+	// - `resource_limit_exceeded` — internal resource protection limits exceeded
+	//   (recursion depth or query budget)
+	// - `max_lookups` — RFC 7208 10-lookup limit exceeded
 	Code string `json:"code" api:"required"`
 	// Domain where the error occurred
 	Domain string `json:"domain" api:"required"`
@@ -122,11 +122,11 @@ type SPFInspectGetResponseError struct {
 	Message string `json:"message" api:"required"`
 	// Additional error-specific details (optional).
 	//
-	//   - For `invalid_domain` errors: the invalid domain string
-	//   - For `invalid_mechanism` errors: the invalid mechanism text (e.g.,
-	//     "invalidmech123")
-	//   - For `loop_detected` errors: the domain that caused the loop
-	//   - For other error types: not present
+	// - For `invalid_domain` errors: the invalid domain string
+	// - For `invalid_mechanism` errors: the invalid mechanism text (e.g.,
+	//   "invalidmech123")
+	// - For `loop_detected` errors: the domain that caused the loop
+	// - For other error types: not present
 	Details string                         `json:"details"`
 	JSON    spfInspectGetResponseErrorJSON `json:"-"`
 }

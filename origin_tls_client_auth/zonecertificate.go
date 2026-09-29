@@ -130,7 +130,7 @@ func (r *ZoneCertificateService) Get(ctx context.Context, certificateID string, 
 }
 
 type ZoneAuthenticatedOriginPull struct {
-	// Identifier.
+	// Certificate identifier tag.
 	ID string `json:"id"`
 	// The zone's leaf certificate.
 	Certificate string `json:"certificate"`
@@ -191,7 +191,7 @@ func (r ZoneAuthenticatedOriginPullStatus) IsKnown() bool {
 }
 
 type ZoneCertificateNewResponse struct {
-	// Identifier.
+	// Certificate identifier tag.
 	ID string `json:"id"`
 	// The zone's leaf certificate.
 	Certificate string `json:"certificate"`
@@ -223,7 +223,7 @@ func (r zoneCertificateNewResponseJSON) RawJSON() string {
 }
 
 type ZoneCertificateListResponse struct {
-	// Identifier.
+	// Certificate identifier tag.
 	ID string `json:"id"`
 	// The zone's leaf certificate.
 	Certificate string `json:"certificate"`
@@ -255,7 +255,7 @@ func (r zoneCertificateListResponseJSON) RawJSON() string {
 }
 
 type ZoneCertificateDeleteResponse struct {
-	// Identifier.
+	// Certificate identifier tag.
 	ID string `json:"id"`
 	// The zone's leaf certificate.
 	Certificate string `json:"certificate"`
@@ -287,7 +287,7 @@ func (r zoneCertificateDeleteResponseJSON) RawJSON() string {
 }
 
 type ZoneCertificateGetResponse struct {
-	// Identifier.
+	// Certificate identifier tag.
 	ID string `json:"id"`
 	// The zone's leaf certificate.
 	Certificate string `json:"certificate"`

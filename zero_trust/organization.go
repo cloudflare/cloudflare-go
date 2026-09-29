@@ -258,6 +258,13 @@ type Organization struct {
 	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
 	// h.
 	SessionDuration string `json:"session_duration"`
+	// Enables new behaviors for requests made with Access service tokens. Unauthorized
+	// requests emit audit logs, and return a 401 or 403 status code in the response
+	// instead of redirecting to the login page. Successful requests no longer receive
+	// a CF_Authorization cookie in the response. Zero Trust organizations created on
+	// or after October 5, 2026 will have this setting enabled by default, and cannot
+	// disable it.
+	StrictServiceTokenAuth bool `json:"strict_service_token_auth"`
 	// A description of the reason why the UI read only field is being toggled.
 	UIReadOnlyToggleReason string `json:"ui_read_only_toggle_reason"`
 	// The amount of time a user seat is inactive before it expires. When the user seat
@@ -291,6 +298,7 @@ type organizationJSON struct {
 	Name                                   apijson.Field
 	ServiceTokenInactivity                 apijson.Field
 	SessionDuration                        apijson.Field
+	StrictServiceTokenAuth                 apijson.Field
 	UIReadOnlyToggleReason                 apijson.Field
 	UserSeatExpirationInactiveTime         apijson.Field
 	WARPAuthNonBrowser401                  apijson.Field
@@ -598,6 +606,13 @@ type OrganizationListResponse struct {
 	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
 	// h.
 	SessionDuration string `json:"session_duration"`
+	// Enables new behaviors for requests made with Access service tokens. Unauthorized
+	// requests emit audit logs, and return a 401 or 403 status code in the response
+	// instead of redirecting to the login page. Successful requests no longer receive
+	// a CF_Authorization cookie in the response. Zero Trust organizations created on
+	// or after October 5, 2026 will have this setting enabled by default, and cannot
+	// disable it.
+	StrictServiceTokenAuth bool `json:"strict_service_token_auth"`
 	// The account tags of organizations trusted by this organization for policy and
 	// device posture sharing.
 	TrustedAccounts []string `json:"trusted_accounts"`
@@ -635,6 +650,7 @@ type organizationListResponseJSON struct {
 	Name                                   apijson.Field
 	ServiceTokenInactivity                 apijson.Field
 	SessionDuration                        apijson.Field
+	StrictServiceTokenAuth                 apijson.Field
 	TrustedAccounts                        apijson.Field
 	UIReadOnlyToggleReason                 apijson.Field
 	UserSeatExpirationInactiveTime         apijson.Field
@@ -961,6 +977,13 @@ type OrganizationNewParams struct {
 	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
 	// h.
 	SessionDuration param.Field[string] `json:"session_duration"`
+	// Enables new behaviors for requests made with Access service tokens. Unauthorized
+	// requests emit audit logs, and return a 401 or 403 status code in the response
+	// instead of redirecting to the login page. Successful requests no longer receive
+	// a CF_Authorization cookie in the response. Zero Trust organizations created on
+	// or after October 5, 2026 will have this setting enabled by default, and cannot
+	// disable it.
+	StrictServiceTokenAuth param.Field[bool] `json:"strict_service_token_auth"`
 	// A description of the reason why the UI read only field is being toggled.
 	UIReadOnlyToggleReason param.Field[string] `json:"ui_read_only_toggle_reason"`
 	// The amount of time a user seat is inactive before it expires. When the user seat
@@ -1341,6 +1364,13 @@ type OrganizationUpdateParams struct {
 	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
 	// h.
 	SessionDuration param.Field[string] `json:"session_duration"`
+	// Enables new behaviors for requests made with Access service tokens. Unauthorized
+	// requests emit audit logs, and return a 401 or 403 status code in the response
+	// instead of redirecting to the login page. Successful requests no longer receive
+	// a CF_Authorization cookie in the response. Zero Trust organizations created on
+	// or after October 5, 2026 will have this setting enabled by default, and cannot
+	// disable it.
+	StrictServiceTokenAuth param.Field[bool] `json:"strict_service_token_auth"`
 	// A description of the reason why the UI read only field is being toggled.
 	UIReadOnlyToggleReason param.Field[string] `json:"ui_read_only_toggle_reason"`
 	// The amount of time a user seat is inactive before it expires. When the user seat

@@ -128,7 +128,7 @@ func (r *CustomTrustStoreService) Get(ctx context.Context, customOriginTrustStor
 }
 
 type CustomTrustStore struct {
-	// Identifier.
+	// Certificate identifier tag.
 	ID string `json:"id" api:"required"`
 	// The root CA certificate in PEM format. Only root CA certificates are accepted;
 	// intermediate and leaf certificates are not supported.
@@ -192,7 +192,7 @@ func (r CustomTrustStoreStatus) IsKnown() bool {
 }
 
 type CustomTrustStoreDeleteResponse struct {
-	// Identifier.
+	// Certificate identifier tag.
 	ID   string                             `json:"id"`
 	JSON customTrustStoreDeleteResponseJSON `json:"-"`
 }

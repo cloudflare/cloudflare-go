@@ -44,7 +44,8 @@ func NewProjectService(opts ...option.RequestOption) (r *ProjectService) {
 	return
 }
 
-// Create a new project.
+// Create a Cloudflare Pages project for configuring and deploying a site or
+// application.
 func (r *ProjectService) New(ctx context.Context, params ProjectNewParams, opts ...option.RequestOption) (res *Project, err error) {
 	var env ProjectNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -61,7 +62,7 @@ func (r *ProjectService) New(ctx context.Context, params ProjectNewParams, opts 
 	return res, nil
 }
 
-// Fetch a list of all user projects.
+// List the Cloudflare Pages projects in an account.
 func (r *ProjectService) List(ctx context.Context, params ProjectListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Project], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -83,12 +84,12 @@ func (r *ProjectService) List(ctx context.Context, params ProjectListParams, opt
 	return res, nil
 }
 
-// Fetch a list of all user projects.
+// List the Cloudflare Pages projects in an account.
 func (r *ProjectService) ListAutoPaging(ctx context.Context, params ProjectListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Project] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete a project by name.
+// Permanently delete a Cloudflare Pages project and its deployments.
 func (r *ProjectService) Delete(ctx context.Context, projectName string, body ProjectDeleteParams, opts ...option.RequestOption) (res *ProjectDeleteResponse, err error) {
 	var env ProjectDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -109,8 +110,8 @@ func (r *ProjectService) Delete(ctx context.Context, projectName string, body Pr
 	return res, nil
 }
 
-// Set new attributes for an existing project. Modify environment variables. To
-// delete an environment variable, set the key to null.
+// Update the build, deployment, source, or environment settings for a Cloudflare
+// Pages project. To delete an environment variable, set its key to `null`.
 func (r *ProjectService) Edit(ctx context.Context, projectName string, params ProjectEditParams, opts ...option.RequestOption) (res *Project, err error) {
 	var env ProjectEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -131,7 +132,8 @@ func (r *ProjectService) Edit(ctx context.Context, projectName string, params Pr
 	return res, nil
 }
 
-// Fetch a project by name.
+// Retrieve the configuration and deployment settings for a Cloudflare Pages
+// project.
 func (r *ProjectService) Get(ctx context.Context, projectName string, query ProjectGetParams, opts ...option.RequestOption) (res *Project, err error) {
 	var env ProjectGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -173,7 +175,8 @@ func (r *ProjectService) GetUploadToken(ctx context.Context, projectName string,
 	return res, nil
 }
 
-// Purge all cached build artifacts for a Pages project
+// Remove cached build artifacts so subsequent builds run without the project's
+// existing build cache.
 func (r *ProjectService) PurgeBuildCache(ctx context.Context, projectName string, body ProjectPurgeBuildCacheParams, opts ...option.RequestOption) (res *ProjectPurgeBuildCacheResponse, err error) {
 	var env ProjectPurgeBuildCacheResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -209,7 +212,7 @@ type Deployment struct {
 	EnvVars map[string]DeploymentEnvVar `json:"env_vars" api:"required,nullable"`
 	// Type of deploy.
 	Environment DeploymentEnvironment `json:"environment" api:"required"`
-	// If the deployment has been skipped.
+	// Whether the deployment was skipped.
 	IsSkipped bool `json:"is_skipped" api:"required"`
 	// The status of the deployment.
 	LatestStage Stage `json:"latest_stage" api:"required"`
@@ -217,7 +220,8 @@ type Deployment struct {
 	ModifiedOn time.Time `json:"modified_on" api:"required" format:"date-time"`
 	// Id of the project.
 	ProjectID string `json:"project_id" api:"required"`
-	// Name of the project.
+	// Name of the Pages project. Must begin with a lowercase letter or digit and
+	// contain only lowercase letters, digits, and hyphens.
 	ProjectName string `json:"project_name" api:"required"`
 	// Short Id (8 character) of the deployment.
 	ShortID string `json:"short_id" api:"required"`
@@ -694,11 +698,12 @@ const (
 	DeploymentSkipReasonPathConfig                    DeploymentSkipReason = "path_config"
 	DeploymentSkipReasonBranchConfig                  DeploymentSkipReason = "branch_config"
 	DeploymentSkipReasonPagesToWorkersConversion      DeploymentSkipReason = "pages_to_workers_conversion"
+	DeploymentSkipReasonSupersededQueuedBuild         DeploymentSkipReason = "superseded_queued_build"
 )
 
 func (r DeploymentSkipReason) IsKnown() bool {
 	switch r {
-	case DeploymentSkipReasonCommitMessage, DeploymentSkipReasonPreviewDeploymentsDisabled, DeploymentSkipReasonProductionDeploymentsDisabled, DeploymentSkipReasonPathConfig, DeploymentSkipReasonBranchConfig, DeploymentSkipReasonPagesToWorkersConversion:
+	case DeploymentSkipReasonCommitMessage, DeploymentSkipReasonPreviewDeploymentsDisabled, DeploymentSkipReasonProductionDeploymentsDisabled, DeploymentSkipReasonPathConfig, DeploymentSkipReasonBranchConfig, DeploymentSkipReasonPagesToWorkersConversion, DeploymentSkipReasonSupersededQueuedBuild:
 		return true
 	}
 	return false
@@ -719,7 +724,8 @@ type Project struct {
 	FrameworkVersion string `json:"framework_version" api:"required"`
 	// Most recent deployment of the project.
 	LatestDeployment Deployment `json:"latest_deployment" api:"required,nullable"`
-	// Name of the project.
+	// Name of the Pages project. Must begin with a lowercase letter or digit and
+	// contain only lowercase letters, digits, and hyphens.
 	Name string `json:"name" api:"required"`
 	// Name of the preview script.
 	PreviewScriptName string `json:"preview_script_name" api:"required"`
@@ -2214,11 +2220,12 @@ const (
 	StageStatusActive   StageStatus = "active"
 	StageStatusFailure  StageStatus = "failure"
 	StageStatusCanceled StageStatus = "canceled"
+	StageStatusSkipped  StageStatus = "skipped"
 )
 
 func (r StageStatus) IsKnown() bool {
 	switch r {
-	case StageStatusSuccess, StageStatusIdle, StageStatusActive, StageStatusFailure, StageStatusCanceled:
+	case StageStatusSuccess, StageStatusIdle, StageStatusActive, StageStatusFailure, StageStatusCanceled, StageStatusSkipped:
 		return true
 	}
 	return false
@@ -2253,7 +2260,8 @@ type ProjectPurgeBuildCacheResponse = interface{}
 type ProjectNewParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Name of the project.
+	// Name for the Pages project. Must begin with a lowercase letter or digit and
+	// contain only lowercase letters, digits, and hyphens.
 	Name param.Field[string] `json:"name" api:"required"`
 	// Production branch of the project. Used to identify production deployments.
 	ProductionBranch param.Field[string] `json:"production_branch" api:"required"`
@@ -3143,9 +3151,9 @@ func (r ProjectNewResponseEnvelopeSuccess) IsKnown() bool {
 type ProjectListParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Which page of projects to fetch.
+	// Page number of results to return.
 	Page param.Field[int64] `query:"page"`
-	// How many projects to return per page.
+	// Number of results to return per page.
 	PerPage param.Field[int64] `query:"per_page"`
 }
 
@@ -3308,7 +3316,8 @@ type ProjectEditParams struct {
 	BuildConfig param.Field[ProjectEditParamsBuildConfig] `json:"build_config"`
 	// Configs for deployments in a project.
 	DeploymentConfigs param.Field[ProjectEditParamsDeploymentConfigs] `json:"deployment_configs"`
-	// Name of the project.
+	// Name for the Pages project. Must begin with a lowercase letter or digit and
+	// contain only lowercase letters, digits, and hyphens.
 	Name param.Field[string] `json:"name"`
 	// Production branch of the project. Used to identify production deployments.
 	ProductionBranch param.Field[string] `json:"production_branch"`
