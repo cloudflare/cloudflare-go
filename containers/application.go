@@ -673,33 +673,33 @@ type ApplicationNewResponseCcScheduledApplicationHealthErrorsEvent struct {
 	Message string                 `json:"message" api:"required"`
 	// Name of the event that describes the kind event that happened.
 	//
-	//   - SchedulerPlaced: It's the first event that creates a container placement. It
-	//     happens when the Containers runtime was able to retrieve deployment resources
-	//     and start verifying everything is correct.
-	//   - NetworkingIPAssigned: It's sent when the Containers runtime maps the IP to the
-	//     container.
-	//   - VMStarted: It's sent when the Containers runtime starts the VM. The container
-	//     might remain unhealthy at this point.
-	//   - ImagePulled: It's sent when the Containers runtime pulls the image
-	//     successfully.
-	//   - ImagePullError: It's sent when the Containers runtime is having issues pulling
-	//     the image. The message and details have more information on what happened for
-	//     debugging.
-	//   - VMFailedToStart: It's sent when the Containers runtime was unable to boot the
-	//     VM.
-	//   - VMStopping: It's sent when the scheduler is stopping the VM.
-	//   - VMStopped: It's sent when the VM finally exits.
-	//   - VMFailed: It's sent when the scheduling of the VM failed in the current
-	//     location.
-	//   - RuntimeStartFailed: It's sent when the runtime hits an internal error.
-	//   - SSHStarted: It's sent when the container gains network connectivity and opens
-	//     the SSH port. Containers only send this event when SSH keys exist.
-	//   - CheckUpdate: Sent when the status of a health or readiness check changes. This
-	//     may also affect the health status of the placement.
-	//   - DurableObjectConnected: Sent when a durable object instance connects and gains
-	//     control of the deployment. This event is only sent for durable object
-	//     deployments. It is sent after VMStarted.
-	//   - ContainerStarted: It's sent when the container starts running.
+	// - SchedulerPlaced: It's the first event that creates a container placement. It
+	//   happens when the Containers runtime was able to retrieve deployment resources
+	//   and start verifying everything is correct.
+	// - NetworkingIPAssigned: It's sent when the Containers runtime maps the IP to the
+	//   container.
+	// - VMStarted: It's sent when the Containers runtime starts the VM. The container
+	//   might remain unhealthy at this point.
+	// - ImagePulled: It's sent when the Containers runtime pulls the image
+	//   successfully.
+	// - ImagePullError: It's sent when the Containers runtime is having issues pulling
+	//   the image. The message and details have more information on what happened for
+	//   debugging.
+	// - VMFailedToStart: It's sent when the Containers runtime was unable to boot the
+	//   VM.
+	// - VMStopping: It's sent when the scheduler is stopping the VM.
+	// - VMStopped: It's sent when the VM finally exits.
+	// - VMFailed: It's sent when the scheduling of the VM failed in the current
+	//   location.
+	// - RuntimeStartFailed: It's sent when the runtime hits an internal error.
+	// - SSHStarted: It's sent when the container gains network connectivity and opens
+	//   the SSH port. Containers only send this event when SSH keys exist.
+	// - CheckUpdate: Sent when the status of a health or readiness check changes. This
+	//   may also affect the health status of the placement.
+	// - DurableObjectConnected: Sent when a durable object instance connects and gains
+	//   control of the deployment. This event is only sent for durable object
+	//   deployments. It is sent after VMStarted.
+	// - ContainerStarted: It's sent when the container starts running.
 	Name         ApplicationNewResponseCcScheduledApplicationHealthErrorsEventName `json:"name" api:"required"`
 	StatusChange map[string]interface{}                                            `json:"statusChange" api:"required"`
 	// UTC timestamp string in ISO 8601 format.
@@ -1737,33 +1737,33 @@ type ApplicationListResponseCcScheduledApplicationHealthErrorsEvent struct {
 	Message string                 `json:"message" api:"required"`
 	// Name of the event that describes the kind event that happened.
 	//
-	//   - SchedulerPlaced: It's the first event that creates a container placement. It
-	//     happens when the Containers runtime was able to retrieve deployment resources
-	//     and start verifying everything is correct.
-	//   - NetworkingIPAssigned: It's sent when the Containers runtime maps the IP to the
-	//     container.
-	//   - VMStarted: It's sent when the Containers runtime starts the VM. The container
-	//     might remain unhealthy at this point.
-	//   - ImagePulled: It's sent when the Containers runtime pulls the image
-	//     successfully.
-	//   - ImagePullError: It's sent when the Containers runtime is having issues pulling
-	//     the image. The message and details have more information on what happened for
-	//     debugging.
-	//   - VMFailedToStart: It's sent when the Containers runtime was unable to boot the
-	//     VM.
-	//   - VMStopping: It's sent when the scheduler is stopping the VM.
-	//   - VMStopped: It's sent when the VM finally exits.
-	//   - VMFailed: It's sent when the scheduling of the VM failed in the current
-	//     location.
-	//   - RuntimeStartFailed: It's sent when the runtime hits an internal error.
-	//   - SSHStarted: It's sent when the container gains network connectivity and opens
-	//     the SSH port. Containers only send this event when SSH keys exist.
-	//   - CheckUpdate: Sent when the status of a health or readiness check changes. This
-	//     may also affect the health status of the placement.
-	//   - DurableObjectConnected: Sent when a durable object instance connects and gains
-	//     control of the deployment. This event is only sent for durable object
-	//     deployments. It is sent after VMStarted.
-	//   - ContainerStarted: It's sent when the container starts running.
+	// - SchedulerPlaced: It's the first event that creates a container placement. It
+	//   happens when the Containers runtime was able to retrieve deployment resources
+	//   and start verifying everything is correct.
+	// - NetworkingIPAssigned: It's sent when the Containers runtime maps the IP to the
+	//   container.
+	// - VMStarted: It's sent when the Containers runtime starts the VM. The container
+	//   might remain unhealthy at this point.
+	// - ImagePulled: It's sent when the Containers runtime pulls the image
+	//   successfully.
+	// - ImagePullError: It's sent when the Containers runtime is having issues pulling
+	//   the image. The message and details have more information on what happened for
+	//   debugging.
+	// - VMFailedToStart: It's sent when the Containers runtime was unable to boot the
+	//   VM.
+	// - VMStopping: It's sent when the scheduler is stopping the VM.
+	// - VMStopped: It's sent when the VM finally exits.
+	// - VMFailed: It's sent when the scheduling of the VM failed in the current
+	//   location.
+	// - RuntimeStartFailed: It's sent when the runtime hits an internal error.
+	// - SSHStarted: It's sent when the container gains network connectivity and opens
+	//   the SSH port. Containers only send this event when SSH keys exist.
+	// - CheckUpdate: Sent when the status of a health or readiness check changes. This
+	//   may also affect the health status of the placement.
+	// - DurableObjectConnected: Sent when a durable object instance connects and gains
+	//   control of the deployment. This event is only sent for durable object
+	//   deployments. It is sent after VMStarted.
+	// - ContainerStarted: It's sent when the container starts running.
 	Name         ApplicationListResponseCcScheduledApplicationHealthErrorsEventName `json:"name" api:"required"`
 	StatusChange map[string]interface{}                                             `json:"statusChange" api:"required"`
 	// UTC timestamp string in ISO 8601 format.
@@ -2824,33 +2824,33 @@ type ApplicationEditResponseCcScheduledApplicationHealthErrorsEvent struct {
 	Message string                 `json:"message" api:"required"`
 	// Name of the event that describes the kind event that happened.
 	//
-	//   - SchedulerPlaced: It's the first event that creates a container placement. It
-	//     happens when the Containers runtime was able to retrieve deployment resources
-	//     and start verifying everything is correct.
-	//   - NetworkingIPAssigned: It's sent when the Containers runtime maps the IP to the
-	//     container.
-	//   - VMStarted: It's sent when the Containers runtime starts the VM. The container
-	//     might remain unhealthy at this point.
-	//   - ImagePulled: It's sent when the Containers runtime pulls the image
-	//     successfully.
-	//   - ImagePullError: It's sent when the Containers runtime is having issues pulling
-	//     the image. The message and details have more information on what happened for
-	//     debugging.
-	//   - VMFailedToStart: It's sent when the Containers runtime was unable to boot the
-	//     VM.
-	//   - VMStopping: It's sent when the scheduler is stopping the VM.
-	//   - VMStopped: It's sent when the VM finally exits.
-	//   - VMFailed: It's sent when the scheduling of the VM failed in the current
-	//     location.
-	//   - RuntimeStartFailed: It's sent when the runtime hits an internal error.
-	//   - SSHStarted: It's sent when the container gains network connectivity and opens
-	//     the SSH port. Containers only send this event when SSH keys exist.
-	//   - CheckUpdate: Sent when the status of a health or readiness check changes. This
-	//     may also affect the health status of the placement.
-	//   - DurableObjectConnected: Sent when a durable object instance connects and gains
-	//     control of the deployment. This event is only sent for durable object
-	//     deployments. It is sent after VMStarted.
-	//   - ContainerStarted: It's sent when the container starts running.
+	// - SchedulerPlaced: It's the first event that creates a container placement. It
+	//   happens when the Containers runtime was able to retrieve deployment resources
+	//   and start verifying everything is correct.
+	// - NetworkingIPAssigned: It's sent when the Containers runtime maps the IP to the
+	//   container.
+	// - VMStarted: It's sent when the Containers runtime starts the VM. The container
+	//   might remain unhealthy at this point.
+	// - ImagePulled: It's sent when the Containers runtime pulls the image
+	//   successfully.
+	// - ImagePullError: It's sent when the Containers runtime is having issues pulling
+	//   the image. The message and details have more information on what happened for
+	//   debugging.
+	// - VMFailedToStart: It's sent when the Containers runtime was unable to boot the
+	//   VM.
+	// - VMStopping: It's sent when the scheduler is stopping the VM.
+	// - VMStopped: It's sent when the VM finally exits.
+	// - VMFailed: It's sent when the scheduling of the VM failed in the current
+	//   location.
+	// - RuntimeStartFailed: It's sent when the runtime hits an internal error.
+	// - SSHStarted: It's sent when the container gains network connectivity and opens
+	//   the SSH port. Containers only send this event when SSH keys exist.
+	// - CheckUpdate: Sent when the status of a health or readiness check changes. This
+	//   may also affect the health status of the placement.
+	// - DurableObjectConnected: Sent when a durable object instance connects and gains
+	//   control of the deployment. This event is only sent for durable object
+	//   deployments. It is sent after VMStarted.
+	// - ContainerStarted: It's sent when the container starts running.
 	Name         ApplicationEditResponseCcScheduledApplicationHealthErrorsEventName `json:"name" api:"required"`
 	StatusChange map[string]interface{}                                             `json:"statusChange" api:"required"`
 	// UTC timestamp string in ISO 8601 format.
@@ -3889,33 +3889,33 @@ type ApplicationGetResponseCcScheduledApplicationHealthErrorsEvent struct {
 	Message string                 `json:"message" api:"required"`
 	// Name of the event that describes the kind event that happened.
 	//
-	//   - SchedulerPlaced: It's the first event that creates a container placement. It
-	//     happens when the Containers runtime was able to retrieve deployment resources
-	//     and start verifying everything is correct.
-	//   - NetworkingIPAssigned: It's sent when the Containers runtime maps the IP to the
-	//     container.
-	//   - VMStarted: It's sent when the Containers runtime starts the VM. The container
-	//     might remain unhealthy at this point.
-	//   - ImagePulled: It's sent when the Containers runtime pulls the image
-	//     successfully.
-	//   - ImagePullError: It's sent when the Containers runtime is having issues pulling
-	//     the image. The message and details have more information on what happened for
-	//     debugging.
-	//   - VMFailedToStart: It's sent when the Containers runtime was unable to boot the
-	//     VM.
-	//   - VMStopping: It's sent when the scheduler is stopping the VM.
-	//   - VMStopped: It's sent when the VM finally exits.
-	//   - VMFailed: It's sent when the scheduling of the VM failed in the current
-	//     location.
-	//   - RuntimeStartFailed: It's sent when the runtime hits an internal error.
-	//   - SSHStarted: It's sent when the container gains network connectivity and opens
-	//     the SSH port. Containers only send this event when SSH keys exist.
-	//   - CheckUpdate: Sent when the status of a health or readiness check changes. This
-	//     may also affect the health status of the placement.
-	//   - DurableObjectConnected: Sent when a durable object instance connects and gains
-	//     control of the deployment. This event is only sent for durable object
-	//     deployments. It is sent after VMStarted.
-	//   - ContainerStarted: It's sent when the container starts running.
+	// - SchedulerPlaced: It's the first event that creates a container placement. It
+	//   happens when the Containers runtime was able to retrieve deployment resources
+	//   and start verifying everything is correct.
+	// - NetworkingIPAssigned: It's sent when the Containers runtime maps the IP to the
+	//   container.
+	// - VMStarted: It's sent when the Containers runtime starts the VM. The container
+	//   might remain unhealthy at this point.
+	// - ImagePulled: It's sent when the Containers runtime pulls the image
+	//   successfully.
+	// - ImagePullError: It's sent when the Containers runtime is having issues pulling
+	//   the image. The message and details have more information on what happened for
+	//   debugging.
+	// - VMFailedToStart: It's sent when the Containers runtime was unable to boot the
+	//   VM.
+	// - VMStopping: It's sent when the scheduler is stopping the VM.
+	// - VMStopped: It's sent when the VM finally exits.
+	// - VMFailed: It's sent when the scheduling of the VM failed in the current
+	//   location.
+	// - RuntimeStartFailed: It's sent when the runtime hits an internal error.
+	// - SSHStarted: It's sent when the container gains network connectivity and opens
+	//   the SSH port. Containers only send this event when SSH keys exist.
+	// - CheckUpdate: Sent when the status of a health or readiness check changes. This
+	//   may also affect the health status of the placement.
+	// - DurableObjectConnected: Sent when a durable object instance connects and gains
+	//   control of the deployment. This event is only sent for durable object
+	//   deployments. It is sent after VMStarted.
+	// - ContainerStarted: It's sent when the container starts running.
 	Name         ApplicationGetResponseCcScheduledApplicationHealthErrorsEventName `json:"name" api:"required"`
 	StatusChange map[string]interface{}                                            `json:"statusChange" api:"required"`
 	// UTC timestamp string in ISO 8601 format.

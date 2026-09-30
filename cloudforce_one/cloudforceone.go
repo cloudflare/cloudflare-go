@@ -23,11 +23,11 @@ type CloudforceOneService struct {
 	//
 	// ## Prerequisites
 	//
-	//  1. **API token** — requests must use an API token with Cloudforce One
-	//     permissions; write operations (creating, editing, or deleting feeds, skills,
-	//     and tags) require write access.
-	//  2. **Plan limits** — access on the Free plan is limited; feed quotas and managed
-	//     default skills apply.
+	// 1. **API token** — requests must use an API token with Cloudforce One
+	//    permissions; write operations (creating, editing, or deleting feeds, skills,
+	//    and tags) require write access.
+	// 2. **Plan limits** — access on the Free plan is limited; feed quotas and managed
+	//    default skills apply.
 	ThreatSignals *ThreatSignalService
 }
 
