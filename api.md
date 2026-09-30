@@ -215,6 +215,8 @@ Methods:
 
 # [R2DataCatalog](r2_data_catalog/api.md)
 
+# [BasinCatalog](basin_catalog/api.md)
+
 # [WorkersForPlatforms](workers_for_platforms/api.md)
 
 # [ZeroTrust](zero_trust/api.md)

@@ -2385,11 +2385,11 @@ type IdentityProviderAccessSAMLConfig struct {
 	//
 	// To enable encryption:
 	//
-	// 1. Create a certificate set via POST to
-	//    `/identity_providers/{id}/saml_certificate`
-	// 2. Set this field to `true` and include `saml_certificate_set_id` in the PUT
-	//    request
-	// 3. Configure the public certificate in your external Identity Provider
+	//  1. Create a certificate set via POST to
+	//     `/identity_providers/{id}/saml_certificate`
+	//  2. Set this field to `true` and include `saml_certificate_set_id` in the PUT
+	//     request
+	//  3. Configure the public certificate in your external Identity Provider
 	//
 	// Note: Requires `saml_certificate_set_id` to be set when `true`.
 	EnableEncryption bool `json:"enable_encryption"`
@@ -3838,11 +3838,11 @@ type IdentityProviderAccessSAMLConfigParam struct {
 	//
 	// To enable encryption:
 	//
-	// 1. Create a certificate set via POST to
-	//    `/identity_providers/{id}/saml_certificate`
-	// 2. Set this field to `true` and include `saml_certificate_set_id` in the PUT
-	//    request
-	// 3. Configure the public certificate in your external Identity Provider
+	//  1. Create a certificate set via POST to
+	//     `/identity_providers/{id}/saml_certificate`
+	//  2. Set this field to `true` and include `saml_certificate_set_id` in the PUT
+	//     request
+	//  3. Configure the public certificate in your external Identity Provider
 	//
 	// Note: Requires `saml_certificate_set_id` to be set when `true`.
 	EnableEncryption param.Field[bool] `json:"enable_encryption"`
@@ -6112,11 +6112,11 @@ type IdentityProviderListResponseAccessSAMLConfig struct {
 	//
 	// To enable encryption:
 	//
-	// 1. Create a certificate set via POST to
-	//    `/identity_providers/{id}/saml_certificate`
-	// 2. Set this field to `true` and include `saml_certificate_set_id` in the PUT
-	//    request
-	// 3. Configure the public certificate in your external Identity Provider
+	//  1. Create a certificate set via POST to
+	//     `/identity_providers/{id}/saml_certificate`
+	//  2. Set this field to `true` and include `saml_certificate_set_id` in the PUT
+	//     request
+	//  3. Configure the public certificate in your external Identity Provider
 	//
 	// Note: Requires `saml_certificate_set_id` to be set when `true`.
 	EnableEncryption bool `json:"enable_encryption"`

@@ -467,6 +467,12 @@ TEST_PATHS=(
 	r2_data_catalog/namespace_test.go
 	r2_data_catalog/namespacetable_test.go
 	r2_data_catalog/namespacetablemaintenanceconfig_test.go
+	basin_catalog/basincatalog_test.go
+	basin_catalog/maintenanceconfig_test.go
+	basin_catalog/credential_test.go
+	basin_catalog/namespace_test.go
+	basin_catalog/namespacetable_test.go
+	basin_catalog/namespacetablemaintenanceconfig_test.go
 	workers_for_platforms/dispatchnamespace_test.go
 	workers_for_platforms/dispatchnamespacescript_test.go
 	workers_for_platforms/dispatchnamespacescriptassetupload_test.go
