@@ -34,6 +34,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/cloud_connector"
 	"github.com/cloudflare/cloudflare-go/v7/cloudforce_one"
 	"github.com/cloudflare/cloudflare-go/v7/connectivity"
+	"github.com/cloudflare/cloudflare-go/v7/containers"
 	"github.com/cloudflare/cloudflare-go/v7/content_scanning"
 	"github.com/cloudflare/cloudflare-go/v7/csam_scanner"
 	"github.com/cloudflare/cloudflare-go/v7/custom_certificates"
@@ -189,6 +190,7 @@ type Client struct {
 	Workers                *workers.WorkerService
 	KV                     *kv.KVService
 	DurableObjects         *durable_objects.DurableObjectService
+	Containers             *containers.ContainerService
 	Queues                 *queues.QueueService
 	APIGateway             *api_gateway.APIGatewayService
 	ManagedTransforms      *managed_transforms.ManagedTransformService
@@ -558,6 +560,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Workers = workers.NewWorkerService(opts...)
 	r.KV = kv.NewKVService(opts...)
 	r.DurableObjects = durable_objects.NewDurableObjectService(opts...)
+	r.Containers = containers.NewContainerService(opts...)
 	r.Queues = queues.NewQueueService(opts...)
 	r.APIGateway = api_gateway.NewAPIGatewayService(opts...)
 	r.ManagedTransforms = managed_transforms.NewManagedTransformService(opts...)

@@ -243,11 +243,14 @@ type CreateRequestParam struct {
 	// Controls which fields the API ingests. Defaults to all available fields when
 	// absent.
 	Fields param.Field[[]CreateRequestFieldParam] `json:"fields"`
-	// Optional Logpush filter predicate to restrict which events are ingested. If
-	// provided, replaces the dataset's default filter entirely. See
+	// Optional Logpush filter predicate to restrict which events are ingested. See
 	// [Logpush filters](https://developers.cloudflare.com/logs/reference/filters/) for
 	// syntax and examples.
 	Filter param.Field[string] `json:"filter"`
+	// Whether to filter attack traffic from the Logpush job. Defaults to `true` for
+	// supported datasets when omitted. Supported datasets are `http_requests`,
+	// `firewall_events`, and `network_analytics_logs`.
+	FilterAttackTraffic param.Field[bool] `json:"filter_attack_traffic"`
 }
 
 func (r CreateRequestParam) MarshalJSON() (data []byte, err error) {
@@ -288,24 +291,28 @@ type Dataset struct {
 	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// The Logpush filter predicate applied to this dataset. Omitted when no filter is
 	// set.
-	Filter string      `json:"filter"`
-	JSON   datasetJSON `json:"-"`
+	Filter string `json:"filter"`
+	// Whether the Logpush job filters attack traffic. Omitted for datasets that do not
+	// support this option.
+	FilterAttackTraffic bool        `json:"filter_attack_traffic"`
+	JSON                datasetJSON `json:"-"`
 }
 
 // datasetJSON contains the JSON metadata for the struct [Dataset]
 type datasetJSON struct {
-	CreatedAt          apijson.Field
-	Dataset            apijson.Field
-	DatasetID          apijson.Field
-	DeletionProtection apijson.Field
-	Enabled            apijson.Field
-	Fields             apijson.Field
-	ObjectID           apijson.Field
-	ObjectType         apijson.Field
-	UpdatedAt          apijson.Field
-	Filter             apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	CreatedAt           apijson.Field
+	Dataset             apijson.Field
+	DatasetID           apijson.Field
+	DeletionProtection  apijson.Field
+	Enabled             apijson.Field
+	Fields              apijson.Field
+	ObjectID            apijson.Field
+	ObjectType          apijson.Field
+	UpdatedAt           apijson.Field
+	Filter              apijson.Field
+	FilterAttackTraffic apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
 }
 
 func (r *Dataset) UnmarshalJSON(data []byte) (err error) {
@@ -430,6 +437,10 @@ type UpdateRequestParam struct {
 	// [Logpush filters](https://developers.cloudflare.com/logs/reference/filters/) for
 	// syntax and examples.
 	Filter param.Field[string] `json:"filter"`
+	// Whether to filter attack traffic from the Logpush job. If omitted, the existing
+	// setting is left unchanged. Supported datasets are `http_requests`,
+	// `firewall_events`, and `network_analytics_logs`.
+	FilterAttackTraffic param.Field[bool] `json:"filter_attack_traffic"`
 }
 
 func (r UpdateRequestParam) MarshalJSON() (data []byte, err error) {

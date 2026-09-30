@@ -242,6 +242,13 @@ TEST_PATHS=(
 	kv/namespacevalue_test.go
 	durable_objects/namespace_test.go
 	durable_objects/namespaceobject_test.go
+	containers/application_test.go
+	containers/applicationinstance_test.go
+	containers/applicationrollout_test.go
+	containers/applicationversion_test.go
+	containers/image_test.go
+	containers/registry_test.go
+	containers/registrycredential_test.go
 	queues/queue_test.go
 	queues/message_test.go
 	queues/purge_test.go

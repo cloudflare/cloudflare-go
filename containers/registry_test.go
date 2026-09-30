@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package resource_tagging_test
+package containers_test
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v7"
+	"github.com/cloudflare/cloudflare-go/v7/containers"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/resource_tagging"
 )
 
-func TestAccountTagUpdateWithOptionalParams(t *testing.T) {
+func TestRegistryNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -24,76 +24,79 @@ func TestAccountTagUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ResourceTagging.AccountTags.Update(context.TODO(), resource_tagging.AccountTagUpdateParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body: resource_tagging.AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersion{
-			ResourceID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			ResourceType: cloudflare.F(resource_tagging.AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeWorkerVersion),
-			WorkerID:     cloudflare.F("3f72a691-44b3-4c11-8642-c18a88ddaa5e"),
-			Tags: cloudflare.F(map[string]string{
-				"environment": "production",
-				"team":        "engineering",
+	_, err := client.Containers.Registries.New(context.TODO(), containers.RegistryNewParams{
+		AccountID: cloudflare.F("account-123"),
+		Auth: cloudflare.F(containers.RegistryNewParamsAuth{
+			PrivateCredential: cloudflare.F(containers.RegistryNewParamsAuthPrivateCredential{
+				SecretName: cloudflare.F("API_KEY"),
+				StoreID:    cloudflare.F("14758f1afd44c09b7992073ccf00b43d"),
 			}),
+			PublicCredential: cloudflare.F("example-user"),
+		}),
+		Domain:   cloudflare.F("docker.io"),
+		Kind:     cloudflare.F(containers.RegistryNewParamsKindEcr),
+		IsPublic: cloudflare.F(containers.RegistryNewParamsIsPublicFalse),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestRegistryList(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.Containers.Registries.List(context.TODO(), containers.RegistryListParams{
+		AccountID: cloudflare.F("account-123"),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestRegistryDelete(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.Containers.Registries.Delete(
+		context.TODO(),
+		"domain",
+		containers.RegistryDeleteParams{
+			AccountID: cloudflare.F("account-123"),
 		},
-		IfMatch: cloudflare.F(`"v1:RBNvo1WzZ4oRRq0W9-hkng"`),
-	})
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestAccountTagDeleteWithOptionalParams(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.ResourceTagging.AccountTags.Delete(context.TODO(), resource_tagging.AccountTagDeleteParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		IfMatch:   cloudflare.F(`"v1:RBNvo1WzZ4oRRq0W9-hkng"`),
-	})
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestAccountTagGetWithOptionalParams(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.ResourceTagging.AccountTags.Get(context.TODO(), resource_tagging.AccountTagGetParams{
-		AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ResourceID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ResourceType: cloudflare.F(resource_tagging.AccountTagGetParamsResourceTypeWorker),
-		WorkerID:     cloudflare.F("3f72a691-44b3-4c11-8642-c18a88ddaa5e"),
-	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

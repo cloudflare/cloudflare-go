@@ -151,6 +151,8 @@ Methods:
 
 # [DurableObjects](durable_objects/api.md)
 
+# [Containers](containers/api.md)
+
 # [Queues](queues/api.md)
 
 # [APIGateway](api_gateway/api.md)
