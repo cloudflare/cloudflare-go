@@ -38,14 +38,26 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 			PermissionGroups: cloudflare.F([]shared.TokenPolicyPermissionGroupParam{{
 				ID: cloudflare.F("c8fed203ed3043cba015a93ad1616f1f"),
 				Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
-					Key:   cloudflare.F("key"),
-					Value: cloudflare.F("value"),
+					Category:    cloudflare.F("category"),
+					Deprecated:  cloudflare.F("deprecated"),
+					Description: cloudflare.F("description"),
+					Editable:    cloudflare.F("editable"),
+					EolAt:       cloudflare.F(time.Now()),
+					Label:       cloudflare.F("load_balancer_admin"),
+					Scopes:      cloudflare.F("com.cloudflare.api.account"),
+					Visibility:  cloudflare.F("visibility"),
 				}),
 			}, {
 				ID: cloudflare.F("82e64a83756745bbbb1c9c2701bf816b"),
 				Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
-					Key:   cloudflare.F("key"),
-					Value: cloudflare.F("value"),
+					Category:    cloudflare.F("category"),
+					Deprecated:  cloudflare.F("deprecated"),
+					Description: cloudflare.F("description"),
+					Editable:    cloudflare.F("editable"),
+					EolAt:       cloudflare.F(time.Now()),
+					Label:       cloudflare.F("fbm_user"),
+					Scopes:      cloudflare.F("com.cloudflare.api.account"),
+					Visibility:  cloudflare.F("visibility"),
 				}),
 			}}),
 			Resources: cloudflare.F[shared.TokenPolicyResourcesUnionParam](shared.TokenPolicyResourcesIAMResourcesTypeObjectStringParam(map[string]string{
@@ -104,14 +116,26 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 					PermissionGroups: cloudflare.F([]shared.TokenPolicyPermissionGroupParam{{
 						ID: cloudflare.F("c8fed203ed3043cba015a93ad1616f1f"),
 						Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
-							Key:   cloudflare.F("key"),
-							Value: cloudflare.F("value"),
+							Category:    cloudflare.F("category"),
+							Deprecated:  cloudflare.F("deprecated"),
+							Description: cloudflare.F("description"),
+							Editable:    cloudflare.F("editable"),
+							EolAt:       cloudflare.F(time.Now()),
+							Label:       cloudflare.F("load_balancer_admin"),
+							Scopes:      cloudflare.F("com.cloudflare.api.account"),
+							Visibility:  cloudflare.F("visibility"),
 						}),
 					}, {
 						ID: cloudflare.F("82e64a83756745bbbb1c9c2701bf816b"),
 						Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
-							Key:   cloudflare.F("key"),
-							Value: cloudflare.F("value"),
+							Category:    cloudflare.F("category"),
+							Deprecated:  cloudflare.F("deprecated"),
+							Description: cloudflare.F("description"),
+							Editable:    cloudflare.F("editable"),
+							EolAt:       cloudflare.F(time.Now()),
+							Label:       cloudflare.F("fbm_user"),
+							Scopes:      cloudflare.F("com.cloudflare.api.account"),
+							Visibility:  cloudflare.F("visibility"),
 						}),
 					}}),
 					Resources: cloudflare.F[shared.TokenPolicyResourcesUnionParam](shared.TokenPolicyResourcesIAMResourcesTypeObjectStringParam(map[string]string{

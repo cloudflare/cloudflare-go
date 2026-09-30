@@ -559,16 +559,36 @@ func (r memberPoliciesPermissionGroupJSON) RawJSON() string {
 
 // Attributes associated to the permission group.
 type MemberPoliciesPermissionGroupsMeta struct {
-	Key   string                                 `json:"key"`
-	Value string                                 `json:"value"`
-	JSON  memberPoliciesPermissionGroupsMetaJSON `json:"-"`
+	// A category used to group permission groups.
+	Category string `json:"category"`
+	// Indicates whether the permission group is deprecated.
+	Deprecated string `json:"deprecated"`
+	// Additional information about the permission group.
+	Description string `json:"description"`
+	// Indicates whether the permission group can be edited.
+	Editable string `json:"editable"`
+	// The planned end-of-life date and time, when provided.
+	EolAt time.Time `json:"eol_at" format:"date-time"`
+	// A label identifying the permission group.
+	Label string `json:"label"`
+	// The scope associated with the permission group.
+	Scopes string `json:"scopes"`
+	// Indicates the permission group's availability or visibility.
+	Visibility string                                 `json:"visibility"`
+	JSON       memberPoliciesPermissionGroupsMetaJSON `json:"-"`
 }
 
 // memberPoliciesPermissionGroupsMetaJSON contains the JSON metadata for the struct
 // [MemberPoliciesPermissionGroupsMeta]
 type memberPoliciesPermissionGroupsMetaJSON struct {
-	Key         apijson.Field
-	Value       apijson.Field
+	Category    apijson.Field
+	Deprecated  apijson.Field
+	Description apijson.Field
+	Editable    apijson.Field
+	EolAt       apijson.Field
+	Label       apijson.Field
+	Scopes      apijson.Field
+	Visibility  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1361,16 +1381,36 @@ func (r tokenPolicyPermissionGroupJSON) RawJSON() string {
 
 // Attributes associated to the permission group.
 type TokenPolicyPermissionGroupsMeta struct {
-	Key   string                              `json:"key"`
-	Value string                              `json:"value"`
-	JSON  tokenPolicyPermissionGroupsMetaJSON `json:"-"`
+	// A category used to group permission groups.
+	Category string `json:"category"`
+	// Indicates whether the permission group is deprecated.
+	Deprecated string `json:"deprecated"`
+	// Additional information about the permission group.
+	Description string `json:"description"`
+	// Indicates whether the permission group can be edited.
+	Editable string `json:"editable"`
+	// The planned end-of-life date and time, when provided.
+	EolAt time.Time `json:"eol_at" format:"date-time"`
+	// A label identifying the permission group.
+	Label string `json:"label"`
+	// The scope associated with the permission group.
+	Scopes string `json:"scopes"`
+	// Indicates the permission group's availability or visibility.
+	Visibility string                              `json:"visibility"`
+	JSON       tokenPolicyPermissionGroupsMetaJSON `json:"-"`
 }
 
 // tokenPolicyPermissionGroupsMetaJSON contains the JSON metadata for the struct
 // [TokenPolicyPermissionGroupsMeta]
 type tokenPolicyPermissionGroupsMetaJSON struct {
-	Key         apijson.Field
-	Value       apijson.Field
+	Category    apijson.Field
+	Deprecated  apijson.Field
+	Description apijson.Field
+	Editable    apijson.Field
+	EolAt       apijson.Field
+	Label       apijson.Field
+	Scopes      apijson.Field
+	Visibility  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1442,8 +1482,22 @@ func (r TokenPolicyPermissionGroupParam) MarshalJSON() (data []byte, err error) 
 
 // Attributes associated to the permission group.
 type TokenPolicyPermissionGroupsMetaParam struct {
-	Key   param.Field[string] `json:"key"`
-	Value param.Field[string] `json:"value"`
+	// A category used to group permission groups.
+	Category param.Field[string] `json:"category"`
+	// Indicates whether the permission group is deprecated.
+	Deprecated param.Field[string] `json:"deprecated"`
+	// Additional information about the permission group.
+	Description param.Field[string] `json:"description"`
+	// Indicates whether the permission group can be edited.
+	Editable param.Field[string] `json:"editable"`
+	// The planned end-of-life date and time, when provided.
+	EolAt param.Field[time.Time] `json:"eol_at" format:"date-time"`
+	// A label identifying the permission group.
+	Label param.Field[string] `json:"label"`
+	// The scope associated with the permission group.
+	Scopes param.Field[string] `json:"scopes"`
+	// Indicates the permission group's availability or visibility.
+	Visibility param.Field[string] `json:"visibility"`
 }
 
 func (r TokenPolicyPermissionGroupsMetaParam) MarshalJSON() (data []byte, err error) {

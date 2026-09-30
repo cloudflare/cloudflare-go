@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"slices"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
@@ -117,16 +118,36 @@ func (r permissionGroupListResponseJSON) RawJSON() string {
 
 // Attributes associated to the permission group.
 type PermissionGroupListResponseMeta struct {
-	Key   string                              `json:"key"`
-	Value string                              `json:"value"`
-	JSON  permissionGroupListResponseMetaJSON `json:"-"`
+	// A category used to group permission groups.
+	Category string `json:"category"`
+	// Indicates whether the permission group is deprecated.
+	Deprecated string `json:"deprecated"`
+	// Additional information about the permission group.
+	Description string `json:"description"`
+	// Indicates whether the permission group can be edited.
+	Editable string `json:"editable"`
+	// The planned end-of-life date and time, when provided.
+	EolAt time.Time `json:"eol_at" format:"date-time"`
+	// A label identifying the permission group.
+	Label string `json:"label"`
+	// The scope associated with the permission group.
+	Scopes string `json:"scopes"`
+	// Indicates the permission group's availability or visibility.
+	Visibility string                              `json:"visibility"`
+	JSON       permissionGroupListResponseMetaJSON `json:"-"`
 }
 
 // permissionGroupListResponseMetaJSON contains the JSON metadata for the struct
 // [PermissionGroupListResponseMeta]
 type permissionGroupListResponseMetaJSON struct {
-	Key         apijson.Field
-	Value       apijson.Field
+	Category    apijson.Field
+	Deprecated  apijson.Field
+	Description apijson.Field
+	Editable    apijson.Field
+	EolAt       apijson.Field
+	Label       apijson.Field
+	Scopes      apijson.Field
+	Visibility  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -171,16 +192,36 @@ func (r permissionGroupGetResponseJSON) RawJSON() string {
 
 // Attributes associated to the permission group.
 type PermissionGroupGetResponseMeta struct {
-	Key   string                             `json:"key"`
-	Value string                             `json:"value"`
-	JSON  permissionGroupGetResponseMetaJSON `json:"-"`
+	// A category used to group permission groups.
+	Category string `json:"category"`
+	// Indicates whether the permission group is deprecated.
+	Deprecated string `json:"deprecated"`
+	// Additional information about the permission group.
+	Description string `json:"description"`
+	// Indicates whether the permission group can be edited.
+	Editable string `json:"editable"`
+	// The planned end-of-life date and time, when provided.
+	EolAt time.Time `json:"eol_at" format:"date-time"`
+	// A label identifying the permission group.
+	Label string `json:"label"`
+	// The scope associated with the permission group.
+	Scopes string `json:"scopes"`
+	// Indicates the permission group's availability or visibility.
+	Visibility string                             `json:"visibility"`
+	JSON       permissionGroupGetResponseMetaJSON `json:"-"`
 }
 
 // permissionGroupGetResponseMetaJSON contains the JSON metadata for the struct
 // [PermissionGroupGetResponseMeta]
 type permissionGroupGetResponseMetaJSON struct {
-	Key         apijson.Field
-	Value       apijson.Field
+	Category    apijson.Field
+	Deprecated  apijson.Field
+	Description apijson.Field
+	Editable    apijson.Field
+	EolAt       apijson.Field
+	Label       apijson.Field
+	Scopes      apijson.Field
+	Visibility  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
