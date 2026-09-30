@@ -419,9 +419,9 @@ func (r MaintenanceConfigUpdateParams) MarshalJSON() (data []byte, err error) {
 
 // Updates compaction configuration (all fields optional).
 type MaintenanceConfigUpdateParamsCompaction struct {
-	// Updates the state optionally.
+	// Specifies the state of maintenance operations.
 	State param.Field[MaintenanceConfigUpdateParamsCompactionState] `json:"state"`
-	// Updates the target file size optionally.
+	// Sets the target file size for compaction in megabytes. Defaults to "128".
 	TargetSizeMB param.Field[MaintenanceConfigUpdateParamsCompactionTargetSizeMB] `json:"target_size_mb"`
 }
 
@@ -429,7 +429,7 @@ func (r MaintenanceConfigUpdateParamsCompaction) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-// Updates the state optionally.
+// Specifies the state of maintenance operations.
 type MaintenanceConfigUpdateParamsCompactionState string
 
 const (
@@ -445,7 +445,7 @@ func (r MaintenanceConfigUpdateParamsCompactionState) IsKnown() bool {
 	return false
 }
 
-// Updates the target file size optionally.
+// Sets the target file size for compaction in megabytes. Defaults to "128".
 type MaintenanceConfigUpdateParamsCompactionTargetSizeMB string
 
 const (
@@ -469,7 +469,7 @@ type MaintenanceConfigUpdateParamsSnapshotExpiration struct {
 	MaxSnapshotAge param.Field[string] `json:"max_snapshot_age"`
 	// Updates the minimum number of snapshots to retain optionally.
 	MinSnapshotsToKeep param.Field[int64] `json:"min_snapshots_to_keep"`
-	// Updates the state optionally.
+	// Specifies the state of maintenance operations.
 	State param.Field[MaintenanceConfigUpdateParamsSnapshotExpirationState] `json:"state"`
 }
 
@@ -477,7 +477,7 @@ func (r MaintenanceConfigUpdateParamsSnapshotExpiration) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-// Updates the state optionally.
+// Specifies the state of maintenance operations.
 type MaintenanceConfigUpdateParamsSnapshotExpirationState string
 
 const (

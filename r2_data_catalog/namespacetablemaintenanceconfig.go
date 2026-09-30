@@ -472,7 +472,7 @@ type NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpiration struct {
 	MaxSnapshotAge param.Field[string] `json:"max_snapshot_age"`
 	// Updates the minimum number of snapshots to retain optionally.
 	MinSnapshotsToKeep param.Field[int64] `json:"min_snapshots_to_keep"`
-	// Updates the state optionally.
+	// Specifies the state of maintenance operations.
 	State param.Field[NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpirationState] `json:"state"`
 }
 
@@ -480,7 +480,7 @@ func (r NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpiration) MarshalJS
 	return apijson.MarshalRoot(r)
 }
 
-// Updates the state optionally.
+// Specifies the state of maintenance operations.
 type NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpirationState string
 
 const (

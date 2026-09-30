@@ -1655,12 +1655,26 @@ func (r observabilityTelemetryQueryResponseCalculationJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseCalculationsAggregate struct {
-	Count          float64                                                          `json:"count" api:"required"`
-	Interval       float64                                                          `json:"interval" api:"required"`
-	SampleInterval float64                                                          `json:"sampleInterval" api:"required"`
-	Value          float64                                                          `json:"value" api:"required"`
-	Groups         []ObservabilityTelemetryQueryResponseCalculationsAggregatesGroup `json:"groups"`
-	JSON           observabilityTelemetryQueryResponseCalculationsAggregateJSON     `json:"-"`
+	// Estimated number of matching events: the sum of the sample intervals of the
+	// stored events. It equals the number of stored events when sampleInterval is 1.
+	Count float64 `json:"count" api:"required"`
+	// Deprecated alias of sampleInterval. Always has the same value; use
+	// sampleInterval instead.
+	//
+	// Deprecated: deprecated
+	Interval float64 `json:"interval" api:"required"`
+	// Average sample interval of the matched events. Each stored event has a sample
+	// interval of 1 / (the sampling rate applied when it was ingested): the Worker's
+	// head_sampling_rate multiplied by any platform sampling applied to the account or
+	// script. A value of 1 means none of the matched events were sampled. A value
+	// above 1 means count and value are estimated from sampled data, not exact. This
+	// is independent of statistics.abr_level.
+	SampleInterval float64 `json:"sampleInterval" api:"required"`
+	// Result of the calculation. count, sum, avg, median, and percentiles are weighted
+	// by each event's sample interval
+	Value  float64                                                          `json:"value" api:"required"`
+	Groups []ObservabilityTelemetryQueryResponseCalculationsAggregatesGroup `json:"groups"`
+	JSON   observabilityTelemetryQueryResponseCalculationsAggregateJSON     `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseCalculationsAggregateJSON contains the JSON
@@ -1761,14 +1775,28 @@ func (r observabilityTelemetryQueryResponseCalculationsSeriesJSON) RawJSON() str
 }
 
 type ObservabilityTelemetryQueryResponseCalculationsSeriesData struct {
-	Count          float64                                                          `json:"count" api:"required"`
-	Interval       float64                                                          `json:"interval" api:"required"`
-	SampleInterval float64                                                          `json:"sampleInterval" api:"required"`
-	Value          float64                                                          `json:"value" api:"required"`
-	FirstSeen      string                                                           `json:"firstSeen"`
-	Groups         []ObservabilityTelemetryQueryResponseCalculationsSeriesDataGroup `json:"groups"`
-	LastSeen       string                                                           `json:"lastSeen"`
-	JSON           observabilityTelemetryQueryResponseCalculationsSeriesDataJSON    `json:"-"`
+	// Estimated number of matching events: the sum of the sample intervals of the
+	// stored events. It equals the number of stored events when sampleInterval is 1.
+	Count float64 `json:"count" api:"required"`
+	// Deprecated alias of sampleInterval. Always has the same value; use
+	// sampleInterval instead.
+	//
+	// Deprecated: deprecated
+	Interval float64 `json:"interval" api:"required"`
+	// Average sample interval of the matched events. Each stored event has a sample
+	// interval of 1 / (the sampling rate applied when it was ingested): the Worker's
+	// head_sampling_rate multiplied by any platform sampling applied to the account or
+	// script. A value of 1 means none of the matched events were sampled. A value
+	// above 1 means count and value are estimated from sampled data, not exact. This
+	// is independent of statistics.abr_level.
+	SampleInterval float64 `json:"sampleInterval" api:"required"`
+	// Result of the calculation. count, sum, avg, median, and percentiles are weighted
+	// by each event's sample interval
+	Value     float64                                                          `json:"value" api:"required"`
+	FirstSeen string                                                           `json:"firstSeen"`
+	Groups    []ObservabilityTelemetryQueryResponseCalculationsSeriesDataGroup `json:"groups"`
+	LastSeen  string                                                           `json:"lastSeen"`
+	JSON      observabilityTelemetryQueryResponseCalculationsSeriesDataJSON    `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseCalculationsSeriesDataJSON contains the JSON
@@ -1875,12 +1903,26 @@ func (r observabilityTelemetryQueryResponseCompareJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseCompareAggregate struct {
-	Count          float64                                                     `json:"count" api:"required"`
-	Interval       float64                                                     `json:"interval" api:"required"`
-	SampleInterval float64                                                     `json:"sampleInterval" api:"required"`
-	Value          float64                                                     `json:"value" api:"required"`
-	Groups         []ObservabilityTelemetryQueryResponseCompareAggregatesGroup `json:"groups"`
-	JSON           observabilityTelemetryQueryResponseCompareAggregateJSON     `json:"-"`
+	// Estimated number of matching events: the sum of the sample intervals of the
+	// stored events. It equals the number of stored events when sampleInterval is 1.
+	Count float64 `json:"count" api:"required"`
+	// Deprecated alias of sampleInterval. Always has the same value; use
+	// sampleInterval instead.
+	//
+	// Deprecated: deprecated
+	Interval float64 `json:"interval" api:"required"`
+	// Average sample interval of the matched events. Each stored event has a sample
+	// interval of 1 / (the sampling rate applied when it was ingested): the Worker's
+	// head_sampling_rate multiplied by any platform sampling applied to the account or
+	// script. A value of 1 means none of the matched events were sampled. A value
+	// above 1 means count and value are estimated from sampled data, not exact. This
+	// is independent of statistics.abr_level.
+	SampleInterval float64 `json:"sampleInterval" api:"required"`
+	// Result of the calculation. count, sum, avg, median, and percentiles are weighted
+	// by each event's sample interval
+	Value  float64                                                     `json:"value" api:"required"`
+	Groups []ObservabilityTelemetryQueryResponseCompareAggregatesGroup `json:"groups"`
+	JSON   observabilityTelemetryQueryResponseCompareAggregateJSON     `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseCompareAggregateJSON contains the JSON
@@ -1980,14 +2022,28 @@ func (r observabilityTelemetryQueryResponseCompareSeriesJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseCompareSeriesData struct {
-	Count          float64                                                     `json:"count" api:"required"`
-	Interval       float64                                                     `json:"interval" api:"required"`
-	SampleInterval float64                                                     `json:"sampleInterval" api:"required"`
-	Value          float64                                                     `json:"value" api:"required"`
-	FirstSeen      string                                                      `json:"firstSeen"`
-	Groups         []ObservabilityTelemetryQueryResponseCompareSeriesDataGroup `json:"groups"`
-	LastSeen       string                                                      `json:"lastSeen"`
-	JSON           observabilityTelemetryQueryResponseCompareSeriesDataJSON    `json:"-"`
+	// Estimated number of matching events: the sum of the sample intervals of the
+	// stored events. It equals the number of stored events when sampleInterval is 1.
+	Count float64 `json:"count" api:"required"`
+	// Deprecated alias of sampleInterval. Always has the same value; use
+	// sampleInterval instead.
+	//
+	// Deprecated: deprecated
+	Interval float64 `json:"interval" api:"required"`
+	// Average sample interval of the matched events. Each stored event has a sample
+	// interval of 1 / (the sampling rate applied when it was ingested): the Worker's
+	// head_sampling_rate multiplied by any platform sampling applied to the account or
+	// script. A value of 1 means none of the matched events were sampled. A value
+	// above 1 means count and value are estimated from sampled data, not exact. This
+	// is independent of statistics.abr_level.
+	SampleInterval float64 `json:"sampleInterval" api:"required"`
+	// Result of the calculation. count, sum, avg, median, and percentiles are weighted
+	// by each event's sample interval
+	Value     float64                                                     `json:"value" api:"required"`
+	FirstSeen string                                                      `json:"firstSeen"`
+	Groups    []ObservabilityTelemetryQueryResponseCompareSeriesDataGroup `json:"groups"`
+	LastSeen  string                                                      `json:"lastSeen"`
+	JSON      observabilityTelemetryQueryResponseCompareSeriesDataJSON    `json:"-"`
 }
 
 // observabilityTelemetryQueryResponseCompareSeriesDataJSON contains the JSON
@@ -2679,11 +2735,23 @@ func (r observabilityTelemetryQueryResponseEventsSeriesJSON) RawJSON() string {
 }
 
 type ObservabilityTelemetryQueryResponseEventsSeriesData struct {
-	Aggregates     ObservabilityTelemetryQueryResponseEventsSeriesDataAggregates `json:"aggregates" api:"required"`
-	Count          float64                                                       `json:"count" api:"required"`
-	Interval       float64                                                       `json:"interval" api:"required"`
-	SampleInterval float64                                                       `json:"sampleInterval" api:"required"`
-	Errors         float64                                                       `json:"errors"`
+	Aggregates ObservabilityTelemetryQueryResponseEventsSeriesDataAggregates `json:"aggregates" api:"required"`
+	// Estimated number of matching events: the sum of the sample intervals of the
+	// stored events. It equals the number of stored events when sampleInterval is 1.
+	Count float64 `json:"count" api:"required"`
+	// Deprecated alias of sampleInterval. Always has the same value; use
+	// sampleInterval instead.
+	//
+	// Deprecated: deprecated
+	Interval float64 `json:"interval" api:"required"`
+	// Average sample interval of the matched events. Each stored event has a sample
+	// interval of 1 / (the sampling rate applied when it was ingested): the Worker's
+	// head_sampling_rate multiplied by any platform sampling applied to the account or
+	// script. A value of 1 means none of the matched events were sampled. A value
+	// above 1 means count and value are estimated from sampled data, not exact. This
+	// is independent of statistics.abr_level.
+	SampleInterval float64 `json:"sampleInterval" api:"required"`
+	Errors         float64 `json:"errors"`
 	// Groups in the query results.
 	Groups map[string]ObservabilityTelemetryQueryResponseEventsSeriesDataGroupsUnion `json:"groups"`
 	JSON   observabilityTelemetryQueryResponseEventsSeriesDataJSON                   `json:"-"`
