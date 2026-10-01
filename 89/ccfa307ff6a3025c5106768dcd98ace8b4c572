@@ -1,0 +1,19 @@
+.gitlab-ci.yml
+  s_11d1a6860ca1c7::t_d8347fb41ef654 12-15,17-20,32,35,45,47,61,64-65
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "89ccfa307ff6a3025c5106768dcd98ace8b4c572",
+  "prompts": {},
+  "sessions": {
+    "s_11d1a6860ca1c7": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f2a5db225ffesfvI3oFFZlvMIf",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Sarah Sicard <ssicard@cloudflare.com>"
+    }
+  }
+}

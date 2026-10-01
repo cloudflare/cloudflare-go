@@ -1,0 +1,23 @@
+.changelog/response-info-string-messages.txt
+  s_6ac8adf43747f8::t_0c50f6bf7a303c 1-3
+cloudflare.go
+  s_6ac8adf43747f8::t_c0bed299b7c82e 434-463
+cloudflare_test.go
+  s_6ac8adf43747f8::t_cdab44a381a15f 550-603
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "c3b07a8e73fdd137074cac1edfd6983b13e75203",
+  "prompts": {},
+  "sessions": {
+    "s_6ac8adf43747f8": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f3a99796effeByI518AfVyZnzi",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Vaishak Dinesh <vaishak@cloudflare.com>"
+    }
+  }
+}

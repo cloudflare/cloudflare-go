@@ -1,0 +1,23 @@
+README.md
+  s_ab9b8b5984a654::t_3ce3fb85de3d73 27
+.release-please-manifest.json
+  s_ab9b8b5984a654::t_74e2303877317e 2
+internal/version.go
+  s_ab9b8b5984a654::t_4f6367c732f248 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "977c0af7bace81ae37086ee2224ff56248a8f72a",
+  "prompts": {},
+  "sessions": {
+    "s_ab9b8b5984a654": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f2cf2c449ffe1nKyx36XLv88gS",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "rotem <rotem@cloudflare.com>"
+    }
+  }
+}
