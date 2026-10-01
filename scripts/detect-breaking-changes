@@ -125,6 +125,7 @@ TEST_PATHS=(
 	dns/usageaccount_test.go
 	dns/settingzone_test.go
 	dns/settingaccount_test.go
+	dns/settingaccountnameserverset_test.go
 	dns/settingaccountview_test.go
 	dns/analyticsreport_test.go
 	dns/analyticsreportbytime_test.go
@@ -930,7 +931,6 @@ TEST_PATHS=(
 	browser_rendering/devtoolsession_test.go
 	browser_rendering/devtoolbrowser_test.go
 	browser_rendering/devtoolbrowserliveview_test.go
-	browser_rendering/devtoolbrowserpage_test.go
 	browser_rendering/devtoolbrowsertarget_test.go
 	custom_pages/custompage_test.go
 	custom_pages/asset_test.go

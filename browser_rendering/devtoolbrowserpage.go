@@ -3,14 +3,6 @@
 package browser_rendering
 
 import (
-	"context"
-	"errors"
-	"fmt"
-	"net/http"
-	"slices"
-
-	"github.com/cloudflare/cloudflare-go/v7/internal/param"
-	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
@@ -31,35 +23,4 @@ func NewDevtoolBrowserPageService(opts ...option.RequestOption) (r *DevtoolBrows
 	r = &DevtoolBrowserPageService{}
 	r.Options = opts
 	return
-}
-
-// Establishes a WebSocket connection to a specific Chrome DevTools target or page.
-func (r *DevtoolBrowserPageService) Get(ctx context.Context, sessionID string, targetID string, params DevtoolBrowserPageGetParams, opts ...option.RequestOption) (err error) {
-	if params.CfBrapiGuardrails.Present {
-		opts = append(opts, option.WithHeader("cf-brapi-guardrails", fmt.Sprintf("%v", params.CfBrapiGuardrails)))
-	}
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	if params.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return err
-	}
-	if sessionID == "" {
-		err = errors.New("missing required session_id parameter")
-		return err
-	}
-	if targetID == "" {
-		err = errors.New("missing required target_id parameter")
-		return err
-	}
-	path := fmt.Sprintf("accounts/%s/browser-rendering/devtools/browser/%s/page/%s", params.AccountID, sessionID, targetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, nil, opts...)
-	return err
-}
-
-type DevtoolBrowserPageGetParams struct {
-	// Account ID.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Optional base64url-encoded JSON connection guardrails (mode)
-	CfBrapiGuardrails param.Field[string] `header:"cf-brapi-guardrails"`
 }

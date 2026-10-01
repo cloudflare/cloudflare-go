@@ -180,7 +180,7 @@ func (r r2DataCatalogListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Contains R2 Data Catalog information.
+// Contains catalog information.
 type R2DataCatalogListResponseWarehouse struct {
 	// Use this to uniquely identify the catalog.
 	ID string `json:"id" api:"required" format:"uuid"`
@@ -415,7 +415,7 @@ func (r r2DataCatalogEnableResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Contains R2 Data Catalog information.
+// Contains catalog information.
 type R2DataCatalogGetResponse struct {
 	// Use this to uniquely identify the catalog.
 	ID string `json:"id" api:"required" format:"uuid"`
@@ -828,7 +828,7 @@ type R2DataCatalogGetResponseEnvelope struct {
 	Messages []R2DataCatalogGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Indicates whether the API call was successful.
 	Success bool `json:"success" api:"required"`
-	// Contains R2 Data Catalog information.
+	// Contains catalog information.
 	Result R2DataCatalogGetResponse             `json:"result"`
 	JSON   r2DataCatalogGetResponseEnvelopeJSON `json:"-"`
 }
