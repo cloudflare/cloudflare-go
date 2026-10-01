@@ -1,0 +1,43 @@
+workers_for_platforms/dispatchnamespacescriptcontent.go
+  s_0186c0812ecd82::t_670940cebd209f 116
+snippets/snippet.go
+  s_0186c0812ecd82::t_670940cebd209f 238
+.release-please-manifest.json
+  s_0186c0812ecd82::t_670940cebd209f 2
+workers_for_platforms/dispatchnamespacescriptsetting.go
+  s_0186c0812ecd82::t_670940cebd209f 8706
+internal/apiform/encoder.go
+  s_0186c0812ecd82::t_670940cebd209f 4,32-36,38-41,53-57,72-76,178-180,182,185-192,201-218,224-233,427-429
+README.md
+  s_0186c0812ecd82::t_670940cebd209f 27
+CHANGELOG.md
+  s_0186c0812ecd82::t_670940cebd209f 3-69,417,470,573,640,760,830,844,969,1106,1116,1128
+docs/migration-guides/v7.12.0-migration-guide.md
+  s_0186c0812ecd82::t_670940cebd209f 1-835
+internal/version.go
+  s_0186c0812ecd82::t_670940cebd209f 5
+internal/apiform/json_test.go
+  s_0186c0812ecd82::t_670940cebd209f 1-63
+multipart_json_test.go
+  s_0186c0812ecd82::t_670940cebd209f 1-141
+workers/scriptcontent.go
+  s_0186c0812ecd82::t_670940cebd209f 105
+workers/scriptscriptandversionsetting.go
+  s_0186c0812ecd82::t_670940cebd209f 8753
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "0cdf7628e1cfdb19a4eea8c9fc1c94a68735765b",
+  "prompts": {},
+  "sessions": {
+    "s_0186c0812ecd82": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f07c11118ffev1vfJ7K3Qfqzjz",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Vaishak Dinesh <vaishak@cloudflare.com>"
+    }
+  }
+}
