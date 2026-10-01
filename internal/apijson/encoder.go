@@ -183,25 +183,29 @@ func (e *encoder) newArrayTypeEncoder(t reflect.Type) encoderFunc {
 	itemEncoder := e.typeEncoder(t.Elem())
 
 	return func(value reflect.Value) ([]byte, error) {
-		json := []byte("[]")
-		for i := 0; i < value.Len(); i++ {
-			var value, err = itemEncoder(value.Index(i))
+		n := value.Len()
+		if n == 0 {
+			return []byte("[]"), nil
+		}
+		var buf bytes.Buffer
+		buf.WriteByte('[')
+		for i := 0; i < n; i++ {
+			item, err := itemEncoder(value.Index(i))
 			if err != nil {
 				return nil, err
 			}
-			if value == nil {
+			if item == nil {
 				// Assume that empty items should be inserted as `null` so that the output array
 				// will be the same length as the input array
-				value = []byte("null")
+				item = []byte("null")
 			}
-
-			json, err = sjson.SetRawBytes(json, "-1", value)
-			if err != nil {
-				return nil, err
+			if i > 0 {
+				buf.WriteByte(',')
 			}
+			buf.Write(item)
 		}
-
-		return json, nil
+		buf.WriteByte(']')
+		return buf.Bytes(), nil
 	}
 }
 

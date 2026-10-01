@@ -1,5 +1,72 @@
 # Changelog
 
+## 7.12.0 (2026-10-01)
+
+Full Changelog: [v7.11.0...v7.12.0](https://github.com/cloudflare/cloudflare-go/compare/v7.11.0...v7.12.0)
+
+### Breaking Changes
+
+See the [v7.12.0 Migration Guide](./docs/migration-guides/v7.12.0-migration-guide.md) for before/after code examples and actions needed for each change.
+
+* **addressing:** `AddressMaps.Zones.Update()` and `AddressMaps.Zones.Delete()` removed. The `Zones` sub-resource is still wired on `AddressMaps` but now exposes no methods. 16 exported types are removed, including `AddressMapZoneUpdateResponse`, `AddressMapZoneDeleteResponse`, `AddressMapZoneUpdateParams`, `AddressMapZoneDeleteParams`, and their nested `Error`, `ErrorsSource`, `Message`, `MessagesSource`, `ResultInfo`, and `Success` types.
+* **browser_rendering:** `Devtools.Browser.Connect()` and `Devtools.Browser.Launch()` removed, along with `DevtoolBrowserConnectParams` and `DevtoolBrowserLaunchParams`. `Devtools.Browser.Page.Get()` is also removed along with `DevtoolBrowserPageGetParams`; the `Page` sub-resource now exposes no methods. `Devtools.Browser` retains `New()`, `Delete()`, `Protocol()`, and `Version()`.
+* **cloud_connector:** `RuleUpdateParams.Rules` is now required. Requests that previously omitted `rules` are rejected.
+* **dns:** `SettingAccountViewListParams.Page` and `SettingAccountViewListParams.PerPage` changed from `param.Field[float64]` to `param.Field[int64]`.
+* **dns:** `Settings.Zone` nameservers changed from a struct to a union. `SettingZoneEditResponse.Nameservers` and `SettingZoneGetResponse.Nameservers` are now `...NameserversUnion` interfaces, and the `SettingZoneEditParams.Nameservers` field type changed from `param.Field[SettingZoneEditParamsNameservers]` to `param.Field[SettingZoneEditParamsNameserversUnion]`. Callers constructing or reading nameservers must switch on the `Cloudflare`, `CustomExisting`, and `CustomSet` variants.
+* **email_security:** `Phishguard.Reports.List()` return type changed from `*pagination.SinglePage[PhishguardReportListResponse]` to `*pagination.V4PagePaginationArray[PhishguardReportListResponse]`.
+* **email_security:** `InvestigatePreviewNewParams.PostfixID` renamed to `ID`, and its JSON key changed from `postfix_id` to `id`.
+* **email_security:** `InvestigateReleaseBulkParams.Body []string` replaced by `IDs param.Field[[]string]`. The request body is now a JSON object `{"ids": [...]}` instead of a bare array, so this is both a compile-time and a wire-format change.
+* **email_security:** `InvestigateMoveBulkParams.IDs` is now required.
+* **email_security:** the `SKIPPED` status value is removed from `InvestigateBulkNewResponseStatus`, `InvestigateBulkGetResponseStatus`, `InvestigateBulkListResponseStatus`, `InvestigateBulkListParamsStatus`, and `InvestigateBulkCancelNewResponseStatus`.
+* **email_security:** the `DISCOVERING` status value is removed from `InvestigateBulkMessageListParamsStatus` and `InvestigateBulkMessageListResponseStatus`.
+* **flagship:** `AppFlagListParams.Limit` and `AppFlagChangelogListParams.Limit` changed from `param.Field[string]` to `param.Field[int64]`.
+* **hyperdrive:** the `Integration` field on every `Configs` response integration struct is renamed to `Provider`, and its JSON key changed from `integration` to `provider`. The accompanying enum types are renamed `ConfigNewResponseIntegrationIntegration` -> `ConfigNewResponseIntegrationProvider` (and the `Update`, `List`, `Edit`, `Get`, and `Restart` equivalents), plus `ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegrationIntegrationIntegration` -> `...IntegrationProvider`. This is both a compile-time and a wire-format change.
+* **queues:** the `MqNotificationConsumer` variant is removed from the `Consumers` request and response unions. `Consumers.New()` and `Consumers.Update()` now accept only the `MqWorkerConsumerRequest` and `MqHTTPConsumerRequest` body variants. Removed types include `ConsumerMqNotificationConsumerResponse` (and its `Settings`, `SettingsObject`, `SettingsObjectEmail`, `SettingsObjectPagerduty`, `SettingsObjectWebhook`, `Type` members and `Param` equivalents), `ConsumerNewParamsBodyMqNotificationConsumerRequest`, and `ConsumerUpdateParamsBodyMqNotificationConsumerRequest` — 31 exported types in total.
+* **resource_tagging:** the per-variant `ResourceType` enums are narrowed to the single resource type each union variant describes. `AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceType` drops from 30 values to `worker_version` only, and `ZoneTagUpdateParamsBodyResourceTaggingSetTagsRequestZoneLevelAccessApplicationPolicyResourceType` drops from 11 values to `access_application_policy` only — 39 exported constants removed.
+* **shared:** the permission group `Meta` struct changed from `{Key, Value string}` to a descriptive shape with `Category`, `Deprecated`, `Description`, `Editable`, `EolAt time.Time`, `Label`, `Scopes`, and `Visibility`. This affects 11 types across four packages: `shared.MemberPoliciesPermissionGroupsMeta`, `shared.TokenPolicyPermissionGroupsMeta` and `shared.TokenPolicyPermissionGroupsMetaParam`, `iam.PermissionGroupListResponseMeta`, `iam.PermissionGroupGetResponseMeta`, the four `iam.UserGroup{New,Update,List,Get}ResponsePoliciesPermissionGroupsMeta` types, and `memberships.Membership{Update,Get}ResponsePoliciesPermissionGroupsMeta`.
+* **vectorize:** the `IndexDimensionConfiguration` type is removed; `CreateIndex.Config` is now `CreateIndexConfig`. `IndexDimensionConfigurationMetric` and `IndexDimensionConfigurationParam` are retained.
+* **workers_for_platforms:** `DispatchNamespaceScriptTagDeleteResponse` changed from an `interface{}` alias to a struct backed by `DispatchNamespaceScriptTagDeleteResponseUnion`. Callers type-asserting the old `interface{}` return of `Dispatch.Namespaces.Scripts.Tags.Delete()` must switch on the `WorkersTagsKVResponse` and `WorkersAPIResponseNullResult` variants. The two variants correspond to the new `api-version` header: on `api-version` dates on or after `2026-10-01`, `tag` identifies a key and the call returns the complete updated tag map; earlier versions keep the legacy string-tag behaviour and return a null result. The six `DispatchNamespaceScriptTagDeleteResponseEnvelope*` types are removed.
+* **zero_trust:** `Gateway.Lists.Items.List()` return type changed from `*pagination.SinglePage[GatewayItem]` to `*pagination.V4PagePaginationArray[GatewayItem]`.
+* **zero_trust:** `Gateway.Pacfiles.List()` return type changed from `*pagination.SinglePage[GatewayPacfileListResponse]` to `*pagination.V4PagePaginationArray[GatewayPacfileListResponse]`.
+* **zero_trust:** `DevicePolicyCustomEditParamsProfileType` type removed.
+
+### Features
+
+* **NEW SERVICE: `containers`** -- Containers application, image, and registry management
+    * `Applications.New()`, `List()`, `Delete()`, `Edit()`, `Get()`
+    * `Applications.Instances.List()`, `Get()`, `ListV1()`
+    * `Applications.Rollouts.New()`
+    * `Applications.Versions.List()`
+    * `Images.Prepare()`
+    * `Registries.New()`, `List()`, `Delete()`
+    * `Registries.Credentials.Generate()`
+* **NEW SERVICE: `basin_catalog`** -- Basin catalog bucket, namespace, and table management
+    * `List()`, `Delete()`, `Disable()`, `Enable()`, `Get()`
+    * `MaintenanceConfigs.Update()`, `Get()`
+    * `Credentials.New()`
+    * `Namespaces.List()`
+    * `Namespaces.Tables.List()`
+    * `Namespaces.Tables.MaintenanceConfigs.Update()`, `Get()`
+* **cloudforce_one:** add `ThreatSignals` sub-resource tree (`/accounts/{account_id}/cloudforce-one/v2/threat-signals`)
+    * `ThreatSignals.Search.Search()`
+    * `ThreatSignals.Categories.List()`
+    * `ThreatSignals.Feeds.New()`, `List()`, `Delete()`, `Edit()`, `Poll()`
+    * `ThreatSignals.Feeds.Raw.Get()`
+    * `ThreatSignals.Feeds.Skills.Update()`, `Get()`
+    * `ThreatSignals.Articles.List()`, `BulkEdit()`, `Edit()`, `Get()`
+    * `ThreatSignals.Articles.Content.Get()`
+    * `ThreatSignals.Articles.Tags.New()`, `Delete()`, `Generate()`
+    * `ThreatSignals.Articles.SkillOutputs.Get()`
+    * `ThreatSignals.Indicators.List()`
+    * `ThreatSignals.Skills.New()`, `List()`, `Delete()`, `Edit()`, `Get()`
+    * `ThreatSignals.Skills.TagCategories.Update()`, `Get()`
+* **cache:** add `Invalidate()` method (`POST /zones/{zone_id}/invalidate_cache`)
+* **cache:** add `InvalidateEnvironment()` method (`POST /zones/{zone_id}/environments/{environment_id}/invalidate_cache`)
+* **dns:** add `Settings.Account.NameserverSets` sub-resource with `New()`, `List()`, `Delete()`, `Get()` methods
+* **registrar:** add `TransferCheck()` method (`POST /accounts/{account_id}/registrar/domain-transfer-check`)
+* **pagination:** add `PageTokenPagination` and `ContainersInstancesV1Pagination` page types (with their `AutoPager` variants) to `packages/pagination`
+* **email_security:** field-level documentation added across `Settings.Domains`, `Settings.ContentPolicies`, `Settings.TrustedDomains`, `Settings.ImpersonationRegistry`, `Settings.BlockSenders`, `Settings.AllowPolicies`, `Investigate`, and `Submissions`
+
 ## 7.11.0 (2026-09-24)
 
 Full Changelog: [v7.10.0...v7.11.0](https://github.com/cloudflare/cloudflare-go/compare/v7.10.0...v7.11.0)
@@ -347,7 +414,7 @@ X-Another: other-value"
 
 ---
 
-## Breaking Changes
+### Breaking Changes
 
 See the [v7.4.0 Migration Guide](./docs/migration-guides/v7.4.0-migration-guide.md) for before/after code examples and actions needed for each change.
 
@@ -400,7 +467,7 @@ The `GatewayListItemService.List()` return type changed from `SinglePage[[]Gatew
 
 ---
 
-## Features
+### Features
 
 ### CustomCsrs (client.CustomCsrs)
 
@@ -503,7 +570,7 @@ The `GatewayListItemService.List()` return type changed from `SinglePage[[]Gatew
 
 _None in this release._
 
-## Bug Fixes
+### Bug Fixes
 
 - **Billing**: The `Paygo` endpoint path was corrected to `/accounts/{account_id}/paygo-usage`
 - **Zones**: Updated zone hold documentation to clarify CDN-only zone behavior
@@ -570,7 +637,7 @@ In this release, you'll see a number of breaking changes. This is primarily due 
 
 ---
 
-## Breaking Changes
+### Breaking Changes
 
 See the [v6.10.0 Migration Guide](./docs/migration-guides/v6.10.0-migration-guide.md) for before/after code examples and actions needed for each change.
 
@@ -690,7 +757,7 @@ The following union interface types have been removed:
 
 ---
 
-## Features
+### Features
 
 ### Vulnerability Scanner (`client.VulnerabilityScanner`)
 
@@ -760,7 +827,7 @@ None in this release.
 
 ---
 
-## Bug Fixes
+### Bug Fixes
 
 - **Testing**: CONTRIBUTING.md updated to reference [steady](https://github.com/dgellow/steady) instead of Prism for running tests against OpenAPI specs
 
@@ -774,7 +841,7 @@ In this release, you'll see a number of breaking changes. This is primarily due 
 
 ---
 
-## Breaking Changes
+### Breaking Changes
 
 See the [v6.9.0 Migration Guide](./docs/migration-guides/v6.9.0-migration-guide.md) for before/after code examples and actions needed for each change.
 
@@ -899,7 +966,7 @@ The `MfaConfigurationAllowed` field has been removed from Organization types:
 
 ---
 
-## Features
+### Features
 
 ### AI Search - BoostBy Field Addition
 
@@ -1036,7 +1103,7 @@ None in this release.
 
 ---
 
-## Bug Fixes
+### Bug Fixes
 
 - **AI Search**: Fixed test compatibility issues
 - **Billing**: Transport error handling improvements
@@ -1046,7 +1113,7 @@ None in this release.
 
 Full Changelog: [v6.7.0...v6.8.0](https://github.com/cloudflare/cloudflare-go/compare/v6.7.0...v6.8.0)
 
-## Breaking Changes
+### Breaking Changes
 
 See the [v6.8.0 Migration Guide](./docs/migration-guides/v6.8.0-migration-guide.md) for before/after code examples and actions needed for each change.
 
@@ -1058,7 +1125,7 @@ See the [v6.8.0 Migration Guide](./docs/migration-guides/v6.8.0-migration-guide.
 - `ZeroTrust.DLP.Profiles.Custom` — `New()`, `Update()`, `Get()` return types replaced with shared `Profile` type
 - `ZeroTrust.DLP.Profiles.Predefined` — `Update()`, `Get()` return types replaced with shared `PredefinedProfile` type
 
-## Features
+### Features
 
 ### New API Resources
 
