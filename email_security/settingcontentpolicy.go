@@ -109,9 +109,10 @@ func (r *SettingContentPolicyService) Delete(ctx context.Context, policyID strin
 	return res, nil
 }
 
-// Executes multiple operations atomically. All four operation arrays (deletes,
-// patches, puts, posts) are required and executed in order. Send empty arrays for
-// unused operations.
+// Executes multiple content policy operations atomically: delete, partially
+// update, replace, and create content policies in a single request. All four
+// operation arrays (deletes, patches, puts, posts) are required and executed in
+// order. Send empty arrays for unused operations.
 func (r *SettingContentPolicyService) Batch(ctx context.Context, params SettingContentPolicyBatchParams, opts ...option.RequestOption) (res *SettingContentPolicyBatchResponse, err error) {
 	var env SettingContentPolicyBatchResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -174,15 +175,20 @@ func (r *SettingContentPolicyService) Get(ctx context.Context, policyID string, 
 // A content policy pattern that matches against the subject or body of an email.
 type SettingContentPolicyNewResponse struct {
 	// Content policy identifier.
-	ID         string                                  `json:"id" format:"uuid"`
-	CreatedAt  time.Time                               `json:"created_at" format:"date-time"`
-	Enabled    bool                                    `json:"enabled"`
-	ModifiedAt time.Time                               `json:"modified_at" format:"date-time"`
-	Name       string                                  `json:"name"`
-	Notes      string                                  `json:"notes" api:"nullable"`
-	Pattern    string                                  `json:"pattern"`
-	Targets    []SettingContentPolicyNewResponseTarget `json:"targets"`
-	JSON       settingContentPolicyNewResponseJSON     `json:"-"`
+	ID        string    `json:"id" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Whether the policy is active.
+	Enabled    bool      `json:"enabled"`
+	ModifiedAt time.Time `json:"modified_at" format:"date-time"`
+	// Human-readable name of the policy.
+	Name string `json:"name"`
+	// Optional note describing the purpose of the policy.
+	Notes string `json:"notes" api:"nullable"`
+	// Regular expression the policy matches against.
+	Pattern string `json:"pattern"`
+	// Parts of the email the pattern is matched against.
+	Targets []SettingContentPolicyNewResponseTarget `json:"targets"`
+	JSON    settingContentPolicyNewResponseJSON     `json:"-"`
 }
 
 // settingContentPolicyNewResponseJSON contains the JSON metadata for the struct
@@ -227,15 +233,20 @@ func (r SettingContentPolicyNewResponseTarget) IsKnown() bool {
 // A content policy pattern that matches against the subject or body of an email.
 type SettingContentPolicyListResponse struct {
 	// Content policy identifier.
-	ID         string                                   `json:"id" format:"uuid"`
-	CreatedAt  time.Time                                `json:"created_at" format:"date-time"`
-	Enabled    bool                                     `json:"enabled"`
-	ModifiedAt time.Time                                `json:"modified_at" format:"date-time"`
-	Name       string                                   `json:"name"`
-	Notes      string                                   `json:"notes" api:"nullable"`
-	Pattern    string                                   `json:"pattern"`
-	Targets    []SettingContentPolicyListResponseTarget `json:"targets"`
-	JSON       settingContentPolicyListResponseJSON     `json:"-"`
+	ID        string    `json:"id" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Whether the policy is active.
+	Enabled    bool      `json:"enabled"`
+	ModifiedAt time.Time `json:"modified_at" format:"date-time"`
+	// Human-readable name of the policy.
+	Name string `json:"name"`
+	// Optional note describing the purpose of the policy.
+	Notes string `json:"notes" api:"nullable"`
+	// Regular expression the policy matches against.
+	Pattern string `json:"pattern"`
+	// Parts of the email the pattern is matched against.
+	Targets []SettingContentPolicyListResponseTarget `json:"targets"`
+	JSON    settingContentPolicyListResponseJSON     `json:"-"`
 }
 
 // settingContentPolicyListResponseJSON contains the JSON metadata for the struct
@@ -351,15 +362,20 @@ func (r settingContentPolicyBatchResponseDeleteJSON) RawJSON() string {
 // A content policy pattern that matches against the subject or body of an email.
 type SettingContentPolicyBatchResponsePatch struct {
 	// Content policy identifier.
-	ID         string                                           `json:"id" format:"uuid"`
-	CreatedAt  time.Time                                        `json:"created_at" format:"date-time"`
-	Enabled    bool                                             `json:"enabled"`
-	ModifiedAt time.Time                                        `json:"modified_at" format:"date-time"`
-	Name       string                                           `json:"name"`
-	Notes      string                                           `json:"notes" api:"nullable"`
-	Pattern    string                                           `json:"pattern"`
-	Targets    []SettingContentPolicyBatchResponsePatchesTarget `json:"targets"`
-	JSON       settingContentPolicyBatchResponsePatchJSON       `json:"-"`
+	ID        string    `json:"id" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Whether the policy is active.
+	Enabled    bool      `json:"enabled"`
+	ModifiedAt time.Time `json:"modified_at" format:"date-time"`
+	// Human-readable name of the policy.
+	Name string `json:"name"`
+	// Optional note describing the purpose of the policy.
+	Notes string `json:"notes" api:"nullable"`
+	// Regular expression the policy matches against.
+	Pattern string `json:"pattern"`
+	// Parts of the email the pattern is matched against.
+	Targets []SettingContentPolicyBatchResponsePatchesTarget `json:"targets"`
+	JSON    settingContentPolicyBatchResponsePatchJSON       `json:"-"`
 }
 
 // settingContentPolicyBatchResponsePatchJSON contains the JSON metadata for the
@@ -404,15 +420,20 @@ func (r SettingContentPolicyBatchResponsePatchesTarget) IsKnown() bool {
 // A content policy pattern that matches against the subject or body of an email.
 type SettingContentPolicyBatchResponsePost struct {
 	// Content policy identifier.
-	ID         string                                         `json:"id" format:"uuid"`
-	CreatedAt  time.Time                                      `json:"created_at" format:"date-time"`
-	Enabled    bool                                           `json:"enabled"`
-	ModifiedAt time.Time                                      `json:"modified_at" format:"date-time"`
-	Name       string                                         `json:"name"`
-	Notes      string                                         `json:"notes" api:"nullable"`
-	Pattern    string                                         `json:"pattern"`
-	Targets    []SettingContentPolicyBatchResponsePostsTarget `json:"targets"`
-	JSON       settingContentPolicyBatchResponsePostJSON      `json:"-"`
+	ID        string    `json:"id" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Whether the policy is active.
+	Enabled    bool      `json:"enabled"`
+	ModifiedAt time.Time `json:"modified_at" format:"date-time"`
+	// Human-readable name of the policy.
+	Name string `json:"name"`
+	// Optional note describing the purpose of the policy.
+	Notes string `json:"notes" api:"nullable"`
+	// Regular expression the policy matches against.
+	Pattern string `json:"pattern"`
+	// Parts of the email the pattern is matched against.
+	Targets []SettingContentPolicyBatchResponsePostsTarget `json:"targets"`
+	JSON    settingContentPolicyBatchResponsePostJSON      `json:"-"`
 }
 
 // settingContentPolicyBatchResponsePostJSON contains the JSON metadata for the
@@ -457,15 +478,20 @@ func (r SettingContentPolicyBatchResponsePostsTarget) IsKnown() bool {
 // A content policy pattern that matches against the subject or body of an email.
 type SettingContentPolicyBatchResponsePut struct {
 	// Content policy identifier.
-	ID         string                                        `json:"id" format:"uuid"`
-	CreatedAt  time.Time                                     `json:"created_at" format:"date-time"`
-	Enabled    bool                                          `json:"enabled"`
-	ModifiedAt time.Time                                     `json:"modified_at" format:"date-time"`
-	Name       string                                        `json:"name"`
-	Notes      string                                        `json:"notes" api:"nullable"`
-	Pattern    string                                        `json:"pattern"`
-	Targets    []SettingContentPolicyBatchResponsePutsTarget `json:"targets"`
-	JSON       settingContentPolicyBatchResponsePutJSON      `json:"-"`
+	ID        string    `json:"id" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Whether the policy is active.
+	Enabled    bool      `json:"enabled"`
+	ModifiedAt time.Time `json:"modified_at" format:"date-time"`
+	// Human-readable name of the policy.
+	Name string `json:"name"`
+	// Optional note describing the purpose of the policy.
+	Notes string `json:"notes" api:"nullable"`
+	// Regular expression the policy matches against.
+	Pattern string `json:"pattern"`
+	// Parts of the email the pattern is matched against.
+	Targets []SettingContentPolicyBatchResponsePutsTarget `json:"targets"`
+	JSON    settingContentPolicyBatchResponsePutJSON      `json:"-"`
 }
 
 // settingContentPolicyBatchResponsePutJSON contains the JSON metadata for the
@@ -510,15 +536,20 @@ func (r SettingContentPolicyBatchResponsePutsTarget) IsKnown() bool {
 // A content policy pattern that matches against the subject or body of an email.
 type SettingContentPolicyEditResponse struct {
 	// Content policy identifier.
-	ID         string                                   `json:"id" format:"uuid"`
-	CreatedAt  time.Time                                `json:"created_at" format:"date-time"`
-	Enabled    bool                                     `json:"enabled"`
-	ModifiedAt time.Time                                `json:"modified_at" format:"date-time"`
-	Name       string                                   `json:"name"`
-	Notes      string                                   `json:"notes" api:"nullable"`
-	Pattern    string                                   `json:"pattern"`
-	Targets    []SettingContentPolicyEditResponseTarget `json:"targets"`
-	JSON       settingContentPolicyEditResponseJSON     `json:"-"`
+	ID        string    `json:"id" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Whether the policy is active.
+	Enabled    bool      `json:"enabled"`
+	ModifiedAt time.Time `json:"modified_at" format:"date-time"`
+	// Human-readable name of the policy.
+	Name string `json:"name"`
+	// Optional note describing the purpose of the policy.
+	Notes string `json:"notes" api:"nullable"`
+	// Regular expression the policy matches against.
+	Pattern string `json:"pattern"`
+	// Parts of the email the pattern is matched against.
+	Targets []SettingContentPolicyEditResponseTarget `json:"targets"`
+	JSON    settingContentPolicyEditResponseJSON     `json:"-"`
 }
 
 // settingContentPolicyEditResponseJSON contains the JSON metadata for the struct
@@ -563,15 +594,20 @@ func (r SettingContentPolicyEditResponseTarget) IsKnown() bool {
 // A content policy pattern that matches against the subject or body of an email.
 type SettingContentPolicyGetResponse struct {
 	// Content policy identifier.
-	ID         string                                  `json:"id" format:"uuid"`
-	CreatedAt  time.Time                               `json:"created_at" format:"date-time"`
-	Enabled    bool                                    `json:"enabled"`
-	ModifiedAt time.Time                               `json:"modified_at" format:"date-time"`
-	Name       string                                  `json:"name"`
-	Notes      string                                  `json:"notes" api:"nullable"`
-	Pattern    string                                  `json:"pattern"`
-	Targets    []SettingContentPolicyGetResponseTarget `json:"targets"`
-	JSON       settingContentPolicyGetResponseJSON     `json:"-"`
+	ID        string    `json:"id" format:"uuid"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Whether the policy is active.
+	Enabled    bool      `json:"enabled"`
+	ModifiedAt time.Time `json:"modified_at" format:"date-time"`
+	// Human-readable name of the policy.
+	Name string `json:"name"`
+	// Optional note describing the purpose of the policy.
+	Notes string `json:"notes" api:"nullable"`
+	// Regular expression the policy matches against.
+	Pattern string `json:"pattern"`
+	// Parts of the email the pattern is matched against.
+	Targets []SettingContentPolicyGetResponseTarget `json:"targets"`
+	JSON    settingContentPolicyGetResponseJSON     `json:"-"`
 }
 
 // settingContentPolicyGetResponseJSON contains the JSON metadata for the struct
@@ -615,12 +651,17 @@ func (r SettingContentPolicyGetResponseTarget) IsKnown() bool {
 
 type SettingContentPolicyNewParams struct {
 	// Identifier.
-	AccountID param.Field[string]                                `path:"account_id" api:"required"`
-	Enabled   param.Field[bool]                                  `json:"enabled" api:"required"`
-	Name      param.Field[string]                                `json:"name" api:"required"`
-	Pattern   param.Field[string]                                `json:"pattern" api:"required"`
-	Targets   param.Field[[]SettingContentPolicyNewParamsTarget] `json:"targets" api:"required"`
-	Notes     param.Field[string]                                `json:"notes"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Whether the policy is active.
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
+	// Human-readable name of the policy.
+	Name param.Field[string] `json:"name" api:"required"`
+	// Regular expression the policy matches against.
+	Pattern param.Field[string] `json:"pattern" api:"required"`
+	// Parts of the email the pattern is matched against.
+	Targets param.Field[[]SettingContentPolicyNewParamsTarget] `json:"targets" api:"required"`
+	// Optional note describing the purpose of the policy.
+	Notes param.Field[string] `json:"notes"`
 }
 
 func (r SettingContentPolicyNewParams) MarshalJSON() (data []byte, err error) {
@@ -990,11 +1031,17 @@ func (r SettingContentPolicyDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingContentPolicyBatchParams struct {
 	// Identifier.
-	AccountID param.Field[string]                                  `path:"account_id" api:"required"`
-	Deletes   param.Field[[]SettingContentPolicyBatchParamsDelete] `json:"deletes" api:"required"`
-	Patches   param.Field[[]SettingContentPolicyBatchParamsPatch]  `json:"patches" api:"required"`
-	Posts     param.Field[[]SettingContentPolicyBatchParamsPost]   `json:"posts" api:"required"`
-	Puts      param.Field[[]SettingContentPolicyBatchParamsPut]    `json:"puts" api:"required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// IDs of the content policies to delete.
+	Deletes param.Field[[]SettingContentPolicyBatchParamsDelete] `json:"deletes" api:"required"`
+	// Partial updates to apply — each entry carries the policy's ID and only the
+	// fields to change.
+	Patches param.Field[[]SettingContentPolicyBatchParamsPatch] `json:"patches" api:"required"`
+	// Content policies to create.
+	Posts param.Field[[]SettingContentPolicyBatchParamsPost] `json:"posts" api:"required"`
+	// Full replacements to apply — each entry carries the policy's ID and every field
+	// of its new value.
+	Puts param.Field[[]SettingContentPolicyBatchParamsPut] `json:"puts" api:"required"`
 }
 
 func (r SettingContentPolicyBatchParams) MarshalJSON() (data []byte, err error) {
@@ -1012,10 +1059,15 @@ func (r SettingContentPolicyBatchParamsDelete) MarshalJSON() (data []byte, err e
 
 // A content policy pattern that matches against the subject or body of an email.
 type SettingContentPolicyBatchParamsPatch struct {
-	Enabled param.Field[bool]                                           `json:"enabled"`
-	Name    param.Field[string]                                         `json:"name"`
-	Notes   param.Field[string]                                         `json:"notes"`
-	Pattern param.Field[string]                                         `json:"pattern"`
+	// Whether the policy is active.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Human-readable name of the policy.
+	Name param.Field[string] `json:"name"`
+	// Optional note describing the purpose of the policy.
+	Notes param.Field[string] `json:"notes"`
+	// Regular expression the policy matches against.
+	Pattern param.Field[string] `json:"pattern"`
+	// Parts of the email the pattern is matched against.
 	Targets param.Field[[]SettingContentPolicyBatchParamsPatchesTarget] `json:"targets"`
 }
 
@@ -1041,11 +1093,16 @@ func (r SettingContentPolicyBatchParamsPatchesTarget) IsKnown() bool {
 
 // Create a content policy.
 type SettingContentPolicyBatchParamsPost struct {
-	Enabled param.Field[bool]                                         `json:"enabled" api:"required"`
-	Name    param.Field[string]                                       `json:"name" api:"required"`
-	Pattern param.Field[string]                                       `json:"pattern" api:"required"`
+	// Whether the policy is active.
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
+	// Human-readable name of the policy.
+	Name param.Field[string] `json:"name" api:"required"`
+	// Regular expression the policy matches against.
+	Pattern param.Field[string] `json:"pattern" api:"required"`
+	// Parts of the email the pattern is matched against.
 	Targets param.Field[[]SettingContentPolicyBatchParamsPostsTarget] `json:"targets" api:"required"`
-	Notes   param.Field[string]                                       `json:"notes"`
+	// Optional note describing the purpose of the policy.
+	Notes param.Field[string] `json:"notes"`
 }
 
 func (r SettingContentPolicyBatchParamsPost) MarshalJSON() (data []byte, err error) {
@@ -1070,11 +1127,16 @@ func (r SettingContentPolicyBatchParamsPostsTarget) IsKnown() bool {
 
 // A content policy pattern that matches against the subject or body of an email.
 type SettingContentPolicyBatchParamsPut struct {
-	Enabled param.Field[bool]                                        `json:"enabled" api:"required"`
-	Name    param.Field[string]                                      `json:"name" api:"required"`
-	Pattern param.Field[string]                                      `json:"pattern" api:"required"`
+	// Whether the policy is active.
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
+	// Human-readable name of the policy.
+	Name param.Field[string] `json:"name" api:"required"`
+	// Regular expression the policy matches against.
+	Pattern param.Field[string] `json:"pattern" api:"required"`
+	// Parts of the email the pattern is matched against.
 	Targets param.Field[[]SettingContentPolicyBatchParamsPutsTarget] `json:"targets" api:"required"`
-	Notes   param.Field[string]                                      `json:"notes"`
+	// Optional note describing the purpose of the policy.
+	Notes param.Field[string] `json:"notes"`
 }
 
 func (r SettingContentPolicyBatchParamsPut) MarshalJSON() (data []byte, err error) {
@@ -1239,12 +1301,17 @@ func (r SettingContentPolicyBatchResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingContentPolicyEditParams struct {
 	// Identifier.
-	AccountID param.Field[string]                                 `path:"account_id" api:"required"`
-	Enabled   param.Field[bool]                                   `json:"enabled"`
-	Name      param.Field[string]                                 `json:"name"`
-	Notes     param.Field[string]                                 `json:"notes"`
-	Pattern   param.Field[string]                                 `json:"pattern"`
-	Targets   param.Field[[]SettingContentPolicyEditParamsTarget] `json:"targets"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Whether the policy is active.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Human-readable name of the policy.
+	Name param.Field[string] `json:"name"`
+	// Optional note describing the purpose of the policy.
+	Notes param.Field[string] `json:"notes"`
+	// Regular expression the policy matches against.
+	Pattern param.Field[string] `json:"pattern"`
+	// Parts of the email the pattern is matched against.
+	Targets param.Field[[]SettingContentPolicyEditParamsTarget] `json:"targets"`
 }
 
 func (r SettingContentPolicyEditParams) MarshalJSON() (data []byte, err error) {

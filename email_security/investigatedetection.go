@@ -35,7 +35,7 @@ func NewInvestigateDetectionService(opts ...option.RequestOption) (r *Investigat
 }
 
 // Returns detection details such as threat categories and sender information for
-// non-benign messages.
+// messages with a detection.
 func (r *InvestigateDetectionService) Get(ctx context.Context, investigateID string, query InvestigateDetectionGetParams, opts ...option.RequestOption) (res *InvestigateDetectionGetResponse, err error) {
 	var env InvestigateDetectionGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -65,6 +65,7 @@ type InvestigateDetectionGetResponse struct {
 	SenderInfo       InvestigateDetectionGetResponseSenderInfo       `json:"sender_info" api:"required"`
 	ThreatCategories []InvestigateDetectionGetResponseThreatCategory `json:"threat_categories" api:"required"`
 	Validation       InvestigateDetectionGetResponseValidation       `json:"validation" api:"required"`
+	// The verdict Email Security assigns to a message.
 	FinalDisposition InvestigateDetectionGetResponseFinalDisposition `json:"final_disposition" api:"nullable"`
 	JSON             investigateDetectionGetResponseJSON             `json:"-"`
 }
@@ -409,6 +410,7 @@ func (r InvestigateDetectionGetResponseValidationSPF) IsKnown() bool {
 	return false
 }
 
+// The verdict Email Security assigns to a message.
 type InvestigateDetectionGetResponseFinalDisposition string
 
 const (

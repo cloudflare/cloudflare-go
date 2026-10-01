@@ -34,6 +34,10 @@ func TestSuppressionNewWithOptionalParams(t *testing.T) {
 		Email:     cloudflare.F("user@example.com"),
 		ExpiresAt: cloudflare.F(time.Now()),
 		Note:      cloudflare.F("Imported from CRM"),
+		Scope: cloudflare.F[email_sending.SuppressionNewParamsScopeUnion](email_sending.SuppressionNewParamsScopeObject{
+			Type:  cloudflare.F(email_sending.SuppressionNewParamsScopeObjectTypeSendingDomain),
+			Value: cloudflare.F("mail.example.com"),
+		}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -59,12 +63,14 @@ func TestSuppressionListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSending.Suppressions.List(context.TODO(), email_sending.SuppressionListParams{
-		AccountID: cloudflare.F("12345678"),
-		Cursor:    cloudflare.F("eyJ0IjozLCJwIjoxMjMsImMiOiJjM2RjNWYwYjM0YTE0ZmY4ZTFiM2VjMDQ4OTVlMWIyMiJ9"),
-		Email:     cloudflare.F("user@example.com"),
-		PerPage:   cloudflare.F(int64(100)),
-		Reason:    cloudflare.F(email_sending.SuppressionListParamsReasonHardBounce),
-		Search:    cloudflare.F("billing@"),
+		AccountID:  cloudflare.F("12345678"),
+		Cursor:     cloudflare.F("eyJ0Ijo0LCJwaCI6ImRvbWFpbiIsInAiOjEyMywiYyI6ImMzZGM1ZjBiMzRhMTRmZjhlMWIzZWMwNDg5NWUxYjIyIn0"),
+		Email:      cloudflare.F("user@example.com"),
+		PerPage:    cloudflare.F(int64(100)),
+		Reason:     cloudflare.F(email_sending.SuppressionListParamsReasonHardBounce),
+		ScopeType:  cloudflare.F(email_sending.SuppressionListParamsScopeTypeSendingDomain),
+		ScopeValue: cloudflare.F("mail.example.com"),
+		Search:     cloudflare.F("billing@"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -126,6 +132,7 @@ func TestSuppressionEditWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("12345678"),
 			ExpiresAt: cloudflare.F(time.Now()),
 			Note:      cloudflare.F("Customer re-confirmed opt-in"),
+			Scope:     cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {
@@ -187,10 +194,18 @@ func TestSuppressionImport(t *testing.T) {
 			Email:     cloudflare.F("user@example.com"),
 			ExpiresAt: cloudflare.F(time.Now()),
 			Note:      cloudflare.F("Imported from CRM"),
+			Scope: cloudflare.F[email_sending.SuppressionImportParamsItemsScopeUnion](email_sending.SuppressionImportParamsItemsScopeObject{
+				Type:  cloudflare.F(email_sending.SuppressionImportParamsItemsScopeObjectTypeSendingDomain),
+				Value: cloudflare.F("mail.example.com"),
+			}),
 		}, {
 			Email:     cloudflare.F("other@example.com"),
 			ExpiresAt: cloudflare.F(time.Now()),
 			Note:      cloudflare.F("Imported from CRM"),
+			Scope: cloudflare.F[email_sending.SuppressionImportParamsItemsScopeUnion](email_sending.SuppressionImportParamsItemsScopeObject{
+				Type:  cloudflare.F(email_sending.SuppressionImportParamsItemsScopeObjectTypeSendingDomain),
+				Value: cloudflare.F("mail.example.com"),
+			}),
 		}}),
 	})
 	if err != nil {

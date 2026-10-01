@@ -71,45 +71,6 @@ func (r *DevtoolBrowserService) Delete(ctx context.Context, sessionID string, bo
 	return res, err
 }
 
-// Establishes a WebSocket connection to an existing browser session.
-func (r *DevtoolBrowserService) Connect(ctx context.Context, sessionID string, params DevtoolBrowserConnectParams, opts ...option.RequestOption) (err error) {
-	if params.CfBrapiGuardrails.Present {
-		opts = append(opts, option.WithHeader("cf-brapi-guardrails", fmt.Sprintf("%v", params.CfBrapiGuardrails)))
-	}
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	if params.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return err
-	}
-	if sessionID == "" {
-		err = errors.New("missing required session_id parameter")
-		return err
-	}
-	path := fmt.Sprintf("accounts/%s/browser-rendering/devtools/browser/%s", params.AccountID, sessionID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, nil, opts...)
-	return err
-}
-
-// Acquires and establishes a WebSocket connection to a browser session. Session
-// guardrails may be supplied in the `cf-brapi-guardrails` header as
-// base64url-encoded JSON of the same `guardrails` object the POST body accepts
-// (for example `{"allowedDomains":["*.example.com"]}`).
-func (r *DevtoolBrowserService) Launch(ctx context.Context, params DevtoolBrowserLaunchParams, opts ...option.RequestOption) (err error) {
-	if params.CfBrapiGuardrails.Present {
-		opts = append(opts, option.WithHeader("cf-brapi-guardrails", fmt.Sprintf("%v", params.CfBrapiGuardrails)))
-	}
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	if params.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return err
-	}
-	path := fmt.Sprintf("accounts/%s/browser-rendering/devtools/browser", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, nil, opts...)
-	return err
-}
-
 // Returns the complete Chrome DevTools Protocol schema including all domains,
 // commands, events, and types. This schema describes the entire CDP API surface.
 func (r *DevtoolBrowserService) Protocol(ctx context.Context, sessionID string, query DevtoolBrowserProtocolParams, opts ...option.RequestOption) (res *DevtoolBrowserProtocolResponse, err error) {
@@ -375,49 +336,6 @@ func (r DevtoolBrowserNewParamsGuardrails) MarshalJSON() (data []byte, err error
 type DevtoolBrowserDeleteParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-}
-
-type DevtoolBrowserConnectParams struct {
-	// Account ID.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Keep-alive time in ms (only valid when acquiring new session).
-	KeepAlive param.Field[float64] `query:"keep_alive"`
-	// Use experimental browser.
-	Lab       param.Field[bool] `query:"lab"`
-	Recording param.Field[bool] `query:"recording"`
-	// Optional base64url-encoded JSON connection guardrails (mode)
-	CfBrapiGuardrails param.Field[string] `header:"cf-brapi-guardrails"`
-}
-
-// URLQuery serializes [DevtoolBrowserConnectParams]'s query parameters as
-// `url.Values`.
-func (r DevtoolBrowserConnectParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
-}
-
-type DevtoolBrowserLaunchParams struct {
-	// Account ID.
-	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Keep-alive time in ms (only valid when acquiring new session).
-	KeepAlive param.Field[float64] `query:"keep_alive"`
-	// Use experimental browser.
-	Lab       param.Field[bool] `query:"lab"`
-	Recording param.Field[bool] `query:"recording"`
-	// Optional base64url-encoded JSON session guardrails (allowedDomains and
-	// allowedDomainSets)
-	CfBrapiGuardrails param.Field[string] `header:"cf-brapi-guardrails"`
-}
-
-// URLQuery serializes [DevtoolBrowserLaunchParams]'s query parameters as
-// `url.Values`.
-func (r DevtoolBrowserLaunchParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
 }
 
 type DevtoolBrowserProtocolParams struct {

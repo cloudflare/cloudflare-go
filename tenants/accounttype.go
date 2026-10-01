@@ -33,7 +33,7 @@ func NewAccountTypeService(opts ...option.RequestOption) (r *AccountTypeService)
 	return
 }
 
-// List of account types available for the Tenant to provision accounts.
+// Lists the account types this tenant is allowed to provision.
 func (r *AccountTypeService) List(ctx context.Context, tenantID string, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -55,7 +55,7 @@ func (r *AccountTypeService) List(ctx context.Context, tenantID string, opts ...
 	return res, nil
 }
 
-// List of account types available for the Tenant to provision accounts.
+// Lists the account types this tenant is allowed to provision.
 func (r *AccountTypeService) ListAutoPaging(ctx context.Context, tenantID string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[string] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, tenantID, opts...))
 }

@@ -620,6 +620,7 @@ func (r *VersionBinding) UnmarshalJSON(data []byte) (err error) {
 // [VersionBindingsWorkersBindingKindAISearchNamespace],
 // [VersionBindingsWorkersBindingKindMessaging],
 // [VersionBindingsWorkersBindingKindAnalyticsEngine],
+// [VersionBindingsWorkersBindingKindArtifacts],
 // [VersionBindingsWorkersBindingKindAssets],
 // [VersionBindingsWorkersBindingKindBrowser],
 // [VersionBindingsWorkersBindingKindD1],
@@ -662,6 +663,7 @@ func (r VersionBinding) AsUnion() VersionBindingsUnion {
 // [VersionBindingsWorkersBindingKindAISearchNamespace],
 // [VersionBindingsWorkersBindingKindMessaging],
 // [VersionBindingsWorkersBindingKindAnalyticsEngine],
+// [VersionBindingsWorkersBindingKindArtifacts],
 // [VersionBindingsWorkersBindingKindAssets],
 // [VersionBindingsWorkersBindingKindBrowser],
 // [VersionBindingsWorkersBindingKindD1],
@@ -725,6 +727,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindAnalyticsEngine{}),
 			DiscriminatorValue: "analytics_engine",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindArtifacts{}),
+			DiscriminatorValue: "artifacts",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -1114,6 +1121,54 @@ const (
 func (r VersionBindingsWorkersBindingKindAnalyticsEngineType) IsKnown() bool {
 	switch r {
 	case VersionBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine:
+		return true
+	}
+	return false
+}
+
+type VersionBindingsWorkersBindingKindArtifacts struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name" api:"required"`
+	// The Artifacts namespace exposed to the Worker in the Worker's account. Must be
+	// 2-63 characters, start with an ASCII alphanumeric character, contain only ASCII
+	// alphanumeric characters, dots, underscores, and hyphens, and must not end with a
+	// hyphen. The namespace does not need to be created before binding it.
+	Namespace string `json:"namespace" api:"required"`
+	// The kind of resource that the binding provides.
+	Type VersionBindingsWorkersBindingKindArtifactsType `json:"type" api:"required"`
+	JSON versionBindingsWorkersBindingKindArtifactsJSON `json:"-"`
+}
+
+// versionBindingsWorkersBindingKindArtifactsJSON contains the JSON metadata for
+// the struct [VersionBindingsWorkersBindingKindArtifacts]
+type versionBindingsWorkersBindingKindArtifactsJSON struct {
+	Name        apijson.Field
+	Namespace   apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionBindingsWorkersBindingKindArtifacts) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionBindingsWorkersBindingKindArtifactsJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionBindingsWorkersBindingKindArtifacts) implementsVersionBinding() {}
+
+// The kind of resource that the binding provides.
+type VersionBindingsWorkersBindingKindArtifactsType string
+
+const (
+	VersionBindingsWorkersBindingKindArtifactsTypeArtifacts VersionBindingsWorkersBindingKindArtifactsType = "artifacts"
+)
+
+func (r VersionBindingsWorkersBindingKindArtifactsType) IsKnown() bool {
+	switch r {
+	case VersionBindingsWorkersBindingKindArtifactsTypeArtifacts:
 		return true
 	}
 	return false
@@ -2825,6 +2880,7 @@ const (
 	VersionBindingsTypeAISearchNamespace      VersionBindingsType = "ai_search_namespace"
 	VersionBindingsTypeMessaging              VersionBindingsType = "messaging"
 	VersionBindingsTypeAnalyticsEngine        VersionBindingsType = "analytics_engine"
+	VersionBindingsTypeArtifacts              VersionBindingsType = "artifacts"
 	VersionBindingsTypeAssets                 VersionBindingsType = "assets"
 	VersionBindingsTypeBrowser                VersionBindingsType = "browser"
 	VersionBindingsTypeD1                     VersionBindingsType = "d1"
@@ -2861,7 +2917,7 @@ const (
 
 func (r VersionBindingsType) IsKnown() bool {
 	switch r {
-	case VersionBindingsTypeAI, VersionBindingsTypeAISearch, VersionBindingsTypeAISearchNamespace, VersionBindingsTypeMessaging, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMedia, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeK2, VersionBindingsTypeQueue, VersionBindingsTypeRatelimit, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeFlagship, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule, VersionBindingsTypeVPCService, VersionBindingsTypeVPCNetwork:
+	case VersionBindingsTypeAI, VersionBindingsTypeAISearch, VersionBindingsTypeAISearchNamespace, VersionBindingsTypeMessaging, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeArtifacts, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMedia, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeK2, VersionBindingsTypeQueue, VersionBindingsTypeRatelimit, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeFlagship, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule, VersionBindingsTypeVPCService, VersionBindingsTypeVPCNetwork:
 		return true
 	}
 	return false
@@ -4655,6 +4711,7 @@ func (r VersionBindingParam) implementsVersionBindingsUnionParam() {}
 // [workers.VersionBindingsWorkersBindingKindAISearchNamespaceParam],
 // [workers.VersionBindingsWorkersBindingKindMessagingParam],
 // [workers.VersionBindingsWorkersBindingKindAnalyticsEngineParam],
+// [workers.VersionBindingsWorkersBindingKindArtifactsParam],
 // [workers.VersionBindingsWorkersBindingKindAssetsParam],
 // [workers.VersionBindingsWorkersBindingKindBrowserParam],
 // [workers.VersionBindingsWorkersBindingKindD1Param],
@@ -4773,6 +4830,24 @@ func (r VersionBindingsWorkersBindingKindAnalyticsEngineParam) MarshalJSON() (da
 
 func (r VersionBindingsWorkersBindingKindAnalyticsEngineParam) implementsVersionBindingsUnionParam() {
 }
+
+type VersionBindingsWorkersBindingKindArtifactsParam struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name" api:"required"`
+	// The Artifacts namespace exposed to the Worker in the Worker's account. Must be
+	// 2-63 characters, start with an ASCII alphanumeric character, contain only ASCII
+	// alphanumeric characters, dots, underscores, and hyphens, and must not end with a
+	// hyphen. The namespace does not need to be created before binding it.
+	Namespace param.Field[string] `json:"namespace" api:"required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[VersionBindingsWorkersBindingKindArtifactsType] `json:"type" api:"required"`
+}
+
+func (r VersionBindingsWorkersBindingKindArtifactsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionBindingsWorkersBindingKindArtifactsParam) implementsVersionBindingsUnionParam() {}
 
 type VersionBindingsWorkersBindingKindAssetsParam struct {
 	// A JavaScript variable name for the binding.

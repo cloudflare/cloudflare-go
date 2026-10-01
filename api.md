@@ -151,6 +151,8 @@ Methods:
 
 # [DurableObjects](durable_objects/api.md)
 
+# [Containers](containers/api.md)
+
 # [Queues](queues/api.md)
 
 # [APIGateway](api_gateway/api.md)
@@ -212,6 +214,8 @@ Methods:
 # [R2](r2/api.md)
 
 # [R2DataCatalog](r2_data_catalog/api.md)
+
+# [BasinCatalog](basin_catalog/api.md)
 
 # [WorkersForPlatforms](workers_for_platforms/api.md)
 

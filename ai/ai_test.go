@@ -30,7 +30,7 @@ func TestAIRunWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.AI.Run(
 		context.TODO(),
-		"model_name",
+		"@cf/meta/llama-3.1-8b-instruct",
 		ai.AIRunParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body: ai.AIRunParamsBodyTextClassification{

@@ -130,7 +130,7 @@ func (r *HostnameCertificateService) Get(ctx context.Context, certificateID stri
 }
 
 type HostnameCertificateNewResponse struct {
-	// Identifier.
+	// Certificate identifier tag.
 	ID string `json:"id"`
 	// The hostname certificate.
 	Certificate string `json:"certificate"`
@@ -194,7 +194,7 @@ func (r HostnameCertificateNewResponseStatus) IsKnown() bool {
 }
 
 type HostnameCertificateListResponse struct {
-	// Identifier.
+	// Certificate identifier tag.
 	ID string `json:"id"`
 	// The hostname certificate.
 	Certificate string `json:"certificate"`
@@ -258,7 +258,7 @@ func (r HostnameCertificateListResponseStatus) IsKnown() bool {
 }
 
 type HostnameCertificateDeleteResponse struct {
-	// Identifier.
+	// Certificate identifier tag.
 	ID string `json:"id"`
 	// The hostname certificate.
 	Certificate string `json:"certificate"`
@@ -322,7 +322,7 @@ func (r HostnameCertificateDeleteResponseStatus) IsKnown() bool {
 }
 
 type HostnameCertificateGetResponse struct {
-	// Identifier.
+	// Certificate identifier tag.
 	ID string `json:"id"`
 	// The hostname certificate.
 	Certificate string `json:"certificate"`

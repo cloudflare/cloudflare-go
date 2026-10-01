@@ -32,7 +32,7 @@ func TestRecordingGetActiveRecordings(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Recordings.GetActiveRecordings(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"meeting_id",
 		realtime_kit.RecordingGetActiveRecordingsParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -64,7 +64,7 @@ func TestRecordingGetOneRecording(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Recordings.GetOneRecording(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.RecordingGetOneRecordingParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -96,7 +96,7 @@ func TestRecordingGetRecordingsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Recordings.GetRecordings(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		realtime_kit.RecordingGetRecordingsParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			EndTime:   cloudflare.F(time.Now()),
@@ -137,7 +137,7 @@ func TestRecordingPauseResumeStopRecording(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Recordings.PauseResumeStopRecording(
 		context.TODO(),
-		"2a95132c15732412d22c1476fa83f27a",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.RecordingPauseResumeStopRecordingParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -170,7 +170,7 @@ func TestRecordingStartRecordingsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Recordings.StartRecordings(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		realtime_kit.RecordingStartRecordingsParams{
 			AccountID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			MeetingID:               cloudflare.F("97440c6a-140b-40a9-9499-b23fd7a3868a"),
@@ -248,7 +248,7 @@ func TestRecordingStartTrackRecordingWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Recordings.StartTrackRecording(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		realtime_kit.RecordingStartTrackRecordingParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			MeetingID: cloudflare.F("97440c6a-140b-40a9-9499-b23fd7a3868a"),

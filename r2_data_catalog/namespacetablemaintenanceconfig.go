@@ -37,6 +37,10 @@ func NewNamespaceTableMaintenanceConfigService(opts ...option.RequestOption) (r 
 
 // Update the maintenance configuration for a specific table. This allows you to
 // enable or disable compaction and adjust target file sizes for optimization.
+//
+// Deprecated: Use
+// `POST /accounts/{account_id}/basin-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}/maintenance-configs`
+// instead.
 func (r *NamespaceTableMaintenanceConfigService) Update(ctx context.Context, bucketName string, namespace string, tableName string, params NamespaceTableMaintenanceConfigUpdateParams, opts ...option.RequestOption) (res *NamespaceTableMaintenanceConfigUpdateResponse, err error) {
 	var env NamespaceTableMaintenanceConfigUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -67,6 +71,10 @@ func (r *NamespaceTableMaintenanceConfigService) Update(ctx context.Context, buc
 
 // Retrieve the maintenance configuration for a specific table, including
 // compaction settings.
+//
+// Deprecated: Use
+// `GET /accounts/{account_id}/basin-catalog/{bucket_name}/namespaces/{namespace}/tables/{table_name}/maintenance-configs`
+// instead.
 func (r *NamespaceTableMaintenanceConfigService) Get(ctx context.Context, bucketName string, namespace string, tableName string, query NamespaceTableMaintenanceConfigGetParams, opts ...option.RequestOption) (res *NamespaceTableMaintenanceConfigGetResponse, err error) {
 	var env NamespaceTableMaintenanceConfigGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -464,7 +472,7 @@ type NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpiration struct {
 	MaxSnapshotAge param.Field[string] `json:"max_snapshot_age"`
 	// Updates the minimum number of snapshots to retain optionally.
 	MinSnapshotsToKeep param.Field[int64] `json:"min_snapshots_to_keep"`
-	// Updates the state optionally.
+	// Specifies the state of maintenance operations.
 	State param.Field[NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpirationState] `json:"state"`
 }
 
@@ -472,7 +480,7 @@ func (r NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpiration) MarshalJS
 	return apijson.MarshalRoot(r)
 }
 
-// Updates the state optionally.
+// Specifies the state of maintenance operations.
 type NamespaceTableMaintenanceConfigUpdateParamsSnapshotExpirationState string
 
 const (

@@ -158,7 +158,7 @@ func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID 
 }
 
 type CustomCertificate struct {
-	// Identifier.
+	// Custom certificate identifier tag.
 	ID string `json:"id" api:"required"`
 	// Identifier.
 	ZoneID string `json:"zone_id" api:"required"`
@@ -334,7 +334,7 @@ func (r Status) IsKnown() bool {
 }
 
 type CustomCertificateDeleteResponse struct {
-	// Identifier.
+	// Custom certificate identifier tag.
 	ID   string                              `json:"id"`
 	JSON customCertificateDeleteResponseJSON `json:"-"`
 }

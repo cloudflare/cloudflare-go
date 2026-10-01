@@ -228,7 +228,9 @@ type AccessAIControlMcpPortalNewResponseServer struct {
 	AuthenticationStatus AccessAIControlMcpPortalNewResponseServersAuthenticationStatus `json:"authentication_status"`
 	CreatedAt            time.Time                                                      `json:"created_at" format:"date-time"`
 	CreatedBy            string                                                         `json:"created_by"`
-	DefaultDisabled      bool                                                           `json:"default_disabled"`
+	// Hide this server's tools and prompts by default. To expose specific
+	// capabilities, set enabled: true for them in updated_tools or updated_prompts.
+	DefaultDisabled bool `json:"default_disabled"`
 	// Optional description of the MCP server.
 	Description  string                                                 `json:"description" api:"nullable"`
 	Error        string                                                 `json:"error"`
@@ -658,7 +660,9 @@ type AccessAIControlMcpPortalUpdateResponseServer struct {
 	AuthenticationStatus AccessAIControlMcpPortalUpdateResponseServersAuthenticationStatus `json:"authentication_status"`
 	CreatedAt            time.Time                                                         `json:"created_at" format:"date-time"`
 	CreatedBy            string                                                            `json:"created_by"`
-	DefaultDisabled      bool                                                              `json:"default_disabled"`
+	// Hide this server's tools and prompts by default. To expose specific
+	// capabilities, set enabled: true for them in updated_tools or updated_prompts.
+	DefaultDisabled bool `json:"default_disabled"`
 	// Optional description of the MCP server.
 	Description  string                                                    `json:"description" api:"nullable"`
 	Error        string                                                    `json:"error"`
@@ -1090,7 +1094,9 @@ type AccessAIControlMcpPortalListResponseServer struct {
 	AuthenticationStatus AccessAIControlMcpPortalListResponseServersAuthenticationStatus `json:"authentication_status"`
 	CreatedAt            time.Time                                                       `json:"created_at" format:"date-time"`
 	CreatedBy            string                                                          `json:"created_by"`
-	DefaultDisabled      bool                                                            `json:"default_disabled"`
+	// Hide this server's tools and prompts by default. To expose specific
+	// capabilities, set enabled: true for them in updated_tools or updated_prompts.
+	DefaultDisabled bool `json:"default_disabled"`
 	// Optional description of the MCP server.
 	Description  string                                                  `json:"description" api:"nullable"`
 	Error        string                                                  `json:"error"`
@@ -1603,7 +1609,9 @@ type AccessAIControlMcpPortalReadResponseServer struct {
 	AuthenticationStatus AccessAIControlMcpPortalReadResponseServersAuthenticationStatus `json:"authentication_status"`
 	CreatedAt            time.Time                                                       `json:"created_at" format:"date-time"`
 	CreatedBy            string                                                          `json:"created_by"`
-	DefaultDisabled      bool                                                            `json:"default_disabled"`
+	// Hide this server's tools and prompts by default. To expose specific
+	// capabilities, set enabled: true for them in updated_tools or updated_prompts.
+	DefaultDisabled bool `json:"default_disabled"`
 	// Optional description of the MCP server.
 	Description  string                                                  `json:"description" api:"nullable"`
 	Error        string                                                  `json:"error"`
@@ -2010,7 +2018,9 @@ func (r AccessAIControlMcpPortalNewParamsCodeMode) IsKnown() bool {
 type AccessAIControlMcpPortalNewParamsServer struct {
 	// Unique identifier for the MCP server.
 	ServerID param.Field[string] `json:"server_id" api:"required"`
-	// Disable this server by default for clients connecting through the portal.
+	// Hide this server's tools and prompts by default. To expose specific
+	// capabilities, set enabled: true for them in this server entry's updated_tools or
+	// updated_prompts fields when creating or updating the portal.
 	DefaultDisabled param.Field[bool] `json:"default_disabled"`
 	// Use end-user OAuth credentials when connecting this server to the portal.
 	OnBehalf param.Field[bool] `json:"on_behalf"`
@@ -2134,7 +2144,9 @@ func (r AccessAIControlMcpPortalUpdateParamsCodeMode) IsKnown() bool {
 type AccessAIControlMcpPortalUpdateParamsServer struct {
 	// Unique identifier for the MCP server.
 	ServerID param.Field[string] `json:"server_id" api:"required"`
-	// Disable this server by default for clients connecting through the portal.
+	// Hide this server's tools and prompts by default. To expose specific
+	// capabilities, set enabled: true for them in this server entry's updated_tools or
+	// updated_prompts fields when creating or updating the portal.
 	DefaultDisabled param.Field[bool] `json:"default_disabled"`
 	// Use end-user OAuth credentials when connecting this server to the portal.
 	OnBehalf param.Field[bool] `json:"on_behalf"`

@@ -35,7 +35,10 @@ func NewBucketEventNotificationService(opts ...option.RequestOption) (r *BucketE
 	return
 }
 
-// Create event notification rule.
+// Creates rules that send notifications for matching R2 object events to the
+// specified Cloudflare Queue. Rules can filter objects by key prefix and suffix.
+// New rules are added to any existing rules for the queue; a rule that overlaps an
+// existing rule is rejected.
 func (r *BucketEventNotificationService) Update(ctx context.Context, bucketName string, queueID string, params BucketEventNotificationUpdateParams, opts ...option.RequestOption) (res *BucketEventNotificationUpdateResponse, err error) {
 	var env BucketEventNotificationUpdateResponseEnvelope
 	if params.CfR2Jurisdiction.Present {
@@ -63,7 +66,8 @@ func (r *BucketEventNotificationService) Update(ctx context.Context, bucketName 
 	return res, nil
 }
 
-// List all event notification rules for a bucket.
+// Lists event notification rules for an R2 bucket, grouped by the Cloudflare Queue
+// that receives matching object events.
 func (r *BucketEventNotificationService) List(ctx context.Context, bucketName string, params BucketEventNotificationListParams, opts ...option.RequestOption) (res *BucketEventNotificationListResponse, err error) {
 	var env BucketEventNotificationListResponseEnvelope
 	if params.CfR2Jurisdiction.Present {
@@ -87,8 +91,9 @@ func (r *BucketEventNotificationService) List(ctx context.Context, bucketName st
 	return res, nil
 }
 
-// Delete an event notification rule. **If no body is provided, all rules for
-// specified queue will be deleted**.
+// Deletes the specified event notification rules for an R2 bucket and Cloudflare
+// Queue. Provide ruleIds in the request body to select rules. If no body is
+// provided, all rules for that bucket and queue are deleted.
 func (r *BucketEventNotificationService) Delete(ctx context.Context, bucketName string, queueID string, params BucketEventNotificationDeleteParams, opts ...option.RequestOption) (res *BucketEventNotificationDeleteResponse, err error) {
 	var env BucketEventNotificationDeleteResponseEnvelope
 	if params.CfR2Jurisdiction.Present {
@@ -116,7 +121,8 @@ func (r *BucketEventNotificationService) Delete(ctx context.Context, bucketName 
 	return res, nil
 }
 
-// Get a single event notification rule.
+// Gets the event notification rules for the specified R2 bucket and Cloudflare
+// Queue. The response includes the queue's configuration and its array of rules.
 func (r *BucketEventNotificationService) Get(ctx context.Context, bucketName string, queueID string, params BucketEventNotificationGetParams, opts ...option.RequestOption) (res *BucketEventNotificationGetResponse, err error) {
 	var env BucketEventNotificationGetResponseEnvelope
 	if params.CfR2Jurisdiction.Present {
@@ -340,7 +346,7 @@ func (r BucketEventNotificationGetResponseRulesAction) IsKnown() bool {
 }
 
 type BucketEventNotificationUpdateParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Array of rules to drive notifications.
 	Rules            param.Field[[]BucketEventNotificationUpdateParamsRule]           `json:"rules" api:"required"`
@@ -447,7 +453,7 @@ func (r BucketEventNotificationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketEventNotificationListParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                                            `path:"account_id" api:"required"`
 	CfR2Jurisdiction param.Field[BucketEventNotificationListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -514,7 +520,7 @@ func (r BucketEventNotificationListResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketEventNotificationDeleteParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                                              `path:"account_id" api:"required"`
 	CfR2Jurisdiction param.Field[BucketEventNotificationDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -581,7 +587,7 @@ func (r BucketEventNotificationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketEventNotificationGetParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                                           `path:"account_id" api:"required"`
 	CfR2Jurisdiction param.Field[BucketEventNotificationGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }

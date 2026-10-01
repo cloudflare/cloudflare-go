@@ -49,5 +49,6 @@ func (r *GatewayConfigurationCustomCertificateService) Get(ctx context.Context, 
 }
 
 type GatewayConfigurationCustomCertificateGetParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }

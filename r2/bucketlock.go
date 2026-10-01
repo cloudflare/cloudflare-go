@@ -38,7 +38,9 @@ func NewBucketLockService(opts ...option.RequestOption) (r *BucketLockService) {
 	return
 }
 
-// Set lock rules for a bucket.
+// Replaces the lock rules for an R2 bucket. Enabled rules prevent matching objects
+// from being overwritten or deleted for a duration, until a date, or indefinitely.
+// Rules apply to existing and newly uploaded objects.
 func (r *BucketLockService) Update(ctx context.Context, bucketName string, params BucketLockUpdateParams, opts ...option.RequestOption) (res *BucketLockUpdateResponse, err error) {
 	var env BucketLockUpdateResponseEnvelope
 	if params.CfR2Jurisdiction.Present {
@@ -353,7 +355,7 @@ func (r BucketLockGetResponseRulesConditionType) IsKnown() bool {
 }
 
 type BucketLockUpdateParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                                 `path:"account_id" api:"required"`
 	Rules            param.Field[[]BucketLockUpdateParamsRule]           `json:"rules"`
 	CfR2Jurisdiction param.Field[BucketLockUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
@@ -560,7 +562,7 @@ func (r BucketLockUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketLockGetParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                              `path:"account_id" api:"required"`
 	CfR2Jurisdiction param.Field[BucketLockGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }

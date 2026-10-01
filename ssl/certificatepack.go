@@ -228,7 +228,7 @@ func (r ValidationMethod) IsKnown() bool {
 
 // A certificate pack with all its properties.
 type CertificatePackNewResponse struct {
-	// Identifier.
+	// The unique identifier for a certificate_pack.
 	ID string `json:"id" api:"required"`
 	// Array of certificates in this pack.
 	Certificates []CertificatePackNewResponseCertificate `json:"certificates" api:"required"`
@@ -580,7 +580,7 @@ func (r CertificatePackNewResponseValidityDays) IsKnown() bool {
 
 // A certificate pack with all its properties.
 type CertificatePackListResponse struct {
-	// Identifier.
+	// The unique identifier for a certificate_pack.
 	ID string `json:"id" api:"required"`
 	// Array of certificates in this pack.
 	Certificates []CertificatePackListResponseCertificate `json:"certificates" api:"required"`
@@ -931,7 +931,7 @@ func (r CertificatePackListResponseValidityDays) IsKnown() bool {
 }
 
 type CertificatePackDeleteResponse struct {
-	// Identifier.
+	// The unique identifier for a certificate_pack.
 	ID   string                            `json:"id"`
 	JSON certificatePackDeleteResponseJSON `json:"-"`
 }
@@ -954,7 +954,7 @@ func (r certificatePackDeleteResponseJSON) RawJSON() string {
 
 // A certificate pack with all its properties.
 type CertificatePackEditResponse struct {
-	// Identifier.
+	// The unique identifier for a certificate_pack.
 	ID string `json:"id" api:"required"`
 	// Array of certificates in this pack.
 	Certificates []CertificatePackEditResponseCertificate `json:"certificates" api:"required"`
@@ -1306,7 +1306,7 @@ func (r CertificatePackEditResponseValidityDays) IsKnown() bool {
 
 // A certificate pack with all its properties.
 type CertificatePackGetResponse struct {
-	// Identifier.
+	// The unique identifier for a certificate_pack.
 	ID string `json:"id" api:"required"`
 	// Array of certificates in this pack.
 	Certificates []CertificatePackGetResponseCertificate `json:"certificates" api:"required"`

@@ -294,6 +294,7 @@ func TestNamespaceInstanceListWithOptionalParams(t *testing.T) {
 		"my-namespace",
 		ai_search.NamespaceInstanceListParams{
 			AccountID:        cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
+			Hostname:         cloudflare.F("x"),
 			Namespace:        cloudflare.F("namespace"),
 			OrderBy:          cloudflare.F(ai_search.NamespaceInstanceListParamsOrderByCreatedAt),
 			OrderByDirection: cloudflare.F(ai_search.NamespaceInstanceListParamsOrderByDirectionAsc),

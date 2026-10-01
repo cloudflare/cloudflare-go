@@ -92,7 +92,7 @@ func TestKeylessCertificateDelete(t *testing.T) {
 	)
 	_, err := client.KeylessCertificates.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"4d2844d2ce78891c34d0b6c0535a291e",
 		keyless_certificates.KeylessCertificateDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -122,7 +122,7 @@ func TestKeylessCertificateEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.KeylessCertificates.Edit(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"4d2844d2ce78891c34d0b6c0535a291e",
 		keyless_certificates.KeylessCertificateEditParams{
 			ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Enabled: cloudflare.F(false),
@@ -160,7 +160,7 @@ func TestKeylessCertificateGet(t *testing.T) {
 	)
 	_, err := client.KeylessCertificates.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"4d2844d2ce78891c34d0b6c0535a291e",
 		keyless_certificates.KeylessCertificateGetParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

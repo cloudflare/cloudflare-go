@@ -9,7 +9,6 @@ Params Types:
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/vectorize">vectorize</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/vectorize#CreateIndex">CreateIndex</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/vectorize">vectorize</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/vectorize#IndexDimensionConfiguration">IndexDimensionConfiguration</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/vectorize">vectorize</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/vectorize#IndexDeleteByIDsResponse">IndexDeleteByIDsResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/vectorize">vectorize</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/vectorize#IndexGetByIDsResponse">IndexGetByIDsResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/vectorize">vectorize</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/vectorize#IndexInfoResponse">IndexInfoResponse</a>

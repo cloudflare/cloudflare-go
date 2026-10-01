@@ -35,7 +35,9 @@ func NewBucketDomainManagedService(opts ...option.RequestOption) (r *BucketDomai
 	return
 }
 
-// Updates state of public access over the bucket's R2-managed (r2.dev) domain.
+// Enables or disables public access to the R2 bucket through its managed r2.dev
+// domain. Custom domain access is unaffected. The r2.dev domain is rate-limited
+// and intended for development use.
 func (r *BucketDomainManagedService) Update(ctx context.Context, bucketName string, params BucketDomainManagedUpdateParams, opts ...option.RequestOption) (res *BucketDomainManagedUpdateResponse, err error) {
 	var env BucketDomainManagedUpdateResponseEnvelope
 	if params.CfR2Jurisdiction.Present {
@@ -59,7 +61,8 @@ func (r *BucketDomainManagedService) Update(ctx context.Context, bucketName stri
 	return res, nil
 }
 
-// Gets state of public access over the bucket's R2-managed (r2.dev) domain.
+// Gets the R2 bucket's managed r2.dev domain and whether public access is enabled.
+// The r2.dev domain is rate-limited and intended for development use.
 func (r *BucketDomainManagedService) List(ctx context.Context, bucketName string, params BucketDomainManagedListParams, opts ...option.RequestOption) (res *BucketDomainManagedListResponse, err error) {
 	var env BucketDomainManagedListResponseEnvelope
 	if params.CfR2Jurisdiction.Present {
@@ -140,7 +143,7 @@ func (r bucketDomainManagedListResponseJSON) RawJSON() string {
 }
 
 type BucketDomainManagedUpdateParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Whether to enable public bucket access at the r2.dev domain.
 	Enabled          param.Field[bool]                                            `json:"enabled" api:"required"`
@@ -213,7 +216,7 @@ func (r BucketDomainManagedUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketDomainManagedListParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                                        `path:"account_id" api:"required"`
 	CfR2Jurisdiction param.Field[BucketDomainManagedListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }

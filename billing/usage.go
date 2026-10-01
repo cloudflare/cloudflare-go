@@ -210,10 +210,12 @@ type UsageGetResponse struct {
 	// recurring).
 	BilledCost float64 `json:"BilledCost" api:"nullable"`
 	// Public identifier of the Cloudflare account (account tag). Omitted when account
-	// is not part of the requested grouping.
+	// is not part of the requested grouping, and always omitted for usage measured at
+	// contract level, even when grouping by account: that usage is returned as its own
+	// record with no account.
 	BillingAccountID string `json:"BillingAccountId"`
 	// Display name of the Cloudflare account. Omitted when account is not part of the
-	// requested grouping.
+	// requested grouping, and for usage measured at contract level.
 	BillingAccountName string `json:"BillingAccountName"`
 	// Currency that a charge was billed in (ISO 4217).
 	BillingCurrency string `json:"BillingCurrency" api:"nullable"`
@@ -274,9 +276,13 @@ type UsageGetResponse struct {
 	// The product family the charge belongs to (e.g., "R2", "Workers"). Cloudflare
 	// extension; replaces FOCUS ServiceName.
 	XProductFamilyName string `json:"x_ProductFamilyName"`
-	// The identifier for the Cloudflare zone (zone tag). Cloudflare extension.
+	// The identifier for the Cloudflare zone (zone tag). Omitted when zone is not part
+	// of the requested grouping, and always omitted for usage measured at contract
+	// level, even when grouping by zone. Cloudflare extension.
 	XZoneID string `json:"x_ZoneId" api:"nullable"`
-	// The display name of the Cloudflare zone. Cloudflare extension.
+	// The display name of the Cloudflare zone. Omitted when zone is not part of the
+	// requested grouping, and for usage measured at contract level. Cloudflare
+	// extension.
 	XZoneName string               `json:"x_ZoneName" api:"nullable"`
 	JSON      usageGetResponseJSON `json:"-"`
 }
@@ -662,10 +668,12 @@ type UsageGetAccountUsageV2Response struct {
 	// recurring).
 	BilledCost float64 `json:"BilledCost" api:"nullable"`
 	// Public identifier of the Cloudflare account (account tag). Omitted when account
-	// is not part of the requested grouping.
+	// is not part of the requested grouping, and always omitted for usage measured at
+	// contract level, even when grouping by account: that usage is returned as its own
+	// record with no account.
 	BillingAccountID string `json:"BillingAccountId"`
 	// Display name of the Cloudflare account. Omitted when account is not part of the
-	// requested grouping.
+	// requested grouping, and for usage measured at contract level.
 	BillingAccountName string `json:"BillingAccountName"`
 	// Currency that a charge was billed in (ISO 4217).
 	BillingCurrency string `json:"BillingCurrency" api:"nullable"`
@@ -726,9 +734,13 @@ type UsageGetAccountUsageV2Response struct {
 	// The product family the charge belongs to (e.g., "R2", "Workers"). Cloudflare
 	// extension; replaces FOCUS ServiceName.
 	XProductFamilyName string `json:"x_ProductFamilyName"`
-	// The identifier for the Cloudflare zone (zone tag). Cloudflare extension.
+	// The identifier for the Cloudflare zone (zone tag). Omitted when zone is not part
+	// of the requested grouping, and always omitted for usage measured at contract
+	// level, even when grouping by zone. Cloudflare extension.
 	XZoneID string `json:"x_ZoneId" api:"nullable"`
-	// The display name of the Cloudflare zone. Cloudflare extension.
+	// The display name of the Cloudflare zone. Omitted when zone is not part of the
+	// requested grouping, and for usage measured at contract level. Cloudflare
+	// extension.
 	XZoneName string                             `json:"x_ZoneName" api:"nullable"`
 	JSON      usageGetAccountUsageV2ResponseJSON `json:"-"`
 }

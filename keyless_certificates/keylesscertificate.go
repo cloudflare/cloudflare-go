@@ -252,7 +252,7 @@ func (r TunnelParam) MarshalJSON() (data []byte, err error) {
 }
 
 type KeylessCertificateDeleteResponse struct {
-	// Identifier.
+	// Keyless certificate identifier tag.
 	ID   string                               `json:"id"`
 	JSON keylessCertificateDeleteResponseJSON `json:"-"`
 }

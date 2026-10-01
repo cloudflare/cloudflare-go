@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package browser_rendering_test
+package cloudforce_one_test
 
 import (
 	"context"
@@ -9,13 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v7"
-	"github.com/cloudflare/cloudflare-go/v7/browser_rendering"
+	"github.com/cloudflare/cloudflare-go/v7/cloudforce_one"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
-func TestDevtoolBrowserPageGetWithOptionalParams(t *testing.T) {
-	t.Skip("HTTP 101 error from prism")
+func TestThreatSignalSearchSearchWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,15 +28,12 @@ func TestDevtoolBrowserPageGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.BrowserRendering.Devtools.Browser.Page.Get(
-		context.TODO(),
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		"target_id",
-		browser_rendering.DevtoolBrowserPageGetParams{
-			AccountID:         cloudflare.F("account_id"),
-			CfBrapiGuardrails: cloudflare.F("eyJtb2RlIjoicmVhZG9ubHkifQ"),
-		},
-	)
+	_, err := client.CloudforceOne.ThreatSignals.Search.Search(context.TODO(), cloudforce_one.ThreatSignalSearchSearchParams{
+		AccountID:  cloudflare.F("account_id"),
+		Query:      cloudflare.F("x"),
+		FeedID:     cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+		MaxResults: cloudflare.F(cloudforce_one.ThreatSignalSearchSearchParamsMaxResultsEmpty),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

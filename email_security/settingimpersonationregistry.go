@@ -160,23 +160,33 @@ func (r *SettingImpersonationRegistryService) Get(ctx context.Context, impersona
 // An impersonation registry entry.
 type SettingImpersonationRegistryNewResponse struct {
 	// Impersonation registry entry identifier.
-	ID              string    `json:"id" format:"uuid"`
-	Comments        string    `json:"comments" api:"nullable"`
-	CreatedAt       time.Time `json:"created_at" format:"date-time"`
-	DirectoryID     int64     `json:"directory_id" api:"nullable"`
-	DirectoryNodeID int64     `json:"directory_node_id" api:"nullable"`
-	Email           string    `json:"email"`
+	ID string `json:"id" format:"uuid"`
+	// Optional note describing the entry.
+	Comments  string    `json:"comments" api:"nullable"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Identifier of the directory the entry was synced from, when directory-synced.
+	DirectoryID int64 `json:"directory_id" api:"nullable"`
+	// Identifier of the directory node the entry was synced from, when
+	// directory-synced.
+	DirectoryNodeID int64 `json:"directory_node_id" api:"nullable"`
+	// Email address (or pattern) of the protected identity.
+	Email string `json:"email"`
+	// Deprecated. External identifier of the directory node.
+	//
 	// Deprecated: This field is deprecated.
 	ExternalDirectoryNodeID string `json:"external_directory_node_id" api:"nullable"`
-	IsEmailRegex            bool   `json:"is_email_regex"`
+	// Whether `email` is a regular expression instead of a literal address.
+	IsEmailRegex bool `json:"is_email_regex"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
-	LastModified time.Time                                         `json:"last_modified" format:"date-time"`
-	ModifiedAt   time.Time                                         `json:"modified_at" format:"date-time"`
-	Name         string                                            `json:"name"`
-	Provenance   SettingImpersonationRegistryNewResponseProvenance `json:"provenance" api:"nullable"`
-	JSON         settingImpersonationRegistryNewResponseJSON       `json:"-"`
+	LastModified time.Time `json:"last_modified" format:"date-time"`
+	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
+	// Display name of the protected identity.
+	Name string `json:"name"`
+	// Source the entry was created from.
+	Provenance SettingImpersonationRegistryNewResponseProvenance `json:"provenance" api:"nullable"`
+	JSON       settingImpersonationRegistryNewResponseJSON       `json:"-"`
 }
 
 // settingImpersonationRegistryNewResponseJSON contains the JSON metadata for the
@@ -206,6 +216,7 @@ func (r settingImpersonationRegistryNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Source the entry was created from.
 type SettingImpersonationRegistryNewResponseProvenance string
 
 const (
@@ -226,23 +237,33 @@ func (r SettingImpersonationRegistryNewResponseProvenance) IsKnown() bool {
 // An impersonation registry entry.
 type SettingImpersonationRegistryListResponse struct {
 	// Impersonation registry entry identifier.
-	ID              string    `json:"id" format:"uuid"`
-	Comments        string    `json:"comments" api:"nullable"`
-	CreatedAt       time.Time `json:"created_at" format:"date-time"`
-	DirectoryID     int64     `json:"directory_id" api:"nullable"`
-	DirectoryNodeID int64     `json:"directory_node_id" api:"nullable"`
-	Email           string    `json:"email"`
+	ID string `json:"id" format:"uuid"`
+	// Optional note describing the entry.
+	Comments  string    `json:"comments" api:"nullable"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Identifier of the directory the entry was synced from, when directory-synced.
+	DirectoryID int64 `json:"directory_id" api:"nullable"`
+	// Identifier of the directory node the entry was synced from, when
+	// directory-synced.
+	DirectoryNodeID int64 `json:"directory_node_id" api:"nullable"`
+	// Email address (or pattern) of the protected identity.
+	Email string `json:"email"`
+	// Deprecated. External identifier of the directory node.
+	//
 	// Deprecated: This field is deprecated.
 	ExternalDirectoryNodeID string `json:"external_directory_node_id" api:"nullable"`
-	IsEmailRegex            bool   `json:"is_email_regex"`
+	// Whether `email` is a regular expression instead of a literal address.
+	IsEmailRegex bool `json:"is_email_regex"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
-	LastModified time.Time                                          `json:"last_modified" format:"date-time"`
-	ModifiedAt   time.Time                                          `json:"modified_at" format:"date-time"`
-	Name         string                                             `json:"name"`
-	Provenance   SettingImpersonationRegistryListResponseProvenance `json:"provenance" api:"nullable"`
-	JSON         settingImpersonationRegistryListResponseJSON       `json:"-"`
+	LastModified time.Time `json:"last_modified" format:"date-time"`
+	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
+	// Display name of the protected identity.
+	Name string `json:"name"`
+	// Source the entry was created from.
+	Provenance SettingImpersonationRegistryListResponseProvenance `json:"provenance" api:"nullable"`
+	JSON       settingImpersonationRegistryListResponseJSON       `json:"-"`
 }
 
 // settingImpersonationRegistryListResponseJSON contains the JSON metadata for the
@@ -272,6 +293,7 @@ func (r settingImpersonationRegistryListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Source the entry was created from.
 type SettingImpersonationRegistryListResponseProvenance string
 
 const (
@@ -314,23 +336,33 @@ func (r settingImpersonationRegistryDeleteResponseJSON) RawJSON() string {
 // An impersonation registry entry.
 type SettingImpersonationRegistryEditResponse struct {
 	// Impersonation registry entry identifier.
-	ID              string    `json:"id" format:"uuid"`
-	Comments        string    `json:"comments" api:"nullable"`
-	CreatedAt       time.Time `json:"created_at" format:"date-time"`
-	DirectoryID     int64     `json:"directory_id" api:"nullable"`
-	DirectoryNodeID int64     `json:"directory_node_id" api:"nullable"`
-	Email           string    `json:"email"`
+	ID string `json:"id" format:"uuid"`
+	// Optional note describing the entry.
+	Comments  string    `json:"comments" api:"nullable"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Identifier of the directory the entry was synced from, when directory-synced.
+	DirectoryID int64 `json:"directory_id" api:"nullable"`
+	// Identifier of the directory node the entry was synced from, when
+	// directory-synced.
+	DirectoryNodeID int64 `json:"directory_node_id" api:"nullable"`
+	// Email address (or pattern) of the protected identity.
+	Email string `json:"email"`
+	// Deprecated. External identifier of the directory node.
+	//
 	// Deprecated: This field is deprecated.
 	ExternalDirectoryNodeID string `json:"external_directory_node_id" api:"nullable"`
-	IsEmailRegex            bool   `json:"is_email_regex"`
+	// Whether `email` is a regular expression instead of a literal address.
+	IsEmailRegex bool `json:"is_email_regex"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
-	LastModified time.Time                                          `json:"last_modified" format:"date-time"`
-	ModifiedAt   time.Time                                          `json:"modified_at" format:"date-time"`
-	Name         string                                             `json:"name"`
-	Provenance   SettingImpersonationRegistryEditResponseProvenance `json:"provenance" api:"nullable"`
-	JSON         settingImpersonationRegistryEditResponseJSON       `json:"-"`
+	LastModified time.Time `json:"last_modified" format:"date-time"`
+	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
+	// Display name of the protected identity.
+	Name string `json:"name"`
+	// Source the entry was created from.
+	Provenance SettingImpersonationRegistryEditResponseProvenance `json:"provenance" api:"nullable"`
+	JSON       settingImpersonationRegistryEditResponseJSON       `json:"-"`
 }
 
 // settingImpersonationRegistryEditResponseJSON contains the JSON metadata for the
@@ -360,6 +392,7 @@ func (r settingImpersonationRegistryEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Source the entry was created from.
 type SettingImpersonationRegistryEditResponseProvenance string
 
 const (
@@ -380,23 +413,33 @@ func (r SettingImpersonationRegistryEditResponseProvenance) IsKnown() bool {
 // An impersonation registry entry.
 type SettingImpersonationRegistryGetResponse struct {
 	// Impersonation registry entry identifier.
-	ID              string    `json:"id" format:"uuid"`
-	Comments        string    `json:"comments" api:"nullable"`
-	CreatedAt       time.Time `json:"created_at" format:"date-time"`
-	DirectoryID     int64     `json:"directory_id" api:"nullable"`
-	DirectoryNodeID int64     `json:"directory_node_id" api:"nullable"`
-	Email           string    `json:"email"`
+	ID string `json:"id" format:"uuid"`
+	// Optional note describing the entry.
+	Comments  string    `json:"comments" api:"nullable"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Identifier of the directory the entry was synced from, when directory-synced.
+	DirectoryID int64 `json:"directory_id" api:"nullable"`
+	// Identifier of the directory node the entry was synced from, when
+	// directory-synced.
+	DirectoryNodeID int64 `json:"directory_node_id" api:"nullable"`
+	// Email address (or pattern) of the protected identity.
+	Email string `json:"email"`
+	// Deprecated. External identifier of the directory node.
+	//
 	// Deprecated: This field is deprecated.
 	ExternalDirectoryNodeID string `json:"external_directory_node_id" api:"nullable"`
-	IsEmailRegex            bool   `json:"is_email_regex"`
+	// Whether `email` is a regular expression instead of a literal address.
+	IsEmailRegex bool `json:"is_email_regex"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
-	LastModified time.Time                                         `json:"last_modified" format:"date-time"`
-	ModifiedAt   time.Time                                         `json:"modified_at" format:"date-time"`
-	Name         string                                            `json:"name"`
-	Provenance   SettingImpersonationRegistryGetResponseProvenance `json:"provenance" api:"nullable"`
-	JSON         settingImpersonationRegistryGetResponseJSON       `json:"-"`
+	LastModified time.Time `json:"last_modified" format:"date-time"`
+	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
+	// Display name of the protected identity.
+	Name string `json:"name"`
+	// Source the entry was created from.
+	Provenance SettingImpersonationRegistryGetResponseProvenance `json:"provenance" api:"nullable"`
+	JSON       settingImpersonationRegistryGetResponseJSON       `json:"-"`
 }
 
 // settingImpersonationRegistryGetResponseJSON contains the JSON metadata for the
@@ -426,6 +469,7 @@ func (r settingImpersonationRegistryGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Source the entry was created from.
 type SettingImpersonationRegistryGetResponseProvenance string
 
 const (
@@ -445,21 +489,31 @@ func (r SettingImpersonationRegistryGetResponseProvenance) IsKnown() bool {
 
 type SettingImpersonationRegistryNewParams struct {
 	// Identifier.
-	AccountID               param.Field[string]                                          `path:"account_id" api:"required"`
-	Email                   param.Field[string]                                          `json:"email" api:"required"`
-	IsEmailRegex            param.Field[bool]                                            `json:"is_email_regex" api:"required"`
-	Name                    param.Field[string]                                          `json:"name" api:"required"`
-	Comments                param.Field[string]                                          `json:"comments"`
-	DirectoryID             param.Field[int64]                                           `json:"directory_id"`
-	DirectoryNodeID         param.Field[int64]                                           `json:"directory_node_id"`
-	ExternalDirectoryNodeID param.Field[string]                                          `json:"external_directory_node_id"`
-	Provenance              param.Field[SettingImpersonationRegistryNewParamsProvenance] `json:"provenance"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Email address (or pattern) of the protected identity.
+	Email param.Field[string] `json:"email" api:"required"`
+	// Whether `email` is a regular expression instead of a literal address.
+	IsEmailRegex param.Field[bool] `json:"is_email_regex" api:"required"`
+	// Display name of the protected identity.
+	Name param.Field[string] `json:"name" api:"required"`
+	// Optional note describing the entry.
+	Comments param.Field[string] `json:"comments"`
+	// Identifier of the directory the entry was synced from, when directory-synced.
+	DirectoryID param.Field[int64] `json:"directory_id"`
+	// Identifier of the directory node the entry was synced from, when
+	// directory-synced.
+	DirectoryNodeID param.Field[int64] `json:"directory_node_id"`
+	// Deprecated. External identifier of the directory node.
+	ExternalDirectoryNodeID param.Field[string] `json:"external_directory_node_id"`
+	// Source the entry was created from.
+	Provenance param.Field[SettingImpersonationRegistryNewParamsProvenance] `json:"provenance"`
 }
 
 func (r SettingImpersonationRegistryNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Source the entry was created from.
 type SettingImpersonationRegistryNewParamsProvenance string
 
 const (
@@ -845,21 +899,31 @@ func (r SettingImpersonationRegistryDeleteResponseEnvelopeSuccess) IsKnown() boo
 
 type SettingImpersonationRegistryEditParams struct {
 	// Identifier.
-	AccountID               param.Field[string]                                           `path:"account_id" api:"required"`
-	Comments                param.Field[string]                                           `json:"comments"`
-	DirectoryID             param.Field[int64]                                            `json:"directory_id"`
-	DirectoryNodeID         param.Field[int64]                                            `json:"directory_node_id"`
-	Email                   param.Field[string]                                           `json:"email"`
-	ExternalDirectoryNodeID param.Field[string]                                           `json:"external_directory_node_id"`
-	IsEmailRegex            param.Field[bool]                                             `json:"is_email_regex"`
-	Name                    param.Field[string]                                           `json:"name"`
-	Provenance              param.Field[SettingImpersonationRegistryEditParamsProvenance] `json:"provenance"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Optional note describing the entry.
+	Comments param.Field[string] `json:"comments"`
+	// Identifier of the directory the entry was synced from, when directory-synced.
+	DirectoryID param.Field[int64] `json:"directory_id"`
+	// Identifier of the directory node the entry was synced from, when
+	// directory-synced.
+	DirectoryNodeID param.Field[int64] `json:"directory_node_id"`
+	// Email address (or pattern) of the protected identity.
+	Email param.Field[string] `json:"email"`
+	// Deprecated. External identifier of the directory node.
+	ExternalDirectoryNodeID param.Field[string] `json:"external_directory_node_id"`
+	// Whether `email` is a regular expression instead of a literal address.
+	IsEmailRegex param.Field[bool] `json:"is_email_regex"`
+	// Display name of the protected identity.
+	Name param.Field[string] `json:"name"`
+	// Source the entry was created from.
+	Provenance param.Field[SettingImpersonationRegistryEditParamsProvenance] `json:"provenance"`
 }
 
 func (r SettingImpersonationRegistryEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Source the entry was created from.
 type SettingImpersonationRegistryEditParamsProvenance string
 
 const (

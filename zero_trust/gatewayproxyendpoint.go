@@ -351,6 +351,7 @@ func (r ProxyEndpointKind) IsKnown() bool {
 type GatewayProxyEndpointDeleteResponse = interface{}
 
 type GatewayProxyEndpointNewParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string]                    `path:"account_id" api:"required"`
 	Body      GatewayProxyEndpointNewParamsBodyUnion `json:"body" api:"required"`
 }
@@ -498,6 +499,7 @@ func (r GatewayProxyEndpointNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayProxyEndpointListParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sort direction. Only takes effect when `order_by` is also provided; it is
 	// ignored otherwise. When `direction` is omitted the effective direction is
@@ -513,10 +515,10 @@ type GatewayProxyEndpointListParams struct {
 	//
 	// Supported fields and their matching behaviour:
 	//
-	//   - `name` — case-insensitive substring match on the endpoint name.
-	//   - `id` — substring match on the endpoint ID (UUID), with or without dashes.
-	//   - `kind` — exact match on the endpoint kind. The value must be `ip` or
-	//     `identity`; any other value returns `400`.
+	// - `name` — case-insensitive substring match on the endpoint name.
+	// - `id` — substring match on the endpoint ID (UUID), with or without dashes.
+	// - `kind` — exact match on the endpoint kind. The value must be `ip` or
+	//   `identity`; any other value returns `400`.
 	//
 	// Each entry must match one of the per-field patterns below: the field must be one
 	// of `name`, `id`, or `kind`; `name`/`id` accept any value, while `kind` only
@@ -525,11 +527,11 @@ type GatewayProxyEndpointListParams struct {
 	// Field to sort the returned endpoints by. When omitted, the order of results is
 	// unspecified. Supported values:
 	//
-	//   - `name` — sort alphabetically by endpoint name.
-	//   - `created_at` — sort by creation time; defaults to descending unless
-	//     `direction` is set.
-	//   - `updated_at` — sort by last-modified time; defaults to descending unless
-	//     `direction` is set.
+	// - `name` — sort alphabetically by endpoint name.
+	// - `created_at` — sort by creation time; defaults to descending unless
+	//   `direction` is set.
+	// - `updated_at` — sort by last-modified time; defaults to descending unless
+	//   `direction` is set.
 	OrderBy param.Field[GatewayProxyEndpointListParamsOrderBy] `query:"order_by"`
 	// Case-insensitive substring match on the endpoint name. When combined with
 	// `filter`, both must match (logical AND).
@@ -592,6 +594,7 @@ func (r GatewayProxyEndpointListParamsOrderBy) IsKnown() bool {
 }
 
 type GatewayProxyEndpointDeleteParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -639,6 +642,7 @@ func (r GatewayProxyEndpointDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayProxyEndpointEditParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the list of CIDRs to restrict ingress connections.
 	IPs param.Field[[]GatewayIPsParam] `json:"ips"`
@@ -694,6 +698,7 @@ func (r GatewayProxyEndpointEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayProxyEndpointGetParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

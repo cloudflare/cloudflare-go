@@ -114,7 +114,8 @@ type DevicePolicyDefaultEditResponse struct {
 	// List of routes included in the WARP client's tunnel.
 	Include  []SplitTunnelInclude `json:"include"`
 	PolicyID string               `json:"policy_id"`
-	// The client type to which the device settings profile applies.
+	// The client type to which the device settings profile applies. This field is set
+	// when the profile is created and cannot be changed.
 	ProfileType DevicePolicyDefaultEditResponseProfileType `json:"profile_type"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
@@ -243,7 +244,8 @@ func (r devicePolicyDefaultEditResponseGlobalAccelerationJSON) RawJSON() string 
 	return r.raw
 }
 
-// The client type to which the device settings profile applies.
+// The client type to which the device settings profile applies. This field is set
+// when the profile is created and cannot be changed.
 type DevicePolicyDefaultEditResponseProfileType string
 
 const (
@@ -348,7 +350,8 @@ type DevicePolicyDefaultGetResponse struct {
 	// List of routes included in the WARP client's tunnel.
 	Include  []SplitTunnelInclude `json:"include"`
 	PolicyID string               `json:"policy_id"`
-	// The client type to which the device settings profile applies.
+	// The client type to which the device settings profile applies. This field is set
+	// when the profile is created and cannot be changed.
 	ProfileType DevicePolicyDefaultGetResponseProfileType `json:"profile_type"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
@@ -477,7 +480,8 @@ func (r devicePolicyDefaultGetResponseGlobalAccelerationJSON) RawJSON() string {
 	return r.raw
 }
 
-// The client type to which the device settings profile applies.
+// The client type to which the device settings profile applies. This field is set
+// when the profile is created and cannot be changed.
 type DevicePolicyDefaultGetResponseProfileType string
 
 const (

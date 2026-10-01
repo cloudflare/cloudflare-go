@@ -36,8 +36,9 @@ func NewInvestigateReleaseService(opts ...option.RequestOption) (r *InvestigateR
 }
 
 // Delivers one or more quarantined messages to their intended recipients, for
-// cases where a message was incorrectly quarantined. The response includes
-// delivery status for each recipient.
+// cases where a message was incorrectly quarantined. Operates on an explicit list
+// of messages; to release all messages matching a search, create a bulk action job
+// instead. The response includes delivery status for each recipient.
 func (r *InvestigateReleaseService) Bulk(ctx context.Context, params InvestigateReleaseBulkParams, opts ...option.RequestOption) (res *pagination.SinglePage[InvestigateReleaseBulkResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -60,8 +61,9 @@ func (r *InvestigateReleaseService) Bulk(ctx context.Context, params Investigate
 }
 
 // Delivers one or more quarantined messages to their intended recipients, for
-// cases where a message was incorrectly quarantined. The response includes
-// delivery status for each recipient.
+// cases where a message was incorrectly quarantined. Operates on an explicit list
+// of messages; to release all messages matching a search, create a bulk action job
+// instead. The response includes delivery status for each recipient.
 func (r *InvestigateReleaseService) BulkAutoPaging(ctx context.Context, params InvestigateReleaseBulkParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[InvestigateReleaseBulkResponse] {
 	return pagination.NewSinglePageAutoPager(r.Bulk(ctx, params, opts...))
 }
@@ -102,9 +104,10 @@ func (r investigateReleaseBulkResponseJSON) RawJSON() string {
 type InvestigateReleaseBulkParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Body      []string            `json:"body" api:"required"`
+	// Investigate IDs of the messages to release.
+	IDs param.Field[[]string] `json:"ids" api:"required"`
 }
 
 func (r InvestigateReleaseBulkParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }

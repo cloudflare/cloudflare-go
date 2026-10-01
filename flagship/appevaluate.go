@@ -40,8 +40,9 @@ func NewAppEvaluateService(opts ...option.RequestOption) (r *AppEvaluateService)
 }
 
 // Evaluates a flag against the provided context. Pass context attributes as query
-// parameters; values are forwarded as strings. For low-latency in-Worker
-// evaluation, prefer the Flagship binding over this endpoint.
+// parameters; values are coerced to numbers or booleans where unambiguous. For
+// low-latency in-Worker evaluation, prefer the Flagship binding over this
+// endpoint.
 func (r *AppEvaluateService) Get(ctx context.Context, appID string, params AppEvaluateGetParams, opts ...option.RequestOption) (res *AppEvaluateGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -58,8 +59,11 @@ func (r *AppEvaluateService) Get(ctx context.Context, appID string, params AppEv
 }
 
 type AppEvaluateGetResponse struct {
-	FlagKey string                           `json:"flagKey" api:"required"`
-	Reason  AppEvaluateGetResponseReason     `json:"reason" api:"required"`
+	// Key of the evaluated flag.
+	FlagKey string `json:"flagKey" api:"required"`
+	// Reason the evaluator selected this variation.
+	Reason AppEvaluateGetResponseReason `json:"reason" api:"required"`
+	// Name of the variation that supplied the resolved value.
 	Variant string                           `json:"variant" api:"required"`
 	Value   AppEvaluateGetResponseValueUnion `json:"value"`
 	JSON    appEvaluateGetResponseJSON       `json:"-"`
@@ -84,9 +88,11 @@ func (r appEvaluateGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Reason the evaluator selected this variation.
 type AppEvaluateGetResponseReason string
 
 const (
+	AppEvaluateGetResponseReasonStatic         AppEvaluateGetResponseReason = "STATIC"
 	AppEvaluateGetResponseReasonTargetingMatch AppEvaluateGetResponseReason = "TARGETING_MATCH"
 	AppEvaluateGetResponseReasonDefault        AppEvaluateGetResponseReason = "DEFAULT"
 	AppEvaluateGetResponseReasonDisabled       AppEvaluateGetResponseReason = "DISABLED"
@@ -95,7 +101,7 @@ const (
 
 func (r AppEvaluateGetResponseReason) IsKnown() bool {
 	switch r {
-	case AppEvaluateGetResponseReasonTargetingMatch, AppEvaluateGetResponseReasonDefault, AppEvaluateGetResponseReasonDisabled, AppEvaluateGetResponseReasonSplit:
+	case AppEvaluateGetResponseReasonStatic, AppEvaluateGetResponseReasonTargetingMatch, AppEvaluateGetResponseReasonDefault, AppEvaluateGetResponseReasonDisabled, AppEvaluateGetResponseReasonSplit:
 		return true
 	}
 	return false
@@ -148,7 +154,7 @@ type AppEvaluateGetResponseValueArray []interface{}
 func (r AppEvaluateGetResponseValueArray) ImplementsAppEvaluateGetResponseValueUnion() {}
 
 type AppEvaluateGetParams struct {
-	// Cloudflare account ID.
+	// Cloudflare account ID that owns the Flagship app.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The flag key to evaluate.
 	FlagKey param.Field[string] `query:"flagKey" api:"required"`

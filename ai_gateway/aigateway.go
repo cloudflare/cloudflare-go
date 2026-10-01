@@ -58,7 +58,9 @@ func NewAIGatewayService(opts ...option.RequestOption) (r *AIGatewayService) {
 	return
 }
 
-// Creates a new AI Gateway.
+// Creates an AI Gateway in the account with the specified caching, rate limiting,
+// logging, and authentication settings. The gateway ID appears in request URLs and
+// must be unique within the account.
 func (r *AIGatewayService) New(ctx context.Context, params AIGatewayNewParams, opts ...option.RequestOption) (res *AIGatewayNewResponse, err error) {
 	var env AIGatewayNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -75,7 +77,8 @@ func (r *AIGatewayService) New(ctx context.Context, params AIGatewayNewParams, o
 	return res, nil
 }
 
-// Updates an existing AI Gateway dataset.
+// Updates the configuration of an AI Gateway, such as its caching, rate limiting,
+// logging, and authentication settings.
 func (r *AIGatewayService) Update(ctx context.Context, id string, params AIGatewayUpdateParams, opts ...option.RequestOption) (res *AIGatewayUpdateResponse, err error) {
 	var env AIGatewayUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -96,7 +99,7 @@ func (r *AIGatewayService) Update(ctx context.Context, id string, params AIGatew
 	return res, nil
 }
 
-// Lists all AI Gateway evaluator types configured for the account.
+// Lists the AI Gateways in the account. Use `search` to filter by gateway ID.
 func (r *AIGatewayService) List(ctx context.Context, params AIGatewayListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AIGatewayListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -118,12 +121,12 @@ func (r *AIGatewayService) List(ctx context.Context, params AIGatewayListParams,
 	return res, nil
 }
 
-// Lists all AI Gateway evaluator types configured for the account.
+// Lists the AI Gateways in the account. Use `search` to filter by gateway ID.
 func (r *AIGatewayService) ListAutoPaging(ctx context.Context, params AIGatewayListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AIGatewayListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Deletes an AI Gateway dataset.
+// Permanently deletes an AI Gateway, its configuration, and its stored logs.
 func (r *AIGatewayService) Delete(ctx context.Context, id string, body AIGatewayDeleteParams, opts ...option.RequestOption) (res *AIGatewayDeleteResponse, err error) {
 	var env AIGatewayDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -144,7 +147,7 @@ func (r *AIGatewayService) Delete(ctx context.Context, id string, body AIGateway
 	return res, nil
 }
 
-// Retrieves details for a specific AI Gateway dataset.
+// Retrieves the configuration of an AI Gateway.
 func (r *AIGatewayService) Get(ctx context.Context, id string, query AIGatewayGetParams, opts ...option.RequestOption) (res *AIGatewayGetResponse, err error) {
 	var env AIGatewayGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -166,7 +169,7 @@ func (r *AIGatewayService) Get(ctx context.Context, id string, query AIGatewayGe
 }
 
 type AIGatewayNewResponse struct {
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	ID                      string    `json:"id" api:"required"`
 	CacheInvalidateOnUpdate bool      `json:"cache_invalidate_on_update" api:"required"`
 	CacheTTL                int64     `json:"cache_ttl" api:"required,nullable"`
@@ -1364,7 +1367,7 @@ func (r AIGatewayNewResponseWorkersAIBillingMode) IsKnown() bool {
 }
 
 type AIGatewayUpdateResponse struct {
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	ID                      string    `json:"id" api:"required"`
 	CacheInvalidateOnUpdate bool      `json:"cache_invalidate_on_update" api:"required"`
 	CacheTTL                int64     `json:"cache_ttl" api:"required,nullable"`
@@ -2563,7 +2566,7 @@ func (r AIGatewayUpdateResponseWorkersAIBillingMode) IsKnown() bool {
 }
 
 type AIGatewayListResponse struct {
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	ID                      string    `json:"id" api:"required"`
 	CacheInvalidateOnUpdate bool      `json:"cache_invalidate_on_update" api:"required"`
 	CacheTTL                int64     `json:"cache_ttl" api:"required,nullable"`
@@ -3762,7 +3765,7 @@ func (r AIGatewayListResponseWorkersAIBillingMode) IsKnown() bool {
 }
 
 type AIGatewayDeleteResponse struct {
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	ID                      string    `json:"id" api:"required"`
 	CacheInvalidateOnUpdate bool      `json:"cache_invalidate_on_update" api:"required"`
 	CacheTTL                int64     `json:"cache_ttl" api:"required,nullable"`
@@ -4961,7 +4964,7 @@ func (r AIGatewayDeleteResponseWorkersAIBillingMode) IsKnown() bool {
 }
 
 type AIGatewayGetResponse struct {
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	ID                      string    `json:"id" api:"required"`
 	CacheInvalidateOnUpdate bool      `json:"cache_invalidate_on_update" api:"required"`
 	CacheTTL                int64     `json:"cache_ttl" api:"required,nullable"`
@@ -6160,7 +6163,7 @@ func (r AIGatewayGetResponseWorkersAIBillingMode) IsKnown() bool {
 
 type AIGatewayNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	ID                      param.Field[string] `json:"id" api:"required"`
 	CacheInvalidateOnUpdate param.Field[bool]   `json:"cache_invalidate_on_update" api:"required"`
 	CacheTTL                param.Field[int64]  `json:"cache_ttl" api:"required"`
@@ -6171,18 +6174,24 @@ type AIGatewayNewParams struct {
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
 	ByokOnly              param.Field[bool]                                    `json:"byok_only"`
+	DLP                   param.Field[AIGatewayNewParamsDLPUnion]              `json:"dlp"`
+	Guardrails            param.Field[AIGatewayNewParamsGuardrails]            `json:"guardrails"`
+	LogClassification     param.Field[bool]                                    `json:"log_classification"`
 	LogManagement         param.Field[int64]                                   `json:"log_management"`
 	LogManagementStrategy param.Field[AIGatewayNewParamsLogManagementStrategy] `json:"log_management_strategy"`
 	Logpush               param.Field[bool]                                    `json:"logpush"`
 	LogpushPublicKey      param.Field[string]                                  `json:"logpush_public_key"`
+	Otel                  param.Field[[]AIGatewayNewParamsOtel]                `json:"otel"`
 	RateLimitingTechnique param.Field[AIGatewayNewParamsRateLimitingTechnique] `json:"rate_limiting_technique"`
 	// Backoff strategy for retry delays
 	RetryBackoff param.Field[AIGatewayNewParamsRetryBackoff] `json:"retry_backoff"`
 	// Delay between retry attempts in milliseconds (0-60000)
 	RetryDelay param.Field[int64] `json:"retry_delay"`
 	// Maximum number of retry attempts for failed requests (1-5)
-	RetryMaxAttempts param.Field[int64]  `json:"retry_max_attempts"`
-	StoreID          param.Field[string] `json:"store_id"`
+	RetryMaxAttempts param.Field[int64]                         `json:"retry_max_attempts"`
+	SpendLimits      param.Field[AIGatewayNewParamsSpendLimits] `json:"spend_limits"`
+	StoreID          param.Field[string]                        `json:"store_id"`
+	Stripe           param.Field[AIGatewayNewParamsStripe]      `json:"stripe"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
 	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
@@ -6195,6 +6204,538 @@ func (r AIGatewayNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type AIGatewayNewParamsDLP struct {
+	Enabled  param.Field[bool]                        `json:"enabled" api:"required"`
+	Action   param.Field[AIGatewayNewParamsDLPAction] `json:"action"`
+	Policies param.Field[interface{}]                 `json:"policies"`
+	Profiles param.Field[interface{}]                 `json:"profiles"`
+}
+
+func (r AIGatewayNewParamsDLP) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIGatewayNewParamsDLP) implementsAIGatewayNewParamsDLPUnion() {}
+
+// Satisfied by [ai_gateway.AIGatewayNewParamsDLPObject],
+// [ai_gateway.AIGatewayNewParamsDLPObject], [AIGatewayNewParamsDLP].
+type AIGatewayNewParamsDLPUnion interface {
+	implementsAIGatewayNewParamsDLPUnion()
+}
+
+type AIGatewayNewParamsDLPObject struct {
+	Action   param.Field[AIGatewayNewParamsDLPObjectAction] `json:"action" api:"required"`
+	Enabled  param.Field[bool]                              `json:"enabled" api:"required"`
+	Profiles param.Field[[]string]                          `json:"profiles" api:"required"`
+}
+
+func (r AIGatewayNewParamsDLPObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIGatewayNewParamsDLPObject) implementsAIGatewayNewParamsDLPUnion() {}
+
+type AIGatewayNewParamsDLPObjectAction string
+
+const (
+	AIGatewayNewParamsDLPObjectActionBlock AIGatewayNewParamsDLPObjectAction = "BLOCK"
+	AIGatewayNewParamsDLPObjectActionFlag  AIGatewayNewParamsDLPObjectAction = "FLAG"
+)
+
+func (r AIGatewayNewParamsDLPObjectAction) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsDLPObjectActionBlock, AIGatewayNewParamsDLPObjectActionFlag:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsDLPAction string
+
+const (
+	AIGatewayNewParamsDLPActionBlock AIGatewayNewParamsDLPAction = "BLOCK"
+	AIGatewayNewParamsDLPActionFlag  AIGatewayNewParamsDLPAction = "FLAG"
+)
+
+func (r AIGatewayNewParamsDLPAction) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsDLPActionBlock, AIGatewayNewParamsDLPActionFlag:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrails struct {
+	Prompt   param.Field[AIGatewayNewParamsGuardrailsPrompt]   `json:"prompt" api:"required"`
+	Response param.Field[AIGatewayNewParamsGuardrailsResponse] `json:"response" api:"required"`
+}
+
+func (r AIGatewayNewParamsGuardrails) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIGatewayNewParamsGuardrailsPrompt struct {
+	P1  param.Field[AIGatewayNewParamsGuardrailsPromptP1]  `json:"P1"`
+	S1  param.Field[AIGatewayNewParamsGuardrailsPromptS1]  `json:"S1"`
+	S10 param.Field[AIGatewayNewParamsGuardrailsPromptS10] `json:"S10"`
+	S11 param.Field[AIGatewayNewParamsGuardrailsPromptS11] `json:"S11"`
+	S12 param.Field[AIGatewayNewParamsGuardrailsPromptS12] `json:"S12"`
+	S13 param.Field[AIGatewayNewParamsGuardrailsPromptS13] `json:"S13"`
+	S2  param.Field[AIGatewayNewParamsGuardrailsPromptS2]  `json:"S2"`
+	S3  param.Field[AIGatewayNewParamsGuardrailsPromptS3]  `json:"S3"`
+	S4  param.Field[AIGatewayNewParamsGuardrailsPromptS4]  `json:"S4"`
+	S5  param.Field[AIGatewayNewParamsGuardrailsPromptS5]  `json:"S5"`
+	S6  param.Field[AIGatewayNewParamsGuardrailsPromptS6]  `json:"S6"`
+	S7  param.Field[AIGatewayNewParamsGuardrailsPromptS7]  `json:"S7"`
+	S8  param.Field[AIGatewayNewParamsGuardrailsPromptS8]  `json:"S8"`
+	S9  param.Field[AIGatewayNewParamsGuardrailsPromptS9]  `json:"S9"`
+}
+
+func (r AIGatewayNewParamsGuardrailsPrompt) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIGatewayNewParamsGuardrailsPromptP1 string
+
+const (
+	AIGatewayNewParamsGuardrailsPromptP1Flag  AIGatewayNewParamsGuardrailsPromptP1 = "FLAG"
+	AIGatewayNewParamsGuardrailsPromptP1Block AIGatewayNewParamsGuardrailsPromptP1 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsPromptP1) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsPromptP1Flag, AIGatewayNewParamsGuardrailsPromptP1Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsPromptS1 string
+
+const (
+	AIGatewayNewParamsGuardrailsPromptS1Flag  AIGatewayNewParamsGuardrailsPromptS1 = "FLAG"
+	AIGatewayNewParamsGuardrailsPromptS1Block AIGatewayNewParamsGuardrailsPromptS1 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsPromptS1) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsPromptS1Flag, AIGatewayNewParamsGuardrailsPromptS1Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsPromptS10 string
+
+const (
+	AIGatewayNewParamsGuardrailsPromptS10Flag  AIGatewayNewParamsGuardrailsPromptS10 = "FLAG"
+	AIGatewayNewParamsGuardrailsPromptS10Block AIGatewayNewParamsGuardrailsPromptS10 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsPromptS10) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsPromptS10Flag, AIGatewayNewParamsGuardrailsPromptS10Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsPromptS11 string
+
+const (
+	AIGatewayNewParamsGuardrailsPromptS11Flag  AIGatewayNewParamsGuardrailsPromptS11 = "FLAG"
+	AIGatewayNewParamsGuardrailsPromptS11Block AIGatewayNewParamsGuardrailsPromptS11 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsPromptS11) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsPromptS11Flag, AIGatewayNewParamsGuardrailsPromptS11Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsPromptS12 string
+
+const (
+	AIGatewayNewParamsGuardrailsPromptS12Flag  AIGatewayNewParamsGuardrailsPromptS12 = "FLAG"
+	AIGatewayNewParamsGuardrailsPromptS12Block AIGatewayNewParamsGuardrailsPromptS12 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsPromptS12) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsPromptS12Flag, AIGatewayNewParamsGuardrailsPromptS12Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsPromptS13 string
+
+const (
+	AIGatewayNewParamsGuardrailsPromptS13Flag  AIGatewayNewParamsGuardrailsPromptS13 = "FLAG"
+	AIGatewayNewParamsGuardrailsPromptS13Block AIGatewayNewParamsGuardrailsPromptS13 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsPromptS13) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsPromptS13Flag, AIGatewayNewParamsGuardrailsPromptS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsPromptS2 string
+
+const (
+	AIGatewayNewParamsGuardrailsPromptS2Flag  AIGatewayNewParamsGuardrailsPromptS2 = "FLAG"
+	AIGatewayNewParamsGuardrailsPromptS2Block AIGatewayNewParamsGuardrailsPromptS2 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsPromptS2) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsPromptS2Flag, AIGatewayNewParamsGuardrailsPromptS2Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsPromptS3 string
+
+const (
+	AIGatewayNewParamsGuardrailsPromptS3Flag  AIGatewayNewParamsGuardrailsPromptS3 = "FLAG"
+	AIGatewayNewParamsGuardrailsPromptS3Block AIGatewayNewParamsGuardrailsPromptS3 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsPromptS3) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsPromptS3Flag, AIGatewayNewParamsGuardrailsPromptS3Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsPromptS4 string
+
+const (
+	AIGatewayNewParamsGuardrailsPromptS4Flag  AIGatewayNewParamsGuardrailsPromptS4 = "FLAG"
+	AIGatewayNewParamsGuardrailsPromptS4Block AIGatewayNewParamsGuardrailsPromptS4 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsPromptS4) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsPromptS4Flag, AIGatewayNewParamsGuardrailsPromptS4Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsPromptS5 string
+
+const (
+	AIGatewayNewParamsGuardrailsPromptS5Flag  AIGatewayNewParamsGuardrailsPromptS5 = "FLAG"
+	AIGatewayNewParamsGuardrailsPromptS5Block AIGatewayNewParamsGuardrailsPromptS5 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsPromptS5) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsPromptS5Flag, AIGatewayNewParamsGuardrailsPromptS5Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsPromptS6 string
+
+const (
+	AIGatewayNewParamsGuardrailsPromptS6Flag  AIGatewayNewParamsGuardrailsPromptS6 = "FLAG"
+	AIGatewayNewParamsGuardrailsPromptS6Block AIGatewayNewParamsGuardrailsPromptS6 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsPromptS6) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsPromptS6Flag, AIGatewayNewParamsGuardrailsPromptS6Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsPromptS7 string
+
+const (
+	AIGatewayNewParamsGuardrailsPromptS7Flag  AIGatewayNewParamsGuardrailsPromptS7 = "FLAG"
+	AIGatewayNewParamsGuardrailsPromptS7Block AIGatewayNewParamsGuardrailsPromptS7 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsPromptS7) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsPromptS7Flag, AIGatewayNewParamsGuardrailsPromptS7Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsPromptS8 string
+
+const (
+	AIGatewayNewParamsGuardrailsPromptS8Flag  AIGatewayNewParamsGuardrailsPromptS8 = "FLAG"
+	AIGatewayNewParamsGuardrailsPromptS8Block AIGatewayNewParamsGuardrailsPromptS8 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsPromptS8) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsPromptS8Flag, AIGatewayNewParamsGuardrailsPromptS8Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsPromptS9 string
+
+const (
+	AIGatewayNewParamsGuardrailsPromptS9Flag  AIGatewayNewParamsGuardrailsPromptS9 = "FLAG"
+	AIGatewayNewParamsGuardrailsPromptS9Block AIGatewayNewParamsGuardrailsPromptS9 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsPromptS9) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsPromptS9Flag, AIGatewayNewParamsGuardrailsPromptS9Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsResponse struct {
+	P1  param.Field[AIGatewayNewParamsGuardrailsResponseP1]  `json:"P1"`
+	S1  param.Field[AIGatewayNewParamsGuardrailsResponseS1]  `json:"S1"`
+	S10 param.Field[AIGatewayNewParamsGuardrailsResponseS10] `json:"S10"`
+	S11 param.Field[AIGatewayNewParamsGuardrailsResponseS11] `json:"S11"`
+	S12 param.Field[AIGatewayNewParamsGuardrailsResponseS12] `json:"S12"`
+	S13 param.Field[AIGatewayNewParamsGuardrailsResponseS13] `json:"S13"`
+	S2  param.Field[AIGatewayNewParamsGuardrailsResponseS2]  `json:"S2"`
+	S3  param.Field[AIGatewayNewParamsGuardrailsResponseS3]  `json:"S3"`
+	S4  param.Field[AIGatewayNewParamsGuardrailsResponseS4]  `json:"S4"`
+	S5  param.Field[AIGatewayNewParamsGuardrailsResponseS5]  `json:"S5"`
+	S6  param.Field[AIGatewayNewParamsGuardrailsResponseS6]  `json:"S6"`
+	S7  param.Field[AIGatewayNewParamsGuardrailsResponseS7]  `json:"S7"`
+	S8  param.Field[AIGatewayNewParamsGuardrailsResponseS8]  `json:"S8"`
+	S9  param.Field[AIGatewayNewParamsGuardrailsResponseS9]  `json:"S9"`
+}
+
+func (r AIGatewayNewParamsGuardrailsResponse) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIGatewayNewParamsGuardrailsResponseP1 string
+
+const (
+	AIGatewayNewParamsGuardrailsResponseP1Flag  AIGatewayNewParamsGuardrailsResponseP1 = "FLAG"
+	AIGatewayNewParamsGuardrailsResponseP1Block AIGatewayNewParamsGuardrailsResponseP1 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsResponseP1) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsResponseP1Flag, AIGatewayNewParamsGuardrailsResponseP1Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsResponseS1 string
+
+const (
+	AIGatewayNewParamsGuardrailsResponseS1Flag  AIGatewayNewParamsGuardrailsResponseS1 = "FLAG"
+	AIGatewayNewParamsGuardrailsResponseS1Block AIGatewayNewParamsGuardrailsResponseS1 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsResponseS1) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsResponseS1Flag, AIGatewayNewParamsGuardrailsResponseS1Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsResponseS10 string
+
+const (
+	AIGatewayNewParamsGuardrailsResponseS10Flag  AIGatewayNewParamsGuardrailsResponseS10 = "FLAG"
+	AIGatewayNewParamsGuardrailsResponseS10Block AIGatewayNewParamsGuardrailsResponseS10 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsResponseS10) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsResponseS10Flag, AIGatewayNewParamsGuardrailsResponseS10Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsResponseS11 string
+
+const (
+	AIGatewayNewParamsGuardrailsResponseS11Flag  AIGatewayNewParamsGuardrailsResponseS11 = "FLAG"
+	AIGatewayNewParamsGuardrailsResponseS11Block AIGatewayNewParamsGuardrailsResponseS11 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsResponseS11) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsResponseS11Flag, AIGatewayNewParamsGuardrailsResponseS11Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsResponseS12 string
+
+const (
+	AIGatewayNewParamsGuardrailsResponseS12Flag  AIGatewayNewParamsGuardrailsResponseS12 = "FLAG"
+	AIGatewayNewParamsGuardrailsResponseS12Block AIGatewayNewParamsGuardrailsResponseS12 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsResponseS12) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsResponseS12Flag, AIGatewayNewParamsGuardrailsResponseS12Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsResponseS13 string
+
+const (
+	AIGatewayNewParamsGuardrailsResponseS13Flag  AIGatewayNewParamsGuardrailsResponseS13 = "FLAG"
+	AIGatewayNewParamsGuardrailsResponseS13Block AIGatewayNewParamsGuardrailsResponseS13 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsResponseS13) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsResponseS13Flag, AIGatewayNewParamsGuardrailsResponseS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsResponseS2 string
+
+const (
+	AIGatewayNewParamsGuardrailsResponseS2Flag  AIGatewayNewParamsGuardrailsResponseS2 = "FLAG"
+	AIGatewayNewParamsGuardrailsResponseS2Block AIGatewayNewParamsGuardrailsResponseS2 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsResponseS2) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsResponseS2Flag, AIGatewayNewParamsGuardrailsResponseS2Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsResponseS3 string
+
+const (
+	AIGatewayNewParamsGuardrailsResponseS3Flag  AIGatewayNewParamsGuardrailsResponseS3 = "FLAG"
+	AIGatewayNewParamsGuardrailsResponseS3Block AIGatewayNewParamsGuardrailsResponseS3 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsResponseS3) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsResponseS3Flag, AIGatewayNewParamsGuardrailsResponseS3Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsResponseS4 string
+
+const (
+	AIGatewayNewParamsGuardrailsResponseS4Flag  AIGatewayNewParamsGuardrailsResponseS4 = "FLAG"
+	AIGatewayNewParamsGuardrailsResponseS4Block AIGatewayNewParamsGuardrailsResponseS4 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsResponseS4) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsResponseS4Flag, AIGatewayNewParamsGuardrailsResponseS4Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsResponseS5 string
+
+const (
+	AIGatewayNewParamsGuardrailsResponseS5Flag  AIGatewayNewParamsGuardrailsResponseS5 = "FLAG"
+	AIGatewayNewParamsGuardrailsResponseS5Block AIGatewayNewParamsGuardrailsResponseS5 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsResponseS5) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsResponseS5Flag, AIGatewayNewParamsGuardrailsResponseS5Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsResponseS6 string
+
+const (
+	AIGatewayNewParamsGuardrailsResponseS6Flag  AIGatewayNewParamsGuardrailsResponseS6 = "FLAG"
+	AIGatewayNewParamsGuardrailsResponseS6Block AIGatewayNewParamsGuardrailsResponseS6 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsResponseS6) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsResponseS6Flag, AIGatewayNewParamsGuardrailsResponseS6Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsResponseS7 string
+
+const (
+	AIGatewayNewParamsGuardrailsResponseS7Flag  AIGatewayNewParamsGuardrailsResponseS7 = "FLAG"
+	AIGatewayNewParamsGuardrailsResponseS7Block AIGatewayNewParamsGuardrailsResponseS7 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsResponseS7) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsResponseS7Flag, AIGatewayNewParamsGuardrailsResponseS7Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsResponseS8 string
+
+const (
+	AIGatewayNewParamsGuardrailsResponseS8Flag  AIGatewayNewParamsGuardrailsResponseS8 = "FLAG"
+	AIGatewayNewParamsGuardrailsResponseS8Block AIGatewayNewParamsGuardrailsResponseS8 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsResponseS8) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsResponseS8Flag, AIGatewayNewParamsGuardrailsResponseS8Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsResponseS9 string
+
+const (
+	AIGatewayNewParamsGuardrailsResponseS9Flag  AIGatewayNewParamsGuardrailsResponseS9 = "FLAG"
+	AIGatewayNewParamsGuardrailsResponseS9Block AIGatewayNewParamsGuardrailsResponseS9 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsResponseS9) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsResponseS9Flag, AIGatewayNewParamsGuardrailsResponseS9Block:
+		return true
+	}
+	return false
+}
+
 type AIGatewayNewParamsLogManagementStrategy string
 
 const (
@@ -6205,6 +6746,32 @@ const (
 func (r AIGatewayNewParamsLogManagementStrategy) IsKnown() bool {
 	switch r {
 	case AIGatewayNewParamsLogManagementStrategyStopInserting, AIGatewayNewParamsLogManagementStrategyDeleteOldest:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsOtel struct {
+	Headers       param.Field[map[string]string]                 `json:"headers" api:"required"`
+	URL           param.Field[string]                            `json:"url" api:"required" format:"uri"`
+	Authorization param.Field[string]                            `json:"authorization"`
+	ContentType   param.Field[AIGatewayNewParamsOtelContentType] `json:"content_type"`
+}
+
+func (r AIGatewayNewParamsOtel) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIGatewayNewParamsOtelContentType string
+
+const (
+	AIGatewayNewParamsOtelContentTypeJson     AIGatewayNewParamsOtelContentType = "json"
+	AIGatewayNewParamsOtelContentTypeProtobuf AIGatewayNewParamsOtelContentType = "protobuf"
+)
+
+func (r AIGatewayNewParamsOtelContentType) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsOtelContentTypeJson, AIGatewayNewParamsOtelContentTypeProtobuf:
 		return true
 	}
 	return false
@@ -6240,6 +6807,193 @@ func (r AIGatewayNewParamsRetryBackoff) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type AIGatewayNewParamsSpendLimits struct {
+	Enabled param.Field[bool]                                `json:"enabled"`
+	Rules   param.Field[[]AIGatewayNewParamsSpendLimitsRule] `json:"rules"`
+}
+
+func (r AIGatewayNewParamsSpendLimits) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIGatewayNewParamsSpendLimitsRule struct {
+	Limit     param.Field[float64]                                                    `json:"limit" api:"required"`
+	LimitType param.Field[AIGatewayNewParamsSpendLimitsRulesLimitType]                `json:"limitType" api:"required"`
+	Window    param.Field[int64]                                                      `json:"window" api:"required"`
+	ID        param.Field[string]                                                     `json:"id"`
+	Enabled   param.Field[bool]                                                       `json:"enabled"`
+	Metadata  param.Field[map[string]AIGatewayNewParamsSpendLimitsRulesMetadataUnion] `json:"metadata"`
+	Model     param.Field[AIGatewayNewParamsSpendLimitsRulesModel]                    `json:"model"`
+	Provider  param.Field[AIGatewayNewParamsSpendLimitsRulesProvider]                 `json:"provider"`
+	Technique param.Field[AIGatewayNewParamsSpendLimitsRulesTechnique]                `json:"technique"`
+}
+
+func (r AIGatewayNewParamsSpendLimitsRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIGatewayNewParamsSpendLimitsRulesLimitType string
+
+const (
+	AIGatewayNewParamsSpendLimitsRulesLimitTypeCost AIGatewayNewParamsSpendLimitsRulesLimitType = "cost"
+)
+
+func (r AIGatewayNewParamsSpendLimitsRulesLimitType) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsSpendLimitsRulesLimitTypeCost:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsSpendLimitsRulesMetadata struct {
+	Mode   param.Field[AIGatewayNewParamsSpendLimitsRulesMetadataMode] `json:"mode" api:"required"`
+	Values param.Field[interface{}]                                    `json:"values"`
+}
+
+func (r AIGatewayNewParamsSpendLimitsRulesMetadata) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIGatewayNewParamsSpendLimitsRulesMetadata) implementsAIGatewayNewParamsSpendLimitsRulesMetadataUnion() {
+}
+
+// Satisfied by [ai_gateway.AIGatewayNewParamsSpendLimitsRulesMetadataMode],
+// [ai_gateway.AIGatewayNewParamsSpendLimitsRulesMetadataObject],
+// [AIGatewayNewParamsSpendLimitsRulesMetadata].
+type AIGatewayNewParamsSpendLimitsRulesMetadataUnion interface {
+	implementsAIGatewayNewParamsSpendLimitsRulesMetadataUnion()
+}
+
+type AIGatewayNewParamsSpendLimitsRulesMetadataMode struct {
+	Mode param.Field[AIGatewayNewParamsSpendLimitsRulesMetadataModeMode] `json:"mode" api:"required"`
+}
+
+func (r AIGatewayNewParamsSpendLimitsRulesMetadataMode) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIGatewayNewParamsSpendLimitsRulesMetadataMode) implementsAIGatewayNewParamsSpendLimitsRulesMetadataUnion() {
+}
+
+type AIGatewayNewParamsSpendLimitsRulesMetadataModeMode string
+
+const (
+	AIGatewayNewParamsSpendLimitsRulesMetadataModeModePartition AIGatewayNewParamsSpendLimitsRulesMetadataModeMode = "partition"
+)
+
+func (r AIGatewayNewParamsSpendLimitsRulesMetadataModeMode) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsSpendLimitsRulesMetadataModeModePartition:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsSpendLimitsRulesMetadataObject struct {
+	Mode   param.Field[AIGatewayNewParamsSpendLimitsRulesMetadataObjectMode] `json:"mode" api:"required"`
+	Values param.Field[[]string]                                             `json:"values" api:"required"`
+}
+
+func (r AIGatewayNewParamsSpendLimitsRulesMetadataObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIGatewayNewParamsSpendLimitsRulesMetadataObject) implementsAIGatewayNewParamsSpendLimitsRulesMetadataUnion() {
+}
+
+type AIGatewayNewParamsSpendLimitsRulesMetadataObjectMode string
+
+const (
+	AIGatewayNewParamsSpendLimitsRulesMetadataObjectModeFilter AIGatewayNewParamsSpendLimitsRulesMetadataObjectMode = "filter"
+)
+
+func (r AIGatewayNewParamsSpendLimitsRulesMetadataObjectMode) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsSpendLimitsRulesMetadataObjectModeFilter:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsSpendLimitsRulesModel struct {
+	Mode   param.Field[AIGatewayNewParamsSpendLimitsRulesModelMode] `json:"mode" api:"required"`
+	Values param.Field[[]string]                                    `json:"values" api:"required"`
+}
+
+func (r AIGatewayNewParamsSpendLimitsRulesModel) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIGatewayNewParamsSpendLimitsRulesModelMode string
+
+const (
+	AIGatewayNewParamsSpendLimitsRulesModelModeFilter AIGatewayNewParamsSpendLimitsRulesModelMode = "filter"
+)
+
+func (r AIGatewayNewParamsSpendLimitsRulesModelMode) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsSpendLimitsRulesModelModeFilter:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsSpendLimitsRulesProvider struct {
+	Mode   param.Field[AIGatewayNewParamsSpendLimitsRulesProviderMode] `json:"mode" api:"required"`
+	Values param.Field[[]string]                                       `json:"values" api:"required"`
+}
+
+func (r AIGatewayNewParamsSpendLimitsRulesProvider) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIGatewayNewParamsSpendLimitsRulesProviderMode string
+
+const (
+	AIGatewayNewParamsSpendLimitsRulesProviderModeFilter AIGatewayNewParamsSpendLimitsRulesProviderMode = "filter"
+)
+
+func (r AIGatewayNewParamsSpendLimitsRulesProviderMode) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsSpendLimitsRulesProviderModeFilter:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsSpendLimitsRulesTechnique string
+
+const (
+	AIGatewayNewParamsSpendLimitsRulesTechniqueFixed   AIGatewayNewParamsSpendLimitsRulesTechnique = "fixed"
+	AIGatewayNewParamsSpendLimitsRulesTechniqueSliding AIGatewayNewParamsSpendLimitsRulesTechnique = "sliding"
+)
+
+func (r AIGatewayNewParamsSpendLimitsRulesTechnique) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsSpendLimitsRulesTechniqueFixed, AIGatewayNewParamsSpendLimitsRulesTechniqueSliding:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsStripe struct {
+	Authorization param.Field[string]                               `json:"authorization" api:"required"`
+	UsageEvents   param.Field[[]AIGatewayNewParamsStripeUsageEvent] `json:"usage_events" api:"required"`
+}
+
+func (r AIGatewayNewParamsStripe) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIGatewayNewParamsStripeUsageEvent struct {
+	Payload param.Field[string] `json:"payload" api:"required"`
+}
+
+func (r AIGatewayNewParamsStripeUsageEvent) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Controls how Workers AI inference calls routed through this gateway are billed.

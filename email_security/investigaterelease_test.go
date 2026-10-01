@@ -30,7 +30,7 @@ func TestInvestigateReleaseBulk(t *testing.T) {
 	)
 	_, err := client.EmailSecurity.Investigate.Release.Bulk(context.TODO(), email_security.InvestigateReleaseBulkParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body:      []string{"4Njp3P0STMz2c02Q-2024-01-05T10:00:00-12345678"},
+		IDs:       cloudflare.F([]string{"4Njp3P0STMz2c02Q-2024-01-05T10:00:00-12345678"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

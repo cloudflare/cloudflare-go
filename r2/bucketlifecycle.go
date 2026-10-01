@@ -38,7 +38,9 @@ func NewBucketLifecycleService(opts ...option.RequestOption) (r *BucketLifecycle
 	return
 }
 
-// Set the object lifecycle rules for a bucket.
+// Replaces the object lifecycle rules for an R2 bucket. Rules match object-key
+// prefixes and can expire objects, abort incomplete multipart uploads, or
+// transition objects to Infrequent Access storage.
 func (r *BucketLifecycleService) Update(ctx context.Context, bucketName string, params BucketLifecycleUpdateParams, opts ...option.RequestOption) (res *BucketLifecycleUpdateResponse, err error) {
 	var env BucketLifecycleUpdateResponseEnvelope
 	if params.CfR2Jurisdiction.Present {
@@ -642,7 +644,7 @@ func (r BucketLifecycleGetResponseRulesStorageClassTransitionsStorageClass) IsKn
 }
 
 type BucketLifecycleUpdateParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                                      `path:"account_id" api:"required"`
 	Rules            param.Field[[]BucketLifecycleUpdateParamsRule]           `json:"rules"`
 	CfR2Jurisdiction param.Field[BucketLifecycleUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
@@ -1009,7 +1011,7 @@ func (r BucketLifecycleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketLifecycleGetParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                                   `path:"account_id" api:"required"`
 	CfR2Jurisdiction param.Field[BucketLifecycleGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }

@@ -87,7 +87,7 @@ func TestCustomTrustStoreDelete(t *testing.T) {
 	)
 	_, err := client.ACM.CustomTrustStore.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"2458ce5a-0c35-4c7f-82c7-8e9487d3ff60",
 		acm.CustomTrustStoreDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -117,7 +117,7 @@ func TestCustomTrustStoreGet(t *testing.T) {
 	)
 	_, err := client.ACM.CustomTrustStore.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"2458ce5a-0c35-4c7f-82c7-8e9487d3ff60",
 		acm.CustomTrustStoreGetParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

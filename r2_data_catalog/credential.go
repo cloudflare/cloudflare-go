@@ -36,6 +36,9 @@ func NewCredentialService(opts ...option.RequestOption) (r *CredentialService) {
 
 // Store authentication credentials for a catalog. These credentials are used to
 // authenticate with R2 storage when performing catalog operations.
+//
+// Deprecated: Use
+// `POST /accounts/{account_id}/basin-catalog/{bucket_name}/credential` instead.
 func (r *CredentialService) New(ctx context.Context, bucketName string, params CredentialNewParams, opts ...option.RequestOption) (res *CredentialNewResponse, err error) {
 	var env CredentialNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

@@ -111,7 +111,9 @@ func (r *BucketDomainCustomService) List(ctx context.Context, bucketName string,
 	return res, nil
 }
 
-// Remove custom domain registration from an existing R2 bucket.
+// Disconnects a custom domain from an R2 bucket and removes its configuration.
+// Access through other enabled custom domains or the bucket's r2.dev domain is
+// unaffected.
 func (r *BucketDomainCustomService) Delete(ctx context.Context, bucketName string, domain string, params BucketDomainCustomDeleteParams, opts ...option.RequestOption) (res *BucketDomainCustomDeleteResponse, err error) {
 	var env BucketDomainCustomDeleteResponseEnvelope
 	if params.CfR2Jurisdiction.Present {
@@ -568,7 +570,7 @@ func (r BucketDomainCustomGetResponseMinTLS) IsKnown() bool {
 }
 
 type BucketDomainCustomNewParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Name of the custom domain to be added.
 	Domain param.Field[string] `json:"domain" api:"required"`
@@ -671,7 +673,7 @@ func (r BucketDomainCustomNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketDomainCustomUpdateParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
@@ -769,7 +771,7 @@ func (r BucketDomainCustomUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketDomainCustomListParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                                       `path:"account_id" api:"required"`
 	CfR2Jurisdiction param.Field[BucketDomainCustomListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -836,7 +838,7 @@ func (r BucketDomainCustomListResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketDomainCustomDeleteParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                                         `path:"account_id" api:"required"`
 	CfR2Jurisdiction param.Field[BucketDomainCustomDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -903,7 +905,7 @@ func (r BucketDomainCustomDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketDomainCustomGetParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                                      `path:"account_id" api:"required"`
 	CfR2Jurisdiction param.Field[BucketDomainCustomGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }

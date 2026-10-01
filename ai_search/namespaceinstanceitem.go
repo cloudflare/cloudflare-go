@@ -80,7 +80,7 @@ func (r *NamespaceInstanceItemService) ListAutoPaging(ctx context.Context, name 
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, name, id, params, opts...))
 }
 
-// Deletes a file from a managed AI Search instance and triggers a reindex.
+// Deletes a file from a managed AI Search instance and removes its indexed data.
 func (r *NamespaceInstanceItemService) Delete(ctx context.Context, name string, id string, itemID string, body NamespaceInstanceItemDeleteParams, opts ...option.RequestOption) (res *NamespaceInstanceItemDeleteResponse, err error) {
 	var env NamespaceInstanceItemDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

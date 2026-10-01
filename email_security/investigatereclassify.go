@@ -36,7 +36,10 @@ func NewInvestigateReclassifyService(opts ...option.RequestOption) (r *Investiga
 
 // Submits a request to reclassify an email's disposition. Use for reporting false
 // positives or false negatives. Optionally provide the raw EML content for
-// reanalysis. The reclassification is processed asynchronously.
+// reanalysis. The reclassification is processed asynchronously. Deprecated; use
+// the create submissions endpoint instead.
+//
+// Deprecated: deprecated
 func (r *InvestigateReclassifyService) New(ctx context.Context, investigateID string, params InvestigateReclassifyNewParams, opts ...option.RequestOption) (res *InvestigateReclassifyNewResponse, err error) {
 	var env InvestigateReclassifyNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -61,10 +64,13 @@ type InvestigateReclassifyNewResponse = interface{}
 
 type InvestigateReclassifyNewParams struct {
 	// Identifier.
-	AccountID           param.Field[string]                                            `path:"account_id" api:"required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// The disposition the message should have.
 	ExpectedDisposition param.Field[InvestigateReclassifyNewParamsExpectedDisposition] `json:"expected_disposition" api:"required"`
 	// Base64 encoded content of the EML file.
-	EmlContent            param.Field[string] `json:"eml_content"`
+	EmlContent param.Field[string] `json:"eml_content"`
+	// Submission ID of the original user submission, when reclassifying an escalated
+	// user report.
 	EscalatedSubmissionID param.Field[string] `json:"escalated_submission_id"`
 }
 
@@ -72,6 +78,7 @@ func (r InvestigateReclassifyNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// The disposition the message should have.
 type InvestigateReclassifyNewParamsExpectedDisposition string
 
 const (

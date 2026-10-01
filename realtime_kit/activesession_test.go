@@ -31,7 +31,7 @@ func TestActiveSessionNewPollWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.ActiveSession.NewPoll(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"meeting_id",
 		realtime_kit.ActiveSessionNewPollParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -67,7 +67,7 @@ func TestActiveSessionGetActiveSession(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.ActiveSession.GetActiveSession(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"meeting_id",
 		realtime_kit.ActiveSessionGetActiveSessionParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -99,7 +99,7 @@ func TestActiveSessionKickAllParticipants(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.ActiveSession.KickAllParticipants(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"meeting_id",
 		realtime_kit.ActiveSessionKickAllParticipantsParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -131,7 +131,7 @@ func TestActiveSessionKickParticipantsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.ActiveSession.KickParticipants(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"meeting_id",
 		realtime_kit.ActiveSessionKickParticipantsParams{
 			AccountID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),

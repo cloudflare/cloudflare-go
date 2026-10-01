@@ -7,12 +7,14 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/tidwall/gjson"
 )
 
 // SettingZoneService contains methods and other services that help with
@@ -84,7 +86,7 @@ type SettingZoneEditResponse struct {
 	// zone even when non-Cloudflare NS records exist, and to respect NS records at the
 	// zone apex during outbound zone transfers.
 	MultiProvider bool `json:"multi_provider" api:"required"`
-	// Settings determining the nameservers through which the zone should be available.
+	// Controls the nameservers through which the zone is available.
 	Nameservers SettingZoneEditResponseNameservers `json:"nameservers" api:"required"`
 	// The time to live (TTL) of the zone's nameserver (NS) records.
 	NSTTL float64 `json:"ns_ttl" api:"required"`
@@ -145,33 +147,214 @@ func (r settingZoneEditResponseInternalDNSJSON) RawJSON() string {
 	return r.raw
 }
 
-// Settings determining the nameservers through which the zone should be available.
+// Controls the nameservers through which the zone is available.
 type SettingZoneEditResponseNameservers struct {
-	// Nameserver type
+	// Nameserver type.
 	Type SettingZoneEditResponseNameserversType `json:"type" api:"required"`
-	// Configured nameserver set to be used for this zone
+	// Identifier of the account-owned Custom Nameserver Set to use for this zone.
+	NameserverSetID string `json:"nameserver_set_id"`
+	// Configured nameserver set number to use for this zone.
 	NSSet int64                                  `json:"ns_set"`
 	JSON  settingZoneEditResponseNameserversJSON `json:"-"`
+	union SettingZoneEditResponseNameserversUnion
 }
 
 // settingZoneEditResponseNameserversJSON contains the JSON metadata for the struct
 // [SettingZoneEditResponseNameservers]
 type settingZoneEditResponseNameserversJSON struct {
-	Type        apijson.Field
-	NSSet       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingZoneEditResponseNameservers) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+	Type            apijson.Field
+	NameserverSetID apijson.Field
+	NSSet           apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r settingZoneEditResponseNameserversJSON) RawJSON() string {
 	return r.raw
 }
 
-// Nameserver type
+func (r *SettingZoneEditResponseNameservers) UnmarshalJSON(data []byte) (err error) {
+	*r = SettingZoneEditResponseNameservers{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [SettingZoneEditResponseNameserversUnion] interface which you
+// can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflare],
+// [SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExisting],
+// [SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomSet].
+func (r SettingZoneEditResponseNameservers) AsUnion() SettingZoneEditResponseNameserversUnion {
+	return r.union
+}
+
+// Controls the nameservers through which the zone is available.
+//
+// Union satisfied by
+// [SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflare],
+// [SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExisting] or
+// [SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomSet].
+type SettingZoneEditResponseNameserversUnion interface {
+	implementsSettingZoneEditResponseNameservers()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingZoneEditResponseNameserversUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflare{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExisting{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomSet{}),
+		},
+	)
+}
+
+type SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflare struct {
+	// Nameserver type.
+	Type SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflareType `json:"type" api:"required"`
+	JSON settingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflareJSON `json:"-"`
+}
+
+// settingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflareJSON
+// contains the JSON metadata for the struct
+// [SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflare]
+type settingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflareJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflare) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflareJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflare) implementsSettingZoneEditResponseNameservers() {
+}
+
+// Nameserver type.
+type SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflareType string
+
+const (
+	SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflareTypeCloudflareStandard SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflareType = "cloudflare.standard"
+	SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflareTypeCloudflareAdvanced SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflareType = "cloudflare.advanced"
+)
+
+func (r SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflareType) IsKnown() bool {
+	switch r {
+	case SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflareTypeCloudflareStandard, SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCloudflareTypeCloudflareAdvanced:
+		return true
+	}
+	return false
+}
+
+type SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExisting struct {
+	// Nameserver type.
+	Type SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExistingType `json:"type" api:"required"`
+	// Configured nameserver set number to use for this zone.
+	NSSet int64                                                                          `json:"ns_set"`
+	JSON  settingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExistingJSON `json:"-"`
+}
+
+// settingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExistingJSON
+// contains the JSON metadata for the struct
+// [SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExisting]
+type settingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExistingJSON struct {
+	Type        apijson.Field
+	NSSet       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExisting) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExistingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExisting) implementsSettingZoneEditResponseNameservers() {
+}
+
+// Nameserver type.
+type SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExistingType string
+
+const (
+	SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExistingTypeCustomAccount SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExistingType = "custom.account"
+	SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExistingTypeCustomTenant  SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExistingType = "custom.tenant"
+	SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExistingTypeCustomZone    SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExistingType = "custom.zone"
+)
+
+func (r SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExistingType) IsKnown() bool {
+	switch r {
+	case SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExistingTypeCustomAccount, SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExistingTypeCustomTenant, SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomExistingTypeCustomZone:
+		return true
+	}
+	return false
+}
+
+type SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomSet struct {
+	// Identifier of the account-owned Custom Nameserver Set to use for this zone.
+	NameserverSetID string `json:"nameserver_set_id" api:"required"`
+	// Nameserver type.
+	Type SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomSetType `json:"type" api:"required"`
+	JSON settingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomSetJSON `json:"-"`
+}
+
+// settingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomSetJSON
+// contains the JSON metadata for the struct
+// [SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomSet]
+type settingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomSetJSON struct {
+	NameserverSetID apijson.Field
+	Type            apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomSet) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomSetJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomSet) implementsSettingZoneEditResponseNameservers() {
+}
+
+// Nameserver type.
+type SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomSetType string
+
+const (
+	SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomSetTypeCustom SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomSetType = "custom"
+)
+
+func (r SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomSetType) IsKnown() bool {
+	switch r {
+	case SettingZoneEditResponseNameserversDNSSettingsZoneNameserversCustomSetTypeCustom:
+		return true
+	}
+	return false
+}
+
+// Nameserver type.
 type SettingZoneEditResponseNameserversType string
 
 const (
@@ -180,11 +363,12 @@ const (
 	SettingZoneEditResponseNameserversTypeCustomAccount      SettingZoneEditResponseNameserversType = "custom.account"
 	SettingZoneEditResponseNameserversTypeCustomTenant       SettingZoneEditResponseNameserversType = "custom.tenant"
 	SettingZoneEditResponseNameserversTypeCustomZone         SettingZoneEditResponseNameserversType = "custom.zone"
+	SettingZoneEditResponseNameserversTypeCustom             SettingZoneEditResponseNameserversType = "custom"
 )
 
 func (r SettingZoneEditResponseNameserversType) IsKnown() bool {
 	switch r {
-	case SettingZoneEditResponseNameserversTypeCloudflareStandard, SettingZoneEditResponseNameserversTypeCloudflareAdvanced, SettingZoneEditResponseNameserversTypeCustomAccount, SettingZoneEditResponseNameserversTypeCustomTenant, SettingZoneEditResponseNameserversTypeCustomZone:
+	case SettingZoneEditResponseNameserversTypeCloudflareStandard, SettingZoneEditResponseNameserversTypeCloudflareAdvanced, SettingZoneEditResponseNameserversTypeCustomAccount, SettingZoneEditResponseNameserversTypeCustomTenant, SettingZoneEditResponseNameserversTypeCustomZone, SettingZoneEditResponseNameserversTypeCustom:
 		return true
 	}
 	return false
@@ -269,7 +453,7 @@ type SettingZoneGetResponse struct {
 	// zone even when non-Cloudflare NS records exist, and to respect NS records at the
 	// zone apex during outbound zone transfers.
 	MultiProvider bool `json:"multi_provider" api:"required"`
-	// Settings determining the nameservers through which the zone should be available.
+	// Controls the nameservers through which the zone is available.
 	Nameservers SettingZoneGetResponseNameservers `json:"nameservers" api:"required"`
 	// The time to live (TTL) of the zone's nameserver (NS) records.
 	NSTTL float64 `json:"ns_ttl" api:"required"`
@@ -330,33 +514,214 @@ func (r settingZoneGetResponseInternalDNSJSON) RawJSON() string {
 	return r.raw
 }
 
-// Settings determining the nameservers through which the zone should be available.
+// Controls the nameservers through which the zone is available.
 type SettingZoneGetResponseNameservers struct {
-	// Nameserver type
+	// Nameserver type.
 	Type SettingZoneGetResponseNameserversType `json:"type" api:"required"`
-	// Configured nameserver set to be used for this zone
+	// Identifier of the account-owned Custom Nameserver Set to use for this zone.
+	NameserverSetID string `json:"nameserver_set_id"`
+	// Configured nameserver set number to use for this zone.
 	NSSet int64                                 `json:"ns_set"`
 	JSON  settingZoneGetResponseNameserversJSON `json:"-"`
+	union SettingZoneGetResponseNameserversUnion
 }
 
 // settingZoneGetResponseNameserversJSON contains the JSON metadata for the struct
 // [SettingZoneGetResponseNameservers]
 type settingZoneGetResponseNameserversJSON struct {
-	Type        apijson.Field
-	NSSet       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingZoneGetResponseNameservers) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+	Type            apijson.Field
+	NameserverSetID apijson.Field
+	NSSet           apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r settingZoneGetResponseNameserversJSON) RawJSON() string {
 	return r.raw
 }
 
-// Nameserver type
+func (r *SettingZoneGetResponseNameservers) UnmarshalJSON(data []byte) (err error) {
+	*r = SettingZoneGetResponseNameservers{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [SettingZoneGetResponseNameserversUnion] interface which you
+// can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflare],
+// [SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExisting],
+// [SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomSet].
+func (r SettingZoneGetResponseNameservers) AsUnion() SettingZoneGetResponseNameserversUnion {
+	return r.union
+}
+
+// Controls the nameservers through which the zone is available.
+//
+// Union satisfied by
+// [SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflare],
+// [SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExisting] or
+// [SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomSet].
+type SettingZoneGetResponseNameserversUnion interface {
+	implementsSettingZoneGetResponseNameservers()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingZoneGetResponseNameserversUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflare{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExisting{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomSet{}),
+		},
+	)
+}
+
+type SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflare struct {
+	// Nameserver type.
+	Type SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflareType `json:"type" api:"required"`
+	JSON settingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflareJSON `json:"-"`
+}
+
+// settingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflareJSON
+// contains the JSON metadata for the struct
+// [SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflare]
+type settingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflareJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflare) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflareJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflare) implementsSettingZoneGetResponseNameservers() {
+}
+
+// Nameserver type.
+type SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflareType string
+
+const (
+	SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflareTypeCloudflareStandard SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflareType = "cloudflare.standard"
+	SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflareTypeCloudflareAdvanced SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflareType = "cloudflare.advanced"
+)
+
+func (r SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflareType) IsKnown() bool {
+	switch r {
+	case SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflareTypeCloudflareStandard, SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCloudflareTypeCloudflareAdvanced:
+		return true
+	}
+	return false
+}
+
+type SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExisting struct {
+	// Nameserver type.
+	Type SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExistingType `json:"type" api:"required"`
+	// Configured nameserver set number to use for this zone.
+	NSSet int64                                                                         `json:"ns_set"`
+	JSON  settingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExistingJSON `json:"-"`
+}
+
+// settingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExistingJSON
+// contains the JSON metadata for the struct
+// [SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExisting]
+type settingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExistingJSON struct {
+	Type        apijson.Field
+	NSSet       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExisting) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExistingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExisting) implementsSettingZoneGetResponseNameservers() {
+}
+
+// Nameserver type.
+type SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExistingType string
+
+const (
+	SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExistingTypeCustomAccount SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExistingType = "custom.account"
+	SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExistingTypeCustomTenant  SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExistingType = "custom.tenant"
+	SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExistingTypeCustomZone    SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExistingType = "custom.zone"
+)
+
+func (r SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExistingType) IsKnown() bool {
+	switch r {
+	case SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExistingTypeCustomAccount, SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExistingTypeCustomTenant, SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomExistingTypeCustomZone:
+		return true
+	}
+	return false
+}
+
+type SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomSet struct {
+	// Identifier of the account-owned Custom Nameserver Set to use for this zone.
+	NameserverSetID string `json:"nameserver_set_id" api:"required"`
+	// Nameserver type.
+	Type SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomSetType `json:"type" api:"required"`
+	JSON settingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomSetJSON `json:"-"`
+}
+
+// settingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomSetJSON
+// contains the JSON metadata for the struct
+// [SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomSet]
+type settingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomSetJSON struct {
+	NameserverSetID apijson.Field
+	Type            apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomSet) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomSetJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomSet) implementsSettingZoneGetResponseNameservers() {
+}
+
+// Nameserver type.
+type SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomSetType string
+
+const (
+	SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomSetTypeCustom SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomSetType = "custom"
+)
+
+func (r SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomSetType) IsKnown() bool {
+	switch r {
+	case SettingZoneGetResponseNameserversDNSSettingsZoneNameserversCustomSetTypeCustom:
+		return true
+	}
+	return false
+}
+
+// Nameserver type.
 type SettingZoneGetResponseNameserversType string
 
 const (
@@ -365,11 +730,12 @@ const (
 	SettingZoneGetResponseNameserversTypeCustomAccount      SettingZoneGetResponseNameserversType = "custom.account"
 	SettingZoneGetResponseNameserversTypeCustomTenant       SettingZoneGetResponseNameserversType = "custom.tenant"
 	SettingZoneGetResponseNameserversTypeCustomZone         SettingZoneGetResponseNameserversType = "custom.zone"
+	SettingZoneGetResponseNameserversTypeCustom             SettingZoneGetResponseNameserversType = "custom"
 )
 
 func (r SettingZoneGetResponseNameserversType) IsKnown() bool {
 	switch r {
-	case SettingZoneGetResponseNameserversTypeCloudflareStandard, SettingZoneGetResponseNameserversTypeCloudflareAdvanced, SettingZoneGetResponseNameserversTypeCustomAccount, SettingZoneGetResponseNameserversTypeCustomTenant, SettingZoneGetResponseNameserversTypeCustomZone:
+	case SettingZoneGetResponseNameserversTypeCloudflareStandard, SettingZoneGetResponseNameserversTypeCloudflareAdvanced, SettingZoneGetResponseNameserversTypeCustomAccount, SettingZoneGetResponseNameserversTypeCustomTenant, SettingZoneGetResponseNameserversTypeCustomZone, SettingZoneGetResponseNameserversTypeCustom:
 		return true
 	}
 	return false
@@ -452,8 +818,8 @@ type SettingZoneEditParams struct {
 	// zone even when non-Cloudflare NS records exist, and to respect NS records at the
 	// zone apex during outbound zone transfers.
 	MultiProvider param.Field[bool] `json:"multi_provider"`
-	// Settings determining the nameservers through which the zone should be available.
-	Nameservers param.Field[SettingZoneEditParamsNameservers] `json:"nameservers"`
+	// Controls the nameservers through which the zone is available.
+	Nameservers param.Field[SettingZoneEditParamsNameserversUnion] `json:"nameservers"`
 	// The time to live (TTL) of the zone's nameserver (NS) records.
 	NSTTL param.Field[float64] `json:"ns_ttl"`
 	// Allows a Secondary DNS zone to use (proxied) override records and CNAME
@@ -479,19 +845,122 @@ func (r SettingZoneEditParamsInternalDNS) MarshalJSON() (data []byte, err error)
 	return apijson.MarshalRoot(r)
 }
 
-// Settings determining the nameservers through which the zone should be available.
+// Controls the nameservers through which the zone is available.
 type SettingZoneEditParamsNameservers struct {
-	// Configured nameserver set to be used for this zone
+	// Nameserver type.
+	Type param.Field[SettingZoneEditParamsNameserversType] `json:"type" api:"required"`
+	// Identifier of the account-owned Custom Nameserver Set to use for this zone.
+	NameserverSetID param.Field[string] `json:"nameserver_set_id"`
+	// Configured nameserver set number to use for this zone.
 	NSSet param.Field[int64] `json:"ns_set"`
-	// Nameserver type
-	Type param.Field[SettingZoneEditParamsNameserversType] `json:"type"`
 }
 
 func (r SettingZoneEditParamsNameservers) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Nameserver type
+func (r SettingZoneEditParamsNameservers) implementsSettingZoneEditParamsNameserversUnion() {}
+
+// Controls the nameservers through which the zone is available.
+//
+// Satisfied by
+// [dns.SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCloudflare],
+// [dns.SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomExisting],
+// [dns.SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomSet],
+// [SettingZoneEditParamsNameservers].
+type SettingZoneEditParamsNameserversUnion interface {
+	implementsSettingZoneEditParamsNameserversUnion()
+}
+
+type SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCloudflare struct {
+	// Nameserver type.
+	Type param.Field[SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCloudflareType] `json:"type" api:"required"`
+}
+
+func (r SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCloudflare) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCloudflare) implementsSettingZoneEditParamsNameserversUnion() {
+}
+
+// Nameserver type.
+type SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCloudflareType string
+
+const (
+	SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCloudflareTypeCloudflareStandard SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCloudflareType = "cloudflare.standard"
+	SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCloudflareTypeCloudflareAdvanced SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCloudflareType = "cloudflare.advanced"
+)
+
+func (r SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCloudflareType) IsKnown() bool {
+	switch r {
+	case SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCloudflareTypeCloudflareStandard, SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCloudflareTypeCloudflareAdvanced:
+		return true
+	}
+	return false
+}
+
+type SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomExisting struct {
+	// Nameserver type.
+	Type param.Field[SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomExistingType] `json:"type" api:"required"`
+	// Configured nameserver set number to use for this zone.
+	NSSet param.Field[int64] `json:"ns_set"`
+}
+
+func (r SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomExisting) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomExisting) implementsSettingZoneEditParamsNameserversUnion() {
+}
+
+// Nameserver type.
+type SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomExistingType string
+
+const (
+	SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomExistingTypeCustomAccount SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomExistingType = "custom.account"
+	SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomExistingTypeCustomTenant  SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomExistingType = "custom.tenant"
+	SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomExistingTypeCustomZone    SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomExistingType = "custom.zone"
+)
+
+func (r SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomExistingType) IsKnown() bool {
+	switch r {
+	case SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomExistingTypeCustomAccount, SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomExistingTypeCustomTenant, SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomExistingTypeCustomZone:
+		return true
+	}
+	return false
+}
+
+type SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomSet struct {
+	// Identifier of the account-owned Custom Nameserver Set to use for this zone.
+	NameserverSetID param.Field[string] `json:"nameserver_set_id" api:"required"`
+	// Nameserver type.
+	Type param.Field[SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomSetType] `json:"type" api:"required"`
+}
+
+func (r SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomSet) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomSet) implementsSettingZoneEditParamsNameserversUnion() {
+}
+
+// Nameserver type.
+type SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomSetType string
+
+const (
+	SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomSetTypeCustom SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomSetType = "custom"
+)
+
+func (r SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomSetType) IsKnown() bool {
+	switch r {
+	case SettingZoneEditParamsNameserversDNSSettingsZoneNameserversCustomSetTypeCustom:
+		return true
+	}
+	return false
+}
+
+// Nameserver type.
 type SettingZoneEditParamsNameserversType string
 
 const (
@@ -500,11 +969,12 @@ const (
 	SettingZoneEditParamsNameserversTypeCustomAccount      SettingZoneEditParamsNameserversType = "custom.account"
 	SettingZoneEditParamsNameserversTypeCustomTenant       SettingZoneEditParamsNameserversType = "custom.tenant"
 	SettingZoneEditParamsNameserversTypeCustomZone         SettingZoneEditParamsNameserversType = "custom.zone"
+	SettingZoneEditParamsNameserversTypeCustom             SettingZoneEditParamsNameserversType = "custom"
 )
 
 func (r SettingZoneEditParamsNameserversType) IsKnown() bool {
 	switch r {
-	case SettingZoneEditParamsNameserversTypeCloudflareStandard, SettingZoneEditParamsNameserversTypeCloudflareAdvanced, SettingZoneEditParamsNameserversTypeCustomAccount, SettingZoneEditParamsNameserversTypeCustomTenant, SettingZoneEditParamsNameserversTypeCustomZone:
+	case SettingZoneEditParamsNameserversTypeCloudflareStandard, SettingZoneEditParamsNameserversTypeCloudflareAdvanced, SettingZoneEditParamsNameserversTypeCustomAccount, SettingZoneEditParamsNameserversTypeCustomTenant, SettingZoneEditParamsNameserversTypeCustomZone, SettingZoneEditParamsNameserversTypeCustom:
 		return true
 	}
 	return false

@@ -127,7 +127,7 @@ func TestCustomHostnameDelete(t *testing.T) {
 	)
 	_, err := client.CustomHostnames.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"0d89c70d-ad9f-4843-b99f-6cc0252067e9",
 		custom_hostnames.CustomHostnameDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -157,7 +157,7 @@ func TestCustomHostnameEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CustomHostnames.Edit(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"0d89c70d-ad9f-4843-b99f-6cc0252067e9",
 		custom_hostnames.CustomHostnameEditParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			CustomMetadata: cloudflare.F(map[string]string{
@@ -214,7 +214,7 @@ func TestCustomHostnameGet(t *testing.T) {
 	)
 	_, err := client.CustomHostnames.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"0d89c70d-ad9f-4843-b99f-6cc0252067e9",
 		custom_hostnames.CustomHostnameGetParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

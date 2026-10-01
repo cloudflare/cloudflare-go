@@ -139,7 +139,7 @@ func (r *MTLSCertificateService) Get(ctx context.Context, mtlsCertificateID stri
 }
 
 type MTLSCertificate struct {
-	// Identifier.
+	// Certificate identifier tag.
 	ID string `json:"id"`
 	// Indicates whether the certificate is a CA or leaf certificate.
 	CA bool `json:"ca"`
@@ -204,7 +204,7 @@ func (r MTLSCertificateType) IsKnown() bool {
 }
 
 type MTLSCertificateNewResponse struct {
-	// Identifier.
+	// Certificate identifier tag.
 	ID string `json:"id"`
 	// Indicates whether the certificate is a CA or leaf certificate.
 	CA bool `json:"ca"`

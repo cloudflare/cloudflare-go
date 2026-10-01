@@ -30,9 +30,9 @@ func TestCertificatePackCertificateUpdate(t *testing.T) {
 	)
 	_, err := client.CustomHostnames.CertificatePack.Certificates.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+		"0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+		"0d89c70d-ad9f-4843-b99f-6cc0252067e9",
 		custom_hostnames.CertificatePackCertificateUpdateParams{
 			ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			CustomCertificate: cloudflare.F("-----BEGIN CERTIFICATE-----\nMIIDdjCCAl6gAwIBAgIJAPnMg0Fs+/B0MA0GCSqGSIb3DQEBCwUAMFsx...\n-----END CERTIFICATE-----\n"),
@@ -64,9 +64,9 @@ func TestCertificatePackCertificateDelete(t *testing.T) {
 	)
 	_, err := client.CustomHostnames.CertificatePack.Certificates.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+		"0d89c70d-ad9f-4843-b99f-6cc0252067e9",
+		"0d89c70d-ad9f-4843-b99f-6cc0252067e9",
 		custom_hostnames.CertificatePackCertificateDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

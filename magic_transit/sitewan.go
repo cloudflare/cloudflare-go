@@ -203,9 +203,10 @@ type WAN struct {
 	ID string `json:"id"`
 	// Magic WAN health check rate for tunnels created on this link. The default value
 	// is `mid`.
-	HealthCheckRate WANHealthCheckRate `json:"health_check_rate"`
-	Name            string             `json:"name"`
-	Physport        int64              `json:"physport"`
+	HealthCheckRate       WANHealthCheckRate `json:"health_check_rate"`
+	LoadBalanceInnerFlows bool               `json:"load_balance_inner_flows"`
+	Name                  string             `json:"name"`
+	Physport              int64              `json:"physport"`
 	// Priority of WAN for traffic loadbalancing.
 	Priority int64 `json:"priority"`
 	// Identifier
@@ -220,16 +221,17 @@ type WAN struct {
 
 // wanJSON contains the JSON metadata for the struct [WAN]
 type wanJSON struct {
-	ID               apijson.Field
-	HealthCheckRate  apijson.Field
-	Name             apijson.Field
-	Physport         apijson.Field
-	Priority         apijson.Field
-	SiteID           apijson.Field
-	StaticAddressing apijson.Field
-	VlanTag          apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	ID                    apijson.Field
+	HealthCheckRate       apijson.Field
+	LoadBalanceInnerFlows apijson.Field
+	Name                  apijson.Field
+	Physport              apijson.Field
+	Priority              apijson.Field
+	SiteID                apijson.Field
+	StaticAddressing      apijson.Field
+	VlanTag               apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *WAN) UnmarshalJSON(data []byte) (err error) {
@@ -307,8 +309,12 @@ type SiteWANNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Physport  param.Field[int64]  `json:"physport" api:"required"`
-	Name      param.Field[string] `json:"name"`
-	Priority  param.Field[int64]  `json:"priority"`
+	// Magic WAN health check rate for tunnels created on this link. The default value
+	// is `mid`.
+	HealthCheckRate       param.Field[SiteWANNewParamsHealthCheckRate] `json:"health_check_rate"`
+	LoadBalanceInnerFlows param.Field[bool]                            `json:"load_balance_inner_flows"`
+	Name                  param.Field[string]                          `json:"name"`
+	Priority              param.Field[int64]                           `json:"priority"`
 	// (optional) if omitted, use DHCP. Submit secondary_address when site is in high
 	// availability mode.
 	StaticAddressing param.Field[WANStaticAddressingParam] `json:"static_addressing"`
@@ -320,12 +326,33 @@ func (r SiteWANNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Magic WAN health check rate for tunnels created on this link. The default value
+// is `mid`.
+type SiteWANNewParamsHealthCheckRate string
+
+const (
+	SiteWANNewParamsHealthCheckRateLow  SiteWANNewParamsHealthCheckRate = "low"
+	SiteWANNewParamsHealthCheckRateMid  SiteWANNewParamsHealthCheckRate = "mid"
+	SiteWANNewParamsHealthCheckRateHigh SiteWANNewParamsHealthCheckRate = "high"
+)
+
+func (r SiteWANNewParamsHealthCheckRate) IsKnown() bool {
+	switch r {
+	case SiteWANNewParamsHealthCheckRateLow, SiteWANNewParamsHealthCheckRateMid, SiteWANNewParamsHealthCheckRateHigh:
+		return true
+	}
+	return false
+}
+
 type SiteWANUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Name      param.Field[string] `json:"name"`
-	Physport  param.Field[int64]  `json:"physport"`
-	Priority  param.Field[int64]  `json:"priority"`
+	// Magic WAN health check rate for tunnels created on this link.
+	HealthCheckRate       param.Field[SiteWANUpdateParamsHealthCheckRate] `json:"health_check_rate"`
+	LoadBalanceInnerFlows param.Field[bool]                               `json:"load_balance_inner_flows"`
+	Name                  param.Field[string]                             `json:"name"`
+	Physport              param.Field[int64]                              `json:"physport"`
+	Priority              param.Field[int64]                              `json:"priority"`
 	// (optional) if omitted, use DHCP. Submit secondary_address when site is in high
 	// availability mode.
 	StaticAddressing param.Field[WANStaticAddressingParam] `json:"static_addressing"`
@@ -335,6 +362,23 @@ type SiteWANUpdateParams struct {
 
 func (r SiteWANUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Magic WAN health check rate for tunnels created on this link.
+type SiteWANUpdateParamsHealthCheckRate string
+
+const (
+	SiteWANUpdateParamsHealthCheckRateLow  SiteWANUpdateParamsHealthCheckRate = "low"
+	SiteWANUpdateParamsHealthCheckRateMid  SiteWANUpdateParamsHealthCheckRate = "mid"
+	SiteWANUpdateParamsHealthCheckRateHigh SiteWANUpdateParamsHealthCheckRate = "high"
+)
+
+func (r SiteWANUpdateParamsHealthCheckRate) IsKnown() bool {
+	switch r {
+	case SiteWANUpdateParamsHealthCheckRateLow, SiteWANUpdateParamsHealthCheckRateMid, SiteWANUpdateParamsHealthCheckRateHigh:
+		return true
+	}
+	return false
 }
 
 type SiteWANUpdateResponseEnvelope struct {
@@ -436,9 +480,12 @@ func (r SiteWANDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type SiteWANEditParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Name      param.Field[string] `json:"name"`
-	Physport  param.Field[int64]  `json:"physport"`
-	Priority  param.Field[int64]  `json:"priority"`
+	// Magic WAN health check rate for tunnels created on this link.
+	HealthCheckRate       param.Field[SiteWANEditParamsHealthCheckRate] `json:"health_check_rate"`
+	LoadBalanceInnerFlows param.Field[bool]                             `json:"load_balance_inner_flows"`
+	Name                  param.Field[string]                           `json:"name"`
+	Physport              param.Field[int64]                            `json:"physport"`
+	Priority              param.Field[int64]                            `json:"priority"`
 	// (optional) if omitted, use DHCP. Submit secondary_address when site is in high
 	// availability mode.
 	StaticAddressing param.Field[WANStaticAddressingParam] `json:"static_addressing"`
@@ -448,6 +495,23 @@ type SiteWANEditParams struct {
 
 func (r SiteWANEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Magic WAN health check rate for tunnels created on this link.
+type SiteWANEditParamsHealthCheckRate string
+
+const (
+	SiteWANEditParamsHealthCheckRateLow  SiteWANEditParamsHealthCheckRate = "low"
+	SiteWANEditParamsHealthCheckRateMid  SiteWANEditParamsHealthCheckRate = "mid"
+	SiteWANEditParamsHealthCheckRateHigh SiteWANEditParamsHealthCheckRate = "high"
+)
+
+func (r SiteWANEditParamsHealthCheckRate) IsKnown() bool {
+	switch r {
+	case SiteWANEditParamsHealthCheckRateLow, SiteWANEditParamsHealthCheckRateMid, SiteWANEditParamsHealthCheckRateHigh:
+		return true
+	}
+	return false
 }
 
 type SiteWANEditResponseEnvelope struct {

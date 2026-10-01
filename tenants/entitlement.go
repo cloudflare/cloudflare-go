@@ -36,7 +36,8 @@ func NewEntitlementService(opts ...option.RequestOption) (r *EntitlementService)
 	return
 }
 
-// List of innate entitlements available for the Tenant.
+// Retrieves the innate and custom entitlement allocations available to this
+// tenant.
 func (r *EntitlementService) Get(ctx context.Context, tenantID string, opts ...option.RequestOption) (res *TenantEntitlements, err error) {
 	var env EntitlementGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

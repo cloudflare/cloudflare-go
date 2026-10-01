@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/zero_trust"
 )
 
-func TestGatewayListItemList(t *testing.T) {
+func TestGatewayListItemListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -33,6 +33,8 @@ func TestGatewayListItemList(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.GatewayListItemListParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+			Page:      cloudflare.F(int64(1)),
+			PerPage:   cloudflare.F(int64(1)),
 		},
 	)
 	if err != nil {

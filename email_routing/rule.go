@@ -122,7 +122,8 @@ func (r *RuleService) ListAutoPaging(ctx context.Context, params RuleListParams,
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete a specific routing rule.
+// Deletes a routing rule so matching incoming messages are no longer forwarded by
+// it.
 func (r *RuleService) Delete(ctx context.Context, ruleIdentifier string, body RuleDeleteParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
 	var env RuleDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

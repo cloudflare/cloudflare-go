@@ -148,6 +148,7 @@ func (r gatewayListResponseJSON) RawJSON() string {
 }
 
 type GatewayNewParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -195,6 +196,7 @@ func (r GatewayNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

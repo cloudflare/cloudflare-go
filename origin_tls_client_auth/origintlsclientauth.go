@@ -152,7 +152,7 @@ func (r *OriginTLSClientAuthService) Get(ctx context.Context, certificateID stri
 }
 
 type OriginTLSClientAuthNewResponse struct {
-	// Identifier.
+	// Certificate identifier tag.
 	ID string `json:"id"`
 	// The zone's leaf certificate.
 	Certificate string `json:"certificate"`
@@ -184,7 +184,7 @@ func (r originTLSClientAuthNewResponseJSON) RawJSON() string {
 }
 
 type OriginTLSClientAuthListResponse struct {
-	// Identifier.
+	// Certificate identifier tag.
 	ID string `json:"id"`
 	// The zone's leaf certificate.
 	Certificate string `json:"certificate"`
@@ -216,7 +216,7 @@ func (r originTLSClientAuthListResponseJSON) RawJSON() string {
 }
 
 type OriginTLSClientAuthDeleteResponse struct {
-	// Identifier.
+	// Certificate identifier tag.
 	ID string `json:"id"`
 	// The zone's leaf certificate.
 	Certificate string `json:"certificate"`
@@ -248,7 +248,7 @@ func (r originTLSClientAuthDeleteResponseJSON) RawJSON() string {
 }
 
 type OriginTLSClientAuthGetResponse struct {
-	// Identifier.
+	// Certificate identifier tag.
 	ID string `json:"id"`
 	// The zone's leaf certificate.
 	Certificate string `json:"certificate"`

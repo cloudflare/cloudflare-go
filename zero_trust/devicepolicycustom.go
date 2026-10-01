@@ -225,7 +225,8 @@ type DevicePolicyCustomNewParams struct {
 	// The precedence of the policy. Lower values indicate higher precedence. Policies
 	// will be evaluated in ascending order of this field.
 	Precedence param.Field[float64] `json:"precedence"`
-	// The client type to which the device settings profile applies.
+	// The client type to which the device settings profile applies. This field is set
+	// when the profile is created and cannot be changed.
 	ProfileType param.Field[DevicePolicyCustomNewParamsProfileType] `json:"profile_type"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
@@ -315,7 +316,8 @@ func (r DevicePolicyCustomNewParamsGlobalAcceleration) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-// The client type to which the device settings profile applies.
+// The client type to which the device settings profile applies. This field is set
+// when the profile is created and cannot be changed.
 type DevicePolicyCustomNewParamsProfileType string
 
 const (
@@ -494,8 +496,6 @@ type DevicePolicyCustomEditParams struct {
 	// The precedence of the policy. Lower values indicate higher precedence. Policies
 	// will be evaluated in ascending order of this field.
 	Precedence param.Field[float64] `json:"precedence"`
-	// The client type to which the device settings profile applies.
-	ProfileType param.Field[DevicePolicyCustomEditParamsProfileType] `json:"profile_type"`
 	// Determines if the operating system will register WARP's local interface IP with
 	// your on-premises DNS server.
 	RegisterInterfaceIPWithDNS param.Field[bool] `json:"register_interface_ip_with_dns"`
@@ -582,22 +582,6 @@ type DevicePolicyCustomEditParamsGlobalAcceleration struct {
 
 func (r DevicePolicyCustomEditParamsGlobalAcceleration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// The client type to which the device settings profile applies.
-type DevicePolicyCustomEditParamsProfileType string
-
-const (
-	DevicePolicyCustomEditParamsProfileTypeWARP             DevicePolicyCustomEditParamsProfileType = "warp"
-	DevicePolicyCustomEditParamsProfileTypeBrowserExtension DevicePolicyCustomEditParamsProfileType = "browser_extension"
-)
-
-func (r DevicePolicyCustomEditParamsProfileType) IsKnown() bool {
-	switch r {
-	case DevicePolicyCustomEditParamsProfileTypeWARP, DevicePolicyCustomEditParamsProfileTypeBrowserExtension:
-		return true
-	}
-	return false
 }
 
 type DevicePolicyCustomEditParamsServiceModeV2 struct {

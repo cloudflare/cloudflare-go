@@ -74,17 +74,18 @@ func (r *InvestigateBulkMessageService) ListAutoPaging(ctx context.Context, jobI
 }
 
 type InvestigateBulkMessageListResponse struct {
-	ActionParams   InvestigateBulkMessageListResponseActionParams `json:"action_params" api:"required"`
-	ActionType     InvestigateBulkMessageListResponseActionType   `json:"action_type" api:"required"`
-	CreatedAt      time.Time                                      `json:"created_at" api:"required" format:"date-time"`
-	MessageID      string                                         `json:"message_id" api:"required" format:"uuid"`
-	PostfixID      string                                         `json:"postfix_id" api:"required"`
-	RetryCount     int64                                          `json:"retry_count" api:"required"`
-	Status         InvestigateBulkMessageListResponseStatus       `json:"status" api:"required"`
-	AlertID        string                                         `json:"alert_id" api:"nullable"`
-	EmailMessageID string                                         `json:"email_message_id" api:"nullable"`
-	Message        InvestigateBulkMessageListResponseMessage      `json:"message"`
-	ProcessedAt    time.Time                                      `json:"processed_at" api:"nullable" format:"date-time"`
+	ActionParams InvestigateBulkMessageListResponseActionParams `json:"action_params" api:"required"`
+	ActionType   InvestigateBulkMessageListResponseActionType   `json:"action_type" api:"required"`
+	CreatedAt    time.Time                                      `json:"created_at" api:"required" format:"date-time"`
+	MessageID    string                                         `json:"message_id" api:"required" format:"uuid"`
+	PostfixID    string                                         `json:"postfix_id" api:"required"`
+	RetryCount   int64                                          `json:"retry_count" api:"required"`
+	// Status of a message within a bulk action job.
+	Status         InvestigateBulkMessageListResponseStatus  `json:"status" api:"required"`
+	AlertID        string                                    `json:"alert_id" api:"nullable"`
+	EmailMessageID string                                    `json:"email_message_id" api:"nullable"`
+	Message        InvestigateBulkMessageListResponseMessage `json:"message"`
+	ProcessedAt    time.Time                                 `json:"processed_at" api:"nullable" format:"date-time"`
 	// When to retry the action if it failed.
 	RetryAfter    time.Time                              `json:"retry_after" api:"nullable" format:"date-time"`
 	StatusMessage string                                 `json:"status_message" api:"nullable"`
@@ -120,9 +121,10 @@ func (r investigateBulkMessageListResponseJSON) RawJSON() string {
 }
 
 type InvestigateBulkMessageListResponseActionParams struct {
-	ClientRecipient string                                                    `json:"client_recipient" api:"required"`
-	Type            InvestigateBulkMessageListResponseActionParamsType        `json:"type" api:"required"`
-	Destination     InvestigateBulkMessageListResponseActionParamsDestination `json:"destination"`
+	ClientRecipient string                                             `json:"client_recipient" api:"required"`
+	Type            InvestigateBulkMessageListResponseActionParamsType `json:"type" api:"required"`
+	// The mailbox folder to move messages to.
+	Destination InvestigateBulkMessageListResponseActionParamsDestination `json:"destination"`
 	// Nonfunctional field. End of life: December 1, 2026.
 	//
 	// Deprecated: This field is nonfunctional.
@@ -189,9 +191,10 @@ func init() {
 }
 
 type InvestigateBulkMessageListResponseActionParamsMove struct {
-	ClientRecipient string                                                        `json:"client_recipient" api:"required"`
-	Destination     InvestigateBulkMessageListResponseActionParamsMoveDestination `json:"destination" api:"required"`
-	Type            InvestigateBulkMessageListResponseActionParamsMoveType        `json:"type" api:"required"`
+	ClientRecipient string `json:"client_recipient" api:"required"`
+	// The mailbox folder to move messages to.
+	Destination InvestigateBulkMessageListResponseActionParamsMoveDestination `json:"destination" api:"required"`
+	Type        InvestigateBulkMessageListResponseActionParamsMoveType        `json:"type" api:"required"`
 	// Nonfunctional field. End of life: December 1, 2026.
 	//
 	// Deprecated: This field is nonfunctional.
@@ -221,6 +224,7 @@ func (r investigateBulkMessageListResponseActionParamsMoveJSON) RawJSON() string
 func (r InvestigateBulkMessageListResponseActionParamsMove) implementsInvestigateBulkMessageListResponseActionParams() {
 }
 
+// The mailbox folder to move messages to.
 type InvestigateBulkMessageListResponseActionParamsMoveDestination string
 
 const (
@@ -332,6 +336,7 @@ func (r InvestigateBulkMessageListResponseActionParamsType) IsKnown() bool {
 	return false
 }
 
+// The mailbox folder to move messages to.
 type InvestigateBulkMessageListResponseActionParamsDestination string
 
 const (
@@ -389,21 +394,21 @@ func (r InvestigateBulkMessageListResponseActionType) IsKnown() bool {
 	return false
 }
 
+// Status of a message within a bulk action job.
 type InvestigateBulkMessageListResponseStatus string
 
 const (
-	InvestigateBulkMessageListResponseStatusPending     InvestigateBulkMessageListResponseStatus = "PENDING"
-	InvestigateBulkMessageListResponseStatusDiscovering InvestigateBulkMessageListResponseStatus = "DISCOVERING"
-	InvestigateBulkMessageListResponseStatusProcessing  InvestigateBulkMessageListResponseStatus = "PROCESSING"
-	InvestigateBulkMessageListResponseStatusCompleted   InvestigateBulkMessageListResponseStatus = "COMPLETED"
-	InvestigateBulkMessageListResponseStatusFailed      InvestigateBulkMessageListResponseStatus = "FAILED"
-	InvestigateBulkMessageListResponseStatusCancelled   InvestigateBulkMessageListResponseStatus = "CANCELLED"
-	InvestigateBulkMessageListResponseStatusSkipped     InvestigateBulkMessageListResponseStatus = "SKIPPED"
+	InvestigateBulkMessageListResponseStatusPending    InvestigateBulkMessageListResponseStatus = "PENDING"
+	InvestigateBulkMessageListResponseStatusProcessing InvestigateBulkMessageListResponseStatus = "PROCESSING"
+	InvestigateBulkMessageListResponseStatusCompleted  InvestigateBulkMessageListResponseStatus = "COMPLETED"
+	InvestigateBulkMessageListResponseStatusFailed     InvestigateBulkMessageListResponseStatus = "FAILED"
+	InvestigateBulkMessageListResponseStatusCancelled  InvestigateBulkMessageListResponseStatus = "CANCELLED"
+	InvestigateBulkMessageListResponseStatusSkipped    InvestigateBulkMessageListResponseStatus = "SKIPPED"
 )
 
 func (r InvestigateBulkMessageListResponseStatus) IsKnown() bool {
 	switch r {
-	case InvestigateBulkMessageListResponseStatusPending, InvestigateBulkMessageListResponseStatusDiscovering, InvestigateBulkMessageListResponseStatusProcessing, InvestigateBulkMessageListResponseStatusCompleted, InvestigateBulkMessageListResponseStatusFailed, InvestigateBulkMessageListResponseStatusCancelled, InvestigateBulkMessageListResponseStatusSkipped:
+	case InvestigateBulkMessageListResponseStatusPending, InvestigateBulkMessageListResponseStatusProcessing, InvestigateBulkMessageListResponseStatusCompleted, InvestigateBulkMessageListResponseStatusFailed, InvestigateBulkMessageListResponseStatusCancelled, InvestigateBulkMessageListResponseStatusSkipped:
 		return true
 	}
 	return false
@@ -428,13 +433,14 @@ type InvestigateBulkMessageListResponseMessage struct {
 	// Deprecated, use `scanned_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `scanned_at` instead.
-	Ts               string                                                    `json:"ts" api:"required"`
-	AlertID          string                                                    `json:"alert_id" api:"nullable"`
-	DeliveryMode     InvestigateBulkMessageListResponseMessageDeliveryMode     `json:"delivery_mode" api:"nullable"`
-	DeliveryStatus   []InvestigateBulkMessageListResponseMessageDeliveryStatus `json:"delivery_status" api:"nullable"`
-	EdfHash          string                                                    `json:"edf_hash" api:"nullable"`
-	EnvelopeFrom     string                                                    `json:"envelope_from" api:"nullable"`
-	EnvelopeTo       []string                                                  `json:"envelope_to" api:"nullable"`
+	Ts             string                                                    `json:"ts" api:"required"`
+	AlertID        string                                                    `json:"alert_id" api:"nullable"`
+	DeliveryMode   InvestigateBulkMessageListResponseMessageDeliveryMode     `json:"delivery_mode" api:"nullable"`
+	DeliveryStatus []InvestigateBulkMessageListResponseMessageDeliveryStatus `json:"delivery_status" api:"nullable"`
+	EdfHash        string                                                    `json:"edf_hash" api:"nullable"`
+	EnvelopeFrom   string                                                    `json:"envelope_from" api:"nullable"`
+	EnvelopeTo     []string                                                  `json:"envelope_to" api:"nullable"`
+	// The verdict Email Security assigns to a message.
 	FinalDisposition InvestigateBulkMessageListResponseMessageFinalDisposition `json:"final_disposition" api:"nullable"`
 	// Deprecated, use the `findings` field from
 	// `GET /investigate/{investigate_id}/detections` instead. End of life: November
@@ -725,6 +731,7 @@ func (r InvestigateBulkMessageListResponseMessageDeliveryStatus) IsKnown() bool 
 	return false
 }
 
+// The verdict Email Security assigns to a message.
 type InvestigateBulkMessageListResponseMessageFinalDisposition string
 
 const (
@@ -749,16 +756,17 @@ func (r InvestigateBulkMessageListResponseMessageFinalDisposition) IsKnown() boo
 }
 
 type InvestigateBulkMessageListResponseMessageFinding struct {
-	Attachment string                                                     `json:"attachment" api:"nullable"`
-	Detail     string                                                     `json:"detail" api:"nullable"`
-	Detection  InvestigateBulkMessageListResponseMessageFindingsDetection `json:"detection" api:"nullable"`
-	Field      string                                                     `json:"field" api:"nullable"`
-	Name       string                                                     `json:"name" api:"nullable"`
-	Portion    string                                                     `json:"portion" api:"nullable"`
-	Reason     string                                                     `json:"reason" api:"nullable"`
-	Score      float64                                                    `json:"score" api:"nullable"`
-	Value      string                                                     `json:"value" api:"nullable"`
-	JSON       investigateBulkMessageListResponseMessageFindingJSON       `json:"-"`
+	Attachment string `json:"attachment" api:"nullable"`
+	Detail     string `json:"detail" api:"nullable"`
+	// The verdict Email Security assigns to a message.
+	Detection InvestigateBulkMessageListResponseMessageFindingsDetection `json:"detection" api:"nullable"`
+	Field     string                                                     `json:"field" api:"nullable"`
+	Name      string                                                     `json:"name" api:"nullable"`
+	Portion   string                                                     `json:"portion" api:"nullable"`
+	Reason    string                                                     `json:"reason" api:"nullable"`
+	Score     float64                                                    `json:"score" api:"nullable"`
+	Value     string                                                     `json:"value" api:"nullable"`
+	JSON      investigateBulkMessageListResponseMessageFindingJSON       `json:"-"`
 }
 
 // investigateBulkMessageListResponseMessageFindingJSON contains the JSON metadata
@@ -785,6 +793,7 @@ func (r investigateBulkMessageListResponseMessageFindingJSON) RawJSON() string {
 	return r.raw
 }
 
+// The verdict Email Security assigns to a message.
 type InvestigateBulkMessageListResponseMessageFindingsDetection string
 
 const (
@@ -912,8 +921,9 @@ type InvestigateBulkMessageListParams struct {
 	// Current page within paginated list of results.
 	Page param.Field[int64] `query:"page"`
 	// The number of results per page. Maximum value is 1000.
-	PerPage param.Field[int64]                                  `query:"per_page"`
-	Status  param.Field[InvestigateBulkMessageListParamsStatus] `query:"status"`
+	PerPage param.Field[int64] `query:"per_page"`
+	// Filter the job's messages by their processing status.
+	Status param.Field[InvestigateBulkMessageListParamsStatus] `query:"status"`
 }
 
 // URLQuery serializes [InvestigateBulkMessageListParams]'s query parameters as
@@ -925,21 +935,21 @@ func (r InvestigateBulkMessageListParams) URLQuery() (v url.Values) {
 	})
 }
 
+// Filter the job's messages by their processing status.
 type InvestigateBulkMessageListParamsStatus string
 
 const (
-	InvestigateBulkMessageListParamsStatusPending     InvestigateBulkMessageListParamsStatus = "PENDING"
-	InvestigateBulkMessageListParamsStatusDiscovering InvestigateBulkMessageListParamsStatus = "DISCOVERING"
-	InvestigateBulkMessageListParamsStatusProcessing  InvestigateBulkMessageListParamsStatus = "PROCESSING"
-	InvestigateBulkMessageListParamsStatusCompleted   InvestigateBulkMessageListParamsStatus = "COMPLETED"
-	InvestigateBulkMessageListParamsStatusFailed      InvestigateBulkMessageListParamsStatus = "FAILED"
-	InvestigateBulkMessageListParamsStatusCancelled   InvestigateBulkMessageListParamsStatus = "CANCELLED"
-	InvestigateBulkMessageListParamsStatusSkipped     InvestigateBulkMessageListParamsStatus = "SKIPPED"
+	InvestigateBulkMessageListParamsStatusPending    InvestigateBulkMessageListParamsStatus = "PENDING"
+	InvestigateBulkMessageListParamsStatusProcessing InvestigateBulkMessageListParamsStatus = "PROCESSING"
+	InvestigateBulkMessageListParamsStatusCompleted  InvestigateBulkMessageListParamsStatus = "COMPLETED"
+	InvestigateBulkMessageListParamsStatusFailed     InvestigateBulkMessageListParamsStatus = "FAILED"
+	InvestigateBulkMessageListParamsStatusCancelled  InvestigateBulkMessageListParamsStatus = "CANCELLED"
+	InvestigateBulkMessageListParamsStatusSkipped    InvestigateBulkMessageListParamsStatus = "SKIPPED"
 )
 
 func (r InvestigateBulkMessageListParamsStatus) IsKnown() bool {
 	switch r {
-	case InvestigateBulkMessageListParamsStatusPending, InvestigateBulkMessageListParamsStatusDiscovering, InvestigateBulkMessageListParamsStatusProcessing, InvestigateBulkMessageListParamsStatusCompleted, InvestigateBulkMessageListParamsStatusFailed, InvestigateBulkMessageListParamsStatusCancelled, InvestigateBulkMessageListParamsStatusSkipped:
+	case InvestigateBulkMessageListParamsStatusPending, InvestigateBulkMessageListParamsStatusProcessing, InvestigateBulkMessageListParamsStatusCompleted, InvestigateBulkMessageListParamsStatusFailed, InvestigateBulkMessageListParamsStatusCancelled, InvestigateBulkMessageListParamsStatusSkipped:
 		return true
 	}
 	return false

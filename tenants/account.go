@@ -35,7 +35,7 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 	return
 }
 
-// List of accounts for the Tenant.
+// Lists the Cloudflare accounts associated with this tenant.
 func (r *AccountService) List(ctx context.Context, tenantID string, opts ...option.RequestOption) (res *pagination.SinglePage[TenantAccount], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -57,7 +57,7 @@ func (r *AccountService) List(ctx context.Context, tenantID string, opts ...opti
 	return res, nil
 }
 
-// List of accounts for the Tenant.
+// Lists the Cloudflare accounts associated with this tenant.
 func (r *AccountService) ListAutoPaging(ctx context.Context, tenantID string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TenantAccount] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, tenantID, opts...))
 }

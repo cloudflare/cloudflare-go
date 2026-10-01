@@ -266,6 +266,7 @@ func (r LoggingSettingSettingsByRuleTypeL4Param) MarshalJSON() (data []byte, err
 }
 
 type GatewayLoggingUpdateParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID      param.Field[string] `path:"account_id" api:"required"`
 	LoggingSetting LoggingSettingParam `json:"logging_setting" api:"required"`
 }
@@ -318,6 +319,7 @@ func (r GatewayLoggingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayLoggingGetParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

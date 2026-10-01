@@ -33,7 +33,7 @@ func TestProjectDomainNew(t *testing.T) {
 		"this-is-my-project-01",
 		pages.ProjectDomainNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Name:      cloudflare.F("this-is-my-domain-01.com"),
+			Name:      cloudflare.F("example.com"),
 		},
 	)
 	if err != nil {
@@ -92,7 +92,7 @@ func TestProjectDomainDelete(t *testing.T) {
 	_, err := client.Pages.Projects.Domains.Delete(
 		context.TODO(),
 		"this-is-my-project-01",
-		"this-is-my-domain-01.com",
+		"example.com",
 		pages.ProjectDomainDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -123,7 +123,7 @@ func TestProjectDomainEdit(t *testing.T) {
 	_, err := client.Pages.Projects.Domains.Edit(
 		context.TODO(),
 		"this-is-my-project-01",
-		"this-is-my-domain-01.com",
+		"example.com",
 		pages.ProjectDomainEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -154,7 +154,7 @@ func TestProjectDomainGet(t *testing.T) {
 	_, err := client.Pages.Projects.Domains.Get(
 		context.TODO(),
 		"this-is-my-project-01",
-		"this-is-my-domain-01.com",
+		"example.com",
 		pages.ProjectDomainGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

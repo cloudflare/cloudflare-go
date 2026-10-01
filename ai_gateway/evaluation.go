@@ -41,7 +41,9 @@ func NewEvaluationService(opts ...option.RequestOption) (r *EvaluationService) {
 	return
 }
 
-// Creates a new AI Gateway.
+// Creates an evaluation that scores the logs in a dataset with the specified
+// evaluator types. Evaluations and datasets are deprecated and unavailable to new
+// accounts.
 func (r *EvaluationService) New(ctx context.Context, gatewayID string, params EvaluationNewParams, opts ...option.RequestOption) (res *EvaluationNewResponse, err error) {
 	var env EvaluationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -62,7 +64,8 @@ func (r *EvaluationService) New(ctx context.Context, gatewayID string, params Ev
 	return res, nil
 }
 
-// Lists all AI Gateway evaluator types configured for the account.
+// Lists the evaluations run on an AI Gateway. Evaluations and datasets are
+// deprecated and unavailable to new accounts.
 func (r *EvaluationService) List(ctx context.Context, gatewayID string, params EvaluationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[EvaluationListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -88,12 +91,14 @@ func (r *EvaluationService) List(ctx context.Context, gatewayID string, params E
 	return res, nil
 }
 
-// Lists all AI Gateway evaluator types configured for the account.
+// Lists the evaluations run on an AI Gateway. Evaluations and datasets are
+// deprecated and unavailable to new accounts.
 func (r *EvaluationService) ListAutoPaging(ctx context.Context, gatewayID string, params EvaluationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[EvaluationListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, gatewayID, params, opts...))
 }
 
-// Deletes an AI Gateway dataset.
+// Deletes an evaluation and its results. Evaluations and datasets are deprecated
+// and unavailable to new accounts.
 func (r *EvaluationService) Delete(ctx context.Context, gatewayID string, id string, body EvaluationDeleteParams, opts ...option.RequestOption) (res *EvaluationDeleteResponse, err error) {
 	var env EvaluationDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -118,7 +123,8 @@ func (r *EvaluationService) Delete(ctx context.Context, gatewayID string, id str
 	return res, nil
 }
 
-// Retrieves details for a specific AI Gateway dataset.
+// Retrieves an evaluation and its results. Evaluations and datasets are deprecated
+// and unavailable to new accounts.
 func (r *EvaluationService) Get(ctx context.Context, gatewayID string, id string, query EvaluationGetParams, opts ...option.RequestOption) (res *EvaluationGetResponse, err error) {
 	var env EvaluationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -147,7 +153,7 @@ type EvaluationNewResponse struct {
 	ID        string                         `json:"id" api:"required"`
 	CreatedAt time.Time                      `json:"created_at" api:"required" format:"date-time"`
 	Datasets  []EvaluationNewResponseDataset `json:"datasets" api:"required"`
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	GatewayID  string                        `json:"gateway_id" api:"required"`
 	ModifiedAt time.Time                     `json:"modified_at" api:"required" format:"date-time"`
 	Name       string                        `json:"name" api:"required"`
@@ -188,7 +194,7 @@ type EvaluationNewResponseDataset struct {
 	CreatedAt  time.Time                             `json:"created_at" api:"required" format:"date-time"`
 	Enable     bool                                  `json:"enable" api:"required"`
 	Filters    []EvaluationNewResponseDatasetsFilter `json:"filters" api:"required"`
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	GatewayID  string                           `json:"gateway_id" api:"required"`
 	ModifiedAt time.Time                        `json:"modified_at" api:"required" format:"date-time"`
 	Name       string                           `json:"name" api:"required"`
@@ -357,7 +363,7 @@ type EvaluationListResponse struct {
 	ID        string                          `json:"id" api:"required"`
 	CreatedAt time.Time                       `json:"created_at" api:"required" format:"date-time"`
 	Datasets  []EvaluationListResponseDataset `json:"datasets" api:"required"`
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	GatewayID  string                         `json:"gateway_id" api:"required"`
 	ModifiedAt time.Time                      `json:"modified_at" api:"required" format:"date-time"`
 	Name       string                         `json:"name" api:"required"`
@@ -398,7 +404,7 @@ type EvaluationListResponseDataset struct {
 	CreatedAt  time.Time                              `json:"created_at" api:"required" format:"date-time"`
 	Enable     bool                                   `json:"enable" api:"required"`
 	Filters    []EvaluationListResponseDatasetsFilter `json:"filters" api:"required"`
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	GatewayID  string                            `json:"gateway_id" api:"required"`
 	ModifiedAt time.Time                         `json:"modified_at" api:"required" format:"date-time"`
 	Name       string                            `json:"name" api:"required"`
@@ -567,7 +573,7 @@ type EvaluationDeleteResponse struct {
 	ID        string                            `json:"id" api:"required"`
 	CreatedAt time.Time                         `json:"created_at" api:"required" format:"date-time"`
 	Datasets  []EvaluationDeleteResponseDataset `json:"datasets" api:"required"`
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	GatewayID  string                           `json:"gateway_id" api:"required"`
 	ModifiedAt time.Time                        `json:"modified_at" api:"required" format:"date-time"`
 	Name       string                           `json:"name" api:"required"`
@@ -608,7 +614,7 @@ type EvaluationDeleteResponseDataset struct {
 	CreatedAt  time.Time                                `json:"created_at" api:"required" format:"date-time"`
 	Enable     bool                                     `json:"enable" api:"required"`
 	Filters    []EvaluationDeleteResponseDatasetsFilter `json:"filters" api:"required"`
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	GatewayID  string                              `json:"gateway_id" api:"required"`
 	ModifiedAt time.Time                           `json:"modified_at" api:"required" format:"date-time"`
 	Name       string                              `json:"name" api:"required"`
@@ -777,7 +783,7 @@ type EvaluationGetResponse struct {
 	ID        string                         `json:"id" api:"required"`
 	CreatedAt time.Time                      `json:"created_at" api:"required" format:"date-time"`
 	Datasets  []EvaluationGetResponseDataset `json:"datasets" api:"required"`
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	GatewayID  string                        `json:"gateway_id" api:"required"`
 	ModifiedAt time.Time                     `json:"modified_at" api:"required" format:"date-time"`
 	Name       string                        `json:"name" api:"required"`
@@ -818,7 +824,7 @@ type EvaluationGetResponseDataset struct {
 	CreatedAt  time.Time                             `json:"created_at" api:"required" format:"date-time"`
 	Enable     bool                                  `json:"enable" api:"required"`
 	Filters    []EvaluationGetResponseDatasetsFilter `json:"filters" api:"required"`
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	GatewayID  string                           `json:"gateway_id" api:"required"`
 	ModifiedAt time.Time                        `json:"modified_at" api:"required" format:"date-time"`
 	Name       string                           `json:"name" api:"required"`

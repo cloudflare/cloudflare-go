@@ -7,8 +7,10 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"slices"
 
+	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
@@ -35,11 +37,11 @@ func NewGatewayListItemService(opts ...option.RequestOption) (r *GatewayListItem
 }
 
 // Fetch all items in a single Zero Trust list.
-func (r *GatewayListItemService) List(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) (res *pagination.SinglePage[GatewayItem], err error) {
+func (r *GatewayListItemService) List(ctx context.Context, listID string, params GatewayListItemListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[GatewayItem], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -47,8 +49,8 @@ func (r *GatewayListItemService) List(ctx context.Context, listID string, query 
 		err = errors.New("missing required list_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/gateway/lists/%s/items", query.AccountID, listID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/gateway/lists/%s/items", params.AccountID, listID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -61,10 +63,24 @@ func (r *GatewayListItemService) List(ctx context.Context, listID string, query 
 }
 
 // Fetch all items in a single Zero Trust list.
-func (r *GatewayListItemService) ListAutoPaging(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[GatewayItem] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, listID, query, opts...))
+func (r *GatewayListItemService) ListAutoPaging(ctx context.Context, listID string, params GatewayListItemListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[GatewayItem] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, listID, params, opts...))
 }
 
 type GatewayListItemListParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Page number of paginated results.
+	Page param.Field[int64] `query:"page"`
+	// Number of items per page.
+	PerPage param.Field[int64] `query:"per_page"`
+}
+
+// URLQuery serializes [GatewayListItemListParams]'s query parameters as
+// `url.Values`.
+func (r GatewayListItemListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }

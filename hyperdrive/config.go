@@ -565,10 +565,10 @@ type ConfigNewResponseIntegration struct {
 	DatabaseBranchName string `json:"database_branch_name" api:"required"`
 	// The name of the PlanetScale database.
 	DatabaseName string `json:"database_name" api:"required"`
-	// The database integration used by this operation.
-	Integration ConfigNewResponseIntegrationIntegration `json:"integration" api:"required"`
 	// The name of the PlanetScale organization.
 	OrganizationName string `json:"organization_name" api:"required"`
+	// The database integration provider used by this operation.
+	Provider ConfigNewResponseIntegrationProvider `json:"provider" api:"required"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme ConfigNewResponseIntegrationScheme `json:"scheme" api:"required"`
 	// The database name to use when connecting. Defaults to `postgres` for PostgreSQL
@@ -582,8 +582,8 @@ type ConfigNewResponseIntegration struct {
 type configNewResponseIntegrationJSON struct {
 	DatabaseBranchName apijson.Field
 	DatabaseName       apijson.Field
-	Integration        apijson.Field
 	OrganizationName   apijson.Field
+	Provider           apijson.Field
 	Scheme             apijson.Field
 	CustomDatabaseName apijson.Field
 	raw                string
@@ -598,16 +598,16 @@ func (r configNewResponseIntegrationJSON) RawJSON() string {
 	return r.raw
 }
 
-// The database integration used by this operation.
-type ConfigNewResponseIntegrationIntegration string
+// The database integration provider used by this operation.
+type ConfigNewResponseIntegrationProvider string
 
 const (
-	ConfigNewResponseIntegrationIntegrationPlanetscale ConfigNewResponseIntegrationIntegration = "planetscale"
+	ConfigNewResponseIntegrationProviderPlanetscale ConfigNewResponseIntegrationProvider = "planetscale"
 )
 
-func (r ConfigNewResponseIntegrationIntegration) IsKnown() bool {
+func (r ConfigNewResponseIntegrationProvider) IsKnown() bool {
 	switch r {
-	case ConfigNewResponseIntegrationIntegrationPlanetscale:
+	case ConfigNewResponseIntegrationProviderPlanetscale:
 		return true
 	}
 	return false
@@ -1029,10 +1029,10 @@ type ConfigUpdateResponseIntegration struct {
 	DatabaseBranchName string `json:"database_branch_name" api:"required"`
 	// The name of the PlanetScale database.
 	DatabaseName string `json:"database_name" api:"required"`
-	// The database integration used by this operation.
-	Integration ConfigUpdateResponseIntegrationIntegration `json:"integration" api:"required"`
 	// The name of the PlanetScale organization.
 	OrganizationName string `json:"organization_name" api:"required"`
+	// The database integration provider used by this operation.
+	Provider ConfigUpdateResponseIntegrationProvider `json:"provider" api:"required"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme ConfigUpdateResponseIntegrationScheme `json:"scheme" api:"required"`
 	// The database name to use when connecting. Defaults to `postgres` for PostgreSQL
@@ -1046,8 +1046,8 @@ type ConfigUpdateResponseIntegration struct {
 type configUpdateResponseIntegrationJSON struct {
 	DatabaseBranchName apijson.Field
 	DatabaseName       apijson.Field
-	Integration        apijson.Field
 	OrganizationName   apijson.Field
+	Provider           apijson.Field
 	Scheme             apijson.Field
 	CustomDatabaseName apijson.Field
 	raw                string
@@ -1062,16 +1062,16 @@ func (r configUpdateResponseIntegrationJSON) RawJSON() string {
 	return r.raw
 }
 
-// The database integration used by this operation.
-type ConfigUpdateResponseIntegrationIntegration string
+// The database integration provider used by this operation.
+type ConfigUpdateResponseIntegrationProvider string
 
 const (
-	ConfigUpdateResponseIntegrationIntegrationPlanetscale ConfigUpdateResponseIntegrationIntegration = "planetscale"
+	ConfigUpdateResponseIntegrationProviderPlanetscale ConfigUpdateResponseIntegrationProvider = "planetscale"
 )
 
-func (r ConfigUpdateResponseIntegrationIntegration) IsKnown() bool {
+func (r ConfigUpdateResponseIntegrationProvider) IsKnown() bool {
 	switch r {
-	case ConfigUpdateResponseIntegrationIntegrationPlanetscale:
+	case ConfigUpdateResponseIntegrationProviderPlanetscale:
 		return true
 	}
 	return false
@@ -1493,10 +1493,10 @@ type ConfigListResponseIntegration struct {
 	DatabaseBranchName string `json:"database_branch_name" api:"required"`
 	// The name of the PlanetScale database.
 	DatabaseName string `json:"database_name" api:"required"`
-	// The database integration used by this operation.
-	Integration ConfigListResponseIntegrationIntegration `json:"integration" api:"required"`
 	// The name of the PlanetScale organization.
 	OrganizationName string `json:"organization_name" api:"required"`
+	// The database integration provider used by this operation.
+	Provider ConfigListResponseIntegrationProvider `json:"provider" api:"required"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme ConfigListResponseIntegrationScheme `json:"scheme" api:"required"`
 	// The database name to use when connecting. Defaults to `postgres` for PostgreSQL
@@ -1510,8 +1510,8 @@ type ConfigListResponseIntegration struct {
 type configListResponseIntegrationJSON struct {
 	DatabaseBranchName apijson.Field
 	DatabaseName       apijson.Field
-	Integration        apijson.Field
 	OrganizationName   apijson.Field
+	Provider           apijson.Field
 	Scheme             apijson.Field
 	CustomDatabaseName apijson.Field
 	raw                string
@@ -1526,16 +1526,16 @@ func (r configListResponseIntegrationJSON) RawJSON() string {
 	return r.raw
 }
 
-// The database integration used by this operation.
-type ConfigListResponseIntegrationIntegration string
+// The database integration provider used by this operation.
+type ConfigListResponseIntegrationProvider string
 
 const (
-	ConfigListResponseIntegrationIntegrationPlanetscale ConfigListResponseIntegrationIntegration = "planetscale"
+	ConfigListResponseIntegrationProviderPlanetscale ConfigListResponseIntegrationProvider = "planetscale"
 )
 
-func (r ConfigListResponseIntegrationIntegration) IsKnown() bool {
+func (r ConfigListResponseIntegrationProvider) IsKnown() bool {
 	switch r {
-	case ConfigListResponseIntegrationIntegrationPlanetscale:
+	case ConfigListResponseIntegrationProviderPlanetscale:
 		return true
 	}
 	return false
@@ -1959,10 +1959,10 @@ type ConfigEditResponseIntegration struct {
 	DatabaseBranchName string `json:"database_branch_name" api:"required"`
 	// The name of the PlanetScale database.
 	DatabaseName string `json:"database_name" api:"required"`
-	// The database integration used by this operation.
-	Integration ConfigEditResponseIntegrationIntegration `json:"integration" api:"required"`
 	// The name of the PlanetScale organization.
 	OrganizationName string `json:"organization_name" api:"required"`
+	// The database integration provider used by this operation.
+	Provider ConfigEditResponseIntegrationProvider `json:"provider" api:"required"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme ConfigEditResponseIntegrationScheme `json:"scheme" api:"required"`
 	// The database name to use when connecting. Defaults to `postgres` for PostgreSQL
@@ -1976,8 +1976,8 @@ type ConfigEditResponseIntegration struct {
 type configEditResponseIntegrationJSON struct {
 	DatabaseBranchName apijson.Field
 	DatabaseName       apijson.Field
-	Integration        apijson.Field
 	OrganizationName   apijson.Field
+	Provider           apijson.Field
 	Scheme             apijson.Field
 	CustomDatabaseName apijson.Field
 	raw                string
@@ -1992,16 +1992,16 @@ func (r configEditResponseIntegrationJSON) RawJSON() string {
 	return r.raw
 }
 
-// The database integration used by this operation.
-type ConfigEditResponseIntegrationIntegration string
+// The database integration provider used by this operation.
+type ConfigEditResponseIntegrationProvider string
 
 const (
-	ConfigEditResponseIntegrationIntegrationPlanetscale ConfigEditResponseIntegrationIntegration = "planetscale"
+	ConfigEditResponseIntegrationProviderPlanetscale ConfigEditResponseIntegrationProvider = "planetscale"
 )
 
-func (r ConfigEditResponseIntegrationIntegration) IsKnown() bool {
+func (r ConfigEditResponseIntegrationProvider) IsKnown() bool {
 	switch r {
-	case ConfigEditResponseIntegrationIntegrationPlanetscale:
+	case ConfigEditResponseIntegrationProviderPlanetscale:
 		return true
 	}
 	return false
@@ -2422,10 +2422,10 @@ type ConfigGetResponseIntegration struct {
 	DatabaseBranchName string `json:"database_branch_name" api:"required"`
 	// The name of the PlanetScale database.
 	DatabaseName string `json:"database_name" api:"required"`
-	// The database integration used by this operation.
-	Integration ConfigGetResponseIntegrationIntegration `json:"integration" api:"required"`
 	// The name of the PlanetScale organization.
 	OrganizationName string `json:"organization_name" api:"required"`
+	// The database integration provider used by this operation.
+	Provider ConfigGetResponseIntegrationProvider `json:"provider" api:"required"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme ConfigGetResponseIntegrationScheme `json:"scheme" api:"required"`
 	// The database name to use when connecting. Defaults to `postgres` for PostgreSQL
@@ -2439,8 +2439,8 @@ type ConfigGetResponseIntegration struct {
 type configGetResponseIntegrationJSON struct {
 	DatabaseBranchName apijson.Field
 	DatabaseName       apijson.Field
-	Integration        apijson.Field
 	OrganizationName   apijson.Field
+	Provider           apijson.Field
 	Scheme             apijson.Field
 	CustomDatabaseName apijson.Field
 	raw                string
@@ -2455,16 +2455,16 @@ func (r configGetResponseIntegrationJSON) RawJSON() string {
 	return r.raw
 }
 
-// The database integration used by this operation.
-type ConfigGetResponseIntegrationIntegration string
+// The database integration provider used by this operation.
+type ConfigGetResponseIntegrationProvider string
 
 const (
-	ConfigGetResponseIntegrationIntegrationPlanetscale ConfigGetResponseIntegrationIntegration = "planetscale"
+	ConfigGetResponseIntegrationProviderPlanetscale ConfigGetResponseIntegrationProvider = "planetscale"
 )
 
-func (r ConfigGetResponseIntegrationIntegration) IsKnown() bool {
+func (r ConfigGetResponseIntegrationProvider) IsKnown() bool {
 	switch r {
-	case ConfigGetResponseIntegrationIntegrationPlanetscale:
+	case ConfigGetResponseIntegrationProviderPlanetscale:
 		return true
 	}
 	return false
@@ -2886,10 +2886,10 @@ type ConfigRestartResponseIntegration struct {
 	DatabaseBranchName string `json:"database_branch_name" api:"required"`
 	// The name of the PlanetScale database.
 	DatabaseName string `json:"database_name" api:"required"`
-	// The database integration used by this operation.
-	Integration ConfigRestartResponseIntegrationIntegration `json:"integration" api:"required"`
 	// The name of the PlanetScale organization.
 	OrganizationName string `json:"organization_name" api:"required"`
+	// The database integration provider used by this operation.
+	Provider ConfigRestartResponseIntegrationProvider `json:"provider" api:"required"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme ConfigRestartResponseIntegrationScheme `json:"scheme" api:"required"`
 	// The database name to use when connecting. Defaults to `postgres` for PostgreSQL
@@ -2903,8 +2903,8 @@ type ConfigRestartResponseIntegration struct {
 type configRestartResponseIntegrationJSON struct {
 	DatabaseBranchName apijson.Field
 	DatabaseName       apijson.Field
-	Integration        apijson.Field
 	OrganizationName   apijson.Field
+	Provider           apijson.Field
 	Scheme             apijson.Field
 	CustomDatabaseName apijson.Field
 	raw                string
@@ -2919,16 +2919,16 @@ func (r configRestartResponseIntegrationJSON) RawJSON() string {
 	return r.raw
 }
 
-// The database integration used by this operation.
-type ConfigRestartResponseIntegrationIntegration string
+// The database integration provider used by this operation.
+type ConfigRestartResponseIntegrationProvider string
 
 const (
-	ConfigRestartResponseIntegrationIntegrationPlanetscale ConfigRestartResponseIntegrationIntegration = "planetscale"
+	ConfigRestartResponseIntegrationProviderPlanetscale ConfigRestartResponseIntegrationProvider = "planetscale"
 )
 
-func (r ConfigRestartResponseIntegrationIntegration) IsKnown() bool {
+func (r ConfigRestartResponseIntegrationProvider) IsKnown() bool {
 	switch r {
-	case ConfigRestartResponseIntegrationIntegrationPlanetscale:
+	case ConfigRestartResponseIntegrationProviderPlanetscale:
 		return true
 	}
 	return false
@@ -3397,10 +3397,10 @@ type ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegrationIntegrati
 	DatabaseBranchName param.Field[string] `json:"database_branch_name" api:"required"`
 	// The name of the PlanetScale database.
 	DatabaseName param.Field[string] `json:"database_name" api:"required"`
-	// The database integration used by this operation.
-	Integration param.Field[ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegrationIntegrationIntegration] `json:"integration" api:"required"`
 	// The name of the PlanetScale organization.
 	OrganizationName param.Field[string] `json:"organization_name" api:"required"`
+	// The database integration provider used by this operation.
+	Provider param.Field[ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegrationIntegrationProvider] `json:"provider" api:"required"`
 	// Specifies the URL scheme used to connect to your origin database.
 	Scheme param.Field[ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegrationIntegrationScheme] `json:"scheme" api:"required"`
 	// The database name to use when connecting. Defaults to `postgres` for PostgreSQL
@@ -3412,16 +3412,16 @@ func (r ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegrationIntegr
 	return apijson.MarshalRoot(r)
 }
 
-// The database integration used by this operation.
-type ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegrationIntegrationIntegration string
+// The database integration provider used by this operation.
+type ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegrationIntegrationProvider string
 
 const (
-	ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegrationIntegrationIntegrationPlanetscale ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegrationIntegrationIntegration = "planetscale"
+	ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegrationIntegrationProviderPlanetscale ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegrationIntegrationProvider = "planetscale"
 )
 
-func (r ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegrationIntegrationIntegration) IsKnown() bool {
+func (r ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegrationIntegrationProvider) IsKnown() bool {
 	switch r {
-	case ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegrationIntegrationIntegrationPlanetscale:
+	case ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegrationIntegrationProviderPlanetscale:
 		return true
 	}
 	return false

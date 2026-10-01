@@ -39,7 +39,9 @@ func NewToMarkdownService(opts ...option.RequestOption) (r *ToMarkdownService) {
 	return
 }
 
-// Lists all file formats supported for conversion to Markdown.
+// Lists the file extensions and MIME types accepted by Workers AI's Markdown
+// conversion endpoint. Use this list to check whether a file can be converted
+// before uploading it.
 func (r *ToMarkdownService) Supported(ctx context.Context, query ToMarkdownSupportedParams, opts ...option.RequestOption) (res *pagination.SinglePage[ToMarkdownSupportedResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -61,12 +63,16 @@ func (r *ToMarkdownService) Supported(ctx context.Context, query ToMarkdownSuppo
 	return res, nil
 }
 
-// Lists all file formats supported for conversion to Markdown.
+// Lists the file extensions and MIME types accepted by Workers AI's Markdown
+// conversion endpoint. Use this list to check whether a file can be converted
+// before uploading it.
 func (r *ToMarkdownService) SupportedAutoPaging(ctx context.Context, query ToMarkdownSupportedParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ToMarkdownSupportedResponse] {
 	return pagination.NewSinglePageAutoPager(r.Supported(ctx, query, opts...))
 }
 
-// Converts uploaded files into Markdown format using Workers AI.
+// Converts files uploaded as multipart form data into Markdown using Workers AI.
+// Returns a conversion result for each file. Use the supported-formats endpoint to
+// check accepted file types.
 func (r *ToMarkdownService) Transform(ctx context.Context, params ToMarkdownTransformParams, opts ...option.RequestOption) (res *pagination.SinglePage[ToMarkdownTransformResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -88,7 +94,9 @@ func (r *ToMarkdownService) Transform(ctx context.Context, params ToMarkdownTran
 	return res, nil
 }
 
-// Converts uploaded files into Markdown format using Workers AI.
+// Converts files uploaded as multipart form data into Markdown using Workers AI.
+// Returns a conversion result for each file. Use the supported-formats endpoint to
+// check accepted file types.
 func (r *ToMarkdownService) TransformAutoPaging(ctx context.Context, params ToMarkdownTransformParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ToMarkdownTransformResponse] {
 	return pagination.NewSinglePageAutoPager(r.Transform(ctx, params, opts...))
 }
@@ -146,10 +154,12 @@ func (r toMarkdownTransformResponseJSON) RawJSON() string {
 }
 
 type ToMarkdownSupportedParams struct {
+	// Cloudflare account ID used for this AI model request.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type ToMarkdownTransformParams struct {
+	// Cloudflare account ID used for this AI model request.
 	AccountID param.Field[string]           `path:"account_id" api:"required"`
 	File      ToMarkdownTransformParamsFile `json:"file" api:"required"`
 }
@@ -170,6 +180,7 @@ func (r ToMarkdownTransformParams) MarshalMultipart() (data []byte, contentType 
 }
 
 type ToMarkdownTransformParamsFile struct {
+	// Files to convert, supplied as multipart file uploads.
 	Files param.Field[[]io.Reader] `json:"files" api:"required" format:"binary"`
 }
 

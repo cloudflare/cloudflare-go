@@ -84,7 +84,7 @@ func TestZoneCertificateDelete(t *testing.T) {
 	)
 	_, err := client.OriginTLSClientAuth.ZoneCertificates.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"2458ce5a-0c35-4c7f-82c7-8e9487d3ff60",
 		origin_tls_client_auth.ZoneCertificateDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -114,7 +114,7 @@ func TestZoneCertificateGet(t *testing.T) {
 	)
 	_, err := client.OriginTLSClientAuth.ZoneCertificates.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"2458ce5a-0c35-4c7f-82c7-8e9487d3ff60",
 		origin_tls_client_auth.ZoneCertificateGetParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

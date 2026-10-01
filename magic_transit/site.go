@@ -325,6 +325,9 @@ type SiteUpdateParams struct {
 	// Magic Connector identifier tag.
 	ConnectorID param.Field[string] `json:"connector_id"`
 	Description param.Field[string] `json:"description"`
+	// Site high availability mode. If set to true, the site can have two connectors
+	// and runs in high availability mode.
+	HaMode param.Field[bool] `json:"ha_mode"`
 	// Location of site in latitude and longitude.
 	Location param.Field[SiteLocationParam] `json:"location"`
 	// The name of the site.
@@ -449,6 +452,9 @@ type SiteEditParams struct {
 	// Magic Connector identifier tag.
 	ConnectorID param.Field[string] `json:"connector_id"`
 	Description param.Field[string] `json:"description"`
+	// Site high availability mode. If set to true, the site can have two connectors
+	// and runs in high availability mode.
+	HaMode param.Field[bool] `json:"ha_mode"`
 	// Location of site in latitude and longitude.
 	Location param.Field[SiteLocationParam] `json:"location"`
 	// The name of the site.

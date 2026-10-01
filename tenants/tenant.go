@@ -43,7 +43,8 @@ func NewTenantService(opts ...option.RequestOption) (r *TenantService) {
 	return
 }
 
-// Retrieves a Tenant by Tenant ID.
+// Retrieves a tenant's identity, status, metadata, contacts, and organizational
+// units.
 func (r *TenantService) Get(ctx context.Context, tenantID string, opts ...option.RequestOption) (res *Tenant, err error) {
 	var env TenantGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

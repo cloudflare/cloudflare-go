@@ -35,7 +35,9 @@ func NewBucketCORSService(opts ...option.RequestOption) (r *BucketCORSService) {
 	return
 }
 
-// Set the CORS policy for a bucket.
+// Replaces the Cross-Origin Resource Sharing (CORS) rules for an R2 bucket. Rules
+// specify which origins, methods, and headers are allowed for browser requests to
+// objects in the bucket.
 func (r *BucketCORSService) Update(ctx context.Context, bucketName string, params BucketCORSUpdateParams, opts ...option.RequestOption) (res *BucketCORSUpdateResponse, err error) {
 	var env BucketCORSUpdateResponseEnvelope
 	if params.CfR2Jurisdiction.Present {
@@ -221,7 +223,7 @@ func (r BucketCORSGetResponseRulesAllowedMethod) IsKnown() bool {
 }
 
 type BucketCORSUpdateParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                                 `path:"account_id" api:"required"`
 	Rules            param.Field[[]BucketCORSUpdateParamsRule]           `json:"rules"`
 	CfR2Jurisdiction param.Field[BucketCORSUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
@@ -350,7 +352,7 @@ func (r BucketCORSUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketCORSDeleteParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                                 `path:"account_id" api:"required"`
 	CfR2Jurisdiction param.Field[BucketCORSDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -417,7 +419,7 @@ func (r BucketCORSDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketCORSGetParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                              `path:"account_id" api:"required"`
 	CfR2Jurisdiction param.Field[BucketCORSGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }

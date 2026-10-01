@@ -110,9 +110,10 @@ func (r *SettingTrustedDomainService) Delete(ctx context.Context, trustedDomainI
 	return res, nil
 }
 
-// Executes multiple operations atomically. All four operation arrays (deletes,
-// patches, puts, posts) are required and executed in order. Send empty arrays for
-// unused operations.
+// Executes multiple trusted domain operations atomically: delete, partially
+// update, replace, and create trusted domain patterns in a single request. All
+// four operation arrays (deletes, patches, puts, posts) are required and executed
+// in order. Send empty arrays for unused operations.
 func (r *SettingTrustedDomainService) Batch(ctx context.Context, params SettingTrustedDomainBatchParams, opts ...option.RequestOption) (res *SettingTrustedDomainBatchResponse, err error) {
 	var env SettingTrustedDomainBatchResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -182,17 +183,19 @@ type SettingTrustedDomainNewResponse struct {
 	// Select to prevent recently registered domains from triggering a Suspicious or
 	// Malicious disposition.
 	IsRecent bool `json:"is_recent"`
-	IsRegex  bool `json:"is_regex"`
+	// Whether `pattern` is a regular expression instead of a literal domain.
+	IsRegex bool `json:"is_regex"`
 	// Select for partner or other approved domains that have similar spelling to your
 	// connected domains. Prevents listed domains from triggering a Spoof disposition.
 	IsSimilarity bool `json:"is_similarity"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
-	LastModified time.Time                           `json:"last_modified" format:"date-time"`
-	ModifiedAt   time.Time                           `json:"modified_at" format:"date-time"`
-	Pattern      string                              `json:"pattern"`
-	JSON         settingTrustedDomainNewResponseJSON `json:"-"`
+	LastModified time.Time `json:"last_modified" format:"date-time"`
+	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
+	// The domain pattern to trust, e.g. `example.com`.
+	Pattern string                              `json:"pattern"`
+	JSON    settingTrustedDomainNewResponseJSON `json:"-"`
 }
 
 // settingTrustedDomainNewResponseJSON contains the JSON metadata for the struct
@@ -228,17 +231,19 @@ type SettingTrustedDomainListResponse struct {
 	// Select to prevent recently registered domains from triggering a Suspicious or
 	// Malicious disposition.
 	IsRecent bool `json:"is_recent"`
-	IsRegex  bool `json:"is_regex"`
+	// Whether `pattern` is a regular expression instead of a literal domain.
+	IsRegex bool `json:"is_regex"`
 	// Select for partner or other approved domains that have similar spelling to your
 	// connected domains. Prevents listed domains from triggering a Spoof disposition.
 	IsSimilarity bool `json:"is_similarity"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
-	LastModified time.Time                            `json:"last_modified" format:"date-time"`
-	ModifiedAt   time.Time                            `json:"modified_at" format:"date-time"`
-	Pattern      string                               `json:"pattern"`
-	JSON         settingTrustedDomainListResponseJSON `json:"-"`
+	LastModified time.Time `json:"last_modified" format:"date-time"`
+	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
+	// The domain pattern to trust, e.g. `example.com`.
+	Pattern string                               `json:"pattern"`
+	JSON    settingTrustedDomainListResponseJSON `json:"-"`
 }
 
 // settingTrustedDomainListResponseJSON contains the JSON metadata for the struct
@@ -345,17 +350,19 @@ type SettingTrustedDomainBatchResponsePatch struct {
 	// Select to prevent recently registered domains from triggering a Suspicious or
 	// Malicious disposition.
 	IsRecent bool `json:"is_recent"`
-	IsRegex  bool `json:"is_regex"`
+	// Whether `pattern` is a regular expression instead of a literal domain.
+	IsRegex bool `json:"is_regex"`
 	// Select for partner or other approved domains that have similar spelling to your
 	// connected domains. Prevents listed domains from triggering a Spoof disposition.
 	IsSimilarity bool `json:"is_similarity"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
-	LastModified time.Time                                  `json:"last_modified" format:"date-time"`
-	ModifiedAt   time.Time                                  `json:"modified_at" format:"date-time"`
-	Pattern      string                                     `json:"pattern"`
-	JSON         settingTrustedDomainBatchResponsePatchJSON `json:"-"`
+	LastModified time.Time `json:"last_modified" format:"date-time"`
+	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
+	// The domain pattern to trust, e.g. `example.com`.
+	Pattern string                                     `json:"pattern"`
+	JSON    settingTrustedDomainBatchResponsePatchJSON `json:"-"`
 }
 
 // settingTrustedDomainBatchResponsePatchJSON contains the JSON metadata for the
@@ -391,17 +398,19 @@ type SettingTrustedDomainBatchResponsePost struct {
 	// Select to prevent recently registered domains from triggering a Suspicious or
 	// Malicious disposition.
 	IsRecent bool `json:"is_recent"`
-	IsRegex  bool `json:"is_regex"`
+	// Whether `pattern` is a regular expression instead of a literal domain.
+	IsRegex bool `json:"is_regex"`
 	// Select for partner or other approved domains that have similar spelling to your
 	// connected domains. Prevents listed domains from triggering a Spoof disposition.
 	IsSimilarity bool `json:"is_similarity"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
-	LastModified time.Time                                 `json:"last_modified" format:"date-time"`
-	ModifiedAt   time.Time                                 `json:"modified_at" format:"date-time"`
-	Pattern      string                                    `json:"pattern"`
-	JSON         settingTrustedDomainBatchResponsePostJSON `json:"-"`
+	LastModified time.Time `json:"last_modified" format:"date-time"`
+	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
+	// The domain pattern to trust, e.g. `example.com`.
+	Pattern string                                    `json:"pattern"`
+	JSON    settingTrustedDomainBatchResponsePostJSON `json:"-"`
 }
 
 // settingTrustedDomainBatchResponsePostJSON contains the JSON metadata for the
@@ -437,17 +446,19 @@ type SettingTrustedDomainBatchResponsePut struct {
 	// Select to prevent recently registered domains from triggering a Suspicious or
 	// Malicious disposition.
 	IsRecent bool `json:"is_recent"`
-	IsRegex  bool `json:"is_regex"`
+	// Whether `pattern` is a regular expression instead of a literal domain.
+	IsRegex bool `json:"is_regex"`
 	// Select for partner or other approved domains that have similar spelling to your
 	// connected domains. Prevents listed domains from triggering a Spoof disposition.
 	IsSimilarity bool `json:"is_similarity"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
-	LastModified time.Time                                `json:"last_modified" format:"date-time"`
-	ModifiedAt   time.Time                                `json:"modified_at" format:"date-time"`
-	Pattern      string                                   `json:"pattern"`
-	JSON         settingTrustedDomainBatchResponsePutJSON `json:"-"`
+	LastModified time.Time `json:"last_modified" format:"date-time"`
+	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
+	// The domain pattern to trust, e.g. `example.com`.
+	Pattern string                                   `json:"pattern"`
+	JSON    settingTrustedDomainBatchResponsePutJSON `json:"-"`
 }
 
 // settingTrustedDomainBatchResponsePutJSON contains the JSON metadata for the
@@ -483,17 +494,19 @@ type SettingTrustedDomainEditResponse struct {
 	// Select to prevent recently registered domains from triggering a Suspicious or
 	// Malicious disposition.
 	IsRecent bool `json:"is_recent"`
-	IsRegex  bool `json:"is_regex"`
+	// Whether `pattern` is a regular expression instead of a literal domain.
+	IsRegex bool `json:"is_regex"`
 	// Select for partner or other approved domains that have similar spelling to your
 	// connected domains. Prevents listed domains from triggering a Spoof disposition.
 	IsSimilarity bool `json:"is_similarity"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
-	LastModified time.Time                            `json:"last_modified" format:"date-time"`
-	ModifiedAt   time.Time                            `json:"modified_at" format:"date-time"`
-	Pattern      string                               `json:"pattern"`
-	JSON         settingTrustedDomainEditResponseJSON `json:"-"`
+	LastModified time.Time `json:"last_modified" format:"date-time"`
+	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
+	// The domain pattern to trust, e.g. `example.com`.
+	Pattern string                               `json:"pattern"`
+	JSON    settingTrustedDomainEditResponseJSON `json:"-"`
 }
 
 // settingTrustedDomainEditResponseJSON contains the JSON metadata for the struct
@@ -529,17 +542,19 @@ type SettingTrustedDomainGetResponse struct {
 	// Select to prevent recently registered domains from triggering a Suspicious or
 	// Malicious disposition.
 	IsRecent bool `json:"is_recent"`
-	IsRegex  bool `json:"is_regex"`
+	// Whether `pattern` is a regular expression instead of a literal domain.
+	IsRegex bool `json:"is_regex"`
 	// Select for partner or other approved domains that have similar spelling to your
 	// connected domains. Prevents listed domains from triggering a Spoof disposition.
 	IsSimilarity bool `json:"is_similarity"`
 	// Deprecated, use `modified_at` instead. End of life: November 1, 2026.
 	//
 	// Deprecated: Use `modified_at` instead.
-	LastModified time.Time                           `json:"last_modified" format:"date-time"`
-	ModifiedAt   time.Time                           `json:"modified_at" format:"date-time"`
-	Pattern      string                              `json:"pattern"`
-	JSON         settingTrustedDomainGetResponseJSON `json:"-"`
+	LastModified time.Time `json:"last_modified" format:"date-time"`
+	ModifiedAt   time.Time `json:"modified_at" format:"date-time"`
+	// The domain pattern to trust, e.g. `example.com`.
+	Pattern string                              `json:"pattern"`
+	JSON    settingTrustedDomainGetResponseJSON `json:"-"`
 }
 
 // settingTrustedDomainGetResponseJSON contains the JSON metadata for the struct
@@ -572,12 +587,14 @@ type SettingTrustedDomainNewParams struct {
 	// Select to prevent recently registered domains from triggering a Suspicious or
 	// Malicious disposition.
 	IsRecent param.Field[bool] `json:"is_recent" api:"required"`
-	IsRegex  param.Field[bool] `json:"is_regex" api:"required"`
+	// Whether `pattern` is a regular expression instead of a literal domain.
+	IsRegex param.Field[bool] `json:"is_regex" api:"required"`
 	// Select for partner or other approved domains that have similar spelling to your
 	// connected domains. Prevents listed domains from triggering a Spoof disposition.
-	IsSimilarity param.Field[bool]   `json:"is_similarity" api:"required"`
-	Pattern      param.Field[string] `json:"pattern" api:"required"`
-	Comments     param.Field[string] `json:"comments"`
+	IsSimilarity param.Field[bool] `json:"is_similarity" api:"required"`
+	// The domain pattern to trust, e.g. `example.com`.
+	Pattern  param.Field[string] `json:"pattern" api:"required"`
+	Comments param.Field[string] `json:"comments"`
 }
 
 func (r SettingTrustedDomainNewParams) MarshalJSON() (data []byte, err error) {
@@ -934,11 +951,17 @@ func (r SettingTrustedDomainDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SettingTrustedDomainBatchParams struct {
 	// Identifier.
-	AccountID param.Field[string]                                  `path:"account_id" api:"required"`
-	Deletes   param.Field[[]SettingTrustedDomainBatchParamsDelete] `json:"deletes" api:"required"`
-	Patches   param.Field[[]SettingTrustedDomainBatchParamsPatch]  `json:"patches" api:"required"`
-	Posts     param.Field[[]SettingTrustedDomainBatchParamsPost]   `json:"posts" api:"required"`
-	Puts      param.Field[[]SettingTrustedDomainBatchParamsPut]    `json:"puts" api:"required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// IDs of the trusted domain patterns to delete.
+	Deletes param.Field[[]SettingTrustedDomainBatchParamsDelete] `json:"deletes" api:"required"`
+	// Partial updates to apply — each entry carries the pattern's ID and only the
+	// fields to change.
+	Patches param.Field[[]SettingTrustedDomainBatchParamsPatch] `json:"patches" api:"required"`
+	// Trusted domain patterns to create.
+	Posts param.Field[[]SettingTrustedDomainBatchParamsPost] `json:"posts" api:"required"`
+	// Full replacements to apply — each entry carries the pattern's ID and every field
+	// of its new value.
+	Puts param.Field[[]SettingTrustedDomainBatchParamsPut] `json:"puts" api:"required"`
 }
 
 func (r SettingTrustedDomainBatchParams) MarshalJSON() (data []byte, err error) {
@@ -960,11 +983,13 @@ type SettingTrustedDomainBatchParamsPatch struct {
 	// Select to prevent recently registered domains from triggering a Suspicious or
 	// Malicious disposition.
 	IsRecent param.Field[bool] `json:"is_recent"`
-	IsRegex  param.Field[bool] `json:"is_regex"`
+	// Whether `pattern` is a regular expression instead of a literal domain.
+	IsRegex param.Field[bool] `json:"is_regex"`
 	// Select for partner or other approved domains that have similar spelling to your
 	// connected domains. Prevents listed domains from triggering a Spoof disposition.
-	IsSimilarity param.Field[bool]   `json:"is_similarity"`
-	Pattern      param.Field[string] `json:"pattern"`
+	IsSimilarity param.Field[bool] `json:"is_similarity"`
+	// The domain pattern to trust, e.g. `example.com`.
+	Pattern param.Field[string] `json:"pattern"`
 }
 
 func (r SettingTrustedDomainBatchParamsPatch) MarshalJSON() (data []byte, err error) {
@@ -976,12 +1001,14 @@ type SettingTrustedDomainBatchParamsPost struct {
 	// Select to prevent recently registered domains from triggering a Suspicious or
 	// Malicious disposition.
 	IsRecent param.Field[bool] `json:"is_recent" api:"required"`
-	IsRegex  param.Field[bool] `json:"is_regex" api:"required"`
+	// Whether `pattern` is a regular expression instead of a literal domain.
+	IsRegex param.Field[bool] `json:"is_regex" api:"required"`
 	// Select for partner or other approved domains that have similar spelling to your
 	// connected domains. Prevents listed domains from triggering a Spoof disposition.
-	IsSimilarity param.Field[bool]   `json:"is_similarity" api:"required"`
-	Pattern      param.Field[string] `json:"pattern" api:"required"`
-	Comments     param.Field[string] `json:"comments"`
+	IsSimilarity param.Field[bool] `json:"is_similarity" api:"required"`
+	// The domain pattern to trust, e.g. `example.com`.
+	Pattern  param.Field[string] `json:"pattern" api:"required"`
+	Comments param.Field[string] `json:"comments"`
 }
 
 func (r SettingTrustedDomainBatchParamsPost) MarshalJSON() (data []byte, err error) {
@@ -993,12 +1020,14 @@ type SettingTrustedDomainBatchParamsPut struct {
 	// Select to prevent recently registered domains from triggering a Suspicious or
 	// Malicious disposition.
 	IsRecent param.Field[bool] `json:"is_recent" api:"required"`
-	IsRegex  param.Field[bool] `json:"is_regex" api:"required"`
+	// Whether `pattern` is a regular expression instead of a literal domain.
+	IsRegex param.Field[bool] `json:"is_regex" api:"required"`
 	// Select for partner or other approved domains that have similar spelling to your
 	// connected domains. Prevents listed domains from triggering a Spoof disposition.
-	IsSimilarity param.Field[bool]   `json:"is_similarity" api:"required"`
-	Pattern      param.Field[string] `json:"pattern" api:"required"`
-	Comments     param.Field[string] `json:"comments"`
+	IsSimilarity param.Field[bool] `json:"is_similarity" api:"required"`
+	// The domain pattern to trust, e.g. `example.com`.
+	Pattern  param.Field[string] `json:"pattern" api:"required"`
+	Comments param.Field[string] `json:"comments"`
 }
 
 func (r SettingTrustedDomainBatchParamsPut) MarshalJSON() (data []byte, err error) {
@@ -1152,11 +1181,13 @@ type SettingTrustedDomainEditParams struct {
 	// Select to prevent recently registered domains from triggering a Suspicious or
 	// Malicious disposition.
 	IsRecent param.Field[bool] `json:"is_recent"`
-	IsRegex  param.Field[bool] `json:"is_regex"`
+	// Whether `pattern` is a regular expression instead of a literal domain.
+	IsRegex param.Field[bool] `json:"is_regex"`
 	// Select for partner or other approved domains that have similar spelling to your
 	// connected domains. Prevents listed domains from triggering a Spoof disposition.
-	IsSimilarity param.Field[bool]   `json:"is_similarity"`
-	Pattern      param.Field[string] `json:"pattern"`
+	IsSimilarity param.Field[bool] `json:"is_similarity"`
+	// The domain pattern to trust, e.g. `example.com`.
+	Pattern param.Field[string] `json:"pattern"`
 }
 
 func (r SettingTrustedDomainEditParams) MarshalJSON() (data []byte, err error) {

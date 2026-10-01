@@ -35,7 +35,9 @@ func NewBucketSippyService(opts ...option.RequestOption) (r *BucketSippyService)
 	return
 }
 
-// Sets configuration for Sippy for an existing R2 bucket.
+// Configures and enables Sippy on-demand migration for an R2 bucket. When a
+// requested object is missing from R2, Sippy serves it from the configured source
+// storage provider and copies it to R2.
 func (r *BucketSippyService) Update(ctx context.Context, bucketName string, params BucketSippyUpdateParams, opts ...option.RequestOption) (res *Sippy, err error) {
 	var env BucketSippyUpdateResponseEnvelope
 	if params.CfR2Jurisdiction.Present {
@@ -59,7 +61,9 @@ func (r *BucketSippyService) Update(ctx context.Context, bucketName string, para
 	return res, nil
 }
 
-// Disables Sippy on this bucket.
+// Disables Sippy on-demand migration for an R2 bucket. Requests no longer fetch
+// missing objects from the source storage provider. Objects already copied to R2
+// remain in the bucket.
 func (r *BucketSippyService) Delete(ctx context.Context, bucketName string, params BucketSippyDeleteParams, opts ...option.RequestOption) (res *BucketSippyDeleteResponse, err error) {
 	var env BucketSippyDeleteResponseEnvelope
 	if params.CfR2Jurisdiction.Present {
@@ -264,7 +268,7 @@ func (r BucketSippyDeleteResponseEnabled) IsKnown() bool {
 }
 
 type BucketSippyUpdateParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                                  `path:"account_id" api:"required"`
 	Body             BucketSippyUpdateParamsBodyUnion                     `json:"body" api:"required"`
 	CfR2Jurisdiction param.Field[BucketSippyUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
@@ -337,7 +341,7 @@ type BucketSippyUpdateParamsBodyR2EnableSippyAwsSource struct {
 	// Name of the AWS S3 bucket.
 	Bucket   param.Field[string]                                                    `json:"bucket"`
 	Provider param.Field[BucketSippyUpdateParamsBodyR2EnableSippyAwsSourceProvider] `json:"provider"`
-	// Name of the AWS availability zone.
+	// AWS region containing the source S3 bucket.
 	Region param.Field[string] `json:"region"`
 	// Secret Access Key of an IAM credential (ideally scoped to a single S3 bucket).
 	SecretAccessKey param.Field[string] `json:"secretAccessKey"`
@@ -621,7 +625,7 @@ func (r BucketSippyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketSippyDeleteParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                                  `path:"account_id" api:"required"`
 	CfR2Jurisdiction param.Field[BucketSippyDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -688,7 +692,7 @@ func (r BucketSippyDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketSippyGetParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                               `path:"account_id" api:"required"`
 	CfR2Jurisdiction param.Field[BucketSippyGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }

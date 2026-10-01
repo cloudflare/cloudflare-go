@@ -38,8 +38,8 @@ func NewOrganizationAccountService(opts ...option.RequestOption) (r *Organizatio
 	return
 }
 
-// Retrieve a list of accounts that belong to a specific organization. (Currently
-// in Public Beta - see
+// Retrieve the accounts immediately attached to a specific organization. Accounts
+// attached to sub-organizations are not included. (Currently in Public Beta - see
 // https://developers.cloudflare.com/fundamentals/organizations/)
 func (r *OrganizationAccountService) Get(ctx context.Context, organizationID string, query OrganizationAccountGetParams, opts ...option.RequestOption) (res *[]tenants.TenantAccount, err error) {
 	var env OrganizationAccountGetResponseEnvelope

@@ -31,7 +31,7 @@ func TestAnalyticsGetOrgAnalyticsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Analytics.GetOrgAnalytics(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		realtime_kit.AnalyticsGetOrgAnalyticsParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			EndDate:   cloudflare.F("2022-09-22T00:00:00Z"),

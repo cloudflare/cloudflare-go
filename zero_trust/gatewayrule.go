@@ -1719,6 +1719,7 @@ func (r ScheduleParam) MarshalJSON() (data []byte, err error) {
 type GatewayRuleDeleteResponse = interface{}
 
 type GatewayRuleNewParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the action to perform when the associated traffic, identity, and device
 	// posture expressions either absent or evaluate to `true`.
@@ -1865,6 +1866,7 @@ func (r GatewayRuleNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayRuleUpdateParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Specify the action to perform when the associated traffic, identity, and device
 	// posture expressions either absent or evaluate to `true`.
@@ -2011,6 +2013,7 @@ func (r GatewayRuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayRuleListParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Sort direction. When `order_by` is omitted, this controls the direction of the
 	// existing precedence ordering. Shared rules remain first in either direction.
@@ -2079,6 +2082,7 @@ func (r GatewayRuleListParamsOrderBy) IsKnown() bool {
 }
 
 type GatewayRuleDeleteParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -2126,6 +2130,7 @@ func (r GatewayRuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayRuleGetParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -2173,10 +2178,12 @@ func (r GatewayRuleGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayRuleListTenantParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type GatewayRuleResetExpirationParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

@@ -147,9 +147,9 @@ type DiscoveryOperationListParams struct {
 	// Filter results to only include discovery results sourced from a particular
 	// discovery engine
 	//
-	//   - `ML` - Discovered operations that were sourced using ML API Discovery
-	//   - `SessionIdentifier` - Discovered operations that were sourced using Session
-	//     Identifier API Discovery
+	// - `ML` - Discovered operations that were sourced using ML API Discovery
+	// - `SessionIdentifier` - Discovered operations that were sourced using Session
+	//   Identifier API Discovery
 	Origin param.Field[DiscoveryOperationListParamsOrigin] `query:"origin"`
 	// Page number of paginated results.
 	Page param.Field[int64] `query:"page"`
@@ -158,11 +158,11 @@ type DiscoveryOperationListParams struct {
 	// Filter results to only include discovery results in a particular state. States
 	// are as follows
 	//
-	//   - `review` - Discovered operations that are not saved into API Shield Endpoint
-	//     Management
-	//   - `saved` - Discovered operations that are already saved into API Shield
-	//     Endpoint Management
-	//   - `ignored` - Discovered operations that have been marked as ignored
+	// - `review` - Discovered operations that are not saved into API Shield Endpoint
+	//   Management
+	// - `saved` - Discovered operations that are already saved into API Shield
+	//   Endpoint Management
+	// - `ignored` - Discovered operations that have been marked as ignored
 	State param.Field[DiscoveryOperationListParamsState] `query:"state"`
 }
 

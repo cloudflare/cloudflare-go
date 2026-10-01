@@ -86,16 +86,6 @@ Methods:
 
 ### Zones
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing#AddressMapZoneUpdateResponse">AddressMapZoneUpdateResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing#AddressMapZoneDeleteResponse">AddressMapZoneDeleteResponse</a>
-
-Methods:
-
-- <code title="put /accounts/{account_id}/addressing/address_maps/{address_map_id}/zones/{zone_id}">client.Addressing.AddressMaps.Zones.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing#AddressMapZoneService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, addressMapID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing#AddressMapZoneUpdateParams">AddressMapZoneUpdateParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing#AddressMapZoneUpdateResponse">AddressMapZoneUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="delete /accounts/{account_id}/addressing/address_maps/{address_map_id}/zones/{zone_id}">client.Addressing.AddressMaps.Zones.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing#AddressMapZoneService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, addressMapID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing#AddressMapZoneDeleteParams">AddressMapZoneDeleteParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/addressing#AddressMapZoneDeleteResponse">AddressMapZoneDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ## LOADocuments
 
 Response Types:

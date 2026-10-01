@@ -120,6 +120,7 @@ func (r gatewaySettingsJSON) RawJSON() string {
 }
 
 type GatewayAuditSSHSettingUpdateParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Provide the Base64-encoded HPKE public key that encrypts SSH session logs. See
 	// https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/use-cases/ssh/ssh-infrastructure-access/#enable-ssh-command-logging.
@@ -174,6 +175,7 @@ func (r GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayAuditSSHSettingGetParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
@@ -221,6 +223,7 @@ func (r GatewayAuditSSHSettingGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayAuditSSHSettingRotateSeedParams struct {
+	// Specify the Cloudflare account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

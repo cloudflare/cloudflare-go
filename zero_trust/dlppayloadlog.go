@@ -37,6 +37,8 @@ func NewDLPPayloadLogService(opts ...option.RequestOption) (r *DLPPayloadLogServ
 
 // Enables or disables payload logging for DLP matches. When enabled, matched
 // content is stored for review.
+//
+// Deprecated: deprecated
 func (r *DLPPayloadLogService) Update(ctx context.Context, params DLPPayloadLogUpdateParams, opts ...option.RequestOption) (res *DLPPayloadLogUpdateResponse, err error) {
 	var env DLPPayloadLogUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -55,6 +57,8 @@ func (r *DLPPayloadLogService) Update(ctx context.Context, params DLPPayloadLogU
 
 // Gets the current payload logging configuration for DLP, showing whether matched
 // content is being logged.
+//
+// Deprecated: deprecated
 func (r *DLPPayloadLogService) Get(ctx context.Context, query DLPPayloadLogGetParams, opts ...option.RequestOption) (res *DLPPayloadLogGetResponse, err error) {
 	var env DLPPayloadLogGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -199,8 +203,8 @@ type DLPPayloadLogUpdateParams struct {
 	//
 	// For customers with configurable payload masking feature rolled out:
 	//
-	//   - If the field is missing, the existing setting will be kept. Note that this is
-	//     different from setting to null or empty string.
+	// - If the field is missing, the existing setting will be kept. Note that this is
+	//   different from setting to null or empty string.
 	//
 	// For all other customers:
 	//

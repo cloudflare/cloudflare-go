@@ -375,7 +375,7 @@ func (r BucketObjectUploadResponseStorageClass) IsKnown() bool {
 }
 
 type BucketObjectListParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Pagination cursor received from a previous List Objects call. Used to retrieve
 	// the next page of results.
@@ -422,7 +422,7 @@ func (r BucketObjectListParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketObjectDeleteParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                                   `path:"account_id" api:"required"`
 	CfR2Jurisdiction param.Field[BucketObjectDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
@@ -490,7 +490,7 @@ func (r BucketObjectDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type BucketObjectGetParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                                `path:"account_id" api:"required"`
 	CfR2Jurisdiction param.Field[BucketObjectGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 	// Returns the object only if it has been modified since the specified time. Must
@@ -519,7 +519,7 @@ func (r BucketObjectGetParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketObjectUploadParams struct {
-	// Account ID.
+	// Cloudflare account ID that owns the R2 resource.
 	AccountID        param.Field[string]                                   `path:"account_id" api:"required"`
 	CfR2Jurisdiction param.Field[BucketObjectUploadParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 	// Storage class for newly uploaded objects, unless specified otherwise.

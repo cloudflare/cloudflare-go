@@ -57,6 +57,8 @@ type LinkNewParams struct {
 	// Account ID.
 	AccountID param.Field[string]    `path:"account_id" api:"required"`
 	Body      LinkNewParamsBodyUnion `json:"body" api:"required"`
+	// Rendering backend. Set to `kitesurf` to use Kitesurf (beta).
+	Browser param.Field[LinkNewParamsBrowser] `query:"browser"`
 	// Cache TTL default is 5s. Set to 0 to disable.
 	CacheTTL param.Field[float64] `query:"cacheTTL"`
 }
@@ -441,6 +443,21 @@ const (
 func (r LinkNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 	switch r {
 	case LinkNewParamsBodyObjectWaitForSelectorVisibleTrue:
+		return true
+	}
+	return false
+}
+
+// Rendering backend. Set to `kitesurf` to use Kitesurf (beta).
+type LinkNewParamsBrowser string
+
+const (
+	LinkNewParamsBrowserKitesurf LinkNewParamsBrowser = "kitesurf"
+)
+
+func (r LinkNewParamsBrowser) IsKnown() bool {
+	switch r {
+	case LinkNewParamsBrowserKitesurf:
 		return true
 	}
 	return false

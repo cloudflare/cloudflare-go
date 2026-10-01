@@ -468,9 +468,9 @@ type SettingAccountViewListParams struct {
 	// Field to order DNS views by.
 	Order param.Field[SettingAccountViewListParamsOrder] `query:"order"`
 	// Page number of paginated results.
-	Page param.Field[float64] `query:"page"`
-	// Number of DNS views per page.
-	PerPage param.Field[float64] `query:"per_page"`
+	Page param.Field[int64] `query:"page"`
+	// Number of results per page.
+	PerPage param.Field[int64] `query:"per_page"`
 	// A zone ID that exists in the zones list for the view.
 	ZoneID param.Field[string] `query:"zone_id"`
 	// A zone name that exists in the zones list for the view.

@@ -38,7 +38,9 @@ func NewProviderConfigService(opts ...option.RequestOption) (r *ProviderConfigSe
 	return
 }
 
-// Creates a new AI Gateway.
+// Stores an upstream AI provider API key for an AI Gateway in the Secrets Store
+// configured on the gateway, with an optional rate limit. Pass `secret` to store a
+// new key, or omit it to use an existing Secrets Store secret.
 func (r *ProviderConfigService) New(ctx context.Context, gatewayID string, params ProviderConfigNewParams, opts ...option.RequestOption) (res *ProviderConfigNewResponse, err error) {
 	var env ProviderConfigNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -59,7 +61,8 @@ func (r *ProviderConfigService) New(ctx context.Context, gatewayID string, param
 	return res, nil
 }
 
-// Lists all AI Gateway evaluator types configured for the account.
+// Lists the provider keys stored for an AI Gateway. Responses show a masked
+// preview of each key, never the key itself.
 func (r *ProviderConfigService) List(ctx context.Context, gatewayID string, params ProviderConfigListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ProviderConfigListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -85,7 +88,8 @@ func (r *ProviderConfigService) List(ctx context.Context, gatewayID string, para
 	return res, nil
 }
 
-// Lists all AI Gateway evaluator types configured for the account.
+// Lists the provider keys stored for an AI Gateway. Responses show a masked
+// preview of each key, never the key itself.
 func (r *ProviderConfigService) ListAutoPaging(ctx context.Context, gatewayID string, params ProviderConfigListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[ProviderConfigListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, gatewayID, params, opts...))
 }
@@ -94,7 +98,7 @@ type ProviderConfigNewResponse struct {
 	ID            string `json:"id" api:"required"`
 	Alias         string `json:"alias" api:"required"`
 	DefaultConfig bool   `json:"default_config" api:"required"`
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	GatewayID       string                        `json:"gateway_id" api:"required"`
 	ModifiedAt      time.Time                     `json:"modified_at" api:"required" format:"date-time"`
 	ProviderSlug    string                        `json:"provider_slug" api:"required"`
@@ -134,7 +138,7 @@ type ProviderConfigListResponse struct {
 	ID            string `json:"id" api:"required"`
 	Alias         string `json:"alias" api:"required"`
 	DefaultConfig bool   `json:"default_config" api:"required"`
-	// gateway id
+	// Unique identifier of the AI Gateway within the account.
 	GatewayID       string                         `json:"gateway_id" api:"required"`
 	ModifiedAt      time.Time                      `json:"modified_at" api:"required" format:"date-time"`
 	ProviderSlug    string                         `json:"provider_slug" api:"required"`
@@ -177,8 +181,9 @@ type ProviderConfigNewParams struct {
 	ProviderSlug    param.Field[string]  `json:"provider_slug" api:"required"`
 	RateLimit       param.Field[float64] `json:"rate_limit"`
 	RateLimitPeriod param.Field[float64] `json:"rate_limit_period"`
-	Secret          param.Field[string]  `json:"secret"`
-	SecretID        param.Field[string]  `json:"secret_id"`
+	// Provider API key to store in the Secrets Store configured on the gateway.
+	Secret   param.Field[string] `json:"secret"`
+	SecretID param.Field[string] `json:"secret_id"`
 }
 
 func (r ProviderConfigNewParams) MarshalJSON() (data []byte, err error) {

@@ -45,6 +45,8 @@ func NewR2DataCatalogService(opts ...option.RequestOption) (r *R2DataCatalogServ
 // Returns a list of R2 buckets that have been enabled as Apache Iceberg catalogs
 // for the specified account. Each catalog represents an R2 bucket configured to
 // store Iceberg metadata and data files.
+//
+// Deprecated: Use `GET /accounts/{account_id}/basin-catalog` instead.
 func (r *R2DataCatalogService) List(ctx context.Context, query R2DataCatalogListParams, opts ...option.RequestOption) (res *R2DataCatalogListResponse, err error) {
 	var env R2DataCatalogListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -64,6 +66,9 @@ func (r *R2DataCatalogService) List(ctx context.Context, query R2DataCatalogList
 // Removes the catalog from the control plane without deleting R2 bucket objects.
 // Set force=true to remove catalog namespaces, tables, views, and maintenance
 // metadata. Force deletion is limited to a configured catalog object count.
+//
+// Deprecated: Use `POST /accounts/{account_id}/basin-catalog/{bucket_name}/delete`
+// instead.
 func (r *R2DataCatalogService) Delete(ctx context.Context, bucketName string, params R2DataCatalogDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -82,6 +87,9 @@ func (r *R2DataCatalogService) Delete(ctx context.Context, bucketName string, pa
 
 // Disable an R2 bucket as a catalog. This operation deactivates the catalog but
 // preserves existing metadata and data files. The catalog can be re-enabled later.
+//
+// Deprecated: Use
+// `POST /accounts/{account_id}/basin-catalog/{bucket_name}/disable` instead.
 func (r *R2DataCatalogService) Disable(ctx context.Context, bucketName string, body R2DataCatalogDisableParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -101,6 +109,9 @@ func (r *R2DataCatalogService) Disable(ctx context.Context, bucketName string, b
 // Enable an R2 bucket as an Apache Iceberg catalog. This operation creates the
 // necessary catalog infrastructure and activates the bucket for storing Iceberg
 // metadata and data files.
+//
+// Deprecated: Use `POST /accounts/{account_id}/basin-catalog/{bucket_name}/enable`
+// instead.
 func (r *R2DataCatalogService) Enable(ctx context.Context, bucketName string, body R2DataCatalogEnableParams, opts ...option.RequestOption) (res *R2DataCatalogEnableResponse, err error) {
 	var env R2DataCatalogEnableResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -123,6 +134,9 @@ func (r *R2DataCatalogService) Enable(ctx context.Context, bucketName string, bo
 
 // Retrieve detailed information about a specific R2 catalog by bucket name.
 // Returns catalog status, maintenance configuration, and credential status.
+//
+// Deprecated: Use `GET /accounts/{account_id}/basin-catalog/{bucket_name}`
+// instead.
 func (r *R2DataCatalogService) Get(ctx context.Context, bucketName string, query R2DataCatalogGetParams, opts ...option.RequestOption) (res *R2DataCatalogGetResponse, err error) {
 	var env R2DataCatalogGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -166,7 +180,7 @@ func (r r2DataCatalogListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Contains R2 Data Catalog information.
+// Contains catalog information.
 type R2DataCatalogListResponseWarehouse struct {
 	// Use this to uniquely identify the catalog.
 	ID string `json:"id" api:"required" format:"uuid"`
@@ -401,7 +415,7 @@ func (r r2DataCatalogEnableResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Contains R2 Data Catalog information.
+// Contains catalog information.
 type R2DataCatalogGetResponse struct {
 	// Use this to uniquely identify the catalog.
 	ID string `json:"id" api:"required" format:"uuid"`
@@ -814,7 +828,7 @@ type R2DataCatalogGetResponseEnvelope struct {
 	Messages []R2DataCatalogGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Indicates whether the API call was successful.
 	Success bool `json:"success" api:"required"`
-	// Contains R2 Data Catalog information.
+	// Contains catalog information.
 	Result R2DataCatalogGetResponse             `json:"result"`
 	JSON   r2DataCatalogGetResponseEnvelopeJSON `json:"-"`
 }

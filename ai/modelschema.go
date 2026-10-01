@@ -36,7 +36,9 @@ func NewModelSchemaService(opts ...option.RequestOption) (r *ModelSchemaService)
 	return
 }
 
-// Retrieves the input and output JSON schema definition for a Workers AI model.
+// Retrieves the input and output JSON Schema definitions for an AI model. Use
+// these definitions to determine the model-specific request fields and response
+// format.
 func (r *ModelSchemaService) Get(ctx context.Context, params ModelSchemaGetParams, opts ...option.RequestOption) (res *ModelSchemaGetResponse, err error) {
 	var env ModelSchemaGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -127,8 +129,9 @@ func (r modelSchemaGetResponseOutputJSON) RawJSON() string {
 }
 
 type ModelSchemaGetParams struct {
+	// Cloudflare account ID used for this AI model request.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Model Name
+	// AI model identifier, including its namespace and model name.
 	Model param.Field[string] `query:"model" api:"required"`
 }
 

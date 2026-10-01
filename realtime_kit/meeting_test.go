@@ -32,7 +32,7 @@ func TestMeetingNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Meetings.New(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		realtime_kit.MeetingNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AIConfig: cloudflare.F(realtime_kit.MeetingNewParamsAIConfig{
@@ -125,7 +125,7 @@ func TestMeetingAddParticipantWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Meetings.AddParticipant(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.MeetingAddParticipantParams{
 			AccountID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -161,7 +161,7 @@ func TestMeetingDeleteMeetingParticipant(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Meetings.DeleteMeetingParticipant(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		"participant_id",
 		realtime_kit.MeetingDeleteMeetingParticipantParams{
@@ -194,7 +194,7 @@ func TestMeetingEditParticipantWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Meetings.EditParticipant(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		"participant_id",
 		realtime_kit.MeetingEditParticipantParams{
@@ -230,7 +230,7 @@ func TestMeetingGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Meetings.Get(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		realtime_kit.MeetingGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			EndTime:   cloudflare.F(time.Now()),
@@ -267,7 +267,7 @@ func TestMeetingGetMeetingByIDWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Meetings.GetMeetingByID(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.MeetingGetMeetingByIDParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -300,7 +300,7 @@ func TestMeetingGetMeetingParticipant(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Meetings.GetMeetingParticipant(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		"participant_id",
 		realtime_kit.MeetingGetMeetingParticipantParams{
@@ -333,7 +333,7 @@ func TestMeetingGetMeetingParticipantsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Meetings.GetMeetingParticipants(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.MeetingGetMeetingParticipantsParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -367,7 +367,7 @@ func TestMeetingRefreshParticipantToken(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Meetings.RefreshParticipantToken(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		"participant_id",
 		realtime_kit.MeetingRefreshParticipantTokenParams{
@@ -400,7 +400,7 @@ func TestMeetingReplaceMeetingByIDWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Meetings.ReplaceMeetingByID(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.MeetingReplaceMeetingByIDParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -494,7 +494,7 @@ func TestMeetingUpdateMeetingByIDWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Meetings.UpdateMeetingByID(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.MeetingUpdateMeetingByIDParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),

@@ -31,7 +31,7 @@ func TestAccountTagUpdateWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Body: resource_tagging.AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersion{
 			ResourceID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			ResourceType: cloudflare.F(resource_tagging.AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeWorker),
+			ResourceType: cloudflare.F(resource_tagging.AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelWorkerVersionResourceTypeWorkerVersion),
 			WorkerID:     cloudflare.F("3f72a691-44b3-4c11-8642-c18a88ddaa5e"),
 			Tags: cloudflare.F(map[string]string{
 				"environment": "production",

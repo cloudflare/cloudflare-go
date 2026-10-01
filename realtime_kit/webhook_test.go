@@ -31,7 +31,7 @@ func TestWebhookNewWebhookWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Webhooks.NewWebhook(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		realtime_kit.WebhookNewWebhookParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Events:    cloudflare.F([]realtime_kit.WebhookNewWebhookParamsEvent{realtime_kit.WebhookNewWebhookParamsEventMeetingStarted, realtime_kit.WebhookNewWebhookParamsEventMeetingEnded, realtime_kit.WebhookNewWebhookParamsEventMeetingParticipantJoined, realtime_kit.WebhookNewWebhookParamsEventMeetingParticipantLeft, realtime_kit.WebhookNewWebhookParamsEventMeetingChatSynced, realtime_kit.WebhookNewWebhookParamsEventRecordingStatusUpdate, realtime_kit.WebhookNewWebhookParamsEventLivestreamingStatusUpdate, realtime_kit.WebhookNewWebhookParamsEventMeetingTranscript, realtime_kit.WebhookNewWebhookParamsEventMeetingSummary}),
@@ -66,7 +66,7 @@ func TestWebhookDeleteWebhook(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Webhooks.DeleteWebhook(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.WebhookDeleteWebhookParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -98,7 +98,7 @@ func TestWebhookEditWebhookWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Webhooks.EditWebhook(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.WebhookEditWebhookParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -134,7 +134,7 @@ func TestWebhookGetWebhookByID(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Webhooks.GetWebhookByID(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.WebhookGetWebhookByIDParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -166,7 +166,7 @@ func TestWebhookGetWebhooks(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Webhooks.GetWebhooks(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		realtime_kit.WebhookGetWebhooksParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -197,7 +197,7 @@ func TestWebhookReplaceWebhookWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Webhooks.ReplaceWebhook(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.WebhookReplaceWebhookParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),

@@ -30,7 +30,7 @@ func TestInvestigateBulkCancelNew(t *testing.T) {
 	)
 	_, err := client.EmailSecurity.Investigate.Bulk.Cancel.New(
 		context.TODO(),
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		email_security.InvestigateBulkCancelNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

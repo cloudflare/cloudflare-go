@@ -70,6 +70,7 @@ func TestSiteUpdateWithOptionalParams(t *testing.T) {
 			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			ConnectorID: cloudflare.F("ac60d3d0435248289d446cedd870bcf4"),
 			Description: cloudflare.F("description"),
+			HaMode:      cloudflare.F(true),
 			Location: cloudflare.F(magic_transit.SiteLocationParam{
 				Lat: cloudflare.F("37.6192"),
 				Lon: cloudflare.F("122.3816"),
@@ -165,6 +166,7 @@ func TestSiteEditWithOptionalParams(t *testing.T) {
 			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			ConnectorID: cloudflare.F("ac60d3d0435248289d446cedd870bcf4"),
 			Description: cloudflare.F("description"),
+			HaMode:      cloudflare.F(true),
 			Location: cloudflare.F(magic_transit.SiteLocationParam{
 				Lat: cloudflare.F("37.6192"),
 				Lon: cloudflare.F("122.3816"),

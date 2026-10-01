@@ -31,7 +31,7 @@ func TestPresetNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Presets.New(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		realtime_kit.PresetNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Config: cloudflare.F(realtime_kit.PresetNewParamsConfig{
@@ -188,7 +188,7 @@ func TestPresetUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Presets.Update(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.PresetUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -346,7 +346,7 @@ func TestPresetDelete(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Presets.Delete(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.PresetDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -378,7 +378,7 @@ func TestPresetGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Presets.Get(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		realtime_kit.PresetGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			PageNo:    cloudflare.F(0.000000),
@@ -412,7 +412,7 @@ func TestPresetGetPresetByID(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Presets.GetPresetByID(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.PresetGetPresetByIDParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -444,7 +444,7 @@ func TestPresetReplacePresetByIDWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RealtimeKit.Presets.ReplacePresetByID(
 		context.TODO(),
-		"app_id",
+		"14a396e7-ca44-4937-bf1f-050a69118543",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.PresetReplacePresetByIDParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),

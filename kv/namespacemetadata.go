@@ -35,9 +35,9 @@ func NewNamespaceMetadataService(opts ...option.RequestOption) (r *NamespaceMeta
 	return
 }
 
-// Returns the metadata associated with the given key in the given namespace. Use
-// URL-encoding to use special characters (for example, `:`, `!`, `%`) in the key
-// name.
+// Returns the JSON metadata associated with the specified key in the Workers KV
+// namespace, without retrieving its value. Use URL-encoding for special characters
+// (for example, `:`, `!`, `%`) in the key name when constructing the request URL.
 func (r *NamespaceMetadataService) Get(ctx context.Context, namespaceID string, keyName string, query NamespaceMetadataGetParams, opts ...option.RequestOption) (res *NamespaceMetadataGetResponse, err error) {
 	var env NamespaceMetadataGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -65,7 +65,7 @@ func (r *NamespaceMetadataService) Get(ctx context.Context, namespaceID string, 
 type NamespaceMetadataGetResponse = interface{}
 
 type NamespaceMetadataGetParams struct {
-	// Identifier.
+	// ID of the Cloudflare account that owns the Workers KV namespaces.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 

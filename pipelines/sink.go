@@ -172,11 +172,12 @@ type SinkNewResponseType string
 const (
 	SinkNewResponseTypeR2            SinkNewResponseType = "r2"
 	SinkNewResponseTypeR2DataCatalog SinkNewResponseType = "r2_data_catalog"
+	SinkNewResponseTypeBasinCatalog  SinkNewResponseType = "basin_catalog"
 )
 
 func (r SinkNewResponseType) IsKnown() bool {
 	switch r {
-	case SinkNewResponseTypeR2, SinkNewResponseTypeR2DataCatalog:
+	case SinkNewResponseTypeR2, SinkNewResponseTypeR2DataCatalog, SinkNewResponseTypeBasinCatalog:
 		return true
 	}
 	return false
@@ -887,11 +888,12 @@ type SinkListResponseType string
 const (
 	SinkListResponseTypeR2            SinkListResponseType = "r2"
 	SinkListResponseTypeR2DataCatalog SinkListResponseType = "r2_data_catalog"
+	SinkListResponseTypeBasinCatalog  SinkListResponseType = "basin_catalog"
 )
 
 func (r SinkListResponseType) IsKnown() bool {
 	switch r {
-	case SinkListResponseTypeR2, SinkListResponseTypeR2DataCatalog:
+	case SinkListResponseTypeR2, SinkListResponseTypeR2DataCatalog, SinkListResponseTypeBasinCatalog:
 		return true
 	}
 	return false
@@ -1567,11 +1569,12 @@ type SinkGetResponseType string
 const (
 	SinkGetResponseTypeR2            SinkGetResponseType = "r2"
 	SinkGetResponseTypeR2DataCatalog SinkGetResponseType = "r2_data_catalog"
+	SinkGetResponseTypeBasinCatalog  SinkGetResponseType = "basin_catalog"
 )
 
 func (r SinkGetResponseType) IsKnown() bool {
 	switch r {
-	case SinkGetResponseTypeR2, SinkGetResponseTypeR2DataCatalog:
+	case SinkGetResponseTypeR2, SinkGetResponseTypeR2DataCatalog, SinkGetResponseTypeBasinCatalog:
 		return true
 	}
 	return false
@@ -2223,11 +2226,12 @@ type SinkNewParamsType string
 const (
 	SinkNewParamsTypeR2            SinkNewParamsType = "r2"
 	SinkNewParamsTypeR2DataCatalog SinkNewParamsType = "r2_data_catalog"
+	SinkNewParamsTypeBasinCatalog  SinkNewParamsType = "basin_catalog"
 )
 
 func (r SinkNewParamsType) IsKnown() bool {
 	switch r {
-	case SinkNewParamsTypeR2, SinkNewParamsTypeR2DataCatalog:
+	case SinkNewParamsTypeR2, SinkNewParamsTypeR2DataCatalog, SinkNewParamsTypeBasinCatalog:
 		return true
 	}
 	return false

@@ -41,6 +41,10 @@ func NewNamespaceTableService(opts ...option.RequestOption) (r *NamespaceTableSe
 
 // Returns a list of tables in the specified namespace within an R2 catalog.
 // Supports pagination for efficient traversal of large table collections.
+//
+// Deprecated: Use
+// `GET /accounts/{account_id}/basin-catalog/{bucket_name}/namespaces/{namespace}/tables`
+// instead.
 func (r *NamespaceTableService) List(ctx context.Context, bucketName string, namespace string, params NamespaceTableListParams, opts ...option.RequestOption) (res *NamespaceTableListResponse, err error) {
 	var env NamespaceTableListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

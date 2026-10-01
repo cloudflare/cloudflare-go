@@ -36,7 +36,7 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 	return
 }
 
-// Enable you Email Routing zone. Add and lock the necessary MX and SPF records.
+// Enable your Email Routing zone. Add and lock the necessary MX and SPF records.
 func (r *DNSService) New(ctx context.Context, params DNSNewParams, opts ...option.RequestOption) (res *Settings, err error) {
 	var env DNSNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
