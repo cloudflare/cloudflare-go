@@ -205,7 +205,7 @@ func (r pageRuleJSON) RawJSON() string {
 }
 
 type PageRuleAction struct {
-	// If enabled, any ` http://“ URL is converted to  `https://` through a 301
+	// If enabled, any ` http://`` URL is converted to  `https://` through a 301
 	// redirect.
 	ID PageRuleActionsID `json:"id"`
 	// This field can have the runtime type of [zones.AutomaticHTTPSRewritesValue],
@@ -1003,14 +1003,14 @@ type PageRuleActionsCacheTTLByStatus struct {
 	// A JSON object containing status codes and their corresponding TTLs. Each
 	// key-value pair in the cache TTL by status cache rule has the following syntax
 	//
-	//   - `status_code`: An integer value such as 200 or 500. status_code matches the
-	//     exact status code from the origin web server. Valid status codes are between
-	//     100-999.
-	//   - `status_code_range`: Integer values for from and to. status_code_range matches
-	//     any status code from the origin web server within the specified range.
-	//   - `value`: An integer value that defines the duration an asset is valid in
-	//     seconds or one of the following strings: no-store (equivalent to -1), no-cache
-	//     (equivalent to 0).
+	// - `status_code`: An integer value such as 200 or 500. status_code matches the
+	//   exact status code from the origin web server. Valid status codes are between
+	//   100-999.
+	// - `status_code_range`: Integer values for from and to. status_code_range matches
+	//   any status code from the origin web server within the specified range.
+	// - `value`: An integer value that defines the duration an asset is valid in
+	//   seconds or one of the following strings: no-store (equivalent to -1), no-cache
+	//   (equivalent to 0).
 	Value map[string]PageRuleActionsCacheTTLByStatusValueUnion `json:"value"`
 	JSON  pageRuleActionsCacheTTLByStatusJSON                  `json:"-"`
 }
@@ -1830,7 +1830,7 @@ func (r PageRuleNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PageRuleNewParamsAction struct {
-	// If enabled, any ` http://“ URL is converted to  `https://` through a 301
+	// If enabled, any ` http://`` URL is converted to  `https://` through a 301
 	// redirect.
 	ID    param.Field[PageRuleNewParamsActionsID] `json:"id"`
 	Value param.Field[interface{}]                `json:"value"`
@@ -2221,14 +2221,14 @@ type PageRuleNewParamsActionsCacheTTLByStatus struct {
 	// A JSON object containing status codes and their corresponding TTLs. Each
 	// key-value pair in the cache TTL by status cache rule has the following syntax
 	//
-	//   - `status_code`: An integer value such as 200 or 500. status_code matches the
-	//     exact status code from the origin web server. Valid status codes are between
-	//     100-999.
-	//   - `status_code_range`: Integer values for from and to. status_code_range matches
-	//     any status code from the origin web server within the specified range.
-	//   - `value`: An integer value that defines the duration an asset is valid in
-	//     seconds or one of the following strings: no-store (equivalent to -1), no-cache
-	//     (equivalent to 0).
+	// - `status_code`: An integer value such as 200 or 500. status_code matches the
+	//   exact status code from the origin web server. Valid status codes are between
+	//   100-999.
+	// - `status_code_range`: Integer values for from and to. status_code_range matches
+	//   any status code from the origin web server within the specified range.
+	// - `value`: An integer value that defines the duration an asset is valid in
+	//   seconds or one of the following strings: no-store (equivalent to -1), no-cache
+	//   (equivalent to 0).
 	Value param.Field[map[string]PageRuleNewParamsActionsCacheTTLByStatusValueUnion] `json:"value"`
 }
 
@@ -2875,7 +2875,7 @@ func (r PageRuleUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PageRuleUpdateParamsAction struct {
-	// If enabled, any ` http://“ URL is converted to  `https://` through a 301
+	// If enabled, any ` http://`` URL is converted to  `https://` through a 301
 	// redirect.
 	ID    param.Field[PageRuleUpdateParamsActionsID] `json:"id"`
 	Value param.Field[interface{}]                   `json:"value"`
@@ -3266,14 +3266,14 @@ type PageRuleUpdateParamsActionsCacheTTLByStatus struct {
 	// A JSON object containing status codes and their corresponding TTLs. Each
 	// key-value pair in the cache TTL by status cache rule has the following syntax
 	//
-	//   - `status_code`: An integer value such as 200 or 500. status_code matches the
-	//     exact status code from the origin web server. Valid status codes are between
-	//     100-999.
-	//   - `status_code_range`: Integer values for from and to. status_code_range matches
-	//     any status code from the origin web server within the specified range.
-	//   - `value`: An integer value that defines the duration an asset is valid in
-	//     seconds or one of the following strings: no-store (equivalent to -1), no-cache
-	//     (equivalent to 0).
+	// - `status_code`: An integer value such as 200 or 500. status_code matches the
+	//   exact status code from the origin web server. Valid status codes are between
+	//   100-999.
+	// - `status_code_range`: Integer values for from and to. status_code_range matches
+	//   any status code from the origin web server within the specified range.
+	// - `value`: An integer value that defines the duration an asset is valid in
+	//   seconds or one of the following strings: no-store (equivalent to -1), no-cache
+	//   (equivalent to 0).
 	Value param.Field[map[string]PageRuleUpdateParamsActionsCacheTTLByStatusValueUnion] `json:"value"`
 }
 
@@ -4292,7 +4292,7 @@ func (r PageRuleEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PageRuleEditParamsAction struct {
-	// If enabled, any ` http://“ URL is converted to  `https://` through a 301
+	// If enabled, any ` http://`` URL is converted to  `https://` through a 301
 	// redirect.
 	ID    param.Field[PageRuleEditParamsActionsID] `json:"id"`
 	Value param.Field[interface{}]                 `json:"value"`
@@ -4683,14 +4683,14 @@ type PageRuleEditParamsActionsCacheTTLByStatus struct {
 	// A JSON object containing status codes and their corresponding TTLs. Each
 	// key-value pair in the cache TTL by status cache rule has the following syntax
 	//
-	//   - `status_code`: An integer value such as 200 or 500. status_code matches the
-	//     exact status code from the origin web server. Valid status codes are between
-	//     100-999.
-	//   - `status_code_range`: Integer values for from and to. status_code_range matches
-	//     any status code from the origin web server within the specified range.
-	//   - `value`: An integer value that defines the duration an asset is valid in
-	//     seconds or one of the following strings: no-store (equivalent to -1), no-cache
-	//     (equivalent to 0).
+	// - `status_code`: An integer value such as 200 or 500. status_code matches the
+	//   exact status code from the origin web server. Valid status codes are between
+	//   100-999.
+	// - `status_code_range`: Integer values for from and to. status_code_range matches
+	//   any status code from the origin web server within the specified range.
+	// - `value`: An integer value that defines the duration an asset is valid in
+	//   seconds or one of the following strings: no-store (equivalent to -1), no-cache
+	//   (equivalent to 0).
 	Value param.Field[map[string]PageRuleEditParamsActionsCacheTTLByStatusValueUnion] `json:"value"`
 }
 
