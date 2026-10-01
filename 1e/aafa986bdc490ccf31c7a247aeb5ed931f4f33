@@ -1,0 +1,33 @@
+docs/migration-guides/v7.9.0-migration-guide.md
+  s_0186c0812ecd82::t_45f15d1a9f4af8 1-285
+README.md
+  s_0186c0812ecd82::t_45f15d1a9f4af8 27
+docs/migration-guides/v7.6.0-migration-guide.md
+  s_0186c0812ecd82::t_45f15d1a9f4af8 1-132
+internal/version.go
+  s_0186c0812ecd82::t_45f15d1a9f4af8 5
+docs/migration-guides/v7.8.0-migration-guide.md
+  s_0186c0812ecd82::t_45f15d1a9f4af8 1-318
+.release-please-manifest.json
+  s_0186c0812ecd82::t_45f15d1a9f4af8 2
+SECURITY.md
+  s_0186c0812ecd82::t_45f15d1a9f4af8 1,28-29
+email_routing/rule_test.go
+  s_0186c0812ecd82::t_45f15d1a9f4af8 33,37,76,80
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "1eaafa986bdc490ccf31c7a247aeb5ed931f4f33",
+  "prompts": {},
+  "sessions": {
+    "s_0186c0812ecd82": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f07c11118ffev1vfJ7K3Qfqzjz",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Vaishak Dinesh <vaishak@cloudflare.com>"
+    }
+  }
+}
