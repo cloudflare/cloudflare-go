@@ -1,0 +1,21 @@
+internal/apijson/array_bench_test.go
+  s_0186c0812ecd82::t_8038db304710c2 1-48
+internal/apijson/encoder.go
+  s_0186c0812ecd82::t_8038db304710c2 186-193,197,200,202-203,205,207-208
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "14ed5c6a5bad27ecc73a0d7b6883eace526e29d0",
+  "prompts": {},
+  "sessions": {
+    "s_0186c0812ecd82": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f07c11118ffev1vfJ7K3Qfqzjz",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Vaishak Dinesh <vaishak@cloudflare.com>"
+    }
+  }
+}
