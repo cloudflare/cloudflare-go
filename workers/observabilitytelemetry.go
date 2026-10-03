@@ -2271,6 +2271,8 @@ type ObservabilityTelemetryQueryResponseEventsEventsMetadata struct {
 	Duration int64 `json:"duration"`
 	// Span end time as a Unix epoch in milliseconds.
 	EndTime int64 `json:"endTime"`
+	// Span end time as a Unix epoch in nanoseconds.
+	EndTimeNS string `json:"endTimeNs"`
 	// Error message, present when the log represents an error.
 	Error string `json:"error"`
 	// Templatized version of the error message used for grouping similar errors.
@@ -2308,8 +2310,12 @@ type ObservabilityTelemetryQueryResponseEventsEventsMetadata struct {
 	StackID string `json:"stackId"`
 	// Span start time as a Unix epoch in milliseconds.
 	StartTime int64 `json:"startTime"`
+	// Span start time as a Unix epoch in nanoseconds.
+	StartTimeNS string `json:"startTimeNs"`
 	// HTTP response status code returned by the Worker.
 	StatusCode int64 `json:"statusCode"`
+	// Event time as a Unix epoch in nanoseconds.
+	TimestampNS string `json:"timestampNs"`
 	// Total duration of the entire trace in milliseconds.
 	TraceDuration int64 `json:"traceDuration"`
 	// Distributed trace ID linking spans across services.
@@ -2336,6 +2342,7 @@ type observabilityTelemetryQueryResponseEventsEventsMetadataJSON struct {
 	Cost            apijson.Field
 	Duration        apijson.Field
 	EndTime         apijson.Field
+	EndTimeNS       apijson.Field
 	Error           apijson.Field
 	ErrorTemplate   apijson.Field
 	Fingerprint     apijson.Field
@@ -2354,7 +2361,9 @@ type observabilityTelemetryQueryResponseEventsEventsMetadataJSON struct {
 	SpanName        apijson.Field
 	StackID         apijson.Field
 	StartTime       apijson.Field
+	StartTimeNS     apijson.Field
 	StatusCode      apijson.Field
+	TimestampNS     apijson.Field
 	TraceDuration   apijson.Field
 	TraceID         apijson.Field
 	TransactionName apijson.Field
@@ -2901,6 +2910,8 @@ type ObservabilityTelemetryQueryResponseInvocationsMetadata struct {
 	Duration int64 `json:"duration"`
 	// Span end time as a Unix epoch in milliseconds.
 	EndTime int64 `json:"endTime"`
+	// Span end time as a Unix epoch in nanoseconds.
+	EndTimeNS string `json:"endTimeNs"`
 	// Error message, present when the log represents an error.
 	Error string `json:"error"`
 	// Templatized version of the error message used for grouping similar errors.
@@ -2938,8 +2949,12 @@ type ObservabilityTelemetryQueryResponseInvocationsMetadata struct {
 	StackID string `json:"stackId"`
 	// Span start time as a Unix epoch in milliseconds.
 	StartTime int64 `json:"startTime"`
+	// Span start time as a Unix epoch in nanoseconds.
+	StartTimeNS string `json:"startTimeNs"`
 	// HTTP response status code returned by the Worker.
 	StatusCode int64 `json:"statusCode"`
+	// Event time as a Unix epoch in nanoseconds.
+	TimestampNS string `json:"timestampNs"`
 	// Total duration of the entire trace in milliseconds.
 	TraceDuration int64 `json:"traceDuration"`
 	// Distributed trace ID linking spans across services.
@@ -2965,6 +2980,7 @@ type observabilityTelemetryQueryResponseInvocationsMetadataJSON struct {
 	Cost            apijson.Field
 	Duration        apijson.Field
 	EndTime         apijson.Field
+	EndTimeNS       apijson.Field
 	Error           apijson.Field
 	ErrorTemplate   apijson.Field
 	Fingerprint     apijson.Field
@@ -2983,7 +2999,9 @@ type observabilityTelemetryQueryResponseInvocationsMetadataJSON struct {
 	SpanName        apijson.Field
 	StackID         apijson.Field
 	StartTime       apijson.Field
+	StartTimeNS     apijson.Field
 	StatusCode      apijson.Field
+	TimestampNS     apijson.Field
 	TraceDuration   apijson.Field
 	TraceID         apijson.Field
 	TransactionName apijson.Field

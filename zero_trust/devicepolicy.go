@@ -181,8 +181,9 @@ type SettingsPolicy struct {
 	// The URL to launch when the Send Feedback button is clicked.
 	SupportURL string `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
-	SwitchLocked bool                       `json:"switch_locked"`
-	TargetTests  []SettingsPolicyTargetTest `json:"target_tests"`
+	SwitchLocked bool `json:"switch_locked"`
+	// Deprecated: deprecated
+	TargetTests []SettingsPolicyTargetTest `json:"target_tests"`
 	// Determines which tunnel protocol to use.
 	TunnelProtocol string `json:"tunnel_protocol"`
 	// Determines whether uninstalling the WARP client requires an override code.
