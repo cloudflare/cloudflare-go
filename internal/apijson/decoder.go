@@ -143,13 +143,13 @@ func (d *decoderBuilder) newTypeDecoder(t reflect.Type) decoderFunc {
 		return unmarshalerDecoder
 	}
 	if !d.root && reflect.PointerTo(t).Implements(reflect.TypeOf((*json.Unmarshaler)(nil)).Elem()) {
-		if _, ok := unionVariants[t]; !ok {
+		if _, ok := unionVariants.Load(t); !ok {
 			return indirectUnmarshalerDecoder
 		}
 	}
 	d.root = false
 
-	if _, ok := unionRegistry[t]; ok {
+	if _, ok := unionRegistry.Load(t); ok {
 		return d.newUnionDecoder(t)
 	}
 
@@ -206,10 +206,11 @@ func (d *decoderBuilder) newTypeDecoder(t reflect.Type) decoderFunc {
 //
 // [smart algorithm]: https://docs.pydantic.dev/latest/concepts/unions/#smart-mode
 func (d *decoderBuilder) newUnionDecoder(t reflect.Type) decoderFunc {
-	unionEntry, ok := unionRegistry[t]
+	v, ok := unionRegistry.Load(t)
 	if !ok {
 		panic("apijson: couldn't find union of type " + t.String() + " in union registry")
 	}
+	unionEntry := v.(unionEntry)
 	decoders := []decoderFunc{}
 	for _, variant := range unionEntry.variants {
 		decoder := d.typeDecoder(variant.Type)
