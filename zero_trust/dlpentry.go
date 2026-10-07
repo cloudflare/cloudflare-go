@@ -213,7 +213,7 @@ type DLPEntryUpdateResponse struct {
 	// This field can have the runtime type of
 	// [DLPEntryUpdateResponsePredefinedEntryVariant].
 	Variant interface{} `json:"variant"`
-	// This field can have the runtime type of [[]string].
+	// This field can have the runtime type of [interface{}].
 	WordList interface{}                `json:"word_list"`
 	JSON     dlpEntryUpdateResponseJSON `json:"-"`
 	union    DLPEntryUpdateResponseUnion
@@ -820,7 +820,7 @@ type DLPEntryUpdateResponseWordListEntry struct {
 	Name      string                                  `json:"name" api:"required"`
 	Type      DLPEntryUpdateResponseWordListEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                               `json:"updated_at" api:"required" format:"date-time"`
-	WordList  []string                                `json:"word_list" api:"required"`
+	WordList  interface{}                             `json:"word_list" api:"required"`
 	ProfileID string                                  `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      dlpEntryUpdateResponseWordListEntryJSON `json:"-"`
 }
@@ -908,7 +908,7 @@ type DLPEntryListResponse struct {
 	UploadStatus DLPEntryListResponseUploadStatus `json:"upload_status"`
 	// This field can have the runtime type of [DLPEntryListResponseObjectVariant].
 	Variant interface{} `json:"variant"`
-	// This field can have the runtime type of [[]string].
+	// This field can have the runtime type of [interface{}].
 	WordList interface{}              `json:"word_list"`
 	JSON     dlpEntryListResponseJSON `json:"-"`
 	union    DLPEntryListResponseUnion
@@ -1147,7 +1147,7 @@ type DLPEntryGetResponse struct {
 	UploadStatus DLPEntryGetResponseUploadStatus `json:"upload_status"`
 	// This field can have the runtime type of [DLPEntryGetResponseObjectVariant].
 	Variant interface{} `json:"variant"`
-	// This field can have the runtime type of [[]string].
+	// This field can have the runtime type of [interface{}].
 	WordList interface{}             `json:"word_list"`
 	JSON     dlpEntryGetResponseJSON `json:"-"`
 	union    DLPEntryGetResponseUnion

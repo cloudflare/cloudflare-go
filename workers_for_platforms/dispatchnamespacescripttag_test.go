@@ -77,7 +77,7 @@ func TestDispatchNamespaceScriptTagList(t *testing.T) {
 	}
 }
 
-func TestDispatchNamespaceScriptTagDeleteWithOptionalParams(t *testing.T) {
+func TestDispatchNamespaceScriptTagDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -95,10 +95,9 @@ func TestDispatchNamespaceScriptTagDeleteWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"my-dispatch-namespace",
 		"this-is_my_script-01",
-		"environment",
+		"my-tag",
 		workers_for_platforms.DispatchNamespaceScriptTagDeleteParams{
-			AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			APIVersion: cloudflare.F("2026-10-01.epoch"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {

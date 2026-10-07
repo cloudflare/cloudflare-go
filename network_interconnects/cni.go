@@ -129,10 +129,14 @@ type CNINewResponse struct {
 	// Cloudflare end of the point-to-point link
 	P2pIP string            `json:"p2p_ip" api:"required" format:"A.B.C.D/N"`
 	BGP   CNINewResponseBGP `json:"bgp"`
-	// The BGP mode for a CNI. One of the following:
+	// The BGP mode for a CNI.
 	//
-	// - `dynamic_route_exchange`
-	// - `advertise_only`
+	// Controls the customer-facing data path:
+	//
+	//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
+	//     bgp-bridge / bgp-bridge-receiver.
+	//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
+	//     Conduit
 	BGPMode CNINewResponseBGPMode `json:"bgp_mode"`
 	JSON    cniNewResponseJSON    `json:"-"`
 }
@@ -229,10 +233,14 @@ func (r cniNewResponseBGPJSON) RawJSON() string {
 	return r.raw
 }
 
-// The BGP mode for a CNI. One of the following:
+// The BGP mode for a CNI.
 //
-// - `dynamic_route_exchange`
-// - `advertise_only`
+// Controls the customer-facing data path:
+//
+//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
+//     bgp-bridge / bgp-bridge-receiver.
+//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
+//     Conduit
 type CNINewResponseBGPMode string
 
 const (
@@ -262,10 +270,14 @@ type CNIUpdateResponse struct {
 	// Cloudflare end of the point-to-point link
 	P2pIP string               `json:"p2p_ip" api:"required" format:"A.B.C.D/N"`
 	BGP   CNIUpdateResponseBGP `json:"bgp"`
-	// The BGP mode for a CNI. One of the following:
+	// The BGP mode for a CNI.
 	//
-	// - `dynamic_route_exchange`
-	// - `advertise_only`
+	// Controls the customer-facing data path:
+	//
+	//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
+	//     bgp-bridge / bgp-bridge-receiver.
+	//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
+	//     Conduit
 	BGPMode CNIUpdateResponseBGPMode `json:"bgp_mode"`
 	JSON    cniUpdateResponseJSON    `json:"-"`
 }
@@ -363,10 +375,14 @@ func (r cniUpdateResponseBGPJSON) RawJSON() string {
 	return r.raw
 }
 
-// The BGP mode for a CNI. One of the following:
+// The BGP mode for a CNI.
 //
-// - `dynamic_route_exchange`
-// - `advertise_only`
+// Controls the customer-facing data path:
+//
+//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
+//     bgp-bridge / bgp-bridge-receiver.
+//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
+//     Conduit
 type CNIUpdateResponseBGPMode string
 
 const (
@@ -418,10 +434,14 @@ type CNIListResponseItem struct {
 	// Cloudflare end of the point-to-point link
 	P2pIP string                  `json:"p2p_ip" api:"required" format:"A.B.C.D/N"`
 	BGP   CNIListResponseItemsBGP `json:"bgp"`
-	// The BGP mode for a CNI. One of the following:
+	// The BGP mode for a CNI.
 	//
-	// - `dynamic_route_exchange`
-	// - `advertise_only`
+	// Controls the customer-facing data path:
+	//
+	//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
+	//     bgp-bridge / bgp-bridge-receiver.
+	//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
+	//     Conduit
 	BGPMode CNIListResponseItemsBGPMode `json:"bgp_mode"`
 	JSON    cniListResponseItemJSON     `json:"-"`
 }
@@ -519,10 +539,14 @@ func (r cniListResponseItemsBGPJSON) RawJSON() string {
 	return r.raw
 }
 
-// The BGP mode for a CNI. One of the following:
+// The BGP mode for a CNI.
 //
-// - `dynamic_route_exchange`
-// - `advertise_only`
+// Controls the customer-facing data path:
+//
+//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
+//     bgp-bridge / bgp-bridge-receiver.
+//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
+//     Conduit
 type CNIListResponseItemsBGPMode string
 
 const (
@@ -552,10 +576,14 @@ type CNIGetResponse struct {
 	// Cloudflare end of the point-to-point link
 	P2pIP string            `json:"p2p_ip" api:"required" format:"A.B.C.D/N"`
 	BGP   CNIGetResponseBGP `json:"bgp"`
-	// The BGP mode for a CNI. One of the following:
+	// The BGP mode for a CNI.
 	//
-	// - `dynamic_route_exchange`
-	// - `advertise_only`
+	// Controls the customer-facing data path:
+	//
+	//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
+	//     bgp-bridge / bgp-bridge-receiver.
+	//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
+	//     Conduit
 	BGPMode CNIGetResponseBGPMode `json:"bgp_mode"`
 	JSON    cniGetResponseJSON    `json:"-"`
 }
@@ -652,10 +680,14 @@ func (r cniGetResponseBGPJSON) RawJSON() string {
 	return r.raw
 }
 
-// The BGP mode for a CNI. One of the following:
+// The BGP mode for a CNI.
 //
-// - `dynamic_route_exchange`
-// - `advertise_only`
+// Controls the customer-facing data path:
+//
+//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
+//     bgp-bridge / bgp-bridge-receiver.
+//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
+//     Conduit
 type CNIGetResponseBGPMode string
 
 const (
@@ -741,10 +773,14 @@ type CNIUpdateParams struct {
 	// Cloudflare end of the point-to-point link
 	P2pIP param.Field[string]             `json:"p2p_ip" api:"required" format:"A.B.C.D/N"`
 	BGP   param.Field[CNIUpdateParamsBGP] `json:"bgp"`
-	// The BGP mode for a CNI. One of the following:
+	// The BGP mode for a CNI.
 	//
-	// - `dynamic_route_exchange`
-	// - `advertise_only`
+	// Controls the customer-facing data path:
+	//
+	//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
+	//     bgp-bridge / bgp-bridge-receiver.
+	//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
+	//     Conduit
 	BGPMode param.Field[CNIUpdateParamsBGPMode] `json:"bgp_mode"`
 }
 
@@ -792,10 +828,14 @@ func (r CNIUpdateParamsBGP) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The BGP mode for a CNI. One of the following:
+// The BGP mode for a CNI.
 //
-// - `dynamic_route_exchange`
-// - `advertise_only`
+// Controls the customer-facing data path:
+//
+//   - `DynamicRouteExchange` — Full BGP: routes flow through to conduit via CRE /
+//     bgp-bridge / bgp-bridge-receiver.
+//   - `AdvertiseOnly` — static advertisement via taserver, no routes exchanged with
+//     Conduit
 type CNIUpdateParamsBGPMode string
 
 const (

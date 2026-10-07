@@ -246,11 +246,6 @@ type Namespace struct {
 	// Specify the jurisdiction to restrict the KV namespace to durably store data
 	// within. Can only be set at namespace creation time.
 	Jurisdiction NamespaceJurisdiction `json:"jurisdiction"`
-	// The mode of the Workers KV namespace. Specify `instant` when creating a
-	// namespace to create a KV Instant namespace. Omit this field when creating a
-	// namespace to create a classic namespace. Currently, `instant` is the only
-	// supported explicit value.
-	Mode NamespaceMode `json:"mode"`
 	// True if keys written on the URL will be URL-decoded before storing. For example,
 	// if set to "true", a key written on the URL as "%3F" will be stored as "?".
 	SupportsURLEncoding bool          `json:"supports_url_encoding"`
@@ -262,7 +257,6 @@ type namespaceJSON struct {
 	ID                  apijson.Field
 	Title               apijson.Field
 	Jurisdiction        apijson.Field
-	Mode                apijson.Field
 	SupportsURLEncoding apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
@@ -289,24 +283,6 @@ const (
 func (r NamespaceJurisdiction) IsKnown() bool {
 	switch r {
 	case NamespaceJurisdictionEu, NamespaceJurisdictionFedramp, NamespaceJurisdictionUs:
-		return true
-	}
-	return false
-}
-
-// The mode of the Workers KV namespace. Specify `instant` when creating a
-// namespace to create a KV Instant namespace. Omit this field when creating a
-// namespace to create a classic namespace. Currently, `instant` is the only
-// supported explicit value.
-type NamespaceMode string
-
-const (
-	NamespaceModeInstant NamespaceMode = "instant"
-)
-
-func (r NamespaceMode) IsKnown() bool {
-	switch r {
-	case NamespaceModeInstant:
 		return true
 	}
 	return false
@@ -572,11 +548,6 @@ type NamespaceNewParams struct {
 	// Specify the jurisdiction to restrict the KV namespace to durably store data
 	// within. Can only be set at namespace creation time.
 	Jurisdiction param.Field[NamespaceNewParamsJurisdiction] `json:"jurisdiction"`
-	// The mode of the Workers KV namespace. Specify `instant` when creating a
-	// namespace to create a KV Instant namespace. Omit this field when creating a
-	// namespace to create a classic namespace. Currently, `instant` is the only
-	// supported explicit value.
-	Mode param.Field[NamespaceNewParamsMode] `json:"mode"`
 }
 
 func (r NamespaceNewParams) MarshalJSON() (data []byte, err error) {
@@ -596,24 +567,6 @@ const (
 func (r NamespaceNewParamsJurisdiction) IsKnown() bool {
 	switch r {
 	case NamespaceNewParamsJurisdictionEu, NamespaceNewParamsJurisdictionFedramp, NamespaceNewParamsJurisdictionUs:
-		return true
-	}
-	return false
-}
-
-// The mode of the Workers KV namespace. Specify `instant` when creating a
-// namespace to create a KV Instant namespace. Omit this field when creating a
-// namespace to create a classic namespace. Currently, `instant` is the only
-// supported explicit value.
-type NamespaceNewParamsMode string
-
-const (
-	NamespaceNewParamsModeInstant NamespaceNewParamsMode = "instant"
-)
-
-func (r NamespaceNewParamsMode) IsKnown() bool {
-	switch r {
-	case NamespaceNewParamsModeInstant:
 		return true
 	}
 	return false

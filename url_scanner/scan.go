@@ -1696,7 +1696,6 @@ type ScanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlContentSig
 	DurationMs float64                                                                                   `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlContentSignalsEvidence `json:"evidence"`
 	Message    string                                                                                    `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlContentSignalsMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlContentSignalsJSON       `json:"-"`
 }
 
@@ -1709,7 +1708,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlContentSig
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1834,38 +1832,12 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlContent
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlContentSignalsMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                                        `json:"code" api:"required"`
-	Params interface{}                                                                                   `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlContentSignalsMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlContentSignalsMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlContentSignalsMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlContentSignalsMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlContentSignalsMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlContentSignalsMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlRobotsTXTAIRules struct {
 	Status     string                                                                                      `json:"status" api:"required"`
 	Details    interface{}                                                                                 `json:"details"`
 	DurationMs float64                                                                                     `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlRobotsTxtaiRulesEvidence `json:"evidence"`
 	Message    string                                                                                      `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlRobotsTXTAIRulesMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlRobotsTxtaiRulesJSON       `json:"-"`
 }
 
@@ -1878,7 +1850,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlRobotsTxta
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2003,38 +1974,12 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlRobotsT
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlRobotsTXTAIRulesMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                                          `json:"code" api:"required"`
-	Params interface{}                                                                                     `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlRobotsTxtaiRulesMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlRobotsTxtaiRulesMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlRobotsTXTAIRulesMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlRobotsTxtaiRulesMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlRobotsTXTAIRulesMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlRobotsTxtaiRulesMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlWebBotAuth struct {
 	Status     string                                                                                `json:"status" api:"required"`
 	Details    interface{}                                                                           `json:"details"`
 	DurationMs float64                                                                               `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlWebBotAuthEvidence `json:"evidence"`
 	Message    string                                                                                `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlWebBotAuthMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlWebBotAuthJSON       `json:"-"`
 }
 
@@ -2047,7 +1992,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlWebBotAuth
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2172,31 +2116,6 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlWebBotA
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlWebBotAuthMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                                    `json:"code" api:"required"`
-	Params interface{}                                                                               `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlWebBotAuthMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlWebBotAuthMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlWebBotAuthMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlWebBotAuthMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlWebBotAuthMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksBotAccessControlWebBotAuthMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksCommerce struct {
 	Acp  ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceAcp  `json:"acp" api:"required"`
 	Ap2  ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceAp2  `json:"ap2" api:"required"`
@@ -2233,7 +2152,6 @@ type ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceAcp struct {
 	DurationMs float64                                                                `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceAcpEvidence `json:"evidence"`
 	Message    string                                                                 `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceAcpMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksCommerceAcpJSON       `json:"-"`
 }
 
@@ -2246,7 +2164,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksCommerceAcpJSON struct {
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2371,38 +2288,12 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksCommerceAcpEvidenceResp
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceAcpMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                     `json:"code" api:"required"`
-	Params interface{}                                                                `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksCommerceAcpMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksCommerceAcpMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceAcpMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksCommerceAcpMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceAcpMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksCommerceAcpMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceAp2 struct {
 	Status     string                                                                 `json:"status" api:"required"`
 	Details    interface{}                                                            `json:"details"`
 	DurationMs float64                                                                `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceAp2Evidence `json:"evidence"`
 	Message    string                                                                 `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceAp2MessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksCommerceAp2JSON       `json:"-"`
 }
 
@@ -2415,7 +2306,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksCommerceAp2JSON struct {
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2540,38 +2430,12 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksCommerceAp2EvidenceResp
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceAp2MessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                     `json:"code" api:"required"`
-	Params interface{}                                                                `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksCommerceAp2MessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksCommerceAp2MessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceAp2MessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksCommerceAp2MessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceAp2MessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksCommerceAp2MessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMpp struct {
 	Status     string                                                                 `json:"status" api:"required"`
 	Details    interface{}                                                            `json:"details"`
 	DurationMs float64                                                                `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidence `json:"evidence"`
 	Message    string                                                                 `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppJSON       `json:"-"`
 }
 
@@ -2584,7 +2448,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppJSON struct {
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2709,38 +2572,12 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppEvidenceResp
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                     `json:"code" api:"required"`
-	Params interface{}                                                                `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksCommerceMppMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceUcp struct {
 	Status     string                                                                 `json:"status" api:"required"`
 	Details    interface{}                                                            `json:"details"`
 	DurationMs float64                                                                `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceUcpEvidence `json:"evidence"`
 	Message    string                                                                 `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceUcpMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksCommerceUcpJSON       `json:"-"`
 }
 
@@ -2753,7 +2590,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksCommerceUcpJSON struct {
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2878,38 +2714,12 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksCommerceUcpEvidenceResp
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceUcpMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                     `json:"code" api:"required"`
-	Params interface{}                                                                `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksCommerceUcpMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksCommerceUcpMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceUcpMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksCommerceUcpMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceUcpMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksCommerceUcpMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceX402 struct {
 	Status     string                                                                  `json:"status" api:"required"`
 	Details    interface{}                                                             `json:"details"`
 	DurationMs float64                                                                 `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceX402Evidence `json:"evidence"`
 	Message    string                                                                  `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceX402MessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksCommerceX402JSON       `json:"-"`
 }
 
@@ -2922,7 +2732,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksCommerceX402JSON struct {
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3047,31 +2856,6 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksCommerceX402EvidenceRes
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceX402MessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                      `json:"code" api:"required"`
-	Params interface{}                                                                 `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksCommerceX402MessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksCommerceX402MessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceX402MessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksCommerceX402MessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksCommerceX402MessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksCommerceX402MessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksContentAccessibility struct {
 	MarkdownNegotiation ScanGetResponseMetaProcessorsAgentReadinessChecksContentAccessibilityMarkdownNegotiation `json:"markdownNegotiation" api:"required"`
 	JSON                scanGetResponseMetaProcessorsAgentReadinessChecksContentAccessibilityJSON                `json:"-"`
@@ -3100,7 +2884,6 @@ type ScanGetResponseMetaProcessorsAgentReadinessChecksContentAccessibilityMarkdo
 	DurationMs float64                                                                                            `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksContentAccessibilityMarkdownNegotiationEvidence `json:"evidence"`
 	Message    string                                                                                             `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksContentAccessibilityMarkdownNegotiationMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksContentAccessibilityMarkdownNegotiationJSON       `json:"-"`
 }
 
@@ -3113,7 +2896,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksContentAccessibilityMarkdo
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3238,31 +3020,6 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksContentAccessibilityMar
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksContentAccessibilityMarkdownNegotiationMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                                                 `json:"code" api:"required"`
-	Params interface{}                                                                                            `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksContentAccessibilityMarkdownNegotiationMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksContentAccessibilityMarkdownNegotiationMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksContentAccessibilityMarkdownNegotiationMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksContentAccessibilityMarkdownNegotiationMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksContentAccessibilityMarkdownNegotiationMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksContentAccessibilityMarkdownNegotiationMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverability struct {
 	DNSAid      ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityDNSAid      `json:"dnsAid" api:"required"`
 	LinkHeaders ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityLinkHeaders `json:"linkHeaders" api:"required"`
@@ -3297,7 +3054,6 @@ type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityDNSAid stru
 	DurationMs float64                                                                          `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityDNSAidEvidence `json:"evidence"`
 	Message    string                                                                           `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityDNSAidMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityDNSAidJSON       `json:"-"`
 }
 
@@ -3310,7 +3066,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityDNSAidJSON 
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3435,38 +3190,12 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityDNSAidEv
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityDNSAidMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                               `json:"code" api:"required"`
-	Params interface{}                                                                          `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityDNSAidMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityDNSAidMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityDNSAidMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityDNSAidMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityDNSAidMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityDNSAidMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityLinkHeaders struct {
 	Status     string                                                                                `json:"status" api:"required"`
 	Details    interface{}                                                                           `json:"details"`
 	DurationMs float64                                                                               `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityLinkHeadersEvidence `json:"evidence"`
 	Message    string                                                                                `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityLinkHeadersMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityLinkHeadersJSON       `json:"-"`
 }
 
@@ -3479,7 +3208,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityLinkHeaders
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3604,38 +3332,12 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityLinkHead
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityLinkHeadersMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                                    `json:"code" api:"required"`
-	Params interface{}                                                                               `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityLinkHeadersMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityLinkHeadersMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityLinkHeadersMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityLinkHeadersMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityLinkHeadersMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityLinkHeadersMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityRobotsTXT struct {
 	Status     string                                                                              `json:"status" api:"required"`
 	Details    interface{}                                                                         `json:"details"`
 	DurationMs float64                                                                             `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityRobotsTXTEvidence `json:"evidence"`
 	Message    string                                                                              `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityRobotsTXTMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityRobotsTXTJSON       `json:"-"`
 }
 
@@ -3648,7 +3350,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityRobotsTXTJS
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3773,38 +3474,12 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityRobotsTX
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityRobotsTXTMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                                  `json:"code" api:"required"`
-	Params interface{}                                                                             `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityRobotsTXTMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityRobotsTXTMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityRobotsTXTMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityRobotsTXTMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityRobotsTXTMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilityRobotsTXTMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilitySitemap struct {
 	Status     string                                                                            `json:"status" api:"required"`
 	Details    interface{}                                                                       `json:"details"`
 	DurationMs float64                                                                           `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilitySitemapEvidence `json:"evidence"`
 	Message    string                                                                            `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilitySitemapMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilitySitemapJSON       `json:"-"`
 }
 
@@ -3817,7 +3492,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilitySitemapJSON
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3942,31 +3616,6 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilitySitemapE
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilitySitemapMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                                `json:"code" api:"required"`
-	Params interface{}                                                                           `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilitySitemapMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilitySitemapMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilitySitemapMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilitySitemapMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilitySitemapMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoverabilitySitemapMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscovery struct {
 	A2aAgentCard           ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryA2aAgentCard           `json:"a2aAgentCard" api:"required"`
 	AgentSkills            ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAgentSkills            `json:"agentSkills" api:"required"`
@@ -4011,7 +3660,6 @@ type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryA2aAgentCard stru
 	DurationMs float64                                                                          `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryA2aAgentCardEvidence `json:"evidence"`
 	Message    string                                                                           `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryA2aAgentCardMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryA2aAgentCardJSON       `json:"-"`
 }
 
@@ -4024,7 +3672,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryA2aAgentCardJSON 
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4149,38 +3796,12 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryA2aAgentCardEv
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryA2aAgentCardMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                               `json:"code" api:"required"`
-	Params interface{}                                                                          `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryA2aAgentCardMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryA2aAgentCardMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryA2aAgentCardMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryA2aAgentCardMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryA2aAgentCardMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryA2aAgentCardMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAgentSkills struct {
 	Status     string                                                                          `json:"status" api:"required"`
 	Details    interface{}                                                                     `json:"details"`
 	DurationMs float64                                                                         `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAgentSkillsEvidence `json:"evidence"`
 	Message    string                                                                          `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAgentSkillsMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAgentSkillsJSON       `json:"-"`
 }
 
@@ -4193,7 +3814,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAgentSkillsJSON s
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4318,38 +3938,12 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAgentSkillsEvi
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAgentSkillsMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                              `json:"code" api:"required"`
-	Params interface{}                                                                         `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAgentSkillsMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAgentSkillsMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAgentSkillsMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAgentSkillsMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAgentSkillsMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAgentSkillsMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAPICatalog struct {
 	Status     string                                                                         `json:"status" api:"required"`
 	Details    interface{}                                                                    `json:"details"`
 	DurationMs float64                                                                        `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAPICatalogEvidence `json:"evidence"`
 	Message    string                                                                         `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAPICatalogMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAPICatalogJSON       `json:"-"`
 }
 
@@ -4362,7 +3956,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAPICatalogJSON st
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4487,38 +4080,12 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAPICatalogEvid
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAPICatalogMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                             `json:"code" api:"required"`
-	Params interface{}                                                                        `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAPICatalogMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAPICatalogMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAPICatalogMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAPICatalogMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAPICatalogMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAPICatalogMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryArd struct {
 	Status     string                                                                  `json:"status" api:"required"`
 	Details    interface{}                                                             `json:"details"`
 	DurationMs float64                                                                 `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryArdEvidence `json:"evidence"`
 	Message    string                                                                  `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryArdMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryArdJSON       `json:"-"`
 }
 
@@ -4531,7 +4098,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryArdJSON struct {
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4656,38 +4222,12 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryArdEvidenceRes
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryArdMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                      `json:"code" api:"required"`
-	Params interface{}                                                                 `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryArdMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryArdMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryArdMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryArdMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryArdMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryArdMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAuthMd struct {
 	Status     string                                                                     `json:"status" api:"required"`
 	Details    interface{}                                                                `json:"details"`
 	DurationMs float64                                                                    `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAuthMdEvidence `json:"evidence"`
 	Message    string                                                                     `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAuthMdMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAuthMdJSON       `json:"-"`
 }
 
@@ -4700,7 +4240,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAuthMdJSON struct
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4825,38 +4364,12 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAuthMdEvidence
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAuthMdMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                         `json:"code" api:"required"`
-	Params interface{}                                                                    `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAuthMdMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAuthMdMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAuthMdMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAuthMdMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAuthMdMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryAuthMdMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryMcpServerCard struct {
 	Status     string                                                                            `json:"status" api:"required"`
 	Details    interface{}                                                                       `json:"details"`
 	DurationMs float64                                                                           `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryMcpServerCardEvidence `json:"evidence"`
 	Message    string                                                                            `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryMcpServerCardMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryMcpServerCardJSON       `json:"-"`
 }
 
@@ -4869,7 +4382,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryMcpServerCardJSON
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4994,38 +4506,12 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryMcpServerCardE
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryMcpServerCardMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                                `json:"code" api:"required"`
-	Params interface{}                                                                           `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryMcpServerCardMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryMcpServerCardMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryMcpServerCardMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryMcpServerCardMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryMcpServerCardMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryMcpServerCardMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthDiscovery struct {
 	Status     string                                                                             `json:"status" api:"required"`
 	Details    interface{}                                                                        `json:"details"`
 	DurationMs float64                                                                            `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthDiscoveryEvidence `json:"evidence"`
 	Message    string                                                                             `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthDiscoveryMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthDiscoveryJSON       `json:"-"`
 }
 
@@ -5038,7 +4524,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthDiscoveryJSO
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5163,38 +4648,12 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthDiscovery
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthDiscoveryMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                                 `json:"code" api:"required"`
-	Params interface{}                                                                            `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthDiscoveryMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthDiscoveryMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthDiscoveryMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthDiscoveryMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthDiscoveryMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthDiscoveryMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthProtectedResource struct {
 	Status     string                                                                                     `json:"status" api:"required"`
 	Details    interface{}                                                                                `json:"details"`
 	DurationMs float64                                                                                    `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthProtectedResourceEvidence `json:"evidence"`
 	Message    string                                                                                     `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthProtectedResourceMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthProtectedResourceJSON       `json:"-"`
 }
 
@@ -5207,7 +4666,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthProtectedRes
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5332,38 +4790,12 @@ func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthProtected
 	return r.raw
 }
 
-type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthProtectedResourceMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                                         `json:"code" api:"required"`
-	Params interface{}                                                                                    `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthProtectedResourceMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthProtectedResourceMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthProtectedResourceMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthProtectedResourceMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthProtectedResourceMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthProtectedResourceMessageRefJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryWebMcp struct {
 	Status     string                                                                     `json:"status" api:"required"`
 	Details    interface{}                                                                `json:"details"`
 	DurationMs float64                                                                    `json:"durationMs"`
 	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryWebMcpEvidence `json:"evidence"`
 	Message    string                                                                     `json:"message"`
-	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryWebMcpMessageRef `json:"messageRef"`
 	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryWebMcpJSON       `json:"-"`
 }
 
@@ -5376,7 +4808,6 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryWebMcpJSON struct
 	DurationMs  apijson.Field
 	Evidence    apijson.Field
 	Message     apijson.Field
-	MessageRef  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5498,31 +4929,6 @@ func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryWebMcpEvidenc
 }
 
 func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryWebMcpEvidenceResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryWebMcpMessageRef struct {
-	// Stable, translatable message code.
-	Code   string                                                                         `json:"code" api:"required"`
-	Params interface{}                                                                    `json:"params"`
-	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryWebMcpMessageRefJSON `json:"-"`
-}
-
-// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryWebMcpMessageRefJSON
-// contains the JSON metadata for the struct
-// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryWebMcpMessageRef]
-type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryWebMcpMessageRefJSON struct {
-	Code        apijson.Field
-	Params      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryWebMcpMessageRef) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryWebMcpMessageRefJSON) RawJSON() string {
 	return r.raw
 }
 

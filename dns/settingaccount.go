@@ -22,9 +22,8 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewSettingAccountService] method instead.
 type SettingAccountService struct {
-	Options        []option.RequestOption
-	NameserverSets *SettingAccountNameserverSetService
-	Views          *SettingAccountViewService
+	Options []option.RequestOption
+	Views   *SettingAccountViewService
 }
 
 // NewSettingAccountService generates a new service that applies the given options
@@ -33,7 +32,6 @@ type SettingAccountService struct {
 func NewSettingAccountService(opts ...option.RequestOption) (r *SettingAccountService) {
 	r = &SettingAccountService{}
 	r.Options = opts
-	r.NameserverSets = NewSettingAccountNameserverSetService(opts...)
 	r.Views = NewSettingAccountViewService(opts...)
 	return
 }

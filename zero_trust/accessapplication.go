@@ -303,7 +303,6 @@ type ApplicationType string
 
 const (
 	ApplicationTypeSelfHosted     ApplicationType = "self_hosted"
-	ApplicationTypeEndUser        ApplicationType = "end_user"
 	ApplicationTypeSaaS           ApplicationType = "saas"
 	ApplicationTypeSSH            ApplicationType = "ssh"
 	ApplicationTypeVNC            ApplicationType = "vnc"
@@ -321,7 +320,7 @@ const (
 
 func (r ApplicationType) IsKnown() bool {
 	switch r {
-	case ApplicationTypeSelfHosted, ApplicationTypeEndUser, ApplicationTypeSaaS, ApplicationTypeSSH, ApplicationTypeVNC, ApplicationTypeAppLauncher, ApplicationTypeWARP, ApplicationTypeBISO, ApplicationTypeBookmark, ApplicationTypeDashSSO, ApplicationTypeInfrastructure, ApplicationTypeRDP, ApplicationTypeMcp, ApplicationTypeMcpPortal, ApplicationTypeProxyEndpoint:
+	case ApplicationTypeSelfHosted, ApplicationTypeSaaS, ApplicationTypeSSH, ApplicationTypeVNC, ApplicationTypeAppLauncher, ApplicationTypeWARP, ApplicationTypeBISO, ApplicationTypeBookmark, ApplicationTypeDashSSO, ApplicationTypeInfrastructure, ApplicationTypeRDP, ApplicationTypeMcp, ApplicationTypeMcpPortal, ApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -2149,7 +2148,6 @@ type AccessApplicationNewResponse struct {
 	// This field can have the runtime type of [[]string].
 	CustomPages interface{} `json:"custom_pages"`
 	// This field can have the runtime type of
-	// [[]AccessApplicationNewResponseEndUserApplicationDestination],
 	// [[]AccessApplicationNewResponseSelfHostedApplicationDestination],
 	// [[]AccessApplicationNewResponseBrowserSSHApplicationDestination],
 	// [[]AccessApplicationNewResponseBrowserVNCApplicationDestination],
@@ -2191,7 +2189,6 @@ type AccessApplicationNewResponse struct {
 	// The name of the application.
 	Name string `json:"name"`
 	// This field can have the runtime type of
-	// [AccessApplicationNewResponseEndUserApplicationOAuthConfiguration],
 	// [AccessApplicationNewResponseSelfHostedApplicationOAuthConfiguration],
 	// [AccessApplicationNewResponseBrowserSSHApplicationOAuthConfiguration],
 	// [AccessApplicationNewResponseBrowserVNCApplicationOAuthConfiguration],
@@ -2262,16 +2259,14 @@ type AccessApplicationNewResponse struct {
 	// [[]AccessApplicationNewResponseBrowserRDPApplicationTargetCriterion].
 	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type AccessApplicationNewResponseType `json:"type"`
+	Type ApplicationType `json:"type"`
 	// Determines if users can access this application via a clientless browser
 	// isolation URL. This allows users to access private domains without connecting to
 	// Gateway. The option requires Clientless Browser Isolation to be set up with
 	// policies that allow users of this application.
-	UseClientlessIsolationAppLauncherURL bool `json:"use_clientless_isolation_app_launcher_url"`
-	// This field can have the runtime type of [[]string].
-	UserPopulations interface{}                      `json:"user_populations"`
-	JSON            accessApplicationNewResponseJSON `json:"-"`
-	union           AccessApplicationNewResponseUnion
+	UseClientlessIsolationAppLauncherURL bool                             `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationNewResponseJSON `json:"-"`
+	union                                AccessApplicationNewResponseUnion
 }
 
 // accessApplicationNewResponseJSON contains the JSON metadata for the struct
@@ -2319,7 +2314,6 @@ type accessApplicationNewResponseJSON struct {
 	TargetCriteria                       apijson.Field
 	Type                                 apijson.Field
 	UseClientlessIsolationAppLauncherURL apijson.Field
-	UserPopulations                      apijson.Field
 	raw                                  string
 	ExtraFields                          map[string]apijson.Field
 }
@@ -2341,7 +2335,6 @@ func (r *AccessApplicationNewResponse) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [AccessApplicationNewResponseEndUserApplication],
 // [AccessApplicationNewResponseSelfHostedApplication],
 // [AccessApplicationNewResponseSaaSApplication],
 // [AccessApplicationNewResponseBrowserSSHApplication],
@@ -2359,8 +2352,7 @@ func (r AccessApplicationNewResponse) AsUnion() AccessApplicationNewResponseUnio
 	return r.union
 }
 
-// Union satisfied by [AccessApplicationNewResponseEndUserApplication],
-// [AccessApplicationNewResponseSelfHostedApplication],
+// Union satisfied by [AccessApplicationNewResponseSelfHostedApplication],
 // [AccessApplicationNewResponseSaaSApplication],
 // [AccessApplicationNewResponseBrowserSSHApplication],
 // [AccessApplicationNewResponseBrowserVNCApplication],
@@ -2381,10 +2373,6 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*AccessApplicationNewResponseUnion)(nil)).Elem(),
 		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseEndUserApplication{}),
-		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationNewResponseSelfHostedApplication{}),
@@ -2438,770 +2426,6 @@ func init() {
 			Type:       reflect.TypeOf(AccessApplicationNewResponseMcpServerPortalApplication{}),
 		},
 	)
-}
-
-type AccessApplicationNewResponseEndUserApplication struct {
-	// **Beta:** Optional configuration for managing an OAuth authorization flow
-	// controlled by Access. When set, Access will act as the OAuth authorization
-	// server for this application. Only compatible with OAuth clients that support
-	// [RFC 8707](https://datatracker.ietf.org/doc/html/rfc8707) (Resource Indicators
-	// for OAuth 2.0). This feature is currently in beta.
-	OAuthConfiguration AccessApplicationNewResponseEndUserApplicationOAuthConfiguration `json:"oauth_configuration" api:"required"`
-	// The application type.
-	Type AccessApplicationNewResponseEndUserApplicationType `json:"type" api:"required"`
-	// The single user population associated with this application.
-	UserPopulations []string `json:"user_populations" api:"required"`
-	// UUID.
-	ID string `json:"id"`
-	// The identity providers your users can select when connecting to this
-	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
-	// Audience tag.
-	AUD string `json:"aud"`
-	// Public hostname and Workers destinations secured by Access.
-	Destinations []AccessApplicationNewResponseEndUserApplicationDestination `json:"destinations"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
-	Domain string `json:"domain"`
-	// The name of the application.
-	Name string `json:"name"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	//
-	// Deprecated: deprecated
-	SelfHostedDomains []SelfHostedDomains                                `json:"self_hosted_domains"`
-	JSON              accessApplicationNewResponseEndUserApplicationJSON `json:"-"`
-}
-
-// accessApplicationNewResponseEndUserApplicationJSON contains the JSON metadata
-// for the struct [AccessApplicationNewResponseEndUserApplication]
-type accessApplicationNewResponseEndUserApplicationJSON struct {
-	OAuthConfiguration apijson.Field
-	Type               apijson.Field
-	UserPopulations    apijson.Field
-	ID                 apijson.Field
-	AllowedIdPs        apijson.Field
-	AUD                apijson.Field
-	Destinations       apijson.Field
-	Domain             apijson.Field
-	Name               apijson.Field
-	SelfHostedDomains  apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseEndUserApplication) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseEndUserApplicationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationNewResponseEndUserApplication) implementsAccessApplicationNewResponse() {}
-
-// **Beta:** Optional configuration for managing an OAuth authorization flow
-// controlled by Access. When set, Access will act as the OAuth authorization
-// server for this application. Only compatible with OAuth clients that support
-// [RFC 8707](https://datatracker.ietf.org/doc/html/rfc8707) (Resource Indicators
-// for OAuth 2.0). This feature is currently in beta.
-type AccessApplicationNewResponseEndUserApplicationOAuthConfiguration struct {
-	// Settings for OAuth dynamic client registration.
-	DynamicClientRegistration AccessApplicationNewResponseEndUserApplicationOAuthConfigurationDynamicClientRegistration `json:"dynamic_client_registration"`
-	// Managed OAuth is required for end user applications and cannot be disabled.
-	Enabled AccessApplicationNewResponseEndUserApplicationOAuthConfigurationEnabled `json:"enabled"`
-	// Settings for OAuth grant behavior.
-	Grant AccessApplicationNewResponseEndUserApplicationOAuthConfigurationGrant `json:"grant"`
-	JSON  accessApplicationNewResponseEndUserApplicationOAuthConfigurationJSON  `json:"-"`
-}
-
-// accessApplicationNewResponseEndUserApplicationOAuthConfigurationJSON contains
-// the JSON metadata for the struct
-// [AccessApplicationNewResponseEndUserApplicationOAuthConfiguration]
-type accessApplicationNewResponseEndUserApplicationOAuthConfigurationJSON struct {
-	DynamicClientRegistration apijson.Field
-	Enabled                   apijson.Field
-	Grant                     apijson.Field
-	raw                       string
-	ExtraFields               map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseEndUserApplicationOAuthConfiguration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseEndUserApplicationOAuthConfigurationJSON) RawJSON() string {
-	return r.raw
-}
-
-// Settings for OAuth dynamic client registration.
-type AccessApplicationNewResponseEndUserApplicationOAuthConfigurationDynamicClientRegistration struct {
-	// Allows any client with redirect URIs on localhost.
-	AllowAnyOnLocalhost bool `json:"allow_any_on_localhost"`
-	// Allows any client with redirect URIs on 127.0.0.1.
-	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
-	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
-	// must be explicitly configured and match exactly.
-	AllowedURIs []string `json:"allowed_uris"`
-	// Whether dynamic client registration is enabled.
-	Enabled bool                                                                                          `json:"enabled"`
-	JSON    accessApplicationNewResponseEndUserApplicationOAuthConfigurationDynamicClientRegistrationJSON `json:"-"`
-}
-
-// accessApplicationNewResponseEndUserApplicationOAuthConfigurationDynamicClientRegistrationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseEndUserApplicationOAuthConfigurationDynamicClientRegistration]
-type accessApplicationNewResponseEndUserApplicationOAuthConfigurationDynamicClientRegistrationJSON struct {
-	AllowAnyOnLocalhost apijson.Field
-	AllowAnyOnLoopback  apijson.Field
-	AllowedURIs         apijson.Field
-	Enabled             apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseEndUserApplicationOAuthConfigurationDynamicClientRegistration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseEndUserApplicationOAuthConfigurationDynamicClientRegistrationJSON) RawJSON() string {
-	return r.raw
-}
-
-// Managed OAuth is required for end user applications and cannot be disabled.
-type AccessApplicationNewResponseEndUserApplicationOAuthConfigurationEnabled bool
-
-const (
-	AccessApplicationNewResponseEndUserApplicationOAuthConfigurationEnabledTrue AccessApplicationNewResponseEndUserApplicationOAuthConfigurationEnabled = true
-)
-
-func (r AccessApplicationNewResponseEndUserApplicationOAuthConfigurationEnabled) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseEndUserApplicationOAuthConfigurationEnabledTrue:
-		return true
-	}
-	return false
-}
-
-// Settings for OAuth grant behavior.
-type AccessApplicationNewResponseEndUserApplicationOAuthConfigurationGrant struct {
-	// The lifetime of the access token. Must be in the format `300ms` or `2h45m`.
-	// Valid time units are ns, us (or µs), ms, s, m, h.
-	AccessTokenLifetime string `json:"access_token_lifetime"`
-	// The duration of the OAuth session. Must be in the format `300ms` or `2h45m`.
-	// Valid time units are ns, us (or µs), ms, s, m, h.
-	SessionDuration string                                                                    `json:"session_duration"`
-	JSON            accessApplicationNewResponseEndUserApplicationOAuthConfigurationGrantJSON `json:"-"`
-}
-
-// accessApplicationNewResponseEndUserApplicationOAuthConfigurationGrantJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseEndUserApplicationOAuthConfigurationGrant]
-type accessApplicationNewResponseEndUserApplicationOAuthConfigurationGrantJSON struct {
-	AccessTokenLifetime apijson.Field
-	SessionDuration     apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseEndUserApplicationOAuthConfigurationGrant) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseEndUserApplicationOAuthConfigurationGrantJSON) RawJSON() string {
-	return r.raw
-}
-
-// The application type.
-type AccessApplicationNewResponseEndUserApplicationType string
-
-const (
-	AccessApplicationNewResponseEndUserApplicationTypeSelfHosted     AccessApplicationNewResponseEndUserApplicationType = "self_hosted"
-	AccessApplicationNewResponseEndUserApplicationTypeEndUser        AccessApplicationNewResponseEndUserApplicationType = "end_user"
-	AccessApplicationNewResponseEndUserApplicationTypeSaaS           AccessApplicationNewResponseEndUserApplicationType = "saas"
-	AccessApplicationNewResponseEndUserApplicationTypeSSH            AccessApplicationNewResponseEndUserApplicationType = "ssh"
-	AccessApplicationNewResponseEndUserApplicationTypeVNC            AccessApplicationNewResponseEndUserApplicationType = "vnc"
-	AccessApplicationNewResponseEndUserApplicationTypeAppLauncher    AccessApplicationNewResponseEndUserApplicationType = "app_launcher"
-	AccessApplicationNewResponseEndUserApplicationTypeWARP           AccessApplicationNewResponseEndUserApplicationType = "warp"
-	AccessApplicationNewResponseEndUserApplicationTypeBISO           AccessApplicationNewResponseEndUserApplicationType = "biso"
-	AccessApplicationNewResponseEndUserApplicationTypeBookmark       AccessApplicationNewResponseEndUserApplicationType = "bookmark"
-	AccessApplicationNewResponseEndUserApplicationTypeDashSSO        AccessApplicationNewResponseEndUserApplicationType = "dash_sso"
-	AccessApplicationNewResponseEndUserApplicationTypeInfrastructure AccessApplicationNewResponseEndUserApplicationType = "infrastructure"
-	AccessApplicationNewResponseEndUserApplicationTypeRDP            AccessApplicationNewResponseEndUserApplicationType = "rdp"
-	AccessApplicationNewResponseEndUserApplicationTypeMcp            AccessApplicationNewResponseEndUserApplicationType = "mcp"
-	AccessApplicationNewResponseEndUserApplicationTypeMcpPortal      AccessApplicationNewResponseEndUserApplicationType = "mcp_portal"
-	AccessApplicationNewResponseEndUserApplicationTypeProxyEndpoint  AccessApplicationNewResponseEndUserApplicationType = "proxy_endpoint"
-)
-
-func (r AccessApplicationNewResponseEndUserApplicationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseEndUserApplicationTypeSelfHosted, AccessApplicationNewResponseEndUserApplicationTypeEndUser, AccessApplicationNewResponseEndUserApplicationTypeSaaS, AccessApplicationNewResponseEndUserApplicationTypeSSH, AccessApplicationNewResponseEndUserApplicationTypeVNC, AccessApplicationNewResponseEndUserApplicationTypeAppLauncher, AccessApplicationNewResponseEndUserApplicationTypeWARP, AccessApplicationNewResponseEndUserApplicationTypeBISO, AccessApplicationNewResponseEndUserApplicationTypeBookmark, AccessApplicationNewResponseEndUserApplicationTypeDashSSO, AccessApplicationNewResponseEndUserApplicationTypeInfrastructure, AccessApplicationNewResponseEndUserApplicationTypeRDP, AccessApplicationNewResponseEndUserApplicationTypeMcp, AccessApplicationNewResponseEndUserApplicationTypeMcpPortal, AccessApplicationNewResponseEndUserApplicationTypeProxyEndpoint:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewResponseEndUserApplicationDestination struct {
-	// This field can have the runtime type of
-	// [[]AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride],
-	// [[]AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride],
-	// [[]AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride],
-	// [[]AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride],
-	// [[]AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride].
-	Overrides interface{}                                                    `json:"overrides"`
-	Type      AccessApplicationNewResponseEndUserApplicationDestinationsType `json:"type"`
-	// The public hostname and optional path to secure.
-	URI string `json:"uri"`
-	// The ID of the Cloudflare Worker to secure.
-	WorkerID string                                                        `json:"worker_id"`
-	JSON     accessApplicationNewResponseEndUserApplicationDestinationJSON `json:"-"`
-	union    AccessApplicationNewResponseEndUserApplicationDestinationsUnion
-}
-
-// accessApplicationNewResponseEndUserApplicationDestinationJSON contains the JSON
-// metadata for the struct
-// [AccessApplicationNewResponseEndUserApplicationDestination]
-type accessApplicationNewResponseEndUserApplicationDestinationJSON struct {
-	Overrides   apijson.Field
-	Type        apijson.Field
-	URI         apijson.Field
-	WorkerID    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r accessApplicationNewResponseEndUserApplicationDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationNewResponseEndUserApplicationDestination) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationNewResponseEndUserApplicationDestination{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationNewResponseEndUserApplicationDestinationsUnion] interface
-// which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestination],
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination],
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination],
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination],
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination].
-func (r AccessApplicationNewResponseEndUserApplicationDestination) AsUnion() AccessApplicationNewResponseEndUserApplicationDestinationsUnion {
-	return r.union
-}
-
-// Union satisfied by
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestination],
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination],
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination],
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination]
-// or
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination].
-type AccessApplicationNewResponseEndUserApplicationDestinationsUnion interface {
-	implementsAccessApplicationNewResponseEndUserApplicationDestination()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationNewResponseEndUserApplicationDestinationsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestination{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination{}),
-		},
-	)
-}
-
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestination struct {
-	// The public hostname and optional path to secure.
-	URI string `json:"uri" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride `json:"overrides"`
-	Type      AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationType       `json:"type"`
-	JSON      accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationJSON       `json:"-"`
-}
-
-// accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestination]
-type accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationJSON struct {
-	URI         apijson.Field
-	Overrides   apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestination) implementsAccessApplicationNewResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                               `json:"path_pattern" api:"required"`
-	JSON        accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride]
-type accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehavior string
-
-const (
-	AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehaviorPublic AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationType string
-
-const (
-	AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationTypePublic AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationType = "public"
-)
-
-func (r AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationTypePublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination struct {
-	Type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationType `json:"type" api:"required"`
-	// The ID of the Cloudflare Worker to secure.
-	WorkerID string `json:"worker_id" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride `json:"overrides"`
-	JSON      accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationJSON       `json:"-"`
-}
-
-// accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination]
-type accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationJSON struct {
-	Type        apijson.Field
-	WorkerID    apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination) implementsAccessApplicationNewResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationType string
-
-const (
-	AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationTypeWorker AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationType = "worker"
-)
-
-func (r AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationTypeWorker:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                               `json:"path_pattern" api:"required"`
-	JSON        accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride]
-type accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehavior string
-
-const (
-	AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehaviorPublic AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination struct {
-	Type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationType `json:"type" api:"required"`
-	// The ID of the Cloudflare Worker whose previews to secure.
-	WorkerID string `json:"worker_id" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride `json:"overrides"`
-	JSON      accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationJSON       `json:"-"`
-}
-
-// accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination]
-type accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationJSON struct {
-	Type        apijson.Field
-	WorkerID    apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination) implementsAccessApplicationNewResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationType string
-
-const (
-	AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationTypePreviewWorker AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationType = "preview_worker"
-)
-
-func (r AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationTypePreviewWorker:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                                      `json:"path_pattern" api:"required"`
-	JSON        accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride]
-type accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior string
-
-const (
-	AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination struct {
-	Type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationType `json:"type" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride `json:"overrides"`
-	JSON      accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationJSON       `json:"-"`
-}
-
-// accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination]
-type accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationJSON struct {
-	Type        apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination) implementsAccessApplicationNewResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationType string
-
-const (
-	AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationTypeAllWorkers AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationType = "all_workers"
-)
-
-func (r AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationTypeAllWorkers:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                                   `json:"path_pattern" api:"required"`
-	JSON        accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride]
-type accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior string
-
-const (
-	AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehaviorPublic AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination struct {
-	Type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride `json:"overrides"`
-	JSON      accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationJSON       `json:"-"`
-}
-
-// accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination]
-type accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationJSON struct {
-	Type        apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination) implementsAccessApplicationNewResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationType string
-
-const (
-	AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationType = "all_preview_workers"
-)
-
-func (r AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationTypeAllPreviewWorkers:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                                          `json:"path_pattern" api:"required"`
-	JSON        accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride]
-type accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior string
-
-const (
-	AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewResponseEndUserApplicationDestinationsType string
-
-const (
-	AccessApplicationNewResponseEndUserApplicationDestinationsTypePublic            AccessApplicationNewResponseEndUserApplicationDestinationsType = "public"
-	AccessApplicationNewResponseEndUserApplicationDestinationsTypeWorker            AccessApplicationNewResponseEndUserApplicationDestinationsType = "worker"
-	AccessApplicationNewResponseEndUserApplicationDestinationsTypePreviewWorker     AccessApplicationNewResponseEndUserApplicationDestinationsType = "preview_worker"
-	AccessApplicationNewResponseEndUserApplicationDestinationsTypeAllWorkers        AccessApplicationNewResponseEndUserApplicationDestinationsType = "all_workers"
-	AccessApplicationNewResponseEndUserApplicationDestinationsTypeAllPreviewWorkers AccessApplicationNewResponseEndUserApplicationDestinationsType = "all_preview_workers"
-)
-
-func (r AccessApplicationNewResponseEndUserApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseEndUserApplicationDestinationsTypePublic, AccessApplicationNewResponseEndUserApplicationDestinationsTypeWorker, AccessApplicationNewResponseEndUserApplicationDestinationsTypePreviewWorker, AccessApplicationNewResponseEndUserApplicationDestinationsTypeAllWorkers, AccessApplicationNewResponseEndUserApplicationDestinationsTypeAllPreviewWorkers:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationNewResponseSelfHostedApplication struct {
@@ -5702,7 +4926,6 @@ type AccessApplicationNewResponseBrowserSSHApplicationType string
 
 const (
 	AccessApplicationNewResponseBrowserSSHApplicationTypeSelfHosted     AccessApplicationNewResponseBrowserSSHApplicationType = "self_hosted"
-	AccessApplicationNewResponseBrowserSSHApplicationTypeEndUser        AccessApplicationNewResponseBrowserSSHApplicationType = "end_user"
 	AccessApplicationNewResponseBrowserSSHApplicationTypeSaaS           AccessApplicationNewResponseBrowserSSHApplicationType = "saas"
 	AccessApplicationNewResponseBrowserSSHApplicationTypeSSH            AccessApplicationNewResponseBrowserSSHApplicationType = "ssh"
 	AccessApplicationNewResponseBrowserSSHApplicationTypeVNC            AccessApplicationNewResponseBrowserSSHApplicationType = "vnc"
@@ -5720,7 +4943,7 @@ const (
 
 func (r AccessApplicationNewResponseBrowserSSHApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationNewResponseBrowserSSHApplicationTypeEndUser, AccessApplicationNewResponseBrowserSSHApplicationTypeSaaS, AccessApplicationNewResponseBrowserSSHApplicationTypeSSH, AccessApplicationNewResponseBrowserSSHApplicationTypeVNC, AccessApplicationNewResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationNewResponseBrowserSSHApplicationTypeWARP, AccessApplicationNewResponseBrowserSSHApplicationTypeBISO, AccessApplicationNewResponseBrowserSSHApplicationTypeBookmark, AccessApplicationNewResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationNewResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationNewResponseBrowserSSHApplicationTypeRDP, AccessApplicationNewResponseBrowserSSHApplicationTypeMcp, AccessApplicationNewResponseBrowserSSHApplicationTypeMcpPortal, AccessApplicationNewResponseBrowserSSHApplicationTypeProxyEndpoint:
+	case AccessApplicationNewResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationNewResponseBrowserSSHApplicationTypeSaaS, AccessApplicationNewResponseBrowserSSHApplicationTypeSSH, AccessApplicationNewResponseBrowserSSHApplicationTypeVNC, AccessApplicationNewResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationNewResponseBrowserSSHApplicationTypeWARP, AccessApplicationNewResponseBrowserSSHApplicationTypeBISO, AccessApplicationNewResponseBrowserSSHApplicationTypeBookmark, AccessApplicationNewResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationNewResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationNewResponseBrowserSSHApplicationTypeRDP, AccessApplicationNewResponseBrowserSSHApplicationTypeMcp, AccessApplicationNewResponseBrowserSSHApplicationTypeMcpPortal, AccessApplicationNewResponseBrowserSSHApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -7326,7 +6549,6 @@ type AccessApplicationNewResponseBrowserVNCApplicationType string
 
 const (
 	AccessApplicationNewResponseBrowserVNCApplicationTypeSelfHosted     AccessApplicationNewResponseBrowserVNCApplicationType = "self_hosted"
-	AccessApplicationNewResponseBrowserVNCApplicationTypeEndUser        AccessApplicationNewResponseBrowserVNCApplicationType = "end_user"
 	AccessApplicationNewResponseBrowserVNCApplicationTypeSaaS           AccessApplicationNewResponseBrowserVNCApplicationType = "saas"
 	AccessApplicationNewResponseBrowserVNCApplicationTypeSSH            AccessApplicationNewResponseBrowserVNCApplicationType = "ssh"
 	AccessApplicationNewResponseBrowserVNCApplicationTypeVNC            AccessApplicationNewResponseBrowserVNCApplicationType = "vnc"
@@ -7344,7 +6566,7 @@ const (
 
 func (r AccessApplicationNewResponseBrowserVNCApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationNewResponseBrowserVNCApplicationTypeEndUser, AccessApplicationNewResponseBrowserVNCApplicationTypeSaaS, AccessApplicationNewResponseBrowserVNCApplicationTypeSSH, AccessApplicationNewResponseBrowserVNCApplicationTypeVNC, AccessApplicationNewResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationNewResponseBrowserVNCApplicationTypeWARP, AccessApplicationNewResponseBrowserVNCApplicationTypeBISO, AccessApplicationNewResponseBrowserVNCApplicationTypeBookmark, AccessApplicationNewResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationNewResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationNewResponseBrowserVNCApplicationTypeRDP, AccessApplicationNewResponseBrowserVNCApplicationTypeMcp, AccessApplicationNewResponseBrowserVNCApplicationTypeMcpPortal, AccessApplicationNewResponseBrowserVNCApplicationTypeProxyEndpoint:
+	case AccessApplicationNewResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationNewResponseBrowserVNCApplicationTypeSaaS, AccessApplicationNewResponseBrowserVNCApplicationTypeSSH, AccessApplicationNewResponseBrowserVNCApplicationTypeVNC, AccessApplicationNewResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationNewResponseBrowserVNCApplicationTypeWARP, AccessApplicationNewResponseBrowserVNCApplicationTypeBISO, AccessApplicationNewResponseBrowserVNCApplicationTypeBookmark, AccessApplicationNewResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationNewResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationNewResponseBrowserVNCApplicationTypeRDP, AccessApplicationNewResponseBrowserVNCApplicationTypeMcp, AccessApplicationNewResponseBrowserVNCApplicationTypeMcpPortal, AccessApplicationNewResponseBrowserVNCApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -8871,7 +8093,6 @@ type AccessApplicationNewResponseAppLauncherApplicationType string
 
 const (
 	AccessApplicationNewResponseAppLauncherApplicationTypeSelfHosted     AccessApplicationNewResponseAppLauncherApplicationType = "self_hosted"
-	AccessApplicationNewResponseAppLauncherApplicationTypeEndUser        AccessApplicationNewResponseAppLauncherApplicationType = "end_user"
 	AccessApplicationNewResponseAppLauncherApplicationTypeSaaS           AccessApplicationNewResponseAppLauncherApplicationType = "saas"
 	AccessApplicationNewResponseAppLauncherApplicationTypeSSH            AccessApplicationNewResponseAppLauncherApplicationType = "ssh"
 	AccessApplicationNewResponseAppLauncherApplicationTypeVNC            AccessApplicationNewResponseAppLauncherApplicationType = "vnc"
@@ -8889,7 +8110,7 @@ const (
 
 func (r AccessApplicationNewResponseAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationNewResponseAppLauncherApplicationTypeEndUser, AccessApplicationNewResponseAppLauncherApplicationTypeSaaS, AccessApplicationNewResponseAppLauncherApplicationTypeSSH, AccessApplicationNewResponseAppLauncherApplicationTypeVNC, AccessApplicationNewResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationNewResponseAppLauncherApplicationTypeWARP, AccessApplicationNewResponseAppLauncherApplicationTypeBISO, AccessApplicationNewResponseAppLauncherApplicationTypeBookmark, AccessApplicationNewResponseAppLauncherApplicationTypeDashSSO, AccessApplicationNewResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationNewResponseAppLauncherApplicationTypeRDP, AccessApplicationNewResponseAppLauncherApplicationTypeMcp, AccessApplicationNewResponseAppLauncherApplicationTypeMcpPortal, AccessApplicationNewResponseAppLauncherApplicationTypeProxyEndpoint:
+	case AccessApplicationNewResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationNewResponseAppLauncherApplicationTypeSaaS, AccessApplicationNewResponseAppLauncherApplicationTypeSSH, AccessApplicationNewResponseAppLauncherApplicationTypeVNC, AccessApplicationNewResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationNewResponseAppLauncherApplicationTypeWARP, AccessApplicationNewResponseAppLauncherApplicationTypeBISO, AccessApplicationNewResponseAppLauncherApplicationTypeBookmark, AccessApplicationNewResponseAppLauncherApplicationTypeDashSSO, AccessApplicationNewResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationNewResponseAppLauncherApplicationTypeRDP, AccessApplicationNewResponseAppLauncherApplicationTypeMcp, AccessApplicationNewResponseAppLauncherApplicationTypeMcpPortal, AccessApplicationNewResponseAppLauncherApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -15545,35 +14766,6 @@ func (r AccessApplicationNewResponseMcpServerPortalApplicationSCIMConfigAuthenti
 	return false
 }
 
-// The application type.
-type AccessApplicationNewResponseType string
-
-const (
-	AccessApplicationNewResponseTypeSelfHosted     AccessApplicationNewResponseType = "self_hosted"
-	AccessApplicationNewResponseTypeEndUser        AccessApplicationNewResponseType = "end_user"
-	AccessApplicationNewResponseTypeSaaS           AccessApplicationNewResponseType = "saas"
-	AccessApplicationNewResponseTypeSSH            AccessApplicationNewResponseType = "ssh"
-	AccessApplicationNewResponseTypeVNC            AccessApplicationNewResponseType = "vnc"
-	AccessApplicationNewResponseTypeAppLauncher    AccessApplicationNewResponseType = "app_launcher"
-	AccessApplicationNewResponseTypeWARP           AccessApplicationNewResponseType = "warp"
-	AccessApplicationNewResponseTypeBISO           AccessApplicationNewResponseType = "biso"
-	AccessApplicationNewResponseTypeBookmark       AccessApplicationNewResponseType = "bookmark"
-	AccessApplicationNewResponseTypeDashSSO        AccessApplicationNewResponseType = "dash_sso"
-	AccessApplicationNewResponseTypeInfrastructure AccessApplicationNewResponseType = "infrastructure"
-	AccessApplicationNewResponseTypeRDP            AccessApplicationNewResponseType = "rdp"
-	AccessApplicationNewResponseTypeMcp            AccessApplicationNewResponseType = "mcp"
-	AccessApplicationNewResponseTypeMcpPortal      AccessApplicationNewResponseType = "mcp_portal"
-	AccessApplicationNewResponseTypeProxyEndpoint  AccessApplicationNewResponseType = "proxy_endpoint"
-)
-
-func (r AccessApplicationNewResponseType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseTypeSelfHosted, AccessApplicationNewResponseTypeEndUser, AccessApplicationNewResponseTypeSaaS, AccessApplicationNewResponseTypeSSH, AccessApplicationNewResponseTypeVNC, AccessApplicationNewResponseTypeAppLauncher, AccessApplicationNewResponseTypeWARP, AccessApplicationNewResponseTypeBISO, AccessApplicationNewResponseTypeBookmark, AccessApplicationNewResponseTypeDashSSO, AccessApplicationNewResponseTypeInfrastructure, AccessApplicationNewResponseTypeRDP, AccessApplicationNewResponseTypeMcp, AccessApplicationNewResponseTypeMcpPortal, AccessApplicationNewResponseTypeProxyEndpoint:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationUpdateResponse struct {
 	// UUID.
 	ID string `json:"id"`
@@ -15610,7 +14802,6 @@ type AccessApplicationUpdateResponse struct {
 	// This field can have the runtime type of [[]string].
 	CustomPages interface{} `json:"custom_pages"`
 	// This field can have the runtime type of
-	// [[]AccessApplicationUpdateResponseEndUserApplicationDestination],
 	// [[]AccessApplicationUpdateResponseSelfHostedApplicationDestination],
 	// [[]AccessApplicationUpdateResponseBrowserSSHApplicationDestination],
 	// [[]AccessApplicationUpdateResponseBrowserVNCApplicationDestination],
@@ -15652,7 +14843,6 @@ type AccessApplicationUpdateResponse struct {
 	// The name of the application.
 	Name string `json:"name"`
 	// This field can have the runtime type of
-	// [AccessApplicationUpdateResponseEndUserApplicationOAuthConfiguration],
 	// [AccessApplicationUpdateResponseSelfHostedApplicationOAuthConfiguration],
 	// [AccessApplicationUpdateResponseBrowserSSHApplicationOAuthConfiguration],
 	// [AccessApplicationUpdateResponseBrowserVNCApplicationOAuthConfiguration],
@@ -15723,16 +14913,14 @@ type AccessApplicationUpdateResponse struct {
 	// [[]AccessApplicationUpdateResponseBrowserRDPApplicationTargetCriterion].
 	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type AccessApplicationUpdateResponseType `json:"type"`
+	Type ApplicationType `json:"type"`
 	// Determines if users can access this application via a clientless browser
 	// isolation URL. This allows users to access private domains without connecting to
 	// Gateway. The option requires Clientless Browser Isolation to be set up with
 	// policies that allow users of this application.
-	UseClientlessIsolationAppLauncherURL bool `json:"use_clientless_isolation_app_launcher_url"`
-	// This field can have the runtime type of [[]string].
-	UserPopulations interface{}                         `json:"user_populations"`
-	JSON            accessApplicationUpdateResponseJSON `json:"-"`
-	union           AccessApplicationUpdateResponseUnion
+	UseClientlessIsolationAppLauncherURL bool                                `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationUpdateResponseJSON `json:"-"`
+	union                                AccessApplicationUpdateResponseUnion
 }
 
 // accessApplicationUpdateResponseJSON contains the JSON metadata for the struct
@@ -15780,7 +14968,6 @@ type accessApplicationUpdateResponseJSON struct {
 	TargetCriteria                       apijson.Field
 	Type                                 apijson.Field
 	UseClientlessIsolationAppLauncherURL apijson.Field
-	UserPopulations                      apijson.Field
 	raw                                  string
 	ExtraFields                          map[string]apijson.Field
 }
@@ -15802,7 +14989,6 @@ func (r *AccessApplicationUpdateResponse) UnmarshalJSON(data []byte) (err error)
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [AccessApplicationUpdateResponseEndUserApplication],
 // [AccessApplicationUpdateResponseSelfHostedApplication],
 // [AccessApplicationUpdateResponseSaaSApplication],
 // [AccessApplicationUpdateResponseBrowserSSHApplication],
@@ -15820,8 +15006,7 @@ func (r AccessApplicationUpdateResponse) AsUnion() AccessApplicationUpdateRespon
 	return r.union
 }
 
-// Union satisfied by [AccessApplicationUpdateResponseEndUserApplication],
-// [AccessApplicationUpdateResponseSelfHostedApplication],
+// Union satisfied by [AccessApplicationUpdateResponseSelfHostedApplication],
 // [AccessApplicationUpdateResponseSaaSApplication],
 // [AccessApplicationUpdateResponseBrowserSSHApplication],
 // [AccessApplicationUpdateResponseBrowserVNCApplication],
@@ -15842,10 +15027,6 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*AccessApplicationUpdateResponseUnion)(nil)).Elem(),
 		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseEndUserApplication{}),
-		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationUpdateResponseSelfHostedApplication{}),
@@ -15899,771 +15080,6 @@ func init() {
 			Type:       reflect.TypeOf(AccessApplicationUpdateResponseMcpServerPortalApplication{}),
 		},
 	)
-}
-
-type AccessApplicationUpdateResponseEndUserApplication struct {
-	// **Beta:** Optional configuration for managing an OAuth authorization flow
-	// controlled by Access. When set, Access will act as the OAuth authorization
-	// server for this application. Only compatible with OAuth clients that support
-	// [RFC 8707](https://datatracker.ietf.org/doc/html/rfc8707) (Resource Indicators
-	// for OAuth 2.0). This feature is currently in beta.
-	OAuthConfiguration AccessApplicationUpdateResponseEndUserApplicationOAuthConfiguration `json:"oauth_configuration" api:"required"`
-	// The application type.
-	Type AccessApplicationUpdateResponseEndUserApplicationType `json:"type" api:"required"`
-	// The single user population associated with this application.
-	UserPopulations []string `json:"user_populations" api:"required"`
-	// UUID.
-	ID string `json:"id"`
-	// The identity providers your users can select when connecting to this
-	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
-	// Audience tag.
-	AUD string `json:"aud"`
-	// Public hostname and Workers destinations secured by Access.
-	Destinations []AccessApplicationUpdateResponseEndUserApplicationDestination `json:"destinations"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
-	Domain string `json:"domain"`
-	// The name of the application.
-	Name string `json:"name"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	//
-	// Deprecated: deprecated
-	SelfHostedDomains []SelfHostedDomains                                   `json:"self_hosted_domains"`
-	JSON              accessApplicationUpdateResponseEndUserApplicationJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseEndUserApplicationJSON contains the JSON metadata
-// for the struct [AccessApplicationUpdateResponseEndUserApplication]
-type accessApplicationUpdateResponseEndUserApplicationJSON struct {
-	OAuthConfiguration apijson.Field
-	Type               apijson.Field
-	UserPopulations    apijson.Field
-	ID                 apijson.Field
-	AllowedIdPs        apijson.Field
-	AUD                apijson.Field
-	Destinations       apijson.Field
-	Domain             apijson.Field
-	Name               apijson.Field
-	SelfHostedDomains  apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseEndUserApplication) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseEndUserApplicationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationUpdateResponseEndUserApplication) implementsAccessApplicationUpdateResponse() {
-}
-
-// **Beta:** Optional configuration for managing an OAuth authorization flow
-// controlled by Access. When set, Access will act as the OAuth authorization
-// server for this application. Only compatible with OAuth clients that support
-// [RFC 8707](https://datatracker.ietf.org/doc/html/rfc8707) (Resource Indicators
-// for OAuth 2.0). This feature is currently in beta.
-type AccessApplicationUpdateResponseEndUserApplicationOAuthConfiguration struct {
-	// Settings for OAuth dynamic client registration.
-	DynamicClientRegistration AccessApplicationUpdateResponseEndUserApplicationOAuthConfigurationDynamicClientRegistration `json:"dynamic_client_registration"`
-	// Managed OAuth is required for end user applications and cannot be disabled.
-	Enabled AccessApplicationUpdateResponseEndUserApplicationOAuthConfigurationEnabled `json:"enabled"`
-	// Settings for OAuth grant behavior.
-	Grant AccessApplicationUpdateResponseEndUserApplicationOAuthConfigurationGrant `json:"grant"`
-	JSON  accessApplicationUpdateResponseEndUserApplicationOAuthConfigurationJSON  `json:"-"`
-}
-
-// accessApplicationUpdateResponseEndUserApplicationOAuthConfigurationJSON contains
-// the JSON metadata for the struct
-// [AccessApplicationUpdateResponseEndUserApplicationOAuthConfiguration]
-type accessApplicationUpdateResponseEndUserApplicationOAuthConfigurationJSON struct {
-	DynamicClientRegistration apijson.Field
-	Enabled                   apijson.Field
-	Grant                     apijson.Field
-	raw                       string
-	ExtraFields               map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseEndUserApplicationOAuthConfiguration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseEndUserApplicationOAuthConfigurationJSON) RawJSON() string {
-	return r.raw
-}
-
-// Settings for OAuth dynamic client registration.
-type AccessApplicationUpdateResponseEndUserApplicationOAuthConfigurationDynamicClientRegistration struct {
-	// Allows any client with redirect URIs on localhost.
-	AllowAnyOnLocalhost bool `json:"allow_any_on_localhost"`
-	// Allows any client with redirect URIs on 127.0.0.1.
-	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
-	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
-	// must be explicitly configured and match exactly.
-	AllowedURIs []string `json:"allowed_uris"`
-	// Whether dynamic client registration is enabled.
-	Enabled bool                                                                                             `json:"enabled"`
-	JSON    accessApplicationUpdateResponseEndUserApplicationOAuthConfigurationDynamicClientRegistrationJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseEndUserApplicationOAuthConfigurationDynamicClientRegistrationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseEndUserApplicationOAuthConfigurationDynamicClientRegistration]
-type accessApplicationUpdateResponseEndUserApplicationOAuthConfigurationDynamicClientRegistrationJSON struct {
-	AllowAnyOnLocalhost apijson.Field
-	AllowAnyOnLoopback  apijson.Field
-	AllowedURIs         apijson.Field
-	Enabled             apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseEndUserApplicationOAuthConfigurationDynamicClientRegistration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseEndUserApplicationOAuthConfigurationDynamicClientRegistrationJSON) RawJSON() string {
-	return r.raw
-}
-
-// Managed OAuth is required for end user applications and cannot be disabled.
-type AccessApplicationUpdateResponseEndUserApplicationOAuthConfigurationEnabled bool
-
-const (
-	AccessApplicationUpdateResponseEndUserApplicationOAuthConfigurationEnabledTrue AccessApplicationUpdateResponseEndUserApplicationOAuthConfigurationEnabled = true
-)
-
-func (r AccessApplicationUpdateResponseEndUserApplicationOAuthConfigurationEnabled) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseEndUserApplicationOAuthConfigurationEnabledTrue:
-		return true
-	}
-	return false
-}
-
-// Settings for OAuth grant behavior.
-type AccessApplicationUpdateResponseEndUserApplicationOAuthConfigurationGrant struct {
-	// The lifetime of the access token. Must be in the format `300ms` or `2h45m`.
-	// Valid time units are ns, us (or µs), ms, s, m, h.
-	AccessTokenLifetime string `json:"access_token_lifetime"`
-	// The duration of the OAuth session. Must be in the format `300ms` or `2h45m`.
-	// Valid time units are ns, us (or µs), ms, s, m, h.
-	SessionDuration string                                                                       `json:"session_duration"`
-	JSON            accessApplicationUpdateResponseEndUserApplicationOAuthConfigurationGrantJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseEndUserApplicationOAuthConfigurationGrantJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseEndUserApplicationOAuthConfigurationGrant]
-type accessApplicationUpdateResponseEndUserApplicationOAuthConfigurationGrantJSON struct {
-	AccessTokenLifetime apijson.Field
-	SessionDuration     apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseEndUserApplicationOAuthConfigurationGrant) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseEndUserApplicationOAuthConfigurationGrantJSON) RawJSON() string {
-	return r.raw
-}
-
-// The application type.
-type AccessApplicationUpdateResponseEndUserApplicationType string
-
-const (
-	AccessApplicationUpdateResponseEndUserApplicationTypeSelfHosted     AccessApplicationUpdateResponseEndUserApplicationType = "self_hosted"
-	AccessApplicationUpdateResponseEndUserApplicationTypeEndUser        AccessApplicationUpdateResponseEndUserApplicationType = "end_user"
-	AccessApplicationUpdateResponseEndUserApplicationTypeSaaS           AccessApplicationUpdateResponseEndUserApplicationType = "saas"
-	AccessApplicationUpdateResponseEndUserApplicationTypeSSH            AccessApplicationUpdateResponseEndUserApplicationType = "ssh"
-	AccessApplicationUpdateResponseEndUserApplicationTypeVNC            AccessApplicationUpdateResponseEndUserApplicationType = "vnc"
-	AccessApplicationUpdateResponseEndUserApplicationTypeAppLauncher    AccessApplicationUpdateResponseEndUserApplicationType = "app_launcher"
-	AccessApplicationUpdateResponseEndUserApplicationTypeWARP           AccessApplicationUpdateResponseEndUserApplicationType = "warp"
-	AccessApplicationUpdateResponseEndUserApplicationTypeBISO           AccessApplicationUpdateResponseEndUserApplicationType = "biso"
-	AccessApplicationUpdateResponseEndUserApplicationTypeBookmark       AccessApplicationUpdateResponseEndUserApplicationType = "bookmark"
-	AccessApplicationUpdateResponseEndUserApplicationTypeDashSSO        AccessApplicationUpdateResponseEndUserApplicationType = "dash_sso"
-	AccessApplicationUpdateResponseEndUserApplicationTypeInfrastructure AccessApplicationUpdateResponseEndUserApplicationType = "infrastructure"
-	AccessApplicationUpdateResponseEndUserApplicationTypeRDP            AccessApplicationUpdateResponseEndUserApplicationType = "rdp"
-	AccessApplicationUpdateResponseEndUserApplicationTypeMcp            AccessApplicationUpdateResponseEndUserApplicationType = "mcp"
-	AccessApplicationUpdateResponseEndUserApplicationTypeMcpPortal      AccessApplicationUpdateResponseEndUserApplicationType = "mcp_portal"
-	AccessApplicationUpdateResponseEndUserApplicationTypeProxyEndpoint  AccessApplicationUpdateResponseEndUserApplicationType = "proxy_endpoint"
-)
-
-func (r AccessApplicationUpdateResponseEndUserApplicationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseEndUserApplicationTypeSelfHosted, AccessApplicationUpdateResponseEndUserApplicationTypeEndUser, AccessApplicationUpdateResponseEndUserApplicationTypeSaaS, AccessApplicationUpdateResponseEndUserApplicationTypeSSH, AccessApplicationUpdateResponseEndUserApplicationTypeVNC, AccessApplicationUpdateResponseEndUserApplicationTypeAppLauncher, AccessApplicationUpdateResponseEndUserApplicationTypeWARP, AccessApplicationUpdateResponseEndUserApplicationTypeBISO, AccessApplicationUpdateResponseEndUserApplicationTypeBookmark, AccessApplicationUpdateResponseEndUserApplicationTypeDashSSO, AccessApplicationUpdateResponseEndUserApplicationTypeInfrastructure, AccessApplicationUpdateResponseEndUserApplicationTypeRDP, AccessApplicationUpdateResponseEndUserApplicationTypeMcp, AccessApplicationUpdateResponseEndUserApplicationTypeMcpPortal, AccessApplicationUpdateResponseEndUserApplicationTypeProxyEndpoint:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateResponseEndUserApplicationDestination struct {
-	// This field can have the runtime type of
-	// [[]AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride],
-	// [[]AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride],
-	// [[]AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride],
-	// [[]AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride],
-	// [[]AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride].
-	Overrides interface{}                                                       `json:"overrides"`
-	Type      AccessApplicationUpdateResponseEndUserApplicationDestinationsType `json:"type"`
-	// The public hostname and optional path to secure.
-	URI string `json:"uri"`
-	// The ID of the Cloudflare Worker to secure.
-	WorkerID string                                                           `json:"worker_id"`
-	JSON     accessApplicationUpdateResponseEndUserApplicationDestinationJSON `json:"-"`
-	union    AccessApplicationUpdateResponseEndUserApplicationDestinationsUnion
-}
-
-// accessApplicationUpdateResponseEndUserApplicationDestinationJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationUpdateResponseEndUserApplicationDestination]
-type accessApplicationUpdateResponseEndUserApplicationDestinationJSON struct {
-	Overrides   apijson.Field
-	Type        apijson.Field
-	URI         apijson.Field
-	WorkerID    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r accessApplicationUpdateResponseEndUserApplicationDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationUpdateResponseEndUserApplicationDestination) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationUpdateResponseEndUserApplicationDestination{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsUnion] interface
-// which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestination],
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination],
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination],
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination],
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination].
-func (r AccessApplicationUpdateResponseEndUserApplicationDestination) AsUnion() AccessApplicationUpdateResponseEndUserApplicationDestinationsUnion {
-	return r.union
-}
-
-// Union satisfied by
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestination],
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination],
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination],
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination]
-// or
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination].
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsUnion interface {
-	implementsAccessApplicationUpdateResponseEndUserApplicationDestination()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationUpdateResponseEndUserApplicationDestinationsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestination{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination{}),
-		},
-	)
-}
-
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestination struct {
-	// The public hostname and optional path to secure.
-	URI string `json:"uri" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride `json:"overrides"`
-	Type      AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationType       `json:"type"`
-	JSON      accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationJSON       `json:"-"`
-}
-
-// accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestination]
-type accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationJSON struct {
-	URI         apijson.Field
-	Overrides   apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestination) implementsAccessApplicationUpdateResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                                  `json:"path_pattern" api:"required"`
-	JSON        accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride]
-type accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehavior string
-
-const (
-	AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationType string
-
-const (
-	AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationTypePublic AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationType = "public"
-)
-
-func (r AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationTypePublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination struct {
-	Type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationType `json:"type" api:"required"`
-	// The ID of the Cloudflare Worker to secure.
-	WorkerID string `json:"worker_id" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride `json:"overrides"`
-	JSON      accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationJSON       `json:"-"`
-}
-
-// accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination]
-type accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationJSON struct {
-	Type        apijson.Field
-	WorkerID    apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination) implementsAccessApplicationUpdateResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationType string
-
-const (
-	AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationTypeWorker AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationType = "worker"
-)
-
-func (r AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationTypeWorker:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                                  `json:"path_pattern" api:"required"`
-	JSON        accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride]
-type accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehavior string
-
-const (
-	AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination struct {
-	Type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationType `json:"type" api:"required"`
-	// The ID of the Cloudflare Worker whose previews to secure.
-	WorkerID string `json:"worker_id" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride `json:"overrides"`
-	JSON      accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationJSON       `json:"-"`
-}
-
-// accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination]
-type accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationJSON struct {
-	Type        apijson.Field
-	WorkerID    apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination) implementsAccessApplicationUpdateResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationType string
-
-const (
-	AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationTypePreviewWorker AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationType = "preview_worker"
-)
-
-func (r AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationTypePreviewWorker:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                                         `json:"path_pattern" api:"required"`
-	JSON        accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride]
-type accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior string
-
-const (
-	AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination struct {
-	Type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationType `json:"type" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride `json:"overrides"`
-	JSON      accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationJSON       `json:"-"`
-}
-
-// accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination]
-type accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationJSON struct {
-	Type        apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination) implementsAccessApplicationUpdateResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationType string
-
-const (
-	AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationTypeAllWorkers AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationType = "all_workers"
-)
-
-func (r AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationTypeAllWorkers:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                                      `json:"path_pattern" api:"required"`
-	JSON        accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride]
-type accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior string
-
-const (
-	AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination struct {
-	Type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride `json:"overrides"`
-	JSON      accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationJSON       `json:"-"`
-}
-
-// accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination]
-type accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationJSON struct {
-	Type        apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination) implementsAccessApplicationUpdateResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationType string
-
-const (
-	AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationType = "all_preview_workers"
-)
-
-func (r AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationTypeAllPreviewWorkers:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                                             `json:"path_pattern" api:"required"`
-	JSON        accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride]
-type accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior string
-
-const (
-	AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateResponseEndUserApplicationDestinationsType string
-
-const (
-	AccessApplicationUpdateResponseEndUserApplicationDestinationsTypePublic            AccessApplicationUpdateResponseEndUserApplicationDestinationsType = "public"
-	AccessApplicationUpdateResponseEndUserApplicationDestinationsTypeWorker            AccessApplicationUpdateResponseEndUserApplicationDestinationsType = "worker"
-	AccessApplicationUpdateResponseEndUserApplicationDestinationsTypePreviewWorker     AccessApplicationUpdateResponseEndUserApplicationDestinationsType = "preview_worker"
-	AccessApplicationUpdateResponseEndUserApplicationDestinationsTypeAllWorkers        AccessApplicationUpdateResponseEndUserApplicationDestinationsType = "all_workers"
-	AccessApplicationUpdateResponseEndUserApplicationDestinationsTypeAllPreviewWorkers AccessApplicationUpdateResponseEndUserApplicationDestinationsType = "all_preview_workers"
-)
-
-func (r AccessApplicationUpdateResponseEndUserApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseEndUserApplicationDestinationsTypePublic, AccessApplicationUpdateResponseEndUserApplicationDestinationsTypeWorker, AccessApplicationUpdateResponseEndUserApplicationDestinationsTypePreviewWorker, AccessApplicationUpdateResponseEndUserApplicationDestinationsTypeAllWorkers, AccessApplicationUpdateResponseEndUserApplicationDestinationsTypeAllPreviewWorkers:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationUpdateResponseSelfHostedApplication struct {
@@ -19167,7 +17583,6 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationType string
 
 const (
 	AccessApplicationUpdateResponseBrowserSSHApplicationTypeSelfHosted     AccessApplicationUpdateResponseBrowserSSHApplicationType = "self_hosted"
-	AccessApplicationUpdateResponseBrowserSSHApplicationTypeEndUser        AccessApplicationUpdateResponseBrowserSSHApplicationType = "end_user"
 	AccessApplicationUpdateResponseBrowserSSHApplicationTypeSaaS           AccessApplicationUpdateResponseBrowserSSHApplicationType = "saas"
 	AccessApplicationUpdateResponseBrowserSSHApplicationTypeSSH            AccessApplicationUpdateResponseBrowserSSHApplicationType = "ssh"
 	AccessApplicationUpdateResponseBrowserSSHApplicationTypeVNC            AccessApplicationUpdateResponseBrowserSSHApplicationType = "vnc"
@@ -19185,7 +17600,7 @@ const (
 
 func (r AccessApplicationUpdateResponseBrowserSSHApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationUpdateResponseBrowserSSHApplicationTypeEndUser, AccessApplicationUpdateResponseBrowserSSHApplicationTypeSaaS, AccessApplicationUpdateResponseBrowserSSHApplicationTypeSSH, AccessApplicationUpdateResponseBrowserSSHApplicationTypeVNC, AccessApplicationUpdateResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationUpdateResponseBrowserSSHApplicationTypeWARP, AccessApplicationUpdateResponseBrowserSSHApplicationTypeBISO, AccessApplicationUpdateResponseBrowserSSHApplicationTypeBookmark, AccessApplicationUpdateResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationUpdateResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationUpdateResponseBrowserSSHApplicationTypeRDP, AccessApplicationUpdateResponseBrowserSSHApplicationTypeMcp, AccessApplicationUpdateResponseBrowserSSHApplicationTypeMcpPortal, AccessApplicationUpdateResponseBrowserSSHApplicationTypeProxyEndpoint:
+	case AccessApplicationUpdateResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationUpdateResponseBrowserSSHApplicationTypeSaaS, AccessApplicationUpdateResponseBrowserSSHApplicationTypeSSH, AccessApplicationUpdateResponseBrowserSSHApplicationTypeVNC, AccessApplicationUpdateResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationUpdateResponseBrowserSSHApplicationTypeWARP, AccessApplicationUpdateResponseBrowserSSHApplicationTypeBISO, AccessApplicationUpdateResponseBrowserSSHApplicationTypeBookmark, AccessApplicationUpdateResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationUpdateResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationUpdateResponseBrowserSSHApplicationTypeRDP, AccessApplicationUpdateResponseBrowserSSHApplicationTypeMcp, AccessApplicationUpdateResponseBrowserSSHApplicationTypeMcpPortal, AccessApplicationUpdateResponseBrowserSSHApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -20792,7 +19207,6 @@ type AccessApplicationUpdateResponseBrowserVNCApplicationType string
 
 const (
 	AccessApplicationUpdateResponseBrowserVNCApplicationTypeSelfHosted     AccessApplicationUpdateResponseBrowserVNCApplicationType = "self_hosted"
-	AccessApplicationUpdateResponseBrowserVNCApplicationTypeEndUser        AccessApplicationUpdateResponseBrowserVNCApplicationType = "end_user"
 	AccessApplicationUpdateResponseBrowserVNCApplicationTypeSaaS           AccessApplicationUpdateResponseBrowserVNCApplicationType = "saas"
 	AccessApplicationUpdateResponseBrowserVNCApplicationTypeSSH            AccessApplicationUpdateResponseBrowserVNCApplicationType = "ssh"
 	AccessApplicationUpdateResponseBrowserVNCApplicationTypeVNC            AccessApplicationUpdateResponseBrowserVNCApplicationType = "vnc"
@@ -20810,7 +19224,7 @@ const (
 
 func (r AccessApplicationUpdateResponseBrowserVNCApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationUpdateResponseBrowserVNCApplicationTypeEndUser, AccessApplicationUpdateResponseBrowserVNCApplicationTypeSaaS, AccessApplicationUpdateResponseBrowserVNCApplicationTypeSSH, AccessApplicationUpdateResponseBrowserVNCApplicationTypeVNC, AccessApplicationUpdateResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationUpdateResponseBrowserVNCApplicationTypeWARP, AccessApplicationUpdateResponseBrowserVNCApplicationTypeBISO, AccessApplicationUpdateResponseBrowserVNCApplicationTypeBookmark, AccessApplicationUpdateResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationUpdateResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationUpdateResponseBrowserVNCApplicationTypeRDP, AccessApplicationUpdateResponseBrowserVNCApplicationTypeMcp, AccessApplicationUpdateResponseBrowserVNCApplicationTypeMcpPortal, AccessApplicationUpdateResponseBrowserVNCApplicationTypeProxyEndpoint:
+	case AccessApplicationUpdateResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationUpdateResponseBrowserVNCApplicationTypeSaaS, AccessApplicationUpdateResponseBrowserVNCApplicationTypeSSH, AccessApplicationUpdateResponseBrowserVNCApplicationTypeVNC, AccessApplicationUpdateResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationUpdateResponseBrowserVNCApplicationTypeWARP, AccessApplicationUpdateResponseBrowserVNCApplicationTypeBISO, AccessApplicationUpdateResponseBrowserVNCApplicationTypeBookmark, AccessApplicationUpdateResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationUpdateResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationUpdateResponseBrowserVNCApplicationTypeRDP, AccessApplicationUpdateResponseBrowserVNCApplicationTypeMcp, AccessApplicationUpdateResponseBrowserVNCApplicationTypeMcpPortal, AccessApplicationUpdateResponseBrowserVNCApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -22337,7 +20751,6 @@ type AccessApplicationUpdateResponseAppLauncherApplicationType string
 
 const (
 	AccessApplicationUpdateResponseAppLauncherApplicationTypeSelfHosted     AccessApplicationUpdateResponseAppLauncherApplicationType = "self_hosted"
-	AccessApplicationUpdateResponseAppLauncherApplicationTypeEndUser        AccessApplicationUpdateResponseAppLauncherApplicationType = "end_user"
 	AccessApplicationUpdateResponseAppLauncherApplicationTypeSaaS           AccessApplicationUpdateResponseAppLauncherApplicationType = "saas"
 	AccessApplicationUpdateResponseAppLauncherApplicationTypeSSH            AccessApplicationUpdateResponseAppLauncherApplicationType = "ssh"
 	AccessApplicationUpdateResponseAppLauncherApplicationTypeVNC            AccessApplicationUpdateResponseAppLauncherApplicationType = "vnc"
@@ -22355,7 +20768,7 @@ const (
 
 func (r AccessApplicationUpdateResponseAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationUpdateResponseAppLauncherApplicationTypeEndUser, AccessApplicationUpdateResponseAppLauncherApplicationTypeSaaS, AccessApplicationUpdateResponseAppLauncherApplicationTypeSSH, AccessApplicationUpdateResponseAppLauncherApplicationTypeVNC, AccessApplicationUpdateResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationUpdateResponseAppLauncherApplicationTypeWARP, AccessApplicationUpdateResponseAppLauncherApplicationTypeBISO, AccessApplicationUpdateResponseAppLauncherApplicationTypeBookmark, AccessApplicationUpdateResponseAppLauncherApplicationTypeDashSSO, AccessApplicationUpdateResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationUpdateResponseAppLauncherApplicationTypeRDP, AccessApplicationUpdateResponseAppLauncherApplicationTypeMcp, AccessApplicationUpdateResponseAppLauncherApplicationTypeMcpPortal, AccessApplicationUpdateResponseAppLauncherApplicationTypeProxyEndpoint:
+	case AccessApplicationUpdateResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationUpdateResponseAppLauncherApplicationTypeSaaS, AccessApplicationUpdateResponseAppLauncherApplicationTypeSSH, AccessApplicationUpdateResponseAppLauncherApplicationTypeVNC, AccessApplicationUpdateResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationUpdateResponseAppLauncherApplicationTypeWARP, AccessApplicationUpdateResponseAppLauncherApplicationTypeBISO, AccessApplicationUpdateResponseAppLauncherApplicationTypeBookmark, AccessApplicationUpdateResponseAppLauncherApplicationTypeDashSSO, AccessApplicationUpdateResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationUpdateResponseAppLauncherApplicationTypeRDP, AccessApplicationUpdateResponseAppLauncherApplicationTypeMcp, AccessApplicationUpdateResponseAppLauncherApplicationTypeMcpPortal, AccessApplicationUpdateResponseAppLauncherApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -29018,35 +27431,6 @@ func (r AccessApplicationUpdateResponseMcpServerPortalApplicationSCIMConfigAuthe
 	return false
 }
 
-// The application type.
-type AccessApplicationUpdateResponseType string
-
-const (
-	AccessApplicationUpdateResponseTypeSelfHosted     AccessApplicationUpdateResponseType = "self_hosted"
-	AccessApplicationUpdateResponseTypeEndUser        AccessApplicationUpdateResponseType = "end_user"
-	AccessApplicationUpdateResponseTypeSaaS           AccessApplicationUpdateResponseType = "saas"
-	AccessApplicationUpdateResponseTypeSSH            AccessApplicationUpdateResponseType = "ssh"
-	AccessApplicationUpdateResponseTypeVNC            AccessApplicationUpdateResponseType = "vnc"
-	AccessApplicationUpdateResponseTypeAppLauncher    AccessApplicationUpdateResponseType = "app_launcher"
-	AccessApplicationUpdateResponseTypeWARP           AccessApplicationUpdateResponseType = "warp"
-	AccessApplicationUpdateResponseTypeBISO           AccessApplicationUpdateResponseType = "biso"
-	AccessApplicationUpdateResponseTypeBookmark       AccessApplicationUpdateResponseType = "bookmark"
-	AccessApplicationUpdateResponseTypeDashSSO        AccessApplicationUpdateResponseType = "dash_sso"
-	AccessApplicationUpdateResponseTypeInfrastructure AccessApplicationUpdateResponseType = "infrastructure"
-	AccessApplicationUpdateResponseTypeRDP            AccessApplicationUpdateResponseType = "rdp"
-	AccessApplicationUpdateResponseTypeMcp            AccessApplicationUpdateResponseType = "mcp"
-	AccessApplicationUpdateResponseTypeMcpPortal      AccessApplicationUpdateResponseType = "mcp_portal"
-	AccessApplicationUpdateResponseTypeProxyEndpoint  AccessApplicationUpdateResponseType = "proxy_endpoint"
-)
-
-func (r AccessApplicationUpdateResponseType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseTypeSelfHosted, AccessApplicationUpdateResponseTypeEndUser, AccessApplicationUpdateResponseTypeSaaS, AccessApplicationUpdateResponseTypeSSH, AccessApplicationUpdateResponseTypeVNC, AccessApplicationUpdateResponseTypeAppLauncher, AccessApplicationUpdateResponseTypeWARP, AccessApplicationUpdateResponseTypeBISO, AccessApplicationUpdateResponseTypeBookmark, AccessApplicationUpdateResponseTypeDashSSO, AccessApplicationUpdateResponseTypeInfrastructure, AccessApplicationUpdateResponseTypeRDP, AccessApplicationUpdateResponseTypeMcp, AccessApplicationUpdateResponseTypeMcpPortal, AccessApplicationUpdateResponseTypeProxyEndpoint:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationListResponse struct {
 	// UUID.
 	ID string `json:"id"`
@@ -29083,7 +27467,6 @@ type AccessApplicationListResponse struct {
 	// This field can have the runtime type of [[]string].
 	CustomPages interface{} `json:"custom_pages"`
 	// This field can have the runtime type of
-	// [[]AccessApplicationListResponseEndUserApplicationDestination],
 	// [[]AccessApplicationListResponseSelfHostedApplicationDestination],
 	// [[]AccessApplicationListResponseBrowserSSHApplicationDestination],
 	// [[]AccessApplicationListResponseBrowserVNCApplicationDestination],
@@ -29125,7 +27508,6 @@ type AccessApplicationListResponse struct {
 	// The name of the application.
 	Name string `json:"name"`
 	// This field can have the runtime type of
-	// [AccessApplicationListResponseEndUserApplicationOAuthConfiguration],
 	// [AccessApplicationListResponseSelfHostedApplicationOAuthConfiguration],
 	// [AccessApplicationListResponseBrowserSSHApplicationOAuthConfiguration],
 	// [AccessApplicationListResponseBrowserVNCApplicationOAuthConfiguration],
@@ -29196,16 +27578,14 @@ type AccessApplicationListResponse struct {
 	// [[]AccessApplicationListResponseBrowserRDPApplicationTargetCriterion].
 	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type AccessApplicationListResponseType `json:"type"`
+	Type ApplicationType `json:"type"`
 	// Determines if users can access this application via a clientless browser
 	// isolation URL. This allows users to access private domains without connecting to
 	// Gateway. The option requires Clientless Browser Isolation to be set up with
 	// policies that allow users of this application.
-	UseClientlessIsolationAppLauncherURL bool `json:"use_clientless_isolation_app_launcher_url"`
-	// This field can have the runtime type of [[]string].
-	UserPopulations interface{}                       `json:"user_populations"`
-	JSON            accessApplicationListResponseJSON `json:"-"`
-	union           AccessApplicationListResponseUnion
+	UseClientlessIsolationAppLauncherURL bool                              `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationListResponseJSON `json:"-"`
+	union                                AccessApplicationListResponseUnion
 }
 
 // accessApplicationListResponseJSON contains the JSON metadata for the struct
@@ -29253,7 +27633,6 @@ type accessApplicationListResponseJSON struct {
 	TargetCriteria                       apijson.Field
 	Type                                 apijson.Field
 	UseClientlessIsolationAppLauncherURL apijson.Field
-	UserPopulations                      apijson.Field
 	raw                                  string
 	ExtraFields                          map[string]apijson.Field
 }
@@ -29275,7 +27654,6 @@ func (r *AccessApplicationListResponse) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [AccessApplicationListResponseEndUserApplication],
 // [AccessApplicationListResponseSelfHostedApplication],
 // [AccessApplicationListResponseSaaSApplication],
 // [AccessApplicationListResponseBrowserSSHApplication],
@@ -29293,8 +27671,7 @@ func (r AccessApplicationListResponse) AsUnion() AccessApplicationListResponseUn
 	return r.union
 }
 
-// Union satisfied by [AccessApplicationListResponseEndUserApplication],
-// [AccessApplicationListResponseSelfHostedApplication],
+// Union satisfied by [AccessApplicationListResponseSelfHostedApplication],
 // [AccessApplicationListResponseSaaSApplication],
 // [AccessApplicationListResponseBrowserSSHApplication],
 // [AccessApplicationListResponseBrowserVNCApplication],
@@ -29315,10 +27692,6 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*AccessApplicationListResponseUnion)(nil)).Elem(),
 		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseEndUserApplication{}),
-		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationListResponseSelfHostedApplication{}),
@@ -29372,770 +27745,6 @@ func init() {
 			Type:       reflect.TypeOf(AccessApplicationListResponseMcpServerPortalApplication{}),
 		},
 	)
-}
-
-type AccessApplicationListResponseEndUserApplication struct {
-	// **Beta:** Optional configuration for managing an OAuth authorization flow
-	// controlled by Access. When set, Access will act as the OAuth authorization
-	// server for this application. Only compatible with OAuth clients that support
-	// [RFC 8707](https://datatracker.ietf.org/doc/html/rfc8707) (Resource Indicators
-	// for OAuth 2.0). This feature is currently in beta.
-	OAuthConfiguration AccessApplicationListResponseEndUserApplicationOAuthConfiguration `json:"oauth_configuration" api:"required"`
-	// The application type.
-	Type AccessApplicationListResponseEndUserApplicationType `json:"type" api:"required"`
-	// The single user population associated with this application.
-	UserPopulations []string `json:"user_populations" api:"required"`
-	// UUID.
-	ID string `json:"id"`
-	// The identity providers your users can select when connecting to this
-	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
-	// Audience tag.
-	AUD string `json:"aud"`
-	// Public hostname and Workers destinations secured by Access.
-	Destinations []AccessApplicationListResponseEndUserApplicationDestination `json:"destinations"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
-	Domain string `json:"domain"`
-	// The name of the application.
-	Name string `json:"name"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	//
-	// Deprecated: deprecated
-	SelfHostedDomains []SelfHostedDomains                                 `json:"self_hosted_domains"`
-	JSON              accessApplicationListResponseEndUserApplicationJSON `json:"-"`
-}
-
-// accessApplicationListResponseEndUserApplicationJSON contains the JSON metadata
-// for the struct [AccessApplicationListResponseEndUserApplication]
-type accessApplicationListResponseEndUserApplicationJSON struct {
-	OAuthConfiguration apijson.Field
-	Type               apijson.Field
-	UserPopulations    apijson.Field
-	ID                 apijson.Field
-	AllowedIdPs        apijson.Field
-	AUD                apijson.Field
-	Destinations       apijson.Field
-	Domain             apijson.Field
-	Name               apijson.Field
-	SelfHostedDomains  apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseEndUserApplication) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseEndUserApplicationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationListResponseEndUserApplication) implementsAccessApplicationListResponse() {}
-
-// **Beta:** Optional configuration for managing an OAuth authorization flow
-// controlled by Access. When set, Access will act as the OAuth authorization
-// server for this application. Only compatible with OAuth clients that support
-// [RFC 8707](https://datatracker.ietf.org/doc/html/rfc8707) (Resource Indicators
-// for OAuth 2.0). This feature is currently in beta.
-type AccessApplicationListResponseEndUserApplicationOAuthConfiguration struct {
-	// Settings for OAuth dynamic client registration.
-	DynamicClientRegistration AccessApplicationListResponseEndUserApplicationOAuthConfigurationDynamicClientRegistration `json:"dynamic_client_registration"`
-	// Managed OAuth is required for end user applications and cannot be disabled.
-	Enabled AccessApplicationListResponseEndUserApplicationOAuthConfigurationEnabled `json:"enabled"`
-	// Settings for OAuth grant behavior.
-	Grant AccessApplicationListResponseEndUserApplicationOAuthConfigurationGrant `json:"grant"`
-	JSON  accessApplicationListResponseEndUserApplicationOAuthConfigurationJSON  `json:"-"`
-}
-
-// accessApplicationListResponseEndUserApplicationOAuthConfigurationJSON contains
-// the JSON metadata for the struct
-// [AccessApplicationListResponseEndUserApplicationOAuthConfiguration]
-type accessApplicationListResponseEndUserApplicationOAuthConfigurationJSON struct {
-	DynamicClientRegistration apijson.Field
-	Enabled                   apijson.Field
-	Grant                     apijson.Field
-	raw                       string
-	ExtraFields               map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseEndUserApplicationOAuthConfiguration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseEndUserApplicationOAuthConfigurationJSON) RawJSON() string {
-	return r.raw
-}
-
-// Settings for OAuth dynamic client registration.
-type AccessApplicationListResponseEndUserApplicationOAuthConfigurationDynamicClientRegistration struct {
-	// Allows any client with redirect URIs on localhost.
-	AllowAnyOnLocalhost bool `json:"allow_any_on_localhost"`
-	// Allows any client with redirect URIs on 127.0.0.1.
-	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
-	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
-	// must be explicitly configured and match exactly.
-	AllowedURIs []string `json:"allowed_uris"`
-	// Whether dynamic client registration is enabled.
-	Enabled bool                                                                                           `json:"enabled"`
-	JSON    accessApplicationListResponseEndUserApplicationOAuthConfigurationDynamicClientRegistrationJSON `json:"-"`
-}
-
-// accessApplicationListResponseEndUserApplicationOAuthConfigurationDynamicClientRegistrationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseEndUserApplicationOAuthConfigurationDynamicClientRegistration]
-type accessApplicationListResponseEndUserApplicationOAuthConfigurationDynamicClientRegistrationJSON struct {
-	AllowAnyOnLocalhost apijson.Field
-	AllowAnyOnLoopback  apijson.Field
-	AllowedURIs         apijson.Field
-	Enabled             apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseEndUserApplicationOAuthConfigurationDynamicClientRegistration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseEndUserApplicationOAuthConfigurationDynamicClientRegistrationJSON) RawJSON() string {
-	return r.raw
-}
-
-// Managed OAuth is required for end user applications and cannot be disabled.
-type AccessApplicationListResponseEndUserApplicationOAuthConfigurationEnabled bool
-
-const (
-	AccessApplicationListResponseEndUserApplicationOAuthConfigurationEnabledTrue AccessApplicationListResponseEndUserApplicationOAuthConfigurationEnabled = true
-)
-
-func (r AccessApplicationListResponseEndUserApplicationOAuthConfigurationEnabled) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseEndUserApplicationOAuthConfigurationEnabledTrue:
-		return true
-	}
-	return false
-}
-
-// Settings for OAuth grant behavior.
-type AccessApplicationListResponseEndUserApplicationOAuthConfigurationGrant struct {
-	// The lifetime of the access token. Must be in the format `300ms` or `2h45m`.
-	// Valid time units are ns, us (or µs), ms, s, m, h.
-	AccessTokenLifetime string `json:"access_token_lifetime"`
-	// The duration of the OAuth session. Must be in the format `300ms` or `2h45m`.
-	// Valid time units are ns, us (or µs), ms, s, m, h.
-	SessionDuration string                                                                     `json:"session_duration"`
-	JSON            accessApplicationListResponseEndUserApplicationOAuthConfigurationGrantJSON `json:"-"`
-}
-
-// accessApplicationListResponseEndUserApplicationOAuthConfigurationGrantJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseEndUserApplicationOAuthConfigurationGrant]
-type accessApplicationListResponseEndUserApplicationOAuthConfigurationGrantJSON struct {
-	AccessTokenLifetime apijson.Field
-	SessionDuration     apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseEndUserApplicationOAuthConfigurationGrant) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseEndUserApplicationOAuthConfigurationGrantJSON) RawJSON() string {
-	return r.raw
-}
-
-// The application type.
-type AccessApplicationListResponseEndUserApplicationType string
-
-const (
-	AccessApplicationListResponseEndUserApplicationTypeSelfHosted     AccessApplicationListResponseEndUserApplicationType = "self_hosted"
-	AccessApplicationListResponseEndUserApplicationTypeEndUser        AccessApplicationListResponseEndUserApplicationType = "end_user"
-	AccessApplicationListResponseEndUserApplicationTypeSaaS           AccessApplicationListResponseEndUserApplicationType = "saas"
-	AccessApplicationListResponseEndUserApplicationTypeSSH            AccessApplicationListResponseEndUserApplicationType = "ssh"
-	AccessApplicationListResponseEndUserApplicationTypeVNC            AccessApplicationListResponseEndUserApplicationType = "vnc"
-	AccessApplicationListResponseEndUserApplicationTypeAppLauncher    AccessApplicationListResponseEndUserApplicationType = "app_launcher"
-	AccessApplicationListResponseEndUserApplicationTypeWARP           AccessApplicationListResponseEndUserApplicationType = "warp"
-	AccessApplicationListResponseEndUserApplicationTypeBISO           AccessApplicationListResponseEndUserApplicationType = "biso"
-	AccessApplicationListResponseEndUserApplicationTypeBookmark       AccessApplicationListResponseEndUserApplicationType = "bookmark"
-	AccessApplicationListResponseEndUserApplicationTypeDashSSO        AccessApplicationListResponseEndUserApplicationType = "dash_sso"
-	AccessApplicationListResponseEndUserApplicationTypeInfrastructure AccessApplicationListResponseEndUserApplicationType = "infrastructure"
-	AccessApplicationListResponseEndUserApplicationTypeRDP            AccessApplicationListResponseEndUserApplicationType = "rdp"
-	AccessApplicationListResponseEndUserApplicationTypeMcp            AccessApplicationListResponseEndUserApplicationType = "mcp"
-	AccessApplicationListResponseEndUserApplicationTypeMcpPortal      AccessApplicationListResponseEndUserApplicationType = "mcp_portal"
-	AccessApplicationListResponseEndUserApplicationTypeProxyEndpoint  AccessApplicationListResponseEndUserApplicationType = "proxy_endpoint"
-)
-
-func (r AccessApplicationListResponseEndUserApplicationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseEndUserApplicationTypeSelfHosted, AccessApplicationListResponseEndUserApplicationTypeEndUser, AccessApplicationListResponseEndUserApplicationTypeSaaS, AccessApplicationListResponseEndUserApplicationTypeSSH, AccessApplicationListResponseEndUserApplicationTypeVNC, AccessApplicationListResponseEndUserApplicationTypeAppLauncher, AccessApplicationListResponseEndUserApplicationTypeWARP, AccessApplicationListResponseEndUserApplicationTypeBISO, AccessApplicationListResponseEndUserApplicationTypeBookmark, AccessApplicationListResponseEndUserApplicationTypeDashSSO, AccessApplicationListResponseEndUserApplicationTypeInfrastructure, AccessApplicationListResponseEndUserApplicationTypeRDP, AccessApplicationListResponseEndUserApplicationTypeMcp, AccessApplicationListResponseEndUserApplicationTypeMcpPortal, AccessApplicationListResponseEndUserApplicationTypeProxyEndpoint:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationListResponseEndUserApplicationDestination struct {
-	// This field can have the runtime type of
-	// [[]AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride],
-	// [[]AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride],
-	// [[]AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride],
-	// [[]AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride],
-	// [[]AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride].
-	Overrides interface{}                                                     `json:"overrides"`
-	Type      AccessApplicationListResponseEndUserApplicationDestinationsType `json:"type"`
-	// The public hostname and optional path to secure.
-	URI string `json:"uri"`
-	// The ID of the Cloudflare Worker to secure.
-	WorkerID string                                                         `json:"worker_id"`
-	JSON     accessApplicationListResponseEndUserApplicationDestinationJSON `json:"-"`
-	union    AccessApplicationListResponseEndUserApplicationDestinationsUnion
-}
-
-// accessApplicationListResponseEndUserApplicationDestinationJSON contains the JSON
-// metadata for the struct
-// [AccessApplicationListResponseEndUserApplicationDestination]
-type accessApplicationListResponseEndUserApplicationDestinationJSON struct {
-	Overrides   apijson.Field
-	Type        apijson.Field
-	URI         apijson.Field
-	WorkerID    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r accessApplicationListResponseEndUserApplicationDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationListResponseEndUserApplicationDestination) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationListResponseEndUserApplicationDestination{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationListResponseEndUserApplicationDestinationsUnion] interface
-// which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestination],
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination],
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination],
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination],
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination].
-func (r AccessApplicationListResponseEndUserApplicationDestination) AsUnion() AccessApplicationListResponseEndUserApplicationDestinationsUnion {
-	return r.union
-}
-
-// Union satisfied by
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestination],
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination],
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination],
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination]
-// or
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination].
-type AccessApplicationListResponseEndUserApplicationDestinationsUnion interface {
-	implementsAccessApplicationListResponseEndUserApplicationDestination()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationListResponseEndUserApplicationDestinationsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestination{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination{}),
-		},
-	)
-}
-
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestination struct {
-	// The public hostname and optional path to secure.
-	URI string `json:"uri" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride `json:"overrides"`
-	Type      AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationType       `json:"type"`
-	JSON      accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationJSON       `json:"-"`
-}
-
-// accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestination]
-type accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationJSON struct {
-	URI         apijson.Field
-	Overrides   apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestination) implementsAccessApplicationListResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                                `json:"path_pattern" api:"required"`
-	JSON        accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride]
-type accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehavior string
-
-const (
-	AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehaviorPublic AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationType string
-
-const (
-	AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationTypePublic AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationType = "public"
-)
-
-func (r AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationTypePublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination struct {
-	Type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationType `json:"type" api:"required"`
-	// The ID of the Cloudflare Worker to secure.
-	WorkerID string `json:"worker_id" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride `json:"overrides"`
-	JSON      accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationJSON       `json:"-"`
-}
-
-// accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination]
-type accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationJSON struct {
-	Type        apijson.Field
-	WorkerID    apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination) implementsAccessApplicationListResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationType string
-
-const (
-	AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationTypeWorker AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationType = "worker"
-)
-
-func (r AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationTypeWorker:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                                `json:"path_pattern" api:"required"`
-	JSON        accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride]
-type accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehavior string
-
-const (
-	AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehaviorPublic AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination struct {
-	Type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationType `json:"type" api:"required"`
-	// The ID of the Cloudflare Worker whose previews to secure.
-	WorkerID string `json:"worker_id" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride `json:"overrides"`
-	JSON      accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationJSON       `json:"-"`
-}
-
-// accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination]
-type accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationJSON struct {
-	Type        apijson.Field
-	WorkerID    apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination) implementsAccessApplicationListResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationType string
-
-const (
-	AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationTypePreviewWorker AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationType = "preview_worker"
-)
-
-func (r AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationTypePreviewWorker:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                                       `json:"path_pattern" api:"required"`
-	JSON        accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride]
-type accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior string
-
-const (
-	AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination struct {
-	Type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationType `json:"type" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride `json:"overrides"`
-	JSON      accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationJSON       `json:"-"`
-}
-
-// accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination]
-type accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationJSON struct {
-	Type        apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination) implementsAccessApplicationListResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationType string
-
-const (
-	AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationTypeAllWorkers AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationType = "all_workers"
-)
-
-func (r AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationTypeAllWorkers:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                                    `json:"path_pattern" api:"required"`
-	JSON        accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride]
-type accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior string
-
-const (
-	AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehaviorPublic AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination struct {
-	Type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride `json:"overrides"`
-	JSON      accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationJSON       `json:"-"`
-}
-
-// accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination]
-type accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationJSON struct {
-	Type        apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination) implementsAccessApplicationListResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationType string
-
-const (
-	AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationType = "all_preview_workers"
-)
-
-func (r AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationTypeAllPreviewWorkers:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                                           `json:"path_pattern" api:"required"`
-	JSON        accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride]
-type accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior string
-
-const (
-	AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationListResponseEndUserApplicationDestinationsType string
-
-const (
-	AccessApplicationListResponseEndUserApplicationDestinationsTypePublic            AccessApplicationListResponseEndUserApplicationDestinationsType = "public"
-	AccessApplicationListResponseEndUserApplicationDestinationsTypeWorker            AccessApplicationListResponseEndUserApplicationDestinationsType = "worker"
-	AccessApplicationListResponseEndUserApplicationDestinationsTypePreviewWorker     AccessApplicationListResponseEndUserApplicationDestinationsType = "preview_worker"
-	AccessApplicationListResponseEndUserApplicationDestinationsTypeAllWorkers        AccessApplicationListResponseEndUserApplicationDestinationsType = "all_workers"
-	AccessApplicationListResponseEndUserApplicationDestinationsTypeAllPreviewWorkers AccessApplicationListResponseEndUserApplicationDestinationsType = "all_preview_workers"
-)
-
-func (r AccessApplicationListResponseEndUserApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseEndUserApplicationDestinationsTypePublic, AccessApplicationListResponseEndUserApplicationDestinationsTypeWorker, AccessApplicationListResponseEndUserApplicationDestinationsTypePreviewWorker, AccessApplicationListResponseEndUserApplicationDestinationsTypeAllWorkers, AccessApplicationListResponseEndUserApplicationDestinationsTypeAllPreviewWorkers:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationListResponseSelfHostedApplication struct {
@@ -32638,7 +30247,6 @@ type AccessApplicationListResponseBrowserSSHApplicationType string
 
 const (
 	AccessApplicationListResponseBrowserSSHApplicationTypeSelfHosted     AccessApplicationListResponseBrowserSSHApplicationType = "self_hosted"
-	AccessApplicationListResponseBrowserSSHApplicationTypeEndUser        AccessApplicationListResponseBrowserSSHApplicationType = "end_user"
 	AccessApplicationListResponseBrowserSSHApplicationTypeSaaS           AccessApplicationListResponseBrowserSSHApplicationType = "saas"
 	AccessApplicationListResponseBrowserSSHApplicationTypeSSH            AccessApplicationListResponseBrowserSSHApplicationType = "ssh"
 	AccessApplicationListResponseBrowserSSHApplicationTypeVNC            AccessApplicationListResponseBrowserSSHApplicationType = "vnc"
@@ -32656,7 +30264,7 @@ const (
 
 func (r AccessApplicationListResponseBrowserSSHApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationListResponseBrowserSSHApplicationTypeEndUser, AccessApplicationListResponseBrowserSSHApplicationTypeSaaS, AccessApplicationListResponseBrowserSSHApplicationTypeSSH, AccessApplicationListResponseBrowserSSHApplicationTypeVNC, AccessApplicationListResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationListResponseBrowserSSHApplicationTypeWARP, AccessApplicationListResponseBrowserSSHApplicationTypeBISO, AccessApplicationListResponseBrowserSSHApplicationTypeBookmark, AccessApplicationListResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationListResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationListResponseBrowserSSHApplicationTypeRDP, AccessApplicationListResponseBrowserSSHApplicationTypeMcp, AccessApplicationListResponseBrowserSSHApplicationTypeMcpPortal, AccessApplicationListResponseBrowserSSHApplicationTypeProxyEndpoint:
+	case AccessApplicationListResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationListResponseBrowserSSHApplicationTypeSaaS, AccessApplicationListResponseBrowserSSHApplicationTypeSSH, AccessApplicationListResponseBrowserSSHApplicationTypeVNC, AccessApplicationListResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationListResponseBrowserSSHApplicationTypeWARP, AccessApplicationListResponseBrowserSSHApplicationTypeBISO, AccessApplicationListResponseBrowserSSHApplicationTypeBookmark, AccessApplicationListResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationListResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationListResponseBrowserSSHApplicationTypeRDP, AccessApplicationListResponseBrowserSSHApplicationTypeMcp, AccessApplicationListResponseBrowserSSHApplicationTypeMcpPortal, AccessApplicationListResponseBrowserSSHApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -34263,7 +31871,6 @@ type AccessApplicationListResponseBrowserVNCApplicationType string
 
 const (
 	AccessApplicationListResponseBrowserVNCApplicationTypeSelfHosted     AccessApplicationListResponseBrowserVNCApplicationType = "self_hosted"
-	AccessApplicationListResponseBrowserVNCApplicationTypeEndUser        AccessApplicationListResponseBrowserVNCApplicationType = "end_user"
 	AccessApplicationListResponseBrowserVNCApplicationTypeSaaS           AccessApplicationListResponseBrowserVNCApplicationType = "saas"
 	AccessApplicationListResponseBrowserVNCApplicationTypeSSH            AccessApplicationListResponseBrowserVNCApplicationType = "ssh"
 	AccessApplicationListResponseBrowserVNCApplicationTypeVNC            AccessApplicationListResponseBrowserVNCApplicationType = "vnc"
@@ -34281,7 +31888,7 @@ const (
 
 func (r AccessApplicationListResponseBrowserVNCApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationListResponseBrowserVNCApplicationTypeEndUser, AccessApplicationListResponseBrowserVNCApplicationTypeSaaS, AccessApplicationListResponseBrowserVNCApplicationTypeSSH, AccessApplicationListResponseBrowserVNCApplicationTypeVNC, AccessApplicationListResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationListResponseBrowserVNCApplicationTypeWARP, AccessApplicationListResponseBrowserVNCApplicationTypeBISO, AccessApplicationListResponseBrowserVNCApplicationTypeBookmark, AccessApplicationListResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationListResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationListResponseBrowserVNCApplicationTypeRDP, AccessApplicationListResponseBrowserVNCApplicationTypeMcp, AccessApplicationListResponseBrowserVNCApplicationTypeMcpPortal, AccessApplicationListResponseBrowserVNCApplicationTypeProxyEndpoint:
+	case AccessApplicationListResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationListResponseBrowserVNCApplicationTypeSaaS, AccessApplicationListResponseBrowserVNCApplicationTypeSSH, AccessApplicationListResponseBrowserVNCApplicationTypeVNC, AccessApplicationListResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationListResponseBrowserVNCApplicationTypeWARP, AccessApplicationListResponseBrowserVNCApplicationTypeBISO, AccessApplicationListResponseBrowserVNCApplicationTypeBookmark, AccessApplicationListResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationListResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationListResponseBrowserVNCApplicationTypeRDP, AccessApplicationListResponseBrowserVNCApplicationTypeMcp, AccessApplicationListResponseBrowserVNCApplicationTypeMcpPortal, AccessApplicationListResponseBrowserVNCApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -35808,7 +33415,6 @@ type AccessApplicationListResponseAppLauncherApplicationType string
 
 const (
 	AccessApplicationListResponseAppLauncherApplicationTypeSelfHosted     AccessApplicationListResponseAppLauncherApplicationType = "self_hosted"
-	AccessApplicationListResponseAppLauncherApplicationTypeEndUser        AccessApplicationListResponseAppLauncherApplicationType = "end_user"
 	AccessApplicationListResponseAppLauncherApplicationTypeSaaS           AccessApplicationListResponseAppLauncherApplicationType = "saas"
 	AccessApplicationListResponseAppLauncherApplicationTypeSSH            AccessApplicationListResponseAppLauncherApplicationType = "ssh"
 	AccessApplicationListResponseAppLauncherApplicationTypeVNC            AccessApplicationListResponseAppLauncherApplicationType = "vnc"
@@ -35826,7 +33432,7 @@ const (
 
 func (r AccessApplicationListResponseAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationListResponseAppLauncherApplicationTypeEndUser, AccessApplicationListResponseAppLauncherApplicationTypeSaaS, AccessApplicationListResponseAppLauncherApplicationTypeSSH, AccessApplicationListResponseAppLauncherApplicationTypeVNC, AccessApplicationListResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationListResponseAppLauncherApplicationTypeWARP, AccessApplicationListResponseAppLauncherApplicationTypeBISO, AccessApplicationListResponseAppLauncherApplicationTypeBookmark, AccessApplicationListResponseAppLauncherApplicationTypeDashSSO, AccessApplicationListResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationListResponseAppLauncherApplicationTypeRDP, AccessApplicationListResponseAppLauncherApplicationTypeMcp, AccessApplicationListResponseAppLauncherApplicationTypeMcpPortal, AccessApplicationListResponseAppLauncherApplicationTypeProxyEndpoint:
+	case AccessApplicationListResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationListResponseAppLauncherApplicationTypeSaaS, AccessApplicationListResponseAppLauncherApplicationTypeSSH, AccessApplicationListResponseAppLauncherApplicationTypeVNC, AccessApplicationListResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationListResponseAppLauncherApplicationTypeWARP, AccessApplicationListResponseAppLauncherApplicationTypeBISO, AccessApplicationListResponseAppLauncherApplicationTypeBookmark, AccessApplicationListResponseAppLauncherApplicationTypeDashSSO, AccessApplicationListResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationListResponseAppLauncherApplicationTypeRDP, AccessApplicationListResponseAppLauncherApplicationTypeMcp, AccessApplicationListResponseAppLauncherApplicationTypeMcpPortal, AccessApplicationListResponseAppLauncherApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -42486,35 +40092,6 @@ func (r AccessApplicationListResponseMcpServerPortalApplicationSCIMConfigAuthent
 	return false
 }
 
-// The application type.
-type AccessApplicationListResponseType string
-
-const (
-	AccessApplicationListResponseTypeSelfHosted     AccessApplicationListResponseType = "self_hosted"
-	AccessApplicationListResponseTypeEndUser        AccessApplicationListResponseType = "end_user"
-	AccessApplicationListResponseTypeSaaS           AccessApplicationListResponseType = "saas"
-	AccessApplicationListResponseTypeSSH            AccessApplicationListResponseType = "ssh"
-	AccessApplicationListResponseTypeVNC            AccessApplicationListResponseType = "vnc"
-	AccessApplicationListResponseTypeAppLauncher    AccessApplicationListResponseType = "app_launcher"
-	AccessApplicationListResponseTypeWARP           AccessApplicationListResponseType = "warp"
-	AccessApplicationListResponseTypeBISO           AccessApplicationListResponseType = "biso"
-	AccessApplicationListResponseTypeBookmark       AccessApplicationListResponseType = "bookmark"
-	AccessApplicationListResponseTypeDashSSO        AccessApplicationListResponseType = "dash_sso"
-	AccessApplicationListResponseTypeInfrastructure AccessApplicationListResponseType = "infrastructure"
-	AccessApplicationListResponseTypeRDP            AccessApplicationListResponseType = "rdp"
-	AccessApplicationListResponseTypeMcp            AccessApplicationListResponseType = "mcp"
-	AccessApplicationListResponseTypeMcpPortal      AccessApplicationListResponseType = "mcp_portal"
-	AccessApplicationListResponseTypeProxyEndpoint  AccessApplicationListResponseType = "proxy_endpoint"
-)
-
-func (r AccessApplicationListResponseType) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseTypeSelfHosted, AccessApplicationListResponseTypeEndUser, AccessApplicationListResponseTypeSaaS, AccessApplicationListResponseTypeSSH, AccessApplicationListResponseTypeVNC, AccessApplicationListResponseTypeAppLauncher, AccessApplicationListResponseTypeWARP, AccessApplicationListResponseTypeBISO, AccessApplicationListResponseTypeBookmark, AccessApplicationListResponseTypeDashSSO, AccessApplicationListResponseTypeInfrastructure, AccessApplicationListResponseTypeRDP, AccessApplicationListResponseTypeMcp, AccessApplicationListResponseTypeMcpPortal, AccessApplicationListResponseTypeProxyEndpoint:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationDeleteResponse struct {
 	// UUID.
 	ID   string                              `json:"id"`
@@ -42573,7 +40150,6 @@ type AccessApplicationGetResponse struct {
 	// This field can have the runtime type of [[]string].
 	CustomPages interface{} `json:"custom_pages"`
 	// This field can have the runtime type of
-	// [[]AccessApplicationGetResponseEndUserApplicationDestination],
 	// [[]AccessApplicationGetResponseSelfHostedApplicationDestination],
 	// [[]AccessApplicationGetResponseBrowserSSHApplicationDestination],
 	// [[]AccessApplicationGetResponseBrowserVNCApplicationDestination],
@@ -42615,7 +40191,6 @@ type AccessApplicationGetResponse struct {
 	// The name of the application.
 	Name string `json:"name"`
 	// This field can have the runtime type of
-	// [AccessApplicationGetResponseEndUserApplicationOAuthConfiguration],
 	// [AccessApplicationGetResponseSelfHostedApplicationOAuthConfiguration],
 	// [AccessApplicationGetResponseBrowserSSHApplicationOAuthConfiguration],
 	// [AccessApplicationGetResponseBrowserVNCApplicationOAuthConfiguration],
@@ -42686,16 +40261,14 @@ type AccessApplicationGetResponse struct {
 	// [[]AccessApplicationGetResponseBrowserRDPApplicationTargetCriterion].
 	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type AccessApplicationGetResponseType `json:"type"`
+	Type ApplicationType `json:"type"`
 	// Determines if users can access this application via a clientless browser
 	// isolation URL. This allows users to access private domains without connecting to
 	// Gateway. The option requires Clientless Browser Isolation to be set up with
 	// policies that allow users of this application.
-	UseClientlessIsolationAppLauncherURL bool `json:"use_clientless_isolation_app_launcher_url"`
-	// This field can have the runtime type of [[]string].
-	UserPopulations interface{}                      `json:"user_populations"`
-	JSON            accessApplicationGetResponseJSON `json:"-"`
-	union           AccessApplicationGetResponseUnion
+	UseClientlessIsolationAppLauncherURL bool                             `json:"use_clientless_isolation_app_launcher_url"`
+	JSON                                 accessApplicationGetResponseJSON `json:"-"`
+	union                                AccessApplicationGetResponseUnion
 }
 
 // accessApplicationGetResponseJSON contains the JSON metadata for the struct
@@ -42743,7 +40316,6 @@ type accessApplicationGetResponseJSON struct {
 	TargetCriteria                       apijson.Field
 	Type                                 apijson.Field
 	UseClientlessIsolationAppLauncherURL apijson.Field
-	UserPopulations                      apijson.Field
 	raw                                  string
 	ExtraFields                          map[string]apijson.Field
 }
@@ -42765,7 +40337,6 @@ func (r *AccessApplicationGetResponse) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [AccessApplicationGetResponseEndUserApplication],
 // [AccessApplicationGetResponseSelfHostedApplication],
 // [AccessApplicationGetResponseSaaSApplication],
 // [AccessApplicationGetResponseBrowserSSHApplication],
@@ -42783,8 +40354,7 @@ func (r AccessApplicationGetResponse) AsUnion() AccessApplicationGetResponseUnio
 	return r.union
 }
 
-// Union satisfied by [AccessApplicationGetResponseEndUserApplication],
-// [AccessApplicationGetResponseSelfHostedApplication],
+// Union satisfied by [AccessApplicationGetResponseSelfHostedApplication],
 // [AccessApplicationGetResponseSaaSApplication],
 // [AccessApplicationGetResponseBrowserSSHApplication],
 // [AccessApplicationGetResponseBrowserVNCApplication],
@@ -42805,10 +40375,6 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*AccessApplicationGetResponseUnion)(nil)).Elem(),
 		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseEndUserApplication{}),
-		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationGetResponseSelfHostedApplication{}),
@@ -42862,770 +40428,6 @@ func init() {
 			Type:       reflect.TypeOf(AccessApplicationGetResponseMcpServerPortalApplication{}),
 		},
 	)
-}
-
-type AccessApplicationGetResponseEndUserApplication struct {
-	// **Beta:** Optional configuration for managing an OAuth authorization flow
-	// controlled by Access. When set, Access will act as the OAuth authorization
-	// server for this application. Only compatible with OAuth clients that support
-	// [RFC 8707](https://datatracker.ietf.org/doc/html/rfc8707) (Resource Indicators
-	// for OAuth 2.0). This feature is currently in beta.
-	OAuthConfiguration AccessApplicationGetResponseEndUserApplicationOAuthConfiguration `json:"oauth_configuration" api:"required"`
-	// The application type.
-	Type AccessApplicationGetResponseEndUserApplicationType `json:"type" api:"required"`
-	// The single user population associated with this application.
-	UserPopulations []string `json:"user_populations" api:"required"`
-	// UUID.
-	ID string `json:"id"`
-	// The identity providers your users can select when connecting to this
-	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
-	// Audience tag.
-	AUD string `json:"aud"`
-	// Public hostname and Workers destinations secured by Access.
-	Destinations []AccessApplicationGetResponseEndUserApplicationDestination `json:"destinations"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
-	Domain string `json:"domain"`
-	// The name of the application.
-	Name string `json:"name"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	//
-	// Deprecated: deprecated
-	SelfHostedDomains []SelfHostedDomains                                `json:"self_hosted_domains"`
-	JSON              accessApplicationGetResponseEndUserApplicationJSON `json:"-"`
-}
-
-// accessApplicationGetResponseEndUserApplicationJSON contains the JSON metadata
-// for the struct [AccessApplicationGetResponseEndUserApplication]
-type accessApplicationGetResponseEndUserApplicationJSON struct {
-	OAuthConfiguration apijson.Field
-	Type               apijson.Field
-	UserPopulations    apijson.Field
-	ID                 apijson.Field
-	AllowedIdPs        apijson.Field
-	AUD                apijson.Field
-	Destinations       apijson.Field
-	Domain             apijson.Field
-	Name               apijson.Field
-	SelfHostedDomains  apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseEndUserApplication) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseEndUserApplicationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationGetResponseEndUserApplication) implementsAccessApplicationGetResponse() {}
-
-// **Beta:** Optional configuration for managing an OAuth authorization flow
-// controlled by Access. When set, Access will act as the OAuth authorization
-// server for this application. Only compatible with OAuth clients that support
-// [RFC 8707](https://datatracker.ietf.org/doc/html/rfc8707) (Resource Indicators
-// for OAuth 2.0). This feature is currently in beta.
-type AccessApplicationGetResponseEndUserApplicationOAuthConfiguration struct {
-	// Settings for OAuth dynamic client registration.
-	DynamicClientRegistration AccessApplicationGetResponseEndUserApplicationOAuthConfigurationDynamicClientRegistration `json:"dynamic_client_registration"`
-	// Managed OAuth is required for end user applications and cannot be disabled.
-	Enabled AccessApplicationGetResponseEndUserApplicationOAuthConfigurationEnabled `json:"enabled"`
-	// Settings for OAuth grant behavior.
-	Grant AccessApplicationGetResponseEndUserApplicationOAuthConfigurationGrant `json:"grant"`
-	JSON  accessApplicationGetResponseEndUserApplicationOAuthConfigurationJSON  `json:"-"`
-}
-
-// accessApplicationGetResponseEndUserApplicationOAuthConfigurationJSON contains
-// the JSON metadata for the struct
-// [AccessApplicationGetResponseEndUserApplicationOAuthConfiguration]
-type accessApplicationGetResponseEndUserApplicationOAuthConfigurationJSON struct {
-	DynamicClientRegistration apijson.Field
-	Enabled                   apijson.Field
-	Grant                     apijson.Field
-	raw                       string
-	ExtraFields               map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseEndUserApplicationOAuthConfiguration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseEndUserApplicationOAuthConfigurationJSON) RawJSON() string {
-	return r.raw
-}
-
-// Settings for OAuth dynamic client registration.
-type AccessApplicationGetResponseEndUserApplicationOAuthConfigurationDynamicClientRegistration struct {
-	// Allows any client with redirect URIs on localhost.
-	AllowAnyOnLocalhost bool `json:"allow_any_on_localhost"`
-	// Allows any client with redirect URIs on 127.0.0.1.
-	AllowAnyOnLoopback bool `json:"allow_any_on_loopback"`
-	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
-	// must be explicitly configured and match exactly.
-	AllowedURIs []string `json:"allowed_uris"`
-	// Whether dynamic client registration is enabled.
-	Enabled bool                                                                                          `json:"enabled"`
-	JSON    accessApplicationGetResponseEndUserApplicationOAuthConfigurationDynamicClientRegistrationJSON `json:"-"`
-}
-
-// accessApplicationGetResponseEndUserApplicationOAuthConfigurationDynamicClientRegistrationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseEndUserApplicationOAuthConfigurationDynamicClientRegistration]
-type accessApplicationGetResponseEndUserApplicationOAuthConfigurationDynamicClientRegistrationJSON struct {
-	AllowAnyOnLocalhost apijson.Field
-	AllowAnyOnLoopback  apijson.Field
-	AllowedURIs         apijson.Field
-	Enabled             apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseEndUserApplicationOAuthConfigurationDynamicClientRegistration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseEndUserApplicationOAuthConfigurationDynamicClientRegistrationJSON) RawJSON() string {
-	return r.raw
-}
-
-// Managed OAuth is required for end user applications and cannot be disabled.
-type AccessApplicationGetResponseEndUserApplicationOAuthConfigurationEnabled bool
-
-const (
-	AccessApplicationGetResponseEndUserApplicationOAuthConfigurationEnabledTrue AccessApplicationGetResponseEndUserApplicationOAuthConfigurationEnabled = true
-)
-
-func (r AccessApplicationGetResponseEndUserApplicationOAuthConfigurationEnabled) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseEndUserApplicationOAuthConfigurationEnabledTrue:
-		return true
-	}
-	return false
-}
-
-// Settings for OAuth grant behavior.
-type AccessApplicationGetResponseEndUserApplicationOAuthConfigurationGrant struct {
-	// The lifetime of the access token. Must be in the format `300ms` or `2h45m`.
-	// Valid time units are ns, us (or µs), ms, s, m, h.
-	AccessTokenLifetime string `json:"access_token_lifetime"`
-	// The duration of the OAuth session. Must be in the format `300ms` or `2h45m`.
-	// Valid time units are ns, us (or µs), ms, s, m, h.
-	SessionDuration string                                                                    `json:"session_duration"`
-	JSON            accessApplicationGetResponseEndUserApplicationOAuthConfigurationGrantJSON `json:"-"`
-}
-
-// accessApplicationGetResponseEndUserApplicationOAuthConfigurationGrantJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseEndUserApplicationOAuthConfigurationGrant]
-type accessApplicationGetResponseEndUserApplicationOAuthConfigurationGrantJSON struct {
-	AccessTokenLifetime apijson.Field
-	SessionDuration     apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseEndUserApplicationOAuthConfigurationGrant) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseEndUserApplicationOAuthConfigurationGrantJSON) RawJSON() string {
-	return r.raw
-}
-
-// The application type.
-type AccessApplicationGetResponseEndUserApplicationType string
-
-const (
-	AccessApplicationGetResponseEndUserApplicationTypeSelfHosted     AccessApplicationGetResponseEndUserApplicationType = "self_hosted"
-	AccessApplicationGetResponseEndUserApplicationTypeEndUser        AccessApplicationGetResponseEndUserApplicationType = "end_user"
-	AccessApplicationGetResponseEndUserApplicationTypeSaaS           AccessApplicationGetResponseEndUserApplicationType = "saas"
-	AccessApplicationGetResponseEndUserApplicationTypeSSH            AccessApplicationGetResponseEndUserApplicationType = "ssh"
-	AccessApplicationGetResponseEndUserApplicationTypeVNC            AccessApplicationGetResponseEndUserApplicationType = "vnc"
-	AccessApplicationGetResponseEndUserApplicationTypeAppLauncher    AccessApplicationGetResponseEndUserApplicationType = "app_launcher"
-	AccessApplicationGetResponseEndUserApplicationTypeWARP           AccessApplicationGetResponseEndUserApplicationType = "warp"
-	AccessApplicationGetResponseEndUserApplicationTypeBISO           AccessApplicationGetResponseEndUserApplicationType = "biso"
-	AccessApplicationGetResponseEndUserApplicationTypeBookmark       AccessApplicationGetResponseEndUserApplicationType = "bookmark"
-	AccessApplicationGetResponseEndUserApplicationTypeDashSSO        AccessApplicationGetResponseEndUserApplicationType = "dash_sso"
-	AccessApplicationGetResponseEndUserApplicationTypeInfrastructure AccessApplicationGetResponseEndUserApplicationType = "infrastructure"
-	AccessApplicationGetResponseEndUserApplicationTypeRDP            AccessApplicationGetResponseEndUserApplicationType = "rdp"
-	AccessApplicationGetResponseEndUserApplicationTypeMcp            AccessApplicationGetResponseEndUserApplicationType = "mcp"
-	AccessApplicationGetResponseEndUserApplicationTypeMcpPortal      AccessApplicationGetResponseEndUserApplicationType = "mcp_portal"
-	AccessApplicationGetResponseEndUserApplicationTypeProxyEndpoint  AccessApplicationGetResponseEndUserApplicationType = "proxy_endpoint"
-)
-
-func (r AccessApplicationGetResponseEndUserApplicationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseEndUserApplicationTypeSelfHosted, AccessApplicationGetResponseEndUserApplicationTypeEndUser, AccessApplicationGetResponseEndUserApplicationTypeSaaS, AccessApplicationGetResponseEndUserApplicationTypeSSH, AccessApplicationGetResponseEndUserApplicationTypeVNC, AccessApplicationGetResponseEndUserApplicationTypeAppLauncher, AccessApplicationGetResponseEndUserApplicationTypeWARP, AccessApplicationGetResponseEndUserApplicationTypeBISO, AccessApplicationGetResponseEndUserApplicationTypeBookmark, AccessApplicationGetResponseEndUserApplicationTypeDashSSO, AccessApplicationGetResponseEndUserApplicationTypeInfrastructure, AccessApplicationGetResponseEndUserApplicationTypeRDP, AccessApplicationGetResponseEndUserApplicationTypeMcp, AccessApplicationGetResponseEndUserApplicationTypeMcpPortal, AccessApplicationGetResponseEndUserApplicationTypeProxyEndpoint:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationGetResponseEndUserApplicationDestination struct {
-	// This field can have the runtime type of
-	// [[]AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride],
-	// [[]AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride],
-	// [[]AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride],
-	// [[]AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride],
-	// [[]AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride].
-	Overrides interface{}                                                    `json:"overrides"`
-	Type      AccessApplicationGetResponseEndUserApplicationDestinationsType `json:"type"`
-	// The public hostname and optional path to secure.
-	URI string `json:"uri"`
-	// The ID of the Cloudflare Worker to secure.
-	WorkerID string                                                        `json:"worker_id"`
-	JSON     accessApplicationGetResponseEndUserApplicationDestinationJSON `json:"-"`
-	union    AccessApplicationGetResponseEndUserApplicationDestinationsUnion
-}
-
-// accessApplicationGetResponseEndUserApplicationDestinationJSON contains the JSON
-// metadata for the struct
-// [AccessApplicationGetResponseEndUserApplicationDestination]
-type accessApplicationGetResponseEndUserApplicationDestinationJSON struct {
-	Overrides   apijson.Field
-	Type        apijson.Field
-	URI         apijson.Field
-	WorkerID    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r accessApplicationGetResponseEndUserApplicationDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationGetResponseEndUserApplicationDestination) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationGetResponseEndUserApplicationDestination{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationGetResponseEndUserApplicationDestinationsUnion] interface
-// which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestination],
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination],
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination],
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination],
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination].
-func (r AccessApplicationGetResponseEndUserApplicationDestination) AsUnion() AccessApplicationGetResponseEndUserApplicationDestinationsUnion {
-	return r.union
-}
-
-// Union satisfied by
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestination],
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination],
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination],
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination]
-// or
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination].
-type AccessApplicationGetResponseEndUserApplicationDestinationsUnion interface {
-	implementsAccessApplicationGetResponseEndUserApplicationDestination()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationGetResponseEndUserApplicationDestinationsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestination{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination{}),
-		},
-	)
-}
-
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestination struct {
-	// The public hostname and optional path to secure.
-	URI string `json:"uri" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride `json:"overrides"`
-	Type      AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationType       `json:"type"`
-	JSON      accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationJSON       `json:"-"`
-}
-
-// accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestination]
-type accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationJSON struct {
-	URI         apijson.Field
-	Overrides   apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestination) implementsAccessApplicationGetResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                               `json:"path_pattern" api:"required"`
-	JSON        accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride]
-type accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehavior string
-
-const (
-	AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehaviorPublic AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationType string
-
-const (
-	AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationTypePublic AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationType = "public"
-)
-
-func (r AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPublicDestinationTypePublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination struct {
-	Type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationType `json:"type" api:"required"`
-	// The ID of the Cloudflare Worker to secure.
-	WorkerID string `json:"worker_id" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride `json:"overrides"`
-	JSON      accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationJSON       `json:"-"`
-}
-
-// accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination]
-type accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationJSON struct {
-	Type        apijson.Field
-	WorkerID    apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestination) implementsAccessApplicationGetResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationType string
-
-const (
-	AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationTypeWorker AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationType = "worker"
-)
-
-func (r AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationTypeWorker:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                               `json:"path_pattern" api:"required"`
-	JSON        accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride]
-type accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehavior string
-
-const (
-	AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehaviorPublic AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserWorkerDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination struct {
-	Type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationType `json:"type" api:"required"`
-	// The ID of the Cloudflare Worker whose previews to secure.
-	WorkerID string `json:"worker_id" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride `json:"overrides"`
-	JSON      accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationJSON       `json:"-"`
-}
-
-// accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination]
-type accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationJSON struct {
-	Type        apijson.Field
-	WorkerID    apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestination) implementsAccessApplicationGetResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationType string
-
-const (
-	AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationTypePreviewWorker AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationType = "preview_worker"
-)
-
-func (r AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationTypePreviewWorker:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                                      `json:"path_pattern" api:"required"`
-	JSON        accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride]
-type accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior string
-
-const (
-	AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination struct {
-	Type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationType `json:"type" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride `json:"overrides"`
-	JSON      accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationJSON       `json:"-"`
-}
-
-// accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination]
-type accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationJSON struct {
-	Type        apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestination) implementsAccessApplicationGetResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationType string
-
-const (
-	AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationTypeAllWorkers AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationType = "all_workers"
-)
-
-func (r AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationTypeAllWorkers:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                                   `json:"path_pattern" api:"required"`
-	JSON        accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride]
-type accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior string
-
-const (
-	AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehaviorPublic AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllWorkersDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination struct {
-	Type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationType `json:"type" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides []AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride `json:"overrides"`
-	JSON      accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationJSON       `json:"-"`
-}
-
-// accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination]
-type accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationJSON struct {
-	Type        apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestination) implementsAccessApplicationGetResponseEndUserApplicationDestination() {
-}
-
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationType string
-
-const (
-	AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationType = "all_preview_workers"
-)
-
-func (r AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationTypeAllPreviewWorkers:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern string                                                                                                          `json:"path_pattern" api:"required"`
-	JSON        accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverrideJSON `json:"-"`
-}
-
-// accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverrideJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride]
-type accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverrideJSON struct {
-	Behavior    apijson.Field
-	PathPattern apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverride) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverrideJSON) RawJSON() string {
-	return r.raw
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior string
-
-const (
-	AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseEndUserApplicationDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationGetResponseEndUserApplicationDestinationsType string
-
-const (
-	AccessApplicationGetResponseEndUserApplicationDestinationsTypePublic            AccessApplicationGetResponseEndUserApplicationDestinationsType = "public"
-	AccessApplicationGetResponseEndUserApplicationDestinationsTypeWorker            AccessApplicationGetResponseEndUserApplicationDestinationsType = "worker"
-	AccessApplicationGetResponseEndUserApplicationDestinationsTypePreviewWorker     AccessApplicationGetResponseEndUserApplicationDestinationsType = "preview_worker"
-	AccessApplicationGetResponseEndUserApplicationDestinationsTypeAllWorkers        AccessApplicationGetResponseEndUserApplicationDestinationsType = "all_workers"
-	AccessApplicationGetResponseEndUserApplicationDestinationsTypeAllPreviewWorkers AccessApplicationGetResponseEndUserApplicationDestinationsType = "all_preview_workers"
-)
-
-func (r AccessApplicationGetResponseEndUserApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseEndUserApplicationDestinationsTypePublic, AccessApplicationGetResponseEndUserApplicationDestinationsTypeWorker, AccessApplicationGetResponseEndUserApplicationDestinationsTypePreviewWorker, AccessApplicationGetResponseEndUserApplicationDestinationsTypeAllWorkers, AccessApplicationGetResponseEndUserApplicationDestinationsTypeAllPreviewWorkers:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationGetResponseSelfHostedApplication struct {
@@ -46126,7 +42928,6 @@ type AccessApplicationGetResponseBrowserSSHApplicationType string
 
 const (
 	AccessApplicationGetResponseBrowserSSHApplicationTypeSelfHosted     AccessApplicationGetResponseBrowserSSHApplicationType = "self_hosted"
-	AccessApplicationGetResponseBrowserSSHApplicationTypeEndUser        AccessApplicationGetResponseBrowserSSHApplicationType = "end_user"
 	AccessApplicationGetResponseBrowserSSHApplicationTypeSaaS           AccessApplicationGetResponseBrowserSSHApplicationType = "saas"
 	AccessApplicationGetResponseBrowserSSHApplicationTypeSSH            AccessApplicationGetResponseBrowserSSHApplicationType = "ssh"
 	AccessApplicationGetResponseBrowserSSHApplicationTypeVNC            AccessApplicationGetResponseBrowserSSHApplicationType = "vnc"
@@ -46144,7 +42945,7 @@ const (
 
 func (r AccessApplicationGetResponseBrowserSSHApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationGetResponseBrowserSSHApplicationTypeEndUser, AccessApplicationGetResponseBrowserSSHApplicationTypeSaaS, AccessApplicationGetResponseBrowserSSHApplicationTypeSSH, AccessApplicationGetResponseBrowserSSHApplicationTypeVNC, AccessApplicationGetResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationGetResponseBrowserSSHApplicationTypeWARP, AccessApplicationGetResponseBrowserSSHApplicationTypeBISO, AccessApplicationGetResponseBrowserSSHApplicationTypeBookmark, AccessApplicationGetResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationGetResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationGetResponseBrowserSSHApplicationTypeRDP, AccessApplicationGetResponseBrowserSSHApplicationTypeMcp, AccessApplicationGetResponseBrowserSSHApplicationTypeMcpPortal, AccessApplicationGetResponseBrowserSSHApplicationTypeProxyEndpoint:
+	case AccessApplicationGetResponseBrowserSSHApplicationTypeSelfHosted, AccessApplicationGetResponseBrowserSSHApplicationTypeSaaS, AccessApplicationGetResponseBrowserSSHApplicationTypeSSH, AccessApplicationGetResponseBrowserSSHApplicationTypeVNC, AccessApplicationGetResponseBrowserSSHApplicationTypeAppLauncher, AccessApplicationGetResponseBrowserSSHApplicationTypeWARP, AccessApplicationGetResponseBrowserSSHApplicationTypeBISO, AccessApplicationGetResponseBrowserSSHApplicationTypeBookmark, AccessApplicationGetResponseBrowserSSHApplicationTypeDashSSO, AccessApplicationGetResponseBrowserSSHApplicationTypeInfrastructure, AccessApplicationGetResponseBrowserSSHApplicationTypeRDP, AccessApplicationGetResponseBrowserSSHApplicationTypeMcp, AccessApplicationGetResponseBrowserSSHApplicationTypeMcpPortal, AccessApplicationGetResponseBrowserSSHApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -47750,7 +44551,6 @@ type AccessApplicationGetResponseBrowserVNCApplicationType string
 
 const (
 	AccessApplicationGetResponseBrowserVNCApplicationTypeSelfHosted     AccessApplicationGetResponseBrowserVNCApplicationType = "self_hosted"
-	AccessApplicationGetResponseBrowserVNCApplicationTypeEndUser        AccessApplicationGetResponseBrowserVNCApplicationType = "end_user"
 	AccessApplicationGetResponseBrowserVNCApplicationTypeSaaS           AccessApplicationGetResponseBrowserVNCApplicationType = "saas"
 	AccessApplicationGetResponseBrowserVNCApplicationTypeSSH            AccessApplicationGetResponseBrowserVNCApplicationType = "ssh"
 	AccessApplicationGetResponseBrowserVNCApplicationTypeVNC            AccessApplicationGetResponseBrowserVNCApplicationType = "vnc"
@@ -47768,7 +44568,7 @@ const (
 
 func (r AccessApplicationGetResponseBrowserVNCApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationGetResponseBrowserVNCApplicationTypeEndUser, AccessApplicationGetResponseBrowserVNCApplicationTypeSaaS, AccessApplicationGetResponseBrowserVNCApplicationTypeSSH, AccessApplicationGetResponseBrowserVNCApplicationTypeVNC, AccessApplicationGetResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationGetResponseBrowserVNCApplicationTypeWARP, AccessApplicationGetResponseBrowserVNCApplicationTypeBISO, AccessApplicationGetResponseBrowserVNCApplicationTypeBookmark, AccessApplicationGetResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationGetResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationGetResponseBrowserVNCApplicationTypeRDP, AccessApplicationGetResponseBrowserVNCApplicationTypeMcp, AccessApplicationGetResponseBrowserVNCApplicationTypeMcpPortal, AccessApplicationGetResponseBrowserVNCApplicationTypeProxyEndpoint:
+	case AccessApplicationGetResponseBrowserVNCApplicationTypeSelfHosted, AccessApplicationGetResponseBrowserVNCApplicationTypeSaaS, AccessApplicationGetResponseBrowserVNCApplicationTypeSSH, AccessApplicationGetResponseBrowserVNCApplicationTypeVNC, AccessApplicationGetResponseBrowserVNCApplicationTypeAppLauncher, AccessApplicationGetResponseBrowserVNCApplicationTypeWARP, AccessApplicationGetResponseBrowserVNCApplicationTypeBISO, AccessApplicationGetResponseBrowserVNCApplicationTypeBookmark, AccessApplicationGetResponseBrowserVNCApplicationTypeDashSSO, AccessApplicationGetResponseBrowserVNCApplicationTypeInfrastructure, AccessApplicationGetResponseBrowserVNCApplicationTypeRDP, AccessApplicationGetResponseBrowserVNCApplicationTypeMcp, AccessApplicationGetResponseBrowserVNCApplicationTypeMcpPortal, AccessApplicationGetResponseBrowserVNCApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -49295,7 +46095,6 @@ type AccessApplicationGetResponseAppLauncherApplicationType string
 
 const (
 	AccessApplicationGetResponseAppLauncherApplicationTypeSelfHosted     AccessApplicationGetResponseAppLauncherApplicationType = "self_hosted"
-	AccessApplicationGetResponseAppLauncherApplicationTypeEndUser        AccessApplicationGetResponseAppLauncherApplicationType = "end_user"
 	AccessApplicationGetResponseAppLauncherApplicationTypeSaaS           AccessApplicationGetResponseAppLauncherApplicationType = "saas"
 	AccessApplicationGetResponseAppLauncherApplicationTypeSSH            AccessApplicationGetResponseAppLauncherApplicationType = "ssh"
 	AccessApplicationGetResponseAppLauncherApplicationTypeVNC            AccessApplicationGetResponseAppLauncherApplicationType = "vnc"
@@ -49313,7 +46112,7 @@ const (
 
 func (r AccessApplicationGetResponseAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationGetResponseAppLauncherApplicationTypeEndUser, AccessApplicationGetResponseAppLauncherApplicationTypeSaaS, AccessApplicationGetResponseAppLauncherApplicationTypeSSH, AccessApplicationGetResponseAppLauncherApplicationTypeVNC, AccessApplicationGetResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationGetResponseAppLauncherApplicationTypeWARP, AccessApplicationGetResponseAppLauncherApplicationTypeBISO, AccessApplicationGetResponseAppLauncherApplicationTypeBookmark, AccessApplicationGetResponseAppLauncherApplicationTypeDashSSO, AccessApplicationGetResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationGetResponseAppLauncherApplicationTypeRDP, AccessApplicationGetResponseAppLauncherApplicationTypeMcp, AccessApplicationGetResponseAppLauncherApplicationTypeMcpPortal, AccessApplicationGetResponseAppLauncherApplicationTypeProxyEndpoint:
+	case AccessApplicationGetResponseAppLauncherApplicationTypeSelfHosted, AccessApplicationGetResponseAppLauncherApplicationTypeSaaS, AccessApplicationGetResponseAppLauncherApplicationTypeSSH, AccessApplicationGetResponseAppLauncherApplicationTypeVNC, AccessApplicationGetResponseAppLauncherApplicationTypeAppLauncher, AccessApplicationGetResponseAppLauncherApplicationTypeWARP, AccessApplicationGetResponseAppLauncherApplicationTypeBISO, AccessApplicationGetResponseAppLauncherApplicationTypeBookmark, AccessApplicationGetResponseAppLauncherApplicationTypeDashSSO, AccessApplicationGetResponseAppLauncherApplicationTypeInfrastructure, AccessApplicationGetResponseAppLauncherApplicationTypeRDP, AccessApplicationGetResponseAppLauncherApplicationTypeMcp, AccessApplicationGetResponseAppLauncherApplicationTypeMcpPortal, AccessApplicationGetResponseAppLauncherApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -55969,42 +52768,10 @@ func (r AccessApplicationGetResponseMcpServerPortalApplicationSCIMConfigAuthenti
 	return false
 }
 
-// The application type.
-type AccessApplicationGetResponseType string
-
-const (
-	AccessApplicationGetResponseTypeSelfHosted     AccessApplicationGetResponseType = "self_hosted"
-	AccessApplicationGetResponseTypeEndUser        AccessApplicationGetResponseType = "end_user"
-	AccessApplicationGetResponseTypeSaaS           AccessApplicationGetResponseType = "saas"
-	AccessApplicationGetResponseTypeSSH            AccessApplicationGetResponseType = "ssh"
-	AccessApplicationGetResponseTypeVNC            AccessApplicationGetResponseType = "vnc"
-	AccessApplicationGetResponseTypeAppLauncher    AccessApplicationGetResponseType = "app_launcher"
-	AccessApplicationGetResponseTypeWARP           AccessApplicationGetResponseType = "warp"
-	AccessApplicationGetResponseTypeBISO           AccessApplicationGetResponseType = "biso"
-	AccessApplicationGetResponseTypeBookmark       AccessApplicationGetResponseType = "bookmark"
-	AccessApplicationGetResponseTypeDashSSO        AccessApplicationGetResponseType = "dash_sso"
-	AccessApplicationGetResponseTypeInfrastructure AccessApplicationGetResponseType = "infrastructure"
-	AccessApplicationGetResponseTypeRDP            AccessApplicationGetResponseType = "rdp"
-	AccessApplicationGetResponseTypeMcp            AccessApplicationGetResponseType = "mcp"
-	AccessApplicationGetResponseTypeMcpPortal      AccessApplicationGetResponseType = "mcp_portal"
-	AccessApplicationGetResponseTypeProxyEndpoint  AccessApplicationGetResponseType = "proxy_endpoint"
-)
-
-func (r AccessApplicationGetResponseType) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseTypeSelfHosted, AccessApplicationGetResponseTypeEndUser, AccessApplicationGetResponseTypeSaaS, AccessApplicationGetResponseTypeSSH, AccessApplicationGetResponseTypeVNC, AccessApplicationGetResponseTypeAppLauncher, AccessApplicationGetResponseTypeWARP, AccessApplicationGetResponseTypeBISO, AccessApplicationGetResponseTypeBookmark, AccessApplicationGetResponseTypeDashSSO, AccessApplicationGetResponseTypeInfrastructure, AccessApplicationGetResponseTypeRDP, AccessApplicationGetResponseTypeMcp, AccessApplicationGetResponseTypeMcpPortal, AccessApplicationGetResponseTypeProxyEndpoint:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationRevokeTokensResponse = interface{}
 
 type AccessApplicationNewParams struct {
-	// An end user application is a public self-hosted application backed by exactly
-	// one organization-owned user population. End user applications use a canonical
-	// allow-everyone policy and do not support custom policies, SCIM configuration,
-	// MFA configuration, or private destinations.
+	// Contains the targets secured by the application.
 	Body AccessApplicationNewParamsBodyUnion `json:"body" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -56016,10 +52783,7 @@ func (r AccessApplicationNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-// An end user application is a public self-hosted application backed by exactly
-// one organization-owned user population. End user applications use a canonical
-// allow-everyone policy and do not support custom policies, SCIM configuration,
-// MFA configuration, or private destinations.
+// Contains the targets secured by the application.
 type AccessApplicationNewParamsBody struct {
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
@@ -56108,13 +52872,12 @@ type AccessApplicationNewParamsBody struct {
 	Tags             param.Field[interface{}] `json:"tags"`
 	TargetCriteria   param.Field[interface{}] `json:"target_criteria"`
 	// The application type.
-	Type param.Field[AccessApplicationNewParamsBodyType] `json:"type"`
+	Type param.Field[ApplicationType] `json:"type"`
 	// Determines if users can access this application via a clientless browser
 	// isolation URL. This allows users to access private domains without connecting to
 	// Gateway. The option requires Clientless Browser Isolation to be set up with
 	// policies that allow users of this application.
-	UseClientlessIsolationAppLauncherURL param.Field[bool]        `json:"use_clientless_isolation_app_launcher_url"`
-	UserPopulations                      param.Field[interface{}] `json:"user_populations"`
+	UseClientlessIsolationAppLauncherURL param.Field[bool] `json:"use_clientless_isolation_app_launcher_url"`
 }
 
 func (r AccessApplicationNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -56123,13 +52886,9 @@ func (r AccessApplicationNewParamsBody) MarshalJSON() (data []byte, err error) {
 
 func (r AccessApplicationNewParamsBody) implementsAccessApplicationNewParamsBodyUnion() {}
 
-// An end user application is a public self-hosted application backed by exactly
-// one organization-owned user population. End user applications use a canonical
-// allow-everyone policy and do not support custom policies, SCIM configuration,
-// MFA configuration, or private destinations.
+// Contains the targets secured by the application.
 //
-// Satisfied by [zero_trust.AccessApplicationNewParamsBodyAccessEndUserProps],
-// [zero_trust.AccessApplicationNewParamsBodySelfHostedApplication],
+// Satisfied by [zero_trust.AccessApplicationNewParamsBodySelfHostedApplication],
 // [zero_trust.AccessApplicationNewParamsBodySaaSApplication],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplication],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserVNCApplication],
@@ -56145,481 +52904,6 @@ func (r AccessApplicationNewParamsBody) implementsAccessApplicationNewParamsBody
 // [AccessApplicationNewParamsBody].
 type AccessApplicationNewParamsBodyUnion interface {
 	implementsAccessApplicationNewParamsBodyUnion()
-}
-
-// An end user application is a public self-hosted application backed by exactly
-// one organization-owned user population. End user applications use a canonical
-// allow-everyone policy and do not support custom policies, SCIM configuration,
-// MFA configuration, or private destinations.
-type AccessApplicationNewParamsBodyAccessEndUserProps struct {
-	// **Beta:** Optional configuration for managing an OAuth authorization flow
-	// controlled by Access. When set, Access will act as the OAuth authorization
-	// server for this application. Only compatible with OAuth clients that support
-	// [RFC 8707](https://datatracker.ietf.org/doc/html/rfc8707) (Resource Indicators
-	// for OAuth 2.0). This feature is currently in beta.
-	OAuthConfiguration param.Field[AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfiguration] `json:"oauth_configuration" api:"required"`
-	// The application type.
-	Type param.Field[AccessApplicationNewParamsBodyAccessEndUserPropsType] `json:"type" api:"required"`
-	// The single user population associated with this application.
-	UserPopulations param.Field[[]string] `json:"user_populations" api:"required"`
-	// The identity providers your users can select when connecting to this
-	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
-	// Public hostname and Workers destinations secured by Access.
-	Destinations param.Field[[]AccessApplicationNewParamsBodyAccessEndUserPropsDestinationUnion] `json:"destinations"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
-	Domain param.Field[string] `json:"domain"`
-	// The name of the application.
-	Name param.Field[string] `json:"name"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	//
-	// Deprecated: deprecated
-	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserProps) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserProps) implementsAccessApplicationNewParamsBodyUnion() {
-}
-
-// **Beta:** Optional configuration for managing an OAuth authorization flow
-// controlled by Access. When set, Access will act as the OAuth authorization
-// server for this application. Only compatible with OAuth clients that support
-// [RFC 8707](https://datatracker.ietf.org/doc/html/rfc8707) (Resource Indicators
-// for OAuth 2.0). This feature is currently in beta.
-type AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfiguration struct {
-	// Settings for OAuth dynamic client registration.
-	DynamicClientRegistration param.Field[AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfigurationDynamicClientRegistration] `json:"dynamic_client_registration"`
-	// Managed OAuth is required for end user applications and cannot be disabled.
-	Enabled param.Field[AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfigurationEnabled] `json:"enabled"`
-	// Settings for OAuth grant behavior.
-	Grant param.Field[AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfigurationGrant] `json:"grant"`
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfiguration) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Settings for OAuth dynamic client registration.
-type AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfigurationDynamicClientRegistration struct {
-	// Allows any client with redirect URIs on localhost.
-	AllowAnyOnLocalhost param.Field[bool] `json:"allow_any_on_localhost"`
-	// Allows any client with redirect URIs on 127.0.0.1.
-	AllowAnyOnLoopback param.Field[bool] `json:"allow_any_on_loopback"`
-	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
-	// must be explicitly configured and match exactly.
-	AllowedURIs param.Field[[]string] `json:"allowed_uris"`
-	// Whether dynamic client registration is enabled.
-	Enabled param.Field[bool] `json:"enabled"`
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfigurationDynamicClientRegistration) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Managed OAuth is required for end user applications and cannot be disabled.
-type AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfigurationEnabled bool
-
-const (
-	AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfigurationEnabledTrue AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfigurationEnabled = true
-)
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfigurationEnabled) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfigurationEnabledTrue:
-		return true
-	}
-	return false
-}
-
-// Settings for OAuth grant behavior.
-type AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfigurationGrant struct {
-	// The lifetime of the access token. Must be in the format `300ms` or `2h45m`.
-	// Valid time units are ns, us (or µs), ms, s, m, h.
-	AccessTokenLifetime param.Field[string] `json:"access_token_lifetime"`
-	// The duration of the OAuth session. Must be in the format `300ms` or `2h45m`.
-	// Valid time units are ns, us (or µs), ms, s, m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfigurationGrant) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The application type.
-type AccessApplicationNewParamsBodyAccessEndUserPropsType string
-
-const (
-	AccessApplicationNewParamsBodyAccessEndUserPropsTypeSelfHosted     AccessApplicationNewParamsBodyAccessEndUserPropsType = "self_hosted"
-	AccessApplicationNewParamsBodyAccessEndUserPropsTypeEndUser        AccessApplicationNewParamsBodyAccessEndUserPropsType = "end_user"
-	AccessApplicationNewParamsBodyAccessEndUserPropsTypeSaaS           AccessApplicationNewParamsBodyAccessEndUserPropsType = "saas"
-	AccessApplicationNewParamsBodyAccessEndUserPropsTypeSSH            AccessApplicationNewParamsBodyAccessEndUserPropsType = "ssh"
-	AccessApplicationNewParamsBodyAccessEndUserPropsTypeVNC            AccessApplicationNewParamsBodyAccessEndUserPropsType = "vnc"
-	AccessApplicationNewParamsBodyAccessEndUserPropsTypeAppLauncher    AccessApplicationNewParamsBodyAccessEndUserPropsType = "app_launcher"
-	AccessApplicationNewParamsBodyAccessEndUserPropsTypeWARP           AccessApplicationNewParamsBodyAccessEndUserPropsType = "warp"
-	AccessApplicationNewParamsBodyAccessEndUserPropsTypeBISO           AccessApplicationNewParamsBodyAccessEndUserPropsType = "biso"
-	AccessApplicationNewParamsBodyAccessEndUserPropsTypeBookmark       AccessApplicationNewParamsBodyAccessEndUserPropsType = "bookmark"
-	AccessApplicationNewParamsBodyAccessEndUserPropsTypeDashSSO        AccessApplicationNewParamsBodyAccessEndUserPropsType = "dash_sso"
-	AccessApplicationNewParamsBodyAccessEndUserPropsTypeInfrastructure AccessApplicationNewParamsBodyAccessEndUserPropsType = "infrastructure"
-	AccessApplicationNewParamsBodyAccessEndUserPropsTypeRDP            AccessApplicationNewParamsBodyAccessEndUserPropsType = "rdp"
-	AccessApplicationNewParamsBodyAccessEndUserPropsTypeMcp            AccessApplicationNewParamsBodyAccessEndUserPropsType = "mcp"
-	AccessApplicationNewParamsBodyAccessEndUserPropsTypeMcpPortal      AccessApplicationNewParamsBodyAccessEndUserPropsType = "mcp_portal"
-	AccessApplicationNewParamsBodyAccessEndUserPropsTypeProxyEndpoint  AccessApplicationNewParamsBodyAccessEndUserPropsType = "proxy_endpoint"
-)
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyAccessEndUserPropsTypeSelfHosted, AccessApplicationNewParamsBodyAccessEndUserPropsTypeEndUser, AccessApplicationNewParamsBodyAccessEndUserPropsTypeSaaS, AccessApplicationNewParamsBodyAccessEndUserPropsTypeSSH, AccessApplicationNewParamsBodyAccessEndUserPropsTypeVNC, AccessApplicationNewParamsBodyAccessEndUserPropsTypeAppLauncher, AccessApplicationNewParamsBodyAccessEndUserPropsTypeWARP, AccessApplicationNewParamsBodyAccessEndUserPropsTypeBISO, AccessApplicationNewParamsBodyAccessEndUserPropsTypeBookmark, AccessApplicationNewParamsBodyAccessEndUserPropsTypeDashSSO, AccessApplicationNewParamsBodyAccessEndUserPropsTypeInfrastructure, AccessApplicationNewParamsBodyAccessEndUserPropsTypeRDP, AccessApplicationNewParamsBodyAccessEndUserPropsTypeMcp, AccessApplicationNewParamsBodyAccessEndUserPropsTypeMcpPortal, AccessApplicationNewParamsBodyAccessEndUserPropsTypeProxyEndpoint:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestination struct {
-	Overrides param.Field[interface{}]                                                      `json:"overrides"`
-	Type      param.Field[AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsType] `json:"type"`
-	// The public hostname and optional path to secure.
-	URI param.Field[string] `json:"uri"`
-	// The ID of the Cloudflare Worker to secure.
-	WorkerID param.Field[string] `json:"worker_id"`
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestination) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestination) implementsAccessApplicationNewParamsBodyAccessEndUserPropsDestinationUnion() {
-}
-
-// Satisfied by
-// [zero_trust.AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestination],
-// [zero_trust.AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestination],
-// [zero_trust.AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestination],
-// [zero_trust.AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestination],
-// [zero_trust.AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestination],
-// [AccessApplicationNewParamsBodyAccessEndUserPropsDestination].
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationUnion interface {
-	implementsAccessApplicationNewParamsBodyAccessEndUserPropsDestinationUnion()
-}
-
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestination struct {
-	// The public hostname and optional path to secure.
-	URI param.Field[string] `json:"uri" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides param.Field[[]AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationOverride] `json:"overrides"`
-	Type      param.Field[AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationType]       `json:"type"`
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestination) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestination) implementsAccessApplicationNewParamsBodyAccessEndUserPropsDestinationUnion() {
-}
-
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior param.Field[AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationOverridesBehavior] `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationOverride) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationOverridesBehavior string
-
-const (
-	AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationType string
-
-const (
-	AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationTypePublic AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationType = "public"
-)
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationTypePublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestination struct {
-	Type param.Field[AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationType] `json:"type" api:"required"`
-	// The ID of the Cloudflare Worker to secure.
-	WorkerID param.Field[string] `json:"worker_id" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides param.Field[[]AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationOverride] `json:"overrides"`
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestination) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestination) implementsAccessApplicationNewParamsBodyAccessEndUserPropsDestinationUnion() {
-}
-
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationType string
-
-const (
-	AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationTypeWorker AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationType = "worker"
-)
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationTypeWorker:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior param.Field[AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationOverridesBehavior string
-
-const (
-	AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestination struct {
-	Type param.Field[AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationType] `json:"type" api:"required"`
-	// The ID of the Cloudflare Worker whose previews to secure.
-	WorkerID param.Field[string] `json:"worker_id" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides param.Field[[]AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationOverride] `json:"overrides"`
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestination) implementsAccessApplicationNewParamsBodyAccessEndUserPropsDestinationUnion() {
-}
-
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationType string
-
-const (
-	AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationTypePreviewWorker AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationType = "preview_worker"
-)
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationTypePreviewWorker:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior param.Field[AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior string
-
-const (
-	AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestination struct {
-	Type param.Field[AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationType] `json:"type" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides param.Field[[]AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationOverride] `json:"overrides"`
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestination) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestination) implementsAccessApplicationNewParamsBodyAccessEndUserPropsDestinationUnion() {
-}
-
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationType string
-
-const (
-	AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationTypeAllWorkers AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationType = "all_workers"
-)
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationTypeAllWorkers:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior param.Field[AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior string
-
-const (
-	AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestination struct {
-	Type param.Field[AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationType] `json:"type" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides param.Field[[]AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationOverride] `json:"overrides"`
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestination) implementsAccessApplicationNewParamsBodyAccessEndUserPropsDestinationUnion() {
-}
-
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationType string
-
-const (
-	AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationType = "all_preview_workers"
-)
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationTypeAllPreviewWorkers:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior param.Field[AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
-}
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior string
-
-const (
-	AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsType string
-
-const (
-	AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsTypePublic            AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsType = "public"
-	AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsTypeWorker            AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsType = "worker"
-	AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsTypePreviewWorker     AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsType = "preview_worker"
-	AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsTypeAllWorkers        AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsType = "all_workers"
-	AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsTypeAllPreviewWorkers AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsType = "all_preview_workers"
-)
-
-func (r AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsTypePublic, AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsTypeWorker, AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsTypePreviewWorker, AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsTypeAllWorkers, AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsTypeAllPreviewWorkers:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationNewParamsBodySelfHostedApplication struct {
@@ -58385,7 +54669,6 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationType string
 
 const (
 	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSelfHosted     AccessApplicationNewParamsBodyBrowserSSHApplicationType = "self_hosted"
-	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeEndUser        AccessApplicationNewParamsBodyBrowserSSHApplicationType = "end_user"
 	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSaaS           AccessApplicationNewParamsBodyBrowserSSHApplicationType = "saas"
 	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSSH            AccessApplicationNewParamsBodyBrowserSSHApplicationType = "ssh"
 	AccessApplicationNewParamsBodyBrowserSSHApplicationTypeVNC            AccessApplicationNewParamsBodyBrowserSSHApplicationType = "vnc"
@@ -58403,7 +54686,7 @@ const (
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSelfHosted, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeEndUser, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSaaS, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSSH, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeVNC, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeAppLauncher, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeWARP, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeBISO, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeBookmark, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeDashSSO, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeInfrastructure, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeRDP, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeMcp, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeMcpPortal, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeProxyEndpoint:
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSelfHosted, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSaaS, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeSSH, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeVNC, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeAppLauncher, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeWARP, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeBISO, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeBookmark, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeDashSSO, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeInfrastructure, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeRDP, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeMcp, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeMcpPortal, AccessApplicationNewParamsBodyBrowserSSHApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -59519,7 +55802,6 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationType string
 
 const (
 	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSelfHosted     AccessApplicationNewParamsBodyBrowserVNCApplicationType = "self_hosted"
-	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeEndUser        AccessApplicationNewParamsBodyBrowserVNCApplicationType = "end_user"
 	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSaaS           AccessApplicationNewParamsBodyBrowserVNCApplicationType = "saas"
 	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSSH            AccessApplicationNewParamsBodyBrowserVNCApplicationType = "ssh"
 	AccessApplicationNewParamsBodyBrowserVNCApplicationTypeVNC            AccessApplicationNewParamsBodyBrowserVNCApplicationType = "vnc"
@@ -59537,7 +55819,7 @@ const (
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSelfHosted, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeEndUser, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSaaS, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSSH, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeVNC, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeAppLauncher, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeWARP, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeBISO, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeBookmark, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeDashSSO, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeInfrastructure, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeRDP, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeMcp, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeMcpPortal, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeProxyEndpoint:
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSelfHosted, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSaaS, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeSSH, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeVNC, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeAppLauncher, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeWARP, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeBISO, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeBookmark, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeDashSSO, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeInfrastructure, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeRDP, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeMcp, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeMcpPortal, AccessApplicationNewParamsBodyBrowserVNCApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -60584,7 +56866,6 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationType string
 
 const (
 	AccessApplicationNewParamsBodyAppLauncherApplicationTypeSelfHosted     AccessApplicationNewParamsBodyAppLauncherApplicationType = "self_hosted"
-	AccessApplicationNewParamsBodyAppLauncherApplicationTypeEndUser        AccessApplicationNewParamsBodyAppLauncherApplicationType = "end_user"
 	AccessApplicationNewParamsBodyAppLauncherApplicationTypeSaaS           AccessApplicationNewParamsBodyAppLauncherApplicationType = "saas"
 	AccessApplicationNewParamsBodyAppLauncherApplicationTypeSSH            AccessApplicationNewParamsBodyAppLauncherApplicationType = "ssh"
 	AccessApplicationNewParamsBodyAppLauncherApplicationTypeVNC            AccessApplicationNewParamsBodyAppLauncherApplicationType = "vnc"
@@ -60602,7 +56883,7 @@ const (
 
 func (r AccessApplicationNewParamsBodyAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyAppLauncherApplicationTypeSelfHosted, AccessApplicationNewParamsBodyAppLauncherApplicationTypeEndUser, AccessApplicationNewParamsBodyAppLauncherApplicationTypeSaaS, AccessApplicationNewParamsBodyAppLauncherApplicationTypeSSH, AccessApplicationNewParamsBodyAppLauncherApplicationTypeVNC, AccessApplicationNewParamsBodyAppLauncherApplicationTypeAppLauncher, AccessApplicationNewParamsBodyAppLauncherApplicationTypeWARP, AccessApplicationNewParamsBodyAppLauncherApplicationTypeBISO, AccessApplicationNewParamsBodyAppLauncherApplicationTypeBookmark, AccessApplicationNewParamsBodyAppLauncherApplicationTypeDashSSO, AccessApplicationNewParamsBodyAppLauncherApplicationTypeInfrastructure, AccessApplicationNewParamsBodyAppLauncherApplicationTypeRDP, AccessApplicationNewParamsBodyAppLauncherApplicationTypeMcp, AccessApplicationNewParamsBodyAppLauncherApplicationTypeMcpPortal, AccessApplicationNewParamsBodyAppLauncherApplicationTypeProxyEndpoint:
+	case AccessApplicationNewParamsBodyAppLauncherApplicationTypeSelfHosted, AccessApplicationNewParamsBodyAppLauncherApplicationTypeSaaS, AccessApplicationNewParamsBodyAppLauncherApplicationTypeSSH, AccessApplicationNewParamsBodyAppLauncherApplicationTypeVNC, AccessApplicationNewParamsBodyAppLauncherApplicationTypeAppLauncher, AccessApplicationNewParamsBodyAppLauncherApplicationTypeWARP, AccessApplicationNewParamsBodyAppLauncherApplicationTypeBISO, AccessApplicationNewParamsBodyAppLauncherApplicationTypeBookmark, AccessApplicationNewParamsBodyAppLauncherApplicationTypeDashSSO, AccessApplicationNewParamsBodyAppLauncherApplicationTypeInfrastructure, AccessApplicationNewParamsBodyAppLauncherApplicationTypeRDP, AccessApplicationNewParamsBodyAppLauncherApplicationTypeMcp, AccessApplicationNewParamsBodyAppLauncherApplicationTypeMcpPortal, AccessApplicationNewParamsBodyAppLauncherApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -65256,35 +61537,6 @@ func (r AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfigAuthen
 	return false
 }
 
-// The application type.
-type AccessApplicationNewParamsBodyType string
-
-const (
-	AccessApplicationNewParamsBodyTypeSelfHosted     AccessApplicationNewParamsBodyType = "self_hosted"
-	AccessApplicationNewParamsBodyTypeEndUser        AccessApplicationNewParamsBodyType = "end_user"
-	AccessApplicationNewParamsBodyTypeSaaS           AccessApplicationNewParamsBodyType = "saas"
-	AccessApplicationNewParamsBodyTypeSSH            AccessApplicationNewParamsBodyType = "ssh"
-	AccessApplicationNewParamsBodyTypeVNC            AccessApplicationNewParamsBodyType = "vnc"
-	AccessApplicationNewParamsBodyTypeAppLauncher    AccessApplicationNewParamsBodyType = "app_launcher"
-	AccessApplicationNewParamsBodyTypeWARP           AccessApplicationNewParamsBodyType = "warp"
-	AccessApplicationNewParamsBodyTypeBISO           AccessApplicationNewParamsBodyType = "biso"
-	AccessApplicationNewParamsBodyTypeBookmark       AccessApplicationNewParamsBodyType = "bookmark"
-	AccessApplicationNewParamsBodyTypeDashSSO        AccessApplicationNewParamsBodyType = "dash_sso"
-	AccessApplicationNewParamsBodyTypeInfrastructure AccessApplicationNewParamsBodyType = "infrastructure"
-	AccessApplicationNewParamsBodyTypeRDP            AccessApplicationNewParamsBodyType = "rdp"
-	AccessApplicationNewParamsBodyTypeMcp            AccessApplicationNewParamsBodyType = "mcp"
-	AccessApplicationNewParamsBodyTypeMcpPortal      AccessApplicationNewParamsBodyType = "mcp_portal"
-	AccessApplicationNewParamsBodyTypeProxyEndpoint  AccessApplicationNewParamsBodyType = "proxy_endpoint"
-)
-
-func (r AccessApplicationNewParamsBodyType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyTypeSelfHosted, AccessApplicationNewParamsBodyTypeEndUser, AccessApplicationNewParamsBodyTypeSaaS, AccessApplicationNewParamsBodyTypeSSH, AccessApplicationNewParamsBodyTypeVNC, AccessApplicationNewParamsBodyTypeAppLauncher, AccessApplicationNewParamsBodyTypeWARP, AccessApplicationNewParamsBodyTypeBISO, AccessApplicationNewParamsBodyTypeBookmark, AccessApplicationNewParamsBodyTypeDashSSO, AccessApplicationNewParamsBodyTypeInfrastructure, AccessApplicationNewParamsBodyTypeRDP, AccessApplicationNewParamsBodyTypeMcp, AccessApplicationNewParamsBodyTypeMcpPortal, AccessApplicationNewParamsBodyTypeProxyEndpoint:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationNewResponseEnvelope struct {
 	Errors   []AccessApplicationNewResponseEnvelopeErrors   `json:"errors" api:"required"`
 	Messages []AccessApplicationNewResponseEnvelopeMessages `json:"messages" api:"required"`
@@ -65425,10 +61677,7 @@ func (r AccessApplicationNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessApplicationUpdateParams struct {
-	// An end user application is a public self-hosted application backed by exactly
-	// one organization-owned user population. End user applications use a canonical
-	// allow-everyone policy and do not support custom policies, SCIM configuration,
-	// MFA configuration, or private destinations.
+	// Contains the targets secured by the application.
 	Body AccessApplicationUpdateParamsBodyUnion `json:"body" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -65440,10 +61689,7 @@ func (r AccessApplicationUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-// An end user application is a public self-hosted application backed by exactly
-// one organization-owned user population. End user applications use a canonical
-// allow-everyone policy and do not support custom policies, SCIM configuration,
-// MFA configuration, or private destinations.
+// Contains the targets secured by the application.
 type AccessApplicationUpdateParamsBody struct {
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
@@ -65532,13 +61778,12 @@ type AccessApplicationUpdateParamsBody struct {
 	Tags             param.Field[interface{}] `json:"tags"`
 	TargetCriteria   param.Field[interface{}] `json:"target_criteria"`
 	// The application type.
-	Type param.Field[AccessApplicationUpdateParamsBodyType] `json:"type"`
+	Type param.Field[ApplicationType] `json:"type"`
 	// Determines if users can access this application via a clientless browser
 	// isolation URL. This allows users to access private domains without connecting to
 	// Gateway. The option requires Clientless Browser Isolation to be set up with
 	// policies that allow users of this application.
-	UseClientlessIsolationAppLauncherURL param.Field[bool]        `json:"use_clientless_isolation_app_launcher_url"`
-	UserPopulations                      param.Field[interface{}] `json:"user_populations"`
+	UseClientlessIsolationAppLauncherURL param.Field[bool] `json:"use_clientless_isolation_app_launcher_url"`
 }
 
 func (r AccessApplicationUpdateParamsBody) MarshalJSON() (data []byte, err error) {
@@ -65547,12 +61792,9 @@ func (r AccessApplicationUpdateParamsBody) MarshalJSON() (data []byte, err error
 
 func (r AccessApplicationUpdateParamsBody) implementsAccessApplicationUpdateParamsBodyUnion() {}
 
-// An end user application is a public self-hosted application backed by exactly
-// one organization-owned user population. End user applications use a canonical
-// allow-everyone policy and do not support custom policies, SCIM configuration,
-// MFA configuration, or private destinations.
+// Contains the targets secured by the application.
 //
-// Satisfied by [zero_trust.AccessApplicationUpdateParamsBodyAccessEndUserProps],
+// Satisfied by
 // [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodySaaSApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplication],
@@ -65569,481 +61811,6 @@ func (r AccessApplicationUpdateParamsBody) implementsAccessApplicationUpdatePara
 // [AccessApplicationUpdateParamsBody].
 type AccessApplicationUpdateParamsBodyUnion interface {
 	implementsAccessApplicationUpdateParamsBodyUnion()
-}
-
-// An end user application is a public self-hosted application backed by exactly
-// one organization-owned user population. End user applications use a canonical
-// allow-everyone policy and do not support custom policies, SCIM configuration,
-// MFA configuration, or private destinations.
-type AccessApplicationUpdateParamsBodyAccessEndUserProps struct {
-	// **Beta:** Optional configuration for managing an OAuth authorization flow
-	// controlled by Access. When set, Access will act as the OAuth authorization
-	// server for this application. Only compatible with OAuth clients that support
-	// [RFC 8707](https://datatracker.ietf.org/doc/html/rfc8707) (Resource Indicators
-	// for OAuth 2.0). This feature is currently in beta.
-	OAuthConfiguration param.Field[AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfiguration] `json:"oauth_configuration" api:"required"`
-	// The application type.
-	Type param.Field[AccessApplicationUpdateParamsBodyAccessEndUserPropsType] `json:"type" api:"required"`
-	// The single user population associated with this application.
-	UserPopulations param.Field[[]string] `json:"user_populations" api:"required"`
-	// The identity providers your users can select when connecting to this
-	// application. Defaults to all IdPs configured in your account.
-	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
-	// Public hostname and Workers destinations secured by Access.
-	Destinations param.Field[[]AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationUnion] `json:"destinations"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
-	Domain param.Field[string] `json:"domain"`
-	// The name of the application.
-	Name param.Field[string] `json:"name"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	//
-	// Deprecated: deprecated
-	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserProps) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserProps) implementsAccessApplicationUpdateParamsBodyUnion() {
-}
-
-// **Beta:** Optional configuration for managing an OAuth authorization flow
-// controlled by Access. When set, Access will act as the OAuth authorization
-// server for this application. Only compatible with OAuth clients that support
-// [RFC 8707](https://datatracker.ietf.org/doc/html/rfc8707) (Resource Indicators
-// for OAuth 2.0). This feature is currently in beta.
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfiguration struct {
-	// Settings for OAuth dynamic client registration.
-	DynamicClientRegistration param.Field[AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfigurationDynamicClientRegistration] `json:"dynamic_client_registration"`
-	// Managed OAuth is required for end user applications and cannot be disabled.
-	Enabled param.Field[AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfigurationEnabled] `json:"enabled"`
-	// Settings for OAuth grant behavior.
-	Grant param.Field[AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfigurationGrant] `json:"grant"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfiguration) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Settings for OAuth dynamic client registration.
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfigurationDynamicClientRegistration struct {
-	// Allows any client with redirect URIs on localhost.
-	AllowAnyOnLocalhost param.Field[bool] `json:"allow_any_on_localhost"`
-	// Allows any client with redirect URIs on 127.0.0.1.
-	AllowAnyOnLoopback param.Field[bool] `json:"allow_any_on_loopback"`
-	// The URIs that are allowed as redirect URIs for dynamically registered clients.
-	// HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs
-	// must be explicitly configured and match exactly.
-	AllowedURIs param.Field[[]string] `json:"allowed_uris"`
-	// Whether dynamic client registration is enabled.
-	Enabled param.Field[bool] `json:"enabled"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfigurationDynamicClientRegistration) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Managed OAuth is required for end user applications and cannot be disabled.
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfigurationEnabled bool
-
-const (
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfigurationEnabledTrue AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfigurationEnabled = true
-)
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfigurationEnabled) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfigurationEnabledTrue:
-		return true
-	}
-	return false
-}
-
-// Settings for OAuth grant behavior.
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfigurationGrant struct {
-	// The lifetime of the access token. Must be in the format `300ms` or `2h45m`.
-	// Valid time units are ns, us (or µs), ms, s, m, h.
-	AccessTokenLifetime param.Field[string] `json:"access_token_lifetime"`
-	// The duration of the OAuth session. Must be in the format `300ms` or `2h45m`.
-	// Valid time units are ns, us (or µs), ms, s, m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfigurationGrant) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The application type.
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsType string
-
-const (
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeSelfHosted     AccessApplicationUpdateParamsBodyAccessEndUserPropsType = "self_hosted"
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeEndUser        AccessApplicationUpdateParamsBodyAccessEndUserPropsType = "end_user"
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeSaaS           AccessApplicationUpdateParamsBodyAccessEndUserPropsType = "saas"
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeSSH            AccessApplicationUpdateParamsBodyAccessEndUserPropsType = "ssh"
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeVNC            AccessApplicationUpdateParamsBodyAccessEndUserPropsType = "vnc"
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeAppLauncher    AccessApplicationUpdateParamsBodyAccessEndUserPropsType = "app_launcher"
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeWARP           AccessApplicationUpdateParamsBodyAccessEndUserPropsType = "warp"
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeBISO           AccessApplicationUpdateParamsBodyAccessEndUserPropsType = "biso"
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeBookmark       AccessApplicationUpdateParamsBodyAccessEndUserPropsType = "bookmark"
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeDashSSO        AccessApplicationUpdateParamsBodyAccessEndUserPropsType = "dash_sso"
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeInfrastructure AccessApplicationUpdateParamsBodyAccessEndUserPropsType = "infrastructure"
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeRDP            AccessApplicationUpdateParamsBodyAccessEndUserPropsType = "rdp"
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeMcp            AccessApplicationUpdateParamsBodyAccessEndUserPropsType = "mcp"
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeMcpPortal      AccessApplicationUpdateParamsBodyAccessEndUserPropsType = "mcp_portal"
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeProxyEndpoint  AccessApplicationUpdateParamsBodyAccessEndUserPropsType = "proxy_endpoint"
-)
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeSelfHosted, AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeEndUser, AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeSaaS, AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeSSH, AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeVNC, AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeAppLauncher, AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeWARP, AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeBISO, AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeBookmark, AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeDashSSO, AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeInfrastructure, AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeRDP, AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeMcp, AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeMcpPortal, AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeProxyEndpoint:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestination struct {
-	Overrides param.Field[interface{}]                                                         `json:"overrides"`
-	Type      param.Field[AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsType] `json:"type"`
-	// The public hostname and optional path to secure.
-	URI param.Field[string] `json:"uri"`
-	// The ID of the Cloudflare Worker to secure.
-	WorkerID param.Field[string] `json:"worker_id"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestination) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestination) implementsAccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationUnion() {
-}
-
-// Satisfied by
-// [zero_trust.AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestination],
-// [zero_trust.AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestination],
-// [zero_trust.AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestination],
-// [zero_trust.AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestination],
-// [zero_trust.AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestination],
-// [AccessApplicationUpdateParamsBodyAccessEndUserPropsDestination].
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationUnion interface {
-	implementsAccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationUnion()
-}
-
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestination struct {
-	// The public hostname and optional path to secure.
-	URI param.Field[string] `json:"uri" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides param.Field[[]AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationOverride] `json:"overrides"`
-	Type      param.Field[AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationType]       `json:"type"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestination) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestination) implementsAccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationUnion() {
-}
-
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior param.Field[AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationOverridesBehavior] `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationOverride) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationOverridesBehavior string
-
-const (
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationType string
-
-const (
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationTypePublic AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationType = "public"
-)
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationTypePublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestination struct {
-	Type param.Field[AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationType] `json:"type" api:"required"`
-	// The ID of the Cloudflare Worker to secure.
-	WorkerID param.Field[string] `json:"worker_id" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides param.Field[[]AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationOverride] `json:"overrides"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestination) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestination) implementsAccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationUnion() {
-}
-
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationType string
-
-const (
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationTypeWorker AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationType = "worker"
-)
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationTypeWorker:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior param.Field[AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationOverridesBehavior string
-
-const (
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserWorkerDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestination struct {
-	Type param.Field[AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationType] `json:"type" api:"required"`
-	// The ID of the Cloudflare Worker whose previews to secure.
-	WorkerID param.Field[string] `json:"worker_id" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides param.Field[[]AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationOverride] `json:"overrides"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestination) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestination) implementsAccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationUnion() {
-}
-
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationType string
-
-const (
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationTypePreviewWorker AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationType = "preview_worker"
-)
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationTypePreviewWorker:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior param.Field[AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior] `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationOverride) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior string
-
-const (
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPreviewWorkerDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestination struct {
-	Type param.Field[AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationType] `json:"type" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides param.Field[[]AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationOverride] `json:"overrides"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestination) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestination) implementsAccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationUnion() {
-}
-
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationType string
-
-const (
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationTypeAllWorkers AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationType = "all_workers"
-)
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationTypeAllWorkers:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior param.Field[AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior string
-
-const (
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllWorkersDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestination struct {
-	Type param.Field[AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationType] `json:"type" api:"required"`
-	// Rules that override how Access handles requests to this destination. Each rule
-	// can make a matching path public, bypassing Access authentication. Overrides are
-	// supported for public destinations and Worker destinations.
-	Overrides param.Field[[]AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationOverride] `json:"overrides"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestination) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestination) implementsAccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationUnion() {
-}
-
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationType string
-
-const (
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationTypeAllPreviewWorkers AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationType = "all_preview_workers"
-)
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationTypeAllPreviewWorkers:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationOverride struct {
-	// The behavior to apply to matching requests.
-	Behavior param.Field[AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior] `json:"behavior" api:"required"`
-	// The request path pattern to match. Wildcards (`*`) are supported, but each path
-	// segment may have at most one wildcard. Unlike the `uri` in public destinations,
-	// override path patterns do not implicitly cover subpaths; to do that, use a
-	// wildcard.
-	PathPattern param.Field[string] `json:"path_pattern" api:"required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationOverride) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The behavior to apply to matching requests.
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior string
-
-const (
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehaviorPublic AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior = "public"
-)
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehavior) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserAllPreviewWorkersDestinationOverridesBehaviorPublic:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsType string
-
-const (
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsTypePublic            AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsType = "public"
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsTypeWorker            AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsType = "worker"
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsTypePreviewWorker     AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsType = "preview_worker"
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsTypeAllWorkers        AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsType = "all_workers"
-	AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsTypeAllPreviewWorkers AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsType = "all_preview_workers"
-)
-
-func (r AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsTypePublic, AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsTypeWorker, AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsTypePreviewWorker, AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsTypeAllWorkers, AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsTypeAllPreviewWorkers:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
@@ -67809,7 +63576,6 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationType string
 
 const (
 	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSelfHosted     AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "self_hosted"
-	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeEndUser        AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "end_user"
 	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSaaS           AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "saas"
 	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSSH            AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "ssh"
 	AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeVNC            AccessApplicationUpdateParamsBodyBrowserSSHApplicationType = "vnc"
@@ -67827,7 +63593,7 @@ const (
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeEndUser, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSaaS, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSSH, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeVNC, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeWARP, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeBISO, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeBookmark, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeRDP, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeMcp, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeMcpPortal, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeProxyEndpoint:
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSaaS, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeSSH, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeVNC, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeWARP, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeBISO, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeBookmark, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeRDP, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeMcp, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeMcpPortal, AccessApplicationUpdateParamsBodyBrowserSSHApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -68943,7 +64709,6 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationType string
 
 const (
 	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSelfHosted     AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "self_hosted"
-	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeEndUser        AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "end_user"
 	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSaaS           AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "saas"
 	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSSH            AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "ssh"
 	AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeVNC            AccessApplicationUpdateParamsBodyBrowserVNCApplicationType = "vnc"
@@ -68961,7 +64726,7 @@ const (
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeEndUser, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSaaS, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSSH, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeVNC, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeWARP, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeBISO, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeBookmark, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeRDP, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeMcp, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeMcpPortal, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeProxyEndpoint:
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSaaS, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeSSH, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeVNC, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeWARP, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeBISO, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeBookmark, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeRDP, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeMcp, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeMcpPortal, AccessApplicationUpdateParamsBodyBrowserVNCApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -70008,7 +65773,6 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationType string
 
 const (
 	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSelfHosted     AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "self_hosted"
-	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeEndUser        AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "end_user"
 	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSaaS           AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "saas"
 	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSSH            AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "ssh"
 	AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeVNC            AccessApplicationUpdateParamsBodyAppLauncherApplicationType = "vnc"
@@ -70026,7 +65790,7 @@ const (
 
 func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeEndUser, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSaaS, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSSH, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeVNC, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeWARP, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeBISO, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeBookmark, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeRDP, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeMcp, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeMcpPortal, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeProxyEndpoint:
+	case AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSelfHosted, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSaaS, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeSSH, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeVNC, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeAppLauncher, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeWARP, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeBISO, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeBookmark, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeDashSSO, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeInfrastructure, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeRDP, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeMcp, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeMcpPortal, AccessApplicationUpdateParamsBodyAppLauncherApplicationTypeProxyEndpoint:
 		return true
 	}
 	return false
@@ -74675,35 +70439,6 @@ const (
 func (r AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
 	switch r {
 	case AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationSchemeOauth2, AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfigAuthenticationSchemeAccessServiceToken:
-		return true
-	}
-	return false
-}
-
-// The application type.
-type AccessApplicationUpdateParamsBodyType string
-
-const (
-	AccessApplicationUpdateParamsBodyTypeSelfHosted     AccessApplicationUpdateParamsBodyType = "self_hosted"
-	AccessApplicationUpdateParamsBodyTypeEndUser        AccessApplicationUpdateParamsBodyType = "end_user"
-	AccessApplicationUpdateParamsBodyTypeSaaS           AccessApplicationUpdateParamsBodyType = "saas"
-	AccessApplicationUpdateParamsBodyTypeSSH            AccessApplicationUpdateParamsBodyType = "ssh"
-	AccessApplicationUpdateParamsBodyTypeVNC            AccessApplicationUpdateParamsBodyType = "vnc"
-	AccessApplicationUpdateParamsBodyTypeAppLauncher    AccessApplicationUpdateParamsBodyType = "app_launcher"
-	AccessApplicationUpdateParamsBodyTypeWARP           AccessApplicationUpdateParamsBodyType = "warp"
-	AccessApplicationUpdateParamsBodyTypeBISO           AccessApplicationUpdateParamsBodyType = "biso"
-	AccessApplicationUpdateParamsBodyTypeBookmark       AccessApplicationUpdateParamsBodyType = "bookmark"
-	AccessApplicationUpdateParamsBodyTypeDashSSO        AccessApplicationUpdateParamsBodyType = "dash_sso"
-	AccessApplicationUpdateParamsBodyTypeInfrastructure AccessApplicationUpdateParamsBodyType = "infrastructure"
-	AccessApplicationUpdateParamsBodyTypeRDP            AccessApplicationUpdateParamsBodyType = "rdp"
-	AccessApplicationUpdateParamsBodyTypeMcp            AccessApplicationUpdateParamsBodyType = "mcp"
-	AccessApplicationUpdateParamsBodyTypeMcpPortal      AccessApplicationUpdateParamsBodyType = "mcp_portal"
-	AccessApplicationUpdateParamsBodyTypeProxyEndpoint  AccessApplicationUpdateParamsBodyType = "proxy_endpoint"
-)
-
-func (r AccessApplicationUpdateParamsBodyType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyTypeSelfHosted, AccessApplicationUpdateParamsBodyTypeEndUser, AccessApplicationUpdateParamsBodyTypeSaaS, AccessApplicationUpdateParamsBodyTypeSSH, AccessApplicationUpdateParamsBodyTypeVNC, AccessApplicationUpdateParamsBodyTypeAppLauncher, AccessApplicationUpdateParamsBodyTypeWARP, AccessApplicationUpdateParamsBodyTypeBISO, AccessApplicationUpdateParamsBodyTypeBookmark, AccessApplicationUpdateParamsBodyTypeDashSSO, AccessApplicationUpdateParamsBodyTypeInfrastructure, AccessApplicationUpdateParamsBodyTypeRDP, AccessApplicationUpdateParamsBodyTypeMcp, AccessApplicationUpdateParamsBodyTypeMcpPortal, AccessApplicationUpdateParamsBodyTypeProxyEndpoint:
 		return true
 	}
 	return false

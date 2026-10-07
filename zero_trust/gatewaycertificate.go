@@ -187,9 +187,6 @@ type GatewayCertificateNewResponse struct {
 	IssuerOrg string `json:"issuer_org"`
 	// Provide the entire issuer field of the certificate (read-only).
 	IssuerRaw string `json:"issuer_raw"`
-	// Indicate the read-only region the certificate authority's key material is pinned
-	// to. Omitted for certificates that were created without a region.
-	Region string `json:"region"`
 	// Indicate the read-only certificate type, BYO-PKI (custom) or Gateway-managed.
 	Type       GatewayCertificateNewResponseType `json:"type"`
 	UpdatedAt  time.Time                         `json:"updated_at" format:"date-time"`
@@ -209,7 +206,6 @@ type gatewayCertificateNewResponseJSON struct {
 	InUse         apijson.Field
 	IssuerOrg     apijson.Field
 	IssuerRaw     apijson.Field
-	Region        apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
 	UploadedOn    apijson.Field
@@ -282,9 +278,6 @@ type GatewayCertificateListResponse struct {
 	IssuerOrg string `json:"issuer_org"`
 	// Provide the entire issuer field of the certificate (read-only).
 	IssuerRaw string `json:"issuer_raw"`
-	// Indicate the read-only region the certificate authority's key material is pinned
-	// to. Omitted for certificates that were created without a region.
-	Region string `json:"region"`
 	// Indicate the read-only certificate type, BYO-PKI (custom) or Gateway-managed.
 	Type       GatewayCertificateListResponseType `json:"type"`
 	UpdatedAt  time.Time                          `json:"updated_at" format:"date-time"`
@@ -304,7 +297,6 @@ type gatewayCertificateListResponseJSON struct {
 	InUse         apijson.Field
 	IssuerOrg     apijson.Field
 	IssuerRaw     apijson.Field
-	Region        apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
 	UploadedOn    apijson.Field
@@ -377,9 +369,6 @@ type GatewayCertificateDeleteResponse struct {
 	IssuerOrg string `json:"issuer_org"`
 	// Provide the entire issuer field of the certificate (read-only).
 	IssuerRaw string `json:"issuer_raw"`
-	// Indicate the read-only region the certificate authority's key material is pinned
-	// to. Omitted for certificates that were created without a region.
-	Region string `json:"region"`
 	// Indicate the read-only certificate type, BYO-PKI (custom) or Gateway-managed.
 	Type       GatewayCertificateDeleteResponseType `json:"type"`
 	UpdatedAt  time.Time                            `json:"updated_at" format:"date-time"`
@@ -399,7 +388,6 @@ type gatewayCertificateDeleteResponseJSON struct {
 	InUse         apijson.Field
 	IssuerOrg     apijson.Field
 	IssuerRaw     apijson.Field
-	Region        apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
 	UploadedOn    apijson.Field
@@ -472,9 +460,6 @@ type GatewayCertificateActivateResponse struct {
 	IssuerOrg string `json:"issuer_org"`
 	// Provide the entire issuer field of the certificate (read-only).
 	IssuerRaw string `json:"issuer_raw"`
-	// Indicate the read-only region the certificate authority's key material is pinned
-	// to. Omitted for certificates that were created without a region.
-	Region string `json:"region"`
 	// Indicate the read-only certificate type, BYO-PKI (custom) or Gateway-managed.
 	Type       GatewayCertificateActivateResponseType `json:"type"`
 	UpdatedAt  time.Time                              `json:"updated_at" format:"date-time"`
@@ -494,7 +479,6 @@ type gatewayCertificateActivateResponseJSON struct {
 	InUse         apijson.Field
 	IssuerOrg     apijson.Field
 	IssuerRaw     apijson.Field
-	Region        apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
 	UploadedOn    apijson.Field
@@ -567,9 +551,6 @@ type GatewayCertificateDeactivateResponse struct {
 	IssuerOrg string `json:"issuer_org"`
 	// Provide the entire issuer field of the certificate (read-only).
 	IssuerRaw string `json:"issuer_raw"`
-	// Indicate the read-only region the certificate authority's key material is pinned
-	// to. Omitted for certificates that were created without a region.
-	Region string `json:"region"`
 	// Indicate the read-only certificate type, BYO-PKI (custom) or Gateway-managed.
 	Type       GatewayCertificateDeactivateResponseType `json:"type"`
 	UpdatedAt  time.Time                                `json:"updated_at" format:"date-time"`
@@ -589,7 +570,6 @@ type gatewayCertificateDeactivateResponseJSON struct {
 	InUse         apijson.Field
 	IssuerOrg     apijson.Field
 	IssuerRaw     apijson.Field
-	Region        apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
 	UploadedOn    apijson.Field
@@ -662,9 +642,6 @@ type GatewayCertificateGetResponse struct {
 	IssuerOrg string `json:"issuer_org"`
 	// Provide the entire issuer field of the certificate (read-only).
 	IssuerRaw string `json:"issuer_raw"`
-	// Indicate the read-only region the certificate authority's key material is pinned
-	// to. Omitted for certificates that were created without a region.
-	Region string `json:"region"`
 	// Indicate the read-only certificate type, BYO-PKI (custom) or Gateway-managed.
 	Type       GatewayCertificateGetResponseType `json:"type"`
 	UpdatedAt  time.Time                         `json:"updated_at" format:"date-time"`
@@ -684,7 +661,6 @@ type gatewayCertificateGetResponseJSON struct {
 	InUse         apijson.Field
 	IssuerOrg     apijson.Field
 	IssuerRaw     apijson.Field
-	Region        apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
 	UploadedOn    apijson.Field

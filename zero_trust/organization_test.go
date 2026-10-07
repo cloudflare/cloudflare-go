@@ -30,9 +30,10 @@ func TestOrganizationNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Organizations.New(context.TODO(), zero_trust.OrganizationNewParams{
+		AuthDomain:                             cloudflare.F("test.cloudflareaccess.com"),
+		Name:                                   cloudflare.F("Widget Corps Internal Applications"),
 		AccountID:                              cloudflare.F("account_id"),
 		AllowAuthenticateViaWARP:               cloudflare.F(true),
-		AuthDomain:                             cloudflare.F("test.cloudflareaccess.com"),
 		AutoRedirectToIdentity:                 cloudflare.F(true),
 		DenyUnmatchedRequests:                  cloudflare.F(true),
 		DenyUnmatchedRequestsExemptedZoneNames: cloudflare.F([]string{"example.com"}),
@@ -58,7 +59,6 @@ func TestOrganizationNewWithOptionalParams(t *testing.T) {
 			TouchPolicy:       cloudflare.F(zero_trust.OrganizationNewParamsMfaPivKeyRequirementsTouchPolicyAlways),
 		}),
 		MfaRequiredForAllApps: cloudflare.F(false),
-		Name:                  cloudflare.F("Widget Corps Internal Applications"),
 		ServiceTokenInactivity: cloudflare.F(zero_trust.OrganizationNewParamsServiceTokenInactivity{
 			Action:                  cloudflare.F(zero_trust.OrganizationNewParamsServiceTokenInactivityActionDisable),
 			Enabled:                 cloudflare.F(true),

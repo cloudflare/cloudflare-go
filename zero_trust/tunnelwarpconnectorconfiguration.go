@@ -37,7 +37,7 @@ func NewTunnelWARPConnectorConfigurationService(opts ...option.RequestOption) (r
 	return
 }
 
-// Adds or updates the high-availability configuration for a Mesh node.
+// Adds or updates the high-availability configuration for a WARP Connector tunnel.
 func (r *TunnelWARPConnectorConfigurationService) Update(ctx context.Context, tunnelID string, params TunnelWARPConnectorConfigurationUpdateParams, opts ...option.RequestOption) (res *TunnelWARPConnectorConfigurationUpdateResponse, err error) {
 	var env TunnelWARPConnectorConfigurationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -58,7 +58,7 @@ func (r *TunnelWARPConnectorConfigurationService) Update(ctx context.Context, tu
 	return res, nil
 }
 
-// Gets the high-availability configuration for a Mesh node.
+// Gets the high-availability configuration for a WARP Connector tunnel.
 func (r *TunnelWARPConnectorConfigurationService) Get(ctx context.Context, tunnelID string, query TunnelWARPConnectorConfigurationGetParams, opts ...option.RequestOption) (res *TunnelWARPConnectorConfigurationGetResponse, err error) {
 	var env TunnelWARPConnectorConfigurationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -84,10 +84,10 @@ type TunnelWARPConnectorConfigurationUpdateResponse struct {
 	ConfigurationVersion int64 `json:"configuration_version" api:"required"`
 	// Timestamp of when the resource was created.
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	// High-availability mode for the Mesh node. `none` means HA is enabled but no
-	// provider is configured yet (newly created nodes default to this). `disabled`
-	// means HA is explicitly turned off. `aws` uses AWS ENI move for failover. `local`
-	// uses virtual IPs (VIPs) on the local interface.
+	// High-availability mode for the WARP Connector tunnel. `none` means HA is enabled
+	// but no provider is configured yet (newly created tunnels default to this).
+	// `disabled` means HA is explicitly turned off. `aws` uses AWS ENI move for
+	// failover. `local` uses virtual IPs (VIPs) on the local interface.
 	HaMode TunnelWARPConnectorConfigurationUpdateResponseHaMode `json:"ha_mode" api:"required"`
 	// UUID of the tunnel.
 	TunnelID string `json:"tunnel_id" api:"required" format:"uuid"`
@@ -119,10 +119,10 @@ func (r tunnelWARPConnectorConfigurationUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// High-availability mode for the Mesh node. `none` means HA is enabled but no
-// provider is configured yet (newly created nodes default to this). `disabled`
-// means HA is explicitly turned off. `aws` uses AWS ENI move for failover. `local`
-// uses virtual IPs (VIPs) on the local interface.
+// High-availability mode for the WARP Connector tunnel. `none` means HA is enabled
+// but no provider is configured yet (newly created tunnels default to this).
+// `disabled` means HA is explicitly turned off. `aws` uses AWS ENI move for
+// failover. `local` uses virtual IPs (VIPs) on the local interface.
 type TunnelWARPConnectorConfigurationUpdateResponseHaMode string
 
 const (
@@ -319,10 +319,10 @@ type TunnelWARPConnectorConfigurationGetResponse struct {
 	ConfigurationVersion int64 `json:"configuration_version" api:"required"`
 	// Timestamp of when the resource was created.
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	// High-availability mode for the Mesh node. `none` means HA is enabled but no
-	// provider is configured yet (newly created nodes default to this). `disabled`
-	// means HA is explicitly turned off. `aws` uses AWS ENI move for failover. `local`
-	// uses virtual IPs (VIPs) on the local interface.
+	// High-availability mode for the WARP Connector tunnel. `none` means HA is enabled
+	// but no provider is configured yet (newly created tunnels default to this).
+	// `disabled` means HA is explicitly turned off. `aws` uses AWS ENI move for
+	// failover. `local` uses virtual IPs (VIPs) on the local interface.
 	HaMode TunnelWARPConnectorConfigurationGetResponseHaMode `json:"ha_mode" api:"required"`
 	// UUID of the tunnel.
 	TunnelID string `json:"tunnel_id" api:"required" format:"uuid"`
@@ -354,10 +354,10 @@ func (r tunnelWARPConnectorConfigurationGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// High-availability mode for the Mesh node. `none` means HA is enabled but no
-// provider is configured yet (newly created nodes default to this). `disabled`
-// means HA is explicitly turned off. `aws` uses AWS ENI move for failover. `local`
-// uses virtual IPs (VIPs) on the local interface.
+// High-availability mode for the WARP Connector tunnel. `none` means HA is enabled
+// but no provider is configured yet (newly created tunnels default to this).
+// `disabled` means HA is explicitly turned off. `aws` uses AWS ENI move for
+// failover. `local` uses virtual IPs (VIPs) on the local interface.
 type TunnelWARPConnectorConfigurationGetResponseHaMode string
 
 const (
@@ -552,10 +552,10 @@ func (r tunnelWARPConnectorConfigurationGetResponseConfigTunnelMeshLocalConfigVi
 type TunnelWARPConnectorConfigurationUpdateParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// High-availability mode for the Mesh node. `none` means HA is enabled but no
-	// provider is configured yet (newly created nodes default to this). `disabled`
-	// means HA is explicitly turned off. `aws` uses AWS ENI move for failover. `local`
-	// uses virtual IPs (VIPs) on the local interface.
+	// High-availability mode for the WARP Connector tunnel. `none` means HA is enabled
+	// but no provider is configured yet (newly created tunnels default to this).
+	// `disabled` means HA is explicitly turned off. `aws` uses AWS ENI move for
+	// failover. `local` uses virtual IPs (VIPs) on the local interface.
 	HaMode param.Field[TunnelWARPConnectorConfigurationUpdateParamsHaMode] `json:"ha_mode" api:"required"`
 	// Provider-specific configuration. Required shape depends on ha_mode. For `aws`,
 	// must contain `fnr_id`. For `local`, must contain `vips`. For `none` and
@@ -567,10 +567,10 @@ func (r TunnelWARPConnectorConfigurationUpdateParams) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-// High-availability mode for the Mesh node. `none` means HA is enabled but no
-// provider is configured yet (newly created nodes default to this). `disabled`
-// means HA is explicitly turned off. `aws` uses AWS ENI move for failover. `local`
-// uses virtual IPs (VIPs) on the local interface.
+// High-availability mode for the WARP Connector tunnel. `none` means HA is enabled
+// but no provider is configured yet (newly created tunnels default to this).
+// `disabled` means HA is explicitly turned off. `aws` uses AWS ENI move for
+// failover. `local` uses virtual IPs (VIPs) on the local interface.
 type TunnelWARPConnectorConfigurationUpdateParamsHaMode string
 
 const (

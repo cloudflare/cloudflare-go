@@ -39,7 +39,7 @@ func TestCNINewWithOptionalParams(t *testing.T) {
 		}),
 		BGP: cloudflare.F(network_interconnects.CNINewParamsBGP{
 			CustomerASN:   cloudflare.F(int64(0)),
-			ExtraPrefixes: cloudflare.F([]string{"192.168.3.4/31"}),
+			ExtraPrefixes: cloudflare.F([]string{"string"}),
 			Md5Key:        cloudflare.F("md5_key"),
 		}),
 	})
@@ -83,7 +83,7 @@ func TestCNIUpdateWithOptionalParams(t *testing.T) {
 			P2pIP: cloudflare.F("192.168.3.4/31"),
 			BGP: cloudflare.F(network_interconnects.CNIUpdateParamsBGP{
 				CustomerASN:   cloudflare.F(int64(0)),
-				ExtraPrefixes: cloudflare.F([]string{"192.168.3.4/31"}),
+				ExtraPrefixes: cloudflare.F([]string{"string"}),
 				Md5Key:        cloudflare.F("md5_key"),
 			}),
 			BGPMode: cloudflare.F(network_interconnects.CNIUpdateParamsBGPModeDynamicRouteExchange),

@@ -869,11 +869,11 @@ Methods:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#AccessUserLastSeenIdentityGetResponse">AccessUserLastSeenIdentityGetResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#Identity">Identity</a>
 
 Methods:
 
-- <code title="get /accounts/{account_id}/access/users/{user_id}/last_seen_identity">client.ZeroTrust.Access.Users.LastSeenIdentity.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#AccessUserLastSeenIdentityService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, userID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#AccessUserLastSeenIdentityGetParams">AccessUserLastSeenIdentityGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#AccessUserLastSeenIdentityGetResponse">AccessUserLastSeenIdentityGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/access/users/{user_id}/last_seen_identity">client.ZeroTrust.Access.Users.LastSeenIdentity.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#AccessUserLastSeenIdentityService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, userID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#AccessUserLastSeenIdentityGetParams">AccessUserLastSeenIdentityGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zero_trust#Identity">Identity</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 #### FailedLogins
 

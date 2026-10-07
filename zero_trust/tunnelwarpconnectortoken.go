@@ -35,7 +35,8 @@ func NewTunnelWARPConnectorTokenService(opts ...option.RequestOption) (r *Tunnel
 	return
 }
 
-// Gets the token used to associate a WARP device with a specific Mesh node.
+// Gets the token used to associate warp device with a specific Warp Connector
+// tunnel.
 func (r *TunnelWARPConnectorTokenService) Get(ctx context.Context, tunnelID string, query TunnelWARPConnectorTokenGetParams, opts ...option.RequestOption) (res *string, err error) {
 	var env TunnelWARPConnectorTokenGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

@@ -32,7 +32,6 @@ func TestNamespaceNewWithOptionalParams(t *testing.T) {
 		AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Title:        cloudflare.F("My Own Namespace"),
 		Jurisdiction: cloudflare.F(kv.NamespaceNewParamsJurisdictionEu),
-		Mode:         cloudflare.F(kv.NamespaceNewParamsModeInstant),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

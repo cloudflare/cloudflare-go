@@ -191,7 +191,6 @@ func (UnionString) ImplementsConfigUpdateParamsToolsWorkerSettingsUnion()       
 func (UnionString) ImplementsSessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataEventsMetadataUnion() {
 }
 func (UnionString) ImplementsThreatEventListParamsSearchObjectValueUnion()                    {}
-func (UnionString) ImplementsThreatEventListParamsSearchBranchesObjectValueUnion()            {}
 func (UnionString) ImplementsThreatEventRelationshipListParamsRelationshipTypesUnion()        {}
 func (UnionString) ImplementsThreatEventIndicatorListParamsSearchValueUnion()                 {}
 func (UnionString) ImplementsThreatEventIndicatorListParamsTagSearchValueUnion()              {}
@@ -681,7 +680,6 @@ func (UnionFloat) ImplementsRankingInternetServiceTimeseriesGroupsResponseSerie0
 func (UnionFloat) ImplementsSessionGetParticipantDataFromPeerIDResponseDataParticipantPeerReportMetadataEventsMetadataUnion() {
 }
 func (UnionFloat) ImplementsThreatEventListParamsSearchObjectValueUnion()                    {}
-func (UnionFloat) ImplementsThreatEventListParamsSearchBranchesObjectValueUnion()            {}
 func (UnionFloat) ImplementsThreatEventIndicatorListParamsTagSearchValueUnion()              {}
 func (UnionFloat) ImplementsThreatEventIndicatorListParamsTagSearchValueArrayItemUnion()     {}
 func (UnionFloat) ImplementsThreatEventTagNewParamsPriorityUnion()                           {}

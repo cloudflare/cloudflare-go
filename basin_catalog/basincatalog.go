@@ -166,7 +166,7 @@ func (r basinCatalogListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Contains catalog information.
+// Contains R2 Data Catalog information.
 type BasinCatalogListResponseWarehouse struct {
 	// Use this to uniquely identify the catalog.
 	ID string `json:"id" api:"required" format:"uuid"`
@@ -401,7 +401,7 @@ func (r basinCatalogEnableResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Contains catalog information.
+// Contains R2 Data Catalog information.
 type BasinCatalogGetResponse struct {
 	// Use this to uniquely identify the catalog.
 	ID string `json:"id" api:"required" format:"uuid"`
@@ -814,7 +814,7 @@ type BasinCatalogGetResponseEnvelope struct {
 	Messages []BasinCatalogGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// Indicates whether the API call was successful.
 	Success bool `json:"success" api:"required"`
-	// Contains catalog information.
+	// Contains R2 Data Catalog information.
 	Result BasinCatalogGetResponse             `json:"result"`
 	JSON   basinCatalogGetResponseEnvelopeJSON `json:"-"`
 }

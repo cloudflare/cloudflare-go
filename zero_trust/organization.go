@@ -216,9 +216,7 @@ type Organization struct {
 	// When set to true, users can authenticate via WARP for any application in your
 	// organization. Application settings will take precedence over this value.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
-	// The unique subdomain assigned to your Zero Trust organization. If omitted on
-	// creation, a unique subdomain is auto-generated in the format
-	// `adjective-noun-hex4` (e.g. `frosty-moon-7a3b.cloudflareaccess.com`).
+	// The unique subdomain assigned to your Zero Trust organization.
 	AuthDomain string `json:"auth_domain"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login.
@@ -249,9 +247,7 @@ type Organization struct {
 	// the infrastructure SSH authenticators ('piv_key' and 'ssh_fido2_key') if the
 	// organization has any non-infrastructure applications.
 	MfaRequiredForAllApps bool `json:"mfa_required_for_all_apps"`
-	// The name of your Zero Trust organization. When omitted on creation, defaults to
-	// the provided auth_domain; when both are omitted, defaults to the auto-generated
-	// subdomain slug (e.g. frosty-moon-7a3b).
+	// The name of your Zero Trust organization.
 	Name string `json:"name"`
 	// Configures automatic enforcement for inactive service tokens. A service token is
 	// inactive if no policy references it, and it has not successfully authenticated
@@ -568,9 +564,7 @@ type OrganizationListResponse struct {
 	// When set to true, users can authenticate via WARP for any application in your
 	// organization. Application settings will take precedence over this value.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
-	// The unique subdomain assigned to your Zero Trust organization. If omitted on
-	// creation, a unique subdomain is auto-generated in the format
-	// `adjective-noun-hex4` (e.g. `frosty-moon-7a3b.cloudflareaccess.com`).
+	// The unique subdomain assigned to your Zero Trust organization.
 	AuthDomain string `json:"auth_domain"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login.
@@ -601,9 +595,7 @@ type OrganizationListResponse struct {
 	// the infrastructure SSH authenticators ('piv_key' and 'ssh_fido2_key') if the
 	// organization has any non-infrastructure applications.
 	MfaRequiredForAllApps bool `json:"mfa_required_for_all_apps"`
-	// The name of your Zero Trust organization. When omitted on creation, defaults to
-	// the provided auth_domain; when both are omitted, defaults to the auto-generated
-	// subdomain slug (e.g. frosty-moon-7a3b).
+	// The name of your Zero Trust organization.
 	Name string `json:"name"`
 	// Configures automatic enforcement for inactive service tokens. A service token is
 	// inactive if no policy references it, and it has not successfully authenticated
@@ -937,6 +929,10 @@ func (r OrganizationRevokeUsersResponse) IsKnown() bool {
 }
 
 type OrganizationNewParams struct {
+	// The unique subdomain assigned to your Zero Trust organization.
+	AuthDomain param.Field[string] `json:"auth_domain" api:"required"`
+	// The name of your Zero Trust organization.
+	Name param.Field[string] `json:"name" api:"required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -944,10 +940,6 @@ type OrganizationNewParams struct {
 	// When set to true, users can authenticate via WARP for any application in your
 	// organization. Application settings will take precedence over this value.
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
-	// The unique subdomain assigned to your Zero Trust organization. If omitted on
-	// creation, a unique subdomain is auto-generated in the format
-	// `adjective-noun-hex4` (e.g. `frosty-moon-7a3b.cloudflareaccess.com`).
-	AuthDomain param.Field[string] `json:"auth_domain"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login.
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
@@ -976,10 +968,6 @@ type OrganizationNewParams struct {
 	// the infrastructure SSH authenticators ('piv_key' and 'ssh_fido2_key') if the
 	// organization has any non-infrastructure applications.
 	MfaRequiredForAllApps param.Field[bool] `json:"mfa_required_for_all_apps"`
-	// The name of your Zero Trust organization. When omitted on creation, defaults to
-	// the provided auth_domain; when both are omitted, defaults to the auto-generated
-	// subdomain slug (e.g. frosty-moon-7a3b).
-	Name param.Field[string] `json:"name"`
 	// Configures automatic enforcement for inactive service tokens. A service token is
 	// inactive if no policy references it, and it has not successfully authenticated
 	// with an Access application during the selected inactivity period. This setting
@@ -1334,9 +1322,7 @@ type OrganizationUpdateParams struct {
 	// When set to true, users can authenticate via WARP for any application in your
 	// organization. Application settings will take precedence over this value.
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
-	// The unique subdomain assigned to your Zero Trust organization. If omitted on
-	// creation, a unique subdomain is auto-generated in the format
-	// `adjective-noun-hex4` (e.g. `frosty-moon-7a3b.cloudflareaccess.com`).
+	// The unique subdomain assigned to your Zero Trust organization.
 	AuthDomain param.Field[string] `json:"auth_domain"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login.
@@ -1367,9 +1353,7 @@ type OrganizationUpdateParams struct {
 	// the infrastructure SSH authenticators ('piv_key' and 'ssh_fido2_key') if the
 	// organization has any non-infrastructure applications.
 	MfaRequiredForAllApps param.Field[bool] `json:"mfa_required_for_all_apps"`
-	// The name of your Zero Trust organization. When omitted on creation, defaults to
-	// the provided auth_domain; when both are omitted, defaults to the auto-generated
-	// subdomain slug (e.g. frosty-moon-7a3b).
+	// The name of your Zero Trust organization.
 	Name param.Field[string] `json:"name"`
 	// Configures automatic enforcement for inactive service tokens. A service token is
 	// inactive if no policy references it, and it has not successfully authenticated

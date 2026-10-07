@@ -374,7 +374,7 @@ type ProfileCustomProfileEntry struct {
 	// This field can have the runtime type of
 	// [ProfileCustomProfileEntriesPredefinedEntryVariant].
 	Variant interface{} `json:"variant"`
-	// This field can have the runtime type of [[]string].
+	// This field can have the runtime type of [interface{}].
 	WordList interface{}                   `json:"word_list"`
 	JSON     profileCustomProfileEntryJSON `json:"-"`
 	union    ProfileCustomProfileEntriesUnion
@@ -983,7 +983,7 @@ type ProfileCustomProfileEntriesWordListEntry struct {
 	Name      string                                       `json:"name" api:"required"`
 	Type      ProfileCustomProfileEntriesWordListEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                                    `json:"updated_at" api:"required" format:"date-time"`
-	WordList  []string                                     `json:"word_list" api:"required"`
+	WordList  interface{}                                  `json:"word_list" api:"required"`
 	ProfileID string                                       `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profileCustomProfileEntriesWordListEntryJSON `json:"-"`
 }
@@ -1096,7 +1096,7 @@ type ProfileCustomProfileSharedEntry struct {
 	// This field can have the runtime type of
 	// [ProfileCustomProfileSharedEntriesPredefinedEntryVariant].
 	Variant interface{} `json:"variant"`
-	// This field can have the runtime type of [[]string].
+	// This field can have the runtime type of [interface{}].
 	WordList interface{}                         `json:"word_list"`
 	JSON     profileCustomProfileSharedEntryJSON `json:"-"`
 	union    ProfileCustomProfileSharedEntriesUnion
@@ -1715,7 +1715,7 @@ type ProfileCustomProfileSharedEntriesWordListEntry struct {
 	Name      string                                             `json:"name" api:"required"`
 	Type      ProfileCustomProfileSharedEntriesWordListEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                                          `json:"updated_at" api:"required" format:"date-time"`
-	WordList  []string                                           `json:"word_list" api:"required"`
+	WordList  interface{}                                        `json:"word_list" api:"required"`
 	ProfileID string                                             `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profileCustomProfileSharedEntriesWordListEntryJSON `json:"-"`
 }
@@ -1853,7 +1853,7 @@ type ProfilePredefinedProfileEntry struct {
 	// This field can have the runtime type of
 	// [ProfilePredefinedProfileEntriesPredefinedEntryVariant].
 	Variant interface{} `json:"variant"`
-	// This field can have the runtime type of [[]string].
+	// This field can have the runtime type of [interface{}].
 	WordList interface{}                       `json:"word_list"`
 	JSON     profilePredefinedProfileEntryJSON `json:"-"`
 	union    ProfilePredefinedProfileEntriesUnion
@@ -2466,7 +2466,7 @@ type ProfilePredefinedProfileEntriesWordListEntry struct {
 	Name      string                                           `json:"name" api:"required"`
 	Type      ProfilePredefinedProfileEntriesWordListEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                                        `json:"updated_at" api:"required" format:"date-time"`
-	WordList  []string                                         `json:"word_list" api:"required"`
+	WordList  interface{}                                      `json:"word_list" api:"required"`
 	ProfileID string                                           `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profilePredefinedProfileEntriesWordListEntryJSON `json:"-"`
 }
@@ -2627,7 +2627,7 @@ type ProfileIntegrationProfileEntry struct {
 	// This field can have the runtime type of
 	// [ProfileIntegrationProfileEntriesPredefinedEntryVariant].
 	Variant interface{} `json:"variant"`
-	// This field can have the runtime type of [[]string].
+	// This field can have the runtime type of [interface{}].
 	WordList interface{}                        `json:"word_list"`
 	JSON     profileIntegrationProfileEntryJSON `json:"-"`
 	union    ProfileIntegrationProfileEntriesUnion
@@ -3242,7 +3242,7 @@ type ProfileIntegrationProfileEntriesWordListEntry struct {
 	Name      string                                            `json:"name" api:"required"`
 	Type      ProfileIntegrationProfileEntriesWordListEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                                         `json:"updated_at" api:"required" format:"date-time"`
-	WordList  []string                                          `json:"word_list" api:"required"`
+	WordList  interface{}                                       `json:"word_list" api:"required"`
 	ProfileID string                                            `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profileIntegrationProfileEntriesWordListEntryJSON `json:"-"`
 }
@@ -3331,7 +3331,7 @@ type ProfileIntegrationProfileSharedEntry struct {
 	// This field can have the runtime type of
 	// [ProfileIntegrationProfileSharedEntriesPredefinedEntryVariant].
 	Variant interface{} `json:"variant"`
-	// This field can have the runtime type of [[]string].
+	// This field can have the runtime type of [interface{}].
 	WordList interface{}                              `json:"word_list"`
 	JSON     profileIntegrationProfileSharedEntryJSON `json:"-"`
 	union    ProfileIntegrationProfileSharedEntriesUnion
@@ -3952,7 +3952,7 @@ type ProfileIntegrationProfileSharedEntriesWordListEntry struct {
 	Name      string                                                  `json:"name" api:"required"`
 	Type      ProfileIntegrationProfileSharedEntriesWordListEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                                               `json:"updated_at" api:"required" format:"date-time"`
-	WordList  []string                                                `json:"word_list" api:"required"`
+	WordList  interface{}                                             `json:"word_list" api:"required"`
 	ProfileID string                                                  `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      profileIntegrationProfileSharedEntriesWordListEntryJSON `json:"-"`
 }

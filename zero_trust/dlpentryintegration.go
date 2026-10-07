@@ -235,7 +235,7 @@ type DLPEntryIntegrationListResponse struct {
 	// This field can have the runtime type of
 	// [DLPEntryIntegrationListResponseObjectVariant].
 	Variant interface{} `json:"variant"`
-	// This field can have the runtime type of [[]string].
+	// This field can have the runtime type of [interface{}].
 	WordList interface{}                         `json:"word_list"`
 	JSON     dlpEntryIntegrationListResponseJSON `json:"-"`
 	union    DLPEntryIntegrationListResponseUnion
@@ -482,7 +482,7 @@ type DLPEntryIntegrationGetResponse struct {
 	// This field can have the runtime type of
 	// [DLPEntryIntegrationGetResponseObjectVariant].
 	Variant interface{} `json:"variant"`
-	// This field can have the runtime type of [[]string].
+	// This field can have the runtime type of [interface{}].
 	WordList interface{}                        `json:"word_list"`
 	JSON     dlpEntryIntegrationGetResponseJSON `json:"-"`
 	union    DLPEntryIntegrationGetResponseUnion
