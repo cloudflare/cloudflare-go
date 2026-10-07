@@ -40,9 +40,9 @@ func NewThreatEventTagIndicatorService(opts ...option.RequestOption) (r *ThreatE
 }
 
 // Returns indicators associated with the provided tag UUID, with pagination. By
-// default fans out across every indicator dataset the account can read; pass
-// datasetIds to scope to UUIDs, analytics datasets, or operational datasets.
-// Analytics datasets do not expose tag associations, so the analytics scope
+// default fans out across every intelligence (isAnalytics=false) indicator dataset
+// the account can read; pass datasetIds to scope to dataset UUIDs or a scope
+// value. Analytics datasets do not expose tag associations, so the analytics scope
 // returns an empty result.
 func (r *ThreatEventTagIndicatorService) List(ctx context.Context, tagUUID string, params ThreatEventTagIndicatorListParams, opts ...option.RequestOption) (res *ThreatEventTagIndicatorListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
@@ -217,10 +217,10 @@ type ThreatEventTagIndicatorListParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Dataset UUIDs to scope to (repeat the param for multiple), or one standalone
-	// scope: 'all'/'\*', 'analytics' for isAnalytics=true datasets, or 'operational'
-	// for isAnalytics=false datasets. Analytics datasets do not expose tag
-	// associations, so 'analytics' returns an empty result. Omit to search all
-	// readable datasets.
+	// scope value: 'all'/'\*' or 'operational' for readable intelligence datasets
+	// (isAnalytics=false), or 'analytics' for readable analytics datasets
+	// (isAnalytics=true). Analytics datasets do not expose tag associations, so
+	// 'analytics' returns an empty result. Omit for 'all'.
 	DatasetIDs    param.Field[[]string] `query:"datasetIds"`
 	IndicatorType param.Field[string]   `query:"indicatorType"`
 	Page          param.Field[float64]  `query:"page"`

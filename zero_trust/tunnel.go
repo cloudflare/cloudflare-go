@@ -181,7 +181,7 @@ func init() {
 	)
 }
 
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+// A Mesh node that connects your origin to Cloudflare's edge.
 type TunnelListResponseTunnelWARPConnectorTunnel struct {
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`

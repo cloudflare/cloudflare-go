@@ -36,7 +36,7 @@ func NewTunnelWARPConnectorConnectionService(opts ...option.RequestOption) (r *T
 	return
 }
 
-// Fetches connection details for a WARP Connector Tunnel.
+// Lists connection details for a Mesh node.
 func (r *TunnelWARPConnectorConnectionService) Get(ctx context.Context, tunnelID string, query TunnelWARPConnectorConnectionGetParams, opts ...option.RequestOption) (res *pagination.SinglePage[TunnelWARPConnectorConnectionGetResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -62,22 +62,22 @@ func (r *TunnelWARPConnectorConnectionService) Get(ctx context.Context, tunnelID
 	return res, nil
 }
 
-// Fetches connection details for a WARP Connector Tunnel.
+// Lists connection details for a Mesh node.
 func (r *TunnelWARPConnectorConnectionService) GetAutoPaging(ctx context.Context, tunnelID string, query TunnelWARPConnectorConnectionGetParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TunnelWARPConnectorConnectionGetResponse] {
 	return pagination.NewSinglePageAutoPager(r.Get(ctx, tunnelID, query, opts...))
 }
 
-// A WARP Connector client that maintains a connection to a Cloudflare data center.
+// A Mesh node connector that maintains a connection to a Cloudflare data center.
 type TunnelWARPConnectorConnectionGetResponse struct {
 	// UUID of the Cloudflare Tunnel connector.
 	ID string `json:"id" format:"uuid"`
 	// The cloudflared OS architecture used to establish this connection.
 	Arch string `json:"arch"`
-	// The WARP Connector Tunnel connections between your origin and Cloudflare's edge.
+	// The Mesh node connections between your origin and Cloudflare's edge.
 	Conns []TunnelWARPConnectorConnectionGetResponseConn `json:"conns"`
 	// Features enabled for the Cloudflare Tunnel.
 	Features []string `json:"features"`
-	// The HA status of a WARP Connector client.
+	// The HA status of a Mesh node connector.
 	HaStatus TunnelWARPConnectorConnectionGetResponseHaStatus `json:"ha_status"`
 	// Timestamp of when the tunnel connection was started.
 	RunAt time.Time `json:"run_at" format:"date-time"`
@@ -119,7 +119,7 @@ type TunnelWARPConnectorConnectionGetResponseConn struct {
 	ColoName string `json:"colo_name"`
 	// Timestamp of when the connection was established.
 	OpenedAt time.Time `json:"opened_at" format:"date-time"`
-	// The public IP address of the host running WARP Connector.
+	// The public IP address of the host running the Mesh node connector.
 	OriginIP string                                           `json:"origin_ip"`
 	JSON     tunnelWARPConnectorConnectionGetResponseConnJSON `json:"-"`
 }
@@ -145,7 +145,7 @@ func (r tunnelWARPConnectorConnectionGetResponseConnJSON) RawJSON() string {
 	return r.raw
 }
 
-// The HA status of a WARP Connector client.
+// The HA status of a Mesh node connector.
 type TunnelWARPConnectorConnectionGetResponseHaStatus string
 
 const (

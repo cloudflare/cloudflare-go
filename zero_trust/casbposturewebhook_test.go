@@ -30,13 +30,10 @@ func TestCasbPostureWebhookNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Casb.Posture.Webhooks.New(context.TODO(), zero_trust.CasbPostureWebhookNewParams{
 		AccountID:          cloudflare.F("46148281d8a93d002ef242d8b0d5f9f6"),
-		AuthenticationType: cloudflare.F(zero_trust.CasbPostureWebhookNewParamsAuthenticationTypeBearerAuth),
+		AuthenticationType: cloudflare.F(zero_trust.CasbPostureWebhookNewParamsAuthenticationTypeHmacSigning),
 		DestinationURL:     cloudflare.F("https://example.com/webhook"),
 		Label:              cloudflare.F("Send to Slack"),
 		Headers: cloudflare.F([]zero_trust.CasbPostureWebhookNewParamsHeader{{
-			Key:   cloudflare.F("Authorization"),
-			Value: cloudflare.F("Bearer token123"),
-		}, {
 			Key:   cloudflare.F("X-Custom-Header"),
 			Value: cloudflare.F("value"),
 		}}),
@@ -71,14 +68,11 @@ func TestCasbPostureWebhookUpdateWithOptionalParams(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.CasbPostureWebhookUpdateParams{
 			AccountID:          cloudflare.F("46148281d8a93d002ef242d8b0d5f9f6"),
-			AuthenticationType: cloudflare.F(zero_trust.CasbPostureWebhookUpdateParamsAuthenticationTypeBearerAuth),
+			AuthenticationType: cloudflare.F(zero_trust.CasbPostureWebhookUpdateParamsAuthenticationTypeHmacSigning),
 			DestinationURL:     cloudflare.F("https://example.com/webhook"),
 			Label:              cloudflare.F("Send to Slack"),
 			Status:             cloudflare.F(zero_trust.CasbPostureWebhookUpdateParamsStatusEnabled),
 			Headers: cloudflare.F([]zero_trust.CasbPostureWebhookUpdateParamsHeader{{
-				Key:   cloudflare.F("Authorization"),
-				Value: cloudflare.F("Bearer token123"),
-			}, {
 				Key:   cloudflare.F("X-Custom-Header"),
 				Value: cloudflare.F("value"),
 			}}),
@@ -166,12 +160,9 @@ func TestCasbPostureWebhookEvaluateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Casb.Posture.Webhooks.Evaluate(context.TODO(), zero_trust.CasbPostureWebhookEvaluateParams{
 		AccountID:          cloudflare.F("46148281d8a93d002ef242d8b0d5f9f6"),
-		AuthenticationType: cloudflare.F(zero_trust.CasbPostureWebhookEvaluateParamsAuthenticationTypeBearerAuth),
+		AuthenticationType: cloudflare.F(zero_trust.CasbPostureWebhookEvaluateParamsAuthenticationTypeHmacSigning),
 		DestinationURL:     cloudflare.F("https://example.com/webhook"),
 		Headers: cloudflare.F([]zero_trust.CasbPostureWebhookEvaluateParamsHeader{{
-			Key:   cloudflare.F("Authorization"),
-			Value: cloudflare.F("Bearer token123"),
-		}, {
 			Key:   cloudflare.F("X-Custom-Header"),
 			Value: cloudflare.F("value"),
 		}}),

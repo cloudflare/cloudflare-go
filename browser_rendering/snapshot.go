@@ -270,6 +270,8 @@ type SnapshotNewParams struct {
 	// Account ID.
 	AccountID param.Field[string]        `path:"account_id" api:"required"`
 	Body      SnapshotNewParamsBodyUnion `json:"body" api:"required"`
+	// Rendering backend. Set to `kitesurf` to use Kitesurf (beta).
+	Browser param.Field[SnapshotNewParamsBrowser] `query:"browser"`
 	// Cache TTL default is 5s. Set to 0 to disable.
 	CacheTTL param.Field[float64] `query:"cacheTTL"`
 }
@@ -714,6 +716,21 @@ const (
 func (r SnapshotNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 	switch r {
 	case SnapshotNewParamsBodyObjectWaitForSelectorVisibleTrue:
+		return true
+	}
+	return false
+}
+
+// Rendering backend. Set to `kitesurf` to use Kitesurf (beta).
+type SnapshotNewParamsBrowser string
+
+const (
+	SnapshotNewParamsBrowserKitesurf SnapshotNewParamsBrowser = "kitesurf"
+)
+
+func (r SnapshotNewParamsBrowser) IsKnown() bool {
+	switch r {
+	case SnapshotNewParamsBrowserKitesurf:
 		return true
 	}
 	return false

@@ -4077,8 +4077,8 @@ func (r *SettingEditResponse) UnmarshalJSON(data []byte) (err error) {
 // [SettingEditResponseZonesTransformations],
 // [SettingEditResponseZonesTransformationsAllowedOrigins],
 // [SettingEditResponseZonesTrueClientIPHeader2], [SettingEditResponseZonesWAF2],
-// [SettingEditResponseZonesWebmcpEnabled], [SettingEditResponseZonesWebmcpPacks],
-// [WebP], [Websocket].
+// [SettingEditResponseZonesWebmcpEnabled], [SettingEditResponseZonesWebmcpMcpURL],
+// [SettingEditResponseZonesWebmcpPacks], [WebP], [Websocket].
 func (r SettingEditResponse) AsUnion() SettingEditResponseUnion {
 	return r.union
 }
@@ -4121,8 +4121,8 @@ func (r SettingEditResponse) AsUnion() SettingEditResponseUnion {
 // [SettingEditResponseZonesTransformations],
 // [SettingEditResponseZonesTransformationsAllowedOrigins],
 // [SettingEditResponseZonesTrueClientIPHeader2], [SettingEditResponseZonesWAF2],
-// [SettingEditResponseZonesWebmcpEnabled], [SettingEditResponseZonesWebmcpPacks],
-// [WebP] or [Websocket].
+// [SettingEditResponseZonesWebmcpEnabled], [SettingEditResponseZonesWebmcpMcpURL],
+// [SettingEditResponseZonesWebmcpPacks], [WebP] or [Websocket].
 type SettingEditResponseUnion interface {
 	implementsSettingEditResponse()
 }
@@ -4382,6 +4382,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(SettingEditResponseZonesWebmcpEnabled{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesWebmcpMcpURL{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -7548,6 +7552,78 @@ func (r SettingEditResponseZonesWebmcpEnabledEditable) IsKnown() bool {
 	return false
 }
 
+// Optional per-zone path of the site's own MCP server, used by the WebMCP
+// mcp-server-client tool pack to list and call the site's MCP tools from the
+// browser. The path is resolved against the page's origin, so it applies to every
+// hostname in the zone. Only takes effect when webmcp_enabled is on and the
+// mcp-server-client pack is active. Leave empty to use /mcp. This setting is
+// currently in beta and its behavior may change.
+type SettingEditResponseZonesWebmcpMcpURL struct {
+	// ID of the zone setting.
+	ID SettingEditResponseZonesWebmcpMcpURLID `json:"id" api:"required"`
+	// Current value of the zone setting.
+	Value string `json:"value" api:"required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable SettingEditResponseZonesWebmcpMcpURLEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                `json:"modified_on" api:"nullable" format:"date-time"`
+	JSON       settingEditResponseZonesWebmcpMcpURLJSON `json:"-"`
+}
+
+// settingEditResponseZonesWebmcpMcpURLJSON contains the JSON metadata for the
+// struct [SettingEditResponseZonesWebmcpMcpURL]
+type settingEditResponseZonesWebmcpMcpURLJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingEditResponseZonesWebmcpMcpURL) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingEditResponseZonesWebmcpMcpURLJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingEditResponseZonesWebmcpMcpURL) implementsSettingEditResponse() {}
+
+// ID of the zone setting.
+type SettingEditResponseZonesWebmcpMcpURLID string
+
+const (
+	SettingEditResponseZonesWebmcpMcpURLIDWebmcpMcpURL SettingEditResponseZonesWebmcpMcpURLID = "webmcp_mcp_url"
+)
+
+func (r SettingEditResponseZonesWebmcpMcpURLID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesWebmcpMcpURLIDWebmcpMcpURL:
+		return true
+	}
+	return false
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingEditResponseZonesWebmcpMcpURLEditable bool
+
+const (
+	SettingEditResponseZonesWebmcpMcpURLEditableTrue  SettingEditResponseZonesWebmcpMcpURLEditable = true
+	SettingEditResponseZonesWebmcpMcpURLEditableFalse SettingEditResponseZonesWebmcpMcpURLEditable = false
+)
+
+func (r SettingEditResponseZonesWebmcpMcpURLEditable) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesWebmcpMcpURLEditableTrue, SettingEditResponseZonesWebmcpMcpURLEditableFalse:
+		return true
+	}
+	return false
+}
+
 // Optional per-zone override of which bundled WebMCP tool packs the injected
 // bridge.js activates. Only takes effect when webmcp_enabled is on. Leave empty to
 // use the bridge's default pack set. Unknown pack names are ignored by the bridge.
@@ -7685,6 +7761,7 @@ const (
 	SettingEditResponseIDTrueClientIPHeader            SettingEditResponseID = "true_client_ip_header"
 	SettingEditResponseIDWAF                           SettingEditResponseID = "waf"
 	SettingEditResponseIDWebmcpEnabled                 SettingEditResponseID = "webmcp_enabled"
+	SettingEditResponseIDWebmcpMcpURL                  SettingEditResponseID = "webmcp_mcp_url"
 	SettingEditResponseIDWebmcpPacks                   SettingEditResponseID = "webmcp_packs"
 	SettingEditResponseIDWebP                          SettingEditResponseID = "webp"
 	SettingEditResponseIDWebsockets                    SettingEditResponseID = "websockets"
@@ -7692,7 +7769,7 @@ const (
 
 func (r SettingEditResponseID) IsKnown() bool {
 	switch r {
-	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAegis, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDChinaNetworkEnabled, SettingEditResponseIDContentConverter, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMirage, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDOriginH2MaxStreams, SettingEditResponseIDOriginMaxHTTPVersion, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDPreRender, SettingEditResponseIDPrivacyPass, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDRedirectsForAITraining, SettingEditResponseIDReplaceInsecureJS, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSearchForAgents, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTransformations, SettingEditResponseIDTransformationsAllowedOrigins, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebmcpEnabled, SettingEditResponseIDWebmcpPacks, SettingEditResponseIDWebP, SettingEditResponseIDWebsockets:
+	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAegis, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDChinaNetworkEnabled, SettingEditResponseIDContentConverter, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMirage, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDOriginH2MaxStreams, SettingEditResponseIDOriginMaxHTTPVersion, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDPreRender, SettingEditResponseIDPrivacyPass, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDRedirectsForAITraining, SettingEditResponseIDReplaceInsecureJS, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSearchForAgents, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTransformations, SettingEditResponseIDTransformationsAllowedOrigins, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebmcpEnabled, SettingEditResponseIDWebmcpMcpURL, SettingEditResponseIDWebmcpPacks, SettingEditResponseIDWebP, SettingEditResponseIDWebsockets:
 		return true
 	}
 	return false
@@ -7836,8 +7913,8 @@ func (r *SettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [SettingGetResponseZonesTransformations],
 // [SettingGetResponseZonesTransformationsAllowedOrigins],
 // [SettingGetResponseZonesTrueClientIPHeader2], [SettingGetResponseZonesWAF2],
-// [SettingGetResponseZonesWebmcpEnabled], [SettingGetResponseZonesWebmcpPacks],
-// [WebP], [Websocket].
+// [SettingGetResponseZonesWebmcpEnabled], [SettingGetResponseZonesWebmcpMcpURL],
+// [SettingGetResponseZonesWebmcpPacks], [WebP], [Websocket].
 func (r SettingGetResponse) AsUnion() SettingGetResponseUnion {
 	return r.union
 }
@@ -7880,8 +7957,8 @@ func (r SettingGetResponse) AsUnion() SettingGetResponseUnion {
 // [SettingGetResponseZonesTransformations],
 // [SettingGetResponseZonesTransformationsAllowedOrigins],
 // [SettingGetResponseZonesTrueClientIPHeader2], [SettingGetResponseZonesWAF2],
-// [SettingGetResponseZonesWebmcpEnabled], [SettingGetResponseZonesWebmcpPacks],
-// [WebP] or [Websocket].
+// [SettingGetResponseZonesWebmcpEnabled], [SettingGetResponseZonesWebmcpMcpURL],
+// [SettingGetResponseZonesWebmcpPacks], [WebP] or [Websocket].
 type SettingGetResponseUnion interface {
 	implementsSettingGetResponse()
 }
@@ -8141,6 +8218,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(SettingGetResponseZonesWebmcpEnabled{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesWebmcpMcpURL{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -11306,6 +11387,78 @@ func (r SettingGetResponseZonesWebmcpEnabledEditable) IsKnown() bool {
 	return false
 }
 
+// Optional per-zone path of the site's own MCP server, used by the WebMCP
+// mcp-server-client tool pack to list and call the site's MCP tools from the
+// browser. The path is resolved against the page's origin, so it applies to every
+// hostname in the zone. Only takes effect when webmcp_enabled is on and the
+// mcp-server-client pack is active. Leave empty to use /mcp. This setting is
+// currently in beta and its behavior may change.
+type SettingGetResponseZonesWebmcpMcpURL struct {
+	// ID of the zone setting.
+	ID SettingGetResponseZonesWebmcpMcpURLID `json:"id" api:"required"`
+	// Current value of the zone setting.
+	Value string `json:"value" api:"required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable SettingGetResponseZonesWebmcpMcpURLEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                               `json:"modified_on" api:"nullable" format:"date-time"`
+	JSON       settingGetResponseZonesWebmcpMcpURLJSON `json:"-"`
+}
+
+// settingGetResponseZonesWebmcpMcpURLJSON contains the JSON metadata for the
+// struct [SettingGetResponseZonesWebmcpMcpURL]
+type settingGetResponseZonesWebmcpMcpURLJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseZonesWebmcpMcpURL) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseZonesWebmcpMcpURLJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingGetResponseZonesWebmcpMcpURL) implementsSettingGetResponse() {}
+
+// ID of the zone setting.
+type SettingGetResponseZonesWebmcpMcpURLID string
+
+const (
+	SettingGetResponseZonesWebmcpMcpURLIDWebmcpMcpURL SettingGetResponseZonesWebmcpMcpURLID = "webmcp_mcp_url"
+)
+
+func (r SettingGetResponseZonesWebmcpMcpURLID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesWebmcpMcpURLIDWebmcpMcpURL:
+		return true
+	}
+	return false
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingGetResponseZonesWebmcpMcpURLEditable bool
+
+const (
+	SettingGetResponseZonesWebmcpMcpURLEditableTrue  SettingGetResponseZonesWebmcpMcpURLEditable = true
+	SettingGetResponseZonesWebmcpMcpURLEditableFalse SettingGetResponseZonesWebmcpMcpURLEditable = false
+)
+
+func (r SettingGetResponseZonesWebmcpMcpURLEditable) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesWebmcpMcpURLEditableTrue, SettingGetResponseZonesWebmcpMcpURLEditableFalse:
+		return true
+	}
+	return false
+}
+
 // Optional per-zone override of which bundled WebMCP tool packs the injected
 // bridge.js activates. Only takes effect when webmcp_enabled is on. Leave empty to
 // use the bridge's default pack set. Unknown pack names are ignored by the bridge.
@@ -11443,6 +11596,7 @@ const (
 	SettingGetResponseIDTrueClientIPHeader            SettingGetResponseID = "true_client_ip_header"
 	SettingGetResponseIDWAF                           SettingGetResponseID = "waf"
 	SettingGetResponseIDWebmcpEnabled                 SettingGetResponseID = "webmcp_enabled"
+	SettingGetResponseIDWebmcpMcpURL                  SettingGetResponseID = "webmcp_mcp_url"
 	SettingGetResponseIDWebmcpPacks                   SettingGetResponseID = "webmcp_packs"
 	SettingGetResponseIDWebP                          SettingGetResponseID = "webp"
 	SettingGetResponseIDWebsockets                    SettingGetResponseID = "websockets"
@@ -11450,7 +11604,7 @@ const (
 
 func (r SettingGetResponseID) IsKnown() bool {
 	switch r {
-	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAegis, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDChinaNetworkEnabled, SettingGetResponseIDContentConverter, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMirage, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDOriginH2MaxStreams, SettingGetResponseIDOriginMaxHTTPVersion, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDPreRender, SettingGetResponseIDPrivacyPass, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDRedirectsForAITraining, SettingGetResponseIDReplaceInsecureJS, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSearchForAgents, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTransformations, SettingGetResponseIDTransformationsAllowedOrigins, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebmcpEnabled, SettingGetResponseIDWebmcpPacks, SettingGetResponseIDWebP, SettingGetResponseIDWebsockets:
+	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAegis, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDChinaNetworkEnabled, SettingGetResponseIDContentConverter, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMirage, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDOriginH2MaxStreams, SettingGetResponseIDOriginMaxHTTPVersion, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDPreRender, SettingGetResponseIDPrivacyPass, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDRedirectsForAITraining, SettingGetResponseIDReplaceInsecureJS, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSearchForAgents, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTransformations, SettingGetResponseIDTransformationsAllowedOrigins, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebmcpEnabled, SettingGetResponseIDWebmcpMcpURL, SettingGetResponseIDWebmcpPacks, SettingGetResponseIDWebP, SettingGetResponseIDWebsockets:
 		return true
 	}
 	return false

@@ -37,7 +37,8 @@ func NewResourceLibraryApplicationService(opts ...option.RequestOption) (r *Reso
 	return
 }
 
-// Create a custom application for an account.
+// Create a custom application for an account from a name, category, and optional
+// network matchers.
 func (r *ResourceLibraryApplicationService) New(ctx context.Context, params ResourceLibraryApplicationNewParams, opts ...option.RequestOption) (res *ResourceLibraryApplicationNewResponse, err error) {
 	var env ResourceLibraryApplicationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -54,7 +55,9 @@ func (r *ResourceLibraryApplicationService) New(ctx context.Context, params Reso
 	return res, nil
 }
 
-// Replace the network matchers for a custom application and create a new version.
+// Replace the supplied network matchers for a custom application and create a new
+// version. Omitted matcher lists remain unchanged; send an empty list to clear a
+// matcher type.
 func (r *ResourceLibraryApplicationService) Update(ctx context.Context, id int64, params ResourceLibraryApplicationUpdateParams, opts ...option.RequestOption) (res *ResourceLibraryApplicationUpdateResponse, err error) {
 	var env ResourceLibraryApplicationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -76,6 +79,10 @@ func (r *ResourceLibraryApplicationService) Update(ctx context.Context, id int64
 //
 // Results are paginated. Use `filter` and `search` to narrow the list, `order_by`
 // to sort it, and `fields` to reduce each result to only the properties you need.
+// Use `lookup` to find complete application names mentioned in a rule sentence,
+// ignoring case. Lookup does not correct misspellings. It ranks matches by
+// relevance and uses the same filters, fields, and pagination as listing. `lookup`
+// cannot be combined with `search`.
 //
 // The authenticated principal must have access to the account identified by
 // `account_id`.
@@ -105,6 +112,10 @@ func (r *ResourceLibraryApplicationService) List(ctx context.Context, params Res
 //
 // Results are paginated. Use `filter` and `search` to narrow the list, `order_by`
 // to sort it, and `fields` to reduce each result to only the properties you need.
+// Use `lookup` to find complete application names mentioned in a rule sentence,
+// ignoring case. Lookup does not correct misspellings. It ranks matches by
+// relevance and uses the same filters, fields, and pagination as listing. `lookup`
+// cannot be combined with `search`.
 //
 // The authenticated principal must have access to the account identified by
 // `account_id`.
@@ -130,7 +141,7 @@ func (r *ResourceLibraryApplicationService) Delete(ctx context.Context, id int64
 	return res, nil
 }
 
-// Get application by ID.
+// Retrieve an application available to the account by its numeric application ID.
 func (r *ResourceLibraryApplicationService) Get(ctx context.Context, id int64, query ResourceLibraryApplicationGetParams, opts ...option.RequestOption) (res *ResourceLibraryApplicationGetResponse, err error) {
 	var env ResourceLibraryApplicationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -148,7 +159,7 @@ func (r *ResourceLibraryApplicationService) Get(ctx context.Context, id int64, q
 }
 
 type ResourceLibraryApplicationNewResponse struct {
-	// Returns the application ID.
+	// Numeric identifier for the application.
 	ID int64 `json:"id" api:"required"`
 	// Confidence score for the application. Returns -1 when no score is available.
 	ApplicationConfidenceScore float64 `json:"application_confidence_score" api:"required"`
@@ -158,7 +169,7 @@ type ResourceLibraryApplicationNewResponse struct {
 	ApplicationType string `json:"application_type" api:"required"`
 	// Returns the application type description.
 	ApplicationTypeDescription string `json:"application_type_description" api:"required"`
-	// Returns the category ID.
+	// Numeric identifier for an application category.
 	CategoryID int64 `json:"category_id" api:"required"`
 	// Returns the application creation time.
 	CreatedAt string `json:"created_at" api:"required"`
@@ -166,15 +177,17 @@ type ResourceLibraryApplicationNewResponse struct {
 	GenAIScore float64 `json:"gen_ai_score" api:"required"`
 	// Hostnames matched by the application.
 	Hostnames []string `json:"hostnames" api:"required"`
-	// Returns the human readable ID.
+	// Human-readable identifier for the application.
 	HumanID string `json:"human_id" api:"required"`
 	// IP subnets for this application. Custom application create and update requests
 	// accept IPv4 prefix lengths /8 through /32 and IPv6 prefix lengths /32 through
 	// /128.
 	IPSubnets []string `json:"ip_subnets" api:"required"`
-	// Returns the application name.
+	// Application name.
 	Name string `json:"name" api:"required"`
-	// Port and protocol pairs matched by the application.
+	// Ports matched by the application, in `protocol/port` or inclusive
+	// `protocol/start-end` format (for example, `tcp/443` or `udp/10000-20000`). TCP
+	// and UDP ports must be between 0 and 65535.
 	PortProtocols []string `json:"port_protocols" api:"required"`
 	// Support domains matched by the application.
 	SupportDomains []string `json:"support_domains" api:"required"`
@@ -239,7 +252,7 @@ func (r ResourceLibraryApplicationNewResponseSupported) IsKnown() bool {
 }
 
 type ResourceLibraryApplicationUpdateResponse struct {
-	// Returns the application ID.
+	// Numeric identifier for the application.
 	ID int64 `json:"id" api:"required"`
 	// Confidence score for the application. Returns -1 when no score is available.
 	ApplicationConfidenceScore float64 `json:"application_confidence_score" api:"required"`
@@ -249,7 +262,7 @@ type ResourceLibraryApplicationUpdateResponse struct {
 	ApplicationType string `json:"application_type" api:"required"`
 	// Returns the application type description.
 	ApplicationTypeDescription string `json:"application_type_description" api:"required"`
-	// Returns the category ID.
+	// Numeric identifier for an application category.
 	CategoryID int64 `json:"category_id" api:"required"`
 	// Returns the application creation time.
 	CreatedAt string `json:"created_at" api:"required"`
@@ -257,15 +270,17 @@ type ResourceLibraryApplicationUpdateResponse struct {
 	GenAIScore float64 `json:"gen_ai_score" api:"required"`
 	// Hostnames matched by the application.
 	Hostnames []string `json:"hostnames" api:"required"`
-	// Returns the human readable ID.
+	// Human-readable identifier for the application.
 	HumanID string `json:"human_id" api:"required"`
 	// IP subnets for this application. Custom application create and update requests
 	// accept IPv4 prefix lengths /8 through /32 and IPv6 prefix lengths /32 through
 	// /128.
 	IPSubnets []string `json:"ip_subnets" api:"required"`
-	// Returns the application name.
+	// Application name.
 	Name string `json:"name" api:"required"`
-	// Port and protocol pairs matched by the application.
+	// Ports matched by the application, in `protocol/port` or inclusive
+	// `protocol/start-end` format (for example, `tcp/443` or `udp/10000-20000`). TCP
+	// and UDP ports must be between 0 and 65535.
 	PortProtocols []string `json:"port_protocols" api:"required"`
 	// Support domains matched by the application.
 	SupportDomains []string `json:"support_domains" api:"required"`
@@ -329,11 +344,11 @@ func (r ResourceLibraryApplicationUpdateResponseSupported) IsKnown() bool {
 	return false
 }
 
-// Describes one application in a list response. This endpoint returns every
-// property below unless the `fields` query parameter narrows the response, so
-// treat all of them except `id` as optional.
+// Describes one application in a list response. The response returns every
+// property below unless `fields` narrows it. Treat all properties except `id` as
+// optional.
 type ResourceLibraryApplicationListResponse struct {
-	// Returns the application ID.
+	// Numeric identifier for the application.
 	ID int64 `json:"id" api:"required"`
 	// Confidence score for the application. Returns -1 when no score is available.
 	ApplicationConfidenceScore float64 `json:"application_confidence_score"`
@@ -345,7 +360,7 @@ type ResourceLibraryApplicationListResponse struct {
 	ApplicationType string `json:"application_type"`
 	// Returns the application type description.
 	ApplicationTypeDescription string `json:"application_type_description"`
-	// Returns the category ID.
+	// Numeric identifier for an application category.
 	CategoryID int64 `json:"category_id"`
 	// Returns the application creation time.
 	CreatedAt string `json:"created_at"`
@@ -353,15 +368,17 @@ type ResourceLibraryApplicationListResponse struct {
 	GenAIScore float64 `json:"gen_ai_score"`
 	// Hostnames matched by the application.
 	Hostnames []string `json:"hostnames"`
-	// Returns the human readable ID.
+	// Human-readable identifier for the application.
 	HumanID string `json:"human_id"`
 	// IP subnets for this application. Custom application create and update requests
 	// accept IPv4 prefix lengths /8 through /32 and IPv6 prefix lengths /32 through
 	// /128.
 	IPSubnets []string `json:"ip_subnets"`
-	// Returns the application name.
+	// Application name.
 	Name string `json:"name"`
-	// Port and protocol pairs matched by the application.
+	// Ports matched by the application, in `protocol/port` or inclusive
+	// `protocol/start-end` format (for example, `tcp/443` or `udp/10000-20000`). TCP
+	// and UDP ports must be between 0 and 65535.
 	PortProtocols []string `json:"port_protocols"`
 	// The account-specific Gateway review status. Applications with no assigned review
 	// status are returned as `unreviewed`.
@@ -449,7 +466,7 @@ func (r ResourceLibraryApplicationListResponseSupported) IsKnown() bool {
 type ResourceLibraryApplicationDeleteResponse = interface{}
 
 type ResourceLibraryApplicationGetResponse struct {
-	// Returns the application ID.
+	// Numeric identifier for the application.
 	ID int64 `json:"id" api:"required"`
 	// Confidence score for the application. Returns -1 when no score is available.
 	ApplicationConfidenceScore float64 `json:"application_confidence_score" api:"required"`
@@ -459,7 +476,7 @@ type ResourceLibraryApplicationGetResponse struct {
 	ApplicationType string `json:"application_type" api:"required"`
 	// Returns the application type description.
 	ApplicationTypeDescription string `json:"application_type_description" api:"required"`
-	// Returns the category ID.
+	// Numeric identifier for an application category.
 	CategoryID int64 `json:"category_id" api:"required"`
 	// Returns the application creation time.
 	CreatedAt string `json:"created_at" api:"required"`
@@ -467,15 +484,17 @@ type ResourceLibraryApplicationGetResponse struct {
 	GenAIScore float64 `json:"gen_ai_score" api:"required"`
 	// Hostnames matched by the application.
 	Hostnames []string `json:"hostnames" api:"required"`
-	// Returns the human readable ID.
+	// Human-readable identifier for the application.
 	HumanID string `json:"human_id" api:"required"`
 	// IP subnets for this application. Custom application create and update requests
 	// accept IPv4 prefix lengths /8 through /32 and IPv6 prefix lengths /32 through
 	// /128.
 	IPSubnets []string `json:"ip_subnets" api:"required"`
-	// Returns the application name.
+	// Application name.
 	Name string `json:"name" api:"required"`
-	// Port and protocol pairs matched by the application.
+	// Ports matched by the application, in `protocol/port` or inclusive
+	// `protocol/start-end` format (for example, `tcp/443` or `udp/10000-20000`). TCP
+	// and UDP ports must be between 0 and 65535.
 	PortProtocols []string `json:"port_protocols" api:"required"`
 	// Support domains matched by the application.
 	SupportDomains []string `json:"support_domains" api:"required"`
@@ -553,13 +572,13 @@ func (r ResourceLibraryApplicationNewParams) MarshalJSON() (data []byte, err err
 // Defines a custom application. At least one hostname or IP subnet is required.
 // Support domains and port/protocol pairs do not satisfy this requirement.
 type ResourceLibraryApplicationNewParamsBody struct {
-	// Returns the category ID.
+	// Numeric identifier for an application category.
 	CategoryID param.Field[int64]       `json:"category_id"`
 	Hostnames  param.Field[interface{}] `json:"hostnames"`
-	// Returns the human readable ID.
+	// Human-readable identifier for the application.
 	HumanID   param.Field[string]      `json:"human_id"`
 	IPSubnets param.Field[interface{}] `json:"ip_subnets"`
-	// Returns the application name.
+	// Application name.
 	Name           param.Field[string]      `json:"name"`
 	PortProtocols  param.Field[interface{}] `json:"port_protocols"`
 	SupportDomains param.Field[interface{}] `json:"support_domains"`
@@ -585,17 +604,19 @@ type ResourceLibraryApplicationNewParamsBodyUnion interface {
 type ResourceLibraryApplicationNewParamsBodyObject struct {
 	// Hostnames matched by the application.
 	Hostnames param.Field[[]string] `json:"hostnames" api:"required"`
-	// Returns the category ID.
+	// Numeric identifier for an application category.
 	CategoryID param.Field[int64] `json:"category_id"`
-	// Returns the human readable ID.
+	// Human-readable identifier for the application.
 	HumanID param.Field[string] `json:"human_id"`
 	// IP subnets for this application. Custom application create and update requests
 	// accept IPv4 prefix lengths /8 through /32 and IPv6 prefix lengths /32 through
 	// /128.
 	IPSubnets param.Field[[]string] `json:"ip_subnets"`
-	// Returns the application name.
+	// Application name.
 	Name param.Field[string] `json:"name"`
-	// Port and protocol pairs matched by the application.
+	// Ports matched by the application, in `protocol/port` or inclusive
+	// `protocol/start-end` format (for example, `tcp/443` or `udp/10000-20000`). TCP
+	// and UDP ports must be between 0 and 65535.
 	PortProtocols param.Field[[]string] `json:"port_protocols"`
 	// Support domains matched by the application.
 	SupportDomains param.Field[[]string] `json:"support_domains"`
@@ -757,7 +778,9 @@ type ResourceLibraryApplicationUpdateParams struct {
 	// accept IPv4 prefix lengths /8 through /32 and IPv6 prefix lengths /32 through
 	// /128.
 	IPSubnets param.Field[[]string] `json:"ip_subnets"`
-	// Port and protocol pairs matched by the application.
+	// Ports matched by the application, in `protocol/port` or inclusive
+	// `protocol/start-end` format (for example, `tcp/443` or `udp/10000-20000`). TCP
+	// and UDP ports must be between 0 and 65535.
 	PortProtocols param.Field[[]string] `json:"port_protocols"`
 	// Support domains matched by the application.
 	SupportDomains param.Field[[]string] `json:"support_domains"`
@@ -913,10 +936,11 @@ type ResourceLibraryApplicationListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Return only the listed properties on each application, as a comma-separated
 	// list. Use this to keep responses small when you only need part of each
-	// application — for example populating a picker with `fields=id,name` instead of
+	// application, for example populating a picker with `fields=id,name` instead of
 	// downloading every hostname and IP subnet.
 	//
-	// Omit this parameter to receive the full application object.
+	// Omit this parameter to receive the full application object, including when
+	// lookup is used.
 	//
 	// `id` is always returned.
 	//
@@ -926,32 +950,39 @@ type ResourceLibraryApplicationListParams struct {
 	//
 	// Unknown or empty property names return `400`.
 	Fields param.Field[string] `query:"fields"`
-	// Filter applications using key:value format. Supported filter keys:
+	// Filter applications using `key:value` format. Supported filter keys:
 	//
-	//   - name: Filter by application name (e.g., name:HR)
-	//   - id: Filter by application ID (e.g., id:498)
-	//   - human_id: Filter by human-readable ID (e.g., human_id:HR)
-	//   - hostname: Filter by hostname or support domain (e.g.,
-	//     hostname:portal.example.com)
-	//   - source: Filter by application source name (e.g., source:cloudflare)
-	//   - ip_subnet: Filter by IP subnet using CIDR containment — returns applications
-	//     where any stored subnet contains the search value (e.g., ip_subnet:10.0.1.5/32
-	//     matches apps with 10.0.0.0/16)
-	//   - category_id: Filter by category ID (e.g., category_id:12).
-	//   - category_name: Filter by category name (e.g., category_name:HR).
-	//   - supported: Filter by supported Cloudflare product (e.g., supported:ACCESS).
-	//     Values: GATEWAY, ACCESS, CASB.
-	//   - review_status: Filter by the account's Gateway review status. Values:
-	//     approved, unapproved, in_review, unreviewed. .
+	//   - `name`: application name (for example, `name:HR`).
+	//   - `id`: application ID (for example, `id:498`).
+	//   - `human_id`: human-readable ID (for example, `human_id:HR`).
+	//   - `hostname`: hostname or support domain (for example,
+	//     `hostname:portal.example.com`).
+	//   - `source`: application source name (for example, `source:cloudflare`).
+	//   - `ip_subnet`: CIDR containment; returns applications where a stored subnet
+	//     contains the search value (for example, `ip_subnet:10.0.1.5/32` matches
+	//     `10.0.0.0/16`).
+	//   - `category_id`: category ID (for example, `category_id:12`).
+	//   - `category_name`: category name (for example, `category_name:HR`).
+	//   - `supported`: supported Cloudflare product. Values: `GATEWAY`, `ACCESS`,
+	//     `CASB`.
+	//   - `review_status`: account-specific Gateway review status. Values: `approved`,
+	//     `unapproved`, `in_review`, `unreviewed`.
 	Filter param.Field[string] `query:"filter"`
-	// Limit of number of results to return (max 250).
+	// Number of results to return. Defaults to 25; values are clamped to 1–250.
 	Limit param.Field[int64] `query:"limit"`
-	// Offset of results to return.
+	// Find complete, case-insensitive application name mentions in a phrase or rule
+	// sentence. Misspelled names do not match. Returns matching applications ranked by
+	// relevance. Must be between 2 and 1000 characters. Uses the same filters, fields,
+	// and pagination as listing. `search` cannot be combined with lookup. Results are
+	// ranked by relevance, so `order_by` is ignored.
+	Lookup param.Field[string] `query:"lookup"`
+	// Number of results to skip. Defaults to 0; negative values are clamped to 0.
 	Offset param.Field[int64] `query:"offset"`
 	// Order results using field:direction format. Supported fields are name, id,
 	// human_id, category_id, application_type, application_confidence_score, and
 	// gen_ai_score. Supported directions are asc and desc. Ignored when search is
-	// provided; results are ranked by relevance instead.
+	// provided; results are ranked by relevance instead. Also ignored when lookup is
+	// provided.
 	OrderBy param.Field[string] `query:"order_by"`
 	// Fuzzy search across application name and hostnames. Results are ranked by
 	// relevance. Must be between 2 and 200 characters. Can be combined with filter

@@ -44,10 +44,10 @@ func NewThreatEventIndicatorService(opts ...option.RequestOption) (r *ThreatEven
 }
 
 // Retrieves indicators across specified datasets, ordered by createdAt descending
-// then UUID, dataset ID, and shard ID ascending. Use the standalone datasetIds
-// value 'all'/'\*' for legacy all-datasets behavior, 'analytics' for
-// isAnalytics=true datasets, or 'operational' for isAnalytics=false datasets. If
-// no datasetIds are provided, uses the default dataset.
+// then UUID, dataset ID, and shard ID ascending. Use one standalone datasetIds
+// scope value: 'all'/'\*' or 'operational' for readable intelligence datasets
+// (isAnalytics=false), or 'analytics' for readable analytics datasets
+// (isAnalytics=true). If no datasetIds are provided, uses the default dataset.
 func (r *ThreatEventIndicatorService) List(ctx context.Context, params ThreatEventIndicatorListParams, opts ...option.RequestOption) (res *ThreatEventIndicatorListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -823,10 +823,10 @@ type ThreatEventIndicatorListParams struct {
 	// that has since been reconfigured as analytics-only yields a 400
 	// `InvalidCursorError`.
 	Cursor param.Field[string] `query:"cursor"`
-	// Dataset UUIDs to query, or one standalone scope value: 'all'/'\*' for legacy
-	// all-datasets behavior, 'analytics' for isAnalytics=true datasets, or
-	// 'operational' for isAnalytics=false datasets. If not provided, uses the default
-	// dataset.
+	// Dataset UUIDs to query, or one standalone scope value: 'all'/'\*' or
+	// 'operational' for readable intelligence datasets (isAnalytics=false), or
+	// 'analytics' for readable analytics datasets (isAnalytics=true). If not provided,
+	// uses the default dataset.
 	DatasetIDs param.Field[[]string] `query:"datasetIds"`
 	// Output format for indicator data. 'json' returns the default format, 'stix2'
 	// returns STIX 2.1 Indicator SDOs, 'taxii' returns a TAXII 2.1 Envelope with

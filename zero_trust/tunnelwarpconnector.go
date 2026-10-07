@@ -49,7 +49,7 @@ func NewTunnelWARPConnectorService(opts ...option.RequestOption) (r *TunnelWARPC
 	return
 }
 
-// Creates a new Warp Connector Tunnel in an account.
+// Creates a new Mesh node in an account.
 func (r *TunnelWARPConnectorService) New(ctx context.Context, params TunnelWARPConnectorNewParams, opts ...option.RequestOption) (res *TunnelWARPConnectorNewResponse, err error) {
 	var env TunnelWARPConnectorNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -66,7 +66,7 @@ func (r *TunnelWARPConnectorService) New(ctx context.Context, params TunnelWARPC
 	return res, nil
 }
 
-// Lists and filters Warp Connector Tunnels in an account.
+// Lists and filters Mesh nodes in an account.
 func (r *TunnelWARPConnectorService) List(ctx context.Context, params TunnelWARPConnectorListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[TunnelWARPConnectorListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -88,12 +88,12 @@ func (r *TunnelWARPConnectorService) List(ctx context.Context, params TunnelWARP
 	return res, nil
 }
 
-// Lists and filters Warp Connector Tunnels in an account.
+// Lists and filters Mesh nodes in an account.
 func (r *TunnelWARPConnectorService) ListAutoPaging(ctx context.Context, params TunnelWARPConnectorListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[TunnelWARPConnectorListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Deletes a Warp Connector Tunnel from an account.
+// Deletes a Mesh node from an account.
 func (r *TunnelWARPConnectorService) Delete(ctx context.Context, tunnelID string, body TunnelWARPConnectorDeleteParams, opts ...option.RequestOption) (res *TunnelWARPConnectorDeleteResponse, err error) {
 	var env TunnelWARPConnectorDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -114,7 +114,7 @@ func (r *TunnelWARPConnectorService) Delete(ctx context.Context, tunnelID string
 	return res, nil
 }
 
-// Updates an existing Warp Connector Tunnel.
+// Updates an existing Mesh node.
 func (r *TunnelWARPConnectorService) Edit(ctx context.Context, tunnelID string, params TunnelWARPConnectorEditParams, opts ...option.RequestOption) (res *TunnelWARPConnectorEditResponse, err error) {
 	var env TunnelWARPConnectorEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -135,7 +135,7 @@ func (r *TunnelWARPConnectorService) Edit(ctx context.Context, tunnelID string, 
 	return res, nil
 }
 
-// Fetches a single Warp Connector Tunnel.
+// Fetches a single Mesh node.
 func (r *TunnelWARPConnectorService) Get(ctx context.Context, tunnelID string, query TunnelWARPConnectorGetParams, opts ...option.RequestOption) (res *TunnelWARPConnectorGetResponse, err error) {
 	var env TunnelWARPConnectorGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -156,7 +156,7 @@ func (r *TunnelWARPConnectorService) Get(ctx context.Context, tunnelID string, q
 	return res, nil
 }
 
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+// A Mesh node that connects your origin to Cloudflare's edge.
 type TunnelWARPConnectorNewResponse struct {
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
@@ -310,7 +310,7 @@ func (r TunnelWARPConnectorNewResponseTunType) IsKnown() bool {
 	return false
 }
 
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+// A Mesh node that connects your origin to Cloudflare's edge.
 type TunnelWARPConnectorListResponse struct {
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
@@ -464,7 +464,7 @@ func (r TunnelWARPConnectorListResponseTunType) IsKnown() bool {
 	return false
 }
 
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+// A Mesh node that connects your origin to Cloudflare's edge.
 type TunnelWARPConnectorDeleteResponse struct {
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
@@ -618,7 +618,7 @@ func (r TunnelWARPConnectorDeleteResponseTunType) IsKnown() bool {
 	return false
 }
 
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+// A Mesh node that connects your origin to Cloudflare's edge.
 type TunnelWARPConnectorEditResponse struct {
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
@@ -772,7 +772,7 @@ func (r TunnelWARPConnectorEditResponseTunType) IsKnown() bool {
 	return false
 }
 
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+// A Mesh node that connects your origin to Cloudflare's edge.
 type TunnelWARPConnectorGetResponse struct {
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
@@ -943,7 +943,7 @@ func (r TunnelWARPConnectorNewParams) MarshalJSON() (data []byte, err error) {
 type TunnelWARPConnectorNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
 	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+	// A Mesh node that connects your origin to Cloudflare's edge.
 	Result TunnelWARPConnectorNewResponse `json:"result" api:"required"`
 	// Whether the API call was successful
 	Success TunnelWARPConnectorNewResponseEnvelopeSuccess `json:"success" api:"required"`
@@ -1050,7 +1050,7 @@ type TunnelWARPConnectorDeleteParams struct {
 type TunnelWARPConnectorDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
 	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+	// A Mesh node that connects your origin to Cloudflare's edge.
 	Result TunnelWARPConnectorDeleteResponse `json:"result" api:"required"`
 	// Whether the API call was successful
 	Success TunnelWARPConnectorDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
@@ -1108,7 +1108,7 @@ func (r TunnelWARPConnectorEditParams) MarshalJSON() (data []byte, err error) {
 type TunnelWARPConnectorEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
 	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+	// A Mesh node that connects your origin to Cloudflare's edge.
 	Result TunnelWARPConnectorEditResponse `json:"result" api:"required"`
 	// Whether the API call was successful
 	Success TunnelWARPConnectorEditResponseEnvelopeSuccess `json:"success" api:"required"`
@@ -1157,7 +1157,7 @@ type TunnelWARPConnectorGetParams struct {
 type TunnelWARPConnectorGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
 	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+	// A Mesh node that connects your origin to Cloudflare's edge.
 	Result TunnelWARPConnectorGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful
 	Success TunnelWARPConnectorGetResponseEnvelopeSuccess `json:"success" api:"required"`

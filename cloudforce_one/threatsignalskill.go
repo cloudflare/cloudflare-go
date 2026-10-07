@@ -563,24 +563,30 @@ func (r threatSignalSkillNewResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type ThreatSignalSkillNewResponseEnvelopeMessages struct {
-	Message  string                                             `json:"message" api:"required"`
-	Code     float64                                            `json:"code"`
-	Expected string                                             `json:"expected"`
-	Path     []string                                           `json:"path"`
-	Reason   ThreatSignalSkillNewResponseEnvelopeMessagesReason `json:"reason"`
-	JSON     threatSignalSkillNewResponseEnvelopeMessagesJSON   `json:"-"`
+	Message string  `json:"message" api:"required"`
+	Code    float64 `json:"code"`
+	// The current count of custom feeds for the account.
+	CustomFeedCount int64 `json:"custom_feed_count"`
+	// The custom feed limit for the account.
+	CustomFeedLimit int64                                              `json:"custom_feed_limit"`
+	Expected        string                                             `json:"expected"`
+	Path            []string                                           `json:"path"`
+	Reason          ThreatSignalSkillNewResponseEnvelopeMessagesReason `json:"reason"`
+	JSON            threatSignalSkillNewResponseEnvelopeMessagesJSON   `json:"-"`
 }
 
 // threatSignalSkillNewResponseEnvelopeMessagesJSON contains the JSON metadata for
 // the struct [ThreatSignalSkillNewResponseEnvelopeMessages]
 type threatSignalSkillNewResponseEnvelopeMessagesJSON struct {
-	Message     apijson.Field
-	Code        apijson.Field
-	Expected    apijson.Field
-	Path        apijson.Field
-	Reason      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Message         apijson.Field
+	Code            apijson.Field
+	CustomFeedCount apijson.Field
+	CustomFeedLimit apijson.Field
+	Expected        apijson.Field
+	Path            apijson.Field
+	Reason          apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *ThreatSignalSkillNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
@@ -594,8 +600,9 @@ func (r threatSignalSkillNewResponseEnvelopeMessagesJSON) RawJSON() string {
 type ThreatSignalSkillNewResponseEnvelopeMessagesReason string
 
 const (
-	ThreatSignalSkillNewResponseEnvelopeMessagesReasonFreeCustomFeedLimit              ThreatSignalSkillNewResponseEnvelopeMessagesReason = "free_custom_feed_limit"
+	ThreatSignalSkillNewResponseEnvelopeMessagesReasonThreatSignalsFeedLimit           ThreatSignalSkillNewResponseEnvelopeMessagesReason = "threat_signals_feed_limit"
 	ThreatSignalSkillNewResponseEnvelopeMessagesReasonFreeCustomSkillsDisabled         ThreatSignalSkillNewResponseEnvelopeMessagesReason = "free_custom_skills_disabled"
+	ThreatSignalSkillNewResponseEnvelopeMessagesReasonFreeSkillRunDisabled             ThreatSignalSkillNewResponseEnvelopeMessagesReason = "free_skill_run_disabled"
 	ThreatSignalSkillNewResponseEnvelopeMessagesReasonFreeTierReconciliationInProgress ThreatSignalSkillNewResponseEnvelopeMessagesReason = "free_tier_reconciliation_in_progress"
 	ThreatSignalSkillNewResponseEnvelopeMessagesReasonFreeTierReconciliationFailed     ThreatSignalSkillNewResponseEnvelopeMessagesReason = "free_tier_reconciliation_failed"
 	ThreatSignalSkillNewResponseEnvelopeMessagesReasonRawContentExpired                ThreatSignalSkillNewResponseEnvelopeMessagesReason = "raw_content_expired"
@@ -604,7 +611,7 @@ const (
 
 func (r ThreatSignalSkillNewResponseEnvelopeMessagesReason) IsKnown() bool {
 	switch r {
-	case ThreatSignalSkillNewResponseEnvelopeMessagesReasonFreeCustomFeedLimit, ThreatSignalSkillNewResponseEnvelopeMessagesReasonFreeCustomSkillsDisabled, ThreatSignalSkillNewResponseEnvelopeMessagesReasonFreeTierReconciliationInProgress, ThreatSignalSkillNewResponseEnvelopeMessagesReasonFreeTierReconciliationFailed, ThreatSignalSkillNewResponseEnvelopeMessagesReasonRawContentExpired, ThreatSignalSkillNewResponseEnvelopeMessagesReasonCuratedVisibilityChanged:
+	case ThreatSignalSkillNewResponseEnvelopeMessagesReasonThreatSignalsFeedLimit, ThreatSignalSkillNewResponseEnvelopeMessagesReasonFreeCustomSkillsDisabled, ThreatSignalSkillNewResponseEnvelopeMessagesReasonFreeSkillRunDisabled, ThreatSignalSkillNewResponseEnvelopeMessagesReasonFreeTierReconciliationInProgress, ThreatSignalSkillNewResponseEnvelopeMessagesReasonFreeTierReconciliationFailed, ThreatSignalSkillNewResponseEnvelopeMessagesReasonRawContentExpired, ThreatSignalSkillNewResponseEnvelopeMessagesReasonCuratedVisibilityChanged:
 		return true
 	}
 	return false
@@ -692,24 +699,30 @@ func (r threatSignalSkillDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type ThreatSignalSkillDeleteResponseEnvelopeMessages struct {
-	Message  string                                                `json:"message" api:"required"`
-	Code     float64                                               `json:"code"`
-	Expected string                                                `json:"expected"`
-	Path     []string                                              `json:"path"`
-	Reason   ThreatSignalSkillDeleteResponseEnvelopeMessagesReason `json:"reason"`
-	JSON     threatSignalSkillDeleteResponseEnvelopeMessagesJSON   `json:"-"`
+	Message string  `json:"message" api:"required"`
+	Code    float64 `json:"code"`
+	// The current count of custom feeds for the account.
+	CustomFeedCount int64 `json:"custom_feed_count"`
+	// The custom feed limit for the account.
+	CustomFeedLimit int64                                                 `json:"custom_feed_limit"`
+	Expected        string                                                `json:"expected"`
+	Path            []string                                              `json:"path"`
+	Reason          ThreatSignalSkillDeleteResponseEnvelopeMessagesReason `json:"reason"`
+	JSON            threatSignalSkillDeleteResponseEnvelopeMessagesJSON   `json:"-"`
 }
 
 // threatSignalSkillDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
 // for the struct [ThreatSignalSkillDeleteResponseEnvelopeMessages]
 type threatSignalSkillDeleteResponseEnvelopeMessagesJSON struct {
-	Message     apijson.Field
-	Code        apijson.Field
-	Expected    apijson.Field
-	Path        apijson.Field
-	Reason      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Message         apijson.Field
+	Code            apijson.Field
+	CustomFeedCount apijson.Field
+	CustomFeedLimit apijson.Field
+	Expected        apijson.Field
+	Path            apijson.Field
+	Reason          apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *ThreatSignalSkillDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
@@ -723,8 +736,9 @@ func (r threatSignalSkillDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 type ThreatSignalSkillDeleteResponseEnvelopeMessagesReason string
 
 const (
-	ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonFreeCustomFeedLimit              ThreatSignalSkillDeleteResponseEnvelopeMessagesReason = "free_custom_feed_limit"
+	ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonThreatSignalsFeedLimit           ThreatSignalSkillDeleteResponseEnvelopeMessagesReason = "threat_signals_feed_limit"
 	ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonFreeCustomSkillsDisabled         ThreatSignalSkillDeleteResponseEnvelopeMessagesReason = "free_custom_skills_disabled"
+	ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonFreeSkillRunDisabled             ThreatSignalSkillDeleteResponseEnvelopeMessagesReason = "free_skill_run_disabled"
 	ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonFreeTierReconciliationInProgress ThreatSignalSkillDeleteResponseEnvelopeMessagesReason = "free_tier_reconciliation_in_progress"
 	ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonFreeTierReconciliationFailed     ThreatSignalSkillDeleteResponseEnvelopeMessagesReason = "free_tier_reconciliation_failed"
 	ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonRawContentExpired                ThreatSignalSkillDeleteResponseEnvelopeMessagesReason = "raw_content_expired"
@@ -733,7 +747,7 @@ const (
 
 func (r ThreatSignalSkillDeleteResponseEnvelopeMessagesReason) IsKnown() bool {
 	switch r {
-	case ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonFreeCustomFeedLimit, ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonFreeCustomSkillsDisabled, ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonFreeTierReconciliationInProgress, ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonFreeTierReconciliationFailed, ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonRawContentExpired, ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonCuratedVisibilityChanged:
+	case ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonThreatSignalsFeedLimit, ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonFreeCustomSkillsDisabled, ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonFreeSkillRunDisabled, ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonFreeTierReconciliationInProgress, ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonFreeTierReconciliationFailed, ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonRawContentExpired, ThreatSignalSkillDeleteResponseEnvelopeMessagesReasonCuratedVisibilityChanged:
 		return true
 	}
 	return false
@@ -815,24 +829,30 @@ func (r threatSignalSkillEditResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type ThreatSignalSkillEditResponseEnvelopeMessages struct {
-	Message  string                                              `json:"message" api:"required"`
-	Code     float64                                             `json:"code"`
-	Expected string                                              `json:"expected"`
-	Path     []string                                            `json:"path"`
-	Reason   ThreatSignalSkillEditResponseEnvelopeMessagesReason `json:"reason"`
-	JSON     threatSignalSkillEditResponseEnvelopeMessagesJSON   `json:"-"`
+	Message string  `json:"message" api:"required"`
+	Code    float64 `json:"code"`
+	// The current count of custom feeds for the account.
+	CustomFeedCount int64 `json:"custom_feed_count"`
+	// The custom feed limit for the account.
+	CustomFeedLimit int64                                               `json:"custom_feed_limit"`
+	Expected        string                                              `json:"expected"`
+	Path            []string                                            `json:"path"`
+	Reason          ThreatSignalSkillEditResponseEnvelopeMessagesReason `json:"reason"`
+	JSON            threatSignalSkillEditResponseEnvelopeMessagesJSON   `json:"-"`
 }
 
 // threatSignalSkillEditResponseEnvelopeMessagesJSON contains the JSON metadata for
 // the struct [ThreatSignalSkillEditResponseEnvelopeMessages]
 type threatSignalSkillEditResponseEnvelopeMessagesJSON struct {
-	Message     apijson.Field
-	Code        apijson.Field
-	Expected    apijson.Field
-	Path        apijson.Field
-	Reason      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Message         apijson.Field
+	Code            apijson.Field
+	CustomFeedCount apijson.Field
+	CustomFeedLimit apijson.Field
+	Expected        apijson.Field
+	Path            apijson.Field
+	Reason          apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *ThreatSignalSkillEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
@@ -846,8 +866,9 @@ func (r threatSignalSkillEditResponseEnvelopeMessagesJSON) RawJSON() string {
 type ThreatSignalSkillEditResponseEnvelopeMessagesReason string
 
 const (
-	ThreatSignalSkillEditResponseEnvelopeMessagesReasonFreeCustomFeedLimit              ThreatSignalSkillEditResponseEnvelopeMessagesReason = "free_custom_feed_limit"
+	ThreatSignalSkillEditResponseEnvelopeMessagesReasonThreatSignalsFeedLimit           ThreatSignalSkillEditResponseEnvelopeMessagesReason = "threat_signals_feed_limit"
 	ThreatSignalSkillEditResponseEnvelopeMessagesReasonFreeCustomSkillsDisabled         ThreatSignalSkillEditResponseEnvelopeMessagesReason = "free_custom_skills_disabled"
+	ThreatSignalSkillEditResponseEnvelopeMessagesReasonFreeSkillRunDisabled             ThreatSignalSkillEditResponseEnvelopeMessagesReason = "free_skill_run_disabled"
 	ThreatSignalSkillEditResponseEnvelopeMessagesReasonFreeTierReconciliationInProgress ThreatSignalSkillEditResponseEnvelopeMessagesReason = "free_tier_reconciliation_in_progress"
 	ThreatSignalSkillEditResponseEnvelopeMessagesReasonFreeTierReconciliationFailed     ThreatSignalSkillEditResponseEnvelopeMessagesReason = "free_tier_reconciliation_failed"
 	ThreatSignalSkillEditResponseEnvelopeMessagesReasonRawContentExpired                ThreatSignalSkillEditResponseEnvelopeMessagesReason = "raw_content_expired"
@@ -856,7 +877,7 @@ const (
 
 func (r ThreatSignalSkillEditResponseEnvelopeMessagesReason) IsKnown() bool {
 	switch r {
-	case ThreatSignalSkillEditResponseEnvelopeMessagesReasonFreeCustomFeedLimit, ThreatSignalSkillEditResponseEnvelopeMessagesReasonFreeCustomSkillsDisabled, ThreatSignalSkillEditResponseEnvelopeMessagesReasonFreeTierReconciliationInProgress, ThreatSignalSkillEditResponseEnvelopeMessagesReasonFreeTierReconciliationFailed, ThreatSignalSkillEditResponseEnvelopeMessagesReasonRawContentExpired, ThreatSignalSkillEditResponseEnvelopeMessagesReasonCuratedVisibilityChanged:
+	case ThreatSignalSkillEditResponseEnvelopeMessagesReasonThreatSignalsFeedLimit, ThreatSignalSkillEditResponseEnvelopeMessagesReasonFreeCustomSkillsDisabled, ThreatSignalSkillEditResponseEnvelopeMessagesReasonFreeSkillRunDisabled, ThreatSignalSkillEditResponseEnvelopeMessagesReasonFreeTierReconciliationInProgress, ThreatSignalSkillEditResponseEnvelopeMessagesReasonFreeTierReconciliationFailed, ThreatSignalSkillEditResponseEnvelopeMessagesReasonRawContentExpired, ThreatSignalSkillEditResponseEnvelopeMessagesReasonCuratedVisibilityChanged:
 		return true
 	}
 	return false
@@ -929,24 +950,30 @@ func (r threatSignalSkillGetResponseEnvelopeErrorsJSON) RawJSON() string {
 }
 
 type ThreatSignalSkillGetResponseEnvelopeMessages struct {
-	Message  string                                             `json:"message" api:"required"`
-	Code     float64                                            `json:"code"`
-	Expected string                                             `json:"expected"`
-	Path     []string                                           `json:"path"`
-	Reason   ThreatSignalSkillGetResponseEnvelopeMessagesReason `json:"reason"`
-	JSON     threatSignalSkillGetResponseEnvelopeMessagesJSON   `json:"-"`
+	Message string  `json:"message" api:"required"`
+	Code    float64 `json:"code"`
+	// The current count of custom feeds for the account.
+	CustomFeedCount int64 `json:"custom_feed_count"`
+	// The custom feed limit for the account.
+	CustomFeedLimit int64                                              `json:"custom_feed_limit"`
+	Expected        string                                             `json:"expected"`
+	Path            []string                                           `json:"path"`
+	Reason          ThreatSignalSkillGetResponseEnvelopeMessagesReason `json:"reason"`
+	JSON            threatSignalSkillGetResponseEnvelopeMessagesJSON   `json:"-"`
 }
 
 // threatSignalSkillGetResponseEnvelopeMessagesJSON contains the JSON metadata for
 // the struct [ThreatSignalSkillGetResponseEnvelopeMessages]
 type threatSignalSkillGetResponseEnvelopeMessagesJSON struct {
-	Message     apijson.Field
-	Code        apijson.Field
-	Expected    apijson.Field
-	Path        apijson.Field
-	Reason      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Message         apijson.Field
+	Code            apijson.Field
+	CustomFeedCount apijson.Field
+	CustomFeedLimit apijson.Field
+	Expected        apijson.Field
+	Path            apijson.Field
+	Reason          apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *ThreatSignalSkillGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
@@ -960,8 +987,9 @@ func (r threatSignalSkillGetResponseEnvelopeMessagesJSON) RawJSON() string {
 type ThreatSignalSkillGetResponseEnvelopeMessagesReason string
 
 const (
-	ThreatSignalSkillGetResponseEnvelopeMessagesReasonFreeCustomFeedLimit              ThreatSignalSkillGetResponseEnvelopeMessagesReason = "free_custom_feed_limit"
+	ThreatSignalSkillGetResponseEnvelopeMessagesReasonThreatSignalsFeedLimit           ThreatSignalSkillGetResponseEnvelopeMessagesReason = "threat_signals_feed_limit"
 	ThreatSignalSkillGetResponseEnvelopeMessagesReasonFreeCustomSkillsDisabled         ThreatSignalSkillGetResponseEnvelopeMessagesReason = "free_custom_skills_disabled"
+	ThreatSignalSkillGetResponseEnvelopeMessagesReasonFreeSkillRunDisabled             ThreatSignalSkillGetResponseEnvelopeMessagesReason = "free_skill_run_disabled"
 	ThreatSignalSkillGetResponseEnvelopeMessagesReasonFreeTierReconciliationInProgress ThreatSignalSkillGetResponseEnvelopeMessagesReason = "free_tier_reconciliation_in_progress"
 	ThreatSignalSkillGetResponseEnvelopeMessagesReasonFreeTierReconciliationFailed     ThreatSignalSkillGetResponseEnvelopeMessagesReason = "free_tier_reconciliation_failed"
 	ThreatSignalSkillGetResponseEnvelopeMessagesReasonRawContentExpired                ThreatSignalSkillGetResponseEnvelopeMessagesReason = "raw_content_expired"
@@ -970,7 +998,7 @@ const (
 
 func (r ThreatSignalSkillGetResponseEnvelopeMessagesReason) IsKnown() bool {
 	switch r {
-	case ThreatSignalSkillGetResponseEnvelopeMessagesReasonFreeCustomFeedLimit, ThreatSignalSkillGetResponseEnvelopeMessagesReasonFreeCustomSkillsDisabled, ThreatSignalSkillGetResponseEnvelopeMessagesReasonFreeTierReconciliationInProgress, ThreatSignalSkillGetResponseEnvelopeMessagesReasonFreeTierReconciliationFailed, ThreatSignalSkillGetResponseEnvelopeMessagesReasonRawContentExpired, ThreatSignalSkillGetResponseEnvelopeMessagesReasonCuratedVisibilityChanged:
+	case ThreatSignalSkillGetResponseEnvelopeMessagesReasonThreatSignalsFeedLimit, ThreatSignalSkillGetResponseEnvelopeMessagesReasonFreeCustomSkillsDisabled, ThreatSignalSkillGetResponseEnvelopeMessagesReasonFreeSkillRunDisabled, ThreatSignalSkillGetResponseEnvelopeMessagesReasonFreeTierReconciliationInProgress, ThreatSignalSkillGetResponseEnvelopeMessagesReasonFreeTierReconciliationFailed, ThreatSignalSkillGetResponseEnvelopeMessagesReasonRawContentExpired, ThreatSignalSkillGetResponseEnvelopeMessagesReasonCuratedVisibilityChanged:
 		return true
 	}
 	return false

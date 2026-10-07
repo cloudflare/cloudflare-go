@@ -125,7 +125,6 @@ import (
 // the [NewRegistrarService] method instead.
 type RegistrarService struct {
 	Options            []option.RequestOption
-	Domains            *DomainService
 	Registrations      *RegistrationService
 	RegistrationStatus *RegistrationStatusService
 	UpdateStatus       *UpdateStatusService
@@ -140,7 +139,6 @@ type RegistrarService struct {
 func NewRegistrarService(opts ...option.RequestOption) (r *RegistrarService) {
 	r = &RegistrarService{}
 	r.Options = opts
-	r.Domains = NewDomainService(opts...)
 	r.Registrations = NewRegistrationService(opts...)
 	r.RegistrationStatus = NewRegistrationStatusService(opts...)
 	r.UpdateStatus = NewUpdateStatusService(opts...)

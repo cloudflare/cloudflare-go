@@ -86,12 +86,12 @@ func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParam
 	return res, err
 }
 
-// Use `datasetId=all` or `datasetId=*` for the legacy all-datasets scope,
-// `datasetId=analytics` for datasets with `isAnalytics=true`, or
-// `datasetId=operational` for datasets with `isAnalytics=false` (limited to 50).
-// Scope values must be used alone. When `datasetId` is unspecified, events are
-// listed from the default Cloudforce One Threat Events dataset. To list existing
-// datasets, use the
+// Use one standalone `datasetId` scope value: 'all'/'\*' or 'operational' for
+// readable intelligence datasets (isAnalytics=false), or 'analytics' for readable
+// analytics datasets (isAnalytics=true). Scope values query at most 50 datasets
+// and must be used alone. When `datasetId` is unspecified, events are listed from
+// the default Cloudforce One Threat Events dataset. To list existing datasets, use
+// the
 // [`List Datasets`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/list/)
 // endpoint.
 func (r *ThreatEventService) List(ctx context.Context, params ThreatEventListParams, opts ...option.RequestOption) (res *[]ThreatEventListResponse, err error) {
@@ -739,10 +739,10 @@ type ThreatEventListParams struct {
 	// result_info.cursor field. Use cursor-based pagination for deep pagination
 	// (beyond 100,000 records) or for optimal performance.
 	Cursor param.Field[string] `query:"cursor"`
-	// Dataset UUIDs to query, or one standalone scope value: 'all'/'\*' for the legacy
-	// all-datasets behavior, 'analytics' for isAnalytics=true datasets, or
-	// 'operational' for isAnalytics=false datasets. If not provided, uses the default
-	// dataset.
+	// Dataset UUIDs to query, or one standalone scope value: 'all'/'\*' or
+	// 'operational' for readable intelligence datasets (isAnalytics=false), or
+	// 'analytics' for readable analytics datasets (isAnalytics=true). Scope values
+	// query at most 50 datasets. If not provided, uses the default dataset.
 	DatasetID    param.Field[[]string]                    `query:"datasetId"`
 	ForceRefresh param.Field[bool]                        `query:"forceRefresh"`
 	Format       param.Field[ThreatEventListParamsFormat] `query:"format"`
@@ -754,6 +754,13 @@ type ThreatEventListParams struct {
 	// Number of results per page. Maximum 25,000.
 	PageSize param.Field[float64]                            `query:"pageSize"`
 	Search   param.Field[[]ThreatEventListParamsSearchUnion] `query:"search"`
+	// JSON-encoded. OR branches of structured search filters. Filters within a branch
+	// are AND'd, branches are OR'd, and the result is AND'd with `search`:
+	// `AND(search) AND OR(AND(branch 1), ...)`. Max 8 branches of 1-10 conditions
+	// each. Not supported for analytics datasets, and `indicator` filters are not yet
+	// supported inside branches. Cursor pages carry the original branches, so do not
+	// resend them with `cursor`.
+	SearchBranches param.Field[[][]ThreatEventListParamsSearchBranchUnion] `query:"searchBranches"`
 }
 
 // URLQuery serializes [ThreatEventListParams]'s query parameters as `url.Values`.
@@ -953,6 +960,154 @@ const (
 func (r ThreatEventListParamsSearchOp) IsKnown() bool {
 	switch r {
 	case ThreatEventListParamsSearchOpEquals, ThreatEventListParamsSearchOpNot, ThreatEventListParamsSearchOpGt, ThreatEventListParamsSearchOpGte, ThreatEventListParamsSearchOpLt, ThreatEventListParamsSearchOpLte, ThreatEventListParamsSearchOpLike, ThreatEventListParamsSearchOpContains, ThreatEventListParamsSearchOpStartsWith, ThreatEventListParamsSearchOpEndsWith, ThreatEventListParamsSearchOpFind, ThreatEventListParamsSearchOpIn:
+		return true
+	}
+	return false
+}
+
+type ThreatEventListParamsSearchBranch struct {
+	Field param.Field[ThreatEventListParamsSearchBranchesField] `json:"field" api:"required"`
+	Op    param.Field[ThreatEventListParamsSearchBranchesOp]    `json:"op" api:"required"`
+	Value param.Field[interface{}]                              `json:"value" api:"required"`
+}
+
+func (r ThreatEventListParamsSearchBranch) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ThreatEventListParamsSearchBranch) implementsThreatEventListParamsSearchBranchUnion() {}
+
+// Satisfied by [cloudforce_one.ThreatEventListParamsSearchBranchesObject],
+// [cloudforce_one.ThreatEventListParamsSearchBranchesObject],
+// [cloudforce_one.ThreatEventListParamsSearchBranchesObject],
+// [cloudforce_one.ThreatEventListParamsSearchBranchesObject],
+// [cloudforce_one.ThreatEventListParamsSearchBranchesObject],
+// [cloudforce_one.ThreatEventListParamsSearchBranchesObject],
+// [ThreatEventListParamsSearchBranch].
+type ThreatEventListParamsSearchBranchUnion interface {
+	implementsThreatEventListParamsSearchBranchUnion()
+}
+
+type ThreatEventListParamsSearchBranchesObject struct {
+	Field param.Field[ThreatEventListParamsSearchBranchesObjectField] `query:"field" api:"required"`
+	Op    param.Field[ThreatEventListParamsSearchBranchesObjectOp]    `query:"op" api:"required"`
+	Value param.Field[string]                                         `query:"value" api:"required"`
+}
+
+// URLQuery serializes [ThreatEventListParamsSearchBranchesObject]'s query
+// parameters as `url.Values`.
+func (r ThreatEventListParamsSearchBranchesObject) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+func (r ThreatEventListParamsSearchBranchesObject) implementsThreatEventListParamsSearchBranchUnion() {
+}
+
+type ThreatEventListParamsSearchBranchesObjectField string
+
+const (
+	ThreatEventListParamsSearchBranchesObjectFieldAttacker        ThreatEventListParamsSearchBranchesObjectField = "attacker"
+	ThreatEventListParamsSearchBranchesObjectFieldAttackerCountry ThreatEventListParamsSearchBranchesObjectField = "attackerCountry"
+	ThreatEventListParamsSearchBranchesObjectFieldCategory        ThreatEventListParamsSearchBranchesObjectField = "category"
+	ThreatEventListParamsSearchBranchesObjectFieldCreatedAt       ThreatEventListParamsSearchBranchesObjectField = "createdAt"
+	ThreatEventListParamsSearchBranchesObjectFieldDate            ThreatEventListParamsSearchBranchesObjectField = "date"
+	ThreatEventListParamsSearchBranchesObjectFieldEvent           ThreatEventListParamsSearchBranchesObjectField = "event"
+	ThreatEventListParamsSearchBranchesObjectFieldIndicator       ThreatEventListParamsSearchBranchesObjectField = "indicator"
+	ThreatEventListParamsSearchBranchesObjectFieldIndicatorType   ThreatEventListParamsSearchBranchesObjectField = "indicatorType"
+	ThreatEventListParamsSearchBranchesObjectFieldMitreAttack     ThreatEventListParamsSearchBranchesObjectField = "mitreAttack"
+	ThreatEventListParamsSearchBranchesObjectFieldMitreCapec      ThreatEventListParamsSearchBranchesObjectField = "mitreCapec"
+	ThreatEventListParamsSearchBranchesObjectFieldTags            ThreatEventListParamsSearchBranchesObjectField = "tags"
+	ThreatEventListParamsSearchBranchesObjectFieldTargetCountry   ThreatEventListParamsSearchBranchesObjectField = "targetCountry"
+	ThreatEventListParamsSearchBranchesObjectFieldTargetIndustry  ThreatEventListParamsSearchBranchesObjectField = "targetIndustry"
+	ThreatEventListParamsSearchBranchesObjectFieldTLP             ThreatEventListParamsSearchBranchesObjectField = "tlp"
+	ThreatEventListParamsSearchBranchesObjectFieldUUID            ThreatEventListParamsSearchBranchesObjectField = "uuid"
+)
+
+func (r ThreatEventListParamsSearchBranchesObjectField) IsKnown() bool {
+	switch r {
+	case ThreatEventListParamsSearchBranchesObjectFieldAttacker, ThreatEventListParamsSearchBranchesObjectFieldAttackerCountry, ThreatEventListParamsSearchBranchesObjectFieldCategory, ThreatEventListParamsSearchBranchesObjectFieldCreatedAt, ThreatEventListParamsSearchBranchesObjectFieldDate, ThreatEventListParamsSearchBranchesObjectFieldEvent, ThreatEventListParamsSearchBranchesObjectFieldIndicator, ThreatEventListParamsSearchBranchesObjectFieldIndicatorType, ThreatEventListParamsSearchBranchesObjectFieldMitreAttack, ThreatEventListParamsSearchBranchesObjectFieldMitreCapec, ThreatEventListParamsSearchBranchesObjectFieldTags, ThreatEventListParamsSearchBranchesObjectFieldTargetCountry, ThreatEventListParamsSearchBranchesObjectFieldTargetIndustry, ThreatEventListParamsSearchBranchesObjectFieldTLP, ThreatEventListParamsSearchBranchesObjectFieldUUID:
+		return true
+	}
+	return false
+}
+
+type ThreatEventListParamsSearchBranchesObjectOp string
+
+const (
+	ThreatEventListParamsSearchBranchesObjectOpEquals     ThreatEventListParamsSearchBranchesObjectOp = "equals"
+	ThreatEventListParamsSearchBranchesObjectOpNot        ThreatEventListParamsSearchBranchesObjectOp = "not"
+	ThreatEventListParamsSearchBranchesObjectOpGt         ThreatEventListParamsSearchBranchesObjectOp = "gt"
+	ThreatEventListParamsSearchBranchesObjectOpGte        ThreatEventListParamsSearchBranchesObjectOp = "gte"
+	ThreatEventListParamsSearchBranchesObjectOpLt         ThreatEventListParamsSearchBranchesObjectOp = "lt"
+	ThreatEventListParamsSearchBranchesObjectOpLte        ThreatEventListParamsSearchBranchesObjectOp = "lte"
+	ThreatEventListParamsSearchBranchesObjectOpLike       ThreatEventListParamsSearchBranchesObjectOp = "like"
+	ThreatEventListParamsSearchBranchesObjectOpContains   ThreatEventListParamsSearchBranchesObjectOp = "contains"
+	ThreatEventListParamsSearchBranchesObjectOpStartsWith ThreatEventListParamsSearchBranchesObjectOp = "startsWith"
+	ThreatEventListParamsSearchBranchesObjectOpEndsWith   ThreatEventListParamsSearchBranchesObjectOp = "endsWith"
+	ThreatEventListParamsSearchBranchesObjectOpFind       ThreatEventListParamsSearchBranchesObjectOp = "find"
+)
+
+func (r ThreatEventListParamsSearchBranchesObjectOp) IsKnown() bool {
+	switch r {
+	case ThreatEventListParamsSearchBranchesObjectOpEquals, ThreatEventListParamsSearchBranchesObjectOpNot, ThreatEventListParamsSearchBranchesObjectOpGt, ThreatEventListParamsSearchBranchesObjectOpGte, ThreatEventListParamsSearchBranchesObjectOpLt, ThreatEventListParamsSearchBranchesObjectOpLte, ThreatEventListParamsSearchBranchesObjectOpLike, ThreatEventListParamsSearchBranchesObjectOpContains, ThreatEventListParamsSearchBranchesObjectOpStartsWith, ThreatEventListParamsSearchBranchesObjectOpEndsWith, ThreatEventListParamsSearchBranchesObjectOpFind:
+		return true
+	}
+	return false
+}
+
+type ThreatEventListParamsSearchBranchesField string
+
+const (
+	ThreatEventListParamsSearchBranchesFieldAttacker        ThreatEventListParamsSearchBranchesField = "attacker"
+	ThreatEventListParamsSearchBranchesFieldAttackerCountry ThreatEventListParamsSearchBranchesField = "attackerCountry"
+	ThreatEventListParamsSearchBranchesFieldCategory        ThreatEventListParamsSearchBranchesField = "category"
+	ThreatEventListParamsSearchBranchesFieldCreatedAt       ThreatEventListParamsSearchBranchesField = "createdAt"
+	ThreatEventListParamsSearchBranchesFieldDate            ThreatEventListParamsSearchBranchesField = "date"
+	ThreatEventListParamsSearchBranchesFieldEvent           ThreatEventListParamsSearchBranchesField = "event"
+	ThreatEventListParamsSearchBranchesFieldIndicator       ThreatEventListParamsSearchBranchesField = "indicator"
+	ThreatEventListParamsSearchBranchesFieldIndicatorType   ThreatEventListParamsSearchBranchesField = "indicatorType"
+	ThreatEventListParamsSearchBranchesFieldMitreAttack     ThreatEventListParamsSearchBranchesField = "mitreAttack"
+	ThreatEventListParamsSearchBranchesFieldMitreCapec      ThreatEventListParamsSearchBranchesField = "mitreCapec"
+	ThreatEventListParamsSearchBranchesFieldTags            ThreatEventListParamsSearchBranchesField = "tags"
+	ThreatEventListParamsSearchBranchesFieldTargetCountry   ThreatEventListParamsSearchBranchesField = "targetCountry"
+	ThreatEventListParamsSearchBranchesFieldTargetIndustry  ThreatEventListParamsSearchBranchesField = "targetIndustry"
+	ThreatEventListParamsSearchBranchesFieldTLP             ThreatEventListParamsSearchBranchesField = "tlp"
+	ThreatEventListParamsSearchBranchesFieldUUID            ThreatEventListParamsSearchBranchesField = "uuid"
+	ThreatEventListParamsSearchBranchesFieldKillChain       ThreatEventListParamsSearchBranchesField = "killChain"
+	ThreatEventListParamsSearchBranchesFieldHasChildren     ThreatEventListParamsSearchBranchesField = "hasChildren"
+)
+
+func (r ThreatEventListParamsSearchBranchesField) IsKnown() bool {
+	switch r {
+	case ThreatEventListParamsSearchBranchesFieldAttacker, ThreatEventListParamsSearchBranchesFieldAttackerCountry, ThreatEventListParamsSearchBranchesFieldCategory, ThreatEventListParamsSearchBranchesFieldCreatedAt, ThreatEventListParamsSearchBranchesFieldDate, ThreatEventListParamsSearchBranchesFieldEvent, ThreatEventListParamsSearchBranchesFieldIndicator, ThreatEventListParamsSearchBranchesFieldIndicatorType, ThreatEventListParamsSearchBranchesFieldMitreAttack, ThreatEventListParamsSearchBranchesFieldMitreCapec, ThreatEventListParamsSearchBranchesFieldTags, ThreatEventListParamsSearchBranchesFieldTargetCountry, ThreatEventListParamsSearchBranchesFieldTargetIndustry, ThreatEventListParamsSearchBranchesFieldTLP, ThreatEventListParamsSearchBranchesFieldUUID, ThreatEventListParamsSearchBranchesFieldKillChain, ThreatEventListParamsSearchBranchesFieldHasChildren:
+		return true
+	}
+	return false
+}
+
+type ThreatEventListParamsSearchBranchesOp string
+
+const (
+	ThreatEventListParamsSearchBranchesOpEquals     ThreatEventListParamsSearchBranchesOp = "equals"
+	ThreatEventListParamsSearchBranchesOpNot        ThreatEventListParamsSearchBranchesOp = "not"
+	ThreatEventListParamsSearchBranchesOpGt         ThreatEventListParamsSearchBranchesOp = "gt"
+	ThreatEventListParamsSearchBranchesOpGte        ThreatEventListParamsSearchBranchesOp = "gte"
+	ThreatEventListParamsSearchBranchesOpLt         ThreatEventListParamsSearchBranchesOp = "lt"
+	ThreatEventListParamsSearchBranchesOpLte        ThreatEventListParamsSearchBranchesOp = "lte"
+	ThreatEventListParamsSearchBranchesOpLike       ThreatEventListParamsSearchBranchesOp = "like"
+	ThreatEventListParamsSearchBranchesOpContains   ThreatEventListParamsSearchBranchesOp = "contains"
+	ThreatEventListParamsSearchBranchesOpStartsWith ThreatEventListParamsSearchBranchesOp = "startsWith"
+	ThreatEventListParamsSearchBranchesOpEndsWith   ThreatEventListParamsSearchBranchesOp = "endsWith"
+	ThreatEventListParamsSearchBranchesOpFind       ThreatEventListParamsSearchBranchesOp = "find"
+	ThreatEventListParamsSearchBranchesOpIn         ThreatEventListParamsSearchBranchesOp = "in"
+)
+
+func (r ThreatEventListParamsSearchBranchesOp) IsKnown() bool {
+	switch r {
+	case ThreatEventListParamsSearchBranchesOpEquals, ThreatEventListParamsSearchBranchesOpNot, ThreatEventListParamsSearchBranchesOpGt, ThreatEventListParamsSearchBranchesOpGte, ThreatEventListParamsSearchBranchesOpLt, ThreatEventListParamsSearchBranchesOpLte, ThreatEventListParamsSearchBranchesOpLike, ThreatEventListParamsSearchBranchesOpContains, ThreatEventListParamsSearchBranchesOpStartsWith, ThreatEventListParamsSearchBranchesOpEndsWith, ThreatEventListParamsSearchBranchesOpFind, ThreatEventListParamsSearchBranchesOpIn:
 		return true
 	}
 	return false

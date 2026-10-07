@@ -69,6 +69,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/intel"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/ips"
+	"github.com/cloudflare/cloudflare-go/v7/k2"
 	"github.com/cloudflare/cloudflare-go/v7/keyless_certificates"
 	"github.com/cloudflare/cloudflare-go/v7/kv"
 	"github.com/cloudflare/cloudflare-go/v7/leaked_credential_checks"
@@ -81,6 +82,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/managed_defense"
 	"github.com/cloudflare/cloudflare-go/v7/managed_transforms"
 	"github.com/cloudflare/cloudflare-go/v7/memberships"
+	"github.com/cloudflare/cloudflare-go/v7/monetization"
 	"github.com/cloudflare/cloudflare-go/v7/moq"
 	"github.com/cloudflare/cloudflare-go/v7/mtls_certificates"
 	"github.com/cloudflare/cloudflare-go/v7/network_interconnects"
@@ -211,6 +213,7 @@ type Client struct {
 	DDoSProtection         *ddos_protection.DDoSProtectionService
 	MagicNetworkMonitoring *magic_network_monitoring.MagicNetworkMonitoringService
 	MagicCloudNetworking   *magic_cloud_networking.MagicCloudNetworkingService
+	Monetization           *monetization.MonetizationService
 	NetworkInterconnects   *network_interconnects.NetworkInterconnectService
 	MTLSCertificates       *mtls_certificates.MTLSCertificateService
 	Pages                  *pages.PageService
@@ -475,6 +478,7 @@ type Client struct {
 	CustomPages                 *custom_pages.CustomPageService
 	SecretsStore                *secrets_store.SecretsStoreService
 	Pipelines                   *pipelines.PipelineService
+	K2                          *k2.K2Service
 	SchemaValidation            *schema_validation.SchemaValidationService
 	TokenValidation             *token_validation.TokenValidationService
 	FieldExtractors             *field_extractors.FieldExtractorService
@@ -582,6 +586,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.DDoSProtection = ddos_protection.NewDDoSProtectionService(opts...)
 	r.MagicNetworkMonitoring = magic_network_monitoring.NewMagicNetworkMonitoringService(opts...)
 	r.MagicCloudNetworking = magic_cloud_networking.NewMagicCloudNetworkingService(opts...)
+	r.Monetization = monetization.NewMonetizationService(opts...)
 	r.NetworkInterconnects = network_interconnects.NewNetworkInterconnectService(opts...)
 	r.MTLSCertificates = mtls_certificates.NewMTLSCertificateService(opts...)
 	r.Pages = pages.NewPageService(opts...)
@@ -643,6 +648,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.CustomPages = custom_pages.NewCustomPageService(opts...)
 	r.SecretsStore = secrets_store.NewSecretsStoreService(opts...)
 	r.Pipelines = pipelines.NewPipelineService(opts...)
+	r.K2 = k2.NewK2Service(opts...)
 	r.SchemaValidation = schema_validation.NewSchemaValidationService(opts...)
 	r.TokenValidation = token_validation.NewTokenValidationService(opts...)
 	r.FieldExtractors = field_extractors.NewFieldExtractorService(opts...)

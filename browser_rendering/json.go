@@ -60,6 +60,8 @@ type JsonNewParams struct {
 	// Account ID.
 	AccountID param.Field[string]    `path:"account_id" api:"required"`
 	Body      JsonNewParamsBodyUnion `json:"body" api:"required"`
+	// Rendering backend. Set to `kitesurf` to use Kitesurf (beta).
+	Browser param.Field[JsonNewParamsBrowser] `query:"browser"`
 	// Cache TTL default is 5s. Set to 0 to disable.
 	CacheTTL param.Field[float64] `query:"cacheTTL"`
 }
@@ -473,6 +475,21 @@ const (
 func (r JsonNewParamsBodyObjectWaitForSelectorVisible) IsKnown() bool {
 	switch r {
 	case JsonNewParamsBodyObjectWaitForSelectorVisibleTrue:
+		return true
+	}
+	return false
+}
+
+// Rendering backend. Set to `kitesurf` to use Kitesurf (beta).
+type JsonNewParamsBrowser string
+
+const (
+	JsonNewParamsBrowserKitesurf JsonNewParamsBrowser = "kitesurf"
+)
+
+func (r JsonNewParamsBrowser) IsKnown() bool {
+	switch r {
+	case JsonNewParamsBrowserKitesurf:
 		return true
 	}
 	return false

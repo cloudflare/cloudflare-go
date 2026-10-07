@@ -151,6 +151,9 @@ type DispatchNamespaceScriptBindingGetResponse struct {
 	Pipeline string `json:"pipeline"`
 	// Name of the Queue to bind to.
 	QueueName string `json:"queue_name"`
+	// This field can have the runtime type of
+	// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceRetry].
+	Retry interface{} `json:"retry"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName string `json:"script_name"`
@@ -218,6 +221,7 @@ type dispatchNamespaceScriptBindingGetResponseJSON struct {
 	Part                        apijson.Field
 	Pipeline                    apijson.Field
 	QueueName                   apijson.Field
+	Retry                       apijson.Field
 	ScriptName                  apijson.Field
 	SecretName                  apijson.Field
 	Service                     apijson.Field
@@ -1159,6 +1163,10 @@ type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNam
 	Environment string `json:"environment"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
+	// Retry policy for calls made to the Durable Object through this binding. Omitted
+	// or null properties use the runtime defaults. These limits are upper bounds and
+	// do not enable retries for otherwise ineligible calls.
+	Retry DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceRetry `json:"retry" api:"nullable"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName string                                                                                `json:"script_name"`
@@ -1175,6 +1183,7 @@ type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNam
 	DispatchNamespace apijson.Field
 	Environment       apijson.Field
 	NamespaceID       apijson.Field
+	Retry             apijson.Field
 	ScriptName        apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
@@ -1204,6 +1213,39 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObject
 		return true
 	}
 	return false
+}
+
+// Retry policy for calls made to the Durable Object through this binding. Omitted
+// or null properties use the runtime defaults. These limits are upper bounds and
+// do not enable retries for otherwise ineligible calls.
+type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceRetry struct {
+	// Maximum number of retries after the initial request, not the total number of
+	// attempts. Defaults to 4. Zero disables retries.
+	MaxAttempts int64 `json:"max_attempts" api:"nullable"`
+	// Retry timeout in milliseconds, measured from the start of the call. No retry
+	// starts after it expires, and a retry still running when it expires is cancelled.
+	// This is not a request timeout; it does not limit the initial request, which is
+	// still subject to any timeouts set by your Worker. Defaults to 10000.
+	TimeoutMs int64                                                                                      `json:"timeout_ms" api:"nullable"`
+	JSON      dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceRetryJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceRetryJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceRetry]
+type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceRetryJSON struct {
+	MaxAttempts apijson.Field
+	TimeoutMs   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceRetry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceRetryJSON) RawJSON() string {
+	return r.raw
 }
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive struct {
