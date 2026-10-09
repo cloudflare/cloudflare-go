@@ -174,7 +174,7 @@ type PredefinedProfileEntry struct {
 	// This field can have the runtime type of
 	// [PredefinedProfileEntriesPredefinedEntryVariant].
 	Variant interface{} `json:"variant"`
-	// This field can have the runtime type of [interface{}].
+	// This field can have the runtime type of [[]string].
 	WordList interface{}                `json:"word_list"`
 	JSON     predefinedProfileEntryJSON `json:"-"`
 	union    PredefinedProfileEntriesUnion
@@ -781,7 +781,7 @@ type PredefinedProfileEntriesWordListEntry struct {
 	Name      string                                    `json:"name" api:"required"`
 	Type      PredefinedProfileEntriesWordListEntryType `json:"type" api:"required"`
 	UpdatedAt time.Time                                 `json:"updated_at" api:"required" format:"date-time"`
-	WordList  interface{}                               `json:"word_list" api:"required"`
+	WordList  []string                                  `json:"word_list" api:"required"`
 	ProfileID string                                    `json:"profile_id" api:"nullable" format:"uuid"`
 	JSON      predefinedProfileEntriesWordListEntryJSON `json:"-"`
 }

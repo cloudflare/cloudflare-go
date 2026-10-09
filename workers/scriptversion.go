@@ -2617,7 +2617,8 @@ type ScriptVersionNewParamsMetadataBinding struct {
 	// Name of the Pipeline to bind to.
 	Pipeline param.Field[string] `json:"pipeline"`
 	// Name of the Queue to bind to.
-	QueueName param.Field[string] `json:"queue_name"`
+	QueueName param.Field[string]      `json:"queue_name"`
+	Retry     param.Field[interface{}] `json:"retry"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName param.Field[string] `json:"script_name"`
@@ -3101,6 +3102,10 @@ type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamesp
 	Environment param.Field[string] `json:"environment"`
 	// Namespace identifier tag.
 	NamespaceID param.Field[string] `json:"namespace_id"`
+	// Retry policy for calls made to the Durable Object through this binding. Omitted
+	// or null properties use the runtime defaults. These limits are upper bounds and
+	// do not enable retries for otherwise ineligible calls.
+	Retry param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceRetry] `json:"retry"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName param.Field[string] `json:"script_name"`
@@ -3126,6 +3131,24 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNam
 		return true
 	}
 	return false
+}
+
+// Retry policy for calls made to the Durable Object through this binding. Omitted
+// or null properties use the runtime defaults. These limits are upper bounds and
+// do not enable retries for otherwise ineligible calls.
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceRetry struct {
+	// Maximum number of retries after the initial request, not the total number of
+	// attempts. Defaults to 4. Zero disables retries.
+	MaxAttempts param.Field[int64] `json:"max_attempts"`
+	// Retry timeout in milliseconds, measured from the start of the call. No retry
+	// starts after it expires, and a retry still running when it expires is cancelled.
+	// This is not a request timeout; it does not limit the initial request, which is
+	// still subject to any timeouts set by your Worker. Defaults to 10000.
+	TimeoutMs param.Field[int64] `json:"timeout_ms"`
+}
+
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDurableObjectNamespaceRetry) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdrive struct {

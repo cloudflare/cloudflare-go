@@ -262,6 +262,9 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	Pipeline string `json:"pipeline"`
 	// Name of the Queue to bind to.
 	QueueName string `json:"queue_name"`
+	// This field can have the runtime type of
+	// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceRetry].
+	Retry interface{} `json:"retry"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName string `json:"script_name"`
@@ -329,6 +332,7 @@ type scriptScriptAndVersionSettingEditResponseBindingJSON struct {
 	Part                        apijson.Field
 	Pipeline                    apijson.Field
 	QueueName                   apijson.Field
+	Retry                       apijson.Field
 	ScriptName                  apijson.Field
 	SecretName                  apijson.Field
 	Service                     apijson.Field
@@ -1271,6 +1275,10 @@ type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableO
 	Environment string `json:"environment"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
+	// Retry policy for calls made to the Durable Object through this binding. Omitted
+	// or null properties use the runtime defaults. These limits are upper bounds and
+	// do not enable retries for otherwise ineligible calls.
+	Retry ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceRetry `json:"retry" api:"nullable"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName string                                                                                        `json:"script_name"`
@@ -1287,6 +1295,7 @@ type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableO
 	DispatchNamespace apijson.Field
 	Environment       apijson.Field
 	NamespaceID       apijson.Field
+	Retry             apijson.Field
 	ScriptName        apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
@@ -1316,6 +1325,39 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurab
 		return true
 	}
 	return false
+}
+
+// Retry policy for calls made to the Durable Object through this binding. Omitted
+// or null properties use the runtime defaults. These limits are upper bounds and
+// do not enable retries for otherwise ineligible calls.
+type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceRetry struct {
+	// Maximum number of retries after the initial request, not the total number of
+	// attempts. Defaults to 4. Zero disables retries.
+	MaxAttempts int64 `json:"max_attempts" api:"nullable"`
+	// Retry timeout in milliseconds, measured from the start of the call. No retry
+	// starts after it expires, and a retry still running when it expires is cancelled.
+	// This is not a request timeout; it does not limit the initial request, which is
+	// still subject to any timeouts set by your Worker. Defaults to 10000.
+	TimeoutMs int64                                                                                              `json:"timeout_ms" api:"nullable"`
+	JSON      scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceRetryJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceRetryJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceRetry]
+type scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceRetryJSON struct {
+	MaxAttempts apijson.Field
+	TimeoutMs   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceRetry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindDurableObjectNamespaceRetryJSON) RawJSON() string {
+	return r.raw
 }
 
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindHyperdrive struct {
@@ -4592,6 +4634,9 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	Pipeline string `json:"pipeline"`
 	// Name of the Queue to bind to.
 	QueueName string `json:"queue_name"`
+	// This field can have the runtime type of
+	// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceRetry].
+	Retry interface{} `json:"retry"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName string `json:"script_name"`
@@ -4659,6 +4704,7 @@ type scriptScriptAndVersionSettingGetResponseBindingJSON struct {
 	Part                        apijson.Field
 	Pipeline                    apijson.Field
 	QueueName                   apijson.Field
+	Retry                       apijson.Field
 	ScriptName                  apijson.Field
 	SecretName                  apijson.Field
 	Service                     apijson.Field
@@ -5601,6 +5647,10 @@ type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableOb
 	Environment string `json:"environment"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
+	// Retry policy for calls made to the Durable Object through this binding. Omitted
+	// or null properties use the runtime defaults. These limits are upper bounds and
+	// do not enable retries for otherwise ineligible calls.
+	Retry ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceRetry `json:"retry" api:"nullable"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName string                                                                                       `json:"script_name"`
@@ -5617,6 +5667,7 @@ type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableOb
 	DispatchNamespace apijson.Field
 	Environment       apijson.Field
 	NamespaceID       apijson.Field
+	Retry             apijson.Field
 	ScriptName        apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
@@ -5646,6 +5697,39 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurabl
 		return true
 	}
 	return false
+}
+
+// Retry policy for calls made to the Durable Object through this binding. Omitted
+// or null properties use the runtime defaults. These limits are upper bounds and
+// do not enable retries for otherwise ineligible calls.
+type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceRetry struct {
+	// Maximum number of retries after the initial request, not the total number of
+	// attempts. Defaults to 4. Zero disables retries.
+	MaxAttempts int64 `json:"max_attempts" api:"nullable"`
+	// Retry timeout in milliseconds, measured from the start of the call. No retry
+	// starts after it expires, and a retry still running when it expires is cancelled.
+	// This is not a request timeout; it does not limit the initial request, which is
+	// still subject to any timeouts set by your Worker. Defaults to 10000.
+	TimeoutMs int64                                                                                             `json:"timeout_ms" api:"nullable"`
+	JSON      scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceRetryJSON `json:"-"`
+}
+
+// scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceRetryJSON
+// contains the JSON metadata for the struct
+// [ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceRetry]
+type scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceRetryJSON struct {
+	MaxAttempts apijson.Field
+	TimeoutMs   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceRetry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindDurableObjectNamespaceRetryJSON) RawJSON() string {
+	return r.raw
 }
 
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindHyperdrive struct {
@@ -8894,7 +8978,8 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	// Name of the Pipeline to bind to.
 	Pipeline param.Field[string] `json:"pipeline"`
 	// Name of the Queue to bind to.
-	QueueName param.Field[string] `json:"queue_name"`
+	QueueName param.Field[string]      `json:"queue_name"`
+	Retry     param.Field[interface{}] `json:"retry"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName param.Field[string] `json:"script_name"`
@@ -9378,6 +9463,10 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDu
 	Environment param.Field[string] `json:"environment"`
 	// Namespace identifier tag.
 	NamespaceID param.Field[string] `json:"namespace_id"`
+	// Retry policy for calls made to the Durable Object through this binding. Omitted
+	// or null properties use the runtime defaults. These limits are upper bounds and
+	// do not enable retries for otherwise ineligible calls.
+	Retry param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceRetry] `json:"retry"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName param.Field[string] `json:"script_name"`
@@ -9403,6 +9492,24 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 		return true
 	}
 	return false
+}
+
+// Retry policy for calls made to the Durable Object through this binding. Omitted
+// or null properties use the runtime defaults. These limits are upper bounds and
+// do not enable retries for otherwise ineligible calls.
+type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceRetry struct {
+	// Maximum number of retries after the initial request, not the total number of
+	// attempts. Defaults to 4. Zero disables retries.
+	MaxAttempts param.Field[int64] `json:"max_attempts"`
+	// Retry timeout in milliseconds, measured from the start of the call. No retry
+	// starts after it expires, and a retry still running when it expires is cancelled.
+	// This is not a request timeout; it does not limit the initial request, which is
+	// still subject to any timeouts set by your Worker. Defaults to 10000.
+	TimeoutMs param.Field[int64] `json:"timeout_ms"`
+}
+
+func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindDurableObjectNamespaceRetry) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindHyperdrive struct {

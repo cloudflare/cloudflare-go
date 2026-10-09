@@ -191,6 +191,8 @@ Methods:
 
 # [MagicCloudNetworking](magic_cloud_networking/api.md)
 
+# [Monetization](monetization/api.md)
+
 # [NetworkInterconnects](network_interconnects/api.md)
 
 # [MTLSCertificates](mtls_certificates/api.md)
@@ -312,6 +314,8 @@ Methods:
 # [SecretsStore](secrets_store/api.md)
 
 # [Pipelines](pipelines/api.md)
+
+# [K2](k2/api.md)
 
 # [SchemaValidation](schema_validation/api.md)
 

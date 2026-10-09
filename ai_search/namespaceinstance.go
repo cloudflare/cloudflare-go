@@ -46,9 +46,9 @@ func NewNamespaceInstanceService(opts ...option.RequestOption) (r *NamespaceInst
 }
 
 // Create a new AI Search instance with the given configuration. If type is omitted
-// or null, a non-blank HTTP(S) source infers web-crawler and an existing R2 bucket
-// source infers r2. A missing or blank source without a type creates a managed
-// upload-only instance. Search for Agents instances require the default namespace.
+// or null, a non-blank HTTP(S) source infers web-crawler and any other source
+// infers r2; r2 sources must name an existing bucket. A missing or blank source
+// without a type creates a managed upload-only instance.
 func (r *NamespaceInstanceService) New(ctx context.Context, name string, params NamespaceInstanceNewParams, opts ...option.RequestOption) (res *NamespaceInstanceNewResponse, err error) {
 	var env NamespaceInstanceNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -69,10 +69,7 @@ func (r *NamespaceInstanceService) New(ctx context.Context, name string, params 
 	return res, nil
 }
 
-// Update an AI Search instance. Submitting Search for Agents metadata requires the
-// default namespace; omitting or removing it is allowed elsewhere. Submit Search
-// for Agents metadata and restrictive or unknown public endpoint changes or custom
-// domains in separate PUT requests, even when resubmitting unchanged metadata.
+// Update the configuration of an AI Search instance.
 func (r *NamespaceInstanceService) Update(ctx context.Context, name string, id string, params NamespaceInstanceUpdateParams, opts ...option.RequestOption) (res *NamespaceInstanceUpdateResponse, err error) {
 	var env NamespaceInstanceUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -540,15 +537,17 @@ func (r NamespaceInstanceNewResponseIndexingOptionsKeywordTokenizer) IsKnown() b
 }
 
 type NamespaceInstanceNewResponseMetadata struct {
-	CreatedFromAISearchWizard bool                                     `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                                   `json:"worker_domain"`
-	JSON                      namespaceInstanceNewResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                                        `json:"created_from_aisearch_wizard"`
+	CreatedFromEmdashPlugin   NamespaceInstanceNewResponseMetadataCreatedFromEmdashPlugin `json:"created_from_emdash_plugin"`
+	WorkerDomain              string                                                      `json:"worker_domain"`
+	JSON                      namespaceInstanceNewResponseMetadataJSON                    `json:"-"`
 }
 
 // namespaceInstanceNewResponseMetadataJSON contains the JSON metadata for the
 // struct [NamespaceInstanceNewResponseMetadata]
 type namespaceInstanceNewResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	CreatedFromEmdashPlugin   apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -560,6 +559,46 @@ func (r *NamespaceInstanceNewResponseMetadata) UnmarshalJSON(data []byte) (err e
 
 func (r namespaceInstanceNewResponseMetadataJSON) RawJSON() string {
 	return r.raw
+}
+
+type NamespaceInstanceNewResponseMetadataCreatedFromEmdashPlugin struct {
+	Type        NamespaceInstanceNewResponseMetadataCreatedFromEmdashPluginType `json:"type" api:"required"`
+	Version     string                                                          `json:"version" api:"required"`
+	ExtraFields map[string]interface{}                                          `json:"-" api:"extrafields"`
+	JSON        namespaceInstanceNewResponseMetadataCreatedFromEmdashPluginJSON `json:"-"`
+}
+
+// namespaceInstanceNewResponseMetadataCreatedFromEmdashPluginJSON contains the
+// JSON metadata for the struct
+// [NamespaceInstanceNewResponseMetadataCreatedFromEmdashPlugin]
+type namespaceInstanceNewResponseMetadataCreatedFromEmdashPluginJSON struct {
+	Type        apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceInstanceNewResponseMetadataCreatedFromEmdashPlugin) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceInstanceNewResponseMetadataCreatedFromEmdashPluginJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceInstanceNewResponseMetadataCreatedFromEmdashPluginType string
+
+const (
+	NamespaceInstanceNewResponseMetadataCreatedFromEmdashPluginTypeNative NamespaceInstanceNewResponseMetadataCreatedFromEmdashPluginType = "native"
+	NamespaceInstanceNewResponseMetadataCreatedFromEmdashPluginTypeRest   NamespaceInstanceNewResponseMetadataCreatedFromEmdashPluginType = "rest"
+)
+
+func (r NamespaceInstanceNewResponseMetadataCreatedFromEmdashPluginType) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceNewResponseMetadataCreatedFromEmdashPluginTypeNative, NamespaceInstanceNewResponseMetadataCreatedFromEmdashPluginTypeRest:
+		return true
+	}
+	return false
 }
 
 type NamespaceInstanceNewResponsePublicEndpointParams struct {
@@ -1363,15 +1402,17 @@ func (r NamespaceInstanceUpdateResponseIndexingOptionsKeywordTokenizer) IsKnown(
 }
 
 type NamespaceInstanceUpdateResponseMetadata struct {
-	CreatedFromAISearchWizard bool                                        `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                                      `json:"worker_domain"`
-	JSON                      namespaceInstanceUpdateResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                                           `json:"created_from_aisearch_wizard"`
+	CreatedFromEmdashPlugin   NamespaceInstanceUpdateResponseMetadataCreatedFromEmdashPlugin `json:"created_from_emdash_plugin"`
+	WorkerDomain              string                                                         `json:"worker_domain"`
+	JSON                      namespaceInstanceUpdateResponseMetadataJSON                    `json:"-"`
 }
 
 // namespaceInstanceUpdateResponseMetadataJSON contains the JSON metadata for the
 // struct [NamespaceInstanceUpdateResponseMetadata]
 type namespaceInstanceUpdateResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	CreatedFromEmdashPlugin   apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -1383,6 +1424,46 @@ func (r *NamespaceInstanceUpdateResponseMetadata) UnmarshalJSON(data []byte) (er
 
 func (r namespaceInstanceUpdateResponseMetadataJSON) RawJSON() string {
 	return r.raw
+}
+
+type NamespaceInstanceUpdateResponseMetadataCreatedFromEmdashPlugin struct {
+	Type        NamespaceInstanceUpdateResponseMetadataCreatedFromEmdashPluginType `json:"type" api:"required"`
+	Version     string                                                             `json:"version" api:"required"`
+	ExtraFields map[string]interface{}                                             `json:"-" api:"extrafields"`
+	JSON        namespaceInstanceUpdateResponseMetadataCreatedFromEmdashPluginJSON `json:"-"`
+}
+
+// namespaceInstanceUpdateResponseMetadataCreatedFromEmdashPluginJSON contains the
+// JSON metadata for the struct
+// [NamespaceInstanceUpdateResponseMetadataCreatedFromEmdashPlugin]
+type namespaceInstanceUpdateResponseMetadataCreatedFromEmdashPluginJSON struct {
+	Type        apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceInstanceUpdateResponseMetadataCreatedFromEmdashPlugin) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceInstanceUpdateResponseMetadataCreatedFromEmdashPluginJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceInstanceUpdateResponseMetadataCreatedFromEmdashPluginType string
+
+const (
+	NamespaceInstanceUpdateResponseMetadataCreatedFromEmdashPluginTypeNative NamespaceInstanceUpdateResponseMetadataCreatedFromEmdashPluginType = "native"
+	NamespaceInstanceUpdateResponseMetadataCreatedFromEmdashPluginTypeRest   NamespaceInstanceUpdateResponseMetadataCreatedFromEmdashPluginType = "rest"
+)
+
+func (r NamespaceInstanceUpdateResponseMetadataCreatedFromEmdashPluginType) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceUpdateResponseMetadataCreatedFromEmdashPluginTypeNative, NamespaceInstanceUpdateResponseMetadataCreatedFromEmdashPluginTypeRest:
+		return true
+	}
+	return false
 }
 
 type NamespaceInstanceUpdateResponsePublicEndpointParams struct {
@@ -2164,16 +2245,18 @@ func (r NamespaceInstanceListResponseIndexingOptionsKeywordTokenizer) IsKnown() 
 }
 
 type NamespaceInstanceListResponseMetadata struct {
-	CreatedFromAISearchWizard bool                                      `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                                    `json:"worker_domain"`
-	ExtraFields               map[string]interface{}                    `json:"-" api:"extrafields"`
-	JSON                      namespaceInstanceListResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                                         `json:"created_from_aisearch_wizard"`
+	CreatedFromEmdashPlugin   NamespaceInstanceListResponseMetadataCreatedFromEmdashPlugin `json:"created_from_emdash_plugin"`
+	WorkerDomain              string                                                       `json:"worker_domain"`
+	ExtraFields               map[string]interface{}                                       `json:"-" api:"extrafields"`
+	JSON                      namespaceInstanceListResponseMetadataJSON                    `json:"-"`
 }
 
 // namespaceInstanceListResponseMetadataJSON contains the JSON metadata for the
 // struct [NamespaceInstanceListResponseMetadata]
 type namespaceInstanceListResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	CreatedFromEmdashPlugin   apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -2185,6 +2268,46 @@ func (r *NamespaceInstanceListResponseMetadata) UnmarshalJSON(data []byte) (err 
 
 func (r namespaceInstanceListResponseMetadataJSON) RawJSON() string {
 	return r.raw
+}
+
+type NamespaceInstanceListResponseMetadataCreatedFromEmdashPlugin struct {
+	Type        NamespaceInstanceListResponseMetadataCreatedFromEmdashPluginType `json:"type" api:"required"`
+	Version     string                                                           `json:"version" api:"required"`
+	ExtraFields map[string]interface{}                                           `json:"-" api:"extrafields"`
+	JSON        namespaceInstanceListResponseMetadataCreatedFromEmdashPluginJSON `json:"-"`
+}
+
+// namespaceInstanceListResponseMetadataCreatedFromEmdashPluginJSON contains the
+// JSON metadata for the struct
+// [NamespaceInstanceListResponseMetadataCreatedFromEmdashPlugin]
+type namespaceInstanceListResponseMetadataCreatedFromEmdashPluginJSON struct {
+	Type        apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceInstanceListResponseMetadataCreatedFromEmdashPlugin) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceInstanceListResponseMetadataCreatedFromEmdashPluginJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceInstanceListResponseMetadataCreatedFromEmdashPluginType string
+
+const (
+	NamespaceInstanceListResponseMetadataCreatedFromEmdashPluginTypeNative NamespaceInstanceListResponseMetadataCreatedFromEmdashPluginType = "native"
+	NamespaceInstanceListResponseMetadataCreatedFromEmdashPluginTypeRest   NamespaceInstanceListResponseMetadataCreatedFromEmdashPluginType = "rest"
+)
+
+func (r NamespaceInstanceListResponseMetadataCreatedFromEmdashPluginType) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceListResponseMetadataCreatedFromEmdashPluginTypeNative, NamespaceInstanceListResponseMetadataCreatedFromEmdashPluginTypeRest:
+		return true
+	}
+	return false
 }
 
 type NamespaceInstanceListResponsePublicEndpointParams struct {
@@ -2939,15 +3062,17 @@ func (r NamespaceInstanceDeleteResponseIndexingOptionsKeywordTokenizer) IsKnown(
 }
 
 type NamespaceInstanceDeleteResponseMetadata struct {
-	CreatedFromAISearchWizard bool                                        `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                                      `json:"worker_domain"`
-	JSON                      namespaceInstanceDeleteResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                                           `json:"created_from_aisearch_wizard"`
+	CreatedFromEmdashPlugin   NamespaceInstanceDeleteResponseMetadataCreatedFromEmdashPlugin `json:"created_from_emdash_plugin"`
+	WorkerDomain              string                                                         `json:"worker_domain"`
+	JSON                      namespaceInstanceDeleteResponseMetadataJSON                    `json:"-"`
 }
 
 // namespaceInstanceDeleteResponseMetadataJSON contains the JSON metadata for the
 // struct [NamespaceInstanceDeleteResponseMetadata]
 type namespaceInstanceDeleteResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	CreatedFromEmdashPlugin   apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -2959,6 +3084,46 @@ func (r *NamespaceInstanceDeleteResponseMetadata) UnmarshalJSON(data []byte) (er
 
 func (r namespaceInstanceDeleteResponseMetadataJSON) RawJSON() string {
 	return r.raw
+}
+
+type NamespaceInstanceDeleteResponseMetadataCreatedFromEmdashPlugin struct {
+	Type        NamespaceInstanceDeleteResponseMetadataCreatedFromEmdashPluginType `json:"type" api:"required"`
+	Version     string                                                             `json:"version" api:"required"`
+	ExtraFields map[string]interface{}                                             `json:"-" api:"extrafields"`
+	JSON        namespaceInstanceDeleteResponseMetadataCreatedFromEmdashPluginJSON `json:"-"`
+}
+
+// namespaceInstanceDeleteResponseMetadataCreatedFromEmdashPluginJSON contains the
+// JSON metadata for the struct
+// [NamespaceInstanceDeleteResponseMetadataCreatedFromEmdashPlugin]
+type namespaceInstanceDeleteResponseMetadataCreatedFromEmdashPluginJSON struct {
+	Type        apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceInstanceDeleteResponseMetadataCreatedFromEmdashPlugin) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceInstanceDeleteResponseMetadataCreatedFromEmdashPluginJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceInstanceDeleteResponseMetadataCreatedFromEmdashPluginType string
+
+const (
+	NamespaceInstanceDeleteResponseMetadataCreatedFromEmdashPluginTypeNative NamespaceInstanceDeleteResponseMetadataCreatedFromEmdashPluginType = "native"
+	NamespaceInstanceDeleteResponseMetadataCreatedFromEmdashPluginTypeRest   NamespaceInstanceDeleteResponseMetadataCreatedFromEmdashPluginType = "rest"
+)
+
+func (r NamespaceInstanceDeleteResponseMetadataCreatedFromEmdashPluginType) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceDeleteResponseMetadataCreatedFromEmdashPluginTypeNative, NamespaceInstanceDeleteResponseMetadataCreatedFromEmdashPluginTypeRest:
+		return true
+	}
+	return false
 }
 
 type NamespaceInstanceDeleteResponsePublicEndpointParams struct {
@@ -4125,15 +4290,17 @@ func (r NamespaceInstanceReadResponseIndexingOptionsKeywordTokenizer) IsKnown() 
 }
 
 type NamespaceInstanceReadResponseMetadata struct {
-	CreatedFromAISearchWizard bool                                      `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                                    `json:"worker_domain"`
-	JSON                      namespaceInstanceReadResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                                         `json:"created_from_aisearch_wizard"`
+	CreatedFromEmdashPlugin   NamespaceInstanceReadResponseMetadataCreatedFromEmdashPlugin `json:"created_from_emdash_plugin"`
+	WorkerDomain              string                                                       `json:"worker_domain"`
+	JSON                      namespaceInstanceReadResponseMetadataJSON                    `json:"-"`
 }
 
 // namespaceInstanceReadResponseMetadataJSON contains the JSON metadata for the
 // struct [NamespaceInstanceReadResponseMetadata]
 type namespaceInstanceReadResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	CreatedFromEmdashPlugin   apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -4145,6 +4312,46 @@ func (r *NamespaceInstanceReadResponseMetadata) UnmarshalJSON(data []byte) (err 
 
 func (r namespaceInstanceReadResponseMetadataJSON) RawJSON() string {
 	return r.raw
+}
+
+type NamespaceInstanceReadResponseMetadataCreatedFromEmdashPlugin struct {
+	Type        NamespaceInstanceReadResponseMetadataCreatedFromEmdashPluginType `json:"type" api:"required"`
+	Version     string                                                           `json:"version" api:"required"`
+	ExtraFields map[string]interface{}                                           `json:"-" api:"extrafields"`
+	JSON        namespaceInstanceReadResponseMetadataCreatedFromEmdashPluginJSON `json:"-"`
+}
+
+// namespaceInstanceReadResponseMetadataCreatedFromEmdashPluginJSON contains the
+// JSON metadata for the struct
+// [NamespaceInstanceReadResponseMetadataCreatedFromEmdashPlugin]
+type namespaceInstanceReadResponseMetadataCreatedFromEmdashPluginJSON struct {
+	Type        apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceInstanceReadResponseMetadataCreatedFromEmdashPlugin) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceInstanceReadResponseMetadataCreatedFromEmdashPluginJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceInstanceReadResponseMetadataCreatedFromEmdashPluginType string
+
+const (
+	NamespaceInstanceReadResponseMetadataCreatedFromEmdashPluginTypeNative NamespaceInstanceReadResponseMetadataCreatedFromEmdashPluginType = "native"
+	NamespaceInstanceReadResponseMetadataCreatedFromEmdashPluginTypeRest   NamespaceInstanceReadResponseMetadataCreatedFromEmdashPluginType = "rest"
+)
+
+func (r NamespaceInstanceReadResponseMetadataCreatedFromEmdashPluginType) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceReadResponseMetadataCreatedFromEmdashPluginTypeNative, NamespaceInstanceReadResponseMetadataCreatedFromEmdashPluginTypeRest:
+		return true
+	}
+	return false
 }
 
 type NamespaceInstanceReadResponsePublicEndpointParams struct {
@@ -5107,12 +5314,38 @@ func (r NamespaceInstanceNewParamsIndexingOptionsKeywordTokenizer) IsKnown() boo
 }
 
 type NamespaceInstanceNewParamsMetadata struct {
-	CreatedFromAISearchWizard param.Field[bool]   `json:"created_from_aisearch_wizard"`
-	WorkerDomain              param.Field[string] `json:"worker_domain"`
+	CreatedFromAISearchWizard param.Field[bool]                                                      `json:"created_from_aisearch_wizard"`
+	CreatedFromEmdashPlugin   param.Field[NamespaceInstanceNewParamsMetadataCreatedFromEmdashPlugin] `json:"created_from_emdash_plugin"`
+	WorkerDomain              param.Field[string]                                                    `json:"worker_domain"`
 }
 
 func (r NamespaceInstanceNewParamsMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type NamespaceInstanceNewParamsMetadataCreatedFromEmdashPlugin struct {
+	Type        param.Field[NamespaceInstanceNewParamsMetadataCreatedFromEmdashPluginType] `json:"type" api:"required"`
+	Version     param.Field[string]                                                        `json:"version" api:"required"`
+	ExtraFields map[string]interface{}                                                     `json:"-,extras"`
+}
+
+func (r NamespaceInstanceNewParamsMetadataCreatedFromEmdashPlugin) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type NamespaceInstanceNewParamsMetadataCreatedFromEmdashPluginType string
+
+const (
+	NamespaceInstanceNewParamsMetadataCreatedFromEmdashPluginTypeNative NamespaceInstanceNewParamsMetadataCreatedFromEmdashPluginType = "native"
+	NamespaceInstanceNewParamsMetadataCreatedFromEmdashPluginTypeRest   NamespaceInstanceNewParamsMetadataCreatedFromEmdashPluginType = "rest"
+)
+
+func (r NamespaceInstanceNewParamsMetadataCreatedFromEmdashPluginType) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceNewParamsMetadataCreatedFromEmdashPluginTypeNative, NamespaceInstanceNewParamsMetadataCreatedFromEmdashPluginTypeRest:
+		return true
+	}
+	return false
 }
 
 type NamespaceInstanceNewParamsPublicEndpointParams struct {
@@ -5642,12 +5875,38 @@ func (r NamespaceInstanceUpdateParamsIndexingOptionsKeywordTokenizer) IsKnown() 
 }
 
 type NamespaceInstanceUpdateParamsMetadata struct {
-	CreatedFromAISearchWizard param.Field[bool]   `json:"created_from_aisearch_wizard"`
-	WorkerDomain              param.Field[string] `json:"worker_domain"`
+	CreatedFromAISearchWizard param.Field[bool]                                                         `json:"created_from_aisearch_wizard"`
+	CreatedFromEmdashPlugin   param.Field[NamespaceInstanceUpdateParamsMetadataCreatedFromEmdashPlugin] `json:"created_from_emdash_plugin"`
+	WorkerDomain              param.Field[string]                                                       `json:"worker_domain"`
 }
 
 func (r NamespaceInstanceUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type NamespaceInstanceUpdateParamsMetadataCreatedFromEmdashPlugin struct {
+	Type        param.Field[NamespaceInstanceUpdateParamsMetadataCreatedFromEmdashPluginType] `json:"type" api:"required"`
+	Version     param.Field[string]                                                           `json:"version" api:"required"`
+	ExtraFields map[string]interface{}                                                        `json:"-,extras"`
+}
+
+func (r NamespaceInstanceUpdateParamsMetadataCreatedFromEmdashPlugin) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type NamespaceInstanceUpdateParamsMetadataCreatedFromEmdashPluginType string
+
+const (
+	NamespaceInstanceUpdateParamsMetadataCreatedFromEmdashPluginTypeNative NamespaceInstanceUpdateParamsMetadataCreatedFromEmdashPluginType = "native"
+	NamespaceInstanceUpdateParamsMetadataCreatedFromEmdashPluginTypeRest   NamespaceInstanceUpdateParamsMetadataCreatedFromEmdashPluginType = "rest"
+)
+
+func (r NamespaceInstanceUpdateParamsMetadataCreatedFromEmdashPluginType) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceUpdateParamsMetadataCreatedFromEmdashPluginTypeNative, NamespaceInstanceUpdateParamsMetadataCreatedFromEmdashPluginTypeRest:
+		return true
+	}
+	return false
 }
 
 type NamespaceInstanceUpdateParamsPublicEndpointParams struct {
@@ -5980,8 +6239,6 @@ type NamespaceInstanceListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Filter by exact Search for Agents hostname (case-insensitive).
 	Hostname param.Field[string] `query:"hostname"`
-	// Filter by namespace.
-	Namespace param.Field[string] `query:"namespace"`
 	// Field to order results by.
 	OrderBy param.Field[NamespaceInstanceListParamsOrderBy] `query:"order_by"`
 	// Order direction.

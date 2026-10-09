@@ -63,7 +63,9 @@ func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ..
 // Replaces and returns the specified Hyperdrive configuration. The request must
 // include the name and complete origin connection details. Omitted caching
 // settings are reset to their defaults, while omitted mTLS settings and origin
-// connection limits are preserved. Use the update operation to modify only
+// connection limits are preserved. The integration association is set only during
+// creation and cannot be changed; omit the integration field even when replacing
+// an integration-backed configuration. Use the update operation to modify only
 // selected fields.
 func (r *ConfigService) Update(ctx context.Context, hyperdriveID string, params ConfigUpdateParams, opts ...option.RequestOption) (res *ConfigUpdateResponse, err error) {
 	var env ConfigUpdateResponseEnvelope
@@ -134,7 +136,9 @@ func (r *ConfigService) Delete(ctx context.Context, hyperdriveID string, body Co
 }
 
 // Updates and returns the specified fields of the Hyperdrive configuration. Custom
-// caching settings are not kept if caching is disabled.
+// caching settings are not kept if caching is disabled. For an integration-backed
+// configuration, the integration association is preserved but cannot be changed;
+// omit the integration field.
 func (r *ConfigService) Edit(ctx context.Context, hyperdriveID string, params ConfigEditParams, opts ...option.RequestOption) (res *ConfigEditResponse, err error) {
 	var env ConfigEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -210,9 +214,10 @@ type ConfigNewResponse struct {
 	Origin ConfigNewResponseOrigin `json:"origin" api:"required"`
 	// Defines the creation time of the Hyperdrive configuration.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Connects to a PlanetScale database using credentials managed by Cloudflare. The
-	// Cloudflare account must already be linked to PlanetScale in the Hyperdrive
-	// dashboard.
+	// Selects a PlanetScale database and provisions credentials managed by Cloudflare
+	// when creating a Hyperdrive configuration. The Cloudflare account must already be
+	// linked to PlanetScale in the Hyperdrive dashboard. The selection is returned as
+	// read-only metadata and cannot be changed with replace or update operations.
 	Integration ConfigNewResponseIntegration `json:"integration"`
 	// Defines the last modified time of the Hyperdrive configuration.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
@@ -557,9 +562,10 @@ func (r ConfigNewResponseOriginScheme) IsKnown() bool {
 	return false
 }
 
-// Connects to a PlanetScale database using credentials managed by Cloudflare. The
-// Cloudflare account must already be linked to PlanetScale in the Hyperdrive
-// dashboard.
+// Selects a PlanetScale database and provisions credentials managed by Cloudflare
+// when creating a Hyperdrive configuration. The Cloudflare account must already be
+// linked to PlanetScale in the Hyperdrive dashboard. The selection is returned as
+// read-only metadata and cannot be changed with replace or update operations.
 type ConfigNewResponseIntegration struct {
 	// The name of the PlanetScale database branch.
 	DatabaseBranchName string `json:"database_branch_name" api:"required"`
@@ -673,9 +679,10 @@ type ConfigUpdateResponse struct {
 	Origin ConfigUpdateResponseOrigin `json:"origin" api:"required"`
 	// Defines the creation time of the Hyperdrive configuration.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Connects to a PlanetScale database using credentials managed by Cloudflare. The
-	// Cloudflare account must already be linked to PlanetScale in the Hyperdrive
-	// dashboard.
+	// Selects a PlanetScale database and provisions credentials managed by Cloudflare
+	// when creating a Hyperdrive configuration. The Cloudflare account must already be
+	// linked to PlanetScale in the Hyperdrive dashboard. The selection is returned as
+	// read-only metadata and cannot be changed with replace or update operations.
 	Integration ConfigUpdateResponseIntegration `json:"integration"`
 	// Defines the last modified time of the Hyperdrive configuration.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
@@ -1021,9 +1028,10 @@ func (r ConfigUpdateResponseOriginScheme) IsKnown() bool {
 	return false
 }
 
-// Connects to a PlanetScale database using credentials managed by Cloudflare. The
-// Cloudflare account must already be linked to PlanetScale in the Hyperdrive
-// dashboard.
+// Selects a PlanetScale database and provisions credentials managed by Cloudflare
+// when creating a Hyperdrive configuration. The Cloudflare account must already be
+// linked to PlanetScale in the Hyperdrive dashboard. The selection is returned as
+// read-only metadata and cannot be changed with replace or update operations.
 type ConfigUpdateResponseIntegration struct {
 	// The name of the PlanetScale database branch.
 	DatabaseBranchName string `json:"database_branch_name" api:"required"`
@@ -1137,9 +1145,10 @@ type ConfigListResponse struct {
 	Origin ConfigListResponseOrigin `json:"origin" api:"required"`
 	// Defines the creation time of the Hyperdrive configuration.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Connects to a PlanetScale database using credentials managed by Cloudflare. The
-	// Cloudflare account must already be linked to PlanetScale in the Hyperdrive
-	// dashboard.
+	// Selects a PlanetScale database and provisions credentials managed by Cloudflare
+	// when creating a Hyperdrive configuration. The Cloudflare account must already be
+	// linked to PlanetScale in the Hyperdrive dashboard. The selection is returned as
+	// read-only metadata and cannot be changed with replace or update operations.
 	Integration ConfigListResponseIntegration `json:"integration"`
 	// Defines the last modified time of the Hyperdrive configuration.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
@@ -1485,9 +1494,10 @@ func (r ConfigListResponseOriginScheme) IsKnown() bool {
 	return false
 }
 
-// Connects to a PlanetScale database using credentials managed by Cloudflare. The
-// Cloudflare account must already be linked to PlanetScale in the Hyperdrive
-// dashboard.
+// Selects a PlanetScale database and provisions credentials managed by Cloudflare
+// when creating a Hyperdrive configuration. The Cloudflare account must already be
+// linked to PlanetScale in the Hyperdrive dashboard. The selection is returned as
+// read-only metadata and cannot be changed with replace or update operations.
 type ConfigListResponseIntegration struct {
 	// The name of the PlanetScale database branch.
 	DatabaseBranchName string `json:"database_branch_name" api:"required"`
@@ -1603,9 +1613,10 @@ type ConfigEditResponse struct {
 	Origin ConfigEditResponseOrigin `json:"origin" api:"required"`
 	// Defines the creation time of the Hyperdrive configuration.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Connects to a PlanetScale database using credentials managed by Cloudflare. The
-	// Cloudflare account must already be linked to PlanetScale in the Hyperdrive
-	// dashboard.
+	// Selects a PlanetScale database and provisions credentials managed by Cloudflare
+	// when creating a Hyperdrive configuration. The Cloudflare account must already be
+	// linked to PlanetScale in the Hyperdrive dashboard. The selection is returned as
+	// read-only metadata and cannot be changed with replace or update operations.
 	Integration ConfigEditResponseIntegration `json:"integration"`
 	// Defines the last modified time of the Hyperdrive configuration.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
@@ -1951,9 +1962,10 @@ func (r ConfigEditResponseOriginScheme) IsKnown() bool {
 	return false
 }
 
-// Connects to a PlanetScale database using credentials managed by Cloudflare. The
-// Cloudflare account must already be linked to PlanetScale in the Hyperdrive
-// dashboard.
+// Selects a PlanetScale database and provisions credentials managed by Cloudflare
+// when creating a Hyperdrive configuration. The Cloudflare account must already be
+// linked to PlanetScale in the Hyperdrive dashboard. The selection is returned as
+// read-only metadata and cannot be changed with replace or update operations.
 type ConfigEditResponseIntegration struct {
 	// The name of the PlanetScale database branch.
 	DatabaseBranchName string `json:"database_branch_name" api:"required"`
@@ -2067,9 +2079,10 @@ type ConfigGetResponse struct {
 	Origin ConfigGetResponseOrigin `json:"origin" api:"required"`
 	// Defines the creation time of the Hyperdrive configuration.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Connects to a PlanetScale database using credentials managed by Cloudflare. The
-	// Cloudflare account must already be linked to PlanetScale in the Hyperdrive
-	// dashboard.
+	// Selects a PlanetScale database and provisions credentials managed by Cloudflare
+	// when creating a Hyperdrive configuration. The Cloudflare account must already be
+	// linked to PlanetScale in the Hyperdrive dashboard. The selection is returned as
+	// read-only metadata and cannot be changed with replace or update operations.
 	Integration ConfigGetResponseIntegration `json:"integration"`
 	// Defines the last modified time of the Hyperdrive configuration.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
@@ -2414,9 +2427,10 @@ func (r ConfigGetResponseOriginScheme) IsKnown() bool {
 	return false
 }
 
-// Connects to a PlanetScale database using credentials managed by Cloudflare. The
-// Cloudflare account must already be linked to PlanetScale in the Hyperdrive
-// dashboard.
+// Selects a PlanetScale database and provisions credentials managed by Cloudflare
+// when creating a Hyperdrive configuration. The Cloudflare account must already be
+// linked to PlanetScale in the Hyperdrive dashboard. The selection is returned as
+// read-only metadata and cannot be changed with replace or update operations.
 type ConfigGetResponseIntegration struct {
 	// The name of the PlanetScale database branch.
 	DatabaseBranchName string `json:"database_branch_name" api:"required"`
@@ -2530,9 +2544,10 @@ type ConfigRestartResponse struct {
 	Origin ConfigRestartResponseOrigin `json:"origin" api:"required"`
 	// Defines the creation time of the Hyperdrive configuration.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Connects to a PlanetScale database using credentials managed by Cloudflare. The
-	// Cloudflare account must already be linked to PlanetScale in the Hyperdrive
-	// dashboard.
+	// Selects a PlanetScale database and provisions credentials managed by Cloudflare
+	// when creating a Hyperdrive configuration. The Cloudflare account must already be
+	// linked to PlanetScale in the Hyperdrive dashboard. The selection is returned as
+	// read-only metadata and cannot be changed with replace or update operations.
 	Integration ConfigRestartResponseIntegration `json:"integration"`
 	// Defines the last modified time of the Hyperdrive configuration.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
@@ -2878,9 +2893,10 @@ func (r ConfigRestartResponseOriginScheme) IsKnown() bool {
 	return false
 }
 
-// Connects to a PlanetScale database using credentials managed by Cloudflare. The
-// Cloudflare account must already be linked to PlanetScale in the Hyperdrive
-// dashboard.
+// Selects a PlanetScale database and provisions credentials managed by Cloudflare
+// when creating a Hyperdrive configuration. The Cloudflare account must already be
+// linked to PlanetScale in the Hyperdrive dashboard. The selection is returned as
+// read-only metadata and cannot be changed with replace or update operations.
 type ConfigRestartResponseIntegration struct {
 	// The name of the PlanetScale database branch.
 	DatabaseBranchName string `json:"database_branch_name" api:"required"`
@@ -3360,9 +3376,10 @@ func (r ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithOriginMTLS) Marsh
 }
 
 type ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegration struct {
-	// Connects to a PlanetScale database using credentials managed by Cloudflare. The
-	// Cloudflare account must already be linked to PlanetScale in the Hyperdrive
-	// dashboard.
+	// Selects a PlanetScale database and provisions credentials managed by Cloudflare
+	// when creating a Hyperdrive configuration. The Cloudflare account must already be
+	// linked to PlanetScale in the Hyperdrive dashboard. The selection is returned as
+	// read-only metadata and cannot be changed with replace or update operations.
 	Integration param.Field[ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegrationIntegration] `json:"integration" api:"required"`
 	// The name of the Hyperdrive configuration. Used to identify the configuration in
 	// the Cloudflare dashboard and API.
@@ -3389,9 +3406,10 @@ func (r ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegration) Mars
 func (r ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegration) implementsConfigNewParamsBodyUnion() {
 }
 
-// Connects to a PlanetScale database using credentials managed by Cloudflare. The
-// Cloudflare account must already be linked to PlanetScale in the Hyperdrive
-// dashboard.
+// Selects a PlanetScale database and provisions credentials managed by Cloudflare
+// when creating a Hyperdrive configuration. The Cloudflare account must already be
+// linked to PlanetScale in the Hyperdrive dashboard. The selection is returned as
+// read-only metadata and cannot be changed with replace or update operations.
 type ConfigNewParamsBodyHyperdriveHyperdriveConfigCreateWithIntegrationIntegration struct {
 	// The name of the PlanetScale database branch.
 	DatabaseBranchName param.Field[string] `json:"database_branch_name" api:"required"`

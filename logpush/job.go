@@ -462,8 +462,7 @@ type OutputOptions struct {
 	// you are interested in.
 	FieldNames []string `json:"field_names"`
 	// If set to true, subrequests will be merged into the parent request. Only
-	// supported for the `http_requests` dataset. Not supported for account-scoped
-	// jobs.
+	// supported for the `http_requests` dataset.
 	MergeSubrequests bool `json:"merge_subrequests" api:"nullable"`
 	// Specifies the output type, such as `ndjson` or `csv`. This sets default values
 	// for the rest of the settings, depending on the chosen output type. Some
@@ -572,8 +571,7 @@ type OutputOptionsParam struct {
 	// you are interested in.
 	FieldNames param.Field[[]string] `json:"field_names"`
 	// If set to true, subrequests will be merged into the parent request. Only
-	// supported for the `http_requests` dataset. Not supported for account-scoped
-	// jobs.
+	// supported for the `http_requests` dataset.
 	MergeSubrequests param.Field[bool] `json:"merge_subrequests"`
 	// Specifies the output type, such as `ndjson` or `csv`. This sets default values
 	// for the rest of the settings, depending on the chosen output type. Some

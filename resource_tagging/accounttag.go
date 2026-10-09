@@ -162,6 +162,7 @@ func (r *AccountTagUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplication],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicy],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroup],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessServiceToken],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccount],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRuleset],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAIGateway],
@@ -176,6 +177,7 @@ func (r *AccountTagUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectD1Database],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDevice],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecord],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayList],
@@ -210,6 +212,7 @@ func (r AccountTagUpdateResponse) AsUnion() AccountTagUpdateResponseUnion {
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplication],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicy],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroup],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessServiceToken],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccount],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRuleset],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAIGateway],
@@ -224,6 +227,7 @@ func (r AccountTagUpdateResponse) AsUnion() AccountTagUpdateResponseUnion {
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectD1Database],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDevice],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecord],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectGatewayList],
@@ -270,6 +274,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroup{}),
 			DiscriminatorValue: "access_group",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessServiceToken{}),
+			DiscriminatorValue: "access_service_token",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -340,6 +349,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectD1Database{}),
 			DiscriminatorValue: "d1_database",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDevice{}),
+			DiscriminatorValue: "device",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -663,6 +677,72 @@ const (
 func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroupType) IsKnown() bool {
 	switch r {
 	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessGroupTypeAccessGroup:
+		return true
+	}
+	return false
+}
+
+// Response for access_service_token resources
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessServiceToken struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                                 `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessServiceTokenType `json:"type" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                         `json:"tags_updated_at" format:"date-time"`
+	JSON          accountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessServiceTokenJSON `json:"-"`
+}
+
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessServiceTokenJSON
+// contains the JSON metadata for the struct
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessServiceToken]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessServiceTokenJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessServiceTokenJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessServiceToken) implementsAccountTagUpdateResponse() {
+}
+
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessServiceTokenType string
+
+const (
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessServiceTokenTypeAccessServiceToken AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessServiceTokenType = "access_service_token"
+)
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessServiceTokenType) IsKnown() bool {
+	switch r {
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccessServiceTokenTypeAccessServiceToken:
 		return true
 	}
 	return false
@@ -1596,6 +1676,72 @@ const (
 func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectD1DatabaseType) IsKnown() bool {
 	switch r {
 	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectD1DatabaseTypeD1Database:
+		return true
+	}
+	return false
+}
+
+// Response for device resources
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDevice struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                     `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDeviceType `json:"type" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                             `json:"tags_updated_at" format:"date-time"`
+	JSON          accountTagUpdateResponseResourceTaggingTaggedResourceObjectDeviceJSON `json:"-"`
+}
+
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectDeviceJSON contains
+// the JSON metadata for the struct
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDevice]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectDeviceJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDevice) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectDeviceJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDevice) implementsAccountTagUpdateResponse() {
+}
+
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDeviceType string
+
+const (
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDeviceTypeDevice AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDeviceType = "device"
+)
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDeviceType) IsKnown() bool {
+	switch r {
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDeviceTypeDevice:
 		return true
 	}
 	return false
@@ -3215,6 +3361,7 @@ const (
 	AccountTagUpdateResponseTypeAccessApplication        AccountTagUpdateResponseType = "access_application"
 	AccountTagUpdateResponseTypeAccessApplicationPolicy  AccountTagUpdateResponseType = "access_application_policy"
 	AccountTagUpdateResponseTypeAccessGroup              AccountTagUpdateResponseType = "access_group"
+	AccountTagUpdateResponseTypeAccessServiceToken       AccountTagUpdateResponseType = "access_service_token"
 	AccountTagUpdateResponseTypeAccount                  AccountTagUpdateResponseType = "account"
 	AccountTagUpdateResponseTypeAccountRuleset           AccountTagUpdateResponseType = "account_ruleset"
 	AccountTagUpdateResponseTypeAIGateway                AccountTagUpdateResponseType = "ai_gateway"
@@ -3229,6 +3376,7 @@ const (
 	AccountTagUpdateResponseTypeCwsPolicySet             AccountTagUpdateResponseType = "cws_policy_set"
 	AccountTagUpdateResponseTypeCwsWorkload              AccountTagUpdateResponseType = "cws_workload"
 	AccountTagUpdateResponseTypeD1Database               AccountTagUpdateResponseType = "d1_database"
+	AccountTagUpdateResponseTypeDevice                   AccountTagUpdateResponseType = "device"
 	AccountTagUpdateResponseTypeDNSRecord                AccountTagUpdateResponseType = "dns_record"
 	AccountTagUpdateResponseTypeDurableObjectNamespace   AccountTagUpdateResponseType = "durable_object_namespace"
 	AccountTagUpdateResponseTypeGatewayList              AccountTagUpdateResponseType = "gateway_list"
@@ -3257,7 +3405,7 @@ const (
 
 func (r AccountTagUpdateResponseType) IsKnown() bool {
 	switch r {
-	case AccountTagUpdateResponseTypeAccessApplication, AccountTagUpdateResponseTypeAccessApplicationPolicy, AccountTagUpdateResponseTypeAccessGroup, AccountTagUpdateResponseTypeAccount, AccountTagUpdateResponseTypeAccountRuleset, AccountTagUpdateResponseTypeAIGateway, AccountTagUpdateResponseTypeAlertingPolicy, AccountTagUpdateResponseTypeAlertingWebhook, AccountTagUpdateResponseTypeAPIGatewayOperation, AccountTagUpdateResponseTypeCloudflaredTunnel, AccountTagUpdateResponseTypeCustomCertificate, AccountTagUpdateResponseTypeCustomHostname, AccountTagUpdateResponseTypeCwsDeployment, AccountTagUpdateResponseTypeCwsPolicy, AccountTagUpdateResponseTypeCwsPolicySet, AccountTagUpdateResponseTypeCwsWorkload, AccountTagUpdateResponseTypeD1Database, AccountTagUpdateResponseTypeDNSRecord, AccountTagUpdateResponseTypeDurableObjectNamespace, AccountTagUpdateResponseTypeGatewayList, AccountTagUpdateResponseTypeGatewayRule, AccountTagUpdateResponseTypeHealthcheck, AccountTagUpdateResponseTypeImage, AccountTagUpdateResponseTypeInfrastructureTarget, AccountTagUpdateResponseTypeKVNamespace, AccountTagUpdateResponseTypeLoadBalancer, AccountTagUpdateResponseTypeLoadBalancerMonitor, AccountTagUpdateResponseTypeLoadBalancerPool, AccountTagUpdateResponseTypeManagedClientCertificate, AccountTagUpdateResponseTypePagesProject, AccountTagUpdateResponseTypeQueue, AccountTagUpdateResponseTypeR2Bucket, AccountTagUpdateResponseTypeResourceShare, AccountTagUpdateResponseTypeStreamLiveInput, AccountTagUpdateResponseTypeStreamVideo, AccountTagUpdateResponseTypeVectorizeIndex, AccountTagUpdateResponseTypeWorker, AccountTagUpdateResponseTypeWorkerRoute, AccountTagUpdateResponseTypeWorkerVersion, AccountTagUpdateResponseTypeZone, AccountTagUpdateResponseTypeZoneRuleset:
+	case AccountTagUpdateResponseTypeAccessApplication, AccountTagUpdateResponseTypeAccessApplicationPolicy, AccountTagUpdateResponseTypeAccessGroup, AccountTagUpdateResponseTypeAccessServiceToken, AccountTagUpdateResponseTypeAccount, AccountTagUpdateResponseTypeAccountRuleset, AccountTagUpdateResponseTypeAIGateway, AccountTagUpdateResponseTypeAlertingPolicy, AccountTagUpdateResponseTypeAlertingWebhook, AccountTagUpdateResponseTypeAPIGatewayOperation, AccountTagUpdateResponseTypeCloudflaredTunnel, AccountTagUpdateResponseTypeCustomCertificate, AccountTagUpdateResponseTypeCustomHostname, AccountTagUpdateResponseTypeCwsDeployment, AccountTagUpdateResponseTypeCwsPolicy, AccountTagUpdateResponseTypeCwsPolicySet, AccountTagUpdateResponseTypeCwsWorkload, AccountTagUpdateResponseTypeD1Database, AccountTagUpdateResponseTypeDevice, AccountTagUpdateResponseTypeDNSRecord, AccountTagUpdateResponseTypeDurableObjectNamespace, AccountTagUpdateResponseTypeGatewayList, AccountTagUpdateResponseTypeGatewayRule, AccountTagUpdateResponseTypeHealthcheck, AccountTagUpdateResponseTypeImage, AccountTagUpdateResponseTypeInfrastructureTarget, AccountTagUpdateResponseTypeKVNamespace, AccountTagUpdateResponseTypeLoadBalancer, AccountTagUpdateResponseTypeLoadBalancerMonitor, AccountTagUpdateResponseTypeLoadBalancerPool, AccountTagUpdateResponseTypeManagedClientCertificate, AccountTagUpdateResponseTypePagesProject, AccountTagUpdateResponseTypeQueue, AccountTagUpdateResponseTypeR2Bucket, AccountTagUpdateResponseTypeResourceShare, AccountTagUpdateResponseTypeStreamLiveInput, AccountTagUpdateResponseTypeStreamVideo, AccountTagUpdateResponseTypeVectorizeIndex, AccountTagUpdateResponseTypeWorker, AccountTagUpdateResponseTypeWorkerRoute, AccountTagUpdateResponseTypeWorkerVersion, AccountTagUpdateResponseTypeZone, AccountTagUpdateResponseTypeZoneRuleset:
 		return true
 	}
 	return false
@@ -3332,6 +3480,7 @@ func (r *AccountTagGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplication],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicy],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessGroup],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessServiceToken],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccount],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountRuleset],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAIGateway],
@@ -3346,6 +3495,7 @@ func (r *AccountTagGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectD1Database],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectDevice],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectDNSRecord],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayList],
@@ -3380,6 +3530,7 @@ func (r AccountTagGetResponse) AsUnion() AccountTagGetResponseUnion {
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplication],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessApplicationPolicy],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessGroup],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessServiceToken],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccount],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountRuleset],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAIGateway],
@@ -3394,6 +3545,7 @@ func (r AccountTagGetResponse) AsUnion() AccountTagGetResponseUnion {
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectD1Database],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectDevice],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectDNSRecord],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectDurableObjectNamespace],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectGatewayList],
@@ -3440,6 +3592,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessGroup{}),
 			DiscriminatorValue: "access_group",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessServiceToken{}),
+			DiscriminatorValue: "access_service_token",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -3510,6 +3667,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectD1Database{}),
 			DiscriminatorValue: "d1_database",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectDevice{}),
+			DiscriminatorValue: "device",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -3833,6 +3995,72 @@ const (
 func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessGroupType) IsKnown() bool {
 	switch r {
 	case AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessGroupTypeAccessGroup:
+		return true
+	}
+	return false
+}
+
+// Response for access_service_token resources
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessServiceToken struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                              `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessServiceTokenType `json:"type" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                      `json:"tags_updated_at" format:"date-time"`
+	JSON          accountTagGetResponseResourceTaggingTaggedResourceObjectAccessServiceTokenJSON `json:"-"`
+}
+
+// accountTagGetResponseResourceTaggingTaggedResourceObjectAccessServiceTokenJSON
+// contains the JSON metadata for the struct
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessServiceToken]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectAccessServiceTokenJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessServiceToken) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectAccessServiceTokenJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessServiceToken) implementsAccountTagGetResponse() {
+}
+
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessServiceTokenType string
+
+const (
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessServiceTokenTypeAccessServiceToken AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessServiceTokenType = "access_service_token"
+)
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessServiceTokenType) IsKnown() bool {
+	switch r {
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectAccessServiceTokenTypeAccessServiceToken:
 		return true
 	}
 	return false
@@ -4766,6 +4994,72 @@ const (
 func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectD1DatabaseType) IsKnown() bool {
 	switch r {
 	case AccountTagGetResponseResourceTaggingTaggedResourceObjectD1DatabaseTypeD1Database:
+		return true
+	}
+	return false
+}
+
+// Response for device resources
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectDevice struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                  `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectDeviceType `json:"type" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                          `json:"tags_updated_at" format:"date-time"`
+	JSON          accountTagGetResponseResourceTaggingTaggedResourceObjectDeviceJSON `json:"-"`
+}
+
+// accountTagGetResponseResourceTaggingTaggedResourceObjectDeviceJSON contains the
+// JSON metadata for the struct
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectDevice]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectDeviceJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectDevice) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectDeviceJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectDevice) implementsAccountTagGetResponse() {
+}
+
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectDeviceType string
+
+const (
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectDeviceTypeDevice AccountTagGetResponseResourceTaggingTaggedResourceObjectDeviceType = "device"
+)
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectDeviceType) IsKnown() bool {
+	switch r {
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectDeviceTypeDevice:
 		return true
 	}
 	return false
@@ -6385,6 +6679,7 @@ const (
 	AccountTagGetResponseTypeAccessApplication        AccountTagGetResponseType = "access_application"
 	AccountTagGetResponseTypeAccessApplicationPolicy  AccountTagGetResponseType = "access_application_policy"
 	AccountTagGetResponseTypeAccessGroup              AccountTagGetResponseType = "access_group"
+	AccountTagGetResponseTypeAccessServiceToken       AccountTagGetResponseType = "access_service_token"
 	AccountTagGetResponseTypeAccount                  AccountTagGetResponseType = "account"
 	AccountTagGetResponseTypeAccountRuleset           AccountTagGetResponseType = "account_ruleset"
 	AccountTagGetResponseTypeAIGateway                AccountTagGetResponseType = "ai_gateway"
@@ -6399,6 +6694,7 @@ const (
 	AccountTagGetResponseTypeCwsPolicySet             AccountTagGetResponseType = "cws_policy_set"
 	AccountTagGetResponseTypeCwsWorkload              AccountTagGetResponseType = "cws_workload"
 	AccountTagGetResponseTypeD1Database               AccountTagGetResponseType = "d1_database"
+	AccountTagGetResponseTypeDevice                   AccountTagGetResponseType = "device"
 	AccountTagGetResponseTypeDNSRecord                AccountTagGetResponseType = "dns_record"
 	AccountTagGetResponseTypeDurableObjectNamespace   AccountTagGetResponseType = "durable_object_namespace"
 	AccountTagGetResponseTypeGatewayList              AccountTagGetResponseType = "gateway_list"
@@ -6427,7 +6723,7 @@ const (
 
 func (r AccountTagGetResponseType) IsKnown() bool {
 	switch r {
-	case AccountTagGetResponseTypeAccessApplication, AccountTagGetResponseTypeAccessApplicationPolicy, AccountTagGetResponseTypeAccessGroup, AccountTagGetResponseTypeAccount, AccountTagGetResponseTypeAccountRuleset, AccountTagGetResponseTypeAIGateway, AccountTagGetResponseTypeAlertingPolicy, AccountTagGetResponseTypeAlertingWebhook, AccountTagGetResponseTypeAPIGatewayOperation, AccountTagGetResponseTypeCloudflaredTunnel, AccountTagGetResponseTypeCustomCertificate, AccountTagGetResponseTypeCustomHostname, AccountTagGetResponseTypeCwsDeployment, AccountTagGetResponseTypeCwsPolicy, AccountTagGetResponseTypeCwsPolicySet, AccountTagGetResponseTypeCwsWorkload, AccountTagGetResponseTypeD1Database, AccountTagGetResponseTypeDNSRecord, AccountTagGetResponseTypeDurableObjectNamespace, AccountTagGetResponseTypeGatewayList, AccountTagGetResponseTypeGatewayRule, AccountTagGetResponseTypeHealthcheck, AccountTagGetResponseTypeImage, AccountTagGetResponseTypeInfrastructureTarget, AccountTagGetResponseTypeKVNamespace, AccountTagGetResponseTypeLoadBalancer, AccountTagGetResponseTypeLoadBalancerMonitor, AccountTagGetResponseTypeLoadBalancerPool, AccountTagGetResponseTypeManagedClientCertificate, AccountTagGetResponseTypePagesProject, AccountTagGetResponseTypeQueue, AccountTagGetResponseTypeR2Bucket, AccountTagGetResponseTypeResourceShare, AccountTagGetResponseTypeStreamLiveInput, AccountTagGetResponseTypeStreamVideo, AccountTagGetResponseTypeVectorizeIndex, AccountTagGetResponseTypeWorker, AccountTagGetResponseTypeWorkerRoute, AccountTagGetResponseTypeWorkerVersion, AccountTagGetResponseTypeZone, AccountTagGetResponseTypeZoneRuleset:
+	case AccountTagGetResponseTypeAccessApplication, AccountTagGetResponseTypeAccessApplicationPolicy, AccountTagGetResponseTypeAccessGroup, AccountTagGetResponseTypeAccessServiceToken, AccountTagGetResponseTypeAccount, AccountTagGetResponseTypeAccountRuleset, AccountTagGetResponseTypeAIGateway, AccountTagGetResponseTypeAlertingPolicy, AccountTagGetResponseTypeAlertingWebhook, AccountTagGetResponseTypeAPIGatewayOperation, AccountTagGetResponseTypeCloudflaredTunnel, AccountTagGetResponseTypeCustomCertificate, AccountTagGetResponseTypeCustomHostname, AccountTagGetResponseTypeCwsDeployment, AccountTagGetResponseTypeCwsPolicy, AccountTagGetResponseTypeCwsPolicySet, AccountTagGetResponseTypeCwsWorkload, AccountTagGetResponseTypeD1Database, AccountTagGetResponseTypeDevice, AccountTagGetResponseTypeDNSRecord, AccountTagGetResponseTypeDurableObjectNamespace, AccountTagGetResponseTypeGatewayList, AccountTagGetResponseTypeGatewayRule, AccountTagGetResponseTypeHealthcheck, AccountTagGetResponseTypeImage, AccountTagGetResponseTypeInfrastructureTarget, AccountTagGetResponseTypeKVNamespace, AccountTagGetResponseTypeLoadBalancer, AccountTagGetResponseTypeLoadBalancerMonitor, AccountTagGetResponseTypeLoadBalancerPool, AccountTagGetResponseTypeManagedClientCertificate, AccountTagGetResponseTypePagesProject, AccountTagGetResponseTypeQueue, AccountTagGetResponseTypeR2Bucket, AccountTagGetResponseTypeResourceShare, AccountTagGetResponseTypeStreamLiveInput, AccountTagGetResponseTypeStreamVideo, AccountTagGetResponseTypeVectorizeIndex, AccountTagGetResponseTypeWorker, AccountTagGetResponseTypeWorkerRoute, AccountTagGetResponseTypeWorkerVersion, AccountTagGetResponseTypeZone, AccountTagGetResponseTypeZoneRuleset:
 		return true
 	}
 	return false
@@ -6533,6 +6829,7 @@ type AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseReso
 const (
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessApplication      AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "access_application"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessGroup            AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "access_group"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessServiceToken     AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "access_service_token"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccount                AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "account"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccountRuleset         AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "account_ruleset"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAIGateway              AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "ai_gateway"
@@ -6544,6 +6841,7 @@ const (
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCwsPolicySet           AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "cws_policy_set"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCwsWorkload            AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "cws_workload"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeD1Database             AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "d1_database"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeDevice                 AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "device"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeDurableObjectNamespace AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "durable_object_namespace"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeGatewayList            AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "gateway_list"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeGatewayRule            AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "gateway_rule"
@@ -6564,7 +6862,7 @@ const (
 
 func (r AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType) IsKnown() bool {
 	switch r {
-	case AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessApplication, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessGroup, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccount, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccountRuleset, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAIGateway, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAlertingPolicy, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAlertingWebhook, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCloudflaredTunnel, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCwsDeployment, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCwsPolicy, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCwsPolicySet, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCwsWorkload, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeD1Database, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeDurableObjectNamespace, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeGatewayList, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeGatewayRule, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeImage, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeInfrastructureTarget, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeKVNamespace, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeLoadBalancerMonitor, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeLoadBalancerPool, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypePagesProject, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeQueue, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeR2Bucket, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeResourceShare, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeStreamLiveInput, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeStreamVideo, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeVectorizeIndex, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeWorker:
+	case AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessApplication, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessGroup, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessServiceToken, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccount, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccountRuleset, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAIGateway, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAlertingPolicy, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAlertingWebhook, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCloudflaredTunnel, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCwsDeployment, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCwsPolicy, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCwsPolicySet, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCwsWorkload, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeD1Database, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeDevice, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeDurableObjectNamespace, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeGatewayList, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeGatewayRule, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeImage, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeInfrastructureTarget, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeKVNamespace, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeLoadBalancerMonitor, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeLoadBalancerPool, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypePagesProject, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeQueue, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeR2Bucket, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeResourceShare, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeStreamLiveInput, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeStreamVideo, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeVectorizeIndex, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeWorker:
 		return true
 	}
 	return false
@@ -6577,6 +6875,7 @@ const (
 	AccountTagUpdateParamsBodyResourceTypeWorkerVersion          AccountTagUpdateParamsBodyResourceType = "worker_version"
 	AccountTagUpdateParamsBodyResourceTypeAccessApplication      AccountTagUpdateParamsBodyResourceType = "access_application"
 	AccountTagUpdateParamsBodyResourceTypeAccessGroup            AccountTagUpdateParamsBodyResourceType = "access_group"
+	AccountTagUpdateParamsBodyResourceTypeAccessServiceToken     AccountTagUpdateParamsBodyResourceType = "access_service_token"
 	AccountTagUpdateParamsBodyResourceTypeAccount                AccountTagUpdateParamsBodyResourceType = "account"
 	AccountTagUpdateParamsBodyResourceTypeAccountRuleset         AccountTagUpdateParamsBodyResourceType = "account_ruleset"
 	AccountTagUpdateParamsBodyResourceTypeAIGateway              AccountTagUpdateParamsBodyResourceType = "ai_gateway"
@@ -6588,6 +6887,7 @@ const (
 	AccountTagUpdateParamsBodyResourceTypeCwsPolicySet           AccountTagUpdateParamsBodyResourceType = "cws_policy_set"
 	AccountTagUpdateParamsBodyResourceTypeCwsWorkload            AccountTagUpdateParamsBodyResourceType = "cws_workload"
 	AccountTagUpdateParamsBodyResourceTypeD1Database             AccountTagUpdateParamsBodyResourceType = "d1_database"
+	AccountTagUpdateParamsBodyResourceTypeDevice                 AccountTagUpdateParamsBodyResourceType = "device"
 	AccountTagUpdateParamsBodyResourceTypeDurableObjectNamespace AccountTagUpdateParamsBodyResourceType = "durable_object_namespace"
 	AccountTagUpdateParamsBodyResourceTypeGatewayList            AccountTagUpdateParamsBodyResourceType = "gateway_list"
 	AccountTagUpdateParamsBodyResourceTypeGatewayRule            AccountTagUpdateParamsBodyResourceType = "gateway_rule"
@@ -6608,7 +6908,7 @@ const (
 
 func (r AccountTagUpdateParamsBodyResourceType) IsKnown() bool {
 	switch r {
-	case AccountTagUpdateParamsBodyResourceTypeWorkerVersion, AccountTagUpdateParamsBodyResourceTypeAccessApplication, AccountTagUpdateParamsBodyResourceTypeAccessGroup, AccountTagUpdateParamsBodyResourceTypeAccount, AccountTagUpdateParamsBodyResourceTypeAccountRuleset, AccountTagUpdateParamsBodyResourceTypeAIGateway, AccountTagUpdateParamsBodyResourceTypeAlertingPolicy, AccountTagUpdateParamsBodyResourceTypeAlertingWebhook, AccountTagUpdateParamsBodyResourceTypeCloudflaredTunnel, AccountTagUpdateParamsBodyResourceTypeCwsDeployment, AccountTagUpdateParamsBodyResourceTypeCwsPolicy, AccountTagUpdateParamsBodyResourceTypeCwsPolicySet, AccountTagUpdateParamsBodyResourceTypeCwsWorkload, AccountTagUpdateParamsBodyResourceTypeD1Database, AccountTagUpdateParamsBodyResourceTypeDurableObjectNamespace, AccountTagUpdateParamsBodyResourceTypeGatewayList, AccountTagUpdateParamsBodyResourceTypeGatewayRule, AccountTagUpdateParamsBodyResourceTypeImage, AccountTagUpdateParamsBodyResourceTypeInfrastructureTarget, AccountTagUpdateParamsBodyResourceTypeKVNamespace, AccountTagUpdateParamsBodyResourceTypeLoadBalancerMonitor, AccountTagUpdateParamsBodyResourceTypeLoadBalancerPool, AccountTagUpdateParamsBodyResourceTypePagesProject, AccountTagUpdateParamsBodyResourceTypeQueue, AccountTagUpdateParamsBodyResourceTypeR2Bucket, AccountTagUpdateParamsBodyResourceTypeResourceShare, AccountTagUpdateParamsBodyResourceTypeStreamLiveInput, AccountTagUpdateParamsBodyResourceTypeStreamVideo, AccountTagUpdateParamsBodyResourceTypeVectorizeIndex, AccountTagUpdateParamsBodyResourceTypeWorker:
+	case AccountTagUpdateParamsBodyResourceTypeWorkerVersion, AccountTagUpdateParamsBodyResourceTypeAccessApplication, AccountTagUpdateParamsBodyResourceTypeAccessGroup, AccountTagUpdateParamsBodyResourceTypeAccessServiceToken, AccountTagUpdateParamsBodyResourceTypeAccount, AccountTagUpdateParamsBodyResourceTypeAccountRuleset, AccountTagUpdateParamsBodyResourceTypeAIGateway, AccountTagUpdateParamsBodyResourceTypeAlertingPolicy, AccountTagUpdateParamsBodyResourceTypeAlertingWebhook, AccountTagUpdateParamsBodyResourceTypeCloudflaredTunnel, AccountTagUpdateParamsBodyResourceTypeCwsDeployment, AccountTagUpdateParamsBodyResourceTypeCwsPolicy, AccountTagUpdateParamsBodyResourceTypeCwsPolicySet, AccountTagUpdateParamsBodyResourceTypeCwsWorkload, AccountTagUpdateParamsBodyResourceTypeD1Database, AccountTagUpdateParamsBodyResourceTypeDevice, AccountTagUpdateParamsBodyResourceTypeDurableObjectNamespace, AccountTagUpdateParamsBodyResourceTypeGatewayList, AccountTagUpdateParamsBodyResourceTypeGatewayRule, AccountTagUpdateParamsBodyResourceTypeImage, AccountTagUpdateParamsBodyResourceTypeInfrastructureTarget, AccountTagUpdateParamsBodyResourceTypeKVNamespace, AccountTagUpdateParamsBodyResourceTypeLoadBalancerMonitor, AccountTagUpdateParamsBodyResourceTypeLoadBalancerPool, AccountTagUpdateParamsBodyResourceTypePagesProject, AccountTagUpdateParamsBodyResourceTypeQueue, AccountTagUpdateParamsBodyResourceTypeR2Bucket, AccountTagUpdateParamsBodyResourceTypeResourceShare, AccountTagUpdateParamsBodyResourceTypeStreamLiveInput, AccountTagUpdateParamsBodyResourceTypeStreamVideo, AccountTagUpdateParamsBodyResourceTypeVectorizeIndex, AccountTagUpdateParamsBodyResourceTypeWorker:
 		return true
 	}
 	return false
@@ -6785,6 +7085,7 @@ type AccountTagGetParamsResourceType string
 const (
 	AccountTagGetParamsResourceTypeAccessApplication      AccountTagGetParamsResourceType = "access_application"
 	AccountTagGetParamsResourceTypeAccessGroup            AccountTagGetParamsResourceType = "access_group"
+	AccountTagGetParamsResourceTypeAccessServiceToken     AccountTagGetParamsResourceType = "access_service_token"
 	AccountTagGetParamsResourceTypeAccount                AccountTagGetParamsResourceType = "account"
 	AccountTagGetParamsResourceTypeAccountRuleset         AccountTagGetParamsResourceType = "account_ruleset"
 	AccountTagGetParamsResourceTypeAIGateway              AccountTagGetParamsResourceType = "ai_gateway"
@@ -6796,6 +7097,7 @@ const (
 	AccountTagGetParamsResourceTypeCwsPolicySet           AccountTagGetParamsResourceType = "cws_policy_set"
 	AccountTagGetParamsResourceTypeCwsWorkload            AccountTagGetParamsResourceType = "cws_workload"
 	AccountTagGetParamsResourceTypeD1Database             AccountTagGetParamsResourceType = "d1_database"
+	AccountTagGetParamsResourceTypeDevice                 AccountTagGetParamsResourceType = "device"
 	AccountTagGetParamsResourceTypeDurableObjectNamespace AccountTagGetParamsResourceType = "durable_object_namespace"
 	AccountTagGetParamsResourceTypeGatewayList            AccountTagGetParamsResourceType = "gateway_list"
 	AccountTagGetParamsResourceTypeGatewayRule            AccountTagGetParamsResourceType = "gateway_rule"
@@ -6817,7 +7119,7 @@ const (
 
 func (r AccountTagGetParamsResourceType) IsKnown() bool {
 	switch r {
-	case AccountTagGetParamsResourceTypeAccessApplication, AccountTagGetParamsResourceTypeAccessGroup, AccountTagGetParamsResourceTypeAccount, AccountTagGetParamsResourceTypeAccountRuleset, AccountTagGetParamsResourceTypeAIGateway, AccountTagGetParamsResourceTypeAlertingPolicy, AccountTagGetParamsResourceTypeAlertingWebhook, AccountTagGetParamsResourceTypeCloudflaredTunnel, AccountTagGetParamsResourceTypeCwsDeployment, AccountTagGetParamsResourceTypeCwsPolicy, AccountTagGetParamsResourceTypeCwsPolicySet, AccountTagGetParamsResourceTypeCwsWorkload, AccountTagGetParamsResourceTypeD1Database, AccountTagGetParamsResourceTypeDurableObjectNamespace, AccountTagGetParamsResourceTypeGatewayList, AccountTagGetParamsResourceTypeGatewayRule, AccountTagGetParamsResourceTypeImage, AccountTagGetParamsResourceTypeInfrastructureTarget, AccountTagGetParamsResourceTypeKVNamespace, AccountTagGetParamsResourceTypeLoadBalancerMonitor, AccountTagGetParamsResourceTypeLoadBalancerPool, AccountTagGetParamsResourceTypePagesProject, AccountTagGetParamsResourceTypeQueue, AccountTagGetParamsResourceTypeR2Bucket, AccountTagGetParamsResourceTypeResourceShare, AccountTagGetParamsResourceTypeStreamLiveInput, AccountTagGetParamsResourceTypeStreamVideo, AccountTagGetParamsResourceTypeVectorizeIndex, AccountTagGetParamsResourceTypeWorker, AccountTagGetParamsResourceTypeWorkerVersion:
+	case AccountTagGetParamsResourceTypeAccessApplication, AccountTagGetParamsResourceTypeAccessGroup, AccountTagGetParamsResourceTypeAccessServiceToken, AccountTagGetParamsResourceTypeAccount, AccountTagGetParamsResourceTypeAccountRuleset, AccountTagGetParamsResourceTypeAIGateway, AccountTagGetParamsResourceTypeAlertingPolicy, AccountTagGetParamsResourceTypeAlertingWebhook, AccountTagGetParamsResourceTypeCloudflaredTunnel, AccountTagGetParamsResourceTypeCwsDeployment, AccountTagGetParamsResourceTypeCwsPolicy, AccountTagGetParamsResourceTypeCwsPolicySet, AccountTagGetParamsResourceTypeCwsWorkload, AccountTagGetParamsResourceTypeD1Database, AccountTagGetParamsResourceTypeDevice, AccountTagGetParamsResourceTypeDurableObjectNamespace, AccountTagGetParamsResourceTypeGatewayList, AccountTagGetParamsResourceTypeGatewayRule, AccountTagGetParamsResourceTypeImage, AccountTagGetParamsResourceTypeInfrastructureTarget, AccountTagGetParamsResourceTypeKVNamespace, AccountTagGetParamsResourceTypeLoadBalancerMonitor, AccountTagGetParamsResourceTypeLoadBalancerPool, AccountTagGetParamsResourceTypePagesProject, AccountTagGetParamsResourceTypeQueue, AccountTagGetParamsResourceTypeR2Bucket, AccountTagGetParamsResourceTypeResourceShare, AccountTagGetParamsResourceTypeStreamLiveInput, AccountTagGetParamsResourceTypeStreamVideo, AccountTagGetParamsResourceTypeVectorizeIndex, AccountTagGetParamsResourceTypeWorker, AccountTagGetParamsResourceTypeWorkerVersion:
 		return true
 	}
 	return false

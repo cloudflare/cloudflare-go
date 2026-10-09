@@ -36,7 +36,7 @@ func TestResourceLibraryApplicationNewWithOptionalParams(t *testing.T) {
 			HumanID:        cloudflare.F("HR"),
 			IPSubnets:      cloudflare.F([]string{"192.168.1.0/24", "2001:db8::/48"}),
 			Name:           cloudflare.F("HR"),
-			PortProtocols:  cloudflare.F([]string{"tcp/80", "tcp/443"}),
+			PortProtocols:  cloudflare.F([]string{"tcp/443", "udp/10000-20000"}),
 			SupportDomains: cloudflare.F([]string{"example.com", "foo.com"}),
 		},
 	})
@@ -70,7 +70,7 @@ func TestResourceLibraryApplicationUpdateWithOptionalParams(t *testing.T) {
 			AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Hostnames:      cloudflare.F([]string{"example.com", "foo.com"}),
 			IPSubnets:      cloudflare.F([]string{"192.168.1.0/24", "2001:db8::/48"}),
-			PortProtocols:  cloudflare.F([]string{"tcp/80", "tcp/443"}),
+			PortProtocols:  cloudflare.F([]string{"tcp/443", "udp/10000-20000"}),
 			SupportDomains: cloudflare.F([]string{"example.com", "foo.com"}),
 		},
 	)
@@ -102,6 +102,7 @@ func TestResourceLibraryApplicationListWithOptionalParams(t *testing.T) {
 		Fields:    cloudflare.F("fields"),
 		Filter:    cloudflare.F("filter"),
 		Limit:     cloudflare.F(int64(0)),
+		Lookup:    cloudflare.F("xx"),
 		Offset:    cloudflare.F(int64(0)),
 		OrderBy:   cloudflare.F("order_by"),
 		Search:    cloudflare.F("xx"),

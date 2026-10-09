@@ -134,10 +134,9 @@ type SettingAccountNameserverSetNewResponse struct {
 	Advanced SettingAccountNameserverSetNewResponseAdvanced `json:"advanced" api:"required"`
 	// When the nameserver set was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Selects the account-specific IP set that supplies the nameserver addresses. The
-	// account's entitlement determines the maximum value. Nameserver sets with the
-	// same `ip_set` and `advanced` value may reuse addresses; otherwise, they use
-	// disjoint address groups.
+	// Selects the account-specific IP set that supplies the nameserver addresses.
+	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
+	// otherwise, they use disjoint address groups.
 	IPSet int64 `json:"ip_set" api:"required"`
 	// This field can have the runtime type of
 	// [[]SettingAccountNameserverSetNewResponseDNSSettingsNameserverSetStandardResponseNameserver],
@@ -212,10 +211,9 @@ type SettingAccountNameserverSetNewResponseDNSSettingsNameserverSetStandardRespo
 	Advanced SettingAccountNameserverSetNewResponseDNSSettingsNameserverSetStandardResponseAdvanced `json:"advanced" api:"required"`
 	// When the nameserver set was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Selects the account-specific IP set that supplies the nameserver addresses. The
-	// account's entitlement determines the maximum value. Nameserver sets with the
-	// same `ip_set` and `advanced` value may reuse addresses; otherwise, they use
-	// disjoint address groups.
+	// Selects the account-specific IP set that supplies the nameserver addresses.
+	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
+	// otherwise, they use disjoint address groups.
 	IPSet       int64                                                                                      `json:"ip_set" api:"required"`
 	Nameservers []SettingAccountNameserverSetNewResponseDNSSettingsNameserverSetStandardResponseNameserver `json:"nameservers" api:"required"`
 	JSON        settingAccountNameserverSetNewResponseDNSSettingsNameserverSetStandardResponseJSON         `json:"-"`
@@ -296,10 +294,9 @@ type SettingAccountNameserverSetNewResponseDNSSettingsNameserverSetAdvancedRespo
 	Advanced SettingAccountNameserverSetNewResponseDNSSettingsNameserverSetAdvancedResponseAdvanced `json:"advanced" api:"required"`
 	// When the nameserver set was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Selects the account-specific IP set that supplies the nameserver addresses. The
-	// account's entitlement determines the maximum value. Nameserver sets with the
-	// same `ip_set` and `advanced` value may reuse addresses; otherwise, they use
-	// disjoint address groups.
+	// Selects the account-specific IP set that supplies the nameserver addresses.
+	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
+	// otherwise, they use disjoint address groups.
 	IPSet       int64                                                                                      `json:"ip_set" api:"required"`
 	Nameservers []SettingAccountNameserverSetNewResponseDNSSettingsNameserverSetAdvancedResponseNameserver `json:"nameservers" api:"required"`
 	JSON        settingAccountNameserverSetNewResponseDNSSettingsNameserverSetAdvancedResponseJSON         `json:"-"`
@@ -436,10 +433,9 @@ type SettingAccountNameserverSetListResponse struct {
 	Advanced SettingAccountNameserverSetListResponseAdvanced `json:"advanced" api:"required"`
 	// When the nameserver set was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Selects the account-specific IP set that supplies the nameserver addresses. The
-	// account's entitlement determines the maximum value. Nameserver sets with the
-	// same `ip_set` and `advanced` value may reuse addresses; otherwise, they use
-	// disjoint address groups.
+	// Selects the account-specific IP set that supplies the nameserver addresses.
+	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
+	// otherwise, they use disjoint address groups.
 	IPSet int64 `json:"ip_set" api:"required"`
 	// This field can have the runtime type of
 	// [[]SettingAccountNameserverSetListResponseDNSSettingsNameserverSetStandardResponseNameserver],
@@ -514,10 +510,9 @@ type SettingAccountNameserverSetListResponseDNSSettingsNameserverSetStandardResp
 	Advanced SettingAccountNameserverSetListResponseDNSSettingsNameserverSetStandardResponseAdvanced `json:"advanced" api:"required"`
 	// When the nameserver set was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Selects the account-specific IP set that supplies the nameserver addresses. The
-	// account's entitlement determines the maximum value. Nameserver sets with the
-	// same `ip_set` and `advanced` value may reuse addresses; otherwise, they use
-	// disjoint address groups.
+	// Selects the account-specific IP set that supplies the nameserver addresses.
+	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
+	// otherwise, they use disjoint address groups.
 	IPSet       int64                                                                                       `json:"ip_set" api:"required"`
 	Nameservers []SettingAccountNameserverSetListResponseDNSSettingsNameserverSetStandardResponseNameserver `json:"nameservers" api:"required"`
 	JSON        settingAccountNameserverSetListResponseDNSSettingsNameserverSetStandardResponseJSON         `json:"-"`
@@ -598,10 +593,9 @@ type SettingAccountNameserverSetListResponseDNSSettingsNameserverSetAdvancedResp
 	Advanced SettingAccountNameserverSetListResponseDNSSettingsNameserverSetAdvancedResponseAdvanced `json:"advanced" api:"required"`
 	// When the nameserver set was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Selects the account-specific IP set that supplies the nameserver addresses. The
-	// account's entitlement determines the maximum value. Nameserver sets with the
-	// same `ip_set` and `advanced` value may reuse addresses; otherwise, they use
-	// disjoint address groups.
+	// Selects the account-specific IP set that supplies the nameserver addresses.
+	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
+	// otherwise, they use disjoint address groups.
 	IPSet       int64                                                                                       `json:"ip_set" api:"required"`
 	Nameservers []SettingAccountNameserverSetListResponseDNSSettingsNameserverSetAdvancedResponseNameserver `json:"nameservers" api:"required"`
 	JSON        settingAccountNameserverSetListResponseDNSSettingsNameserverSetAdvancedResponseJSON         `json:"-"`
@@ -760,10 +754,9 @@ type SettingAccountNameserverSetGetResponse struct {
 	Advanced SettingAccountNameserverSetGetResponseAdvanced `json:"advanced" api:"required"`
 	// When the nameserver set was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Selects the account-specific IP set that supplies the nameserver addresses. The
-	// account's entitlement determines the maximum value. Nameserver sets with the
-	// same `ip_set` and `advanced` value may reuse addresses; otherwise, they use
-	// disjoint address groups.
+	// Selects the account-specific IP set that supplies the nameserver addresses.
+	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
+	// otherwise, they use disjoint address groups.
 	IPSet int64 `json:"ip_set" api:"required"`
 	// This field can have the runtime type of
 	// [[]SettingAccountNameserverSetGetResponseDNSSettingsNameserverSetStandardResponseNameserver],
@@ -838,10 +831,9 @@ type SettingAccountNameserverSetGetResponseDNSSettingsNameserverSetStandardRespo
 	Advanced SettingAccountNameserverSetGetResponseDNSSettingsNameserverSetStandardResponseAdvanced `json:"advanced" api:"required"`
 	// When the nameserver set was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Selects the account-specific IP set that supplies the nameserver addresses. The
-	// account's entitlement determines the maximum value. Nameserver sets with the
-	// same `ip_set` and `advanced` value may reuse addresses; otherwise, they use
-	// disjoint address groups.
+	// Selects the account-specific IP set that supplies the nameserver addresses.
+	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
+	// otherwise, they use disjoint address groups.
 	IPSet       int64                                                                                      `json:"ip_set" api:"required"`
 	Nameservers []SettingAccountNameserverSetGetResponseDNSSettingsNameserverSetStandardResponseNameserver `json:"nameservers" api:"required"`
 	JSON        settingAccountNameserverSetGetResponseDNSSettingsNameserverSetStandardResponseJSON         `json:"-"`
@@ -922,10 +914,9 @@ type SettingAccountNameserverSetGetResponseDNSSettingsNameserverSetAdvancedRespo
 	Advanced SettingAccountNameserverSetGetResponseDNSSettingsNameserverSetAdvancedResponseAdvanced `json:"advanced" api:"required"`
 	// When the nameserver set was created.
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
-	// Selects the account-specific IP set that supplies the nameserver addresses. The
-	// account's entitlement determines the maximum value. Nameserver sets with the
-	// same `ip_set` and `advanced` value may reuse addresses; otherwise, they use
-	// disjoint address groups.
+	// Selects the account-specific IP set that supplies the nameserver addresses.
+	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
+	// otherwise, they use disjoint address groups.
 	IPSet       int64                                                                                      `json:"ip_set" api:"required"`
 	Nameservers []SettingAccountNameserverSetGetResponseDNSSettingsNameserverSetAdvancedResponseNameserver `json:"nameservers" api:"required"`
 	JSON        settingAccountNameserverSetGetResponseDNSSettingsNameserverSetAdvancedResponseJSON         `json:"-"`
@@ -1063,10 +1054,9 @@ type SettingAccountNameserverSetNewParams struct {
 	Nameservers param.Field[[]SettingAccountNameserverSetNewParamsNameserver] `json:"nameservers" api:"required"`
 	// Whether to allocate the nameservers from distinct Advanced anycast groups.
 	Advanced param.Field[bool] `json:"advanced"`
-	// Selects the account-specific IP set that supplies the nameserver addresses. The
-	// account's entitlement determines the maximum value. Nameserver sets with the
-	// same `ip_set` and `advanced` value may reuse addresses; otherwise, they use
-	// disjoint address groups.
+	// Selects the account-specific IP set that supplies the nameserver addresses.
+	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
+	// otherwise, they use disjoint address groups.
 	IPSet param.Field[int64] `json:"ip_set"`
 }
 

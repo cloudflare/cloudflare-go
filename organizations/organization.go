@@ -51,8 +51,10 @@ func NewOrganizationService(opts ...option.RequestOption) (r *OrganizationServic
 }
 
 // Create a new organization for a user. Sub-organization creation availability
-// depends on the organization's capabilities. (Currently in Public Beta - see
-// https://developers.cloudflare.com/fundamentals/organizations/)
+// depends on the organization's capabilities.
+//
+// Authentication: Use a Global API key, or a User API Token with the
+// `User Details Write` permission.
 func (r *OrganizationService) New(ctx context.Context, body OrganizationNewParams, opts ...option.RequestOption) (res *Organization, err error) {
 	var env OrganizationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -65,8 +67,11 @@ func (r *OrganizationService) New(ctx context.Context, body OrganizationNewParam
 	return res, nil
 }
 
-// Update an organization's name. (Currently in Public Beta - see
-// https://developers.cloudflare.com/fundamentals/organizations/)
+// Update an organization's name.
+//
+// Authentication: A Global API key for a user with
+// `com.cloudflare.api.tenant.unit.update` is required. User API Tokens are not
+// currently supported.
 func (r *OrganizationService) Update(ctx context.Context, organizationID string, body OrganizationUpdateParams, opts ...option.RequestOption) (res *Organization, err error) {
 	var env OrganizationUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -83,8 +88,10 @@ func (r *OrganizationService) Update(ctx context.Context, organizationID string,
 	return res, nil
 }
 
-// Retrieve a list of organizations a particular user has access to. (Currently in
-// Public Beta - see https://developers.cloudflare.com/fundamentals/organizations/)
+// Retrieve a list of organizations a particular user has access to.
+//
+// Authentication: Use a Global API key, or a User API Token with the
+// `User Details Read` or `User Details Write` permission.
 func (r *OrganizationService) List(ctx context.Context, query OrganizationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Organization], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -102,18 +109,23 @@ func (r *OrganizationService) List(ctx context.Context, query OrganizationListPa
 	return res, nil
 }
 
-// Retrieve a list of organizations a particular user has access to. (Currently in
-// Public Beta - see https://developers.cloudflare.com/fundamentals/organizations/)
+// Retrieve a list of organizations a particular user has access to.
+//
+// Authentication: Use a Global API key, or a User API Token with the
+// `User Details Read` or `User Details Write` permission.
 func (r *OrganizationService) ListAutoPaging(ctx context.Context, query OrganizationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Organization] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete an organization. The organization MUST be empty before deleting. It must
 // not contain any sub-organizations, accounts, members or users. Sub-organization
-// deletion availability depends on the organization's capabilities. (Currently in
-// Public Beta - see https://developers.cloudflare.com/fundamentals/organizations/)
+// deletion availability depends on the organization's capabilities.
 //
 // **Access Control:** Restricted to enterprise organizations.
+//
+// Authentication: A Global API key for a user with
+// `com.cloudflare.api.tenant.unit.update` is required. User API Tokens are not
+// currently supported.
 func (r *OrganizationService) Delete(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *OrganizationDeleteResponse, err error) {
 	var env OrganizationDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -130,8 +142,11 @@ func (r *OrganizationService) Delete(ctx context.Context, organizationID string,
 	return res, nil
 }
 
-// Retrieve the details of a certain organization. (Currently in Public Beta - see
-// https://developers.cloudflare.com/fundamentals/organizations/)
+// Retrieve the details of a certain organization.
+//
+// Authentication: A Global API key for a user with
+// `com.cloudflare.api.tenant.unit.read` is required. User API Tokens are not
+// currently supported and return HTTP `403` with error code `10000`.
 func (r *OrganizationService) Get(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *Organization, err error) {
 	var env OrganizationGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
