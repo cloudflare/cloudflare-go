@@ -1,0 +1,27 @@
+CHANGELOG.md
+  s_e393c339f979ae::t_82647905eec5f6 3-33
+.release-please-manifest.json
+  s_e393c339f979ae::t_82647905eec5f6 2
+docs/migration-guides/v7.13.0-migration-guide.md
+  s_e393c339f979ae::t_82647905eec5f6 1-125
+README.md
+  s_e393c339f979ae::t_82647905eec5f6 27
+internal/version.go
+  s_e393c339f979ae::t_82647905eec5f6 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "043efce6d83aadb7b9a6c9a22971338ff0976fa7",
+  "prompts": {},
+  "sessions": {
+    "s_e393c339f979ae": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_ede2c91afffeewQb5VQfap9xjI",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "rotem <rotem@cloudflare.com>"
+    }
+  }
+}
