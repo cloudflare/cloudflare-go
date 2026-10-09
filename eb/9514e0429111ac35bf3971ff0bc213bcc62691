@@ -1,0 +1,27 @@
+docs/migration-guides/v7.6.0-migration-guide.md
+  s_e393c339f979ae::t_67a980dd865bd3 1-132
+SECURITY.md
+  s_e393c339f979ae::t_67a980dd865bd3 1,28-29
+docs/migration-guides/v7.8.0-migration-guide.md
+  s_e393c339f979ae::t_67a980dd865bd3 1-318
+email_routing/rule_test.go
+  s_e393c339f979ae::t_67a980dd865bd3 33,37,76,80
+docs/migration-guides/v7.9.0-migration-guide.md
+  s_e393c339f979ae::t_67a980dd865bd3 1-285
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "eb9514e0429111ac35bf3971ff0bc213bcc62691",
+  "prompts": {},
+  "sessions": {
+    "s_e393c339f979ae": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_ede2c91afffeewQb5VQfap9xjI",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "rotem <rotem@cloudflare.com>"
+    }
+  }
+}
