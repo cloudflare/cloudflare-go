@@ -61,7 +61,11 @@ func TestNamespaceInstanceNewWithOptionalParams(t *testing.T) {
 			MaxNumResults: cloudflare.F(int64(1)),
 			Metadata: cloudflare.F(ai_search.NamespaceInstanceNewParamsMetadata{
 				CreatedFromAISearchWizard: cloudflare.F(true),
-				WorkerDomain:              cloudflare.F("worker_domain"),
+				CreatedFromEmdashPlugin: cloudflare.F(ai_search.NamespaceInstanceNewParamsMetadataCreatedFromEmdashPlugin{
+					Type:    cloudflare.F(ai_search.NamespaceInstanceNewParamsMetadataCreatedFromEmdashPluginTypeNative),
+					Version: cloudflare.F("version"),
+				}),
+				WorkerDomain: cloudflare.F("worker_domain"),
 			}),
 			PublicEndpointParams: cloudflare.F(ai_search.NamespaceInstanceNewParamsPublicEndpointParams{
 				AuthorizedHosts: cloudflare.F([]string{"string"}),
@@ -188,7 +192,11 @@ func TestNamespaceInstanceUpdateWithOptionalParams(t *testing.T) {
 			MaxNumResults: cloudflare.F(int64(1)),
 			Metadata: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsMetadata{
 				CreatedFromAISearchWizard: cloudflare.F(true),
-				WorkerDomain:              cloudflare.F("worker_domain"),
+				CreatedFromEmdashPlugin: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsMetadataCreatedFromEmdashPlugin{
+					Type:    cloudflare.F(ai_search.NamespaceInstanceUpdateParamsMetadataCreatedFromEmdashPluginTypeNative),
+					Version: cloudflare.F("version"),
+				}),
+				WorkerDomain: cloudflare.F("worker_domain"),
 			}),
 			Paused: cloudflare.F(true),
 			PublicEndpointParams: cloudflare.F(ai_search.NamespaceInstanceUpdateParamsPublicEndpointParams{
@@ -295,7 +303,6 @@ func TestNamespaceInstanceListWithOptionalParams(t *testing.T) {
 		ai_search.NamespaceInstanceListParams{
 			AccountID:        cloudflare.F("c3dc5f0b34a14ff8e1b3ec04895e1b22"),
 			Hostname:         cloudflare.F("x"),
-			Namespace:        cloudflare.F("namespace"),
 			OrderBy:          cloudflare.F(ai_search.NamespaceInstanceListParamsOrderByCreatedAt),
 			OrderByDirection: cloudflare.F(ai_search.NamespaceInstanceListParamsOrderByDirectionAsc),
 			Page:             cloudflare.F(int64(1)),

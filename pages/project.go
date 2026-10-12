@@ -737,6 +737,10 @@ type Project struct {
 	UsesFunctions bool `json:"uses_functions" api:"required,nullable"`
 	// Configs for the project build process.
 	BuildConfig ProjectBuildConfig `json:"build_config"`
+	// Present when the project is set to a retired build image major version and its
+	// builds have been moved to a newer one. `build_image_major_version` in
+	// `deployment_configs` then reports the version the builds run on.
+	BuildImageAutoUpgrade ProjectBuildImageAutoUpgrade `json:"build_image_auto_upgrade"`
 	// A list of associated custom domains for the project.
 	Domains []string `json:"domains"`
 	// Configs for the project source control.
@@ -748,24 +752,25 @@ type Project struct {
 
 // projectJSON contains the JSON metadata for the struct [Project]
 type projectJSON struct {
-	ID                   apijson.Field
-	CanonicalDeployment  apijson.Field
-	CreatedOn            apijson.Field
-	DeploymentConfigs    apijson.Field
-	Framework            apijson.Field
-	FrameworkVersion     apijson.Field
-	LatestDeployment     apijson.Field
-	Name                 apijson.Field
-	PreviewScriptName    apijson.Field
-	ProductionBranch     apijson.Field
-	ProductionScriptName apijson.Field
-	UsesFunctions        apijson.Field
-	BuildConfig          apijson.Field
-	Domains              apijson.Field
-	Source               apijson.Field
-	Subdomain            apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
+	ID                    apijson.Field
+	CanonicalDeployment   apijson.Field
+	CreatedOn             apijson.Field
+	DeploymentConfigs     apijson.Field
+	Framework             apijson.Field
+	FrameworkVersion      apijson.Field
+	LatestDeployment      apijson.Field
+	Name                  apijson.Field
+	PreviewScriptName     apijson.Field
+	ProductionBranch      apijson.Field
+	ProductionScriptName  apijson.Field
+	UsesFunctions         apijson.Field
+	BuildConfig           apijson.Field
+	BuildImageAutoUpgrade apijson.Field
+	Domains               apijson.Field
+	Source                apijson.Field
+	Subdomain             apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *Project) UnmarshalJSON(data []byte) (err error) {
@@ -806,7 +811,10 @@ func (r projectDeploymentConfigsJSON) RawJSON() string {
 type ProjectDeploymentConfigsPreview struct {
 	// Whether to always use the latest compatibility date for Pages Functions.
 	AlwaysUseLatestCompatibilityDate bool `json:"always_use_latest_compatibility_date" api:"required"`
-	// The major version of the build image to use for Pages Functions.
+	// The major version of the build image to use for Pages Functions. Version 1 is
+	// retired and its projects are moved to version 3. Once a project's builds have
+	// been moved, this is the version the builds run on and `build_image_auto_upgrade`
+	// is set on the project.
 	BuildImageMajorVersion int64 `json:"build_image_major_version" api:"required"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate string `json:"compatibility_date" api:"required"`
@@ -1402,7 +1410,10 @@ func (r projectDeploymentConfigsPreviewVectorizeBindingJSON) RawJSON() string {
 type ProjectDeploymentConfigsProduction struct {
 	// Whether to always use the latest compatibility date for Pages Functions.
 	AlwaysUseLatestCompatibilityDate bool `json:"always_use_latest_compatibility_date" api:"required"`
-	// The major version of the build image to use for Pages Functions.
+	// The major version of the build image to use for Pages Functions. Version 1 is
+	// retired and its projects are moved to version 3. Once a project's builds have
+	// been moved, this is the version the builds run on and `build_image_auto_upgrade`
+	// is set on the project.
 	BuildImageMajorVersion int64 `json:"build_image_major_version" api:"required"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate string `json:"compatibility_date" api:"required"`
@@ -2035,6 +2046,34 @@ func (r projectBuildConfigJSON) RawJSON() string {
 	return r.raw
 }
 
+// Present when the project is set to a retired build image major version and its
+// builds have been moved to a newer one. `build_image_major_version` in
+// `deployment_configs` then reports the version the builds run on.
+type ProjectBuildImageAutoUpgrade struct {
+	// The retired build image major version the project is set to.
+	FromVersion int64 `json:"from_version" api:"required"`
+	// The build image major version the project's builds run on.
+	ToVersion int64                            `json:"to_version" api:"required"`
+	JSON      projectBuildImageAutoUpgradeJSON `json:"-"`
+}
+
+// projectBuildImageAutoUpgradeJSON contains the JSON metadata for the struct
+// [ProjectBuildImageAutoUpgrade]
+type projectBuildImageAutoUpgradeJSON struct {
+	FromVersion apijson.Field
+	ToVersion   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectBuildImageAutoUpgrade) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectBuildImageAutoUpgradeJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configs for the project source control.
 type ProjectSource struct {
 	Config ProjectSourceConfig `json:"config" api:"required"`
@@ -2319,7 +2358,9 @@ type ProjectNewParamsDeploymentConfigsPreview struct {
 	AnalyticsEngineDatasets param.Field[map[string]ProjectNewParamsDeploymentConfigsPreviewAnalyticsEngineDatasets] `json:"analytics_engine_datasets"`
 	// Browser bindings used for Pages Functions.
 	Browsers param.Field[map[string]ProjectNewParamsDeploymentConfigsPreviewBrowsers] `json:"browsers"`
-	// The major version of the build image to use for Pages Functions.
+	// The major version of the build image to use for Pages Functions. Version 1 is
+	// retired and its projects are moved to version 3. Once a project's builds have
+	// been moved, a request that sets version 1 is rejected.
 	BuildImageMajorVersion param.Field[int64] `json:"build_image_major_version"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate param.Field[string] `json:"compatibility_date"`
@@ -2625,7 +2666,9 @@ type ProjectNewParamsDeploymentConfigsProduction struct {
 	AnalyticsEngineDatasets param.Field[map[string]ProjectNewParamsDeploymentConfigsProductionAnalyticsEngineDatasets] `json:"analytics_engine_datasets"`
 	// Browser bindings used for Pages Functions.
 	Browsers param.Field[map[string]ProjectNewParamsDeploymentConfigsProductionBrowsers] `json:"browsers"`
-	// The major version of the build image to use for Pages Functions.
+	// The major version of the build image to use for Pages Functions. Version 1 is
+	// retired and its projects are moved to version 3. Once a project's builds have
+	// been moved, a request that sets version 1 is rejected.
 	BuildImageMajorVersion param.Field[int64] `json:"build_image_major_version"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate param.Field[string] `json:"compatibility_date"`
@@ -3371,7 +3414,9 @@ type ProjectEditParamsDeploymentConfigsPreview struct {
 	AnalyticsEngineDatasets param.Field[map[string]ProjectEditParamsDeploymentConfigsPreviewAnalyticsEngineDatasets] `json:"analytics_engine_datasets"`
 	// Browser bindings used for Pages Functions.
 	Browsers param.Field[map[string]ProjectEditParamsDeploymentConfigsPreviewBrowsers] `json:"browsers"`
-	// The major version of the build image to use for Pages Functions.
+	// The major version of the build image to use for Pages Functions. Version 1 is
+	// retired and its projects are moved to version 3. Once a project's builds have
+	// been moved, a request that sets version 1 is rejected.
 	BuildImageMajorVersion param.Field[int64] `json:"build_image_major_version"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate param.Field[string] `json:"compatibility_date"`
@@ -3677,7 +3722,9 @@ type ProjectEditParamsDeploymentConfigsProduction struct {
 	AnalyticsEngineDatasets param.Field[map[string]ProjectEditParamsDeploymentConfigsProductionAnalyticsEngineDatasets] `json:"analytics_engine_datasets"`
 	// Browser bindings used for Pages Functions.
 	Browsers param.Field[map[string]ProjectEditParamsDeploymentConfigsProductionBrowsers] `json:"browsers"`
-	// The major version of the build image to use for Pages Functions.
+	// The major version of the build image to use for Pages Functions. Version 1 is
+	// retired and its projects are moved to version 3. Once a project's builds have
+	// been moved, a request that sets version 1 is rejected.
 	BuildImageMajorVersion param.Field[int64] `json:"build_image_major_version"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate param.Field[string] `json:"compatibility_date"`

@@ -93,6 +93,7 @@ const (
 	ValueListParamsTypeAccessApplication        ValueListParamsType = "access_application"
 	ValueListParamsTypeAccessApplicationPolicy  ValueListParamsType = "access_application_policy"
 	ValueListParamsTypeAccessGroup              ValueListParamsType = "access_group"
+	ValueListParamsTypeAccessServiceToken       ValueListParamsType = "access_service_token"
 	ValueListParamsTypeAccount                  ValueListParamsType = "account"
 	ValueListParamsTypeAccountRuleset           ValueListParamsType = "account_ruleset"
 	ValueListParamsTypeAIGateway                ValueListParamsType = "ai_gateway"
@@ -107,6 +108,7 @@ const (
 	ValueListParamsTypeCwsPolicySet             ValueListParamsType = "cws_policy_set"
 	ValueListParamsTypeCwsWorkload              ValueListParamsType = "cws_workload"
 	ValueListParamsTypeD1Database               ValueListParamsType = "d1_database"
+	ValueListParamsTypeDevice                   ValueListParamsType = "device"
 	ValueListParamsTypeDNSRecord                ValueListParamsType = "dns_record"
 	ValueListParamsTypeDurableObjectNamespace   ValueListParamsType = "durable_object_namespace"
 	ValueListParamsTypeGatewayList              ValueListParamsType = "gateway_list"
@@ -135,7 +137,7 @@ const (
 
 func (r ValueListParamsType) IsKnown() bool {
 	switch r {
-	case ValueListParamsTypeAccessApplication, ValueListParamsTypeAccessApplicationPolicy, ValueListParamsTypeAccessGroup, ValueListParamsTypeAccount, ValueListParamsTypeAccountRuleset, ValueListParamsTypeAIGateway, ValueListParamsTypeAlertingPolicy, ValueListParamsTypeAlertingWebhook, ValueListParamsTypeAPIGatewayOperation, ValueListParamsTypeCloudflaredTunnel, ValueListParamsTypeCustomCertificate, ValueListParamsTypeCustomHostname, ValueListParamsTypeCwsDeployment, ValueListParamsTypeCwsPolicy, ValueListParamsTypeCwsPolicySet, ValueListParamsTypeCwsWorkload, ValueListParamsTypeD1Database, ValueListParamsTypeDNSRecord, ValueListParamsTypeDurableObjectNamespace, ValueListParamsTypeGatewayList, ValueListParamsTypeGatewayRule, ValueListParamsTypeHealthcheck, ValueListParamsTypeImage, ValueListParamsTypeInfrastructureTarget, ValueListParamsTypeKVNamespace, ValueListParamsTypeLoadBalancer, ValueListParamsTypeLoadBalancerMonitor, ValueListParamsTypeLoadBalancerPool, ValueListParamsTypeManagedClientCertificate, ValueListParamsTypePagesProject, ValueListParamsTypeQueue, ValueListParamsTypeR2Bucket, ValueListParamsTypeResourceShare, ValueListParamsTypeStreamLiveInput, ValueListParamsTypeStreamVideo, ValueListParamsTypeVectorizeIndex, ValueListParamsTypeWorker, ValueListParamsTypeWorkerRoute, ValueListParamsTypeWorkerVersion, ValueListParamsTypeZone, ValueListParamsTypeZoneRuleset:
+	case ValueListParamsTypeAccessApplication, ValueListParamsTypeAccessApplicationPolicy, ValueListParamsTypeAccessGroup, ValueListParamsTypeAccessServiceToken, ValueListParamsTypeAccount, ValueListParamsTypeAccountRuleset, ValueListParamsTypeAIGateway, ValueListParamsTypeAlertingPolicy, ValueListParamsTypeAlertingWebhook, ValueListParamsTypeAPIGatewayOperation, ValueListParamsTypeCloudflaredTunnel, ValueListParamsTypeCustomCertificate, ValueListParamsTypeCustomHostname, ValueListParamsTypeCwsDeployment, ValueListParamsTypeCwsPolicy, ValueListParamsTypeCwsPolicySet, ValueListParamsTypeCwsWorkload, ValueListParamsTypeD1Database, ValueListParamsTypeDevice, ValueListParamsTypeDNSRecord, ValueListParamsTypeDurableObjectNamespace, ValueListParamsTypeGatewayList, ValueListParamsTypeGatewayRule, ValueListParamsTypeHealthcheck, ValueListParamsTypeImage, ValueListParamsTypeInfrastructureTarget, ValueListParamsTypeKVNamespace, ValueListParamsTypeLoadBalancer, ValueListParamsTypeLoadBalancerMonitor, ValueListParamsTypeLoadBalancerPool, ValueListParamsTypeManagedClientCertificate, ValueListParamsTypePagesProject, ValueListParamsTypeQueue, ValueListParamsTypeR2Bucket, ValueListParamsTypeResourceShare, ValueListParamsTypeStreamLiveInput, ValueListParamsTypeStreamVideo, ValueListParamsTypeVectorizeIndex, ValueListParamsTypeWorker, ValueListParamsTypeWorkerRoute, ValueListParamsTypeWorkerVersion, ValueListParamsTypeZone, ValueListParamsTypeZoneRuleset:
 		return true
 	}
 	return false

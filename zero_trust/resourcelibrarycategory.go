@@ -37,7 +37,8 @@ func NewResourceLibraryCategoryService(opts ...option.RequestOption) (r *Resourc
 	return
 }
 
-// List application categories.
+// List the categories available for classifying applications. Results are
+// paginated.
 func (r *ResourceLibraryCategoryService) List(ctx context.Context, params ResourceLibraryCategoryListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ResourceLibraryCategoryListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -59,12 +60,13 @@ func (r *ResourceLibraryCategoryService) List(ctx context.Context, params Resour
 	return res, nil
 }
 
-// List application categories.
+// List the categories available for classifying applications. Results are
+// paginated.
 func (r *ResourceLibraryCategoryService) ListAutoPaging(ctx context.Context, params ResourceLibraryCategoryListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ResourceLibraryCategoryListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
-// Get application category by ID.
+// Retrieve an application category by its numeric ID.
 func (r *ResourceLibraryCategoryService) Get(ctx context.Context, id int64, query ResourceLibraryCategoryGetParams, opts ...option.RequestOption) (res *ResourceLibraryCategoryGetResponse, err error) {
 	var env ResourceLibraryCategoryGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -82,7 +84,7 @@ func (r *ResourceLibraryCategoryService) Get(ctx context.Context, id int64, quer
 }
 
 type ResourceLibraryCategoryListResponse struct {
-	// Returns the category ID.
+	// Numeric identifier for an application category.
 	ID int64 `json:"id" api:"required"`
 	// Returns the category creation time.
 	CreatedAt string `json:"created_at" api:"required"`
@@ -113,7 +115,7 @@ func (r resourceLibraryCategoryListResponseJSON) RawJSON() string {
 }
 
 type ResourceLibraryCategoryGetResponse struct {
-	// Returns the category ID.
+	// Numeric identifier for an application category.
 	ID int64 `json:"id" api:"required"`
 	// Returns the category creation time.
 	CreatedAt string `json:"created_at" api:"required"`
@@ -145,9 +147,9 @@ func (r resourceLibraryCategoryGetResponseJSON) RawJSON() string {
 
 type ResourceLibraryCategoryListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Limit of number of results to return.
+	// Number of results to return. Defaults to 25; values are clamped to 1–250.
 	Limit param.Field[int64] `query:"limit"`
-	// Offset of results to return.
+	// Number of results to skip. Defaults to 0; negative values are clamped to 0.
 	Offset param.Field[int64] `query:"offset"`
 }
 

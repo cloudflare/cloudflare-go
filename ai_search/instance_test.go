@@ -58,7 +58,11 @@ func TestInstanceNewWithOptionalParams(t *testing.T) {
 		MaxNumResults: cloudflare.F(int64(1)),
 		Metadata: cloudflare.F(ai_search.InstanceNewParamsMetadata{
 			CreatedFromAISearchWizard: cloudflare.F(true),
-			WorkerDomain:              cloudflare.F("worker_domain"),
+			CreatedFromEmdashPlugin: cloudflare.F(ai_search.InstanceNewParamsMetadataCreatedFromEmdashPlugin{
+				Type:    cloudflare.F(ai_search.InstanceNewParamsMetadataCreatedFromEmdashPluginTypeNative),
+				Version: cloudflare.F("version"),
+			}),
+			WorkerDomain: cloudflare.F("worker_domain"),
 		}),
 		PublicEndpointParams: cloudflare.F(ai_search.InstanceNewParamsPublicEndpointParams{
 			AuthorizedHosts: cloudflare.F([]string{"string"}),
@@ -183,7 +187,11 @@ func TestInstanceUpdateWithOptionalParams(t *testing.T) {
 			MaxNumResults: cloudflare.F(int64(1)),
 			Metadata: cloudflare.F(ai_search.InstanceUpdateParamsMetadata{
 				CreatedFromAISearchWizard: cloudflare.F(true),
-				WorkerDomain:              cloudflare.F("worker_domain"),
+				CreatedFromEmdashPlugin: cloudflare.F(ai_search.InstanceUpdateParamsMetadataCreatedFromEmdashPlugin{
+					Type:    cloudflare.F(ai_search.InstanceUpdateParamsMetadataCreatedFromEmdashPluginTypeNative),
+					Version: cloudflare.F("version"),
+				}),
+				WorkerDomain: cloudflare.F("worker_domain"),
 			}),
 			Paused: cloudflare.F(true),
 			PublicEndpointParams: cloudflare.F(ai_search.InstanceUpdateParamsPublicEndpointParams{

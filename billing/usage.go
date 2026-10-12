@@ -48,8 +48,9 @@ func NewUsageService(opts ...option.RequestOption) (r *UsageService) {
 // includes all metered usage, including usage that falls within free-tier
 // allowances and may result in zero cost.
 //
-// **Note:** Cost and pricing fields are not yet populated and will be absent from
-// responses until billing integration is complete.
+// **Note:** This endpoint serves `usage` records only; cost and pricing fields are
+// absent from responses. To retrieve rated costs, use `POST` on the same path with
+// `Metric: cost`.
 //
 // When `from` and `to` are omitted, defaults to the start of the current month
 // through today. The maximum date range is 31 days.
@@ -115,8 +116,9 @@ func (r *UsageService) GetAccountUsageV1(ctx context.Context, params UsageGetAcc
 // includes all metered usage, including usage that falls within free-tier
 // allowances and may result in zero cost.
 //
-// **Note:** Cost and pricing fields are not yet populated and will be absent from
-// responses until billing integration is complete.
+// **Note:** This endpoint serves `usage` records only; cost and pricing fields are
+// absent from responses. To retrieve rated costs, use `POST` on the same path with
+// `Metric: cost`.
 //
 // When `from` and `to` are omitted, defaults to the start of the current month
 // through today. The maximum date range is 31 days.
@@ -190,9 +192,6 @@ type UsageGetResponse struct {
 	ChargePeriodEnd time.Time `json:"ChargePeriodEnd" api:"required" format:"date-time"`
 	// Inclusive start of the time interval during which the usage was consumed.
 	ChargePeriodStart time.Time `json:"ChargePeriodStart" api:"required" format:"date-time"`
-	// Measured usage amount within the charge period. Reflects raw metered consumption
-	// before pricing transformations.
-	ConsumedQuantity float64 `json:"ConsumedQuantity" api:"required"`
 	// Unit of measure for the consumed quantity (e.g., "GB", "Requests",
 	// "vCPU-Hours").
 	ConsumedUnit string `json:"ConsumedUnit" api:"required"`
@@ -226,6 +225,9 @@ type UsageGetResponse struct {
 	// Indicates whether the row represents a correction to one or more charges
 	// invoiced in a previous billing period.
 	ChargeClass UsageGetResponseChargeClass `json:"ChargeClass" api:"nullable"`
+	// Measured usage amount within the charge period. Reflects raw metered consumption
+	// before pricing transformations.
+	ConsumedQuantity float64 `json:"ConsumedQuantity"`
 	// Cost calculated by multiplying ContractedUnitPrice and the corresponding
 	// PricingQuantity.
 	ContractedCost float64 `json:"ContractedCost" api:"nullable"`
@@ -295,7 +297,6 @@ type usageGetResponseJSON struct {
 	ChargeFrequency      apijson.Field
 	ChargePeriodEnd      apijson.Field
 	ChargePeriodStart    apijson.Field
-	ConsumedQuantity     apijson.Field
 	ConsumedUnit         apijson.Field
 	HostProviderName     apijson.Field
 	InvoiceIssuerName    apijson.Field
@@ -308,6 +309,7 @@ type usageGetResponseJSON struct {
 	BillingPeriodEnd     apijson.Field
 	BillingPeriodStart   apijson.Field
 	ChargeClass          apijson.Field
+	ConsumedQuantity     apijson.Field
 	ContractedCost       apijson.Field
 	ContractedUnitPrice  apijson.Field
 	EffectiveCost        apijson.Field
@@ -648,9 +650,6 @@ type UsageGetAccountUsageV2Response struct {
 	ChargePeriodEnd time.Time `json:"ChargePeriodEnd" api:"required" format:"date-time"`
 	// Inclusive start of the time interval during which the usage was consumed.
 	ChargePeriodStart time.Time `json:"ChargePeriodStart" api:"required" format:"date-time"`
-	// Measured usage amount within the charge period. Reflects raw metered consumption
-	// before pricing transformations.
-	ConsumedQuantity float64 `json:"ConsumedQuantity" api:"required"`
 	// Unit of measure for the consumed quantity (e.g., "GB", "Requests",
 	// "vCPU-Hours").
 	ConsumedUnit string `json:"ConsumedUnit" api:"required"`
@@ -684,6 +683,9 @@ type UsageGetAccountUsageV2Response struct {
 	// Indicates whether the row represents a correction to one or more charges
 	// invoiced in a previous billing period.
 	ChargeClass UsageGetAccountUsageV2ResponseChargeClass `json:"ChargeClass" api:"nullable"`
+	// Measured usage amount within the charge period. Reflects raw metered consumption
+	// before pricing transformations.
+	ConsumedQuantity float64 `json:"ConsumedQuantity"`
 	// Cost calculated by multiplying ContractedUnitPrice and the corresponding
 	// PricingQuantity.
 	ContractedCost float64 `json:"ContractedCost" api:"nullable"`
@@ -753,7 +755,6 @@ type usageGetAccountUsageV2ResponseJSON struct {
 	ChargeFrequency      apijson.Field
 	ChargePeriodEnd      apijson.Field
 	ChargePeriodStart    apijson.Field
-	ConsumedQuantity     apijson.Field
 	ConsumedUnit         apijson.Field
 	HostProviderName     apijson.Field
 	InvoiceIssuerName    apijson.Field
@@ -766,6 +767,7 @@ type usageGetAccountUsageV2ResponseJSON struct {
 	BillingPeriodEnd     apijson.Field
 	BillingPeriodStart   apijson.Field
 	ChargeClass          apijson.Field
+	ConsumedQuantity     apijson.Field
 	ContractedCost       apijson.Field
 	ContractedUnitPrice  apijson.Field
 	EffectiveCost        apijson.Field

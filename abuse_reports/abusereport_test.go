@@ -91,6 +91,7 @@ func TestAbuseReportListWithOptionalParams(t *testing.T) {
 		MitigationStatus: cloudflare.F(abuse_reports.AbuseReportListParamsMitigationStatusPending),
 		Page:             cloudflare.F(int64(0)),
 		PerPage:          cloudflare.F(int64(0)),
+		Search:           cloudflare.F("search"),
 		Sort:             cloudflare.F("sort"),
 		Status:           cloudflare.F(abuse_reports.AbuseReportListParamsStatusAccepted),
 		Type:             cloudflare.F(abuse_reports.AbuseReportListParamsTypePhish),

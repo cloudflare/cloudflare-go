@@ -44,9 +44,9 @@ func NewInstanceService(opts ...option.RequestOption) (r *InstanceService) {
 }
 
 // Create a new AI Search instance with the given configuration. If type is omitted
-// or null, a non-blank HTTP(S) source infers web-crawler and an existing R2 bucket
-// source infers r2. A missing or blank source without a type creates a managed
-// upload-only instance. Search for Agents instances require the default namespace.
+// or null, a non-blank HTTP(S) source infers web-crawler and any other source
+// infers r2; r2 sources must name an existing bucket. A missing or blank source
+// without a type creates a managed upload-only instance.
 //
 // Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
 // (and descendant paths) instead.
@@ -68,10 +68,7 @@ func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opt
 	return res, nil
 }
 
-// Update an AI Search instance. Submitting Search for Agents metadata requires the
-// default namespace; omitting or removing it is allowed elsewhere. Submit Search
-// for Agents metadata and restrictive or unknown public endpoint changes or custom
-// domains in separate PUT requests, even when resubmitting unchanged metadata.
+// Update the configuration of an AI Search instance.
 //
 // Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
 // (and descendant paths) instead.
@@ -551,15 +548,17 @@ func (r InstanceNewResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceNewResponseMetadata struct {
-	CreatedFromAISearchWizard bool                            `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                          `json:"worker_domain"`
-	JSON                      instanceNewResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                               `json:"created_from_aisearch_wizard"`
+	CreatedFromEmdashPlugin   InstanceNewResponseMetadataCreatedFromEmdashPlugin `json:"created_from_emdash_plugin"`
+	WorkerDomain              string                                             `json:"worker_domain"`
+	JSON                      instanceNewResponseMetadataJSON                    `json:"-"`
 }
 
 // instanceNewResponseMetadataJSON contains the JSON metadata for the struct
 // [InstanceNewResponseMetadata]
 type instanceNewResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	CreatedFromEmdashPlugin   apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -571,6 +570,45 @@ func (r *InstanceNewResponseMetadata) UnmarshalJSON(data []byte) (err error) {
 
 func (r instanceNewResponseMetadataJSON) RawJSON() string {
 	return r.raw
+}
+
+type InstanceNewResponseMetadataCreatedFromEmdashPlugin struct {
+	Type        InstanceNewResponseMetadataCreatedFromEmdashPluginType `json:"type" api:"required"`
+	Version     string                                                 `json:"version" api:"required"`
+	ExtraFields map[string]interface{}                                 `json:"-" api:"extrafields"`
+	JSON        instanceNewResponseMetadataCreatedFromEmdashPluginJSON `json:"-"`
+}
+
+// instanceNewResponseMetadataCreatedFromEmdashPluginJSON contains the JSON
+// metadata for the struct [InstanceNewResponseMetadataCreatedFromEmdashPlugin]
+type instanceNewResponseMetadataCreatedFromEmdashPluginJSON struct {
+	Type        apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceNewResponseMetadataCreatedFromEmdashPlugin) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceNewResponseMetadataCreatedFromEmdashPluginJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceNewResponseMetadataCreatedFromEmdashPluginType string
+
+const (
+	InstanceNewResponseMetadataCreatedFromEmdashPluginTypeNative InstanceNewResponseMetadataCreatedFromEmdashPluginType = "native"
+	InstanceNewResponseMetadataCreatedFromEmdashPluginTypeRest   InstanceNewResponseMetadataCreatedFromEmdashPluginType = "rest"
+)
+
+func (r InstanceNewResponseMetadataCreatedFromEmdashPluginType) IsKnown() bool {
+	switch r {
+	case InstanceNewResponseMetadataCreatedFromEmdashPluginTypeNative, InstanceNewResponseMetadataCreatedFromEmdashPluginTypeRest:
+		return true
+	}
+	return false
 }
 
 type InstanceNewResponsePublicEndpointParams struct {
@@ -1371,15 +1409,17 @@ func (r InstanceUpdateResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceUpdateResponseMetadata struct {
-	CreatedFromAISearchWizard bool                               `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                             `json:"worker_domain"`
-	JSON                      instanceUpdateResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                                  `json:"created_from_aisearch_wizard"`
+	CreatedFromEmdashPlugin   InstanceUpdateResponseMetadataCreatedFromEmdashPlugin `json:"created_from_emdash_plugin"`
+	WorkerDomain              string                                                `json:"worker_domain"`
+	JSON                      instanceUpdateResponseMetadataJSON                    `json:"-"`
 }
 
 // instanceUpdateResponseMetadataJSON contains the JSON metadata for the struct
 // [InstanceUpdateResponseMetadata]
 type instanceUpdateResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	CreatedFromEmdashPlugin   apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -1391,6 +1431,45 @@ func (r *InstanceUpdateResponseMetadata) UnmarshalJSON(data []byte) (err error) 
 
 func (r instanceUpdateResponseMetadataJSON) RawJSON() string {
 	return r.raw
+}
+
+type InstanceUpdateResponseMetadataCreatedFromEmdashPlugin struct {
+	Type        InstanceUpdateResponseMetadataCreatedFromEmdashPluginType `json:"type" api:"required"`
+	Version     string                                                    `json:"version" api:"required"`
+	ExtraFields map[string]interface{}                                    `json:"-" api:"extrafields"`
+	JSON        instanceUpdateResponseMetadataCreatedFromEmdashPluginJSON `json:"-"`
+}
+
+// instanceUpdateResponseMetadataCreatedFromEmdashPluginJSON contains the JSON
+// metadata for the struct [InstanceUpdateResponseMetadataCreatedFromEmdashPlugin]
+type instanceUpdateResponseMetadataCreatedFromEmdashPluginJSON struct {
+	Type        apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceUpdateResponseMetadataCreatedFromEmdashPlugin) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceUpdateResponseMetadataCreatedFromEmdashPluginJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceUpdateResponseMetadataCreatedFromEmdashPluginType string
+
+const (
+	InstanceUpdateResponseMetadataCreatedFromEmdashPluginTypeNative InstanceUpdateResponseMetadataCreatedFromEmdashPluginType = "native"
+	InstanceUpdateResponseMetadataCreatedFromEmdashPluginTypeRest   InstanceUpdateResponseMetadataCreatedFromEmdashPluginType = "rest"
+)
+
+func (r InstanceUpdateResponseMetadataCreatedFromEmdashPluginType) IsKnown() bool {
+	switch r {
+	case InstanceUpdateResponseMetadataCreatedFromEmdashPluginTypeNative, InstanceUpdateResponseMetadataCreatedFromEmdashPluginTypeRest:
+		return true
+	}
+	return false
 }
 
 type InstanceUpdateResponsePublicEndpointParams struct {
@@ -2171,16 +2250,18 @@ func (r InstanceListResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceListResponseMetadata struct {
-	CreatedFromAISearchWizard bool                             `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                           `json:"worker_domain"`
-	ExtraFields               map[string]interface{}           `json:"-" api:"extrafields"`
-	JSON                      instanceListResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                                `json:"created_from_aisearch_wizard"`
+	CreatedFromEmdashPlugin   InstanceListResponseMetadataCreatedFromEmdashPlugin `json:"created_from_emdash_plugin"`
+	WorkerDomain              string                                              `json:"worker_domain"`
+	ExtraFields               map[string]interface{}                              `json:"-" api:"extrafields"`
+	JSON                      instanceListResponseMetadataJSON                    `json:"-"`
 }
 
 // instanceListResponseMetadataJSON contains the JSON metadata for the struct
 // [InstanceListResponseMetadata]
 type instanceListResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	CreatedFromEmdashPlugin   apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -2192,6 +2273,45 @@ func (r *InstanceListResponseMetadata) UnmarshalJSON(data []byte) (err error) {
 
 func (r instanceListResponseMetadataJSON) RawJSON() string {
 	return r.raw
+}
+
+type InstanceListResponseMetadataCreatedFromEmdashPlugin struct {
+	Type        InstanceListResponseMetadataCreatedFromEmdashPluginType `json:"type" api:"required"`
+	Version     string                                                  `json:"version" api:"required"`
+	ExtraFields map[string]interface{}                                  `json:"-" api:"extrafields"`
+	JSON        instanceListResponseMetadataCreatedFromEmdashPluginJSON `json:"-"`
+}
+
+// instanceListResponseMetadataCreatedFromEmdashPluginJSON contains the JSON
+// metadata for the struct [InstanceListResponseMetadataCreatedFromEmdashPlugin]
+type instanceListResponseMetadataCreatedFromEmdashPluginJSON struct {
+	Type        apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceListResponseMetadataCreatedFromEmdashPlugin) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceListResponseMetadataCreatedFromEmdashPluginJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceListResponseMetadataCreatedFromEmdashPluginType string
+
+const (
+	InstanceListResponseMetadataCreatedFromEmdashPluginTypeNative InstanceListResponseMetadataCreatedFromEmdashPluginType = "native"
+	InstanceListResponseMetadataCreatedFromEmdashPluginTypeRest   InstanceListResponseMetadataCreatedFromEmdashPluginType = "rest"
+)
+
+func (r InstanceListResponseMetadataCreatedFromEmdashPluginType) IsKnown() bool {
+	switch r {
+	case InstanceListResponseMetadataCreatedFromEmdashPluginTypeNative, InstanceListResponseMetadataCreatedFromEmdashPluginTypeRest:
+		return true
+	}
+	return false
 }
 
 type InstanceListResponsePublicEndpointParams struct {
@@ -2943,15 +3063,17 @@ func (r InstanceDeleteResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceDeleteResponseMetadata struct {
-	CreatedFromAISearchWizard bool                               `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                             `json:"worker_domain"`
-	JSON                      instanceDeleteResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                                  `json:"created_from_aisearch_wizard"`
+	CreatedFromEmdashPlugin   InstanceDeleteResponseMetadataCreatedFromEmdashPlugin `json:"created_from_emdash_plugin"`
+	WorkerDomain              string                                                `json:"worker_domain"`
+	JSON                      instanceDeleteResponseMetadataJSON                    `json:"-"`
 }
 
 // instanceDeleteResponseMetadataJSON contains the JSON metadata for the struct
 // [InstanceDeleteResponseMetadata]
 type instanceDeleteResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	CreatedFromEmdashPlugin   apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -2963,6 +3085,45 @@ func (r *InstanceDeleteResponseMetadata) UnmarshalJSON(data []byte) (err error) 
 
 func (r instanceDeleteResponseMetadataJSON) RawJSON() string {
 	return r.raw
+}
+
+type InstanceDeleteResponseMetadataCreatedFromEmdashPlugin struct {
+	Type        InstanceDeleteResponseMetadataCreatedFromEmdashPluginType `json:"type" api:"required"`
+	Version     string                                                    `json:"version" api:"required"`
+	ExtraFields map[string]interface{}                                    `json:"-" api:"extrafields"`
+	JSON        instanceDeleteResponseMetadataCreatedFromEmdashPluginJSON `json:"-"`
+}
+
+// instanceDeleteResponseMetadataCreatedFromEmdashPluginJSON contains the JSON
+// metadata for the struct [InstanceDeleteResponseMetadataCreatedFromEmdashPlugin]
+type instanceDeleteResponseMetadataCreatedFromEmdashPluginJSON struct {
+	Type        apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceDeleteResponseMetadataCreatedFromEmdashPlugin) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceDeleteResponseMetadataCreatedFromEmdashPluginJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceDeleteResponseMetadataCreatedFromEmdashPluginType string
+
+const (
+	InstanceDeleteResponseMetadataCreatedFromEmdashPluginTypeNative InstanceDeleteResponseMetadataCreatedFromEmdashPluginType = "native"
+	InstanceDeleteResponseMetadataCreatedFromEmdashPluginTypeRest   InstanceDeleteResponseMetadataCreatedFromEmdashPluginType = "rest"
+)
+
+func (r InstanceDeleteResponseMetadataCreatedFromEmdashPluginType) IsKnown() bool {
+	switch r {
+	case InstanceDeleteResponseMetadataCreatedFromEmdashPluginTypeNative, InstanceDeleteResponseMetadataCreatedFromEmdashPluginTypeRest:
+		return true
+	}
+	return false
 }
 
 type InstanceDeleteResponsePublicEndpointParams struct {
@@ -4127,15 +4288,17 @@ func (r InstanceReadResponseIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceReadResponseMetadata struct {
-	CreatedFromAISearchWizard bool                             `json:"created_from_aisearch_wizard"`
-	WorkerDomain              string                           `json:"worker_domain"`
-	JSON                      instanceReadResponseMetadataJSON `json:"-"`
+	CreatedFromAISearchWizard bool                                                `json:"created_from_aisearch_wizard"`
+	CreatedFromEmdashPlugin   InstanceReadResponseMetadataCreatedFromEmdashPlugin `json:"created_from_emdash_plugin"`
+	WorkerDomain              string                                              `json:"worker_domain"`
+	JSON                      instanceReadResponseMetadataJSON                    `json:"-"`
 }
 
 // instanceReadResponseMetadataJSON contains the JSON metadata for the struct
 // [InstanceReadResponseMetadata]
 type instanceReadResponseMetadataJSON struct {
 	CreatedFromAISearchWizard apijson.Field
+	CreatedFromEmdashPlugin   apijson.Field
 	WorkerDomain              apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -4147,6 +4310,45 @@ func (r *InstanceReadResponseMetadata) UnmarshalJSON(data []byte) (err error) {
 
 func (r instanceReadResponseMetadataJSON) RawJSON() string {
 	return r.raw
+}
+
+type InstanceReadResponseMetadataCreatedFromEmdashPlugin struct {
+	Type        InstanceReadResponseMetadataCreatedFromEmdashPluginType `json:"type" api:"required"`
+	Version     string                                                  `json:"version" api:"required"`
+	ExtraFields map[string]interface{}                                  `json:"-" api:"extrafields"`
+	JSON        instanceReadResponseMetadataCreatedFromEmdashPluginJSON `json:"-"`
+}
+
+// instanceReadResponseMetadataCreatedFromEmdashPluginJSON contains the JSON
+// metadata for the struct [InstanceReadResponseMetadataCreatedFromEmdashPlugin]
+type instanceReadResponseMetadataCreatedFromEmdashPluginJSON struct {
+	Type        apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *InstanceReadResponseMetadataCreatedFromEmdashPlugin) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r instanceReadResponseMetadataCreatedFromEmdashPluginJSON) RawJSON() string {
+	return r.raw
+}
+
+type InstanceReadResponseMetadataCreatedFromEmdashPluginType string
+
+const (
+	InstanceReadResponseMetadataCreatedFromEmdashPluginTypeNative InstanceReadResponseMetadataCreatedFromEmdashPluginType = "native"
+	InstanceReadResponseMetadataCreatedFromEmdashPluginTypeRest   InstanceReadResponseMetadataCreatedFromEmdashPluginType = "rest"
+)
+
+func (r InstanceReadResponseMetadataCreatedFromEmdashPluginType) IsKnown() bool {
+	switch r {
+	case InstanceReadResponseMetadataCreatedFromEmdashPluginTypeNative, InstanceReadResponseMetadataCreatedFromEmdashPluginTypeRest:
+		return true
+	}
+	return false
 }
 
 type InstanceReadResponsePublicEndpointParams struct {
@@ -5106,12 +5308,38 @@ func (r InstanceNewParamsIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceNewParamsMetadata struct {
-	CreatedFromAISearchWizard param.Field[bool]   `json:"created_from_aisearch_wizard"`
-	WorkerDomain              param.Field[string] `json:"worker_domain"`
+	CreatedFromAISearchWizard param.Field[bool]                                             `json:"created_from_aisearch_wizard"`
+	CreatedFromEmdashPlugin   param.Field[InstanceNewParamsMetadataCreatedFromEmdashPlugin] `json:"created_from_emdash_plugin"`
+	WorkerDomain              param.Field[string]                                           `json:"worker_domain"`
 }
 
 func (r InstanceNewParamsMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type InstanceNewParamsMetadataCreatedFromEmdashPlugin struct {
+	Type        param.Field[InstanceNewParamsMetadataCreatedFromEmdashPluginType] `json:"type" api:"required"`
+	Version     param.Field[string]                                               `json:"version" api:"required"`
+	ExtraFields map[string]interface{}                                            `json:"-,extras"`
+}
+
+func (r InstanceNewParamsMetadataCreatedFromEmdashPlugin) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceNewParamsMetadataCreatedFromEmdashPluginType string
+
+const (
+	InstanceNewParamsMetadataCreatedFromEmdashPluginTypeNative InstanceNewParamsMetadataCreatedFromEmdashPluginType = "native"
+	InstanceNewParamsMetadataCreatedFromEmdashPluginTypeRest   InstanceNewParamsMetadataCreatedFromEmdashPluginType = "rest"
+)
+
+func (r InstanceNewParamsMetadataCreatedFromEmdashPluginType) IsKnown() bool {
+	switch r {
+	case InstanceNewParamsMetadataCreatedFromEmdashPluginTypeNative, InstanceNewParamsMetadataCreatedFromEmdashPluginTypeRest:
+		return true
+	}
+	return false
 }
 
 type InstanceNewParamsPublicEndpointParams struct {
@@ -5641,12 +5869,38 @@ func (r InstanceUpdateParamsIndexingOptionsKeywordTokenizer) IsKnown() bool {
 }
 
 type InstanceUpdateParamsMetadata struct {
-	CreatedFromAISearchWizard param.Field[bool]   `json:"created_from_aisearch_wizard"`
-	WorkerDomain              param.Field[string] `json:"worker_domain"`
+	CreatedFromAISearchWizard param.Field[bool]                                                `json:"created_from_aisearch_wizard"`
+	CreatedFromEmdashPlugin   param.Field[InstanceUpdateParamsMetadataCreatedFromEmdashPlugin] `json:"created_from_emdash_plugin"`
+	WorkerDomain              param.Field[string]                                              `json:"worker_domain"`
 }
 
 func (r InstanceUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type InstanceUpdateParamsMetadataCreatedFromEmdashPlugin struct {
+	Type        param.Field[InstanceUpdateParamsMetadataCreatedFromEmdashPluginType] `json:"type" api:"required"`
+	Version     param.Field[string]                                                  `json:"version" api:"required"`
+	ExtraFields map[string]interface{}                                               `json:"-,extras"`
+}
+
+func (r InstanceUpdateParamsMetadataCreatedFromEmdashPlugin) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type InstanceUpdateParamsMetadataCreatedFromEmdashPluginType string
+
+const (
+	InstanceUpdateParamsMetadataCreatedFromEmdashPluginTypeNative InstanceUpdateParamsMetadataCreatedFromEmdashPluginType = "native"
+	InstanceUpdateParamsMetadataCreatedFromEmdashPluginTypeRest   InstanceUpdateParamsMetadataCreatedFromEmdashPluginType = "rest"
+)
+
+func (r InstanceUpdateParamsMetadataCreatedFromEmdashPluginType) IsKnown() bool {
+	switch r {
+	case InstanceUpdateParamsMetadataCreatedFromEmdashPluginTypeNative, InstanceUpdateParamsMetadataCreatedFromEmdashPluginTypeRest:
+		return true
+	}
+	return false
 }
 
 type InstanceUpdateParamsPublicEndpointParams struct {

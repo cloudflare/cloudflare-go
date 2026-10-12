@@ -160,7 +160,7 @@ type SettingsPolicy struct {
 	// The wirefilter expression to match devices. Available values: "identity.email",
 	// "identity.groups.id", "identity.groups.name", "identity.groups.email",
 	// "identity.service_token_uuid", "identity.saml_attributes", "network", "os.name",
-	// "os.version".
+	// "os.version", "device.tags".
 	Match string `json:"match"`
 	// The name of the device settings profile.
 	Name     string `json:"name"`
@@ -181,8 +181,9 @@ type SettingsPolicy struct {
 	// The URL to launch when the Send Feedback button is clicked.
 	SupportURL string `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
-	SwitchLocked bool                       `json:"switch_locked"`
-	TargetTests  []SettingsPolicyTargetTest `json:"target_tests"`
+	SwitchLocked bool `json:"switch_locked"`
+	// Deprecated: deprecated
+	TargetTests []SettingsPolicyTargetTest `json:"target_tests"`
 	// Determines which tunnel protocol to use.
 	TunnelProtocol string `json:"tunnel_protocol"`
 	// Determines whether uninstalling the WARP client requires an override code.

@@ -1645,6 +1645,11 @@ type AbuseReportListParams struct {
 	Page param.Field[int64] `query:"page"`
 	// How many abuse reports per page to list
 	PerPage param.Field[int64] `query:"per_page"`
+	// Free-text search. Returns reports whose report ID starts with the term or whose
+	// domain contains the term, both case-insensitively. Surrounding whitespace is
+	// ignored, and an empty value is treated as absent. Combined with the other
+	// filters using AND.
+	Search param.Field[string] `query:"search"`
 	// A property to sort by, followed by the order (id, cdate, domain, type, status)
 	Sort param.Field[string] `query:"sort"`
 	// Filter by the status of the report.

@@ -35,8 +35,8 @@ func NewTunnelWARPConnectorFailoverService(opts ...option.RequestOption) (r *Tun
 	return
 }
 
-// Triggers a manual failover for a specific WARP Connector Tunnel, setting the
-// specified client as the active connector. The tunnel must be configured for high
+// Triggers a manual failover for a specific Mesh node, setting the specified
+// client as the active connector. The tunnel must be configured for high
 // availability (HA) and the client must be linked to the tunnel.
 func (r *TunnelWARPConnectorFailoverService) Update(ctx context.Context, tunnelID string, params TunnelWARPConnectorFailoverUpdateParams, opts ...option.RequestOption) (res *TunnelWARPConnectorFailoverUpdateResponse, err error) {
 	var env TunnelWARPConnectorFailoverUpdateResponseEnvelope

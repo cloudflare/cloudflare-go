@@ -393,6 +393,7 @@ TEST_PATHS=(
 	magic_cloud_networking/onrampaddressspace_test.go
 	magic_cloud_networking/cloudintegration_test.go
 	magic_cloud_networking/resource_test.go
+	monetization/rule_test.go
 	network_interconnects/cni_test.go
 	network_interconnects/interconnect_test.go
 	network_interconnects/setting_test.go
@@ -406,7 +407,6 @@ TEST_PATHS=(
 	pages/projectdomain_test.go
 	pages/asset_test.go
 	registrar/registrar_test.go
-	registrar/domain_test.go
 	registrar/registration_test.go
 	registrar/registrationstatus_test.go
 	registrar/updatestatus_test.go
@@ -940,6 +940,8 @@ TEST_PATHS=(
 	pipelines/pipeline_test.go
 	pipelines/sink_test.go
 	pipelines/stream_test.go
+	k2/stream_test.go
+	k2/streamsubscription_test.go
 	schema_validation/schema_test.go
 	schema_validation/setting_test.go
 	schema_validation/settingoperation_test.go

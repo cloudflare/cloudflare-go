@@ -1950,16 +1950,26 @@ type AccessAIControlMcpServerNewParams struct {
 	Hostname param.Field[string] `json:"hostname" api:"required" format:"uri"`
 	// Display name for the MCP server.
 	Name param.Field[string] `json:"name" api:"required"`
-	// Static credential for the upstream MCP server. For auth_type "bearer", either a
-	// raw token string (e.g. "sk-abc123"), which is wrapped server-side as
+	// Credential configuration for the upstream MCP server. For auth_type "bearer",
+	// either a raw token string (e.g. "sk-abc123"), which is wrapped server-side as
 	// `Authorization: Bearer <token>`, or a JSON-encoded object of the form
 	// `{"headers":{"Header-Name":"value",...}}` for custom or multiple static headers
 	// (e.g. Cloudflare Access service tokens:
 	// `{"headers":{"cf-access-client-id":"...","cf-access-client-secret":"..."}}`).
+	// For auth_type "oauth" with a pre-registered client, send a JSON-encoded object
+	// containing `auth_mode:"manual"`, `config.authorization_endpoint`,
+	// `config.token_endpoint`, and `registration_info.client_id`. Also provide
+	// `registration_info.redirect_uris` unless `is_shared_oauth_callback_enabled` is
+	// true. Optional fields include `config.issuer`, `config.revocation_endpoint`,
+	// `registration_info.scope`, and `registration_info.token_endpoint_auth_method`.
+	// Send the client secret in the separate `client_secret` field. Omit
+	// `auth_credentials` on update to preserve the existing configuration.
 	AuthCredentials param.Field[string] `json:"auth_credentials"`
 	// Pre-registered OAuth client_secret. Write-only - accepted on create/update when
-	// auth_credentials.auth_mode is 'manual'. Stored AES-GCM-encrypted in
-	// server_oauth_secrets; never returned by read endpoints.
+	// auth_credentials.auth_mode is 'manual'. Required when creating a manual OAuth
+	// server or converting an existing server to manual mode. Omit it on update to
+	// preserve the existing secret; provide it to rotate the secret. Stored
+	// AES-GCM-encrypted in server_oauth_secrets; never returned by read endpoints.
 	ClientSecret param.Field[string] `json:"client_secret"`
 	// Optional description of the MCP server.
 	Description param.Field[string] `json:"description"`
@@ -2052,16 +2062,26 @@ func (r accessAIControlMcpServerNewResponseEnvelopeJSON) RawJSON() string {
 
 type AccessAIControlMcpServerUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Static credential for the upstream MCP server. For auth_type "bearer", either a
-	// raw token string (e.g. "sk-abc123"), which is wrapped server-side as
+	// Credential configuration for the upstream MCP server. For auth_type "bearer",
+	// either a raw token string (e.g. "sk-abc123"), which is wrapped server-side as
 	// `Authorization: Bearer <token>`, or a JSON-encoded object of the form
 	// `{"headers":{"Header-Name":"value",...}}` for custom or multiple static headers
 	// (e.g. Cloudflare Access service tokens:
 	// `{"headers":{"cf-access-client-id":"...","cf-access-client-secret":"..."}}`).
+	// For auth_type "oauth" with a pre-registered client, send a JSON-encoded object
+	// containing `auth_mode:"manual"`, `config.authorization_endpoint`,
+	// `config.token_endpoint`, and `registration_info.client_id`. Also provide
+	// `registration_info.redirect_uris` unless `is_shared_oauth_callback_enabled` is
+	// true. Optional fields include `config.issuer`, `config.revocation_endpoint`,
+	// `registration_info.scope`, and `registration_info.token_endpoint_auth_method`.
+	// Send the client secret in the separate `client_secret` field. Omit
+	// `auth_credentials` on update to preserve the existing configuration.
 	AuthCredentials param.Field[string] `json:"auth_credentials"`
 	// Pre-registered OAuth client_secret. Write-only - accepted on create/update when
-	// auth_credentials.auth_mode is 'manual'. Stored AES-GCM-encrypted in
-	// server_oauth_secrets; never returned by read endpoints.
+	// auth_credentials.auth_mode is 'manual'. Required when creating a manual OAuth
+	// server or converting an existing server to manual mode. Omit it on update to
+	// preserve the existing secret; provide it to rotate the secret. Stored
+	// AES-GCM-encrypted in server_oauth_secrets; never returned by read endpoints.
 	ClientSecret param.Field[string] `json:"client_secret"`
 	// Optional description of the MCP server.
 	Description param.Field[string] `json:"description"`

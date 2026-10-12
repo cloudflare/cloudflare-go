@@ -11,7 +11,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 	"github.com/cloudflare/cloudflare-go/v7/zero_trust"
 )
 
@@ -31,150 +30,34 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Applications.New(context.TODO(), zero_trust.AccessApplicationNewParams{
-		Body: zero_trust.AccessApplicationNewParamsBodySelfHostedApplication{
-			Domain:                   cloudflare.F("test.example.com/admin"),
-			Type:                     cloudflare.F(zero_trust.ApplicationTypeSelfHosted),
-			AllowAuthenticateViaWARP: cloudflare.F(true),
-			AllowIframe:              cloudflare.F(true),
-			AllowedIdPs:              cloudflare.F([]zero_trust.AllowedIdPsParam{"699d98642c564d2e855e9661899b7252"}),
-			AppLauncherVisible:       cloudflare.F(true),
-			AutoRedirectToIdentity:   cloudflare.F(true),
-			CORSHeaders: cloudflare.F(zero_trust.CORSHeadersParam{
-				AllowAllHeaders:  cloudflare.F(true),
-				AllowAllMethods:  cloudflare.F(true),
-				AllowAllOrigins:  cloudflare.F(true),
-				AllowCredentials: cloudflare.F(true),
-				AllowedHeaders:   cloudflare.F([]zero_trust.AllowedHeadersParam{"string"}),
-				AllowedMethods:   cloudflare.F([]zero_trust.AllowedMethods{zero_trust.AllowedMethodsGet}),
-				AllowedOrigins:   cloudflare.F([]zero_trust.AllowedOriginsParam{"https://example.com"}),
-				MaxAge:           cloudflare.F(-1.000000),
-			}),
-			CustomDenyMessage:        cloudflare.F("custom_deny_message"),
-			CustomDenyURL:            cloudflare.F("custom_deny_url"),
-			CustomNonIdentityDenyURL: cloudflare.F("custom_non_identity_deny_url"),
-			CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252"}),
-			Destinations: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationUnion{zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestination{
-				Overrides: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationOverride{{
-					Behavior:    cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic),
-					PathPattern: cloudflare.F("/health/*"),
-				}}),
-				Type: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationTypePublic),
-				URI:  cloudflare.F("test.example.com/admin"),
-			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestination{
-				Overrides: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationOverride{{
-					Behavior:    cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic),
-					PathPattern: cloudflare.F("/health/*"),
-				}}),
-				Type: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPublicDestinationTypePublic),
-				URI:  cloudflare.F("test.anotherexample.com/staff"),
-			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestination{
-				CIDR:       cloudflare.F("10.5.0.0/24"),
-				Hostname:   cloudflare.F("hostname"),
-				L4Protocol: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP),
-				PortRange:  cloudflare.F("80-90"),
-				Type:       cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate),
-				VnetID:     cloudflare.F("vnet_id"),
-			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestination{
-				CIDR:       cloudflare.F("10.5.0.3/32"),
-				Hostname:   cloudflare.F("hostname"),
-				L4Protocol: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP),
-				PortRange:  cloudflare.F("80"),
-				Type:       cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate),
-				VnetID:     cloudflare.F("vnet_id"),
-			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestination{
-				CIDR:       cloudflare.F("cidr"),
-				Hostname:   cloudflare.F("private-sni.example.com"),
-				L4Protocol: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP),
-				PortRange:  cloudflare.F("port_range"),
-				Type:       cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate),
-				VnetID:     cloudflare.F("vnet_id"),
-			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestination{
-				McpServerID: cloudflare.F("mcp-server-1"),
-				Type:        cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal),
-			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestination{
-				Type:     cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationTypeWorker),
-				WorkerID: cloudflare.F("617f1d0431a98306ff61e336d79fce86"),
-				Overrides: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverride{{
-					Behavior:    cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverridesBehaviorPublic),
-					PathPattern: cloudflare.F("/health/*"),
-				}}),
-			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestination{
-				Type:     cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker),
-				WorkerID: cloudflare.F("617f1d0431a98306ff61e336d79fce86"),
-				Overrides: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverride{{
-					Behavior:    cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic),
-					PathPattern: cloudflare.F("/health/*"),
-				}}),
-			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestination{
-				Type: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationTypeAllWorkers),
-				Overrides: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverride{{
-					Behavior:    cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic),
-					PathPattern: cloudflare.F("/health/*"),
-				}}),
-			}, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestination{
-				Type: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers),
-				Overrides: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride{{
-					Behavior:    cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic),
-					PathPattern: cloudflare.F("/health/*"),
-				}}),
-			}}),
-			EagerRedirectCookieSetting: cloudflare.F(true),
-			EnableBindingCookie:        cloudflare.F(true),
-			HTTPOnlyCookieAttribute:    cloudflare.F(true),
-			LogoURL:                    cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
-			MfaConfig: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationMfaConfig{
-				AllowedAuthenticators: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticator{zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticatorTotp, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticatorBiometrics, zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticatorSecurityKey}),
-				MfaDisabled:           cloudflare.F(false),
-				SessionDuration:       cloudflare.F("24h"),
-			}),
-			Name: cloudflare.F("Admin Site"),
-			OAuthConfiguration: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationOAuthConfiguration{
-				DynamicClientRegistration: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationOAuthConfigurationDynamicClientRegistration{
+		Body: zero_trust.AccessApplicationNewParamsBodyAccessEndUserProps{
+			OAuthConfiguration: cloudflare.F(zero_trust.AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfiguration{
+				DynamicClientRegistration: cloudflare.F(zero_trust.AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfigurationDynamicClientRegistration{
 					AllowAnyOnLocalhost: cloudflare.F(true),
 					AllowAnyOnLoopback:  cloudflare.F(true),
 					AllowedURIs:         cloudflare.F([]string{"https://example.com/callback", "com.example.app:/oauth/callback"}),
 					Enabled:             cloudflare.F(true),
 				}),
-				Enabled: cloudflare.F(true),
-				Grant: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationOAuthConfigurationGrant{
+				Enabled: cloudflare.F(zero_trust.AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfigurationEnabledTrue),
+				Grant: cloudflare.F(zero_trust.AccessApplicationNewParamsBodyAccessEndUserPropsOAuthConfigurationGrant{
 					AccessTokenLifetime: cloudflare.F("5m"),
 					SessionDuration:     cloudflare.F("24h"),
 				}),
 			}),
-			OptionsPreflightBypass:      cloudflare.F(true),
-			PathCookieAttribute:         cloudflare.F(true),
-			Policies:                    cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion{shared.UnionString("f174e90a-fafe-4643-bbbc-4a0ed4fc8415")}),
-			ReadServiceTokensFromHeader: cloudflare.F("Authorization"),
-			SameSiteCookieAttribute:     cloudflare.F("strict"),
-			SCIMConfig: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfig{
-				IdPUID:    cloudflare.F("idp_uid"),
-				RemoteURI: cloudflare.F("remote_uri"),
-				Authentication: cloudflare.F[zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationUnion](zero_trust.SCIMConfigAuthenticationHTTPBasicParam{
-					Password: cloudflare.F("password"),
-					Scheme:   cloudflare.F(zero_trust.SCIMConfigAuthenticationHTTPBasicSchemeHttpbasic),
-					User:     cloudflare.F("user"),
-				}),
-				DeactivateOnDelete: cloudflare.F(true),
-				Enabled:            cloudflare.F(true),
-				Mappings: cloudflare.F([]zero_trust.SCIMConfigMappingParam{{
-					Schema:  cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
-					Enabled: cloudflare.F(true),
-					Filter:  cloudflare.F(`title pr or userType eq "Intern"`),
-					Operations: cloudflare.F(zero_trust.SCIMConfigMappingOperationsParam{
-						Create: cloudflare.F(true),
-						Delete: cloudflare.F(true),
-						Update: cloudflare.F(true),
-					}),
-					Strictness:       cloudflare.F(zero_trust.SCIMConfigMappingStrictnessStrict),
-					TransformJsonata: cloudflare.F("$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])"),
+			Type:            cloudflare.F(zero_trust.AccessApplicationNewParamsBodyAccessEndUserPropsTypeSelfHosted),
+			UserPopulations: cloudflare.F([]string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"}),
+			AllowedIdPs:     cloudflare.F([]zero_trust.AllowedIdPsParam{"699d98642c564d2e855e9661899b7252"}),
+			Destinations: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodyAccessEndUserPropsDestinationUnion{zero_trust.AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestination{
+				URI: cloudflare.F("uri"),
+				Overrides: cloudflare.F([]zero_trust.DestinationOverrideParam{{
+					Behavior:    cloudflare.F(zero_trust.DestinationOverrideBehaviorPublic),
+					PathPattern: cloudflare.F("/health/*"),
 				}}),
-			}),
-			SelfHostedDomains:                    cloudflare.F([]zero_trust.SelfHostedDomainsParam{"test.example.com/admin", "test.anotherexample.com/staff"}),
-			ServiceAuth401Redirect:               cloudflare.F(true),
-			SessionDuration:                      cloudflare.F("24h"),
-			SkipInterstitial:                     cloudflare.F(true),
-			Tags:                                 cloudflare.F([]string{"engineers"}),
-			UseClientlessIsolationAppLauncherURL: cloudflare.F(false),
+				Type: cloudflare.F(zero_trust.AccessApplicationNewParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationTypePublic),
+			}}),
+			Domain:            cloudflare.F("test.example.com/admin"),
+			Name:              cloudflare.F("Admin Site"),
+			SelfHostedDomains: cloudflare.F([]zero_trust.SelfHostedDomainsParam{"test.example.com/admin", "test.anotherexample.com/staff"}),
 		},
 		AccountID: cloudflare.F("account_id"),
 	})
@@ -206,150 +89,34 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		zero_trust.AccessApplicationUpdateParams{
-			Body: zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplication{
-				Domain:                   cloudflare.F("test.example.com/admin"),
-				Type:                     cloudflare.F(zero_trust.ApplicationTypeSelfHosted),
-				AllowAuthenticateViaWARP: cloudflare.F(true),
-				AllowIframe:              cloudflare.F(true),
-				AllowedIdPs:              cloudflare.F([]zero_trust.AllowedIdPsParam{"699d98642c564d2e855e9661899b7252"}),
-				AppLauncherVisible:       cloudflare.F(true),
-				AutoRedirectToIdentity:   cloudflare.F(true),
-				CORSHeaders: cloudflare.F(zero_trust.CORSHeadersParam{
-					AllowAllHeaders:  cloudflare.F(true),
-					AllowAllMethods:  cloudflare.F(true),
-					AllowAllOrigins:  cloudflare.F(true),
-					AllowCredentials: cloudflare.F(true),
-					AllowedHeaders:   cloudflare.F([]zero_trust.AllowedHeadersParam{"string"}),
-					AllowedMethods:   cloudflare.F([]zero_trust.AllowedMethods{zero_trust.AllowedMethodsGet}),
-					AllowedOrigins:   cloudflare.F([]zero_trust.AllowedOriginsParam{"https://example.com"}),
-					MaxAge:           cloudflare.F(-1.000000),
-				}),
-				CustomDenyMessage:        cloudflare.F("custom_deny_message"),
-				CustomDenyURL:            cloudflare.F("custom_deny_url"),
-				CustomNonIdentityDenyURL: cloudflare.F("custom_non_identity_deny_url"),
-				CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252"}),
-				Destinations: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationUnion{zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestination{
-					Overrides: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationOverride{{
-						Behavior:    cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic),
-						PathPattern: cloudflare.F("/health/*"),
-					}}),
-					Type: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationTypePublic),
-					URI:  cloudflare.F("test.example.com/admin"),
-				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestination{
-					Overrides: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationOverride{{
-						Behavior:    cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationOverridesBehaviorPublic),
-						PathPattern: cloudflare.F("/health/*"),
-					}}),
-					Type: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPublicDestinationTypePublic),
-					URI:  cloudflare.F("test.anotherexample.com/staff"),
-				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestination{
-					CIDR:       cloudflare.F("10.5.0.0/24"),
-					Hostname:   cloudflare.F("hostname"),
-					L4Protocol: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP),
-					PortRange:  cloudflare.F("80-90"),
-					Type:       cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate),
-					VnetID:     cloudflare.F("vnet_id"),
-				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestination{
-					CIDR:       cloudflare.F("10.5.0.3/32"),
-					Hostname:   cloudflare.F("hostname"),
-					L4Protocol: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP),
-					PortRange:  cloudflare.F("80"),
-					Type:       cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate),
-					VnetID:     cloudflare.F("vnet_id"),
-				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestination{
-					CIDR:       cloudflare.F("cidr"),
-					Hostname:   cloudflare.F("private-sni.example.com"),
-					L4Protocol: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationL4ProtocolTCP),
-					PortRange:  cloudflare.F("port_range"),
-					Type:       cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPrivateDestinationTypePrivate),
-					VnetID:     cloudflare.F("vnet_id"),
-				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestination{
-					McpServerID: cloudflare.F("mcp-server-1"),
-					Type:        cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsViaMcpServerPortalDestinationTypeViaMcpServerPortal),
-				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestination{
-					Type:     cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationTypeWorker),
-					WorkerID: cloudflare.F("617f1d0431a98306ff61e336d79fce86"),
-					Overrides: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverride{{
-						Behavior:    cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsWorkerDestinationOverridesBehaviorPublic),
-						PathPattern: cloudflare.F("/health/*"),
-					}}),
-				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestination{
-					Type:     cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationTypePreviewWorker),
-					WorkerID: cloudflare.F("617f1d0431a98306ff61e336d79fce86"),
-					Overrides: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverride{{
-						Behavior:    cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsPreviewWorkerDestinationOverridesBehaviorPublic),
-						PathPattern: cloudflare.F("/health/*"),
-					}}),
-				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestination{
-					Type: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationTypeAllWorkers),
-					Overrides: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverride{{
-						Behavior:    cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllWorkersDestinationOverridesBehaviorPublic),
-						PathPattern: cloudflare.F("/health/*"),
-					}}),
-				}, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestination{
-					Type: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationTypeAllPreviewWorkers),
-					Overrides: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverride{{
-						Behavior:    cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsAllPreviewWorkersDestinationOverridesBehaviorPublic),
-						PathPattern: cloudflare.F("/health/*"),
-					}}),
-				}}),
-				EagerRedirectCookieSetting: cloudflare.F(true),
-				EnableBindingCookie:        cloudflare.F(true),
-				HTTPOnlyCookieAttribute:    cloudflare.F(true),
-				LogoURL:                    cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
-				MfaConfig: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfig{
-					AllowedAuthenticators: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticator{zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticatorTotp, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticatorBiometrics, zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationMfaConfigAllowedAuthenticatorSecurityKey}),
-					MfaDisabled:           cloudflare.F(false),
-					SessionDuration:       cloudflare.F("24h"),
-				}),
-				Name: cloudflare.F("Admin Site"),
-				OAuthConfiguration: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationOAuthConfiguration{
-					DynamicClientRegistration: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationOAuthConfigurationDynamicClientRegistration{
+			Body: zero_trust.AccessApplicationUpdateParamsBodyAccessEndUserProps{
+				OAuthConfiguration: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfiguration{
+					DynamicClientRegistration: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfigurationDynamicClientRegistration{
 						AllowAnyOnLocalhost: cloudflare.F(true),
 						AllowAnyOnLoopback:  cloudflare.F(true),
 						AllowedURIs:         cloudflare.F([]string{"https://example.com/callback", "com.example.app:/oauth/callback"}),
 						Enabled:             cloudflare.F(true),
 					}),
-					Enabled: cloudflare.F(true),
-					Grant: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationOAuthConfigurationGrant{
+					Enabled: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfigurationEnabledTrue),
+					Grant: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodyAccessEndUserPropsOAuthConfigurationGrant{
 						AccessTokenLifetime: cloudflare.F("5m"),
 						SessionDuration:     cloudflare.F("24h"),
 					}),
 				}),
-				OptionsPreflightBypass:      cloudflare.F(true),
-				PathCookieAttribute:         cloudflare.F(true),
-				Policies:                    cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion{shared.UnionString("f174e90a-fafe-4643-bbbc-4a0ed4fc8415")}),
-				ReadServiceTokensFromHeader: cloudflare.F("Authorization"),
-				SameSiteCookieAttribute:     cloudflare.F("strict"),
-				SCIMConfig: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfig{
-					IdPUID:    cloudflare.F("idp_uid"),
-					RemoteURI: cloudflare.F("remote_uri"),
-					Authentication: cloudflare.F[zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationUnion](zero_trust.SCIMConfigAuthenticationHTTPBasicParam{
-						Password: cloudflare.F("password"),
-						Scheme:   cloudflare.F(zero_trust.SCIMConfigAuthenticationHTTPBasicSchemeHttpbasic),
-						User:     cloudflare.F("user"),
-					}),
-					DeactivateOnDelete: cloudflare.F(true),
-					Enabled:            cloudflare.F(true),
-					Mappings: cloudflare.F([]zero_trust.SCIMConfigMappingParam{{
-						Schema:  cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
-						Enabled: cloudflare.F(true),
-						Filter:  cloudflare.F(`title pr or userType eq "Intern"`),
-						Operations: cloudflare.F(zero_trust.SCIMConfigMappingOperationsParam{
-							Create: cloudflare.F(true),
-							Delete: cloudflare.F(true),
-							Update: cloudflare.F(true),
-						}),
-						Strictness:       cloudflare.F(zero_trust.SCIMConfigMappingStrictnessStrict),
-						TransformJsonata: cloudflare.F("$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])"),
+				Type:            cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodyAccessEndUserPropsTypeSelfHosted),
+				UserPopulations: cloudflare.F([]string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"}),
+				AllowedIdPs:     cloudflare.F([]zero_trust.AllowedIdPsParam{"699d98642c564d2e855e9661899b7252"}),
+				Destinations: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationUnion{zero_trust.AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestination{
+					URI: cloudflare.F("uri"),
+					Overrides: cloudflare.F([]zero_trust.DestinationOverrideParam{{
+						Behavior:    cloudflare.F(zero_trust.DestinationOverrideBehaviorPublic),
+						PathPattern: cloudflare.F("/health/*"),
 					}}),
-				}),
-				SelfHostedDomains:                    cloudflare.F([]zero_trust.SelfHostedDomainsParam{"test.example.com/admin", "test.anotherexample.com/staff"}),
-				ServiceAuth401Redirect:               cloudflare.F(true),
-				SessionDuration:                      cloudflare.F("24h"),
-				SkipInterstitial:                     cloudflare.F(true),
-				Tags:                                 cloudflare.F([]string{"engineers"}),
-				UseClientlessIsolationAppLauncherURL: cloudflare.F(false),
+					Type: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodyAccessEndUserPropsDestinationsAccessEndUserPublicDestinationTypePublic),
+				}}),
+				Domain:            cloudflare.F("test.example.com/admin"),
+				Name:              cloudflare.F("Admin Site"),
+				SelfHostedDomains: cloudflare.F([]zero_trust.SelfHostedDomainsParam{"test.example.com/admin", "test.anotherexample.com/staff"}),
 			},
 			AccountID: cloudflare.F("account_id"),
 		},

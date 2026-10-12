@@ -92,7 +92,8 @@ func (r *BillingService) InvoicePreview(ctx context.Context, query BillingInvoic
 	return res, nil
 }
 
-// Retrieve aggregated usage meter event summaries for the given time range.
+// Retrieve AI Gateway usage cost, in US dollars, aggregated by hour or day for the
+// given time range.
 func (r *BillingService) UsageHistory(ctx context.Context, params BillingUsageHistoryParams, opts ...option.RequestOption) (res *BillingUsageHistoryResponse, err error) {
 	var env BillingUsageHistoryResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -469,7 +470,8 @@ func (r billingUsageHistoryResponseJSON) RawJSON() string {
 }
 
 type BillingUsageHistoryResponseHistory struct {
-	ID              string                                 `json:"id" api:"required"`
+	ID string `json:"id" api:"required"`
+	// AI Gateway usage cost in the window, in US dollars.
 	AggregatedValue float64                                `json:"aggregated_value" api:"required"`
 	EndTime         float64                                `json:"end_time" api:"required"`
 	StartTime       float64                                `json:"start_time" api:"required"`

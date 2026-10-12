@@ -138,6 +138,29 @@ func (r *BetaWorkerVersionService) Get(ctx context.Context, workerID string, ver
 	return res, nil
 }
 
+// Captures a CPU or heap profile from a recently active isolate running the
+// specified Worker version. This endpoint requires the Worker profiling feature to
+// be enabled for the account.
+func (r *BetaWorkerVersionService) Profile(ctx context.Context, workerID string, versionID string, params BetaWorkerVersionProfileParams, opts ...option.RequestOption) (res *http.Response, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/vnd.google.protobuf")}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if workerID == "" {
+		err = errors.New("missing required worker_id parameter")
+		return nil, err
+	}
+	if versionID == "" {
+		err = errors.New("missing required version_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/workers/workers/%s/versions/%s/profile", params.AccountID, workerID, versionID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
+	return res, err
+}
+
 type Version struct {
 	// Version identifier.
 	ID string `json:"id" api:"required" format:"uuid"`
@@ -517,6 +540,9 @@ type VersionBinding struct {
 	Pipeline string `json:"pipeline"`
 	// Name of the Queue to bind to.
 	QueueName string `json:"queue_name"`
+	// This field can have the runtime type of
+	// [VersionBindingsWorkersBindingKindDurableObjectNamespaceRetry].
+	Retry interface{} `json:"retry"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName string `json:"script_name"`
@@ -583,6 +609,7 @@ type versionBindingJSON struct {
 	Part                        apijson.Field
 	Pipeline                    apijson.Field
 	QueueName                   apijson.Field
+	Retry                       apijson.Field
 	ScriptName                  apijson.Field
 	SecretName                  apijson.Field
 	Service                     apijson.Field
@@ -1498,6 +1525,10 @@ type VersionBindingsWorkersBindingKindDurableObjectNamespace struct {
 	Environment string `json:"environment"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
+	// Retry policy for calls made to the Durable Object through this binding. Omitted
+	// or null properties use the runtime defaults. These limits are upper bounds and
+	// do not enable retries for otherwise ineligible calls.
+	Retry VersionBindingsWorkersBindingKindDurableObjectNamespaceRetry `json:"retry" api:"nullable"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName string                                                      `json:"script_name"`
@@ -1514,6 +1545,7 @@ type versionBindingsWorkersBindingKindDurableObjectNamespaceJSON struct {
 	DispatchNamespace apijson.Field
 	Environment       apijson.Field
 	NamespaceID       apijson.Field
+	Retry             apijson.Field
 	ScriptName        apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
@@ -1542,6 +1574,39 @@ func (r VersionBindingsWorkersBindingKindDurableObjectNamespaceType) IsKnown() b
 		return true
 	}
 	return false
+}
+
+// Retry policy for calls made to the Durable Object through this binding. Omitted
+// or null properties use the runtime defaults. These limits are upper bounds and
+// do not enable retries for otherwise ineligible calls.
+type VersionBindingsWorkersBindingKindDurableObjectNamespaceRetry struct {
+	// Maximum number of retries after the initial request, not the total number of
+	// attempts. Defaults to 4. Zero disables retries.
+	MaxAttempts int64 `json:"max_attempts" api:"nullable"`
+	// Retry timeout in milliseconds, measured from the start of the call. No retry
+	// starts after it expires, and a retry still running when it expires is cancelled.
+	// This is not a request timeout; it does not limit the initial request, which is
+	// still subject to any timeouts set by your Worker. Defaults to 10000.
+	TimeoutMs int64                                                            `json:"timeout_ms" api:"nullable"`
+	JSON      versionBindingsWorkersBindingKindDurableObjectNamespaceRetryJSON `json:"-"`
+}
+
+// versionBindingsWorkersBindingKindDurableObjectNamespaceRetryJSON contains the
+// JSON metadata for the struct
+// [VersionBindingsWorkersBindingKindDurableObjectNamespaceRetry]
+type versionBindingsWorkersBindingKindDurableObjectNamespaceRetryJSON struct {
+	MaxAttempts apijson.Field
+	TimeoutMs   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionBindingsWorkersBindingKindDurableObjectNamespaceRetry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionBindingsWorkersBindingKindDurableObjectNamespaceRetryJSON) RawJSON() string {
+	return r.raw
 }
 
 type VersionBindingsWorkersBindingKindHyperdrive struct {
@@ -4670,7 +4735,8 @@ type VersionBindingParam struct {
 	// Name of the Pipeline to bind to.
 	Pipeline param.Field[string] `json:"pipeline"`
 	// Name of the Queue to bind to.
-	QueueName param.Field[string] `json:"queue_name"`
+	QueueName param.Field[string]      `json:"queue_name"`
+	Retry     param.Field[interface{}] `json:"retry"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName param.Field[string] `json:"script_name"`
@@ -4943,6 +5009,10 @@ type VersionBindingsWorkersBindingKindDurableObjectNamespaceParam struct {
 	Environment param.Field[string] `json:"environment"`
 	// Namespace identifier tag.
 	NamespaceID param.Field[string] `json:"namespace_id"`
+	// Retry policy for calls made to the Durable Object through this binding. Omitted
+	// or null properties use the runtime defaults. These limits are upper bounds and
+	// do not enable retries for otherwise ineligible calls.
+	Retry param.Field[VersionBindingsWorkersBindingKindDurableObjectNamespaceRetryParam] `json:"retry"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName param.Field[string] `json:"script_name"`
@@ -4953,6 +5023,24 @@ func (r VersionBindingsWorkersBindingKindDurableObjectNamespaceParam) MarshalJSO
 }
 
 func (r VersionBindingsWorkersBindingKindDurableObjectNamespaceParam) implementsVersionBindingsUnionParam() {
+}
+
+// Retry policy for calls made to the Durable Object through this binding. Omitted
+// or null properties use the runtime defaults. These limits are upper bounds and
+// do not enable retries for otherwise ineligible calls.
+type VersionBindingsWorkersBindingKindDurableObjectNamespaceRetryParam struct {
+	// Maximum number of retries after the initial request, not the total number of
+	// attempts. Defaults to 4. Zero disables retries.
+	MaxAttempts param.Field[int64] `json:"max_attempts"`
+	// Retry timeout in milliseconds, measured from the start of the call. No retry
+	// starts after it expires, and a retry still running when it expires is cancelled.
+	// This is not a request timeout; it does not limit the initial request, which is
+	// still subject to any timeouts set by your Worker. Defaults to 10000.
+	TimeoutMs param.Field[int64] `json:"timeout_ms"`
+}
+
+func (r VersionBindingsWorkersBindingKindDurableObjectNamespaceRetryParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type VersionBindingsWorkersBindingKindHyperdriveParam struct {
@@ -6440,6 +6528,40 @@ const (
 func (r BetaWorkerVersionGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case BetaWorkerVersionGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type BetaWorkerVersionProfileParams struct {
+	// Identifier.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Profile duration in milliseconds.
+	DurationMs param.Field[int64] `json:"duration_ms" api:"required"`
+	// Identifies the exact Durable Object actor to profile. Must be specified together
+	// with namespace_id. The actor must currently be active and running the requested
+	// Worker version.
+	ActorID param.Field[string] `json:"actor_id"`
+	// Identifies the Durable Object namespace containing the actor to profile. Must be
+	// specified together with actor_id.
+	NamespaceID param.Field[string]                                    `json:"namespace_id"`
+	ProfileType param.Field[BetaWorkerVersionProfileParamsProfileType] `json:"profile_type"`
+}
+
+func (r BetaWorkerVersionProfileParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type BetaWorkerVersionProfileParamsProfileType string
+
+const (
+	BetaWorkerVersionProfileParamsProfileTypeCPU  BetaWorkerVersionProfileParamsProfileType = "cpu"
+	BetaWorkerVersionProfileParamsProfileTypeHeap BetaWorkerVersionProfileParamsProfileType = "heap"
+)
+
+func (r BetaWorkerVersionProfileParamsProfileType) IsKnown() bool {
+	switch r {
+	case BetaWorkerVersionProfileParamsProfileTypeCPU, BetaWorkerVersionProfileParamsProfileTypeHeap:
 		return true
 	}
 	return false

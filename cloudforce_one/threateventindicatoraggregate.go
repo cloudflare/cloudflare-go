@@ -116,10 +116,11 @@ type ThreatEventIndicatorAggregateListParams struct {
 	// Filter indicators created before this date/datetime (ISO 8601, e.g.,
 	// '2024-12-31' or '2024-12-31T23:59:59Z')
 	CreatedBefore param.Field[ThreatEventIndicatorAggregateListParamsCreatedBeforeUnion] `query:"createdBefore" format:"date-time"`
-	// Dataset UUIDs to filter by, or one standalone scope value: 'all'/'\*' for all
-	// accessible datasets, 'analytics' for isAnalytics=true datasets, or 'operational'
-	// for isAnalytics=false datasets. If not provided, aggregates across all
-	// accessible datasets.
+	// Dataset UUIDs to filter by, or one standalone scope value: 'operational' for
+	// readable intelligence datasets (isAnalytics=false), 'analytics' for readable
+	// analytics datasets (isAnalytics=true), or 'all'/'\*' for every readable dataset
+	// including analytics datasets. If not provided, aggregates across all accessible
+	// datasets, including analytics datasets.
 	DatasetIDs param.Field[[]string] `query:"datasetIds"`
 	// For measure=relationships: only count indicator→event links whose relationship
 	// was created/observed on or after this date (ISO 8601). Bounds the activity view

@@ -220,7 +220,7 @@ type DevicePolicyCustomNewParams struct {
 	// The wirefilter expression to match devices. Available values: "identity.email",
 	// "identity.groups.id", "identity.groups.name", "identity.groups.email",
 	// "identity.service_token_uuid", "identity.saml_attributes", "network", "os.name",
-	// "os.version".
+	// "os.version", "device.tags".
 	Match param.Field[string] `json:"match"`
 	// The precedence of the policy. Lower values indicate higher precedence. Policies
 	// will be evaluated in ascending order of this field.
@@ -489,7 +489,7 @@ type DevicePolicyCustomEditParams struct {
 	// The wirefilter expression to match devices. Available values: "identity.email",
 	// "identity.groups.id", "identity.groups.name", "identity.groups.email",
 	// "identity.service_token_uuid", "identity.saml_attributes", "network", "os.name",
-	// "os.version".
+	// "os.version", "device.tags".
 	Match param.Field[string] `json:"match"`
 	// The name of the device settings profile.
 	Name param.Field[string] `json:"name"`

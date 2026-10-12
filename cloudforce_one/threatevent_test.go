@@ -104,6 +104,11 @@ func TestThreatEventListWithOptionalParams(t *testing.T) {
 			Op:    cloudflare.F(cloudforce_one.ThreatEventListParamsSearchObjectOpEquals),
 			Value: cloudflare.F("x"),
 		}}),
+		SearchBranches: cloudflare.F([][]cloudforce_one.ThreatEventListParamsSearchBranchUnion{{cloudforce_one.ThreatEventListParamsSearchBranchesObject{
+			Field: cloudflare.F(cloudforce_one.ThreatEventListParamsSearchBranchesObjectFieldAttacker),
+			Op:    cloudflare.F(cloudforce_one.ThreatEventListParamsSearchBranchesObjectOpEquals),
+			Value: cloudflare.F("x"),
+		}}}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

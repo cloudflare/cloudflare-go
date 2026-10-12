@@ -171,7 +171,7 @@ type CasbPosturePolicyNewResponse struct {
 	// disabled_at is unset).
 	Enabled bool `json:"enabled" api:"required"`
 	// The finding type this policy is associated with. Immutable after creation;
-	// changing it replaces the policy.
+	// attempts to change it via update are rejected.
 	FindingTypeID string `json:"finding_type_id" api:"required" format:"uuid"`
 	// The integrations this policy applies to.
 	IntegrationIDs []string `json:"integration_ids" api:"required" format:"uuid"`
@@ -314,7 +314,7 @@ type CasbPosturePolicyUpdateResponse struct {
 	// disabled_at is unset).
 	Enabled bool `json:"enabled" api:"required"`
 	// The finding type this policy is associated with. Immutable after creation;
-	// changing it replaces the policy.
+	// attempts to change it via update are rejected.
 	FindingTypeID string `json:"finding_type_id" api:"required" format:"uuid"`
 	// The integrations this policy applies to.
 	IntegrationIDs []string `json:"integration_ids" api:"required" format:"uuid"`
@@ -457,7 +457,7 @@ type CasbPosturePolicyListResponse struct {
 	// disabled_at is unset).
 	Enabled bool `json:"enabled" api:"required"`
 	// The finding type this policy is associated with. Immutable after creation;
-	// changing it replaces the policy.
+	// attempts to change it via update are rejected.
 	FindingTypeID string `json:"finding_type_id" api:"required" format:"uuid"`
 	// The integrations this policy applies to.
 	IntegrationIDs []string `json:"integration_ids" api:"required" format:"uuid"`
@@ -623,7 +623,7 @@ type CasbPosturePolicyGetResponse struct {
 	// disabled_at is unset).
 	Enabled bool `json:"enabled" api:"required"`
 	// The finding type this policy is associated with. Immutable after creation;
-	// changing it replaces the policy.
+	// attempts to change it via update are rejected.
 	FindingTypeID string `json:"finding_type_id" api:"required" format:"uuid"`
 	// The integrations this policy applies to.
 	IntegrationIDs []string `json:"integration_ids" api:"required" format:"uuid"`

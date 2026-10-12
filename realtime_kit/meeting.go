@@ -458,7 +458,8 @@ func (r MeetingNewResponseDataAIConfigSummarizationTextFormat) IsKnown() bool {
 type MeetingNewResponseDataAIConfigTranscription struct {
 	// Adds specific terms to improve accurate detection during transcription.
 	Keywords []string `json:"keywords"`
-	// Specifies the language code for transcription to ensure accurate results.
+	// Specifies the language code for transcription to ensure accurate results. If
+	// omitted, the language is auto-detected for post-meeting (Whisper) transcription.
 	Language MeetingNewResponseDataAIConfigTranscriptionLanguage `json:"language"`
 	// Control the inclusion of offensive language in transcriptions.
 	ProfanityFilter bool                                            `json:"profanity_filter"`
@@ -483,7 +484,8 @@ func (r meetingNewResponseDataAIConfigTranscriptionJSON) RawJSON() string {
 	return r.raw
 }
 
-// Specifies the language code for transcription to ensure accurate results.
+// Specifies the language code for transcription to ensure accurate results. If
+// omitted, the language is auto-detected for post-meeting (Whisper) transcription.
 type MeetingNewResponseDataAIConfigTranscriptionLanguage string
 
 const (
@@ -2005,7 +2007,8 @@ func (r MeetingGetMeetingByIDResponseDataAIConfigSummarizationTextFormat) IsKnow
 type MeetingGetMeetingByIDResponseDataAIConfigTranscription struct {
 	// Adds specific terms to improve accurate detection during transcription.
 	Keywords []string `json:"keywords"`
-	// Specifies the language code for transcription to ensure accurate results.
+	// Specifies the language code for transcription to ensure accurate results. If
+	// omitted, the language is auto-detected for post-meeting (Whisper) transcription.
 	Language MeetingGetMeetingByIDResponseDataAIConfigTranscriptionLanguage `json:"language"`
 	// Control the inclusion of offensive language in transcriptions.
 	ProfanityFilter bool                                                       `json:"profanity_filter"`
@@ -2030,7 +2033,8 @@ func (r meetingGetMeetingByIDResponseDataAIConfigTranscriptionJSON) RawJSON() st
 	return r.raw
 }
 
-// Specifies the language code for transcription to ensure accurate results.
+// Specifies the language code for transcription to ensure accurate results. If
+// omitted, the language is auto-detected for post-meeting (Whisper) transcription.
 type MeetingGetMeetingByIDResponseDataAIConfigTranscriptionLanguage string
 
 const (
@@ -2955,7 +2959,8 @@ func (r MeetingReplaceMeetingByIDResponseDataAIConfigSummarizationTextFormat) Is
 type MeetingReplaceMeetingByIDResponseDataAIConfigTranscription struct {
 	// Adds specific terms to improve accurate detection during transcription.
 	Keywords []string `json:"keywords"`
-	// Specifies the language code for transcription to ensure accurate results.
+	// Specifies the language code for transcription to ensure accurate results. If
+	// omitted, the language is auto-detected for post-meeting (Whisper) transcription.
 	Language MeetingReplaceMeetingByIDResponseDataAIConfigTranscriptionLanguage `json:"language"`
 	// Control the inclusion of offensive language in transcriptions.
 	ProfanityFilter bool                                                           `json:"profanity_filter"`
@@ -2981,7 +2986,8 @@ func (r meetingReplaceMeetingByIDResponseDataAIConfigTranscriptionJSON) RawJSON(
 	return r.raw
 }
 
-// Specifies the language code for transcription to ensure accurate results.
+// Specifies the language code for transcription to ensure accurate results. If
+// omitted, the language is auto-detected for post-meeting (Whisper) transcription.
 type MeetingReplaceMeetingByIDResponseDataAIConfigTranscriptionLanguage string
 
 const (
@@ -3701,7 +3707,8 @@ func (r MeetingUpdateMeetingByIDResponseDataAIConfigSummarizationTextFormat) IsK
 type MeetingUpdateMeetingByIDResponseDataAIConfigTranscription struct {
 	// Adds specific terms to improve accurate detection during transcription.
 	Keywords []string `json:"keywords"`
-	// Specifies the language code for transcription to ensure accurate results.
+	// Specifies the language code for transcription to ensure accurate results. If
+	// omitted, the language is auto-detected for post-meeting (Whisper) transcription.
 	Language MeetingUpdateMeetingByIDResponseDataAIConfigTranscriptionLanguage `json:"language"`
 	// Control the inclusion of offensive language in transcriptions.
 	ProfanityFilter bool                                                          `json:"profanity_filter"`
@@ -3727,7 +3734,8 @@ func (r meetingUpdateMeetingByIDResponseDataAIConfigTranscriptionJSON) RawJSON()
 	return r.raw
 }
 
-// Specifies the language code for transcription to ensure accurate results.
+// Specifies the language code for transcription to ensure accurate results. If
+// omitted, the language is auto-detected for post-meeting (Whisper) transcription.
 type MeetingUpdateMeetingByIDResponseDataAIConfigTranscriptionLanguage string
 
 const (
@@ -4360,7 +4368,8 @@ func (r MeetingNewParamsAIConfigSummarizationTextFormat) IsKnown() bool {
 type MeetingNewParamsAIConfigTranscription struct {
 	// Adds specific terms to improve accurate detection during transcription.
 	Keywords param.Field[[]string] `json:"keywords"`
-	// Specifies the language code for transcription to ensure accurate results.
+	// Specifies the language code for transcription to ensure accurate results. If
+	// omitted, the language is auto-detected for post-meeting (Whisper) transcription.
 	Language param.Field[MeetingNewParamsAIConfigTranscriptionLanguage] `json:"language"`
 	// Control the inclusion of offensive language in transcriptions.
 	ProfanityFilter param.Field[bool] `json:"profanity_filter"`
@@ -4370,7 +4379,8 @@ func (r MeetingNewParamsAIConfigTranscription) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-// Specifies the language code for transcription to ensure accurate results.
+// Specifies the language code for transcription to ensure accurate results. If
+// omitted, the language is auto-detected for post-meeting (Whisper) transcription.
 type MeetingNewParamsAIConfigTranscriptionLanguage string
 
 const (
@@ -4939,7 +4949,8 @@ func (r MeetingReplaceMeetingByIDParamsAIConfigSummarizationTextFormat) IsKnown(
 type MeetingReplaceMeetingByIDParamsAIConfigTranscription struct {
 	// Adds specific terms to improve accurate detection during transcription.
 	Keywords param.Field[[]string] `json:"keywords"`
-	// Specifies the language code for transcription to ensure accurate results.
+	// Specifies the language code for transcription to ensure accurate results. If
+	// omitted, the language is auto-detected for post-meeting (Whisper) transcription.
 	Language param.Field[MeetingReplaceMeetingByIDParamsAIConfigTranscriptionLanguage] `json:"language"`
 	// Control the inclusion of offensive language in transcriptions.
 	ProfanityFilter param.Field[bool] `json:"profanity_filter"`
@@ -4949,7 +4960,8 @@ func (r MeetingReplaceMeetingByIDParamsAIConfigTranscription) MarshalJSON() (dat
 	return apijson.MarshalRoot(r)
 }
 
-// Specifies the language code for transcription to ensure accurate results.
+// Specifies the language code for transcription to ensure accurate results. If
+// omitted, the language is auto-detected for post-meeting (Whisper) transcription.
 type MeetingReplaceMeetingByIDParamsAIConfigTranscriptionLanguage string
 
 const (
@@ -5398,7 +5410,8 @@ func (r MeetingUpdateMeetingByIDParamsAIConfigSummarizationTextFormat) IsKnown()
 type MeetingUpdateMeetingByIDParamsAIConfigTranscription struct {
 	// Adds specific terms to improve accurate detection during transcription.
 	Keywords param.Field[[]string] `json:"keywords"`
-	// Specifies the language code for transcription to ensure accurate results.
+	// Specifies the language code for transcription to ensure accurate results. If
+	// omitted, the language is auto-detected for post-meeting (Whisper) transcription.
 	Language param.Field[MeetingUpdateMeetingByIDParamsAIConfigTranscriptionLanguage] `json:"language"`
 	// Control the inclusion of offensive language in transcriptions.
 	ProfanityFilter param.Field[bool] `json:"profanity_filter"`
@@ -5408,7 +5421,8 @@ func (r MeetingUpdateMeetingByIDParamsAIConfigTranscription) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-// Specifies the language code for transcription to ensure accurate results.
+// Specifies the language code for transcription to ensure accurate results. If
+// omitted, the language is auto-detected for post-meeting (Whisper) transcription.
 type MeetingUpdateMeetingByIDParamsAIConfigTranscriptionLanguage string
 
 const (

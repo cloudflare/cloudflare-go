@@ -267,9 +267,9 @@ type RegistrationNewParams struct {
 	Contacts param.Field[RegistrationNewParamsContacts] `json:"contacts"`
 	// Sets the WHOIS privacy mode for the registration. Defaults to `redaction`.
 	//
-	// - `off`: Disables WHOIS privacy.
-	// - `redaction`: Requests WHOIS redaction where the extension supports it. Some
-	//   extensions exclude privacy and redaction.
+	//   - `off`: Disables WHOIS privacy.
+	//   - `redaction`: Requests WHOIS redaction where the extension supports it. Some
+	//     extensions exclude privacy and redaction.
 	PrivacyMode param.Field[RegistrationNewParamsPrivacyMode] `json:"privacy_mode"`
 	// Sets the registration term from 1 to 10 years. When omitted, this field defaults
 	// to the registry's minimum registration period for the extension. Most extensions
