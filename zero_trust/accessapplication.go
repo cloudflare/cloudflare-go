@@ -2306,7 +2306,7 @@ type AccessApplicationNewResponse struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool `json:"skip_app_launcher_login_page"`
@@ -3131,7 +3131,7 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -5238,7 +5238,7 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -6637,7 +6637,7 @@ type AccessApplicationNewResponseBrowserVNCApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -7980,7 +7980,7 @@ type AccessApplicationNewResponseAppLauncherApplication struct {
 	Policies []AccessApplicationNewResponseAppLauncherApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool                                                   `json:"skip_app_launcher_login_page"`
@@ -8358,7 +8358,7 @@ type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication struct {
 	Policies []AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                 `json:"session_duration"`
 	JSON            accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
@@ -8638,7 +8638,7 @@ type AccessApplicationNewResponseBrowserIsolationPermissionsApplication struct {
 	Policies []AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                 `json:"session_duration"`
 	JSON            accessApplicationNewResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
@@ -8918,7 +8918,7 @@ type AccessApplicationNewResponseGatewayIdentityProxyEndpointApplication struct 
 	Policies []AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                  `json:"session_duration"`
 	JSON            accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationJSON `json:"-"`
 }
@@ -9445,21 +9445,26 @@ type AccessApplicationNewResponseInfrastructureApplication struct {
 	// The name of the application.
 	Name     string                                                        `json:"name"`
 	Policies []AccessApplicationNewResponseInfrastructureApplicationPolicy `json:"policies"`
-	JSON     accessApplicationNewResponseInfrastructureApplicationJSON     `json:"-"`
+	// The maximum duration of a connection to this application's targets. Connections
+	// are terminated once it elapses. Must be in the format `30m` or `2h45m`, in whole
+	// seconds. Valid time units are: s, m, h.
+	SessionDuration string                                                    `json:"session_duration"`
+	JSON            accessApplicationNewResponseInfrastructureApplicationJSON `json:"-"`
 }
 
 // accessApplicationNewResponseInfrastructureApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationNewResponseInfrastructureApplication]
 type accessApplicationNewResponseInfrastructureApplicationJSON struct {
-	TargetCriteria apijson.Field
-	Type           apijson.Field
-	ID             apijson.Field
-	AUD            apijson.Field
-	MfaConfig      apijson.Field
-	Name           apijson.Field
-	Policies       apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	TargetCriteria  apijson.Field
+	Type            apijson.Field
+	ID              apijson.Field
+	AUD             apijson.Field
+	MfaConfig       apijson.Field
+	Name            apijson.Field
+	Policies        apijson.Field
+	SessionDuration apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
@@ -9996,7 +10001,7 @@ type AccessApplicationNewResponseBrowserRDPApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -11551,7 +11556,7 @@ type AccessApplicationNewResponseMcpServerApplication struct {
 	SCIMConfig AccessApplicationNewResponseMcpServerApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -12818,7 +12823,7 @@ type AccessApplicationNewResponseMcpServerPortalApplication struct {
 	SCIMConfig AccessApplicationNewResponseMcpServerPortalApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -14192,7 +14197,7 @@ type AccessApplicationUpdateResponse struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool `json:"skip_app_launcher_login_page"`
@@ -15018,7 +15023,7 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -17127,7 +17132,7 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -18527,7 +18532,7 @@ type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -19871,7 +19876,7 @@ type AccessApplicationUpdateResponseAppLauncherApplication struct {
 	Policies []AccessApplicationUpdateResponseAppLauncherApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool                                                      `json:"skip_app_launcher_login_page"`
@@ -20249,7 +20254,7 @@ type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication struc
 	Policies []AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                    `json:"session_duration"`
 	JSON            accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
@@ -20529,7 +20534,7 @@ type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication struc
 	Policies []AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                    `json:"session_duration"`
 	JSON            accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
@@ -20809,7 +20814,7 @@ type AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplication stru
 	Policies []AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                     `json:"session_duration"`
 	JSON            accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationJSON `json:"-"`
 }
@@ -21338,22 +21343,27 @@ type AccessApplicationUpdateResponseInfrastructureApplication struct {
 	// The name of the application.
 	Name     string                                                           `json:"name"`
 	Policies []AccessApplicationUpdateResponseInfrastructureApplicationPolicy `json:"policies"`
-	JSON     accessApplicationUpdateResponseInfrastructureApplicationJSON     `json:"-"`
+	// The maximum duration of a connection to this application's targets. Connections
+	// are terminated once it elapses. Must be in the format `30m` or `2h45m`, in whole
+	// seconds. Valid time units are: s, m, h.
+	SessionDuration string                                                       `json:"session_duration"`
+	JSON            accessApplicationUpdateResponseInfrastructureApplicationJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseInfrastructureApplicationJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationUpdateResponseInfrastructureApplication]
 type accessApplicationUpdateResponseInfrastructureApplicationJSON struct {
-	TargetCriteria apijson.Field
-	Type           apijson.Field
-	ID             apijson.Field
-	AUD            apijson.Field
-	MfaConfig      apijson.Field
-	Name           apijson.Field
-	Policies       apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	TargetCriteria  apijson.Field
+	Type            apijson.Field
+	ID              apijson.Field
+	AUD             apijson.Field
+	MfaConfig       apijson.Field
+	Name            apijson.Field
+	Policies        apijson.Field
+	SessionDuration apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
@@ -21890,7 +21900,7 @@ type AccessApplicationUpdateResponseBrowserRDPApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -23446,7 +23456,7 @@ type AccessApplicationUpdateResponseMcpServerApplication struct {
 	SCIMConfig AccessApplicationUpdateResponseMcpServerApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -24715,7 +24725,7 @@ type AccessApplicationUpdateResponseMcpServerPortalApplication struct {
 	SCIMConfig AccessApplicationUpdateResponseMcpServerPortalApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -26090,7 +26100,7 @@ type AccessApplicationListResponse struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool `json:"skip_app_launcher_login_page"`
@@ -26915,7 +26925,7 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -29023,7 +29033,7 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -30423,7 +30433,7 @@ type AccessApplicationListResponseBrowserVNCApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -31767,7 +31777,7 @@ type AccessApplicationListResponseAppLauncherApplication struct {
 	Policies []AccessApplicationListResponseAppLauncherApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool                                                    `json:"skip_app_launcher_login_page"`
@@ -32145,7 +32155,7 @@ type AccessApplicationListResponseDeviceEnrollmentPermissionsApplication struct 
 	Policies []AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                  `json:"session_duration"`
 	JSON            accessApplicationListResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
@@ -32425,7 +32435,7 @@ type AccessApplicationListResponseBrowserIsolationPermissionsApplication struct 
 	Policies []AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                  `json:"session_duration"`
 	JSON            accessApplicationListResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
@@ -32705,7 +32715,7 @@ type AccessApplicationListResponseGatewayIdentityProxyEndpointApplication struct
 	Policies []AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                   `json:"session_duration"`
 	JSON            accessApplicationListResponseGatewayIdentityProxyEndpointApplicationJSON `json:"-"`
 }
@@ -33232,21 +33242,26 @@ type AccessApplicationListResponseInfrastructureApplication struct {
 	// The name of the application.
 	Name     string                                                         `json:"name"`
 	Policies []AccessApplicationListResponseInfrastructureApplicationPolicy `json:"policies"`
-	JSON     accessApplicationListResponseInfrastructureApplicationJSON     `json:"-"`
+	// The maximum duration of a connection to this application's targets. Connections
+	// are terminated once it elapses. Must be in the format `30m` or `2h45m`, in whole
+	// seconds. Valid time units are: s, m, h.
+	SessionDuration string                                                     `json:"session_duration"`
+	JSON            accessApplicationListResponseInfrastructureApplicationJSON `json:"-"`
 }
 
 // accessApplicationListResponseInfrastructureApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationListResponseInfrastructureApplication]
 type accessApplicationListResponseInfrastructureApplicationJSON struct {
-	TargetCriteria apijson.Field
-	Type           apijson.Field
-	ID             apijson.Field
-	AUD            apijson.Field
-	MfaConfig      apijson.Field
-	Name           apijson.Field
-	Policies       apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	TargetCriteria  apijson.Field
+	Type            apijson.Field
+	ID              apijson.Field
+	AUD             apijson.Field
+	MfaConfig       apijson.Field
+	Name            apijson.Field
+	Policies        apijson.Field
+	SessionDuration apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
@@ -33783,7 +33798,7 @@ type AccessApplicationListResponseBrowserRDPApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -35339,7 +35354,7 @@ type AccessApplicationListResponseMcpServerApplication struct {
 	SCIMConfig AccessApplicationListResponseMcpServerApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -36608,7 +36623,7 @@ type AccessApplicationListResponseMcpServerPortalApplication struct {
 	SCIMConfig AccessApplicationListResponseMcpServerPortalApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -38005,7 +38020,7 @@ type AccessApplicationGetResponse struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool `json:"skip_app_launcher_login_page"`
@@ -38830,7 +38845,7 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -40937,7 +40952,7 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -42336,7 +42351,7 @@ type AccessApplicationGetResponseBrowserVNCApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -43679,7 +43694,7 @@ type AccessApplicationGetResponseAppLauncherApplication struct {
 	Policies []AccessApplicationGetResponseAppLauncherApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool                                                   `json:"skip_app_launcher_login_page"`
@@ -44057,7 +44072,7 @@ type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication struct {
 	Policies []AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                 `json:"session_duration"`
 	JSON            accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
@@ -44337,7 +44352,7 @@ type AccessApplicationGetResponseBrowserIsolationPermissionsApplication struct {
 	Policies []AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                 `json:"session_duration"`
 	JSON            accessApplicationGetResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
@@ -44617,7 +44632,7 @@ type AccessApplicationGetResponseGatewayIdentityProxyEndpointApplication struct 
 	Policies []AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                  `json:"session_duration"`
 	JSON            accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationJSON `json:"-"`
 }
@@ -45144,21 +45159,26 @@ type AccessApplicationGetResponseInfrastructureApplication struct {
 	// The name of the application.
 	Name     string                                                        `json:"name"`
 	Policies []AccessApplicationGetResponseInfrastructureApplicationPolicy `json:"policies"`
-	JSON     accessApplicationGetResponseInfrastructureApplicationJSON     `json:"-"`
+	// The maximum duration of a connection to this application's targets. Connections
+	// are terminated once it elapses. Must be in the format `30m` or `2h45m`, in whole
+	// seconds. Valid time units are: s, m, h.
+	SessionDuration string                                                    `json:"session_duration"`
+	JSON            accessApplicationGetResponseInfrastructureApplicationJSON `json:"-"`
 }
 
 // accessApplicationGetResponseInfrastructureApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationGetResponseInfrastructureApplication]
 type accessApplicationGetResponseInfrastructureApplicationJSON struct {
-	TargetCriteria apijson.Field
-	Type           apijson.Field
-	ID             apijson.Field
-	AUD            apijson.Field
-	MfaConfig      apijson.Field
-	Name           apijson.Field
-	Policies       apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	TargetCriteria  apijson.Field
+	Type            apijson.Field
+	ID              apijson.Field
+	AUD             apijson.Field
+	MfaConfig       apijson.Field
+	Name            apijson.Field
+	Policies        apijson.Field
+	SessionDuration apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
@@ -45695,7 +45715,7 @@ type AccessApplicationGetResponseBrowserRDPApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -47250,7 +47270,7 @@ type AccessApplicationGetResponseMcpServerApplication struct {
 	SCIMConfig AccessApplicationGetResponseMcpServerApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -48517,7 +48537,7 @@ type AccessApplicationGetResponseMcpServerPortalApplication struct {
 	SCIMConfig AccessApplicationGetResponseMcpServerPortalApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -49856,7 +49876,7 @@ type AccessApplicationNewParamsBody struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
@@ -50329,7 +50349,7 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
@@ -51826,7 +51846,7 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
@@ -52815,7 +52835,7 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
@@ -53743,7 +53763,7 @@ type AccessApplicationNewParamsBodyAppLauncherApplication struct {
 	Policies param.Field[[]AccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
@@ -54027,7 +54047,7 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication struct
 	Policies param.Field[[]AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
@@ -54251,7 +54271,7 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication struct
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
@@ -54480,7 +54500,7 @@ type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplication struc
 	Policies param.Field[[]AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
@@ -54908,6 +54928,10 @@ type AccessApplicationNewParamsBodyInfrastructureApplication struct {
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyInfrastructureApplicationPolicy] `json:"policies"`
+	// The maximum duration of a connection to this application's targets. Connections
+	// are terminated once it elapses. Must be in the format `30m` or `2h45m`, in whole
+	// seconds. Valid time units are: s, m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r AccessApplicationNewParamsBodyInfrastructureApplication) MarshalJSON() (data []byte, err error) {
@@ -55247,7 +55271,7 @@ type AccessApplicationNewParamsBodyBrowserRDPApplication struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
@@ -56285,7 +56309,7 @@ type AccessApplicationNewParamsBodyMcpServerApplication struct {
 	SCIMConfig param.Field[AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -57172,7 +57196,7 @@ type AccessApplicationNewParamsBodyMcpServerPortalApplication struct {
 	SCIMConfig param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -58265,7 +58289,7 @@ type AccessApplicationUpdateParamsBody struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
@@ -58738,7 +58762,7 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
@@ -60235,7 +60259,7 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
@@ -61224,7 +61248,7 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
@@ -62152,7 +62176,7 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplication struct {
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
@@ -62436,7 +62460,7 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication str
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
@@ -62660,7 +62684,7 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication str
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
@@ -62889,7 +62913,7 @@ type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplication st
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
@@ -63317,6 +63341,10 @@ type AccessApplicationUpdateParamsBodyInfrastructureApplication struct {
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy] `json:"policies"`
+	// The maximum duration of a connection to this application's targets. Connections
+	// are terminated once it elapses. Must be in the format `30m` or `2h45m`, in whole
+	// seconds. Valid time units are: s, m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r AccessApplicationUpdateParamsBodyInfrastructureApplication) MarshalJSON() (data []byte, err error) {
@@ -63656,7 +63684,7 @@ type AccessApplicationUpdateParamsBodyBrowserRDPApplication struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
@@ -64694,7 +64722,7 @@ type AccessApplicationUpdateParamsBodyMcpServerApplication struct {
 	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -65581,7 +65609,7 @@ type AccessApplicationUpdateParamsBodyMcpServerPortalApplication struct {
 	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.

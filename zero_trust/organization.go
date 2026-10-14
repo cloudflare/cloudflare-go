@@ -235,6 +235,8 @@ type Organization struct {
 	// by default if there is a configured Access application and policy that matches
 	// the request.
 	DenyUnmatchedRequestsExemptedZoneNames []string `json:"deny_unmatched_requests_exempted_zone_names"`
+	// Whether creation of end user applications is disabled for this organization.
+	DisableEndUserAppCreation bool `json:"disable_end_user_app_creation"`
 	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
 	// Updates may only be made via the API or Terraform for this account when enabled.
 	IsUIReadOnly bool        `json:"is_ui_read_only"`
@@ -294,6 +296,7 @@ type organizationJSON struct {
 	CustomPages                            apijson.Field
 	DenyUnmatchedRequests                  apijson.Field
 	DenyUnmatchedRequestsExemptedZoneNames apijson.Field
+	DisableEndUserAppCreation              apijson.Field
 	IsUIReadOnly                           apijson.Field
 	LoginDesign                            apijson.Field
 	MfaConfig                              apijson.Field
@@ -587,6 +590,8 @@ type OrganizationListResponse struct {
 	// by default if there is a configured Access application and policy that matches
 	// the request.
 	DenyUnmatchedRequestsExemptedZoneNames []string `json:"deny_unmatched_requests_exempted_zone_names"`
+	// Whether creation of end user applications is disabled for this organization.
+	DisableEndUserAppCreation bool `json:"disable_end_user_app_creation"`
 	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
 	// Updates may only be made via the API or Terraform for this account when enabled.
 	IsUIReadOnly bool        `json:"is_ui_read_only"`
@@ -650,6 +655,7 @@ type organizationListResponseJSON struct {
 	CustomPages                            apijson.Field
 	DenyUnmatchedRequests                  apijson.Field
 	DenyUnmatchedRequestsExemptedZoneNames apijson.Field
+	DisableEndUserAppCreation              apijson.Field
 	IsUIReadOnly                           apijson.Field
 	LoginDesign                            apijson.Field
 	MfaConfig                              apijson.Field
@@ -962,6 +968,8 @@ type OrganizationNewParams struct {
 	// by default if there is a configured Access application and policy that matches
 	// the request.
 	DenyUnmatchedRequestsExemptedZoneNames param.Field[[]string] `json:"deny_unmatched_requests_exempted_zone_names"`
+	// Whether creation of end user applications is disabled for this organization.
+	DisableEndUserAppCreation param.Field[bool] `json:"disable_end_user_app_creation"`
 	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
 	// Updates may only be made via the API or Terraform for this account when enabled.
 	IsUIReadOnly param.Field[bool]             `json:"is_ui_read_only"`
@@ -1353,6 +1361,8 @@ type OrganizationUpdateParams struct {
 	// by default if there is a configured Access application and policy that matches
 	// the request.
 	DenyUnmatchedRequestsExemptedZoneNames param.Field[[]string] `json:"deny_unmatched_requests_exempted_zone_names"`
+	// Whether creation of end user applications is disabled for this organization.
+	DisableEndUserAppCreation param.Field[bool] `json:"disable_end_user_app_creation"`
 	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
 	// Updates may only be made via the API or Terraform for this account when enabled.
 	IsUIReadOnly param.Field[bool]             `json:"is_ui_read_only"`

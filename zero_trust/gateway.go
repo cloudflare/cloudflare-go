@@ -23,18 +23,19 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewGatewayService] method instead.
 type GatewayService struct {
-	Options          []option.RequestOption
-	AuditSSHSettings *GatewayAuditSSHSettingService
-	Categories       *GatewayCategoryService
-	AppTypes         *GatewayAppTypeService
-	Configurations   *GatewayConfigurationService
-	Lists            *GatewayListService
-	Locations        *GatewayLocationService
-	Logging          *GatewayLoggingService
-	ProxyEndpoints   *GatewayProxyEndpointService
-	Rules            *GatewayRuleService
-	Certificates     *GatewayCertificateService
-	Pacfiles         *GatewayPacfileService
+	Options           []option.RequestOption
+	AuditSSHSettings  *GatewayAuditSSHSettingService
+	Categories        *GatewayCategoryService
+	AppTypes          *GatewayAppTypeService
+	Configurations    *GatewayConfigurationService
+	Lists             *GatewayListService
+	Locations         *GatewayLocationService
+	Logging           *GatewayLoggingService
+	ProxyEndpoints    *GatewayProxyEndpointService
+	Rules             *GatewayRuleService
+	Certificates      *GatewayCertificateService
+	Pacfiles          *GatewayPacfileService
+	DNSDestinationIPs *GatewayDNSDestinationIPService
 }
 
 // NewGatewayService generates a new service that applies the given options to each
@@ -54,6 +55,7 @@ func NewGatewayService(opts ...option.RequestOption) (r *GatewayService) {
 	r.Rules = NewGatewayRuleService(opts...)
 	r.Certificates = NewGatewayCertificateService(opts...)
 	r.Pacfiles = NewGatewayPacfileService(opts...)
+	r.DNSDestinationIPs = NewGatewayDNSDestinationIPService(opts...)
 	return
 }
 

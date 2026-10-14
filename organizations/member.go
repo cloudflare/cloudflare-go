@@ -40,10 +40,6 @@ func NewMemberService(opts ...option.RequestOption) (r *MemberService) {
 }
 
 // Create a membership that grants access to a specific Organization.
-//
-// Authentication: A Global API key for a user with
-// `com.cloudflare.api.tenant.unit.member.create` is required. User API Tokens are
-// not currently supported.
 func (r *MemberService) New(ctx context.Context, organizationID string, body MemberNewParams, opts ...option.RequestOption) (res *OrganizationMember, err error) {
 	var env MemberNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -61,10 +57,6 @@ func (r *MemberService) New(ctx context.Context, organizationID string, body Mem
 }
 
 // List memberships for an Organization.
-//
-// Authentication: A Global API key for a user with
-// `com.cloudflare.api.tenant.unit.member.list` is required. User API Tokens are
-// not currently supported.
 func (r *MemberService) List(ctx context.Context, organizationID string, query MemberListParams, opts ...option.RequestOption) (res *pagination.SinglePage[OrganizationMember], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -87,19 +79,11 @@ func (r *MemberService) List(ctx context.Context, organizationID string, query M
 }
 
 // List memberships for an Organization.
-//
-// Authentication: A Global API key for a user with
-// `com.cloudflare.api.tenant.unit.member.list` is required. User API Tokens are
-// not currently supported.
 func (r *MemberService) ListAutoPaging(ctx context.Context, organizationID string, query MemberListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[OrganizationMember] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, organizationID, query, opts...))
 }
 
 // Delete a membership to a particular Organization.
-//
-// Authentication: A Global API key for a user with
-// `com.cloudflare.api.tenant.unit.member.delete` is required. User API Tokens are
-// not currently supported.
 func (r *MemberService) Delete(ctx context.Context, organizationID string, memberID string, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -117,10 +101,6 @@ func (r *MemberService) Delete(ctx context.Context, organizationID string, membe
 }
 
 // Retrieve a single membership from an Organization.
-//
-// Authentication: A Global API key for a user with
-// `com.cloudflare.api.tenant.unit.member.read` is required. User API Tokens are
-// not currently supported.
 func (r *MemberService) Get(ctx context.Context, organizationID string, memberID string, opts ...option.RequestOption) (res *OrganizationMember, err error) {
 	var env MemberGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

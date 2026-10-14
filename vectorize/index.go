@@ -153,9 +153,10 @@ func (r *IndexService) Get(ctx context.Context, indexName string, query IndexGet
 }
 
 // Get a set of vectors from an index by their vector identifiers.
-func (r *IndexService) GetByIDs(ctx context.Context, indexName string, params IndexGetByIDsParams, opts ...option.RequestOption) (res *IndexGetByIDsResponse, err error) {
-	var env IndexGetByIDsResponseEnvelope
+func (r *IndexService) GetByIDs(ctx context.Context, indexName string, params IndexGetByIDsParams, opts ...option.RequestOption) (res *pagination.SinglePage[IndexGetByIDsResponse], err error) {
+	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
@@ -165,12 +166,21 @@ func (r *IndexService) GetByIDs(ctx context.Context, indexName string, params In
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes/%s/get_by_ids", params.AccountID, indexName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodPost, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
-	res = &env.Result
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
 	return res, nil
+}
+
+// Get a set of vectors from an index by their vector identifiers.
+func (r *IndexService) GetByIDsAutoPaging(ctx context.Context, indexName string, params IndexGetByIDsParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[IndexGetByIDsResponse] {
+	return pagination.NewSinglePageAutoPager(r.GetByIDs(ctx, indexName, params, opts...))
 }
 
 // Get information about a vectorize index.
@@ -407,7 +417,7 @@ func (r IndexDimensionConfigurationMetric) IsKnown() bool {
 
 type IndexDeleteByIDsResponse struct {
 	// The unique identifier for the async mutation operation containing the changeset.
-	MutationID string                       `json:"mutationId"`
+	MutationID string                       `json:"mutationId" format:"uuid"`
 	JSON       indexDeleteByIDsResponseJSON `json:"-"`
 }
 
@@ -427,7 +437,33 @@ func (r indexDeleteByIDsResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type IndexGetByIDsResponse = interface{}
+type IndexGetByIDsResponse struct {
+	// Identifier for a Vector
+	ID        string                    `json:"id"`
+	Metadata  interface{}               `json:"metadata"`
+	Namespace string                    `json:"namespace" api:"nullable"`
+	Values    []float64                 `json:"values"`
+	JSON      indexGetByIDsResponseJSON `json:"-"`
+}
+
+// indexGetByIDsResponseJSON contains the JSON metadata for the struct
+// [IndexGetByIDsResponse]
+type indexGetByIDsResponseJSON struct {
+	ID          apijson.Field
+	Metadata    apijson.Field
+	Namespace   apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IndexGetByIDsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r indexGetByIDsResponseJSON) RawJSON() string {
+	return r.raw
+}
 
 type IndexInfoResponse struct {
 	// Specifies the number of dimensions for the index
@@ -436,7 +472,7 @@ type IndexInfoResponse struct {
 	// string.
 	ProcessedUpToDatetime time.Time `json:"processedUpToDatetime" api:"nullable" format:"date-time"`
 	// The unique identifier for the async mutation operation containing the changeset.
-	ProcessedUpToMutation string `json:"processedUpToMutation"`
+	ProcessedUpToMutation string `json:"processedUpToMutation" api:"nullable" format:"uuid"`
 	// Specifies the number of vectors present in the index
 	VectorCount int64                 `json:"vectorCount"`
 	JSON        indexInfoResponseJSON `json:"-"`
@@ -463,7 +499,7 @@ func (r indexInfoResponseJSON) RawJSON() string {
 
 type IndexInsertResponse struct {
 	// The unique identifier for the async mutation operation containing the changeset.
-	MutationID string                  `json:"mutationId"`
+	MutationID string                  `json:"mutationId" format:"uuid"`
 	JSON       indexInsertResponseJSON `json:"-"`
 }
 
@@ -600,7 +636,7 @@ func (r indexQueryResponseMatchJSON) RawJSON() string {
 
 type IndexUpsertResponse struct {
 	// The unique identifier for the async mutation operation containing the changeset.
-	MutationID string                  `json:"mutationId"`
+	MutationID string                  `json:"mutationId" format:"uuid"`
 	JSON       indexUpsertResponseJSON `json:"-"`
 }
 
@@ -933,50 +969,6 @@ type IndexGetByIDsParams struct {
 
 func (r IndexGetByIDsParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type IndexGetByIDsResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	// Array of vectors with matching ids.
-	Result IndexGetByIDsResponse `json:"result" api:"required,nullable"`
-	// Whether the API call was successful
-	Success IndexGetByIDsResponseEnvelopeSuccess `json:"success" api:"required"`
-	JSON    indexGetByIDsResponseEnvelopeJSON    `json:"-"`
-}
-
-// indexGetByIDsResponseEnvelopeJSON contains the JSON metadata for the struct
-// [IndexGetByIDsResponseEnvelope]
-type indexGetByIDsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexGetByIDsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexGetByIDsResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type IndexGetByIDsResponseEnvelopeSuccess bool
-
-const (
-	IndexGetByIDsResponseEnvelopeSuccessTrue IndexGetByIDsResponseEnvelopeSuccess = true
-)
-
-func (r IndexGetByIDsResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case IndexGetByIDsResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type IndexInfoParams struct {

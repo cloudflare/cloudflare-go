@@ -403,11 +403,14 @@ type Location struct {
 	ClientDefault bool      `json:"client_default"`
 	CreatedAt     time.Time `json:"created_at" format:"date-time"`
 	// Indicate the identifier of the pair of IPv4 addresses assigned to this location.
-	DNSDestinationIPsID string `json:"dns_destination_ips_id"`
+	DNSDestinationIPsID DNSDestinationIPs `json:"dns_destination_ips_id"`
 	// Specify the UUID of the IPv6 block brought to the gateway so that this
 	// location's IPv6 address is allocated from the Bring Your Own IPv6 (BYOIPv6)
 	// block rather than the standard Cloudflare IPv6 block.
 	DNSDestinationIPV6BlockID string `json:"dns_destination_ipv6_block_id" api:"nullable"`
+	// Enable DNS64 synthesis for DNS queries matched to this location. When updating a
+	// location, omitting this field resets it to false.
+	Dns64Enabled bool `json:"dns64_enabled"`
 	// Specify the DNS over HTTPS domain that receives DNS requests. Gateway
 	// automatically generates this value.
 	DOHSubdomain string `json:"doh_subdomain"`
@@ -446,6 +449,7 @@ type locationJSON struct {
 	CreatedAt                 apijson.Field
 	DNSDestinationIPsID       apijson.Field
 	DNSDestinationIPV6BlockID apijson.Field
+	Dns64Enabled              apijson.Field
 	DOHSubdomain              apijson.Field
 	ECSSupport                apijson.Field
 	Endpoints                 apijson.Field
@@ -551,6 +555,9 @@ type GatewayLocationNewParams struct {
 	// When updating a location, if this field is absent or set to null, the
 	// pre-assigned pair remains unchanged.
 	DNSDestinationIPsID param.Field[string] `json:"dns_destination_ips_id"`
+	// Enable DNS64 synthesis for DNS queries matched to this location. When updating a
+	// location, omitting this field resets it to false.
+	Dns64Enabled param.Field[bool] `json:"dns64_enabled"`
 	// Indicate whether the location must resolve EDNS queries.
 	ECSSupport param.Field[bool] `json:"ecs_support"`
 	// Configure the destination endpoints for this location.
@@ -668,6 +675,9 @@ type GatewayLocationUpdateParams struct {
 	// When updating a location, if this field is absent or set to null, the
 	// pre-assigned pair remains unchanged.
 	DNSDestinationIPsID param.Field[string] `json:"dns_destination_ips_id"`
+	// Enable DNS64 synthesis for DNS queries matched to this location. When updating a
+	// location, omitting this field resets it to false.
+	Dns64Enabled param.Field[bool] `json:"dns64_enabled"`
 	// Indicate whether the location must resolve EDNS queries.
 	ECSSupport param.Field[bool] `json:"ecs_support"`
 	// Configure the destination endpoints for this location.

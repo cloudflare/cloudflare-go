@@ -14,6 +14,7 @@ import (
 // the [NewZeroTrustService] method instead.
 type ZeroTrustService struct {
 	Options              []option.RequestOption
+	CWS                  *CWSService
 	Devices              *DeviceService
 	IdentityProviders    *IdentityProviderService
 	Organizations        *OrganizationService
@@ -36,6 +37,7 @@ type ZeroTrustService struct {
 func NewZeroTrustService(opts ...option.RequestOption) (r *ZeroTrustService) {
 	r = &ZeroTrustService{}
 	r.Options = opts
+	r.CWS = NewCWSService(opts...)
 	r.Devices = NewDeviceService(opts...)
 	r.IdentityProviders = NewIdentityProviderService(opts...)
 	r.Organizations = NewOrganizationService(opts...)

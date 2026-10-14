@@ -84,6 +84,9 @@ func (r *ResourceLibraryApplicationService) Update(ctx context.Context, id int64
 // relevance and uses the same filters, fields, and pagination as listing. `lookup`
 // cannot be combined with `search`.
 //
+// Invalid UTF-8 or a NUL character (U+0000) in any query parameter name or value
+// returns `400`.
+//
 // The authenticated principal must have access to the account identified by
 // `account_id`.
 func (r *ResourceLibraryApplicationService) List(ctx context.Context, params ResourceLibraryApplicationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ResourceLibraryApplicationListResponse], err error) {
@@ -116,6 +119,9 @@ func (r *ResourceLibraryApplicationService) List(ctx context.Context, params Res
 // ignoring case. Lookup does not correct misspellings. It ranks matches by
 // relevance and uses the same filters, fields, and pagination as listing. `lookup`
 // cannot be combined with `search`.
+//
+// Invalid UTF-8 or a NUL character (U+0000) in any query parameter name or value
+// returns `400`.
 //
 // The authenticated principal must have access to the account identified by
 // `account_id`.
@@ -561,7 +567,8 @@ func (r ResourceLibraryApplicationGetResponseSupported) IsKnown() bool {
 type ResourceLibraryApplicationNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Defines a custom application. At least one hostname or IP subnet is required.
-	// Support domains and port/protocol pairs do not satisfy this requirement.
+	// Support domains and port/protocol pairs do not satisfy this requirement. A NUL
+	// character (U+0000) in any string value returns `400`.
 	Body ResourceLibraryApplicationNewParamsBodyUnion `json:"body" api:"required"`
 }
 
@@ -570,7 +577,8 @@ func (r ResourceLibraryApplicationNewParams) MarshalJSON() (data []byte, err err
 }
 
 // Defines a custom application. At least one hostname or IP subnet is required.
-// Support domains and port/protocol pairs do not satisfy this requirement.
+// Support domains and port/protocol pairs do not satisfy this requirement. A NUL
+// character (U+0000) in any string value returns `400`.
 type ResourceLibraryApplicationNewParamsBody struct {
 	// Numeric identifier for an application category.
 	CategoryID param.Field[int64]       `json:"category_id"`
@@ -592,7 +600,8 @@ func (r ResourceLibraryApplicationNewParamsBody) implementsResourceLibraryApplic
 }
 
 // Defines a custom application. At least one hostname or IP subnet is required.
-// Support domains and port/protocol pairs do not satisfy this requirement.
+// Support domains and port/protocol pairs do not satisfy this requirement. A NUL
+// character (U+0000) in any string value returns `400`.
 //
 // Satisfied by [zero_trust.ResourceLibraryApplicationNewParamsBodyObject],
 // [zero_trust.ResourceLibraryApplicationNewParamsBodyObject],
@@ -972,9 +981,11 @@ type ResourceLibraryApplicationListParams struct {
 	Limit param.Field[int64] `query:"limit"`
 	// Find complete, case-insensitive application name mentions in a phrase or rule
 	// sentence. Misspelled names do not match. Returns matching applications ranked by
-	// relevance. Must be between 2 and 1000 characters. Uses the same filters, fields,
-	// and pagination as listing. `search` cannot be combined with lookup. Results are
-	// ranked by relevance, so `order_by` is ignored.
+	// relevance. Must be between 2 and 1000 characters, with no control characters
+	// other than tab and line breaks. Uses the same filters, fields, and pagination as
+	// listing. `search` cannot be combined with lookup. Results are ranked by
+	// relevance, so `order_by` is ignored. To keep the text out of URLs, send it to
+	// `POST .../applications/lookup` instead.
 	Lookup param.Field[string] `query:"lookup"`
 	// Number of results to skip. Defaults to 0; negative values are clamped to 0.
 	Offset param.Field[int64] `query:"offset"`

@@ -100,7 +100,7 @@ func (r *IndexMetadataIndexService) Delete(ctx context.Context, indexName string
 
 type IndexMetadataIndexNewResponse struct {
 	// The unique identifier for the async mutation operation containing the changeset.
-	MutationID string                            `json:"mutationId"`
+	MutationID string                            `json:"mutationId" format:"uuid"`
 	JSON       indexMetadataIndexNewResponseJSON `json:"-"`
 }
 
@@ -186,7 +186,7 @@ func (r IndexMetadataIndexListResponseMetadataIndexesIndexType) IsKnown() bool {
 
 type IndexMetadataIndexDeleteResponse struct {
 	// The unique identifier for the async mutation operation containing the changeset.
-	MutationID string                               `json:"mutationId"`
+	MutationID string                               `json:"mutationId" format:"uuid"`
 	JSON       indexMetadataIndexDeleteResponseJSON `json:"-"`
 }
 

@@ -100,9 +100,13 @@ type ThreatEventQueryNewResponse struct {
 	ID int64 `json:"id" api:"required"`
 	// Account ID
 	AccountID int64 `json:"account_id" api:"required"`
-	// Whether alerts are enabled
+	// Deprecated: saved-query alerting and rules were removed. Always false.
+	//
+	// Deprecated: deprecated
 	AlertEnabled bool `json:"alert_enabled" api:"required"`
-	// Whether alert rollup is enabled
+	// Deprecated: saved-query alerting and rules were removed. Always false.
+	//
+	// Deprecated: deprecated
 	AlertRollupEnabled bool `json:"alert_rollup_enabled" api:"required"`
 	// Creation timestamp
 	CreatedAt string `json:"created_at" api:"required"`
@@ -110,17 +114,25 @@ type ThreatEventQueryNewResponse struct {
 	Name string `json:"name" api:"required"`
 	// JSON string containing the query parameters
 	QueryJson string `json:"query_json" api:"required"`
-	// Whether rule is enabled
+	// Deprecated: saved-query alerting and rules were removed. Always false.
+	//
+	// Deprecated: deprecated
 	RuleEnabled bool `json:"rule_enabled" api:"required"`
 	// Last update timestamp
 	UpdatedAt string `json:"updated_at" api:"required"`
 	// Email of the user who created the query
 	UserEmail string `json:"user_email" api:"required"`
-	// Intel Indicator Feed ID (numeric)
+	// Deprecated: saved-query alerting and rules were removed. Always null.
+	//
+	// Deprecated: deprecated
 	CustomThreatFeedID int64 `json:"custom_threat_feed_id" api:"nullable"`
-	// WAF rules list ID for blocking
+	// Deprecated: saved-query alerting and rules were removed. Always null.
+	//
+	// Deprecated: deprecated
 	RuleListID string `json:"rule_list_id"`
-	// Scope for the rule
+	// Deprecated: saved-query alerting and rules were removed. Always null.
+	//
+	// Deprecated: deprecated
 	RuleScope string                          `json:"rule_scope"`
 	JSON      threatEventQueryNewResponseJSON `json:"-"`
 }
@@ -158,9 +170,13 @@ type ThreatEventQueryListResponse struct {
 	ID int64 `json:"id" api:"required"`
 	// Account ID
 	AccountID int64 `json:"account_id" api:"required"`
-	// Whether alerts are enabled
+	// Deprecated: saved-query alerting and rules were removed. Always false.
+	//
+	// Deprecated: deprecated
 	AlertEnabled bool `json:"alert_enabled" api:"required"`
-	// Whether alert rollup is enabled
+	// Deprecated: saved-query alerting and rules were removed. Always false.
+	//
+	// Deprecated: deprecated
 	AlertRollupEnabled bool `json:"alert_rollup_enabled" api:"required"`
 	// Creation timestamp
 	CreatedAt string `json:"created_at" api:"required"`
@@ -168,17 +184,25 @@ type ThreatEventQueryListResponse struct {
 	Name string `json:"name" api:"required"`
 	// JSON string containing the query parameters
 	QueryJson string `json:"query_json" api:"required"`
-	// Whether rule is enabled
+	// Deprecated: saved-query alerting and rules were removed. Always false.
+	//
+	// Deprecated: deprecated
 	RuleEnabled bool `json:"rule_enabled" api:"required"`
 	// Last update timestamp
 	UpdatedAt string `json:"updated_at" api:"required"`
 	// Email of the user who created the query
 	UserEmail string `json:"user_email" api:"required"`
-	// Intel Indicator Feed ID (numeric)
+	// Deprecated: saved-query alerting and rules were removed. Always null.
+	//
+	// Deprecated: deprecated
 	CustomThreatFeedID int64 `json:"custom_threat_feed_id" api:"nullable"`
-	// WAF rules list ID for blocking
+	// Deprecated: saved-query alerting and rules were removed. Always null.
+	//
+	// Deprecated: deprecated
 	RuleListID string `json:"rule_list_id"`
-	// Scope for the rule
+	// Deprecated: saved-query alerting and rules were removed. Always null.
+	//
+	// Deprecated: deprecated
 	RuleScope string                           `json:"rule_scope"`
 	JSON      threatEventQueryListResponseJSON `json:"-"`
 }
@@ -216,9 +240,13 @@ type ThreatEventQueryEditResponse struct {
 	ID int64 `json:"id" api:"required"`
 	// Account ID
 	AccountID int64 `json:"account_id" api:"required"`
-	// Whether alerts are enabled
+	// Deprecated: saved-query alerting and rules were removed. Always false.
+	//
+	// Deprecated: deprecated
 	AlertEnabled bool `json:"alert_enabled" api:"required"`
-	// Whether alert rollup is enabled
+	// Deprecated: saved-query alerting and rules were removed. Always false.
+	//
+	// Deprecated: deprecated
 	AlertRollupEnabled bool `json:"alert_rollup_enabled" api:"required"`
 	// Creation timestamp
 	CreatedAt string `json:"created_at" api:"required"`
@@ -226,17 +254,25 @@ type ThreatEventQueryEditResponse struct {
 	Name string `json:"name" api:"required"`
 	// JSON string containing the query parameters
 	QueryJson string `json:"query_json" api:"required"`
-	// Whether rule is enabled
+	// Deprecated: saved-query alerting and rules were removed. Always false.
+	//
+	// Deprecated: deprecated
 	RuleEnabled bool `json:"rule_enabled" api:"required"`
 	// Last update timestamp
 	UpdatedAt string `json:"updated_at" api:"required"`
 	// Email of the user who created the query
 	UserEmail string `json:"user_email" api:"required"`
-	// Intel Indicator Feed ID (numeric)
+	// Deprecated: saved-query alerting and rules were removed. Always null.
+	//
+	// Deprecated: deprecated
 	CustomThreatFeedID int64 `json:"custom_threat_feed_id" api:"nullable"`
-	// WAF rules list ID for blocking
+	// Deprecated: saved-query alerting and rules were removed. Always null.
+	//
+	// Deprecated: deprecated
 	RuleListID string `json:"rule_list_id"`
-	// Scope for the rule
+	// Deprecated: saved-query alerting and rules were removed. Always null.
+	//
+	// Deprecated: deprecated
 	RuleScope string                           `json:"rule_scope"`
 	JSON      threatEventQueryEditResponseJSON `json:"-"`
 }
@@ -274,9 +310,13 @@ type ThreatEventQueryGetResponse struct {
 	ID int64 `json:"id" api:"required"`
 	// Account ID
 	AccountID int64 `json:"account_id" api:"required"`
-	// Whether alerts are enabled
+	// Deprecated: saved-query alerting and rules were removed. Always false.
+	//
+	// Deprecated: deprecated
 	AlertEnabled bool `json:"alert_enabled" api:"required"`
-	// Whether alert rollup is enabled
+	// Deprecated: saved-query alerting and rules were removed. Always false.
+	//
+	// Deprecated: deprecated
 	AlertRollupEnabled bool `json:"alert_rollup_enabled" api:"required"`
 	// Creation timestamp
 	CreatedAt string `json:"created_at" api:"required"`
@@ -284,17 +324,25 @@ type ThreatEventQueryGetResponse struct {
 	Name string `json:"name" api:"required"`
 	// JSON string containing the query parameters
 	QueryJson string `json:"query_json" api:"required"`
-	// Whether rule is enabled
+	// Deprecated: saved-query alerting and rules were removed. Always false.
+	//
+	// Deprecated: deprecated
 	RuleEnabled bool `json:"rule_enabled" api:"required"`
 	// Last update timestamp
 	UpdatedAt string `json:"updated_at" api:"required"`
 	// Email of the user who created the query
 	UserEmail string `json:"user_email" api:"required"`
-	// Intel Indicator Feed ID (numeric)
+	// Deprecated: saved-query alerting and rules were removed. Always null.
+	//
+	// Deprecated: deprecated
 	CustomThreatFeedID int64 `json:"custom_threat_feed_id" api:"nullable"`
-	// WAF rules list ID for blocking
+	// Deprecated: saved-query alerting and rules were removed. Always null.
+	//
+	// Deprecated: deprecated
 	RuleListID string `json:"rule_list_id"`
-	// Scope for the rule
+	// Deprecated: saved-query alerting and rules were removed. Always null.
+	//
+	// Deprecated: deprecated
 	RuleScope string                          `json:"rule_scope"`
 	JSON      threatEventQueryGetResponseJSON `json:"-"`
 }
@@ -330,17 +378,17 @@ func (r threatEventQueryGetResponseJSON) RawJSON() string {
 type ThreatEventQueryNewParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Enable alerts for this query
-	AlertEnabled param.Field[bool] `json:"alert_enabled" api:"required"`
-	// Enable alert rollup for this query
-	AlertRollupEnabled param.Field[bool] `json:"alert_rollup_enabled" api:"required"`
 	// Unique name for the saved query
 	Name param.Field[string] `json:"name" api:"required"`
 	// JSON string containing the query parameters
 	QueryJson param.Field[string] `json:"query_json" api:"required"`
-	// Enable rule for this query
-	RuleEnabled param.Field[bool] `json:"rule_enabled" api:"required"`
-	// Scope for the rule
+	// Deprecated and ignored: saved-query alerting and rules were removed.
+	AlertEnabled param.Field[bool] `json:"alert_enabled"`
+	// Deprecated and ignored: saved-query alerting and rules were removed.
+	AlertRollupEnabled param.Field[bool] `json:"alert_rollup_enabled"`
+	// Deprecated and ignored: saved-query alerting and rules were removed.
+	RuleEnabled param.Field[bool] `json:"rule_enabled"`
+	// Deprecated and ignored: saved-query alerting and rules were removed.
 	RuleScope param.Field[string] `json:"rule_scope"`
 }
 
@@ -361,17 +409,17 @@ type ThreatEventQueryDeleteParams struct {
 type ThreatEventQueryEditParams struct {
 	// Account ID.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Enable alerts for this query
+	// Deprecated and ignored: saved-query alerting and rules were removed.
 	AlertEnabled param.Field[bool] `json:"alert_enabled"`
-	// Enable alert rollup for this query
+	// Deprecated and ignored: saved-query alerting and rules were removed.
 	AlertRollupEnabled param.Field[bool] `json:"alert_rollup_enabled"`
 	// Unique name for the saved query
 	Name param.Field[string] `json:"name"`
 	// JSON string containing the query parameters
 	QueryJson param.Field[string] `json:"query_json"`
-	// Enable rule for this query
+	// Deprecated and ignored: saved-query alerting and rules were removed.
 	RuleEnabled param.Field[bool] `json:"rule_enabled"`
-	// Scope for the rule
+	// Deprecated and ignored: saved-query alerting and rules were removed.
 	RuleScope param.Field[string] `json:"rule_scope"`
 }
 

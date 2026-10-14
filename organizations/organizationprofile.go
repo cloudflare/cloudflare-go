@@ -37,10 +37,6 @@ func NewOrganizationProfileService(opts ...option.RequestOption) (r *Organizatio
 }
 
 // Modify organization profile.
-//
-// Authentication: A Global API key for a user with
-// `com.cloudflare.api.tenant.unit.update` is required. User API Tokens are not
-// currently supported.
 func (r *OrganizationProfileService) Update(ctx context.Context, organizationID string, body OrganizationProfileUpdateParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -54,10 +50,6 @@ func (r *OrganizationProfileService) Update(ctx context.Context, organizationID 
 }
 
 // Get an organizations profile if it exists.
-//
-// Authentication: A Global API key for a user with
-// `com.cloudflare.api.tenant.unit.read` is required. User API Tokens are not
-// currently supported.
 func (r *OrganizationProfileService) Get(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *accounts.AccountProfile, err error) {
 	var env OrganizationProfileGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

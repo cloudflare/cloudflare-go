@@ -124,6 +124,11 @@ type DomainUpdateResponse struct {
 	ID string `json:"id" api:"required"`
 	// ID of the TLS certificate issued for the domain.
 	CERTID string `json:"cert_id" api:"required" format:"uuid"`
+	// Whether the configured hostname is routable for the domain. If disabled, then
+	// requests to the configured hostname will not be routed to the configured Worker.
+	// If disabled, then preview routing must be enabled, and only subdomains of the
+	// configured hostname will be routable.
+	Enabled bool `json:"enabled" api:"required"`
 	// Worker environment associated with the domain.
 	//
 	// Deprecated: deprecated
@@ -131,6 +136,13 @@ type DomainUpdateResponse struct {
 	// Hostname of the domain. Can be either the zone apex or a subdomain of the zone.
 	// Requests to this hostname will be routed to the configured Worker.
 	Hostname string `json:"hostname" api:"required"`
+	// Whether previews are routable for the domain. If enabled, previews will be
+	// routable as subdomains of the configured hostname. For example, if the
+	// configured hostname is `app.example.com`, then requests to
+	// `my-feature.app.example.com` will be routed to the preview with slug
+	// `my-feature`, if such a preview exists. If preview routing is disabled, then
+	// hostname routing must be enabled.
+	PreviewsEnabled bool `json:"previews_enabled" api:"required"`
 	// Name of the Worker associated with the domain. Requests to the configured
 	// hostname will be routed to this Worker.
 	Service string `json:"service" api:"required"`
@@ -144,15 +156,17 @@ type DomainUpdateResponse struct {
 // domainUpdateResponseJSON contains the JSON metadata for the struct
 // [DomainUpdateResponse]
 type domainUpdateResponseJSON struct {
-	ID          apijson.Field
-	CERTID      apijson.Field
-	Environment apijson.Field
-	Hostname    apijson.Field
-	Service     apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID              apijson.Field
+	CERTID          apijson.Field
+	Enabled         apijson.Field
+	Environment     apijson.Field
+	Hostname        apijson.Field
+	PreviewsEnabled apijson.Field
+	Service         apijson.Field
+	ZoneID          apijson.Field
+	ZoneName        apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *DomainUpdateResponse) UnmarshalJSON(data []byte) (err error) {
@@ -168,6 +182,11 @@ type DomainListResponse struct {
 	ID string `json:"id" api:"required"`
 	// ID of the TLS certificate issued for the domain.
 	CERTID string `json:"cert_id" api:"required" format:"uuid"`
+	// Whether the configured hostname is routable for the domain. If disabled, then
+	// requests to the configured hostname will not be routed to the configured Worker.
+	// If disabled, then preview routing must be enabled, and only subdomains of the
+	// configured hostname will be routable.
+	Enabled bool `json:"enabled" api:"required"`
 	// Worker environment associated with the domain.
 	//
 	// Deprecated: deprecated
@@ -175,6 +194,13 @@ type DomainListResponse struct {
 	// Hostname of the domain. Can be either the zone apex or a subdomain of the zone.
 	// Requests to this hostname will be routed to the configured Worker.
 	Hostname string `json:"hostname" api:"required"`
+	// Whether previews are routable for the domain. If enabled, previews will be
+	// routable as subdomains of the configured hostname. For example, if the
+	// configured hostname is `app.example.com`, then requests to
+	// `my-feature.app.example.com` will be routed to the preview with slug
+	// `my-feature`, if such a preview exists. If preview routing is disabled, then
+	// hostname routing must be enabled.
+	PreviewsEnabled bool `json:"previews_enabled" api:"required"`
 	// Name of the Worker associated with the domain. Requests to the configured
 	// hostname will be routed to this Worker.
 	Service string `json:"service" api:"required"`
@@ -188,15 +214,17 @@ type DomainListResponse struct {
 // domainListResponseJSON contains the JSON metadata for the struct
 // [DomainListResponse]
 type domainListResponseJSON struct {
-	ID          apijson.Field
-	CERTID      apijson.Field
-	Environment apijson.Field
-	Hostname    apijson.Field
-	Service     apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID              apijson.Field
+	CERTID          apijson.Field
+	Enabled         apijson.Field
+	Environment     apijson.Field
+	Hostname        apijson.Field
+	PreviewsEnabled apijson.Field
+	Service         apijson.Field
+	ZoneID          apijson.Field
+	ZoneName        apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *DomainListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -349,6 +377,11 @@ type DomainGetResponse struct {
 	ID string `json:"id" api:"required"`
 	// ID of the TLS certificate issued for the domain.
 	CERTID string `json:"cert_id" api:"required" format:"uuid"`
+	// Whether the configured hostname is routable for the domain. If disabled, then
+	// requests to the configured hostname will not be routed to the configured Worker.
+	// If disabled, then preview routing must be enabled, and only subdomains of the
+	// configured hostname will be routable.
+	Enabled bool `json:"enabled" api:"required"`
 	// Worker environment associated with the domain.
 	//
 	// Deprecated: deprecated
@@ -356,6 +389,13 @@ type DomainGetResponse struct {
 	// Hostname of the domain. Can be either the zone apex or a subdomain of the zone.
 	// Requests to this hostname will be routed to the configured Worker.
 	Hostname string `json:"hostname" api:"required"`
+	// Whether previews are routable for the domain. If enabled, previews will be
+	// routable as subdomains of the configured hostname. For example, if the
+	// configured hostname is `app.example.com`, then requests to
+	// `my-feature.app.example.com` will be routed to the preview with slug
+	// `my-feature`, if such a preview exists. If preview routing is disabled, then
+	// hostname routing must be enabled.
+	PreviewsEnabled bool `json:"previews_enabled" api:"required"`
 	// Name of the Worker associated with the domain. Requests to the configured
 	// hostname will be routed to this Worker.
 	Service string `json:"service" api:"required"`
@@ -369,15 +409,17 @@ type DomainGetResponse struct {
 // domainGetResponseJSON contains the JSON metadata for the struct
 // [DomainGetResponse]
 type domainGetResponseJSON struct {
-	ID          apijson.Field
-	CERTID      apijson.Field
-	Environment apijson.Field
-	Hostname    apijson.Field
-	Service     apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID              apijson.Field
+	CERTID          apijson.Field
+	Enabled         apijson.Field
+	Environment     apijson.Field
+	Hostname        apijson.Field
+	PreviewsEnabled apijson.Field
+	Service         apijson.Field
+	ZoneID          apijson.Field
+	ZoneName        apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *DomainGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -397,6 +439,18 @@ type DomainUpdateParams struct {
 	// Name of the Worker associated with the domain. Requests to the configured
 	// hostname will be routed to this Worker.
 	Service param.Field[string] `json:"service" api:"required"`
+	// Whether the configured hostname is routable for the domain. If disabled, then
+	// requests to the configured hostname will not be routed to the configured Worker.
+	// If disabled, then preview routing must be enabled, and only subdomains of the
+	// configured hostname will be routable.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Whether previews are routable for the domain. If enabled, previews will be
+	// routable as subdomains of the configured hostname. For example, if the
+	// configured hostname is `app.example.com`, then requests to
+	// `my-feature.app.example.com` will be routed to the preview with slug
+	// `my-feature`, if such a preview exists. If preview routing is disabled, then
+	// hostname routing must be enabled.
+	PreviewsEnabled param.Field[bool] `json:"previews_enabled"`
 	// Worker environment associated with the domain.
 	Environment param.Field[string] `json:"environment"`
 	// ID of the zone containing the domain hostname.
@@ -551,10 +605,14 @@ func (r DomainUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type DomainListParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Whether the configured hostname is routable for the domain.
+	Enabled param.Field[bool] `query:"enabled"`
 	// Worker environment associated with the domain.
 	Environment param.Field[string] `query:"environment"`
 	// Hostname of the domain.
 	Hostname param.Field[string] `query:"hostname"`
+	// Whether previews are routable for the domain.
+	PreviewsEnabled param.Field[bool] `query:"previews_enabled"`
 	// Name of the Worker associated with the domain.
 	Service param.Field[string] `query:"service"`
 	// ID of the zone containing the domain hostname.

@@ -34,7 +34,7 @@ func TestAgentReadinessSummaryWithOptionalParams(t *testing.T) {
 		radar.AgentReadinessSummaryParamsDimensionCheck,
 		radar.AgentReadinessSummaryParams{
 			Date:           cloudflare.F(time.Now()),
-			DomainCategory: cloudflare.F([]string{"string"}),
+			DomainCategory: cloudflare.F([]string{"News & Media"}),
 			Format:         cloudflare.F(radar.AgentReadinessSummaryParamsFormatJson),
 			Name:           cloudflare.F([]string{"main_series"}),
 		},

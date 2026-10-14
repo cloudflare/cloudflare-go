@@ -241,9 +241,10 @@ type ConnectorEventGetResponseE struct {
 	// Tunnel identifier
 	TunnelID string `json:"tunnel_id"`
 	// Location of upgrade bundle
-	URL   string                         `json:"url"`
-	JSON  connectorEventGetResponseEJSON `json:"-"`
-	union ConnectorEventGetResponseEUnion
+	URL         string                         `json:"url"`
+	JSON        connectorEventGetResponseEJSON `json:"-"`
+	ExtraFields map[string]interface{}         `json:"-" api:"extrafields"`
+	union       ConnectorEventGetResponseEUnion
 }
 
 // connectorEventGetResponseEJSON contains the JSON metadata for the struct
@@ -262,15 +263,36 @@ func (r connectorEventGetResponseEJSON) RawJSON() string {
 
 func (r *ConnectorEventGetResponseE) UnmarshalJSON(data []byte) (err error) {
 	*r = ConnectorEventGetResponseE{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
+	// Decode the open object first so an unimplemented variant cannot lose payload.
+	if err = apijson.UnmarshalRoot(data, r); err != nil {
 		return err
 	}
-	return apijson.Port(r.union, &r)
+	if !connectorEventHasTypedVariant(string(r.K)) {
+		return nil
+	}
+	return apijson.UnmarshalRoot(data, &r.union)
+}
+
+// Keep this list aligned with the variants registered for both event unions.
+// Other spec-defined and future kinds use the open-object representation.
+func connectorEventHasTypedVariant(kind string) bool {
+	switch kind {
+	case "Init", "Leave", "StartAttestation", "FinishAttestationSuccess",
+		"FinishAttestationFailure", "StartRotateCryptKey", "FinishRotateCryptKeySuccess",
+		"FinishRotateCryptKeyFailure", "StartRotatePki", "FinishRotatePkiSuccess",
+		"FinishRotatePkiFailure", "StartUpgrade", "FinishUpgradeSuccess",
+		"FinishUpgradeFailure", "Reconcile", "ConfigureCloudflaredTunnel",
+		"RekeyInstallBoth", "RekeyStart", "RekeyAdvance", "RekeyComplete", "RekeyReset":
+		return true
+	default:
+		return false
+	}
 }
 
 // AsUnion returns a [ConnectorEventGetResponseEUnion] interface which you can cast
 // to the specific types for more type safety.
+// It returns nil for kinds without an implemented variant; use K, TunnelID, URL,
+// and ExtraFields to access the open-object representation in that case.
 //
 // Possible runtime types of the union are [ConnectorEventGetResponseEInit],
 // [ConnectorEventGetResponseELeave], [ConnectorEventGetResponseEStartAttestation],

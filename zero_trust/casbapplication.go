@@ -103,6 +103,7 @@ type CasbApplicationListResponse struct {
 	// - `SALESFORCE` - SALESFORCE
 	// - `SERVICENOW` - SERVICENOW
 	// - `SLACK` - SLACK
+	// - `ZOOM` - ZOOM
 	ID CasbApplicationListResponseID `json:"id" api:"required"`
 	// Available auth methods.
 	AuthMethods []CasbApplicationListResponseAuthMethod `json:"auth_methods" api:"required"`
@@ -167,6 +168,7 @@ func (r casbApplicationListResponseJSON) RawJSON() string {
 // - `SALESFORCE` - SALESFORCE
 // - `SERVICENOW` - SERVICENOW
 // - `SLACK` - SLACK
+// - `ZOOM` - ZOOM
 type CasbApplicationListResponseID string
 
 const (
@@ -185,11 +187,12 @@ const (
 	CasbApplicationListResponseIDSalesforce          CasbApplicationListResponseID = "SALESFORCE"
 	CasbApplicationListResponseIDServicenow          CasbApplicationListResponseID = "SERVICENOW"
 	CasbApplicationListResponseIDSlack               CasbApplicationListResponseID = "SLACK"
+	CasbApplicationListResponseIDZoom                CasbApplicationListResponseID = "ZOOM"
 )
 
 func (r CasbApplicationListResponseID) IsKnown() bool {
 	switch r {
-	case CasbApplicationListResponseIDAnthropic, CasbApplicationListResponseIDAws, CasbApplicationListResponseIDBitbucket, CasbApplicationListResponseIDBox, CasbApplicationListResponseIDConfluence, CasbApplicationListResponseIDDropbox, CasbApplicationListResponseIDGitHub, CasbApplicationListResponseIDGoogleCloudPlatform, CasbApplicationListResponseIDGoogleWorkspace, CasbApplicationListResponseIDJira, CasbApplicationListResponseIDMicrosoftInternal, CasbApplicationListResponseIDOpenAI, CasbApplicationListResponseIDSalesforce, CasbApplicationListResponseIDServicenow, CasbApplicationListResponseIDSlack:
+	case CasbApplicationListResponseIDAnthropic, CasbApplicationListResponseIDAws, CasbApplicationListResponseIDBitbucket, CasbApplicationListResponseIDBox, CasbApplicationListResponseIDConfluence, CasbApplicationListResponseIDDropbox, CasbApplicationListResponseIDGitHub, CasbApplicationListResponseIDGoogleCloudPlatform, CasbApplicationListResponseIDGoogleWorkspace, CasbApplicationListResponseIDJira, CasbApplicationListResponseIDMicrosoftInternal, CasbApplicationListResponseIDOpenAI, CasbApplicationListResponseIDSalesforce, CasbApplicationListResponseIDServicenow, CasbApplicationListResponseIDSlack, CasbApplicationListResponseIDZoom:
 		return true
 	}
 	return false
@@ -323,6 +326,7 @@ type CasbApplicationGetResponse struct {
 	// - `SALESFORCE` - SALESFORCE
 	// - `SERVICENOW` - SERVICENOW
 	// - `SLACK` - SLACK
+	// - `ZOOM` - ZOOM
 	ID CasbApplicationGetResponseID `json:"id" api:"required"`
 	// Available authentication methods.
 	AuthMethods []CasbApplicationGetResponseAuthMethod `json:"auth_methods" api:"required"`
@@ -384,6 +388,7 @@ func (r casbApplicationGetResponseJSON) RawJSON() string {
 // - `SALESFORCE` - SALESFORCE
 // - `SERVICENOW` - SERVICENOW
 // - `SLACK` - SLACK
+// - `ZOOM` - ZOOM
 type CasbApplicationGetResponseID string
 
 const (
@@ -402,11 +407,12 @@ const (
 	CasbApplicationGetResponseIDSalesforce          CasbApplicationGetResponseID = "SALESFORCE"
 	CasbApplicationGetResponseIDServicenow          CasbApplicationGetResponseID = "SERVICENOW"
 	CasbApplicationGetResponseIDSlack               CasbApplicationGetResponseID = "SLACK"
+	CasbApplicationGetResponseIDZoom                CasbApplicationGetResponseID = "ZOOM"
 )
 
 func (r CasbApplicationGetResponseID) IsKnown() bool {
 	switch r {
-	case CasbApplicationGetResponseIDAnthropic, CasbApplicationGetResponseIDAws, CasbApplicationGetResponseIDBitbucket, CasbApplicationGetResponseIDBox, CasbApplicationGetResponseIDConfluence, CasbApplicationGetResponseIDDropbox, CasbApplicationGetResponseIDGitHub, CasbApplicationGetResponseIDGoogleCloudPlatform, CasbApplicationGetResponseIDGoogleWorkspace, CasbApplicationGetResponseIDJira, CasbApplicationGetResponseIDMicrosoftInternal, CasbApplicationGetResponseIDOpenAI, CasbApplicationGetResponseIDSalesforce, CasbApplicationGetResponseIDServicenow, CasbApplicationGetResponseIDSlack:
+	case CasbApplicationGetResponseIDAnthropic, CasbApplicationGetResponseIDAws, CasbApplicationGetResponseIDBitbucket, CasbApplicationGetResponseIDBox, CasbApplicationGetResponseIDConfluence, CasbApplicationGetResponseIDDropbox, CasbApplicationGetResponseIDGitHub, CasbApplicationGetResponseIDGoogleCloudPlatform, CasbApplicationGetResponseIDGoogleWorkspace, CasbApplicationGetResponseIDJira, CasbApplicationGetResponseIDMicrosoftInternal, CasbApplicationGetResponseIDOpenAI, CasbApplicationGetResponseIDSalesforce, CasbApplicationGetResponseIDServicenow, CasbApplicationGetResponseIDSlack, CasbApplicationGetResponseIDZoom:
 		return true
 	}
 	return false
@@ -666,11 +672,12 @@ const (
 	CasbApplicationGetParamsApplicationIDSalesforce          CasbApplicationGetParamsApplicationID = "SALESFORCE"
 	CasbApplicationGetParamsApplicationIDServicenow          CasbApplicationGetParamsApplicationID = "SERVICENOW"
 	CasbApplicationGetParamsApplicationIDSlack               CasbApplicationGetParamsApplicationID = "SLACK"
+	CasbApplicationGetParamsApplicationIDZoom                CasbApplicationGetParamsApplicationID = "ZOOM"
 )
 
 func (r CasbApplicationGetParamsApplicationID) IsKnown() bool {
 	switch r {
-	case CasbApplicationGetParamsApplicationIDAnthropic, CasbApplicationGetParamsApplicationIDAws, CasbApplicationGetParamsApplicationIDBitbucket, CasbApplicationGetParamsApplicationIDBox, CasbApplicationGetParamsApplicationIDConfluence, CasbApplicationGetParamsApplicationIDDropbox, CasbApplicationGetParamsApplicationIDGitHub, CasbApplicationGetParamsApplicationIDGoogleCloudPlatform, CasbApplicationGetParamsApplicationIDGoogleWorkspace, CasbApplicationGetParamsApplicationIDJira, CasbApplicationGetParamsApplicationIDMicrosoftInternal, CasbApplicationGetParamsApplicationIDOpenAI, CasbApplicationGetParamsApplicationIDSalesforce, CasbApplicationGetParamsApplicationIDServicenow, CasbApplicationGetParamsApplicationIDSlack:
+	case CasbApplicationGetParamsApplicationIDAnthropic, CasbApplicationGetParamsApplicationIDAws, CasbApplicationGetParamsApplicationIDBitbucket, CasbApplicationGetParamsApplicationIDBox, CasbApplicationGetParamsApplicationIDConfluence, CasbApplicationGetParamsApplicationIDDropbox, CasbApplicationGetParamsApplicationIDGitHub, CasbApplicationGetParamsApplicationIDGoogleCloudPlatform, CasbApplicationGetParamsApplicationIDGoogleWorkspace, CasbApplicationGetParamsApplicationIDJira, CasbApplicationGetParamsApplicationIDMicrosoftInternal, CasbApplicationGetParamsApplicationIDOpenAI, CasbApplicationGetParamsApplicationIDSalesforce, CasbApplicationGetParamsApplicationIDServicenow, CasbApplicationGetParamsApplicationIDSlack, CasbApplicationGetParamsApplicationIDZoom:
 		return true
 	}
 	return false

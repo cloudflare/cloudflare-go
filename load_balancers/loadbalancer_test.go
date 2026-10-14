@@ -46,7 +46,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 			Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
 			PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 		}),
-		Networks: cloudflare.F([]string{"string"}),
+		Networks: cloudflare.F([]string{"cloudflare", "jdcloud"}),
 		POPPools: cloudflare.F(map[string][]string{
 			"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 			"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
@@ -183,7 +183,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 				Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
 				PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 			}),
-			Networks: cloudflare.F([]string{"string"}),
+			Networks: cloudflare.F([]string{"cloudflare", "jdcloud"}),
 			POPPools: cloudflare.F(map[string][]string{
 				"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 				"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
@@ -377,7 +377,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 				PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 			}),
 			Name:     cloudflare.F("www.example.com"),
-			Networks: cloudflare.F([]string{"string"}),
+			Networks: cloudflare.F([]string{"cloudflare", "jdcloud"}),
 			POPPools: cloudflare.F(map[string][]string{
 				"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 				"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},

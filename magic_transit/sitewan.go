@@ -209,6 +209,10 @@ type WAN struct {
 	Physport              int64              `json:"physport"`
 	// Priority of WAN for traffic loadbalancing.
 	Priority int64 `json:"priority"`
+	// Provisioned download rate of the WAN circuit in kilobits per second.
+	ProvisionedDownloadKbps int64 `json:"provisioned_download_kbps"`
+	// Provisioned upload rate of the WAN circuit in kilobits per second.
+	ProvisionedUploadKbps int64 `json:"provisioned_upload_kbps"`
 	// Identifier
 	SiteID string `json:"site_id"`
 	// (optional) if omitted, use DHCP. Submit secondary_address when site is in high
@@ -221,17 +225,19 @@ type WAN struct {
 
 // wanJSON contains the JSON metadata for the struct [WAN]
 type wanJSON struct {
-	ID                    apijson.Field
-	HealthCheckRate       apijson.Field
-	LoadBalanceInnerFlows apijson.Field
-	Name                  apijson.Field
-	Physport              apijson.Field
-	Priority              apijson.Field
-	SiteID                apijson.Field
-	StaticAddressing      apijson.Field
-	VlanTag               apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
+	ID                      apijson.Field
+	HealthCheckRate         apijson.Field
+	LoadBalanceInnerFlows   apijson.Field
+	Name                    apijson.Field
+	Physport                apijson.Field
+	Priority                apijson.Field
+	ProvisionedDownloadKbps apijson.Field
+	ProvisionedUploadKbps   apijson.Field
+	SiteID                  apijson.Field
+	StaticAddressing        apijson.Field
+	VlanTag                 apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r *WAN) UnmarshalJSON(data []byte) (err error) {
@@ -268,18 +274,21 @@ type WANStaticAddressing struct {
 	// A valid IPv4 address.
 	GatewayAddress string `json:"gateway_address" api:"required"`
 	// A valid CIDR notation representing an IP range.
-	SecondaryAddress string                  `json:"secondary_address"`
-	JSON             wanStaticAddressingJSON `json:"-"`
+	SecondaryAddress string `json:"secondary_address"`
+	// Gateway address for the secondary connector of a high availability site.
+	SecondaryGatewayAddress string                  `json:"secondary_gateway_address"`
+	JSON                    wanStaticAddressingJSON `json:"-"`
 }
 
 // wanStaticAddressingJSON contains the JSON metadata for the struct
 // [WANStaticAddressing]
 type wanStaticAddressingJSON struct {
-	Address          apijson.Field
-	GatewayAddress   apijson.Field
-	SecondaryAddress apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Address                 apijson.Field
+	GatewayAddress          apijson.Field
+	SecondaryAddress        apijson.Field
+	SecondaryGatewayAddress apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r *WANStaticAddressing) UnmarshalJSON(data []byte) (err error) {
@@ -288,21 +297,6 @@ func (r *WANStaticAddressing) UnmarshalJSON(data []byte) (err error) {
 
 func (r wanStaticAddressingJSON) RawJSON() string {
 	return r.raw
-}
-
-// (optional) if omitted, use DHCP. Submit secondary_address when site is in high
-// availability mode.
-type WANStaticAddressingParam struct {
-	// A valid CIDR notation representing an IP range.
-	Address param.Field[string] `json:"address" api:"required"`
-	// A valid IPv4 address.
-	GatewayAddress param.Field[string] `json:"gateway_address" api:"required"`
-	// A valid CIDR notation representing an IP range.
-	SecondaryAddress param.Field[string] `json:"secondary_address"`
-}
-
-func (r WANStaticAddressingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type SiteWANNewParams struct {
@@ -315,9 +309,13 @@ type SiteWANNewParams struct {
 	LoadBalanceInnerFlows param.Field[bool]                            `json:"load_balance_inner_flows"`
 	Name                  param.Field[string]                          `json:"name"`
 	Priority              param.Field[int64]                           `json:"priority"`
-	// (optional) if omitted, use DHCP. Submit secondary_address when site is in high
-	// availability mode.
-	StaticAddressing param.Field[WANStaticAddressingParam] `json:"static_addressing"`
+	// Provisioned download rate of the WAN circuit in kilobits per second.
+	ProvisionedDownloadKbps param.Field[int64] `json:"provisioned_download_kbps"`
+	// Provisioned upload rate of the WAN circuit in kilobits per second.
+	ProvisionedUploadKbps param.Field[int64] `json:"provisioned_upload_kbps"`
+	// Static addressing configuration for a WAN. Omit to use DHCP. Submit
+	// secondary_address when the site is in high availability mode.
+	StaticAddressing param.Field[SiteWANNewParamsStaticAddressing] `json:"static_addressing"`
 	// VLAN ID. Use zero for untagged.
 	VlanTag param.Field[int64] `json:"vlan_tag"`
 }
@@ -344,6 +342,23 @@ func (r SiteWANNewParamsHealthCheckRate) IsKnown() bool {
 	return false
 }
 
+// Static addressing configuration for a WAN. Omit to use DHCP. Submit
+// secondary_address when the site is in high availability mode.
+type SiteWANNewParamsStaticAddressing struct {
+	// A valid CIDR notation representing an IP range.
+	Address param.Field[string] `json:"address" api:"required"`
+	// A valid IPv4 address.
+	GatewayAddress param.Field[string] `json:"gateway_address" api:"required"`
+	// A valid CIDR notation representing an IP range.
+	SecondaryAddress param.Field[string] `json:"secondary_address"`
+	// Gateway address for the secondary connector of a high availability site.
+	SecondaryGatewayAddress param.Field[string] `json:"secondary_gateway_address"`
+}
+
+func (r SiteWANNewParamsStaticAddressing) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type SiteWANUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -353,9 +368,15 @@ type SiteWANUpdateParams struct {
 	Name                  param.Field[string]                             `json:"name"`
 	Physport              param.Field[int64]                              `json:"physport"`
 	Priority              param.Field[int64]                              `json:"priority"`
-	// (optional) if omitted, use DHCP. Submit secondary_address when site is in high
-	// availability mode.
-	StaticAddressing param.Field[WANStaticAddressingParam] `json:"static_addressing"`
+	// Provisioned download rate of the WAN circuit in kilobits per second. Set to null
+	// to remove it.
+	ProvisionedDownloadKbps param.Field[int64] `json:"provisioned_download_kbps"`
+	// Provisioned upload rate of the WAN circuit in kilobits per second. Set to null
+	// to remove it.
+	ProvisionedUploadKbps param.Field[int64] `json:"provisioned_upload_kbps"`
+	// Static addressing configuration. PATCH updates only the fields provided, and PUT
+	// replaces the configuration.
+	StaticAddressing param.Field[SiteWANUpdateParamsStaticAddressing] `json:"static_addressing"`
 	// VLAN ID. Use zero for untagged.
 	VlanTag param.Field[int64] `json:"vlan_tag"`
 }
@@ -379,6 +400,24 @@ func (r SiteWANUpdateParamsHealthCheckRate) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Static addressing configuration. PATCH updates only the fields provided, and PUT
+// replaces the configuration.
+type SiteWANUpdateParamsStaticAddressing struct {
+	// A valid CIDR notation representing an IP range.
+	Address param.Field[string] `json:"address"`
+	// A valid IPv4 address.
+	GatewayAddress param.Field[string] `json:"gateway_address"`
+	// A valid CIDR notation representing an IP range.
+	SecondaryAddress param.Field[string] `json:"secondary_address"`
+	// Gateway address for the secondary connector of a high availability site. Set to
+	// null to remove it.
+	SecondaryGatewayAddress param.Field[string] `json:"secondary_gateway_address"`
+}
+
+func (r SiteWANUpdateParamsStaticAddressing) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type SiteWANUpdateResponseEnvelope struct {
@@ -486,9 +525,15 @@ type SiteWANEditParams struct {
 	Name                  param.Field[string]                           `json:"name"`
 	Physport              param.Field[int64]                            `json:"physport"`
 	Priority              param.Field[int64]                            `json:"priority"`
-	// (optional) if omitted, use DHCP. Submit secondary_address when site is in high
-	// availability mode.
-	StaticAddressing param.Field[WANStaticAddressingParam] `json:"static_addressing"`
+	// Provisioned download rate of the WAN circuit in kilobits per second. Set to null
+	// to remove it.
+	ProvisionedDownloadKbps param.Field[int64] `json:"provisioned_download_kbps"`
+	// Provisioned upload rate of the WAN circuit in kilobits per second. Set to null
+	// to remove it.
+	ProvisionedUploadKbps param.Field[int64] `json:"provisioned_upload_kbps"`
+	// Static addressing configuration. PATCH updates only the fields provided, and PUT
+	// replaces the configuration.
+	StaticAddressing param.Field[SiteWANEditParamsStaticAddressing] `json:"static_addressing"`
 	// VLAN ID. Use zero for untagged.
 	VlanTag param.Field[int64] `json:"vlan_tag"`
 }
@@ -512,6 +557,24 @@ func (r SiteWANEditParamsHealthCheckRate) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Static addressing configuration. PATCH updates only the fields provided, and PUT
+// replaces the configuration.
+type SiteWANEditParamsStaticAddressing struct {
+	// A valid CIDR notation representing an IP range.
+	Address param.Field[string] `json:"address"`
+	// A valid IPv4 address.
+	GatewayAddress param.Field[string] `json:"gateway_address"`
+	// A valid CIDR notation representing an IP range.
+	SecondaryAddress param.Field[string] `json:"secondary_address"`
+	// Gateway address for the secondary connector of a high availability site. Set to
+	// null to remove it.
+	SecondaryGatewayAddress param.Field[string] `json:"secondary_gateway_address"`
+}
+
+func (r SiteWANEditParamsStaticAddressing) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type SiteWANEditResponseEnvelope struct {

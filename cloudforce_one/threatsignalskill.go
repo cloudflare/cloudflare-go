@@ -488,17 +488,19 @@ func (r ThreatSignalSkillGetResponseSource) IsKnown() bool {
 }
 
 type ThreatSignalSkillNewParams struct {
-	AccountID    param.Field[string]                         `path:"account_id" api:"required"`
-	Name         param.Field[string]                         `json:"name" api:"required"`
-	OutputSchema param.Field[string]                         `json:"output_schema" api:"required"`
-	Prompt       param.Field[string]                         `json:"prompt" api:"required"`
-	Type         param.Field[ThreatSignalSkillNewParamsType] `json:"type" api:"required"`
+	AccountID    param.Field[string] `path:"account_id" api:"required"`
+	Name         param.Field[string] `json:"name" api:"required"`
+	OutputSchema param.Field[string] `json:"output_schema" api:"required"`
+	Prompt       param.Field[string] `json:"prompt" api:"required"`
+	// Optional label; does not affect execution. Defaults to "summary".
+	Type param.Field[ThreatSignalSkillNewParamsType] `json:"type"`
 }
 
 func (r ThreatSignalSkillNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Optional label; does not affect execution. Defaults to "summary".
 type ThreatSignalSkillNewParamsType string
 
 const (

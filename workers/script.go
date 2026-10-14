@@ -4137,9 +4137,10 @@ type ScriptUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// JSON-encoded metadata about the uploaded parts and Worker configuration.
 	Metadata param.Field[ScriptUpdateParamsMetadata] `json:"metadata" api:"required"`
-	// When set to "strict", the upload will fail if any `inherit` type bindings cannot
-	// be resolved against the previous version of the Worker. Without this,
-	// unresolvable inherit bindings are silently dropped.
+	// When set to "strict", the upload will fail with error 10057 if any `inherit`
+	// type bindings cannot be resolved against the latest uploaded version of the
+	// Worker, which may not be the deployed version. Without this, unresolvable
+	// inherit bindings are silently dropped.
 	BindingsInherit param.Field[ScriptUpdateParamsBindingsInherit] `query:"bindings_inherit"`
 	// An array of modules (often JavaScript files) comprising a Worker script. At
 	// least one module must be present and referenced in the metadata as `main_module`
@@ -4441,9 +4442,13 @@ type ScriptUpdateParamsMetadataBinding struct {
 	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
 	TunnelID param.Field[string]      `json:"tunnel_id"`
 	Usages   param.Field[interface{}] `json:"usages"`
-	// Identifier for the version to inherit the binding from, which can be the version
-	// ID or the literal "latest" to inherit from the latest version. Defaults to
-	// inheriting the binding from the latest version.
+	// Identifier for the version to inherit the binding from. This can be a version
+	// ID, or the literal "latest" to inherit from the most recently uploaded version,
+	// which may not be the deployed version. Defaults to "latest". Only the Workers
+	// API version endpoints under
+	// `/accounts/{account_id}/workers/workers/{worker_id}/versions` accept a version
+	// ID. Other endpoints, including script upload and script version upload, accept
+	// only "latest" and reject a version ID with error 10057.
 	VersionID param.Field[string] `json:"version_id"`
 	// Name of the Workflow to bind to.
 	WorkflowName param.Field[string] `json:"workflow_name"`
@@ -4992,9 +4997,13 @@ type ScriptUpdateParamsMetadataBindingsWorkersBindingKindInherit struct {
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
 	// same name between versions.
 	OldName param.Field[string] `json:"old_name"`
-	// Identifier for the version to inherit the binding from, which can be the version
-	// ID or the literal "latest" to inherit from the latest version. Defaults to
-	// inheriting the binding from the latest version.
+	// Identifier for the version to inherit the binding from. This can be a version
+	// ID, or the literal "latest" to inherit from the most recently uploaded version,
+	// which may not be the deployed version. Defaults to "latest". Only the Workers
+	// API version endpoints under
+	// `/accounts/{account_id}/workers/workers/{worker_id}/versions` accept a version
+	// ID. Other endpoints, including script upload and script version upload, accept
+	// only "latest" and reject a version ID with error 10057.
 	VersionID param.Field[string] `json:"version_id"`
 }
 
@@ -7045,9 +7054,10 @@ func (r ScriptUpdateParamsMetadataUsageModel) IsKnown() bool {
 	return false
 }
 
-// When set to "strict", the upload will fail if any `inherit` type bindings cannot
-// be resolved against the previous version of the Worker. Without this,
-// unresolvable inherit bindings are silently dropped.
+// When set to "strict", the upload will fail with error 10057 if any `inherit`
+// type bindings cannot be resolved against the latest uploaded version of the
+// Worker, which may not be the deployed version. Without this, unresolvable
+// inherit bindings are silently dropped.
 type ScriptUpdateParamsBindingsInherit string
 
 const (

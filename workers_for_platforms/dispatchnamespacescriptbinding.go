@@ -177,9 +177,13 @@ type DispatchNamespaceScriptBindingGetResponse struct {
 	// This field can have the runtime type of
 	// [[]DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsage].
 	Usages interface{} `json:"usages"`
-	// Identifier for the version to inherit the binding from, which can be the version
-	// ID or the literal "latest" to inherit from the latest version. Defaults to
-	// inheriting the binding from the latest version.
+	// Identifier for the version to inherit the binding from. This can be a version
+	// ID, or the literal "latest" to inherit from the most recently uploaded version,
+	// which may not be the deployed version. Defaults to "latest". Only the Workers
+	// API version endpoints under
+	// `/accounts/{account_id}/workers/workers/{worker_id}/versions` accept a version
+	// ID. Other endpoints, including script upload and script version upload, accept
+	// only "latest" and reject a version ID with error 10057.
 	VersionID string `json:"version_id"`
 	// Name of the Workflow to bind to.
 	WorkflowName string                                        `json:"workflow_name"`
@@ -1304,9 +1308,13 @@ type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindInherit struct {
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
 	// same name between versions.
 	OldName string `json:"old_name"`
-	// Identifier for the version to inherit the binding from, which can be the version
-	// ID or the literal "latest" to inherit from the latest version. Defaults to
-	// inheriting the binding from the latest version.
+	// Identifier for the version to inherit the binding from. This can be a version
+	// ID, or the literal "latest" to inherit from the most recently uploaded version,
+	// which may not be the deployed version. Defaults to "latest". Only the Workers
+	// API version endpoints under
+	// `/accounts/{account_id}/workers/workers/{worker_id}/versions` accept a version
+	// ID. Other endpoints, including script upload and script version upload, accept
+	// only "latest" and reject a version ID with error 10057.
 	VersionID string                                                                 `json:"version_id"`
 	JSON      dispatchNamespaceScriptBindingGetResponseWorkersBindingKindInheritJSON `json:"-"`
 }

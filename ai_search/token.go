@@ -78,7 +78,8 @@ func (r *TokenService) Update(ctx context.Context, id string, params TokenUpdate
 	return res, nil
 }
 
-// List stored AI Search credentials in the account without exposing their secrets.
+// Lists stored AI Search credentials in the account without exposing their
+// secrets.
 func (r *TokenService) List(ctx context.Context, params TokenListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[TokenListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -100,12 +101,13 @@ func (r *TokenService) List(ctx context.Context, params TokenListParams, opts ..
 	return res, nil
 }
 
-// List stored AI Search credentials in the account without exposing their secrets.
+// Lists stored AI Search credentials in the account without exposing their
+// secrets.
 func (r *TokenService) ListAutoPaging(ctx context.Context, params TokenListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[TokenListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Permanently delete a stored AI Search credential. Credentials in use by an
+// Deletes a stored AI Search credential permanently. Credentials in use by an
 // instance cannot be deleted.
 func (r *TokenService) Delete(ctx context.Context, id string, body TokenDeleteParams, opts ...option.RequestOption) (res *TokenDeleteResponse, err error) {
 	var env TokenDeleteResponseEnvelope

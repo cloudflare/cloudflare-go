@@ -110,6 +110,9 @@ type ZoneTagUpdateResponse struct {
 	Type ZoneTagUpdateResponseType `json:"type" api:"required"`
 	// Access application ID is required only for access_application_policy resources
 	AccessApplicationID string `json:"access_application_id" format:"uuid"`
+	// This field can have the runtime type of
+	// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation].
+	Navigation interface{} `json:"navigation"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -135,6 +138,7 @@ type zoneTagUpdateResponseJSON struct {
 	Tags                apijson.Field
 	Type                apijson.Field
 	AccessApplicationID apijson.Field
+	Navigation          apijson.Field
 	TagsUpdatedAt       apijson.Field
 	WorkerID            apijson.Field
 	ZoneID              apijson.Field
@@ -172,10 +176,10 @@ func (r *ZoneTagUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificate],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostname],
-// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment],
-// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy],
-// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet],
-// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload],
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeployment],
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicy],
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySet],
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkload],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectD1Database],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectDevice],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecord],
@@ -190,6 +194,7 @@ func (r *ZoneTagUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPool],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificate],
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorker],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProject],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectQueue],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectR2Bucket],
@@ -222,10 +227,10 @@ func (r ZoneTagUpdateResponse) AsUnion() ZoneTagUpdateResponseUnion {
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificate],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostname],
-// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment],
-// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy],
-// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet],
-// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload],
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeployment],
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicy],
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySet],
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkload],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectD1Database],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectDevice],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecord],
@@ -240,6 +245,7 @@ func (r ZoneTagUpdateResponse) AsUnion() ZoneTagUpdateResponseUnion {
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPool],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificate],
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorker],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProject],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectQueue],
 // [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectR2Bucket],
@@ -327,22 +333,22 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment{}),
+			Type:               reflect.TypeOf(ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeployment{}),
 			DiscriminatorValue: "cws_deployment",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy{}),
+			Type:               reflect.TypeOf(ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicy{}),
 			DiscriminatorValue: "cws_policy",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet{}),
+			Type:               reflect.TypeOf(ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySet{}),
 			DiscriminatorValue: "cws_policy_set",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload{}),
+			Type:               reflect.TypeOf(ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkload{}),
 			DiscriminatorValue: "cws_workload",
 		},
 		apijson.UnionVariant{
@@ -414,6 +420,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificate{}),
 			DiscriminatorValue: "managed_client_certificate",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorker{}),
+			DiscriminatorValue: "namespace_worker",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -1352,7 +1363,7 @@ func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostnameTy
 }
 
 // Response for cws_deployment resources
-type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment struct {
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeployment struct {
 	// Identifies the unique resource.
 	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
@@ -1366,7 +1377,7 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment struc
 	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                         `json:"tags" api:"required"`
-	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentType `json:"type" api:"required"`
+	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentType `json:"type" api:"required"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -1375,13 +1386,13 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment struc
 	// has no current version, and deletions are ordered by event order rather than by
 	// version.
 	TagsUpdatedAt time.Time                                                                 `json:"tags_updated_at" format:"date-time"`
-	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON `json:"-"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentJSON `json:"-"`
 }
 
-// zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON
+// zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentJSON
 // contains the JSON metadata for the struct
-// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment]
-type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON struct {
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeployment]
+type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentJSON struct {
 	ID            apijson.Field
 	Etag          apijson.Field
 	Name          apijson.Field
@@ -1392,33 +1403,33 @@ type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON s
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeployment) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON) RawJSON() string {
+func (r zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment) implementsZoneTagUpdateResponse() {
+func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeployment) implementsZoneTagUpdateResponse() {
 }
 
-type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentType string
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentType string
 
 const (
-	ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentTypeCwsDeployment ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentType = "cws_deployment"
+	ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentTypeCWSDeployment ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentType = "cws_deployment"
 )
 
-func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentType) IsKnown() bool {
+func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentType) IsKnown() bool {
 	switch r {
-	case ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentTypeCwsDeployment:
+	case ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentTypeCWSDeployment:
 		return true
 	}
 	return false
 }
 
 // Response for cws_policy resources
-type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy struct {
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicy struct {
 	// Identifies the unique resource.
 	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
@@ -1432,7 +1443,7 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy struct {
 	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                     `json:"tags" api:"required"`
-	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyType `json:"type" api:"required"`
+	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyType `json:"type" api:"required"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -1441,13 +1452,13 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy struct {
 	// has no current version, and deletions are ordered by event order rather than by
 	// version.
 	TagsUpdatedAt time.Time                                                             `json:"tags_updated_at" format:"date-time"`
-	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON `json:"-"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyJSON `json:"-"`
 }
 
-// zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON contains
+// zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyJSON contains
 // the JSON metadata for the struct
-// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy]
-type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON struct {
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicy]
+type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyJSON struct {
 	ID            apijson.Field
 	Etag          apijson.Field
 	Name          apijson.Field
@@ -1458,33 +1469,33 @@ type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON struc
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON) RawJSON() string {
+func (r zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy) implementsZoneTagUpdateResponse() {
+func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicy) implementsZoneTagUpdateResponse() {
 }
 
-type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyType string
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyType string
 
 const (
-	ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyTypeCwsPolicy ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyType = "cws_policy"
+	ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyTypeCWSPolicy ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyType = "cws_policy"
 )
 
-func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyType) IsKnown() bool {
+func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyType) IsKnown() bool {
 	switch r {
-	case ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyTypeCwsPolicy:
+	case ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyTypeCWSPolicy:
 		return true
 	}
 	return false
 }
 
 // Response for cws_policy_set resources
-type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet struct {
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySet struct {
 	// Identifies the unique resource.
 	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
@@ -1498,7 +1509,7 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet struct
 	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                        `json:"tags" api:"required"`
-	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetType `json:"type" api:"required"`
+	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetType `json:"type" api:"required"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -1507,13 +1518,13 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet struct
 	// has no current version, and deletions are ordered by event order rather than by
 	// version.
 	TagsUpdatedAt time.Time                                                                `json:"tags_updated_at" format:"date-time"`
-	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON `json:"-"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetJSON `json:"-"`
 }
 
-// zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON
+// zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetJSON
 // contains the JSON metadata for the struct
-// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet]
-type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON struct {
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySet]
+type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetJSON struct {
 	ID            apijson.Field
 	Etag          apijson.Field
 	Name          apijson.Field
@@ -1524,33 +1535,33 @@ type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON st
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySet) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON) RawJSON() string {
+func (r zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet) implementsZoneTagUpdateResponse() {
+func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySet) implementsZoneTagUpdateResponse() {
 }
 
-type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetType string
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetType string
 
 const (
-	ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetTypeCwsPolicySet ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetType = "cws_policy_set"
+	ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetTypeCWSPolicySet ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetType = "cws_policy_set"
 )
 
-func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetType) IsKnown() bool {
+func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetType) IsKnown() bool {
 	switch r {
-	case ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetTypeCwsPolicySet:
+	case ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetTypeCWSPolicySet:
 		return true
 	}
 	return false
 }
 
 // Response for cws_workload resources
-type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload struct {
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkload struct {
 	// Identifies the unique resource.
 	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
@@ -1564,7 +1575,7 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload struct 
 	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                       `json:"tags" api:"required"`
-	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadType `json:"type" api:"required"`
+	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadType `json:"type" api:"required"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -1573,13 +1584,13 @@ type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload struct 
 	// has no current version, and deletions are ordered by event order rather than by
 	// version.
 	TagsUpdatedAt time.Time                                                               `json:"tags_updated_at" format:"date-time"`
-	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON `json:"-"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadJSON `json:"-"`
 }
 
-// zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON contains
+// zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadJSON contains
 // the JSON metadata for the struct
-// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload]
-type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON struct {
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkload]
+type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadJSON struct {
 	ID            apijson.Field
 	Etag          apijson.Field
 	Name          apijson.Field
@@ -1590,26 +1601,26 @@ type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON str
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkload) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON) RawJSON() string {
+func (r zoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload) implementsZoneTagUpdateResponse() {
+func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkload) implementsZoneTagUpdateResponse() {
 }
 
-type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadType string
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadType string
 
 const (
-	ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadTypeCwsWorkload ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadType = "cws_workload"
+	ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadTypeCWSWorkload ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadType = "cws_workload"
 )
 
-func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadType) IsKnown() bool {
+func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadType) IsKnown() bool {
 	switch r {
-	case ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadTypeCwsWorkload:
+	case ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadTypeCWSWorkload:
 		return true
 	}
 	return false
@@ -2551,6 +2562,108 @@ func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCer
 	return false
 }
 
+// Response for namespace_worker resources
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorker struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                           `json:"tags" api:"required"`
+	Type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerType `json:"type" api:"required"`
+	// Read-only routing metadata resolved from EWC using the account and immutable
+	// namespace Worker ID. Returned only by tagged-resource lists requested with
+	// include_navigation=true. Omitted when lookup is unavailable or the child has
+	// been deleted. Never supplied on tag writes or stored as extra_data.
+	Navigation ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation `json:"navigation"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                   `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerJSON `json:"-"`
+}
+
+// zoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerJSON
+// contains the JSON metadata for the struct
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorker]
+type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	Navigation    apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorker) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorker) implementsZoneTagUpdateResponse() {
+}
+
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerType string
+
+const (
+	ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerTypeNamespaceWorker ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerType = "namespace_worker"
+)
+
+func (r ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerType) IsKnown() bool {
+	switch r {
+	case ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerTypeNamespaceWorker:
+		return true
+	}
+	return false
+}
+
+// Read-only routing metadata resolved from EWC using the account and immutable
+// namespace Worker ID. Returned only by tagged-resource lists requested with
+// include_navigation=true. Omitted when lookup is unavailable or the child has
+// been deleted. Never supplied on tag writes or stored as extra_data.
+type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation struct {
+	NamespaceID   string                                                                                `json:"namespace_id" api:"required"`
+	NamespaceName string                                                                                `json:"namespace_name" api:"required"`
+	ScriptName    string                                                                                `json:"script_name" api:"required"`
+	JSON          zoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigationJSON `json:"-"`
+}
+
+// zoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigationJSON
+// contains the JSON metadata for the struct
+// [ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation]
+type zoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigationJSON struct {
+	NamespaceID   apijson.Field
+	NamespaceName apijson.Field
+	ScriptName    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Response for pages_project resources
 type ZoneTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProject struct {
 	// Identifies the unique resource.
@@ -3371,10 +3484,10 @@ const (
 	ZoneTagUpdateResponseTypeCloudflaredTunnel        ZoneTagUpdateResponseType = "cloudflared_tunnel"
 	ZoneTagUpdateResponseTypeCustomCertificate        ZoneTagUpdateResponseType = "custom_certificate"
 	ZoneTagUpdateResponseTypeCustomHostname           ZoneTagUpdateResponseType = "custom_hostname"
-	ZoneTagUpdateResponseTypeCwsDeployment            ZoneTagUpdateResponseType = "cws_deployment"
-	ZoneTagUpdateResponseTypeCwsPolicy                ZoneTagUpdateResponseType = "cws_policy"
-	ZoneTagUpdateResponseTypeCwsPolicySet             ZoneTagUpdateResponseType = "cws_policy_set"
-	ZoneTagUpdateResponseTypeCwsWorkload              ZoneTagUpdateResponseType = "cws_workload"
+	ZoneTagUpdateResponseTypeCWSDeployment            ZoneTagUpdateResponseType = "cws_deployment"
+	ZoneTagUpdateResponseTypeCWSPolicy                ZoneTagUpdateResponseType = "cws_policy"
+	ZoneTagUpdateResponseTypeCWSPolicySet             ZoneTagUpdateResponseType = "cws_policy_set"
+	ZoneTagUpdateResponseTypeCWSWorkload              ZoneTagUpdateResponseType = "cws_workload"
 	ZoneTagUpdateResponseTypeD1Database               ZoneTagUpdateResponseType = "d1_database"
 	ZoneTagUpdateResponseTypeDevice                   ZoneTagUpdateResponseType = "device"
 	ZoneTagUpdateResponseTypeDNSRecord                ZoneTagUpdateResponseType = "dns_record"
@@ -3389,6 +3502,7 @@ const (
 	ZoneTagUpdateResponseTypeLoadBalancerMonitor      ZoneTagUpdateResponseType = "load_balancer_monitor"
 	ZoneTagUpdateResponseTypeLoadBalancerPool         ZoneTagUpdateResponseType = "load_balancer_pool"
 	ZoneTagUpdateResponseTypeManagedClientCertificate ZoneTagUpdateResponseType = "managed_client_certificate"
+	ZoneTagUpdateResponseTypeNamespaceWorker          ZoneTagUpdateResponseType = "namespace_worker"
 	ZoneTagUpdateResponseTypePagesProject             ZoneTagUpdateResponseType = "pages_project"
 	ZoneTagUpdateResponseTypeQueue                    ZoneTagUpdateResponseType = "queue"
 	ZoneTagUpdateResponseTypeR2Bucket                 ZoneTagUpdateResponseType = "r2_bucket"
@@ -3405,7 +3519,7 @@ const (
 
 func (r ZoneTagUpdateResponseType) IsKnown() bool {
 	switch r {
-	case ZoneTagUpdateResponseTypeAccessApplication, ZoneTagUpdateResponseTypeAccessApplicationPolicy, ZoneTagUpdateResponseTypeAccessGroup, ZoneTagUpdateResponseTypeAccessServiceToken, ZoneTagUpdateResponseTypeAccount, ZoneTagUpdateResponseTypeAccountRuleset, ZoneTagUpdateResponseTypeAIGateway, ZoneTagUpdateResponseTypeAlertingPolicy, ZoneTagUpdateResponseTypeAlertingWebhook, ZoneTagUpdateResponseTypeAPIGatewayOperation, ZoneTagUpdateResponseTypeCloudflaredTunnel, ZoneTagUpdateResponseTypeCustomCertificate, ZoneTagUpdateResponseTypeCustomHostname, ZoneTagUpdateResponseTypeCwsDeployment, ZoneTagUpdateResponseTypeCwsPolicy, ZoneTagUpdateResponseTypeCwsPolicySet, ZoneTagUpdateResponseTypeCwsWorkload, ZoneTagUpdateResponseTypeD1Database, ZoneTagUpdateResponseTypeDevice, ZoneTagUpdateResponseTypeDNSRecord, ZoneTagUpdateResponseTypeDurableObjectNamespace, ZoneTagUpdateResponseTypeGatewayList, ZoneTagUpdateResponseTypeGatewayRule, ZoneTagUpdateResponseTypeHealthcheck, ZoneTagUpdateResponseTypeImage, ZoneTagUpdateResponseTypeInfrastructureTarget, ZoneTagUpdateResponseTypeKVNamespace, ZoneTagUpdateResponseTypeLoadBalancer, ZoneTagUpdateResponseTypeLoadBalancerMonitor, ZoneTagUpdateResponseTypeLoadBalancerPool, ZoneTagUpdateResponseTypeManagedClientCertificate, ZoneTagUpdateResponseTypePagesProject, ZoneTagUpdateResponseTypeQueue, ZoneTagUpdateResponseTypeR2Bucket, ZoneTagUpdateResponseTypeResourceShare, ZoneTagUpdateResponseTypeStreamLiveInput, ZoneTagUpdateResponseTypeStreamVideo, ZoneTagUpdateResponseTypeVectorizeIndex, ZoneTagUpdateResponseTypeWorker, ZoneTagUpdateResponseTypeWorkerRoute, ZoneTagUpdateResponseTypeWorkerVersion, ZoneTagUpdateResponseTypeZone, ZoneTagUpdateResponseTypeZoneRuleset:
+	case ZoneTagUpdateResponseTypeAccessApplication, ZoneTagUpdateResponseTypeAccessApplicationPolicy, ZoneTagUpdateResponseTypeAccessGroup, ZoneTagUpdateResponseTypeAccessServiceToken, ZoneTagUpdateResponseTypeAccount, ZoneTagUpdateResponseTypeAccountRuleset, ZoneTagUpdateResponseTypeAIGateway, ZoneTagUpdateResponseTypeAlertingPolicy, ZoneTagUpdateResponseTypeAlertingWebhook, ZoneTagUpdateResponseTypeAPIGatewayOperation, ZoneTagUpdateResponseTypeCloudflaredTunnel, ZoneTagUpdateResponseTypeCustomCertificate, ZoneTagUpdateResponseTypeCustomHostname, ZoneTagUpdateResponseTypeCWSDeployment, ZoneTagUpdateResponseTypeCWSPolicy, ZoneTagUpdateResponseTypeCWSPolicySet, ZoneTagUpdateResponseTypeCWSWorkload, ZoneTagUpdateResponseTypeD1Database, ZoneTagUpdateResponseTypeDevice, ZoneTagUpdateResponseTypeDNSRecord, ZoneTagUpdateResponseTypeDurableObjectNamespace, ZoneTagUpdateResponseTypeGatewayList, ZoneTagUpdateResponseTypeGatewayRule, ZoneTagUpdateResponseTypeHealthcheck, ZoneTagUpdateResponseTypeImage, ZoneTagUpdateResponseTypeInfrastructureTarget, ZoneTagUpdateResponseTypeKVNamespace, ZoneTagUpdateResponseTypeLoadBalancer, ZoneTagUpdateResponseTypeLoadBalancerMonitor, ZoneTagUpdateResponseTypeLoadBalancerPool, ZoneTagUpdateResponseTypeManagedClientCertificate, ZoneTagUpdateResponseTypeNamespaceWorker, ZoneTagUpdateResponseTypePagesProject, ZoneTagUpdateResponseTypeQueue, ZoneTagUpdateResponseTypeR2Bucket, ZoneTagUpdateResponseTypeResourceShare, ZoneTagUpdateResponseTypeStreamLiveInput, ZoneTagUpdateResponseTypeStreamVideo, ZoneTagUpdateResponseTypeVectorizeIndex, ZoneTagUpdateResponseTypeWorker, ZoneTagUpdateResponseTypeWorkerRoute, ZoneTagUpdateResponseTypeWorkerVersion, ZoneTagUpdateResponseTypeZone, ZoneTagUpdateResponseTypeZoneRuleset:
 		return true
 	}
 	return false
@@ -3428,6 +3542,9 @@ type ZoneTagGetResponse struct {
 	Type ZoneTagGetResponseType `json:"type" api:"required"`
 	// Access application ID is required only for access_application_policy resources
 	AccessApplicationID string `json:"access_application_id" format:"uuid"`
+	// This field can have the runtime type of
+	// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation].
+	Navigation interface{} `json:"navigation"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -3453,6 +3570,7 @@ type zoneTagGetResponseJSON struct {
 	Tags                apijson.Field
 	Type                apijson.Field
 	AccessApplicationID apijson.Field
+	Navigation          apijson.Field
 	TagsUpdatedAt       apijson.Field
 	WorkerID            apijson.Field
 	ZoneID              apijson.Field
@@ -3490,10 +3608,10 @@ func (r *ZoneTagGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificate],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomHostname],
-// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment],
-// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy],
-// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet],
-// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload],
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSDeployment],
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicy],
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySet],
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkload],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectD1Database],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectDevice],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectDNSRecord],
@@ -3508,6 +3626,7 @@ func (r *ZoneTagGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPool],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificate],
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorker],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectPagesProject],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectQueue],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectR2Bucket],
@@ -3540,10 +3659,10 @@ func (r ZoneTagGetResponse) AsUnion() ZoneTagGetResponseUnion {
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificate],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomHostname],
-// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment],
-// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy],
-// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet],
-// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload],
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSDeployment],
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicy],
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySet],
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkload],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectD1Database],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectDevice],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectDNSRecord],
@@ -3558,6 +3677,7 @@ func (r ZoneTagGetResponse) AsUnion() ZoneTagGetResponseUnion {
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPool],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificate],
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorker],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectPagesProject],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectQueue],
 // [ZoneTagGetResponseResourceTaggingTaggedResourceObjectR2Bucket],
@@ -3645,22 +3765,22 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment{}),
+			Type:               reflect.TypeOf(ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSDeployment{}),
 			DiscriminatorValue: "cws_deployment",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy{}),
+			Type:               reflect.TypeOf(ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicy{}),
 			DiscriminatorValue: "cws_policy",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet{}),
+			Type:               reflect.TypeOf(ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySet{}),
 			DiscriminatorValue: "cws_policy_set",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload{}),
+			Type:               reflect.TypeOf(ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkload{}),
 			DiscriminatorValue: "cws_workload",
 		},
 		apijson.UnionVariant{
@@ -3732,6 +3852,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ZoneTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificate{}),
 			DiscriminatorValue: "managed_client_certificate",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ZoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorker{}),
+			DiscriminatorValue: "namespace_worker",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -4670,7 +4795,7 @@ func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCustomHostnameType)
 }
 
 // Response for cws_deployment resources
-type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment struct {
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSDeployment struct {
 	// Identifies the unique resource.
 	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
@@ -4684,7 +4809,7 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment struct {
 	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                      `json:"tags" api:"required"`
-	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentType `json:"type" api:"required"`
+	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentType `json:"type" api:"required"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -4693,13 +4818,13 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment struct {
 	// has no current version, and deletions are ordered by event order rather than by
 	// version.
 	TagsUpdatedAt time.Time                                                              `json:"tags_updated_at" format:"date-time"`
-	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON `json:"-"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentJSON `json:"-"`
 }
 
-// zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON contains
+// zoneTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentJSON contains
 // the JSON metadata for the struct
-// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment]
-type zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON struct {
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSDeployment]
+type zoneTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentJSON struct {
 	ID            apijson.Field
 	Etag          apijson.Field
 	Name          apijson.Field
@@ -4710,33 +4835,33 @@ type zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON stru
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSDeployment) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON) RawJSON() string {
+func (r zoneTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment) implementsZoneTagGetResponse() {
+func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSDeployment) implementsZoneTagGetResponse() {
 }
 
-type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentType string
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentType string
 
 const (
-	ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentTypeCwsDeployment ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentType = "cws_deployment"
+	ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentTypeCWSDeployment ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentType = "cws_deployment"
 )
 
-func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentType) IsKnown() bool {
+func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentType) IsKnown() bool {
 	switch r {
-	case ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentTypeCwsDeployment:
+	case ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentTypeCWSDeployment:
 		return true
 	}
 	return false
 }
 
 // Response for cws_policy resources
-type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy struct {
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicy struct {
 	// Identifies the unique resource.
 	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
@@ -4750,7 +4875,7 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy struct {
 	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                  `json:"tags" api:"required"`
-	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyType `json:"type" api:"required"`
+	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyType `json:"type" api:"required"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -4759,13 +4884,13 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy struct {
 	// has no current version, and deletions are ordered by event order rather than by
 	// version.
 	TagsUpdatedAt time.Time                                                          `json:"tags_updated_at" format:"date-time"`
-	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON `json:"-"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyJSON `json:"-"`
 }
 
-// zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON contains the
+// zoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyJSON contains the
 // JSON metadata for the struct
-// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy]
-type zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON struct {
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicy]
+type zoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyJSON struct {
 	ID            apijson.Field
 	Etag          apijson.Field
 	Name          apijson.Field
@@ -4776,33 +4901,33 @@ type zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON) RawJSON() string {
+func (r zoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy) implementsZoneTagGetResponse() {
+func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicy) implementsZoneTagGetResponse() {
 }
 
-type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyType string
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyType string
 
 const (
-	ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyTypeCwsPolicy ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyType = "cws_policy"
+	ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyTypeCWSPolicy ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyType = "cws_policy"
 )
 
-func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyType) IsKnown() bool {
+func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyType) IsKnown() bool {
 	switch r {
-	case ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyTypeCwsPolicy:
+	case ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyTypeCWSPolicy:
 		return true
 	}
 	return false
 }
 
 // Response for cws_policy_set resources
-type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet struct {
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySet struct {
 	// Identifies the unique resource.
 	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
@@ -4816,7 +4941,7 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet struct {
 	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                     `json:"tags" api:"required"`
-	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetType `json:"type" api:"required"`
+	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetType `json:"type" api:"required"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -4825,13 +4950,13 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet struct {
 	// has no current version, and deletions are ordered by event order rather than by
 	// version.
 	TagsUpdatedAt time.Time                                                             `json:"tags_updated_at" format:"date-time"`
-	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON `json:"-"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetJSON `json:"-"`
 }
 
-// zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON contains
+// zoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetJSON contains
 // the JSON metadata for the struct
-// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet]
-type zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON struct {
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySet]
+type zoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetJSON struct {
 	ID            apijson.Field
 	Etag          apijson.Field
 	Name          apijson.Field
@@ -4842,33 +4967,33 @@ type zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON struc
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySet) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON) RawJSON() string {
+func (r zoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet) implementsZoneTagGetResponse() {
+func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySet) implementsZoneTagGetResponse() {
 }
 
-type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetType string
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetType string
 
 const (
-	ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetTypeCwsPolicySet ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetType = "cws_policy_set"
+	ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetTypeCWSPolicySet ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetType = "cws_policy_set"
 )
 
-func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetType) IsKnown() bool {
+func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetType) IsKnown() bool {
 	switch r {
-	case ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetTypeCwsPolicySet:
+	case ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetTypeCWSPolicySet:
 		return true
 	}
 	return false
 }
 
 // Response for cws_workload resources
-type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload struct {
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkload struct {
 	// Identifies the unique resource.
 	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
@@ -4882,7 +5007,7 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload struct {
 	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                    `json:"tags" api:"required"`
-	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadType `json:"type" api:"required"`
+	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadType `json:"type" api:"required"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -4891,13 +5016,13 @@ type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload struct {
 	// has no current version, and deletions are ordered by event order rather than by
 	// version.
 	TagsUpdatedAt time.Time                                                            `json:"tags_updated_at" format:"date-time"`
-	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON `json:"-"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadJSON `json:"-"`
 }
 
-// zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON contains
+// zoneTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadJSON contains
 // the JSON metadata for the struct
-// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload]
-type zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON struct {
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkload]
+type zoneTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadJSON struct {
 	ID            apijson.Field
 	Etag          apijson.Field
 	Name          apijson.Field
@@ -4908,26 +5033,26 @@ type zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON struct
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkload) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON) RawJSON() string {
+func (r zoneTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload) implementsZoneTagGetResponse() {
+func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkload) implementsZoneTagGetResponse() {
 }
 
-type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadType string
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadType string
 
 const (
-	ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadTypeCwsWorkload ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadType = "cws_workload"
+	ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadTypeCWSWorkload ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadType = "cws_workload"
 )
 
-func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadType) IsKnown() bool {
+func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadType) IsKnown() bool {
 	switch r {
-	case ZoneTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadTypeCwsWorkload:
+	case ZoneTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadTypeCWSWorkload:
 		return true
 	}
 	return false
@@ -5867,6 +5992,108 @@ func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertif
 	return false
 }
 
+// Response for namespace_worker resources
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorker struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                        `json:"tags" api:"required"`
+	Type ZoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerType `json:"type" api:"required"`
+	// Read-only routing metadata resolved from EWC using the account and immutable
+	// namespace Worker ID. Returned only by tagged-resource lists requested with
+	// include_navigation=true. Omitted when lookup is unavailable or the child has
+	// been deleted. Never supplied on tag writes or stored as extra_data.
+	Navigation ZoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation `json:"navigation"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                `json:"tags_updated_at" format:"date-time"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerJSON `json:"-"`
+}
+
+// zoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerJSON
+// contains the JSON metadata for the struct
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorker]
+type zoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	Navigation    apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorker) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorker) implementsZoneTagGetResponse() {
+}
+
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerType string
+
+const (
+	ZoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerTypeNamespaceWorker ZoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerType = "namespace_worker"
+)
+
+func (r ZoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerType) IsKnown() bool {
+	switch r {
+	case ZoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerTypeNamespaceWorker:
+		return true
+	}
+	return false
+}
+
+// Read-only routing metadata resolved from EWC using the account and immutable
+// namespace Worker ID. Returned only by tagged-resource lists requested with
+// include_navigation=true. Omitted when lookup is unavailable or the child has
+// been deleted. Never supplied on tag writes or stored as extra_data.
+type ZoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation struct {
+	NamespaceID   string                                                                             `json:"namespace_id" api:"required"`
+	NamespaceName string                                                                             `json:"namespace_name" api:"required"`
+	ScriptName    string                                                                             `json:"script_name" api:"required"`
+	JSON          zoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigationJSON `json:"-"`
+}
+
+// zoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigationJSON
+// contains the JSON metadata for the struct
+// [ZoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation]
+type zoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigationJSON struct {
+	NamespaceID   apijson.Field
+	NamespaceName apijson.Field
+	ScriptName    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Response for pages_project resources
 type ZoneTagGetResponseResourceTaggingTaggedResourceObjectPagesProject struct {
 	// Identifies the unique resource.
@@ -6684,10 +6911,10 @@ const (
 	ZoneTagGetResponseTypeCloudflaredTunnel        ZoneTagGetResponseType = "cloudflared_tunnel"
 	ZoneTagGetResponseTypeCustomCertificate        ZoneTagGetResponseType = "custom_certificate"
 	ZoneTagGetResponseTypeCustomHostname           ZoneTagGetResponseType = "custom_hostname"
-	ZoneTagGetResponseTypeCwsDeployment            ZoneTagGetResponseType = "cws_deployment"
-	ZoneTagGetResponseTypeCwsPolicy                ZoneTagGetResponseType = "cws_policy"
-	ZoneTagGetResponseTypeCwsPolicySet             ZoneTagGetResponseType = "cws_policy_set"
-	ZoneTagGetResponseTypeCwsWorkload              ZoneTagGetResponseType = "cws_workload"
+	ZoneTagGetResponseTypeCWSDeployment            ZoneTagGetResponseType = "cws_deployment"
+	ZoneTagGetResponseTypeCWSPolicy                ZoneTagGetResponseType = "cws_policy"
+	ZoneTagGetResponseTypeCWSPolicySet             ZoneTagGetResponseType = "cws_policy_set"
+	ZoneTagGetResponseTypeCWSWorkload              ZoneTagGetResponseType = "cws_workload"
 	ZoneTagGetResponseTypeD1Database               ZoneTagGetResponseType = "d1_database"
 	ZoneTagGetResponseTypeDevice                   ZoneTagGetResponseType = "device"
 	ZoneTagGetResponseTypeDNSRecord                ZoneTagGetResponseType = "dns_record"
@@ -6702,6 +6929,7 @@ const (
 	ZoneTagGetResponseTypeLoadBalancerMonitor      ZoneTagGetResponseType = "load_balancer_monitor"
 	ZoneTagGetResponseTypeLoadBalancerPool         ZoneTagGetResponseType = "load_balancer_pool"
 	ZoneTagGetResponseTypeManagedClientCertificate ZoneTagGetResponseType = "managed_client_certificate"
+	ZoneTagGetResponseTypeNamespaceWorker          ZoneTagGetResponseType = "namespace_worker"
 	ZoneTagGetResponseTypePagesProject             ZoneTagGetResponseType = "pages_project"
 	ZoneTagGetResponseTypeQueue                    ZoneTagGetResponseType = "queue"
 	ZoneTagGetResponseTypeR2Bucket                 ZoneTagGetResponseType = "r2_bucket"
@@ -6718,7 +6946,7 @@ const (
 
 func (r ZoneTagGetResponseType) IsKnown() bool {
 	switch r {
-	case ZoneTagGetResponseTypeAccessApplication, ZoneTagGetResponseTypeAccessApplicationPolicy, ZoneTagGetResponseTypeAccessGroup, ZoneTagGetResponseTypeAccessServiceToken, ZoneTagGetResponseTypeAccount, ZoneTagGetResponseTypeAccountRuleset, ZoneTagGetResponseTypeAIGateway, ZoneTagGetResponseTypeAlertingPolicy, ZoneTagGetResponseTypeAlertingWebhook, ZoneTagGetResponseTypeAPIGatewayOperation, ZoneTagGetResponseTypeCloudflaredTunnel, ZoneTagGetResponseTypeCustomCertificate, ZoneTagGetResponseTypeCustomHostname, ZoneTagGetResponseTypeCwsDeployment, ZoneTagGetResponseTypeCwsPolicy, ZoneTagGetResponseTypeCwsPolicySet, ZoneTagGetResponseTypeCwsWorkload, ZoneTagGetResponseTypeD1Database, ZoneTagGetResponseTypeDevice, ZoneTagGetResponseTypeDNSRecord, ZoneTagGetResponseTypeDurableObjectNamespace, ZoneTagGetResponseTypeGatewayList, ZoneTagGetResponseTypeGatewayRule, ZoneTagGetResponseTypeHealthcheck, ZoneTagGetResponseTypeImage, ZoneTagGetResponseTypeInfrastructureTarget, ZoneTagGetResponseTypeKVNamespace, ZoneTagGetResponseTypeLoadBalancer, ZoneTagGetResponseTypeLoadBalancerMonitor, ZoneTagGetResponseTypeLoadBalancerPool, ZoneTagGetResponseTypeManagedClientCertificate, ZoneTagGetResponseTypePagesProject, ZoneTagGetResponseTypeQueue, ZoneTagGetResponseTypeR2Bucket, ZoneTagGetResponseTypeResourceShare, ZoneTagGetResponseTypeStreamLiveInput, ZoneTagGetResponseTypeStreamVideo, ZoneTagGetResponseTypeVectorizeIndex, ZoneTagGetResponseTypeWorker, ZoneTagGetResponseTypeWorkerRoute, ZoneTagGetResponseTypeWorkerVersion, ZoneTagGetResponseTypeZone, ZoneTagGetResponseTypeZoneRuleset:
+	case ZoneTagGetResponseTypeAccessApplication, ZoneTagGetResponseTypeAccessApplicationPolicy, ZoneTagGetResponseTypeAccessGroup, ZoneTagGetResponseTypeAccessServiceToken, ZoneTagGetResponseTypeAccount, ZoneTagGetResponseTypeAccountRuleset, ZoneTagGetResponseTypeAIGateway, ZoneTagGetResponseTypeAlertingPolicy, ZoneTagGetResponseTypeAlertingWebhook, ZoneTagGetResponseTypeAPIGatewayOperation, ZoneTagGetResponseTypeCloudflaredTunnel, ZoneTagGetResponseTypeCustomCertificate, ZoneTagGetResponseTypeCustomHostname, ZoneTagGetResponseTypeCWSDeployment, ZoneTagGetResponseTypeCWSPolicy, ZoneTagGetResponseTypeCWSPolicySet, ZoneTagGetResponseTypeCWSWorkload, ZoneTagGetResponseTypeD1Database, ZoneTagGetResponseTypeDevice, ZoneTagGetResponseTypeDNSRecord, ZoneTagGetResponseTypeDurableObjectNamespace, ZoneTagGetResponseTypeGatewayList, ZoneTagGetResponseTypeGatewayRule, ZoneTagGetResponseTypeHealthcheck, ZoneTagGetResponseTypeImage, ZoneTagGetResponseTypeInfrastructureTarget, ZoneTagGetResponseTypeKVNamespace, ZoneTagGetResponseTypeLoadBalancer, ZoneTagGetResponseTypeLoadBalancerMonitor, ZoneTagGetResponseTypeLoadBalancerPool, ZoneTagGetResponseTypeManagedClientCertificate, ZoneTagGetResponseTypeNamespaceWorker, ZoneTagGetResponseTypePagesProject, ZoneTagGetResponseTypeQueue, ZoneTagGetResponseTypeR2Bucket, ZoneTagGetResponseTypeResourceShare, ZoneTagGetResponseTypeStreamLiveInput, ZoneTagGetResponseTypeStreamVideo, ZoneTagGetResponseTypeVectorizeIndex, ZoneTagGetResponseTypeWorker, ZoneTagGetResponseTypeWorkerRoute, ZoneTagGetResponseTypeWorkerVersion, ZoneTagGetResponseTypeZone, ZoneTagGetResponseTypeZoneRuleset:
 		return true
 	}
 	return false

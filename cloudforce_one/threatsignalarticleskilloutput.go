@@ -7,12 +7,15 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/cloudflare/cloudflare-go/v7/shared"
+	"github.com/tidwall/gjson"
 )
 
 // ThreatSignalArticleSkillOutputService contains methods and other services that
@@ -60,27 +63,38 @@ func (r *ThreatSignalArticleSkillOutputService) Get(ctx context.Context, article
 }
 
 type ThreatSignalArticleSkillOutputGetResponse struct {
-	ArticleID          string `json:"article_id" api:"required" format:"uuid"`
+	// Article UUID that received the skill output.
+	ArticleID string `json:"article_id" api:"required" format:"uuid"`
+	// Untrusted model output: parsed JSON when the stored completion text is valid
+	// JSON, otherwise raw text. Consumers must safely render or escape it.
+	CustomOutput ThreatSignalArticleSkillOutputGetResponseCustomOutputUnion `json:"custom_output" api:"required"`
+	// Whether custom_output was parsed from the stored completion text.
+	CustomOutputParseStatus ThreatSignalArticleSkillOutputGetResponseCustomOutputParseStatus `json:"custom_output_parse_status" api:"required"`
+	// Non-blocking validation classification for untrusted model output. `unknown` is
+	// retained only for historical rows.
+	CustomOutputValidationStatus ThreatSignalArticleSkillOutputGetResponseCustomOutputValidationStatus `json:"custom_output_validation_status" api:"required"`
+	// Custom Skill version that produced the output. Null when historical metadata is
+	// unavailable.
 	CustomSkillVersion string `json:"custom_skill_version" api:"required,nullable"`
-	// JSON-encoded output schema of the skill. Null when the skill no longer exists.
+	// JSON-encoded output schema. Null when historical skill metadata is unavailable.
 	OutputSchema string `json:"output_schema" api:"required,nullable"`
-	SkillID      string `json:"skill_id" api:"required"`
-	// Skill output. Parsed JSON when the stored output is valid JSON, otherwise the
-	// raw string.
-	CustomOutput interface{}                                   `json:"custom_output"`
-	JSON         threatSignalArticleSkillOutputGetResponseJSON `json:"-"`
+	// Custom Skill UUID that produced the output.
+	SkillID string                                        `json:"skill_id" api:"required"`
+	JSON    threatSignalArticleSkillOutputGetResponseJSON `json:"-"`
 }
 
 // threatSignalArticleSkillOutputGetResponseJSON contains the JSON metadata for the
 // struct [ThreatSignalArticleSkillOutputGetResponse]
 type threatSignalArticleSkillOutputGetResponseJSON struct {
-	ArticleID          apijson.Field
-	CustomSkillVersion apijson.Field
-	OutputSchema       apijson.Field
-	SkillID            apijson.Field
-	CustomOutput       apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	ArticleID                    apijson.Field
+	CustomOutput                 apijson.Field
+	CustomOutputParseStatus      apijson.Field
+	CustomOutputValidationStatus apijson.Field
+	CustomSkillVersion           apijson.Field
+	OutputSchema                 apijson.Field
+	SkillID                      apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *ThreatSignalArticleSkillOutputGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -89,6 +103,92 @@ func (r *ThreatSignalArticleSkillOutputGetResponse) UnmarshalJSON(data []byte) (
 
 func (r threatSignalArticleSkillOutputGetResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Untrusted model output: parsed JSON when the stored completion text is valid
+// JSON, otherwise raw text. Consumers must safely render or escape it.
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat],
+// [shared.UnionBool], [ThreatSignalArticleSkillOutputGetResponseCustomOutputArray]
+// or [ThreatSignalArticleSkillOutputGetResponseCustomOutputMap].
+type ThreatSignalArticleSkillOutputGetResponseCustomOutputUnion interface {
+	ImplementsThreatSignalArticleSkillOutputGetResponseCustomOutputUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ThreatSignalArticleSkillOutputGetResponseCustomOutputUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ThreatSignalArticleSkillOutputGetResponseCustomOutputArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ThreatSignalArticleSkillOutputGetResponseCustomOutputMap{}),
+		},
+	)
+}
+
+type ThreatSignalArticleSkillOutputGetResponseCustomOutputArray []interface{}
+
+func (r ThreatSignalArticleSkillOutputGetResponseCustomOutputArray) ImplementsThreatSignalArticleSkillOutputGetResponseCustomOutputUnion() {
+}
+
+type ThreatSignalArticleSkillOutputGetResponseCustomOutputMap map[string]interface{}
+
+func (r ThreatSignalArticleSkillOutputGetResponseCustomOutputMap) ImplementsThreatSignalArticleSkillOutputGetResponseCustomOutputUnion() {
+}
+
+// Whether custom_output was parsed from the stored completion text.
+type ThreatSignalArticleSkillOutputGetResponseCustomOutputParseStatus string
+
+const (
+	ThreatSignalArticleSkillOutputGetResponseCustomOutputParseStatusParsed      ThreatSignalArticleSkillOutputGetResponseCustomOutputParseStatus = "parsed"
+	ThreatSignalArticleSkillOutputGetResponseCustomOutputParseStatusInvalidJson ThreatSignalArticleSkillOutputGetResponseCustomOutputParseStatus = "invalid_json"
+)
+
+func (r ThreatSignalArticleSkillOutputGetResponseCustomOutputParseStatus) IsKnown() bool {
+	switch r {
+	case ThreatSignalArticleSkillOutputGetResponseCustomOutputParseStatusParsed, ThreatSignalArticleSkillOutputGetResponseCustomOutputParseStatusInvalidJson:
+		return true
+	}
+	return false
+}
+
+// Non-blocking validation classification for untrusted model output. `unknown` is
+// retained only for historical rows.
+type ThreatSignalArticleSkillOutputGetResponseCustomOutputValidationStatus string
+
+const (
+	ThreatSignalArticleSkillOutputGetResponseCustomOutputValidationStatusValid         ThreatSignalArticleSkillOutputGetResponseCustomOutputValidationStatus = "valid"
+	ThreatSignalArticleSkillOutputGetResponseCustomOutputValidationStatusInvalidJson   ThreatSignalArticleSkillOutputGetResponseCustomOutputValidationStatus = "invalid_json"
+	ThreatSignalArticleSkillOutputGetResponseCustomOutputValidationStatusSchemaInvalid ThreatSignalArticleSkillOutputGetResponseCustomOutputValidationStatus = "schema_invalid"
+	ThreatSignalArticleSkillOutputGetResponseCustomOutputValidationStatusUnknown       ThreatSignalArticleSkillOutputGetResponseCustomOutputValidationStatus = "unknown"
+)
+
+func (r ThreatSignalArticleSkillOutputGetResponseCustomOutputValidationStatus) IsKnown() bool {
+	switch r {
+	case ThreatSignalArticleSkillOutputGetResponseCustomOutputValidationStatusValid, ThreatSignalArticleSkillOutputGetResponseCustomOutputValidationStatusInvalidJson, ThreatSignalArticleSkillOutputGetResponseCustomOutputValidationStatusSchemaInvalid, ThreatSignalArticleSkillOutputGetResponseCustomOutputValidationStatusUnknown:
+		return true
+	}
+	return false
 }
 
 type ThreatSignalArticleSkillOutputGetParams struct {

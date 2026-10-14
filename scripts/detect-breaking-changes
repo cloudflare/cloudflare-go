@@ -482,6 +482,17 @@ TEST_PATHS=(
 	workers_for_platforms/dispatchnamespacescriptbinding_test.go
 	workers_for_platforms/dispatchnamespacescriptsecret_test.go
 	workers_for_platforms/dispatchnamespacescripttag_test.go
+	zero_trust/cwsbasicauthcredential_test.go
+	zero_trust/cwsbasicauthcredentialsecret_test.go
+	zero_trust/cwsdeployment_test.go
+	zero_trust/cwsdomainacl_test.go
+	zero_trust/cwspolicy_test.go
+	zero_trust/cwspolicyset_test.go
+	zero_trust/cwsregometadata_test.go
+	zero_trust/cwsregomodule_test.go
+	zero_trust/cwstenantstructure_test.go
+	zero_trust/cwstenantstructurenode_test.go
+	zero_trust/cwsworkload_test.go
 	zero_trust/device_test.go
 	zero_trust/devicedevice_test.go
 	zero_trust/deviceresilienceglobalwarpoverride_test.go
@@ -622,6 +633,7 @@ TEST_PATHS=(
 	zero_trust/gatewayrule_test.go
 	zero_trust/gatewaycertificate_test.go
 	zero_trust/gatewaypacfile_test.go
+	zero_trust/gatewaydnsdestinationip_test.go
 	zero_trust/networkroute_test.go
 	zero_trust/networkrouteip_test.go
 	zero_trust/networkroutenetwork_test.go

@@ -33,7 +33,7 @@ func TestRankingTimeseriesGroupsWithOptionalParams(t *testing.T) {
 		DateEnd:        cloudflare.F([]time.Time{time.Now()}),
 		DateRange:      cloudflare.F([]string{"7d"}),
 		DateStart:      cloudflare.F([]time.Time{time.Now()}),
-		DomainCategory: cloudflare.F([]string{"string"}),
+		DomainCategory: cloudflare.F([]string{"News & Media"}),
 		Domains:        cloudflare.F([]string{"google.com"}),
 		Format:         cloudflare.F(radar.RankingTimeseriesGroupsParamsFormatJson),
 		Limit:          cloudflare.F(int64(1)),
@@ -66,7 +66,7 @@ func TestRankingTopWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Ranking.Top(context.TODO(), radar.RankingTopParams{
 		Date:           cloudflare.F([]time.Time{time.Now()}),
-		DomainCategory: cloudflare.F([]string{"string"}),
+		DomainCategory: cloudflare.F([]string{"News & Media"}),
 		Format:         cloudflare.F(radar.RankingTopParamsFormatJson),
 		Limit:          cloudflare.F(int64(5)),
 		Location:       cloudflare.F([]string{"string"}),

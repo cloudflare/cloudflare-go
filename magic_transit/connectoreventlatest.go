@@ -183,9 +183,10 @@ type ConnectorEventLatestListResponseItemsE struct {
 	// Tunnel identifier
 	TunnelID string `json:"tunnel_id"`
 	// Location of upgrade bundle
-	URL   string                                     `json:"url"`
-	JSON  connectorEventLatestListResponseItemsEJSON `json:"-"`
-	union ConnectorEventLatestListResponseItemsEUnion
+	URL         string                                     `json:"url"`
+	JSON        connectorEventLatestListResponseItemsEJSON `json:"-"`
+	ExtraFields map[string]interface{}                     `json:"-" api:"extrafields"`
+	union       ConnectorEventLatestListResponseItemsEUnion
 }
 
 // connectorEventLatestListResponseItemsEJSON contains the JSON metadata for the
@@ -204,15 +205,20 @@ func (r connectorEventLatestListResponseItemsEJSON) RawJSON() string {
 
 func (r *ConnectorEventLatestListResponseItemsE) UnmarshalJSON(data []byte) (err error) {
 	*r = ConnectorEventLatestListResponseItemsE{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
+	// Decode the open object first so an unimplemented variant cannot lose payload.
+	if err = apijson.UnmarshalRoot(data, r); err != nil {
 		return err
 	}
-	return apijson.Port(r.union, &r)
+	if !connectorEventHasTypedVariant(string(r.K)) {
+		return nil
+	}
+	return apijson.UnmarshalRoot(data, &r.union)
 }
 
 // AsUnion returns a [ConnectorEventLatestListResponseItemsEUnion] interface which
 // you can cast to the specific types for more type safety.
+// It returns nil for kinds without an implemented variant; use K, TunnelID, URL,
+// and ExtraFields to access the open-object representation in that case.
 //
 // Possible runtime types of the union are
 // [ConnectorEventLatestListResponseItemsEInit],

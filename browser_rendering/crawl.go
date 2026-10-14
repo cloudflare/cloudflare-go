@@ -229,6 +229,18 @@ type CrawlGetResponseRecordsMetadata struct {
 	Status float64 `json:"status" api:"required"`
 	// Final URL of the crawled page.
 	URL string `json:"url" api:"required"`
+	// Value of the Last-Modified response header, when provided by the origin.
+	LastModified string `json:"lastModified"`
+	// Open Graph description of the crawled page.
+	OgDescription string `json:"og:description"`
+	// Open Graph image of the crawled page.
+	OgImage string `json:"og:image"`
+	// Open Graph site name of the crawled page.
+	OgSiteName string `json:"og:site_name"`
+	// Open Graph title of the crawled page.
+	OgTitle string `json:"og:title"`
+	// Open Graph type of the crawled page.
+	OgType string `json:"og:type"`
 	// Title of the crawled page.
 	Title string                              `json:"title"`
 	JSON  crawlGetResponseRecordsMetadataJSON `json:"-"`
@@ -237,11 +249,17 @@ type CrawlGetResponseRecordsMetadata struct {
 // crawlGetResponseRecordsMetadataJSON contains the JSON metadata for the struct
 // [CrawlGetResponseRecordsMetadata]
 type crawlGetResponseRecordsMetadataJSON struct {
-	Status      apijson.Field
-	URL         apijson.Field
-	Title       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Status        apijson.Field
+	URL           apijson.Field
+	LastModified  apijson.Field
+	OgDescription apijson.Field
+	OgImage       apijson.Field
+	OgSiteName    apijson.Field
+	OgTitle       apijson.Field
+	OgType        apijson.Field
+	Title         apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *CrawlGetResponseRecordsMetadata) UnmarshalJSON(data []byte) (err error) {
