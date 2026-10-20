@@ -11,7 +11,7 @@ caches the system certificate pool per process, so a restart is required after u
 
 ### Changes
 
-* The minimum supported Go version is raised from 1.22 to 1.27. Go 1.26 and earlier are no longer supported.
+* The minimum supported Go version is raised from 1.22 to 1.26. Go 1.25 and earlier are no longer supported.
   Projects whose own `go.mod` declares a lower version will need to raise it to build against this release.
 
 ## 7.13.0 (2026-10-09)
