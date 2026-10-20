@@ -1,5 +1,19 @@
 # Changelog
 
+## 7.13.1 (2026-10-20)
+
+Full Changelog: [v7.13.0...v7.13.1](https://github.com/cloudflare/cloudflare-go/compare/v7.13.0...v7.13.1)
+
+Users are encouraged to build with the latest Go patch release. Rebuild your application with Go >= 1.26.10 or >= 1.27.3.
+This library sets no TLS trust policy of its own — trust is resolved by `crypto/x509` in the toolchain that
+compiles your binary, so the minimum-version change above does not itself provide this fix. Note that Go
+caches the system certificate pool per process, so a restart is required after updating any trust store.
+
+### Changes
+
+* The minimum supported Go version is raised from 1.22 to 1.27. Go 1.26 and earlier are no longer supported.
+  Projects whose own `go.mod` declares a lower version will need to raise it to build against this release.
+
 ## 7.13.0 (2026-10-09)
 
 Full Changelog: [v7.12.0...v7.13.0](https://github.com/cloudflare/cloudflare-go/compare/v7.12.0...v7.13.0)
