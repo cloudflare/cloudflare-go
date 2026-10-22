@@ -305,7 +305,7 @@ type NamespaceInstanceNewResponse struct {
 	// Deprecated: deprecated
 	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
 	// Controls which storage backends indexing uses. Defaults to vector and keyword
-	// indexing for new instances.
+	// indexing for new instances. When set, both vector and keyword are required.
 	IndexMethod          NamespaceInstanceNewResponseIndexMethod          `json:"index_method"`
 	IndexingOptions      NamespaceInstanceNewResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
 	LastActivity         time.Time                                        `json:"last_activity" api:"nullable" format:"date-time"`
@@ -321,14 +321,17 @@ type NamespaceInstanceNewResponse struct {
 	RetrievalOptions     NamespaceInstanceNewResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
 	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
 	// Completions API. An empty string uses the configured or default model.
-	RewriteModel   string                                   `json:"rewrite_model" api:"nullable"`
-	RewriteQuery   bool                                     `json:"rewrite_query"`
+	RewriteModel string `json:"rewrite_model" api:"nullable"`
+	RewriteQuery bool   `json:"rewrite_query"`
+	// Minimum similarity score a chunk must reach to be returned. Defaults to 0.4.
 	ScoreThreshold float64                                  `json:"score_threshold"`
 	Source         string                                   `json:"source" api:"nullable"`
 	SourceParams   NamespaceInstanceNewResponseSourceParams `json:"source_params" api:"nullable"`
 	Status         string                                   `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Defaults to 21600 (6h); instances crawling a domain outside the account may be
+	// set to 86400.
 	SyncInterval NamespaceInstanceNewResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                                   `json:"token_id" format:"uuid"`
 	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
@@ -491,7 +494,7 @@ func (r NamespaceInstanceNewResponseFusionMethod) IsKnown() bool {
 }
 
 // Controls which storage backends indexing uses. Defaults to vector and keyword
-// indexing for new instances.
+// indexing for new instances. When set, both vector and keyword are required.
 type NamespaceInstanceNewResponseIndexMethod struct {
 	// Enable keyword (BM25) storage backend.
 	Keyword bool `json:"keyword" api:"required"`
@@ -1105,6 +1108,8 @@ func (r NamespaceInstanceNewResponseSourceParamsWebCrawlerParseType) IsKnown() b
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 // (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Defaults to 21600 (6h); instances crawling a domain outside the account may be
+// set to 86400.
 type NamespaceInstanceNewResponseSyncInterval float64
 
 const (
@@ -1173,7 +1178,7 @@ type NamespaceInstanceUpdateResponse struct {
 	// Deprecated: deprecated
 	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
 	// Controls which storage backends indexing uses. Defaults to vector and keyword
-	// indexing for new instances.
+	// indexing for new instances. When set, both vector and keyword are required.
 	IndexMethod          NamespaceInstanceUpdateResponseIndexMethod          `json:"index_method"`
 	IndexingOptions      NamespaceInstanceUpdateResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
 	LastActivity         time.Time                                           `json:"last_activity" api:"nullable" format:"date-time"`
@@ -1189,14 +1194,17 @@ type NamespaceInstanceUpdateResponse struct {
 	RetrievalOptions     NamespaceInstanceUpdateResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
 	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
 	// Completions API. An empty string uses the configured or default model.
-	RewriteModel   string                                      `json:"rewrite_model" api:"nullable"`
-	RewriteQuery   bool                                        `json:"rewrite_query"`
+	RewriteModel string `json:"rewrite_model" api:"nullable"`
+	RewriteQuery bool   `json:"rewrite_query"`
+	// Minimum similarity score a chunk must reach to be returned. Defaults to 0.4.
 	ScoreThreshold float64                                     `json:"score_threshold"`
 	Source         string                                      `json:"source" api:"nullable"`
 	SourceParams   NamespaceInstanceUpdateResponseSourceParams `json:"source_params" api:"nullable"`
 	Status         string                                      `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Defaults to 21600 (6h); instances crawling a domain outside the account may be
+	// set to 86400.
 	SyncInterval NamespaceInstanceUpdateResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                                      `json:"token_id" format:"uuid"`
 	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
@@ -1359,7 +1367,7 @@ func (r NamespaceInstanceUpdateResponseFusionMethod) IsKnown() bool {
 }
 
 // Controls which storage backends indexing uses. Defaults to vector and keyword
-// indexing for new instances.
+// indexing for new instances. When set, both vector and keyword are required.
 type NamespaceInstanceUpdateResponseIndexMethod struct {
 	// Enable keyword (BM25) storage backend.
 	Keyword bool `json:"keyword" api:"required"`
@@ -1973,6 +1981,8 @@ func (r NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseType) IsKnown(
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 // (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Defaults to 21600 (6h); instances crawling a domain outside the account may be
+// set to 86400.
 type NamespaceInstanceUpdateResponseSyncInterval float64
 
 const (
@@ -2836,7 +2846,7 @@ type NamespaceInstanceDeleteResponse struct {
 	// Deprecated: deprecated
 	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
 	// Controls which storage backends indexing uses. Defaults to vector and keyword
-	// indexing for new instances.
+	// indexing for new instances. When set, both vector and keyword are required.
 	IndexMethod          NamespaceInstanceDeleteResponseIndexMethod          `json:"index_method"`
 	IndexingOptions      NamespaceInstanceDeleteResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
 	LastActivity         time.Time                                           `json:"last_activity" api:"nullable" format:"date-time"`
@@ -2852,14 +2862,17 @@ type NamespaceInstanceDeleteResponse struct {
 	RetrievalOptions     NamespaceInstanceDeleteResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
 	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
 	// Completions API. An empty string uses the configured or default model.
-	RewriteModel   string                                      `json:"rewrite_model" api:"nullable"`
-	RewriteQuery   bool                                        `json:"rewrite_query"`
+	RewriteModel string `json:"rewrite_model" api:"nullable"`
+	RewriteQuery bool   `json:"rewrite_query"`
+	// Minimum similarity score a chunk must reach to be returned. Defaults to 0.4.
 	ScoreThreshold float64                                     `json:"score_threshold"`
 	Source         string                                      `json:"source" api:"nullable"`
 	SourceParams   NamespaceInstanceDeleteResponseSourceParams `json:"source_params" api:"nullable"`
 	Status         string                                      `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Defaults to 21600 (6h); instances crawling a domain outside the account may be
+	// set to 86400.
 	SyncInterval NamespaceInstanceDeleteResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                                      `json:"token_id" format:"uuid"`
 	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
@@ -3022,7 +3035,7 @@ func (r NamespaceInstanceDeleteResponseFusionMethod) IsKnown() bool {
 }
 
 // Controls which storage backends indexing uses. Defaults to vector and keyword
-// indexing for new instances.
+// indexing for new instances. When set, both vector and keyword are required.
 type NamespaceInstanceDeleteResponseIndexMethod struct {
 	// Enable keyword (BM25) storage backend.
 	Keyword bool `json:"keyword" api:"required"`
@@ -3636,6 +3649,8 @@ func (r NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseType) IsKnown(
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 // (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Defaults to 21600 (6h); instances crawling a domain outside the account may be
+// set to 86400.
 type NamespaceInstanceDeleteResponseSyncInterval float64
 
 const (
@@ -4102,7 +4117,7 @@ type NamespaceInstanceReadResponse struct {
 	// Deprecated: deprecated
 	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
 	// Controls which storage backends indexing uses. Defaults to vector and keyword
-	// indexing for new instances.
+	// indexing for new instances. When set, both vector and keyword are required.
 	IndexMethod          NamespaceInstanceReadResponseIndexMethod          `json:"index_method"`
 	IndexingOptions      NamespaceInstanceReadResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
 	LastActivity         time.Time                                         `json:"last_activity" api:"nullable" format:"date-time"`
@@ -4118,14 +4133,17 @@ type NamespaceInstanceReadResponse struct {
 	RetrievalOptions     NamespaceInstanceReadResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
 	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
 	// Completions API. An empty string uses the configured or default model.
-	RewriteModel   string                                    `json:"rewrite_model" api:"nullable"`
-	RewriteQuery   bool                                      `json:"rewrite_query"`
+	RewriteModel string `json:"rewrite_model" api:"nullable"`
+	RewriteQuery bool   `json:"rewrite_query"`
+	// Minimum similarity score a chunk must reach to be returned. Defaults to 0.4.
 	ScoreThreshold float64                                   `json:"score_threshold"`
 	Source         string                                    `json:"source" api:"nullable"`
 	SourceParams   NamespaceInstanceReadResponseSourceParams `json:"source_params" api:"nullable"`
 	Status         string                                    `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Defaults to 21600 (6h); instances crawling a domain outside the account may be
+	// set to 86400.
 	SyncInterval NamespaceInstanceReadResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                                    `json:"token_id" format:"uuid"`
 	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
@@ -4288,7 +4306,7 @@ func (r NamespaceInstanceReadResponseFusionMethod) IsKnown() bool {
 }
 
 // Controls which storage backends indexing uses. Defaults to vector and keyword
-// indexing for new instances.
+// indexing for new instances. When set, both vector and keyword are required.
 type NamespaceInstanceReadResponseIndexMethod struct {
 	// Enable keyword (BM25) storage backend.
 	Keyword bool `json:"keyword" api:"required"`
@@ -4902,6 +4920,8 @@ func (r NamespaceInstanceReadResponseSourceParamsWebCrawlerParseType) IsKnown() 
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 // (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Defaults to 21600 (6h); instances crawling a domain outside the account may be
+// set to 86400.
 type NamespaceInstanceReadResponseSyncInterval float64
 
 const (
@@ -5261,7 +5281,7 @@ type NamespaceInstanceNewParams struct {
 	// false to create a vector-only instance.
 	HybridSearchEnabled param.Field[bool] `json:"hybrid_search_enabled"`
 	// Controls which storage backends indexing uses. Defaults to vector and keyword
-	// indexing for new instances.
+	// indexing for new instances. When set, both vector and keyword are required.
 	IndexMethod          param.Field[NamespaceInstanceNewParamsIndexMethod]          `json:"index_method"`
 	IndexingOptions      param.Field[NamespaceInstanceNewParamsIndexingOptions]      `json:"indexing_options"`
 	MaxNumResults        param.Field[int64]                                          `json:"max_num_results"`
@@ -5272,13 +5292,16 @@ type NamespaceInstanceNewParams struct {
 	RetrievalOptions     param.Field[NamespaceInstanceNewParamsRetrievalOptions]     `json:"retrieval_options"`
 	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
 	// Completions API. An empty string uses the configured or default model.
-	RewriteModel   param.Field[string]                                 `json:"rewrite_model"`
-	RewriteQuery   param.Field[bool]                                   `json:"rewrite_query"`
+	RewriteModel param.Field[string] `json:"rewrite_model"`
+	RewriteQuery param.Field[bool]   `json:"rewrite_query"`
+	// Minimum similarity score a chunk must reach to be returned. Defaults to 0.4.
 	ScoreThreshold param.Field[float64]                                `json:"score_threshold"`
 	Source         param.Field[string]                                 `json:"source"`
 	SourceParams   param.Field[NamespaceInstanceNewParamsSourceParams] `json:"source_params"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Defaults to 21600 (6h); instances crawling a domain outside the account may be
+	// set to 86400.
 	SyncInterval param.Field[NamespaceInstanceNewParamsSyncInterval] `json:"sync_interval"`
 	TokenID      param.Field[string]                                 `json:"token_id" format:"uuid"`
 	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
@@ -5376,7 +5399,7 @@ func (r NamespaceInstanceNewParamsFusionMethod) IsKnown() bool {
 }
 
 // Controls which storage backends indexing uses. Defaults to vector and keyword
-// indexing for new instances.
+// indexing for new instances. When set, both vector and keyword are required.
 type NamespaceInstanceNewParamsIndexMethod struct {
 	// Enable keyword (BM25) storage backend.
 	Keyword param.Field[bool] `json:"keyword" api:"required"`
@@ -5742,6 +5765,8 @@ func (r NamespaceInstanceNewParamsSourceParamsWebCrawlerParseType) IsKnown() boo
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 // (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Defaults to 21600 (6h); instances crawling a domain outside the account may be
+// set to 86400.
 type NamespaceInstanceNewParamsSyncInterval float64
 
 const (
@@ -5823,7 +5848,7 @@ type NamespaceInstanceUpdateParams struct {
 	EmbeddingModel param.Field[string]                                        `json:"embedding_model"`
 	FusionMethod   param.Field[NamespaceInstanceUpdateParamsFusionMethod]     `json:"fusion_method"`
 	// Controls which storage backends indexing uses. Defaults to vector and keyword
-	// indexing for new instances.
+	// indexing for new instances. When set, both vector and keyword are required.
 	IndexMethod          param.Field[NamespaceInstanceUpdateParamsIndexMethod]          `json:"index_method"`
 	IndexingOptions      param.Field[NamespaceInstanceUpdateParamsIndexingOptions]      `json:"indexing_options"`
 	MaxNumResults        param.Field[int64]                                             `json:"max_num_results"`
@@ -5835,8 +5860,9 @@ type NamespaceInstanceUpdateParams struct {
 	RetrievalOptions     param.Field[NamespaceInstanceUpdateParamsRetrievalOptions]     `json:"retrieval_options"`
 	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
 	// Completions API. An empty string uses the configured or default model.
-	RewriteModel       param.Field[string]                                    `json:"rewrite_model"`
-	RewriteQuery       param.Field[bool]                                      `json:"rewrite_query"`
+	RewriteModel param.Field[string] `json:"rewrite_model"`
+	RewriteQuery param.Field[bool]   `json:"rewrite_query"`
+	// Minimum similarity score a chunk must reach to be returned. Defaults to 0.4.
 	ScoreThreshold     param.Field[float64]                                   `json:"score_threshold"`
 	Source             param.Field[string]                                    `json:"source"`
 	SourceParams       param.Field[NamespaceInstanceUpdateParamsSourceParams] `json:"source_params"`
@@ -5844,6 +5870,8 @@ type NamespaceInstanceUpdateParams struct {
 	SummarizationModel param.Field[string]                                    `json:"summarization_model"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Defaults to 21600 (6h); instances crawling a domain outside the account may be
+	// set to 86400.
 	SyncInterval                   param.Field[NamespaceInstanceUpdateParamsSyncInterval] `json:"sync_interval"`
 	SystemPromptAISearch           param.Field[string]                                    `json:"system_prompt_ai_search"`
 	SystemPromptIndexSummarization param.Field[string]                                    `json:"system_prompt_index_summarization"`
@@ -5940,7 +5968,7 @@ func (r NamespaceInstanceUpdateParamsFusionMethod) IsKnown() bool {
 }
 
 // Controls which storage backends indexing uses. Defaults to vector and keyword
-// indexing for new instances.
+// indexing for new instances. When set, both vector and keyword are required.
 type NamespaceInstanceUpdateParamsIndexMethod struct {
 	// Enable keyword (BM25) storage backend.
 	Keyword param.Field[bool] `json:"keyword" api:"required"`
@@ -6306,6 +6334,8 @@ func (r NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseType) IsKnown() 
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 // (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Defaults to 21600 (6h); instances crawling a domain outside the account may be
+// set to 86400.
 type NamespaceInstanceUpdateParamsSyncInterval float64
 
 const (
@@ -6636,10 +6666,14 @@ type NamespaceInstanceChatCompletionsParamsAISearchOptionsRetrieval struct {
 	// omitted, falls back to the instance-level retrieval_options.keyword_match_mode,
 	// then to 'and'.
 	KeywordMatchMode param.Field[NamespaceInstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
-	MatchThreshold   param.Field[float64]                                                                        `json:"match_threshold"`
-	MaxNumResults    param.Field[int64]                                                                          `json:"max_num_results"`
-	RetrievalType    param.Field[NamespaceInstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType]    `json:"retrieval_type"`
-	ReturnOnFailure  param.Field[bool]                                                                           `json:"return_on_failure"`
+	// Minimum similarity score a chunk must reach to be returned. When omitted, falls
+	// back to the instance-level score_threshold, then to 0.4.
+	MatchThreshold param.Field[float64] `json:"match_threshold"`
+	// Maximum number of results to return. When omitted, falls back to the
+	// instance-level max_num_results, then to 10.
+	MaxNumResults   param.Field[int64]                                                                       `json:"max_num_results"`
+	RetrievalType   param.Field[NamespaceInstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType] `json:"retrieval_type"`
+	ReturnOnFailure param.Field[bool]                                                                        `json:"return_on_failure"`
 }
 
 func (r NamespaceInstanceChatCompletionsParamsAISearchOptionsRetrieval) MarshalJSON() (data []byte, err error) {
@@ -6910,10 +6944,14 @@ type NamespaceInstanceSearchParamsAISearchOptionsRetrieval struct {
 	// omitted, falls back to the instance-level retrieval_options.keyword_match_mode,
 	// then to 'and'.
 	KeywordMatchMode param.Field[NamespaceInstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
-	MatchThreshold   param.Field[float64]                                                               `json:"match_threshold"`
-	MaxNumResults    param.Field[int64]                                                                 `json:"max_num_results"`
-	RetrievalType    param.Field[NamespaceInstanceSearchParamsAISearchOptionsRetrievalRetrievalType]    `json:"retrieval_type"`
-	ReturnOnFailure  param.Field[bool]                                                                  `json:"return_on_failure"`
+	// Minimum similarity score a chunk must reach to be returned. When omitted, falls
+	// back to the instance-level score_threshold, then to 0.4.
+	MatchThreshold param.Field[float64] `json:"match_threshold"`
+	// Maximum number of results to return. When omitted, falls back to the
+	// instance-level max_num_results, then to 10.
+	MaxNumResults   param.Field[int64]                                                              `json:"max_num_results"`
+	RetrievalType   param.Field[NamespaceInstanceSearchParamsAISearchOptionsRetrievalRetrievalType] `json:"retrieval_type"`
+	ReturnOnFailure param.Field[bool]                                                               `json:"return_on_failure"`
 }
 
 func (r NamespaceInstanceSearchParamsAISearchOptionsRetrieval) MarshalJSON() (data []byte, err error) {

@@ -504,9 +504,6 @@ type RuleSetting struct {
 	// Set to enable MSP children to bypass this rule. Only parent MSP accounts can set
 	// this. this rule. Settable for all types of rules.
 	AllowChildBypass bool `json:"allow_child_bypass" api:"nullable"`
-	// Define the settings for the Audit SSH action. Settable only for `l4` rules with
-	// `audit_ssh` action.
-	AuditSSH RuleSettingAuditSSH `json:"audit_ssh" api:"nullable"`
 	// Configure browser isolation behavior. Settable only for `http` rules with the
 	// action set to `isolate`.
 	BISOAdminControls RuleSettingBISOAdminControls `json:"biso_admin_controls"`
@@ -605,7 +602,6 @@ type RuleSetting struct {
 type ruleSettingJSON struct {
 	AddHeaders                      apijson.Field
 	AllowChildBypass                apijson.Field
-	AuditSSH                        apijson.Field
 	BISOAdminControls               apijson.Field
 	BlockPage                       apijson.Field
 	BlockPageEnabled                apijson.Field
@@ -640,30 +636,6 @@ func (r *RuleSetting) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r ruleSettingJSON) RawJSON() string {
-	return r.raw
-}
-
-// Define the settings for the Audit SSH action. Settable only for `l4` rules with
-// `audit_ssh` action.
-type RuleSettingAuditSSH struct {
-	// Enable SSH command logging.
-	CommandLogging bool                    `json:"command_logging"`
-	JSON           ruleSettingAuditSSHJSON `json:"-"`
-}
-
-// ruleSettingAuditSSHJSON contains the JSON metadata for the struct
-// [RuleSettingAuditSSH]
-type ruleSettingAuditSSHJSON struct {
-	CommandLogging apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *RuleSettingAuditSSH) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleSettingAuditSSHJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1273,9 +1245,6 @@ type RuleSettingParam struct {
 	// Set to enable MSP children to bypass this rule. Only parent MSP accounts can set
 	// this. this rule. Settable for all types of rules.
 	AllowChildBypass param.Field[bool] `json:"allow_child_bypass"`
-	// Define the settings for the Audit SSH action. Settable only for `l4` rules with
-	// `audit_ssh` action.
-	AuditSSH param.Field[RuleSettingAuditSSHParam] `json:"audit_ssh"`
 	// Configure browser isolation behavior. Settable only for `http` rules with the
 	// action set to `isolate`.
 	BISOAdminControls param.Field[RuleSettingBISOAdminControlsParam] `json:"biso_admin_controls"`
@@ -1370,17 +1339,6 @@ type RuleSettingParam struct {
 }
 
 func (r RuleSettingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Define the settings for the Audit SSH action. Settable only for `l4` rules with
-// `audit_ssh` action.
-type RuleSettingAuditSSHParam struct {
-	// Enable SSH command logging.
-	CommandLogging param.Field[bool] `json:"command_logging"`
-}
-
-func (r RuleSettingAuditSSHParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

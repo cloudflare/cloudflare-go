@@ -34,7 +34,8 @@ func NewThreatSignalFeedSkillService(opts ...option.RequestOption) (r *ThreatSig
 	return
 }
 
-// Replaces the ordered custom skills assigned to a Threat Signals feed.
+// Replaces the ordered custom skills assigned to a Threat Signals feed. Requires a
+// paid Threat Signals subscription.
 func (r *ThreatSignalFeedSkillService) Update(ctx context.Context, feedID string, params ThreatSignalFeedSkillUpdateParams, opts ...option.RequestOption) (res *ThreatSignalFeedSkillUpdateResponse, err error) {
 	var env ThreatSignalFeedSkillUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -55,7 +56,9 @@ func (r *ThreatSignalFeedSkillService) Update(ctx context.Context, feedID string
 	return res, nil
 }
 
-// Retrieves the effective skill pipeline for a Threat Signals feed.
+// Retrieves active non-IOC-context Managed Default Skills followed by active
+// Custom Skills assigned to the feed, with each entry's source. Free Threat
+// Signals accounts receive only those Managed Default Skills.
 func (r *ThreatSignalFeedSkillService) Get(ctx context.Context, feedID string, query ThreatSignalFeedSkillGetParams, opts ...option.RequestOption) (res *ThreatSignalFeedSkillGetResponse, err error) {
 	var env ThreatSignalFeedSkillGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -208,8 +211,11 @@ func (r ThreatSignalFeedSkillGetResponseSkillsSource) IsKnown() bool {
 }
 
 type ThreatSignalFeedSkillUpdateParams struct {
-	AccountID param.Field[string]   `path:"account_id" api:"required"`
-	SkillIDs  param.Field[[]string] `json:"skill_ids" api:"required" format:"uuid"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Ordered array of Custom Skill UUIDs (max 20). Replaces the feed's custom skill
+	// assignments. Free accounts cannot assign custom skills. Managed default skills
+	// are unaffected.
+	SkillIDs param.Field[[]string] `json:"skill_ids" api:"required" format:"uuid"`
 }
 
 func (r ThreatSignalFeedSkillUpdateParams) MarshalJSON() (data []byte, err error) {

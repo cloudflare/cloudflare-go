@@ -259,6 +259,7 @@ const (
 	PhaseHTTPRequestTransform         Phase = "http_request_transform"
 	PhaseHTTPResponseCacheSettings    Phase = "http_response_cache_settings"
 	PhaseHTTPResponseCompression      Phase = "http_response_compression"
+	PhaseHTTPResponseFirewallCustom   Phase = "http_response_firewall_custom"
 	PhaseHTTPResponseFirewallManaged  Phase = "http_response_firewall_managed"
 	PhaseHTTPResponseHeadersTransform Phase = "http_response_headers_transform"
 	PhaseMagicTransit                 Phase = "magic_transit"
@@ -269,7 +270,7 @@ const (
 
 func (r Phase) IsKnown() bool {
 	switch r {
-	case PhaseDDoSL4, PhaseDDoSL7, PhaseHTTPConfigSettings, PhaseHTTPCustomErrors, PhaseHTTPLogCustomFields, PhaseHTTPRatelimit, PhaseHTTPRequestCacheSettings, PhaseHTTPRequestDynamicRedirect, PhaseHTTPRequestFirewallCustom, PhaseHTTPRequestFirewallManaged, PhaseHTTPRequestLateTransform, PhaseHTTPRequestOrigin, PhaseHTTPRequestRedirect, PhaseHTTPRequestSanitize, PhaseHTTPRequestSBFM, PhaseHTTPRequestTransform, PhaseHTTPResponseCacheSettings, PhaseHTTPResponseCompression, PhaseHTTPResponseFirewallManaged, PhaseHTTPResponseHeadersTransform, PhaseMagicTransit, PhaseMagicTransitIDsManaged, PhaseMagicTransitManaged, PhaseMagicTransitRatelimit:
+	case PhaseDDoSL4, PhaseDDoSL7, PhaseHTTPConfigSettings, PhaseHTTPCustomErrors, PhaseHTTPLogCustomFields, PhaseHTTPRatelimit, PhaseHTTPRequestCacheSettings, PhaseHTTPRequestDynamicRedirect, PhaseHTTPRequestFirewallCustom, PhaseHTTPRequestFirewallManaged, PhaseHTTPRequestLateTransform, PhaseHTTPRequestOrigin, PhaseHTTPRequestRedirect, PhaseHTTPRequestSanitize, PhaseHTTPRequestSBFM, PhaseHTTPRequestTransform, PhaseHTTPResponseCacheSettings, PhaseHTTPResponseCompression, PhaseHTTPResponseFirewallCustom, PhaseHTTPResponseFirewallManaged, PhaseHTTPResponseHeadersTransform, PhaseMagicTransit, PhaseMagicTransitIDsManaged, PhaseMagicTransitManaged, PhaseMagicTransitRatelimit:
 		return true
 	}
 	return false

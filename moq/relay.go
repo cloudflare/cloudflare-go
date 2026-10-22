@@ -174,6 +174,8 @@ func (r *RelayService) Get(ctx context.Context, relayID string, query RelayGetPa
 // subscribe] and one [subscribe]-only), each with its one-time secret, wrapped in
 // the issuers envelope.
 type RelayNewResponse struct {
+	// Relay configuration. All sub-objects use whole-object replacement when present;
+	// omitted sub-objects preserve the existing value.
 	Config  RelayNewResponseConfig `json:"config" api:"required"`
 	Created time.Time              `json:"created" api:"required" format:"date-time"`
 	// Token collection (discriminated union on `type`). On create this holds the
@@ -207,6 +209,8 @@ func (r relayNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Relay configuration. All sub-objects use whole-object replacement when present;
+// omitted sub-objects preserve the existing value.
 type RelayNewResponseConfig struct {
 	// Upstreams are external MOQT server publishers that a relay falls back to when it
 	// has no local publisher for a requested namespace/track.
@@ -393,6 +397,8 @@ func (r RelayNewResponseIssuersType) IsKnown() bool {
 
 // Full relay details (no tokens).
 type RelayUpdateResponse struct {
+	// Relay configuration. All sub-objects use whole-object replacement when present;
+	// omitted sub-objects preserve the existing value.
 	Config   RelayUpdateResponseConfig `json:"config" api:"required"`
 	Created  time.Time                 `json:"created" api:"required" format:"date-time"`
 	Modified time.Time                 `json:"modified" api:"required" format:"date-time"`
@@ -424,6 +430,8 @@ func (r relayUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Relay configuration. All sub-objects use whole-object replacement when present;
+// omitted sub-objects preserve the existing value.
 type RelayUpdateResponseConfig struct {
 	// Upstreams are external MOQT server publishers that a relay falls back to when it
 	// has no local publisher for a requested namespace/track.
@@ -547,6 +555,8 @@ type RelayDeleteResponse = interface{}
 
 // Full relay details (no tokens).
 type RelayGetResponse struct {
+	// Relay configuration. All sub-objects use whole-object replacement when present;
+	// omitted sub-objects preserve the existing value.
 	Config   RelayGetResponseConfig `json:"config" api:"required"`
 	Created  time.Time              `json:"created" api:"required" format:"date-time"`
 	Modified time.Time              `json:"modified" api:"required" format:"date-time"`
@@ -578,6 +588,8 @@ func (r relayGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Relay configuration. All sub-objects use whole-object replacement when present;
+// omitted sub-objects preserve the existing value.
 type RelayGetResponseConfig struct {
 	// Upstreams are external MOQT server publishers that a relay falls back to when it
 	// has no local publisher for a requested namespace/track.
@@ -758,15 +770,19 @@ func (r relayNewResponseEnvelopeMessagesJSON) RawJSON() string {
 
 type RelayUpdateParams struct {
 	// Cloudflare account identifier.
-	AccountID param.Field[string]                  `path:"account_id" api:"required"`
-	Config    param.Field[RelayUpdateParamsConfig] `json:"config"`
-	Name      param.Field[string]                  `json:"name"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Relay configuration. All sub-objects use whole-object replacement when present;
+	// omitted sub-objects preserve the existing value.
+	Config param.Field[RelayUpdateParamsConfig] `json:"config"`
+	Name   param.Field[string]                  `json:"name"`
 }
 
 func (r RelayUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Relay configuration. All sub-objects use whole-object replacement when present;
+// omitted sub-objects preserve the existing value.
 type RelayUpdateParamsConfig struct {
 	// Upstreams are external MOQT server publishers that a relay falls back to when it
 	// has no local publisher for a requested namespace/track.

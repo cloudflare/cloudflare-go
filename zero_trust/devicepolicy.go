@@ -134,6 +134,10 @@ type SettingsPolicy struct {
 	// List of DNS search suffixes to apply to clients. Suffixes are evaluated in
 	// order. Use an empty array to clear.
 	DNSSearchSuffixes []SettingsPolicyDNSSearchSuffix `json:"dns_search_suffixes"`
+	// Determines whether the WARP client can silently reauthenticate the user with
+	// device credentials (Microsoft Entra) instead of prompting for browser-based
+	// reauthentication.
+	EnableDeviceCredentialAuthentication bool `json:"enable_device_credential_authentication"`
 	// Whether the policy will be applied to matching devices.
 	Enabled bool `json:"enabled"`
 	// List of routes excluded in the WARP client's tunnel.
@@ -196,41 +200,42 @@ type SettingsPolicy struct {
 
 // settingsPolicyJSON contains the JSON metadata for the struct [SettingsPolicy]
 type settingsPolicyJSON struct {
-	AllowModeSwitch            apijson.Field
-	AllowUpdates               apijson.Field
-	AllowedToLeave             apijson.Field
-	AutoConnect                apijson.Field
-	BrowserExtensionConfig     apijson.Field
-	CaptivePortal              apijson.Field
-	Default                    apijson.Field
-	Description                apijson.Field
-	DisableAutoFallback        apijson.Field
-	DNSSearchSuffixes          apijson.Field
-	Enabled                    apijson.Field
-	Exclude                    apijson.Field
-	ExcludeOfficeIPs           apijson.Field
-	FallbackDomains            apijson.Field
-	GatewayUniqueID            apijson.Field
-	GlobalAcceleration         apijson.Field
-	Include                    apijson.Field
-	LANAllowMinutes            apijson.Field
-	LANAllowSubnetSize         apijson.Field
-	Match                      apijson.Field
-	Name                       apijson.Field
-	PolicyID                   apijson.Field
-	Precedence                 apijson.Field
-	ProfileType                apijson.Field
-	RegisterInterfaceIPWithDNS apijson.Field
-	SccmVpnBoundarySupport     apijson.Field
-	ServiceModeV2              apijson.Field
-	SupportURL                 apijson.Field
-	SwitchLocked               apijson.Field
-	TargetTests                apijson.Field
-	TunnelProtocol             apijson.Field
-	UninstallProtection        apijson.Field
-	VirtualNetworks            apijson.Field
-	raw                        string
-	ExtraFields                map[string]apijson.Field
+	AllowModeSwitch                      apijson.Field
+	AllowUpdates                         apijson.Field
+	AllowedToLeave                       apijson.Field
+	AutoConnect                          apijson.Field
+	BrowserExtensionConfig               apijson.Field
+	CaptivePortal                        apijson.Field
+	Default                              apijson.Field
+	Description                          apijson.Field
+	DisableAutoFallback                  apijson.Field
+	DNSSearchSuffixes                    apijson.Field
+	EnableDeviceCredentialAuthentication apijson.Field
+	Enabled                              apijson.Field
+	Exclude                              apijson.Field
+	ExcludeOfficeIPs                     apijson.Field
+	FallbackDomains                      apijson.Field
+	GatewayUniqueID                      apijson.Field
+	GlobalAcceleration                   apijson.Field
+	Include                              apijson.Field
+	LANAllowMinutes                      apijson.Field
+	LANAllowSubnetSize                   apijson.Field
+	Match                                apijson.Field
+	Name                                 apijson.Field
+	PolicyID                             apijson.Field
+	Precedence                           apijson.Field
+	ProfileType                          apijson.Field
+	RegisterInterfaceIPWithDNS           apijson.Field
+	SccmVpnBoundarySupport               apijson.Field
+	ServiceModeV2                        apijson.Field
+	SupportURL                           apijson.Field
+	SwitchLocked                         apijson.Field
+	TargetTests                          apijson.Field
+	TunnelProtocol                       apijson.Field
+	UninstallProtection                  apijson.Field
+	VirtualNetworks                      apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *SettingsPolicy) UnmarshalJSON(data []byte) (err error) {

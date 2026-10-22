@@ -76,12 +76,12 @@ type ApplicationRolloutNewResponse struct {
 	Health         ApplicationRolloutNewResponseHealth `json:"health" api:"required"`
 	// Kind of the rollout process.
 	//
-	//   - "full_auto": For rolling rollouts, starts progressing steps upon rollout
-	//     creation. For new_instances rollouts, advances percentage targets
-	//     automatically after target-version health is observed.
-	//   - "full_manual": Requires manually progressing each step in the rollout using
-	//     the UpdateRollout's action paramater.
-	//   - "durable_objects_auto": Default when the application is a DO application.
+	// - "full_auto": For rolling rollouts, starts progressing steps upon rollout
+	//   creation. For new_instances rollouts, advances percentage targets
+	//   automatically after target-version health is observed.
+	// - "full_manual": Requires manually progressing each step in the rollout using
+	//   the UpdateRollout's action paramater.
+	// - "durable_objects_auto": Default when the application is a DO application.
 	Kind ApplicationRolloutNewResponseKind `json:"kind" api:"required"`
 	// Timestamp of the most recent update to status, health, or progress.
 	LastUpdatedAt string `json:"last_updated_at" api:"required"`
@@ -89,13 +89,13 @@ type ApplicationRolloutNewResponse struct {
 	Status ApplicationRolloutNewResponseStatus `json:"status" api:"required"`
 	// The rollout strategy.
 	//
-	//   - "rolling": Step-based rollout with health gates. Actively replaces instances
-	//     to reach each step's target percentage. Response includes steps and progress.
-	//   - "new_instances": Percentage control over version distribution. Version sync
-	//     actively replaces instances to match the configured percentage. "full_auto"
-	//     ramps through fixed percentage targets after target-version health is
-	//     observed. Response includes percentage, version_distribution, and
-	//     health.summary.
+	// - "rolling": Step-based rollout with health gates. Actively replaces instances
+	//   to reach each step's target percentage. Response includes steps and progress.
+	// - "new_instances": Percentage control over version distribution. Version sync
+	//   actively replaces instances to match the configured percentage. "full_auto"
+	//   ramps through fixed percentage targets after target-version health is
+	//   observed. Response includes percentage, version_distribution, and
+	//   health.summary.
 	Strategy ApplicationRolloutNewResponseStrategy `json:"strategy" api:"required"`
 	// User-specified container configuration changes.
 	TargetConfiguration ApplicationRolloutNewResponseTargetConfiguration `json:"target_configuration" api:"required"`
@@ -394,33 +394,33 @@ type ApplicationRolloutNewResponseHealthErrorsEvent struct {
 	Message string                 `json:"message" api:"required"`
 	// Name of the event that describes the kind event that happened.
 	//
-	//   - SchedulerPlaced: It's the first event that creates a container placement. It
-	//     happens when the Containers runtime was able to retrieve deployment resources
-	//     and start verifying everything is correct.
-	//   - NetworkingIPAssigned: It's sent when the Containers runtime maps the IP to the
-	//     container.
-	//   - VMStarted: It's sent when the Containers runtime starts the VM. The container
-	//     might remain unhealthy at this point.
-	//   - ImagePulled: It's sent when the Containers runtime pulls the image
-	//     successfully.
-	//   - ImagePullError: It's sent when the Containers runtime is having issues pulling
-	//     the image. The message and details have more information on what happened for
-	//     debugging.
-	//   - VMFailedToStart: It's sent when the Containers runtime was unable to boot the
-	//     VM.
-	//   - VMStopping: It's sent when the scheduler is stopping the VM.
-	//   - VMStopped: It's sent when the VM finally exits.
-	//   - VMFailed: It's sent when the scheduling of the VM failed in the current
-	//     location.
-	//   - RuntimeStartFailed: It's sent when the runtime hits an internal error.
-	//   - SSHStarted: It's sent when the container gains network connectivity and opens
-	//     the SSH port. Containers only send this event when SSH keys exist.
-	//   - CheckUpdate: Sent when the status of a health or readiness check changes. This
-	//     may also affect the health status of the placement.
-	//   - DurableObjectConnected: Sent when a durable object instance connects and gains
-	//     control of the deployment. This event is only sent for durable object
-	//     deployments. It is sent after VMStarted.
-	//   - ContainerStarted: It's sent when the container starts running.
+	// - SchedulerPlaced: It's the first event that creates a container placement. It
+	//   happens when the Containers runtime was able to retrieve deployment resources
+	//   and start verifying everything is correct.
+	// - NetworkingIPAssigned: It's sent when the Containers runtime maps the IP to the
+	//   container.
+	// - VMStarted: It's sent when the Containers runtime starts the VM. The container
+	//   might remain unhealthy at this point.
+	// - ImagePulled: It's sent when the Containers runtime pulls the image
+	//   successfully.
+	// - ImagePullError: It's sent when the Containers runtime is having issues pulling
+	//   the image. The message and details have more information on what happened for
+	//   debugging.
+	// - VMFailedToStart: It's sent when the Containers runtime was unable to boot the
+	//   VM.
+	// - VMStopping: It's sent when the scheduler is stopping the VM.
+	// - VMStopped: It's sent when the VM finally exits.
+	// - VMFailed: It's sent when the scheduling of the VM failed in the current
+	//   location.
+	// - RuntimeStartFailed: It's sent when the runtime hits an internal error.
+	// - SSHStarted: It's sent when the container gains network connectivity and opens
+	//   the SSH port. Containers only send this event when SSH keys exist.
+	// - CheckUpdate: Sent when the status of a health or readiness check changes. This
+	//   may also affect the health status of the placement.
+	// - DurableObjectConnected: Sent when a durable object instance connects and gains
+	//   control of the deployment. This event is only sent for durable object
+	//   deployments. It is sent after VMStarted.
+	// - ContainerStarted: It's sent when the container starts running.
 	Name         ApplicationRolloutNewResponseHealthErrorsEventName `json:"name" api:"required"`
 	StatusChange map[string]interface{}                             `json:"statusChange" api:"required"`
 	// UTC timestamp string in ISO 8601 format.
@@ -1026,22 +1026,22 @@ type ApplicationRolloutNewParams struct {
 	Description param.Field[string] `json:"description" api:"required"`
 	// Strategy used for the rollout.
 	//
-	//   - "rolling": Step-based rollout with health gates. Actively replaces instances
-	//     to reach each step's target percentage.
-	//   - "new_instances": Percentage control over version distribution. Version sync
-	//     actively replaces instances to match the configured percentage. The
-	//     "full_auto" kind advances through fixed percentage targets after
-	//     target-version health is observed.
+	// - "rolling": Step-based rollout with health gates. Actively replaces instances
+	//   to reach each step's target percentage.
+	// - "new_instances": Percentage control over version distribution. Version sync
+	//   actively replaces instances to match the configured percentage. The
+	//   "full_auto" kind advances through fixed percentage targets after
+	//   target-version health is observed.
 	Strategy param.Field[ApplicationRolloutNewParamsStrategy] `json:"strategy" api:"required"`
 	// User-specified container configuration changes.
 	TargetConfiguration param.Field[ApplicationRolloutNewParamsTargetConfiguration] `json:"target_configuration" api:"required"`
 	// Kind of the rollout process. Defaults to "full_auto".
 	//
-	//   - "full_auto": For rolling rollouts, starts progressing steps upon rollout
-	//     creation. For new_instances rollouts, advances percentage targets
-	//     automatically after target-version health is observed.
-	//   - "full_manual": Requires manually progressing each step in the rollout using
-	//     the UpdateRollout's action parameter.
+	// - "full_auto": For rolling rollouts, starts progressing steps upon rollout
+	//   creation. For new_instances rollouts, advances percentage targets
+	//   automatically after target-version health is observed.
+	// - "full_manual": Requires manually progressing each step in the rollout using
+	//   the UpdateRollout's action parameter.
 	Kind param.Field[ApplicationRolloutNewParamsKind] `json:"kind"`
 	// Initial target version percentage (0-100). Version sync actively replaces
 	// instances to match. Required when strategy is "new_instances" and kind is

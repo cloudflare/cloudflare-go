@@ -77,19 +77,21 @@ func (r *ResourceLibraryApplicationService) Update(ctx context.Context, id int64
 // List the applications available to an account, both the applications Cloudflare
 // curates and the custom applications the account has defined.
 //
-// Results are paginated. Use `filter` and `search` to narrow the list, `order_by`
-// to sort it, and `fields` to reduce each result to only the properties you need.
-// Use `lookup` to find complete application names mentioned in a rule sentence,
-// ignoring case. Lookup does not correct misspellings. It ranks matches by
-// relevance and uses the same filters, fields, and pagination as listing. `lookup`
-// cannot be combined with `search`.
+// Results are paginated. Page with `cursor` so that applications added or removed
+// between requests do not make other results repeat or go missing; `offset` paging
+// can repeat or miss results when the list changes between requests. Use `filter`
+// and `search` to narrow the list, `order_by` to sort it, and `fields` to reduce
+// each result to only the properties you need. Use `lookup` to find complete
+// application names mentioned in a rule sentence, ignoring case. Lookup does not
+// correct misspellings. It ranks matches by relevance and uses the same filters,
+// fields, and pagination as listing. `lookup` cannot be combined with `search`.
 //
 // Invalid UTF-8 or a NUL character (U+0000) in any query parameter name or value
 // returns `400`.
 //
 // The authenticated principal must have access to the account identified by
 // `account_id`.
-func (r *ResourceLibraryApplicationService) List(ctx context.Context, params ResourceLibraryApplicationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ResourceLibraryApplicationListResponse], err error) {
+func (r *ResourceLibraryApplicationService) List(ctx context.Context, params ResourceLibraryApplicationListParams, opts ...option.RequestOption) (res *pagination.CursorPaginationAfter[ResourceLibraryApplicationListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -113,20 +115,22 @@ func (r *ResourceLibraryApplicationService) List(ctx context.Context, params Res
 // List the applications available to an account, both the applications Cloudflare
 // curates and the custom applications the account has defined.
 //
-// Results are paginated. Use `filter` and `search` to narrow the list, `order_by`
-// to sort it, and `fields` to reduce each result to only the properties you need.
-// Use `lookup` to find complete application names mentioned in a rule sentence,
-// ignoring case. Lookup does not correct misspellings. It ranks matches by
-// relevance and uses the same filters, fields, and pagination as listing. `lookup`
-// cannot be combined with `search`.
+// Results are paginated. Page with `cursor` so that applications added or removed
+// between requests do not make other results repeat or go missing; `offset` paging
+// can repeat or miss results when the list changes between requests. Use `filter`
+// and `search` to narrow the list, `order_by` to sort it, and `fields` to reduce
+// each result to only the properties you need. Use `lookup` to find complete
+// application names mentioned in a rule sentence, ignoring case. Lookup does not
+// correct misspellings. It ranks matches by relevance and uses the same filters,
+// fields, and pagination as listing. `lookup` cannot be combined with `search`.
 //
 // Invalid UTF-8 or a NUL character (U+0000) in any query parameter name or value
 // returns `400`.
 //
 // The authenticated principal must have access to the account identified by
 // `account_id`.
-func (r *ResourceLibraryApplicationService) ListAutoPaging(ctx context.Context, params ResourceLibraryApplicationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ResourceLibraryApplicationListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *ResourceLibraryApplicationService) ListAutoPaging(ctx context.Context, params ResourceLibraryApplicationListParams, opts ...option.RequestOption) *pagination.CursorPaginationAfterAutoPager[ResourceLibraryApplicationListResponse] {
+	return pagination.NewCursorPaginationAfterAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a custom application and all of its versions. Deletion is rejected when
@@ -943,6 +947,12 @@ func (r ResourceLibraryApplicationUpdateResponseEnvelopeSuccess) IsKnown() bool 
 
 type ResourceLibraryApplicationListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Opaque value from `result_info.cursor` of the previous response. Returns the
+	// results that follow it. Send the same `filter`, `search`, `lookup`, and
+	// `order_by` values as the request that returned it; `limit` and `fields` may
+	// change. An empty value is the same as no cursor. A modified cursor, or one used
+	// with different values, returns `400`.
+	Cursor param.Field[string] `query:"cursor"`
 	// Return only the listed properties on each application, as a comma-separated
 	// list. Use this to keep responses small when you only need part of each
 	// application, for example populating a picker with `fields=id,name` instead of
@@ -961,21 +971,21 @@ type ResourceLibraryApplicationListParams struct {
 	Fields param.Field[string] `query:"fields"`
 	// Filter applications using `key:value` format. Supported filter keys:
 	//
-	//   - `name`: application name (for example, `name:HR`).
-	//   - `id`: application ID (for example, `id:498`).
-	//   - `human_id`: human-readable ID (for example, `human_id:HR`).
-	//   - `hostname`: hostname or support domain (for example,
-	//     `hostname:portal.example.com`).
-	//   - `source`: application source name (for example, `source:cloudflare`).
-	//   - `ip_subnet`: CIDR containment; returns applications where a stored subnet
-	//     contains the search value (for example, `ip_subnet:10.0.1.5/32` matches
-	//     `10.0.0.0/16`).
-	//   - `category_id`: category ID (for example, `category_id:12`).
-	//   - `category_name`: category name (for example, `category_name:HR`).
-	//   - `supported`: supported Cloudflare product. Values: `GATEWAY`, `ACCESS`,
-	//     `CASB`.
-	//   - `review_status`: account-specific Gateway review status. Values: `approved`,
-	//     `unapproved`, `in_review`, `unreviewed`.
+	// - `name`: application name (for example, `name:HR`).
+	// - `id`: application ID (for example, `id:498`).
+	// - `human_id`: human-readable ID (for example, `human_id:HR`).
+	// - `hostname`: hostname or support domain (for example,
+	//   `hostname:portal.example.com`).
+	// - `source`: application source name (for example, `source:cloudflare`).
+	// - `ip_subnet`: CIDR containment; returns applications where a stored subnet
+	//   contains the search value (for example, `ip_subnet:10.0.1.5/32` matches
+	//   `10.0.0.0/16`).
+	// - `category_id`: category ID (for example, `category_id:12`).
+	// - `category_name`: category name (for example, `category_name:HR`).
+	// - `supported`: supported Cloudflare product. Values: `GATEWAY`, `ACCESS`,
+	//   `CASB`.
+	// - `review_status`: account-specific Gateway review status. Values: `approved`,
+	//   `unapproved`, `in_review`, `unreviewed`.
 	Filter param.Field[string] `query:"filter"`
 	// Number of results to return. Defaults to 25; values are clamped to 1–250.
 	Limit param.Field[int64] `query:"limit"`
@@ -988,6 +998,7 @@ type ResourceLibraryApplicationListParams struct {
 	// `POST .../applications/lookup` instead.
 	Lookup param.Field[string] `query:"lookup"`
 	// Number of results to skip. Defaults to 0; negative values are clamped to 0.
+	// Ignored when `cursor` is provided.
 	Offset param.Field[int64] `query:"offset"`
 	// Order results using field:direction format. Supported fields are name, id,
 	// human_id, category_id, application_type, application_confidence_score, and

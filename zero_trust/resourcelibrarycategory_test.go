@@ -30,6 +30,7 @@ func TestResourceLibraryCategoryListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.ResourceLibrary.Categories.List(context.TODO(), zero_trust.ResourceLibraryCategoryListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Cursor:    cloudflare.F("cursor"),
 		Limit:     cloudflare.F(int64(0)),
 		Offset:    cloudflare.F(int64(0)),
 	})

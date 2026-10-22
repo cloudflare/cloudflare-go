@@ -49,9 +49,6 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 				"X-Custom-Header-Name": {"somecustomvalue"},
 			}),
 			AllowChildBypass: cloudflare.F(false),
-			AuditSSH: cloudflare.F(zero_trust.RuleSettingAuditSSHParam{
-				CommandLogging: cloudflare.F(false),
-			}),
 			BISOAdminControls: cloudflare.F(zero_trust.RuleSettingBISOAdminControlsParam{
 				Copy:     cloudflare.F(zero_trust.RuleSettingBISOAdminControlsCopyRemoteOnly),
 				DCP:      cloudflare.F(true),
@@ -198,9 +195,6 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 					"X-Custom-Header-Name": {"somecustomvalue"},
 				}),
 				AllowChildBypass: cloudflare.F(false),
-				AuditSSH: cloudflare.F(zero_trust.RuleSettingAuditSSHParam{
-					CommandLogging: cloudflare.F(false),
-				}),
 				BISOAdminControls: cloudflare.F(zero_trust.RuleSettingBISOAdminControlsParam{
 					Copy:     cloudflare.F(zero_trust.RuleSettingBISOAdminControlsCopyRemoteOnly),
 					DCP:      cloudflare.F(true),

@@ -31,10 +31,10 @@ func TestCWSPolicyNewWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.CWS.Policies.New(context.TODO(), zero_trust.CWSPolicyNewParams{
 		AccountID:   cloudflare.F("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
 		Entrypoint:  cloudflare.F("entrypoint"),
+		Filter:      cloudflare.F("x"),
 		Name:        cloudflare.F("x"),
 		RegoSource:  cloudflare.F("x"),
 		Description: cloudflare.F("description"),
-		Filter:      cloudflare.F("x"),
 		Tags: cloudflare.F(map[string]string{
 			"foo": "string",
 		}),
@@ -68,10 +68,10 @@ func TestCWSPolicyUpdateWithOptionalParams(t *testing.T) {
 		zero_trust.CWSPolicyUpdateParams{
 			AccountID:   cloudflare.F("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
 			Entrypoint:  cloudflare.F("entrypoint"),
+			Filter:      cloudflare.F("x"),
 			Name:        cloudflare.F("x"),
 			RegoSource:  cloudflare.F("x"),
 			Description: cloudflare.F("description"),
-			Filter:      cloudflare.F("x"),
 			Tags: cloudflare.F(map[string]string{
 				"foo": "string",
 			}),

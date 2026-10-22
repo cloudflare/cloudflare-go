@@ -181,8 +181,13 @@ type AIGatewayNewResponse struct {
 	Authentication          bool      `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
-	ByokOnly              bool                                      `json:"byok_only"`
-	DLP                   AIGatewayNewResponseDLP                   `json:"dlp"`
+	ByokOnly bool                    `json:"byok_only"`
+	DLP      AIGatewayNewResponseDLP `json:"dlp"`
+	// FedRAMP compliance level: fedramp-medium or fedramp-high.
+	FedrampLevel AIGatewayNewResponseFedrampLevel `json:"fedramp_level" api:"nullable"`
+	// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+	// fallback. "require" strictly filters.
+	FedrampMode           AIGatewayNewResponseFedrampMode           `json:"fedramp_mode" api:"nullable"`
 	Guardrails            AIGatewayNewResponseGuardrails            `json:"guardrails" api:"nullable"`
 	IsDefault             bool                                      `json:"is_default"`
 	LogClassification     bool                                      `json:"log_classification"`
@@ -199,8 +204,10 @@ type AIGatewayNewResponse struct {
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts int64                           `json:"retry_max_attempts" api:"nullable"`
 	SpendLimits      AIGatewayNewResponseSpendLimits `json:"spend_limits" api:"nullable"`
-	StoreID          string                          `json:"store_id" api:"nullable"`
-	Stripe           AIGatewayNewResponseStripe      `json:"stripe" api:"nullable"`
+	// Secrets Store used by this gateway. Omit on update to keep the current store.
+	// Cannot be cleared while stored keys or secret references depend on it.
+	StoreID string                     `json:"store_id" api:"nullable"`
+	Stripe  AIGatewayNewResponseStripe `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
 	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
@@ -224,6 +231,8 @@ type aiGatewayNewResponseJSON struct {
 	Authentication          apijson.Field
 	ByokOnly                apijson.Field
 	DLP                     apijson.Field
+	FedrampLevel            apijson.Field
+	FedrampMode             apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
 	LogClassification       apijson.Field
@@ -370,6 +379,39 @@ const (
 func (r AIGatewayNewResponseDLPAction) IsKnown() bool {
 	switch r {
 	case AIGatewayNewResponseDLPActionBlock, AIGatewayNewResponseDLPActionFlag:
+		return true
+	}
+	return false
+}
+
+// FedRAMP compliance level: fedramp-medium or fedramp-high.
+type AIGatewayNewResponseFedrampLevel string
+
+const (
+	AIGatewayNewResponseFedrampLevelFedrampMedium AIGatewayNewResponseFedrampLevel = "fedramp-medium"
+	AIGatewayNewResponseFedrampLevelFedrampHigh   AIGatewayNewResponseFedrampLevel = "fedramp-high"
+)
+
+func (r AIGatewayNewResponseFedrampLevel) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseFedrampLevelFedrampMedium, AIGatewayNewResponseFedrampLevelFedrampHigh:
+		return true
+	}
+	return false
+}
+
+// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+// fallback. "require" strictly filters.
+type AIGatewayNewResponseFedrampMode string
+
+const (
+	AIGatewayNewResponseFedrampModePrefer  AIGatewayNewResponseFedrampMode = "prefer"
+	AIGatewayNewResponseFedrampModeRequire AIGatewayNewResponseFedrampMode = "require"
+)
+
+func (r AIGatewayNewResponseFedrampMode) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseFedrampModePrefer, AIGatewayNewResponseFedrampModeRequire:
 		return true
 	}
 	return false
@@ -1379,8 +1421,13 @@ type AIGatewayUpdateResponse struct {
 	Authentication          bool      `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
-	ByokOnly              bool                                         `json:"byok_only"`
-	DLP                   AIGatewayUpdateResponseDLP                   `json:"dlp"`
+	ByokOnly bool                       `json:"byok_only"`
+	DLP      AIGatewayUpdateResponseDLP `json:"dlp"`
+	// FedRAMP compliance level: fedramp-medium or fedramp-high.
+	FedrampLevel AIGatewayUpdateResponseFedrampLevel `json:"fedramp_level" api:"nullable"`
+	// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+	// fallback. "require" strictly filters.
+	FedrampMode           AIGatewayUpdateResponseFedrampMode           `json:"fedramp_mode" api:"nullable"`
 	Guardrails            AIGatewayUpdateResponseGuardrails            `json:"guardrails" api:"nullable"`
 	IsDefault             bool                                         `json:"is_default"`
 	LogClassification     bool                                         `json:"log_classification"`
@@ -1397,8 +1444,10 @@ type AIGatewayUpdateResponse struct {
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts int64                              `json:"retry_max_attempts" api:"nullable"`
 	SpendLimits      AIGatewayUpdateResponseSpendLimits `json:"spend_limits" api:"nullable"`
-	StoreID          string                             `json:"store_id" api:"nullable"`
-	Stripe           AIGatewayUpdateResponseStripe      `json:"stripe" api:"nullable"`
+	// Secrets Store used by this gateway. Omit on update to keep the current store.
+	// Cannot be cleared while stored keys or secret references depend on it.
+	StoreID string                        `json:"store_id" api:"nullable"`
+	Stripe  AIGatewayUpdateResponseStripe `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
 	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
@@ -1422,6 +1471,8 @@ type aiGatewayUpdateResponseJSON struct {
 	Authentication          apijson.Field
 	ByokOnly                apijson.Field
 	DLP                     apijson.Field
+	FedrampLevel            apijson.Field
+	FedrampMode             apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
 	LogClassification       apijson.Field
@@ -1569,6 +1620,39 @@ const (
 func (r AIGatewayUpdateResponseDLPAction) IsKnown() bool {
 	switch r {
 	case AIGatewayUpdateResponseDLPActionBlock, AIGatewayUpdateResponseDLPActionFlag:
+		return true
+	}
+	return false
+}
+
+// FedRAMP compliance level: fedramp-medium or fedramp-high.
+type AIGatewayUpdateResponseFedrampLevel string
+
+const (
+	AIGatewayUpdateResponseFedrampLevelFedrampMedium AIGatewayUpdateResponseFedrampLevel = "fedramp-medium"
+	AIGatewayUpdateResponseFedrampLevelFedrampHigh   AIGatewayUpdateResponseFedrampLevel = "fedramp-high"
+)
+
+func (r AIGatewayUpdateResponseFedrampLevel) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseFedrampLevelFedrampMedium, AIGatewayUpdateResponseFedrampLevelFedrampHigh:
+		return true
+	}
+	return false
+}
+
+// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+// fallback. "require" strictly filters.
+type AIGatewayUpdateResponseFedrampMode string
+
+const (
+	AIGatewayUpdateResponseFedrampModePrefer  AIGatewayUpdateResponseFedrampMode = "prefer"
+	AIGatewayUpdateResponseFedrampModeRequire AIGatewayUpdateResponseFedrampMode = "require"
+)
+
+func (r AIGatewayUpdateResponseFedrampMode) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseFedrampModePrefer, AIGatewayUpdateResponseFedrampModeRequire:
 		return true
 	}
 	return false
@@ -2578,8 +2662,13 @@ type AIGatewayListResponse struct {
 	Authentication          bool      `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
-	ByokOnly              bool                                       `json:"byok_only"`
-	DLP                   AIGatewayListResponseDLP                   `json:"dlp"`
+	ByokOnly bool                     `json:"byok_only"`
+	DLP      AIGatewayListResponseDLP `json:"dlp"`
+	// FedRAMP compliance level: fedramp-medium or fedramp-high.
+	FedrampLevel AIGatewayListResponseFedrampLevel `json:"fedramp_level" api:"nullable"`
+	// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+	// fallback. "require" strictly filters.
+	FedrampMode           AIGatewayListResponseFedrampMode           `json:"fedramp_mode" api:"nullable"`
 	Guardrails            AIGatewayListResponseGuardrails            `json:"guardrails" api:"nullable"`
 	IsDefault             bool                                       `json:"is_default"`
 	LogClassification     bool                                       `json:"log_classification"`
@@ -2596,8 +2685,10 @@ type AIGatewayListResponse struct {
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts int64                            `json:"retry_max_attempts" api:"nullable"`
 	SpendLimits      AIGatewayListResponseSpendLimits `json:"spend_limits" api:"nullable"`
-	StoreID          string                           `json:"store_id" api:"nullable"`
-	Stripe           AIGatewayListResponseStripe      `json:"stripe" api:"nullable"`
+	// Secrets Store used by this gateway. Omit on update to keep the current store.
+	// Cannot be cleared while stored keys or secret references depend on it.
+	StoreID string                      `json:"store_id" api:"nullable"`
+	Stripe  AIGatewayListResponseStripe `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
 	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
@@ -2621,6 +2712,8 @@ type aiGatewayListResponseJSON struct {
 	Authentication          apijson.Field
 	ByokOnly                apijson.Field
 	DLP                     apijson.Field
+	FedrampLevel            apijson.Field
+	FedrampMode             apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
 	LogClassification       apijson.Field
@@ -2768,6 +2861,39 @@ const (
 func (r AIGatewayListResponseDLPAction) IsKnown() bool {
 	switch r {
 	case AIGatewayListResponseDLPActionBlock, AIGatewayListResponseDLPActionFlag:
+		return true
+	}
+	return false
+}
+
+// FedRAMP compliance level: fedramp-medium or fedramp-high.
+type AIGatewayListResponseFedrampLevel string
+
+const (
+	AIGatewayListResponseFedrampLevelFedrampMedium AIGatewayListResponseFedrampLevel = "fedramp-medium"
+	AIGatewayListResponseFedrampLevelFedrampHigh   AIGatewayListResponseFedrampLevel = "fedramp-high"
+)
+
+func (r AIGatewayListResponseFedrampLevel) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseFedrampLevelFedrampMedium, AIGatewayListResponseFedrampLevelFedrampHigh:
+		return true
+	}
+	return false
+}
+
+// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+// fallback. "require" strictly filters.
+type AIGatewayListResponseFedrampMode string
+
+const (
+	AIGatewayListResponseFedrampModePrefer  AIGatewayListResponseFedrampMode = "prefer"
+	AIGatewayListResponseFedrampModeRequire AIGatewayListResponseFedrampMode = "require"
+)
+
+func (r AIGatewayListResponseFedrampMode) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseFedrampModePrefer, AIGatewayListResponseFedrampModeRequire:
 		return true
 	}
 	return false
@@ -3777,8 +3903,13 @@ type AIGatewayDeleteResponse struct {
 	Authentication          bool      `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
-	ByokOnly              bool                                         `json:"byok_only"`
-	DLP                   AIGatewayDeleteResponseDLP                   `json:"dlp"`
+	ByokOnly bool                       `json:"byok_only"`
+	DLP      AIGatewayDeleteResponseDLP `json:"dlp"`
+	// FedRAMP compliance level: fedramp-medium or fedramp-high.
+	FedrampLevel AIGatewayDeleteResponseFedrampLevel `json:"fedramp_level" api:"nullable"`
+	// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+	// fallback. "require" strictly filters.
+	FedrampMode           AIGatewayDeleteResponseFedrampMode           `json:"fedramp_mode" api:"nullable"`
 	Guardrails            AIGatewayDeleteResponseGuardrails            `json:"guardrails" api:"nullable"`
 	IsDefault             bool                                         `json:"is_default"`
 	LogClassification     bool                                         `json:"log_classification"`
@@ -3795,8 +3926,10 @@ type AIGatewayDeleteResponse struct {
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts int64                              `json:"retry_max_attempts" api:"nullable"`
 	SpendLimits      AIGatewayDeleteResponseSpendLimits `json:"spend_limits" api:"nullable"`
-	StoreID          string                             `json:"store_id" api:"nullable"`
-	Stripe           AIGatewayDeleteResponseStripe      `json:"stripe" api:"nullable"`
+	// Secrets Store used by this gateway. Omit on update to keep the current store.
+	// Cannot be cleared while stored keys or secret references depend on it.
+	StoreID string                        `json:"store_id" api:"nullable"`
+	Stripe  AIGatewayDeleteResponseStripe `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
 	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
@@ -3820,6 +3953,8 @@ type aiGatewayDeleteResponseJSON struct {
 	Authentication          apijson.Field
 	ByokOnly                apijson.Field
 	DLP                     apijson.Field
+	FedrampLevel            apijson.Field
+	FedrampMode             apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
 	LogClassification       apijson.Field
@@ -3967,6 +4102,39 @@ const (
 func (r AIGatewayDeleteResponseDLPAction) IsKnown() bool {
 	switch r {
 	case AIGatewayDeleteResponseDLPActionBlock, AIGatewayDeleteResponseDLPActionFlag:
+		return true
+	}
+	return false
+}
+
+// FedRAMP compliance level: fedramp-medium or fedramp-high.
+type AIGatewayDeleteResponseFedrampLevel string
+
+const (
+	AIGatewayDeleteResponseFedrampLevelFedrampMedium AIGatewayDeleteResponseFedrampLevel = "fedramp-medium"
+	AIGatewayDeleteResponseFedrampLevelFedrampHigh   AIGatewayDeleteResponseFedrampLevel = "fedramp-high"
+)
+
+func (r AIGatewayDeleteResponseFedrampLevel) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseFedrampLevelFedrampMedium, AIGatewayDeleteResponseFedrampLevelFedrampHigh:
+		return true
+	}
+	return false
+}
+
+// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+// fallback. "require" strictly filters.
+type AIGatewayDeleteResponseFedrampMode string
+
+const (
+	AIGatewayDeleteResponseFedrampModePrefer  AIGatewayDeleteResponseFedrampMode = "prefer"
+	AIGatewayDeleteResponseFedrampModeRequire AIGatewayDeleteResponseFedrampMode = "require"
+)
+
+func (r AIGatewayDeleteResponseFedrampMode) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseFedrampModePrefer, AIGatewayDeleteResponseFedrampModeRequire:
 		return true
 	}
 	return false
@@ -4976,8 +5144,13 @@ type AIGatewayGetResponse struct {
 	Authentication          bool      `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
-	ByokOnly              bool                                      `json:"byok_only"`
-	DLP                   AIGatewayGetResponseDLP                   `json:"dlp"`
+	ByokOnly bool                    `json:"byok_only"`
+	DLP      AIGatewayGetResponseDLP `json:"dlp"`
+	// FedRAMP compliance level: fedramp-medium or fedramp-high.
+	FedrampLevel AIGatewayGetResponseFedrampLevel `json:"fedramp_level" api:"nullable"`
+	// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+	// fallback. "require" strictly filters.
+	FedrampMode           AIGatewayGetResponseFedrampMode           `json:"fedramp_mode" api:"nullable"`
 	Guardrails            AIGatewayGetResponseGuardrails            `json:"guardrails" api:"nullable"`
 	IsDefault             bool                                      `json:"is_default"`
 	LogClassification     bool                                      `json:"log_classification"`
@@ -4994,8 +5167,10 @@ type AIGatewayGetResponse struct {
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts int64                           `json:"retry_max_attempts" api:"nullable"`
 	SpendLimits      AIGatewayGetResponseSpendLimits `json:"spend_limits" api:"nullable"`
-	StoreID          string                          `json:"store_id" api:"nullable"`
-	Stripe           AIGatewayGetResponseStripe      `json:"stripe" api:"nullable"`
+	// Secrets Store used by this gateway. Omit on update to keep the current store.
+	// Cannot be cleared while stored keys or secret references depend on it.
+	StoreID string                     `json:"store_id" api:"nullable"`
+	Stripe  AIGatewayGetResponseStripe `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
 	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
@@ -5019,6 +5194,8 @@ type aiGatewayGetResponseJSON struct {
 	Authentication          apijson.Field
 	ByokOnly                apijson.Field
 	DLP                     apijson.Field
+	FedrampLevel            apijson.Field
+	FedrampMode             apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
 	LogClassification       apijson.Field
@@ -5165,6 +5342,39 @@ const (
 func (r AIGatewayGetResponseDLPAction) IsKnown() bool {
 	switch r {
 	case AIGatewayGetResponseDLPActionBlock, AIGatewayGetResponseDLPActionFlag:
+		return true
+	}
+	return false
+}
+
+// FedRAMP compliance level: fedramp-medium or fedramp-high.
+type AIGatewayGetResponseFedrampLevel string
+
+const (
+	AIGatewayGetResponseFedrampLevelFedrampMedium AIGatewayGetResponseFedrampLevel = "fedramp-medium"
+	AIGatewayGetResponseFedrampLevelFedrampHigh   AIGatewayGetResponseFedrampLevel = "fedramp-high"
+)
+
+func (r AIGatewayGetResponseFedrampLevel) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseFedrampLevelFedrampMedium, AIGatewayGetResponseFedrampLevelFedrampHigh:
+		return true
+	}
+	return false
+}
+
+// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+// fallback. "require" strictly filters.
+type AIGatewayGetResponseFedrampMode string
+
+const (
+	AIGatewayGetResponseFedrampModePrefer  AIGatewayGetResponseFedrampMode = "prefer"
+	AIGatewayGetResponseFedrampModeRequire AIGatewayGetResponseFedrampMode = "require"
+)
+
+func (r AIGatewayGetResponseFedrampMode) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseFedrampModePrefer, AIGatewayGetResponseFedrampModeRequire:
 		return true
 	}
 	return false
@@ -6190,8 +6400,10 @@ type AIGatewayNewParams struct {
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts param.Field[int64]                         `json:"retry_max_attempts"`
 	SpendLimits      param.Field[AIGatewayNewParamsSpendLimits] `json:"spend_limits"`
-	StoreID          param.Field[string]                        `json:"store_id"`
-	Stripe           param.Field[AIGatewayNewParamsStripe]      `json:"stripe"`
+	// Secrets Store used by this gateway. Omit on update to keep the current store.
+	// Cannot be cleared while stored keys or secret references depend on it.
+	StoreID param.Field[string]                   `json:"store_id"`
+	Stripe  param.Field[AIGatewayNewParamsStripe] `json:"stripe"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
 	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
@@ -7065,8 +7277,10 @@ type AIGatewayUpdateParams struct {
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts param.Field[int64]                            `json:"retry_max_attempts"`
 	SpendLimits      param.Field[AIGatewayUpdateParamsSpendLimits] `json:"spend_limits"`
-	StoreID          param.Field[string]                           `json:"store_id"`
-	Stripe           param.Field[AIGatewayUpdateParamsStripe]      `json:"stripe"`
+	// Secrets Store used by this gateway. Omit on update to keep the current store.
+	// Cannot be cleared while stored keys or secret references depend on it.
+	StoreID param.Field[string]                      `json:"store_id"`
+	Stripe  param.Field[AIGatewayUpdateParamsStripe] `json:"stripe"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
 	// credits via AI Gateway using neuron-based pricing and delegates billing to AI

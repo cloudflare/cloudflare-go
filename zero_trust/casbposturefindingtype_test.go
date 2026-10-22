@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
@@ -29,11 +30,19 @@ func TestCasbPostureFindingTypeListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Casb.Posture.FindingTypes.List(context.TODO(), zero_trust.CasbPostureFindingTypeListParams{
-		AccountID: cloudflare.F("46148281d8a93d002ef242d8b0d5f9f6"),
-		Page:      cloudflare.F(int64(0)),
-		PerPage:   cloudflare.F(int64(0)),
-		Search:    cloudflare.F("search"),
-		Vendors:   cloudflare.F([]zero_trust.CasbPostureFindingTypeListParamsVendor{zero_trust.CasbPostureFindingTypeListParamsVendorGoogleWorkspace}),
+		AccountID:    cloudflare.F("46148281d8a93d002ef242d8b0d5f9f6"),
+		Direction:    cloudflare.F(zero_trust.CasbPostureFindingTypeListParamsDirectionAsc),
+		MaxUpdatedAt: cloudflare.F(time.Now()),
+		MinUpdatedAt: cloudflare.F(time.Now()),
+		Order:        cloudflare.F(zero_trust.CasbPostureFindingTypeListParamsOrderCreated),
+		Origins:      cloudflare.F([]zero_trust.CasbPostureFindingTypeListParamsOrigin{zero_trust.CasbPostureFindingTypeListParamsOriginSystem}),
+		Page:         cloudflare.F(int64(0)),
+		PerPage:      cloudflare.F(int64(0)),
+		Quarantined:  cloudflare.F(true),
+		Search:       cloudflare.F("search"),
+		Severities:   cloudflare.F([]zero_trust.CasbPostureFindingTypeListParamsSeverity{zero_trust.CasbPostureFindingTypeListParamsSeverityHigh}),
+		Types:        cloudflare.F([]zero_trust.CasbPostureFindingTypeListParamsType{zero_trust.CasbPostureFindingTypeListParamsTypeContent}),
+		Vendors:      cloudflare.F([]zero_trust.CasbPostureFindingTypeListParamsVendor{zero_trust.CasbPostureFindingTypeListParamsVendorGoogleWorkspace}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

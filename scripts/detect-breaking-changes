@@ -544,11 +544,17 @@ TEST_PATHS=(
 	zero_trust/accessbookmark_test.go
 	zero_trust/accesskey_test.go
 	zero_trust/accesslogaccessrequest_test.go
+	zero_trust/accesslogjitrequest_test.go
 	zero_trust/accesslogscimupdate_test.go
 	zero_trust/accessuser_test.go
 	zero_trust/accessuseractivesession_test.go
 	zero_trust/accessuserlastseenidentity_test.go
 	zero_trust/accessuserfailedlogin_test.go
+	zero_trust/accessusermfaauthenticator_test.go
+	zero_trust/accessuserpasskey_test.go
+	zero_trust/accessuserpopulation_test.go
+	zero_trust/accessuserpopulationuser_test.go
+	zero_trust/accessmfaauthenticatorcatalog_test.go
 	zero_trust/accesscustompage_test.go
 	zero_trust/accesstag_test.go
 	zero_trust/accesspolicy_test.go
@@ -613,6 +619,8 @@ TEST_PATHS=(
 	zero_trust/dlpentrycustom_test.go
 	zero_trust/dlpentrypredefined_test.go
 	zero_trust/dlpentryintegration_test.go
+	zero_trust/dlpvalidator_test.go
+	zero_trust/dlpvalidatorproximityword_test.go
 	zero_trust/dlpsensitivitygroup_test.go
 	zero_trust/dlpsensitivitygrouplevel_test.go
 	zero_trust/dlpsensitivitygrouplevelorder_test.go

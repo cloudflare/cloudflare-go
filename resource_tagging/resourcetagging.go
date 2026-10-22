@@ -154,6 +154,8 @@ func (r *ResourceTaggingListResponse) UnmarshalJSON(data []byte) (err error) {
 // [ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAccount],
 // [ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAccountRuleset],
 // [ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAIGateway],
+// [ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchInstance],
+// [ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchNamespace],
 // [ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAlertingPolicy],
 // [ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAlertingWebhook],
 // [ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAPIGatewayOperation],
@@ -205,6 +207,8 @@ func (r ResourceTaggingListResponse) AsUnion() ResourceTaggingListResponseUnion 
 // [ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAccount],
 // [ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAccountRuleset],
 // [ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAIGateway],
+// [ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchInstance],
+// [ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchNamespace],
 // [ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAlertingPolicy],
 // [ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAlertingWebhook],
 // [ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAPIGatewayOperation],
@@ -284,6 +288,16 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAIGateway{}),
 			DiscriminatorValue: "ai_gateway",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchInstance{}),
+			DiscriminatorValue: "ai_search_instance",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchNamespace{}),
+			DiscriminatorValue: "ai_search_namespace",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -936,6 +950,138 @@ const (
 func (r ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAIGatewayType) IsKnown() bool {
 	switch r {
 	case ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAIGatewayTypeAIGateway:
+		return true
+	}
+	return false
+}
+
+// Response for ai_search_instance resources
+type ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchInstance struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                                  `json:"tags" api:"required"`
+	Type ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchInstanceType `json:"type" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                          `json:"tags_updated_at" format:"date-time"`
+	JSON          resourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchInstanceJSON `json:"-"`
+}
+
+// resourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchInstanceJSON
+// contains the JSON metadata for the struct
+// [ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchInstance]
+type resourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchInstanceJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchInstance) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchInstanceJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchInstance) implementsResourceTaggingListResponse() {
+}
+
+type ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchInstanceType string
+
+const (
+	ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchInstanceTypeAISearchInstance ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchInstanceType = "ai_search_instance"
+)
+
+func (r ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchInstanceType) IsKnown() bool {
+	switch r {
+	case ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchInstanceTypeAISearchInstance:
+		return true
+	}
+	return false
+}
+
+// Response for ai_search_namespace resources
+type ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchNamespace struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                                   `json:"tags" api:"required"`
+	Type ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchNamespaceType `json:"type" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                           `json:"tags_updated_at" format:"date-time"`
+	JSON          resourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchNamespaceJSON `json:"-"`
+}
+
+// resourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchNamespaceJSON
+// contains the JSON metadata for the struct
+// [ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchNamespace]
+type resourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchNamespaceJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchNamespace) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchNamespaceJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchNamespace) implementsResourceTaggingListResponse() {
+}
+
+type ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchNamespaceType string
+
+const (
+	ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchNamespaceTypeAISearchNamespace ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchNamespaceType = "ai_search_namespace"
+)
+
+func (r ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchNamespaceType) IsKnown() bool {
+	switch r {
+	case ResourceTaggingListResponseResourceTaggingTaggedResourceObjectAISearchNamespaceTypeAISearchNamespace:
 		return true
 	}
 	return false
@@ -3462,6 +3608,8 @@ const (
 	ResourceTaggingListResponseTypeAccount                  ResourceTaggingListResponseType = "account"
 	ResourceTaggingListResponseTypeAccountRuleset           ResourceTaggingListResponseType = "account_ruleset"
 	ResourceTaggingListResponseTypeAIGateway                ResourceTaggingListResponseType = "ai_gateway"
+	ResourceTaggingListResponseTypeAISearchInstance         ResourceTaggingListResponseType = "ai_search_instance"
+	ResourceTaggingListResponseTypeAISearchNamespace        ResourceTaggingListResponseType = "ai_search_namespace"
 	ResourceTaggingListResponseTypeAlertingPolicy           ResourceTaggingListResponseType = "alerting_policy"
 	ResourceTaggingListResponseTypeAlertingWebhook          ResourceTaggingListResponseType = "alerting_webhook"
 	ResourceTaggingListResponseTypeAPIGatewayOperation      ResourceTaggingListResponseType = "api_gateway_operation"
@@ -3503,7 +3651,7 @@ const (
 
 func (r ResourceTaggingListResponseType) IsKnown() bool {
 	switch r {
-	case ResourceTaggingListResponseTypeAccessApplication, ResourceTaggingListResponseTypeAccessApplicationPolicy, ResourceTaggingListResponseTypeAccessGroup, ResourceTaggingListResponseTypeAccessServiceToken, ResourceTaggingListResponseTypeAccount, ResourceTaggingListResponseTypeAccountRuleset, ResourceTaggingListResponseTypeAIGateway, ResourceTaggingListResponseTypeAlertingPolicy, ResourceTaggingListResponseTypeAlertingWebhook, ResourceTaggingListResponseTypeAPIGatewayOperation, ResourceTaggingListResponseTypeCloudflaredTunnel, ResourceTaggingListResponseTypeCustomCertificate, ResourceTaggingListResponseTypeCustomHostname, ResourceTaggingListResponseTypeCWSDeployment, ResourceTaggingListResponseTypeCWSPolicy, ResourceTaggingListResponseTypeCWSPolicySet, ResourceTaggingListResponseTypeCWSWorkload, ResourceTaggingListResponseTypeD1Database, ResourceTaggingListResponseTypeDevice, ResourceTaggingListResponseTypeDNSRecord, ResourceTaggingListResponseTypeDurableObjectNamespace, ResourceTaggingListResponseTypeGatewayList, ResourceTaggingListResponseTypeGatewayRule, ResourceTaggingListResponseTypeHealthcheck, ResourceTaggingListResponseTypeImage, ResourceTaggingListResponseTypeInfrastructureTarget, ResourceTaggingListResponseTypeKVNamespace, ResourceTaggingListResponseTypeLoadBalancer, ResourceTaggingListResponseTypeLoadBalancerMonitor, ResourceTaggingListResponseTypeLoadBalancerPool, ResourceTaggingListResponseTypeManagedClientCertificate, ResourceTaggingListResponseTypeNamespaceWorker, ResourceTaggingListResponseTypePagesProject, ResourceTaggingListResponseTypeQueue, ResourceTaggingListResponseTypeR2Bucket, ResourceTaggingListResponseTypeResourceShare, ResourceTaggingListResponseTypeStreamLiveInput, ResourceTaggingListResponseTypeStreamVideo, ResourceTaggingListResponseTypeVectorizeIndex, ResourceTaggingListResponseTypeWorker, ResourceTaggingListResponseTypeWorkerRoute, ResourceTaggingListResponseTypeWorkerVersion, ResourceTaggingListResponseTypeZone, ResourceTaggingListResponseTypeZoneRuleset:
+	case ResourceTaggingListResponseTypeAccessApplication, ResourceTaggingListResponseTypeAccessApplicationPolicy, ResourceTaggingListResponseTypeAccessGroup, ResourceTaggingListResponseTypeAccessServiceToken, ResourceTaggingListResponseTypeAccount, ResourceTaggingListResponseTypeAccountRuleset, ResourceTaggingListResponseTypeAIGateway, ResourceTaggingListResponseTypeAISearchInstance, ResourceTaggingListResponseTypeAISearchNamespace, ResourceTaggingListResponseTypeAlertingPolicy, ResourceTaggingListResponseTypeAlertingWebhook, ResourceTaggingListResponseTypeAPIGatewayOperation, ResourceTaggingListResponseTypeCloudflaredTunnel, ResourceTaggingListResponseTypeCustomCertificate, ResourceTaggingListResponseTypeCustomHostname, ResourceTaggingListResponseTypeCWSDeployment, ResourceTaggingListResponseTypeCWSPolicy, ResourceTaggingListResponseTypeCWSPolicySet, ResourceTaggingListResponseTypeCWSWorkload, ResourceTaggingListResponseTypeD1Database, ResourceTaggingListResponseTypeDevice, ResourceTaggingListResponseTypeDNSRecord, ResourceTaggingListResponseTypeDurableObjectNamespace, ResourceTaggingListResponseTypeGatewayList, ResourceTaggingListResponseTypeGatewayRule, ResourceTaggingListResponseTypeHealthcheck, ResourceTaggingListResponseTypeImage, ResourceTaggingListResponseTypeInfrastructureTarget, ResourceTaggingListResponseTypeKVNamespace, ResourceTaggingListResponseTypeLoadBalancer, ResourceTaggingListResponseTypeLoadBalancerMonitor, ResourceTaggingListResponseTypeLoadBalancerPool, ResourceTaggingListResponseTypeManagedClientCertificate, ResourceTaggingListResponseTypeNamespaceWorker, ResourceTaggingListResponseTypePagesProject, ResourceTaggingListResponseTypeQueue, ResourceTaggingListResponseTypeR2Bucket, ResourceTaggingListResponseTypeResourceShare, ResourceTaggingListResponseTypeStreamLiveInput, ResourceTaggingListResponseTypeStreamVideo, ResourceTaggingListResponseTypeVectorizeIndex, ResourceTaggingListResponseTypeWorker, ResourceTaggingListResponseTypeWorkerRoute, ResourceTaggingListResponseTypeWorkerVersion, ResourceTaggingListResponseTypeZone, ResourceTaggingListResponseTypeZoneRuleset:
 		return true
 	}
 	return false
@@ -3534,16 +3682,16 @@ type ResourceTaggingListParams struct {
 	//
 	// Supported syntax:
 	//
-	//   - **Key-only**: `tag=<key>` - Resource must have the tag key (e.g.,
-	//     `tag=production`)
-	//   - **Key-value**: `tag=<key>=<value>` - Resource must have the tag with specific
-	//     value (e.g., `tag=env=prod`)
-	//   - **Multiple values (OR)**: `tag=<key>=<v1>,<v2>` - Resource must have tag with
-	//     any of the values (e.g., `tag=env=prod,staging`)
-	//   - **Negate key-only**: `tag=!<key>` - Resource must not have the tag key (e.g.,
-	//     `tag=!archived`)
-	//   - **Negate key-value**: `tag=<key>!=<value>` - Resource must not have the tag
-	//     with specific value (e.g., `tag=region!=us-west-1`)
+	// - **Key-only**: `tag=<key>` - Resource must have the tag key (e.g.,
+	//   `tag=production`)
+	// - **Key-value**: `tag=<key>=<value>` - Resource must have the tag with specific
+	//   value (e.g., `tag=env=prod`)
+	// - **Multiple values (OR)**: `tag=<key>=<v1>,<v2>` - Resource must have tag with
+	//   any of the values (e.g., `tag=env=prod,staging`)
+	// - **Negate key-only**: `tag=!<key>` - Resource must not have the tag key (e.g.,
+	//   `tag=!archived`)
+	// - **Negate key-value**: `tag=<key>!=<value>` - Resource must not have the tag
+	//   with specific value (e.g., `tag=region!=us-west-1`)
 	//
 	// Multiple tag parameters are combined with AND logic.
 	Tag param.Field[[]string] `query:"tag"`
@@ -3572,6 +3720,8 @@ const (
 	ResourceTaggingListParamsTypeAccount                  ResourceTaggingListParamsType = "account"
 	ResourceTaggingListParamsTypeAccountRuleset           ResourceTaggingListParamsType = "account_ruleset"
 	ResourceTaggingListParamsTypeAIGateway                ResourceTaggingListParamsType = "ai_gateway"
+	ResourceTaggingListParamsTypeAISearchInstance         ResourceTaggingListParamsType = "ai_search_instance"
+	ResourceTaggingListParamsTypeAISearchNamespace        ResourceTaggingListParamsType = "ai_search_namespace"
 	ResourceTaggingListParamsTypeAlertingPolicy           ResourceTaggingListParamsType = "alerting_policy"
 	ResourceTaggingListParamsTypeAlertingWebhook          ResourceTaggingListParamsType = "alerting_webhook"
 	ResourceTaggingListParamsTypeAPIGatewayOperation      ResourceTaggingListParamsType = "api_gateway_operation"
@@ -3613,7 +3763,7 @@ const (
 
 func (r ResourceTaggingListParamsType) IsKnown() bool {
 	switch r {
-	case ResourceTaggingListParamsTypeAccessApplication, ResourceTaggingListParamsTypeAccessApplicationPolicy, ResourceTaggingListParamsTypeAccessGroup, ResourceTaggingListParamsTypeAccessServiceToken, ResourceTaggingListParamsTypeAccount, ResourceTaggingListParamsTypeAccountRuleset, ResourceTaggingListParamsTypeAIGateway, ResourceTaggingListParamsTypeAlertingPolicy, ResourceTaggingListParamsTypeAlertingWebhook, ResourceTaggingListParamsTypeAPIGatewayOperation, ResourceTaggingListParamsTypeCloudflaredTunnel, ResourceTaggingListParamsTypeCustomCertificate, ResourceTaggingListParamsTypeCustomHostname, ResourceTaggingListParamsTypeCWSDeployment, ResourceTaggingListParamsTypeCWSPolicy, ResourceTaggingListParamsTypeCWSPolicySet, ResourceTaggingListParamsTypeCWSWorkload, ResourceTaggingListParamsTypeD1Database, ResourceTaggingListParamsTypeDevice, ResourceTaggingListParamsTypeDNSRecord, ResourceTaggingListParamsTypeDurableObjectNamespace, ResourceTaggingListParamsTypeGatewayList, ResourceTaggingListParamsTypeGatewayRule, ResourceTaggingListParamsTypeHealthcheck, ResourceTaggingListParamsTypeImage, ResourceTaggingListParamsTypeInfrastructureTarget, ResourceTaggingListParamsTypeKVNamespace, ResourceTaggingListParamsTypeLoadBalancer, ResourceTaggingListParamsTypeLoadBalancerMonitor, ResourceTaggingListParamsTypeLoadBalancerPool, ResourceTaggingListParamsTypeManagedClientCertificate, ResourceTaggingListParamsTypeNamespaceWorker, ResourceTaggingListParamsTypePagesProject, ResourceTaggingListParamsTypeQueue, ResourceTaggingListParamsTypeR2Bucket, ResourceTaggingListParamsTypeResourceShare, ResourceTaggingListParamsTypeStreamLiveInput, ResourceTaggingListParamsTypeStreamVideo, ResourceTaggingListParamsTypeVectorizeIndex, ResourceTaggingListParamsTypeWorker, ResourceTaggingListParamsTypeWorkerRoute, ResourceTaggingListParamsTypeWorkerVersion, ResourceTaggingListParamsTypeZone, ResourceTaggingListParamsTypeZoneRuleset:
+	case ResourceTaggingListParamsTypeAccessApplication, ResourceTaggingListParamsTypeAccessApplicationPolicy, ResourceTaggingListParamsTypeAccessGroup, ResourceTaggingListParamsTypeAccessServiceToken, ResourceTaggingListParamsTypeAccount, ResourceTaggingListParamsTypeAccountRuleset, ResourceTaggingListParamsTypeAIGateway, ResourceTaggingListParamsTypeAISearchInstance, ResourceTaggingListParamsTypeAISearchNamespace, ResourceTaggingListParamsTypeAlertingPolicy, ResourceTaggingListParamsTypeAlertingWebhook, ResourceTaggingListParamsTypeAPIGatewayOperation, ResourceTaggingListParamsTypeCloudflaredTunnel, ResourceTaggingListParamsTypeCustomCertificate, ResourceTaggingListParamsTypeCustomHostname, ResourceTaggingListParamsTypeCWSDeployment, ResourceTaggingListParamsTypeCWSPolicy, ResourceTaggingListParamsTypeCWSPolicySet, ResourceTaggingListParamsTypeCWSWorkload, ResourceTaggingListParamsTypeD1Database, ResourceTaggingListParamsTypeDevice, ResourceTaggingListParamsTypeDNSRecord, ResourceTaggingListParamsTypeDurableObjectNamespace, ResourceTaggingListParamsTypeGatewayList, ResourceTaggingListParamsTypeGatewayRule, ResourceTaggingListParamsTypeHealthcheck, ResourceTaggingListParamsTypeImage, ResourceTaggingListParamsTypeInfrastructureTarget, ResourceTaggingListParamsTypeKVNamespace, ResourceTaggingListParamsTypeLoadBalancer, ResourceTaggingListParamsTypeLoadBalancerMonitor, ResourceTaggingListParamsTypeLoadBalancerPool, ResourceTaggingListParamsTypeManagedClientCertificate, ResourceTaggingListParamsTypeNamespaceWorker, ResourceTaggingListParamsTypePagesProject, ResourceTaggingListParamsTypeQueue, ResourceTaggingListParamsTypeR2Bucket, ResourceTaggingListParamsTypeResourceShare, ResourceTaggingListParamsTypeStreamLiveInput, ResourceTaggingListParamsTypeStreamVideo, ResourceTaggingListParamsTypeVectorizeIndex, ResourceTaggingListParamsTypeWorker, ResourceTaggingListParamsTypeWorkerRoute, ResourceTaggingListParamsTypeWorkerVersion, ResourceTaggingListParamsTypeZone, ResourceTaggingListParamsTypeZoneRuleset:
 		return true
 	}
 	return false

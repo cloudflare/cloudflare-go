@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/email_security"
@@ -38,6 +39,7 @@ func TestSettingAllowPolicyNewWithOptionalParams(t *testing.T) {
 		PatternType:        cloudflare.F(email_security.SettingAllowPolicyNewParamsPatternTypeEmail),
 		VerifySender:       cloudflare.F(true),
 		Comments:           cloudflare.F("Trust all messages send from test@example.com"),
+		ExpiresAt:          cloudflare.F(time.Now()),
 		IsRecipient:        cloudflare.F(false),
 		IsSender:           cloudflare.F(true),
 		IsSpoof:            cloudflare.F(false),
@@ -68,6 +70,7 @@ func TestSettingAllowPolicyListWithOptionalParams(t *testing.T) {
 	_, err := client.EmailSecurity.Settings.AllowPolicies.List(context.TODO(), email_security.SettingAllowPolicyListParams{
 		AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Direction:          cloudflare.F(email_security.SettingAllowPolicyListParamsDirectionAsc),
+		Expired:            cloudflare.F(true),
 		IsAcceptableSender: cloudflare.F(true),
 		IsExemptRecipient:  cloudflare.F(true),
 		IsTrustedSender:    cloudflare.F(true),
@@ -139,6 +142,7 @@ func TestSettingAllowPolicyBatch(t *testing.T) {
 		}}),
 		Patches: cloudflare.F([]email_security.SettingAllowPolicyBatchParamsPatch{{
 			Comments:           cloudflare.F("Trust all messages send from test@example.com"),
+			ExpiresAt:          cloudflare.F(time.Now()),
 			IsAcceptableSender: cloudflare.F(false),
 			IsExemptRecipient:  cloudflare.F(false),
 			IsRecipient:        cloudflare.F(false),
@@ -159,12 +163,14 @@ func TestSettingAllowPolicyBatch(t *testing.T) {
 			PatternType:        cloudflare.F(email_security.SettingAllowPolicyBatchParamsPostsPatternTypeEmail),
 			VerifySender:       cloudflare.F(true),
 			Comments:           cloudflare.F("Trust all messages send from test@example.com"),
+			ExpiresAt:          cloudflare.F(time.Now()),
 			IsRecipient:        cloudflare.F(false),
 			IsSender:           cloudflare.F(true),
 			IsSpoof:            cloudflare.F(false),
 		}}),
 		Puts: cloudflare.F([]email_security.SettingAllowPolicyBatchParamsPut{{
 			Comments:           cloudflare.F("Trust all messages send from test@example.com"),
+			ExpiresAt:          cloudflare.F(time.Now()),
 			IsAcceptableSender: cloudflare.F(false),
 			IsExemptRecipient:  cloudflare.F(false),
 			IsRecipient:        cloudflare.F(false),
@@ -207,6 +213,7 @@ func TestSettingAllowPolicyEditWithOptionalParams(t *testing.T) {
 		email_security.SettingAllowPolicyEditParams{
 			AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Comments:           cloudflare.F("Trust all messages send from test@example.com"),
+			ExpiresAt:          cloudflare.F(time.Now()),
 			IsAcceptableSender: cloudflare.F(false),
 			IsExemptRecipient:  cloudflare.F(false),
 			IsRecipient:        cloudflare.F(false),

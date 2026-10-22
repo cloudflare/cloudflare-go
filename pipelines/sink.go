@@ -2651,11 +2651,15 @@ func (r sinkNewResponseEnvelopeJSON) RawJSON() string {
 type SinkListParams struct {
 	// Specifies the public ID of the account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Sort direction.
+	Direction param.Field[SinkListParamsDirection] `query:"direction"`
 	// Filters sinks by name (case-insensitive substring).
-	Name       param.Field[string]  `query:"name"`
-	Page       param.Field[float64] `query:"page"`
-	PerPage    param.Field[float64] `query:"per_page"`
-	PipelineID param.Field[string]  `query:"pipeline_id"`
+	Name param.Field[string] `query:"name"`
+	// Sorts sinks by this field. Defaults to `created_at`.
+	OrderBy    param.Field[SinkListParamsOrderBy] `query:"order_by"`
+	Page       param.Field[float64]               `query:"page"`
+	PerPage    param.Field[float64]               `query:"per_page"`
+	PipelineID param.Field[string]                `query:"pipeline_id"`
 }
 
 // URLQuery serializes [SinkListParams]'s query parameters as `url.Values`.
@@ -2664,6 +2668,38 @@ func (r SinkListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Sort direction.
+type SinkListParamsDirection string
+
+const (
+	SinkListParamsDirectionAsc  SinkListParamsDirection = "asc"
+	SinkListParamsDirectionDesc SinkListParamsDirection = "desc"
+)
+
+func (r SinkListParamsDirection) IsKnown() bool {
+	switch r {
+	case SinkListParamsDirectionAsc, SinkListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
+// Sorts sinks by this field. Defaults to `created_at`.
+type SinkListParamsOrderBy string
+
+const (
+	SinkListParamsOrderByName      SinkListParamsOrderBy = "name"
+	SinkListParamsOrderByCreatedAt SinkListParamsOrderBy = "created_at"
+)
+
+func (r SinkListParamsOrderBy) IsKnown() bool {
+	switch r {
+	case SinkListParamsOrderByName, SinkListParamsOrderByCreatedAt:
+		return true
+	}
+	return false
 }
 
 type SinkDeleteParams struct {

@@ -35,7 +35,8 @@ func NewThreatSignalFeedRawService(opts ...option.RequestOption) (r *ThreatSigna
 	return
 }
 
-// Retrieves the feed document fetched by the most recent poll.
+// Retrieves the feed document fetched by the most recent poll as text/plain by
+// default or application/xml when format is xml.
 func (r *ThreatSignalFeedRawService) Get(ctx context.Context, feedID string, params ThreatSignalFeedRawGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/xml")}, opts...)
@@ -53,8 +54,10 @@ func (r *ThreatSignalFeedRawService) Get(ctx context.Context, feedID string, par
 }
 
 type ThreatSignalFeedRawGetParams struct {
-	AccountID param.Field[string]                             `path:"account_id" api:"required"`
-	Format    param.Field[ThreatSignalFeedRawGetParamsFormat] `query:"format"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Response format. Use xml for application/xml; omit it for the default text/plain
+	// response.
+	Format param.Field[ThreatSignalFeedRawGetParamsFormat] `query:"format"`
 }
 
 // URLQuery serializes [ThreatSignalFeedRawGetParams]'s query parameters as
@@ -66,6 +69,8 @@ func (r ThreatSignalFeedRawGetParams) URLQuery() (v url.Values) {
 	})
 }
 
+// Response format. Use xml for application/xml; omit it for the default text/plain
+// response.
 type ThreatSignalFeedRawGetParamsFormat string
 
 const (

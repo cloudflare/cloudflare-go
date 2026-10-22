@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/email_security"
@@ -34,6 +35,7 @@ func TestSettingContentPolicyNewWithOptionalParams(t *testing.T) {
 		Name:      cloudflare.F("Block phishing keywords"),
 		Pattern:   cloudflare.F("urgent.*verify.*account"),
 		Targets:   cloudflare.F([]email_security.SettingContentPolicyNewParamsTarget{email_security.SettingContentPolicyNewParamsTargetSubject}),
+		ExpiresAt: cloudflare.F(time.Now()),
 		Notes:     cloudflare.F("Blocks common phishing subject lines"),
 	})
 	if err != nil {
@@ -63,6 +65,7 @@ func TestSettingContentPolicyListWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Direction: cloudflare.F(email_security.SettingContentPolicyListParamsDirectionAsc),
 		Enabled:   cloudflare.F(true),
+		Expired:   cloudflare.F(true),
 		Name:      cloudflare.F("name"),
 		Order:     cloudflare.F(email_security.SettingContentPolicyListParamsOrderName),
 		Page:      cloudflare.F(int64(1)),
@@ -128,25 +131,28 @@ func TestSettingContentPolicyBatch(t *testing.T) {
 			ID: cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 		}}),
 		Patches: cloudflare.F([]email_security.SettingContentPolicyBatchParamsPatch{{
-			Enabled: cloudflare.F(true),
-			Name:    cloudflare.F("Block phishing keywords"),
-			Notes:   cloudflare.F("Blocks common phishing subject lines"),
-			Pattern: cloudflare.F("urgent.*verify.*account"),
-			Targets: cloudflare.F([]email_security.SettingContentPolicyBatchParamsPatchesTarget{email_security.SettingContentPolicyBatchParamsPatchesTargetSubject}),
+			Enabled:   cloudflare.F(true),
+			ExpiresAt: cloudflare.F(time.Now()),
+			Name:      cloudflare.F("Block phishing keywords"),
+			Notes:     cloudflare.F("Blocks common phishing subject lines"),
+			Pattern:   cloudflare.F("urgent.*verify.*account"),
+			Targets:   cloudflare.F([]email_security.SettingContentPolicyBatchParamsPatchesTarget{email_security.SettingContentPolicyBatchParamsPatchesTargetSubject}),
 		}}),
 		Posts: cloudflare.F([]email_security.SettingContentPolicyBatchParamsPost{{
-			Enabled: cloudflare.F(true),
-			Name:    cloudflare.F("Block phishing keywords"),
-			Pattern: cloudflare.F("urgent.*verify.*account"),
-			Targets: cloudflare.F([]email_security.SettingContentPolicyBatchParamsPostsTarget{email_security.SettingContentPolicyBatchParamsPostsTargetSubject}),
-			Notes:   cloudflare.F("Blocks common phishing subject lines"),
+			Enabled:   cloudflare.F(true),
+			Name:      cloudflare.F("Block phishing keywords"),
+			Pattern:   cloudflare.F("urgent.*verify.*account"),
+			Targets:   cloudflare.F([]email_security.SettingContentPolicyBatchParamsPostsTarget{email_security.SettingContentPolicyBatchParamsPostsTargetSubject}),
+			ExpiresAt: cloudflare.F(time.Now()),
+			Notes:     cloudflare.F("Blocks common phishing subject lines"),
 		}}),
 		Puts: cloudflare.F([]email_security.SettingContentPolicyBatchParamsPut{{
-			Enabled: cloudflare.F(true),
-			Name:    cloudflare.F("Block phishing keywords"),
-			Pattern: cloudflare.F("urgent.*verify.*account"),
-			Targets: cloudflare.F([]email_security.SettingContentPolicyBatchParamsPutsTarget{email_security.SettingContentPolicyBatchParamsPutsTargetSubject}),
-			Notes:   cloudflare.F("Blocks common phishing subject lines"),
+			Enabled:   cloudflare.F(true),
+			Name:      cloudflare.F("Block phishing keywords"),
+			Pattern:   cloudflare.F("urgent.*verify.*account"),
+			Targets:   cloudflare.F([]email_security.SettingContentPolicyBatchParamsPutsTarget{email_security.SettingContentPolicyBatchParamsPutsTargetSubject}),
+			ExpiresAt: cloudflare.F(time.Now()),
+			Notes:     cloudflare.F("Blocks common phishing subject lines"),
 		}}),
 	})
 	if err != nil {
@@ -178,6 +184,7 @@ func TestSettingContentPolicyEditWithOptionalParams(t *testing.T) {
 		email_security.SettingContentPolicyEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Enabled:   cloudflare.F(true),
+			ExpiresAt: cloudflare.F(time.Now()),
 			Name:      cloudflare.F("Block phishing keywords"),
 			Notes:     cloudflare.F("Blocks common phishing subject lines"),
 			Pattern:   cloudflare.F("urgent.*verify.*account"),

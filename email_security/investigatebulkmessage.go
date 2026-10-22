@@ -468,7 +468,7 @@ type InvestigateBulkMessageListResponseMessage struct {
 	ThreatCategories  []string                                            `json:"threat_categories" api:"nullable"`
 	To                []string                                            `json:"to" api:"nullable"`
 	ToName            []string                                            `json:"to_name" api:"nullable"`
-	Validation        InvestigateBulkMessageListResponseMessageValidation `json:"validation" api:"nullable"`
+	Validation        InvestigateBulkMessageListResponseMessageValidation `json:"validation"`
 	XOriginatingIP    string                                              `json:"x_originating_ip" api:"nullable"`
 	JSON              investigateBulkMessageListResponseMessageJSON       `json:"-"`
 }

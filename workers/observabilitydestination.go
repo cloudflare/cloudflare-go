@@ -153,24 +153,24 @@ func (r observabilityDestinationNewResponseJSON) RawJSON() string {
 }
 
 type ObservabilityDestinationNewResponseConfiguration struct {
-	DestinationConf string                                                         `json:"destination_conf" api:"required"`
-	LogpushDataset  ObservabilityDestinationNewResponseConfigurationLogpushDataset `json:"logpushDataset" api:"required"`
-	LogpushJob      float64                                                        `json:"logpushJob" api:"required"`
-	Type            ObservabilityDestinationNewResponseConfigurationType           `json:"type" api:"required"`
-	URL             string                                                         `json:"url" api:"required"`
-	JSON            observabilityDestinationNewResponseConfigurationJSON           `json:"-"`
+	Headers        map[string]string                                              `json:"headers" api:"required"`
+	JobStatus      ObservabilityDestinationNewResponseConfigurationJobStatus      `json:"jobStatus" api:"required"`
+	LogpushDataset ObservabilityDestinationNewResponseConfigurationLogpushDataset `json:"logpushDataset" api:"required"`
+	Type           ObservabilityDestinationNewResponseConfigurationType           `json:"type" api:"required"`
+	URL            string                                                         `json:"url" api:"required"`
+	JSON           observabilityDestinationNewResponseConfigurationJSON           `json:"-"`
 }
 
 // observabilityDestinationNewResponseConfigurationJSON contains the JSON metadata
 // for the struct [ObservabilityDestinationNewResponseConfiguration]
 type observabilityDestinationNewResponseConfigurationJSON struct {
-	DestinationConf apijson.Field
-	LogpushDataset  apijson.Field
-	LogpushJob      apijson.Field
-	Type            apijson.Field
-	URL             apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	Headers        apijson.Field
+	JobStatus      apijson.Field
+	LogpushDataset apijson.Field
+	Type           apijson.Field
+	URL            apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *ObservabilityDestinationNewResponseConfiguration) UnmarshalJSON(data []byte) (err error) {
@@ -178,6 +178,32 @@ func (r *ObservabilityDestinationNewResponseConfiguration) UnmarshalJSON(data []
 }
 
 func (r observabilityDestinationNewResponseConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
+type ObservabilityDestinationNewResponseConfigurationJobStatus struct {
+	ErrorMessage string                                                        `json:"error_message" api:"required"`
+	LastComplete string                                                        `json:"last_complete" api:"required"`
+	LastError    string                                                        `json:"last_error" api:"required"`
+	JSON         observabilityDestinationNewResponseConfigurationJobStatusJSON `json:"-"`
+}
+
+// observabilityDestinationNewResponseConfigurationJobStatusJSON contains the JSON
+// metadata for the struct
+// [ObservabilityDestinationNewResponseConfigurationJobStatus]
+type observabilityDestinationNewResponseConfigurationJobStatusJSON struct {
+	ErrorMessage apijson.Field
+	LastComplete apijson.Field
+	LastError    apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ObservabilityDestinationNewResponseConfigurationJobStatus) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r observabilityDestinationNewResponseConfigurationJobStatusJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -241,24 +267,24 @@ func (r observabilityDestinationUpdateResponseJSON) RawJSON() string {
 }
 
 type ObservabilityDestinationUpdateResponseConfiguration struct {
-	DestinationConf string                                                            `json:"destination_conf" api:"required"`
-	LogpushDataset  ObservabilityDestinationUpdateResponseConfigurationLogpushDataset `json:"logpushDataset" api:"required"`
-	LogpushJob      float64                                                           `json:"logpushJob" api:"required"`
-	Type            ObservabilityDestinationUpdateResponseConfigurationType           `json:"type" api:"required"`
-	URL             string                                                            `json:"url" api:"required"`
-	JSON            observabilityDestinationUpdateResponseConfigurationJSON           `json:"-"`
+	Headers        map[string]string                                                 `json:"headers" api:"required"`
+	JobStatus      ObservabilityDestinationUpdateResponseConfigurationJobStatus      `json:"jobStatus" api:"required"`
+	LogpushDataset ObservabilityDestinationUpdateResponseConfigurationLogpushDataset `json:"logpushDataset" api:"required"`
+	Type           ObservabilityDestinationUpdateResponseConfigurationType           `json:"type" api:"required"`
+	URL            string                                                            `json:"url" api:"required"`
+	JSON           observabilityDestinationUpdateResponseConfigurationJSON           `json:"-"`
 }
 
 // observabilityDestinationUpdateResponseConfigurationJSON contains the JSON
 // metadata for the struct [ObservabilityDestinationUpdateResponseConfiguration]
 type observabilityDestinationUpdateResponseConfigurationJSON struct {
-	DestinationConf apijson.Field
-	LogpushDataset  apijson.Field
-	LogpushJob      apijson.Field
-	Type            apijson.Field
-	URL             apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	Headers        apijson.Field
+	JobStatus      apijson.Field
+	LogpushDataset apijson.Field
+	Type           apijson.Field
+	URL            apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *ObservabilityDestinationUpdateResponseConfiguration) UnmarshalJSON(data []byte) (err error) {
@@ -266,6 +292,32 @@ func (r *ObservabilityDestinationUpdateResponseConfiguration) UnmarshalJSON(data
 }
 
 func (r observabilityDestinationUpdateResponseConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
+type ObservabilityDestinationUpdateResponseConfigurationJobStatus struct {
+	ErrorMessage string                                                           `json:"error_message" api:"required"`
+	LastComplete string                                                           `json:"last_complete" api:"required"`
+	LastError    string                                                           `json:"last_error" api:"required"`
+	JSON         observabilityDestinationUpdateResponseConfigurationJobStatusJSON `json:"-"`
+}
+
+// observabilityDestinationUpdateResponseConfigurationJobStatusJSON contains the
+// JSON metadata for the struct
+// [ObservabilityDestinationUpdateResponseConfigurationJobStatus]
+type observabilityDestinationUpdateResponseConfigurationJobStatusJSON struct {
+	ErrorMessage apijson.Field
+	LastComplete apijson.Field
+	LastError    apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ObservabilityDestinationUpdateResponseConfigurationJobStatus) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r observabilityDestinationUpdateResponseConfigurationJobStatusJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -329,26 +381,24 @@ func (r observabilityDestinationListResponseJSON) RawJSON() string {
 }
 
 type ObservabilityDestinationListResponseConfiguration struct {
-	DestinationConf string                                                          `json:"destination_conf" api:"required"`
-	Headers         map[string]string                                               `json:"headers" api:"required"`
-	JobStatus       ObservabilityDestinationListResponseConfigurationJobStatus      `json:"jobStatus" api:"required"`
-	LogpushDataset  ObservabilityDestinationListResponseConfigurationLogpushDataset `json:"logpushDataset" api:"required"`
-	Type            ObservabilityDestinationListResponseConfigurationType           `json:"type" api:"required"`
-	URL             string                                                          `json:"url" api:"required"`
-	JSON            observabilityDestinationListResponseConfigurationJSON           `json:"-"`
+	Headers        map[string]string                                               `json:"headers" api:"required"`
+	JobStatus      ObservabilityDestinationListResponseConfigurationJobStatus      `json:"jobStatus" api:"required"`
+	LogpushDataset ObservabilityDestinationListResponseConfigurationLogpushDataset `json:"logpushDataset" api:"required"`
+	Type           ObservabilityDestinationListResponseConfigurationType           `json:"type" api:"required"`
+	URL            string                                                          `json:"url" api:"required"`
+	JSON           observabilityDestinationListResponseConfigurationJSON           `json:"-"`
 }
 
 // observabilityDestinationListResponseConfigurationJSON contains the JSON metadata
 // for the struct [ObservabilityDestinationListResponseConfiguration]
 type observabilityDestinationListResponseConfigurationJSON struct {
-	DestinationConf apijson.Field
-	Headers         apijson.Field
-	JobStatus       apijson.Field
-	LogpushDataset  apijson.Field
-	Type            apijson.Field
-	URL             apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	Headers        apijson.Field
+	JobStatus      apijson.Field
+	LogpushDataset apijson.Field
+	Type           apijson.Field
+	URL            apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *ObservabilityDestinationListResponseConfiguration) UnmarshalJSON(data []byte) (err error) {
@@ -445,24 +495,24 @@ func (r observabilityDestinationDeleteResponseJSON) RawJSON() string {
 }
 
 type ObservabilityDestinationDeleteResponseConfiguration struct {
-	DestinationConf string                                                            `json:"destination_conf" api:"required"`
-	LogpushDataset  ObservabilityDestinationDeleteResponseConfigurationLogpushDataset `json:"logpushDataset" api:"required"`
-	LogpushJob      float64                                                           `json:"logpushJob" api:"required"`
-	Type            ObservabilityDestinationDeleteResponseConfigurationType           `json:"type" api:"required"`
-	URL             string                                                            `json:"url" api:"required"`
-	JSON            observabilityDestinationDeleteResponseConfigurationJSON           `json:"-"`
+	Headers        map[string]string                                                 `json:"headers" api:"required"`
+	JobStatus      ObservabilityDestinationDeleteResponseConfigurationJobStatus      `json:"jobStatus" api:"required"`
+	LogpushDataset ObservabilityDestinationDeleteResponseConfigurationLogpushDataset `json:"logpushDataset" api:"required"`
+	Type           ObservabilityDestinationDeleteResponseConfigurationType           `json:"type" api:"required"`
+	URL            string                                                            `json:"url" api:"required"`
+	JSON           observabilityDestinationDeleteResponseConfigurationJSON           `json:"-"`
 }
 
 // observabilityDestinationDeleteResponseConfigurationJSON contains the JSON
 // metadata for the struct [ObservabilityDestinationDeleteResponseConfiguration]
 type observabilityDestinationDeleteResponseConfigurationJSON struct {
-	DestinationConf apijson.Field
-	LogpushDataset  apijson.Field
-	LogpushJob      apijson.Field
-	Type            apijson.Field
-	URL             apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	Headers        apijson.Field
+	JobStatus      apijson.Field
+	LogpushDataset apijson.Field
+	Type           apijson.Field
+	URL            apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *ObservabilityDestinationDeleteResponseConfiguration) UnmarshalJSON(data []byte) (err error) {
@@ -470,6 +520,32 @@ func (r *ObservabilityDestinationDeleteResponseConfiguration) UnmarshalJSON(data
 }
 
 func (r observabilityDestinationDeleteResponseConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
+type ObservabilityDestinationDeleteResponseConfigurationJobStatus struct {
+	ErrorMessage string                                                           `json:"error_message" api:"required"`
+	LastComplete string                                                           `json:"last_complete" api:"required"`
+	LastError    string                                                           `json:"last_error" api:"required"`
+	JSON         observabilityDestinationDeleteResponseConfigurationJobStatusJSON `json:"-"`
+}
+
+// observabilityDestinationDeleteResponseConfigurationJobStatusJSON contains the
+// JSON metadata for the struct
+// [ObservabilityDestinationDeleteResponseConfigurationJobStatus]
+type observabilityDestinationDeleteResponseConfigurationJobStatusJSON struct {
+	ErrorMessage apijson.Field
+	LastComplete apijson.Field
+	LastError    apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ObservabilityDestinationDeleteResponseConfigurationJobStatus) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r observabilityDestinationDeleteResponseConfigurationJobStatusJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -655,8 +731,8 @@ func (r ObservabilityDestinationNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ObservabilityDestinationUpdateParams struct {
 	AccountID     param.Field[string]                                            `path:"account_id" api:"required"`
-	Configuration param.Field[ObservabilityDestinationUpdateParamsConfiguration] `json:"configuration" api:"required"`
 	Enabled       param.Field[bool]                                              `json:"enabled" api:"required"`
+	Configuration param.Field[ObservabilityDestinationUpdateParamsConfiguration] `json:"configuration"`
 }
 
 func (r ObservabilityDestinationUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -664,9 +740,10 @@ func (r ObservabilityDestinationUpdateParams) MarshalJSON() (data []byte, err er
 }
 
 type ObservabilityDestinationUpdateParamsConfiguration struct {
-	Headers param.Field[map[string]string]                                     `json:"headers" api:"required"`
-	Type    param.Field[ObservabilityDestinationUpdateParamsConfigurationType] `json:"type" api:"required"`
-	URL     param.Field[string]                                                `json:"url" api:"required"`
+	Headers        param.Field[map[string]string]                                     `json:"headers" api:"required"`
+	Type           param.Field[ObservabilityDestinationUpdateParamsConfigurationType] `json:"type" api:"required"`
+	URL            param.Field[string]                                                `json:"url" api:"required"`
+	ReplaceHeaders param.Field[bool]                                                  `json:"replaceHeaders"`
 }
 
 func (r ObservabilityDestinationUpdateParamsConfiguration) MarshalJSON() (data []byte, err error) {

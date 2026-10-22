@@ -189,7 +189,8 @@ type ApplicationNewResponse struct {
 	// [ApplicationNewResponseCcDurableObjectApplicationConfiguration].
 	Configuration interface{} `json:"configuration"`
 	// This field can have the runtime type of
-	// [ApplicationNewResponseCcScheduledApplicationConstraints].
+	// [ApplicationNewResponseCcScheduledApplicationConstraints],
+	// [ApplicationNewResponseCcDurableObjectApplicationConstraints].
 	Constraints interface{} `json:"constraints"`
 	// This field can have the runtime type of
 	// [ApplicationNewResponseCcScheduledApplicationDurableObjects],
@@ -673,33 +674,33 @@ type ApplicationNewResponseCcScheduledApplicationHealthErrorsEvent struct {
 	Message string                 `json:"message" api:"required"`
 	// Name of the event that describes the kind event that happened.
 	//
-	//   - SchedulerPlaced: It's the first event that creates a container placement. It
-	//     happens when the Containers runtime was able to retrieve deployment resources
-	//     and start verifying everything is correct.
-	//   - NetworkingIPAssigned: It's sent when the Containers runtime maps the IP to the
-	//     container.
-	//   - VMStarted: It's sent when the Containers runtime starts the VM. The container
-	//     might remain unhealthy at this point.
-	//   - ImagePulled: It's sent when the Containers runtime pulls the image
-	//     successfully.
-	//   - ImagePullError: It's sent when the Containers runtime is having issues pulling
-	//     the image. The message and details have more information on what happened for
-	//     debugging.
-	//   - VMFailedToStart: It's sent when the Containers runtime was unable to boot the
-	//     VM.
-	//   - VMStopping: It's sent when the scheduler is stopping the VM.
-	//   - VMStopped: It's sent when the VM finally exits.
-	//   - VMFailed: It's sent when the scheduling of the VM failed in the current
-	//     location.
-	//   - RuntimeStartFailed: It's sent when the runtime hits an internal error.
-	//   - SSHStarted: It's sent when the container gains network connectivity and opens
-	//     the SSH port. Containers only send this event when SSH keys exist.
-	//   - CheckUpdate: Sent when the status of a health or readiness check changes. This
-	//     may also affect the health status of the placement.
-	//   - DurableObjectConnected: Sent when a durable object instance connects and gains
-	//     control of the deployment. This event is only sent for durable object
-	//     deployments. It is sent after VMStarted.
-	//   - ContainerStarted: It's sent when the container starts running.
+	// - SchedulerPlaced: It's the first event that creates a container placement. It
+	//   happens when the Containers runtime was able to retrieve deployment resources
+	//   and start verifying everything is correct.
+	// - NetworkingIPAssigned: It's sent when the Containers runtime maps the IP to the
+	//   container.
+	// - VMStarted: It's sent when the Containers runtime starts the VM. The container
+	//   might remain unhealthy at this point.
+	// - ImagePulled: It's sent when the Containers runtime pulls the image
+	//   successfully.
+	// - ImagePullError: It's sent when the Containers runtime is having issues pulling
+	//   the image. The message and details have more information on what happened for
+	//   debugging.
+	// - VMFailedToStart: It's sent when the Containers runtime was unable to boot the
+	//   VM.
+	// - VMStopping: It's sent when the scheduler is stopping the VM.
+	// - VMStopped: It's sent when the VM finally exits.
+	// - VMFailed: It's sent when the scheduling of the VM failed in the current
+	//   location.
+	// - RuntimeStartFailed: It's sent when the runtime hits an internal error.
+	// - SSHStarted: It's sent when the container gains network connectivity and opens
+	//   the SSH port. Containers only send this event when SSH keys exist.
+	// - CheckUpdate: Sent when the status of a health or readiness check changes. This
+	//   may also affect the health status of the placement.
+	// - DurableObjectConnected: Sent when a durable object instance connects and gains
+	//   control of the deployment. This event is only sent for durable object
+	//   deployments. It is sent after VMStarted.
+	// - ContainerStarted: It's sent when the container starts running.
 	Name         ApplicationNewResponseCcScheduledApplicationHealthErrorsEventName `json:"name" api:"required"`
 	StatusChange map[string]interface{}                                            `json:"statusChange" api:"required"`
 	// UTC timestamp string in ISO 8601 format.
@@ -937,6 +938,10 @@ type ApplicationNewResponseCcDurableObjectApplication struct {
 	UpdatedAt string `json:"updated_at" api:"required"`
 	// Application-wide settings for a Durable Object-managed application.
 	Configuration ApplicationNewResponseCcDurableObjectApplicationConfiguration `json:"configuration"`
+	// The jurisdiction of a Durable Object-managed application's primary control-plane
+	// object. Set this when creating the application; it cannot be changed afterwards.
+	// Other placement constraints are not supported by this scheduling policy.
+	Constraints ApplicationNewResponseCcDurableObjectApplicationConstraints `json:"constraints"`
 	// Aggregate current activity for the latest observed placement of each instance.
 	// Runtime snapshots feed periodic background sweeps. Counts refresh after each
 	// complete sweep. Instance listings retain their separate three-month history for
@@ -960,6 +965,7 @@ type applicationNewResponseCcDurableObjectApplicationJSON struct {
 	SchedulingPolicy apijson.Field
 	UpdatedAt        apijson.Field
 	Configuration    apijson.Field
+	Constraints      apijson.Field
 	Health           apijson.Field
 	Observability    apijson.Field
 	raw              string
@@ -1094,6 +1100,47 @@ func (r *ApplicationNewResponseCcDurableObjectApplicationConfigurationWranglerSS
 
 func (r applicationNewResponseCcDurableObjectApplicationConfigurationWranglerSSHJSON) RawJSON() string {
 	return r.raw
+}
+
+// The jurisdiction of a Durable Object-managed application's primary control-plane
+// object. Set this when creating the application; it cannot be changed afterwards.
+// Other placement constraints are not supported by this scheduling policy.
+type ApplicationNewResponseCcDurableObjectApplicationConstraints struct {
+	Jurisdiction ApplicationNewResponseCcDurableObjectApplicationConstraintsJurisdiction `json:"jurisdiction" api:"required"`
+	JSON         applicationNewResponseCcDurableObjectApplicationConstraintsJSON         `json:"-"`
+}
+
+// applicationNewResponseCcDurableObjectApplicationConstraintsJSON contains the
+// JSON metadata for the struct
+// [ApplicationNewResponseCcDurableObjectApplicationConstraints]
+type applicationNewResponseCcDurableObjectApplicationConstraintsJSON struct {
+	Jurisdiction apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ApplicationNewResponseCcDurableObjectApplicationConstraints) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r applicationNewResponseCcDurableObjectApplicationConstraintsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ApplicationNewResponseCcDurableObjectApplicationConstraintsJurisdiction string
+
+const (
+	ApplicationNewResponseCcDurableObjectApplicationConstraintsJurisdictionEu      ApplicationNewResponseCcDurableObjectApplicationConstraintsJurisdiction = "eu"
+	ApplicationNewResponseCcDurableObjectApplicationConstraintsJurisdictionFedramp ApplicationNewResponseCcDurableObjectApplicationConstraintsJurisdiction = "fedramp"
+	ApplicationNewResponseCcDurableObjectApplicationConstraintsJurisdictionUs      ApplicationNewResponseCcDurableObjectApplicationConstraintsJurisdiction = "us"
+)
+
+func (r ApplicationNewResponseCcDurableObjectApplicationConstraintsJurisdiction) IsKnown() bool {
+	switch r {
+	case ApplicationNewResponseCcDurableObjectApplicationConstraintsJurisdictionEu, ApplicationNewResponseCcDurableObjectApplicationConstraintsJurisdictionFedramp, ApplicationNewResponseCcDurableObjectApplicationConstraintsJurisdictionUs:
+		return true
+	}
+	return false
 }
 
 // Aggregate current activity for the latest observed placement of each instance.
@@ -1253,7 +1300,8 @@ type ApplicationListResponse struct {
 	// [ApplicationListResponseCcDurableObjectApplicationConfiguration].
 	Configuration interface{} `json:"configuration"`
 	// This field can have the runtime type of
-	// [ApplicationListResponseCcScheduledApplicationConstraints].
+	// [ApplicationListResponseCcScheduledApplicationConstraints],
+	// [ApplicationListResponseCcDurableObjectApplicationConstraints].
 	Constraints interface{} `json:"constraints"`
 	// This field can have the runtime type of
 	// [ApplicationListResponseCcScheduledApplicationDurableObjects],
@@ -1737,33 +1785,33 @@ type ApplicationListResponseCcScheduledApplicationHealthErrorsEvent struct {
 	Message string                 `json:"message" api:"required"`
 	// Name of the event that describes the kind event that happened.
 	//
-	//   - SchedulerPlaced: It's the first event that creates a container placement. It
-	//     happens when the Containers runtime was able to retrieve deployment resources
-	//     and start verifying everything is correct.
-	//   - NetworkingIPAssigned: It's sent when the Containers runtime maps the IP to the
-	//     container.
-	//   - VMStarted: It's sent when the Containers runtime starts the VM. The container
-	//     might remain unhealthy at this point.
-	//   - ImagePulled: It's sent when the Containers runtime pulls the image
-	//     successfully.
-	//   - ImagePullError: It's sent when the Containers runtime is having issues pulling
-	//     the image. The message and details have more information on what happened for
-	//     debugging.
-	//   - VMFailedToStart: It's sent when the Containers runtime was unable to boot the
-	//     VM.
-	//   - VMStopping: It's sent when the scheduler is stopping the VM.
-	//   - VMStopped: It's sent when the VM finally exits.
-	//   - VMFailed: It's sent when the scheduling of the VM failed in the current
-	//     location.
-	//   - RuntimeStartFailed: It's sent when the runtime hits an internal error.
-	//   - SSHStarted: It's sent when the container gains network connectivity and opens
-	//     the SSH port. Containers only send this event when SSH keys exist.
-	//   - CheckUpdate: Sent when the status of a health or readiness check changes. This
-	//     may also affect the health status of the placement.
-	//   - DurableObjectConnected: Sent when a durable object instance connects and gains
-	//     control of the deployment. This event is only sent for durable object
-	//     deployments. It is sent after VMStarted.
-	//   - ContainerStarted: It's sent when the container starts running.
+	// - SchedulerPlaced: It's the first event that creates a container placement. It
+	//   happens when the Containers runtime was able to retrieve deployment resources
+	//   and start verifying everything is correct.
+	// - NetworkingIPAssigned: It's sent when the Containers runtime maps the IP to the
+	//   container.
+	// - VMStarted: It's sent when the Containers runtime starts the VM. The container
+	//   might remain unhealthy at this point.
+	// - ImagePulled: It's sent when the Containers runtime pulls the image
+	//   successfully.
+	// - ImagePullError: It's sent when the Containers runtime is having issues pulling
+	//   the image. The message and details have more information on what happened for
+	//   debugging.
+	// - VMFailedToStart: It's sent when the Containers runtime was unable to boot the
+	//   VM.
+	// - VMStopping: It's sent when the scheduler is stopping the VM.
+	// - VMStopped: It's sent when the VM finally exits.
+	// - VMFailed: It's sent when the scheduling of the VM failed in the current
+	//   location.
+	// - RuntimeStartFailed: It's sent when the runtime hits an internal error.
+	// - SSHStarted: It's sent when the container gains network connectivity and opens
+	//   the SSH port. Containers only send this event when SSH keys exist.
+	// - CheckUpdate: Sent when the status of a health or readiness check changes. This
+	//   may also affect the health status of the placement.
+	// - DurableObjectConnected: Sent when a durable object instance connects and gains
+	//   control of the deployment. This event is only sent for durable object
+	//   deployments. It is sent after VMStarted.
+	// - ContainerStarted: It's sent when the container starts running.
 	Name         ApplicationListResponseCcScheduledApplicationHealthErrorsEventName `json:"name" api:"required"`
 	StatusChange map[string]interface{}                                             `json:"statusChange" api:"required"`
 	// UTC timestamp string in ISO 8601 format.
@@ -2001,6 +2049,10 @@ type ApplicationListResponseCcDurableObjectApplication struct {
 	UpdatedAt string `json:"updated_at" api:"required"`
 	// Application-wide settings for a Durable Object-managed application.
 	Configuration ApplicationListResponseCcDurableObjectApplicationConfiguration `json:"configuration"`
+	// The jurisdiction of a Durable Object-managed application's primary control-plane
+	// object. Set this when creating the application; it cannot be changed afterwards.
+	// Other placement constraints are not supported by this scheduling policy.
+	Constraints ApplicationListResponseCcDurableObjectApplicationConstraints `json:"constraints"`
 	// Aggregate current activity for the latest observed placement of each instance.
 	// Runtime snapshots feed periodic background sweeps. Counts refresh after each
 	// complete sweep. Instance listings retain their separate three-month history for
@@ -2024,6 +2076,7 @@ type applicationListResponseCcDurableObjectApplicationJSON struct {
 	SchedulingPolicy apijson.Field
 	UpdatedAt        apijson.Field
 	Configuration    apijson.Field
+	Constraints      apijson.Field
 	Health           apijson.Field
 	Observability    apijson.Field
 	raw              string
@@ -2158,6 +2211,47 @@ func (r *ApplicationListResponseCcDurableObjectApplicationConfigurationWranglerS
 
 func (r applicationListResponseCcDurableObjectApplicationConfigurationWranglerSSHJSON) RawJSON() string {
 	return r.raw
+}
+
+// The jurisdiction of a Durable Object-managed application's primary control-plane
+// object. Set this when creating the application; it cannot be changed afterwards.
+// Other placement constraints are not supported by this scheduling policy.
+type ApplicationListResponseCcDurableObjectApplicationConstraints struct {
+	Jurisdiction ApplicationListResponseCcDurableObjectApplicationConstraintsJurisdiction `json:"jurisdiction" api:"required"`
+	JSON         applicationListResponseCcDurableObjectApplicationConstraintsJSON         `json:"-"`
+}
+
+// applicationListResponseCcDurableObjectApplicationConstraintsJSON contains the
+// JSON metadata for the struct
+// [ApplicationListResponseCcDurableObjectApplicationConstraints]
+type applicationListResponseCcDurableObjectApplicationConstraintsJSON struct {
+	Jurisdiction apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ApplicationListResponseCcDurableObjectApplicationConstraints) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r applicationListResponseCcDurableObjectApplicationConstraintsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ApplicationListResponseCcDurableObjectApplicationConstraintsJurisdiction string
+
+const (
+	ApplicationListResponseCcDurableObjectApplicationConstraintsJurisdictionEu      ApplicationListResponseCcDurableObjectApplicationConstraintsJurisdiction = "eu"
+	ApplicationListResponseCcDurableObjectApplicationConstraintsJurisdictionFedramp ApplicationListResponseCcDurableObjectApplicationConstraintsJurisdiction = "fedramp"
+	ApplicationListResponseCcDurableObjectApplicationConstraintsJurisdictionUs      ApplicationListResponseCcDurableObjectApplicationConstraintsJurisdiction = "us"
+)
+
+func (r ApplicationListResponseCcDurableObjectApplicationConstraintsJurisdiction) IsKnown() bool {
+	switch r {
+	case ApplicationListResponseCcDurableObjectApplicationConstraintsJurisdictionEu, ApplicationListResponseCcDurableObjectApplicationConstraintsJurisdictionFedramp, ApplicationListResponseCcDurableObjectApplicationConstraintsJurisdictionUs:
+		return true
+	}
+	return false
 }
 
 // Aggregate current activity for the latest observed placement of each instance.
@@ -2340,7 +2434,8 @@ type ApplicationEditResponse struct {
 	// [ApplicationEditResponseCcDurableObjectApplicationConfiguration].
 	Configuration interface{} `json:"configuration"`
 	// This field can have the runtime type of
-	// [ApplicationEditResponseCcScheduledApplicationConstraints].
+	// [ApplicationEditResponseCcScheduledApplicationConstraints],
+	// [ApplicationEditResponseCcDurableObjectApplicationConstraints].
 	Constraints interface{} `json:"constraints"`
 	// This field can have the runtime type of
 	// [ApplicationEditResponseCcScheduledApplicationDurableObjects],
@@ -2824,33 +2919,33 @@ type ApplicationEditResponseCcScheduledApplicationHealthErrorsEvent struct {
 	Message string                 `json:"message" api:"required"`
 	// Name of the event that describes the kind event that happened.
 	//
-	//   - SchedulerPlaced: It's the first event that creates a container placement. It
-	//     happens when the Containers runtime was able to retrieve deployment resources
-	//     and start verifying everything is correct.
-	//   - NetworkingIPAssigned: It's sent when the Containers runtime maps the IP to the
-	//     container.
-	//   - VMStarted: It's sent when the Containers runtime starts the VM. The container
-	//     might remain unhealthy at this point.
-	//   - ImagePulled: It's sent when the Containers runtime pulls the image
-	//     successfully.
-	//   - ImagePullError: It's sent when the Containers runtime is having issues pulling
-	//     the image. The message and details have more information on what happened for
-	//     debugging.
-	//   - VMFailedToStart: It's sent when the Containers runtime was unable to boot the
-	//     VM.
-	//   - VMStopping: It's sent when the scheduler is stopping the VM.
-	//   - VMStopped: It's sent when the VM finally exits.
-	//   - VMFailed: It's sent when the scheduling of the VM failed in the current
-	//     location.
-	//   - RuntimeStartFailed: It's sent when the runtime hits an internal error.
-	//   - SSHStarted: It's sent when the container gains network connectivity and opens
-	//     the SSH port. Containers only send this event when SSH keys exist.
-	//   - CheckUpdate: Sent when the status of a health or readiness check changes. This
-	//     may also affect the health status of the placement.
-	//   - DurableObjectConnected: Sent when a durable object instance connects and gains
-	//     control of the deployment. This event is only sent for durable object
-	//     deployments. It is sent after VMStarted.
-	//   - ContainerStarted: It's sent when the container starts running.
+	// - SchedulerPlaced: It's the first event that creates a container placement. It
+	//   happens when the Containers runtime was able to retrieve deployment resources
+	//   and start verifying everything is correct.
+	// - NetworkingIPAssigned: It's sent when the Containers runtime maps the IP to the
+	//   container.
+	// - VMStarted: It's sent when the Containers runtime starts the VM. The container
+	//   might remain unhealthy at this point.
+	// - ImagePulled: It's sent when the Containers runtime pulls the image
+	//   successfully.
+	// - ImagePullError: It's sent when the Containers runtime is having issues pulling
+	//   the image. The message and details have more information on what happened for
+	//   debugging.
+	// - VMFailedToStart: It's sent when the Containers runtime was unable to boot the
+	//   VM.
+	// - VMStopping: It's sent when the scheduler is stopping the VM.
+	// - VMStopped: It's sent when the VM finally exits.
+	// - VMFailed: It's sent when the scheduling of the VM failed in the current
+	//   location.
+	// - RuntimeStartFailed: It's sent when the runtime hits an internal error.
+	// - SSHStarted: It's sent when the container gains network connectivity and opens
+	//   the SSH port. Containers only send this event when SSH keys exist.
+	// - CheckUpdate: Sent when the status of a health or readiness check changes. This
+	//   may also affect the health status of the placement.
+	// - DurableObjectConnected: Sent when a durable object instance connects and gains
+	//   control of the deployment. This event is only sent for durable object
+	//   deployments. It is sent after VMStarted.
+	// - ContainerStarted: It's sent when the container starts running.
 	Name         ApplicationEditResponseCcScheduledApplicationHealthErrorsEventName `json:"name" api:"required"`
 	StatusChange map[string]interface{}                                             `json:"statusChange" api:"required"`
 	// UTC timestamp string in ISO 8601 format.
@@ -3088,6 +3183,10 @@ type ApplicationEditResponseCcDurableObjectApplication struct {
 	UpdatedAt string `json:"updated_at" api:"required"`
 	// Application-wide settings for a Durable Object-managed application.
 	Configuration ApplicationEditResponseCcDurableObjectApplicationConfiguration `json:"configuration"`
+	// The jurisdiction of a Durable Object-managed application's primary control-plane
+	// object. Set this when creating the application; it cannot be changed afterwards.
+	// Other placement constraints are not supported by this scheduling policy.
+	Constraints ApplicationEditResponseCcDurableObjectApplicationConstraints `json:"constraints"`
 	// Aggregate current activity for the latest observed placement of each instance.
 	// Runtime snapshots feed periodic background sweeps. Counts refresh after each
 	// complete sweep. Instance listings retain their separate three-month history for
@@ -3111,6 +3210,7 @@ type applicationEditResponseCcDurableObjectApplicationJSON struct {
 	SchedulingPolicy apijson.Field
 	UpdatedAt        apijson.Field
 	Configuration    apijson.Field
+	Constraints      apijson.Field
 	Health           apijson.Field
 	Observability    apijson.Field
 	raw              string
@@ -3245,6 +3345,47 @@ func (r *ApplicationEditResponseCcDurableObjectApplicationConfigurationWranglerS
 
 func (r applicationEditResponseCcDurableObjectApplicationConfigurationWranglerSSHJSON) RawJSON() string {
 	return r.raw
+}
+
+// The jurisdiction of a Durable Object-managed application's primary control-plane
+// object. Set this when creating the application; it cannot be changed afterwards.
+// Other placement constraints are not supported by this scheduling policy.
+type ApplicationEditResponseCcDurableObjectApplicationConstraints struct {
+	Jurisdiction ApplicationEditResponseCcDurableObjectApplicationConstraintsJurisdiction `json:"jurisdiction" api:"required"`
+	JSON         applicationEditResponseCcDurableObjectApplicationConstraintsJSON         `json:"-"`
+}
+
+// applicationEditResponseCcDurableObjectApplicationConstraintsJSON contains the
+// JSON metadata for the struct
+// [ApplicationEditResponseCcDurableObjectApplicationConstraints]
+type applicationEditResponseCcDurableObjectApplicationConstraintsJSON struct {
+	Jurisdiction apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ApplicationEditResponseCcDurableObjectApplicationConstraints) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r applicationEditResponseCcDurableObjectApplicationConstraintsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ApplicationEditResponseCcDurableObjectApplicationConstraintsJurisdiction string
+
+const (
+	ApplicationEditResponseCcDurableObjectApplicationConstraintsJurisdictionEu      ApplicationEditResponseCcDurableObjectApplicationConstraintsJurisdiction = "eu"
+	ApplicationEditResponseCcDurableObjectApplicationConstraintsJurisdictionFedramp ApplicationEditResponseCcDurableObjectApplicationConstraintsJurisdiction = "fedramp"
+	ApplicationEditResponseCcDurableObjectApplicationConstraintsJurisdictionUs      ApplicationEditResponseCcDurableObjectApplicationConstraintsJurisdiction = "us"
+)
+
+func (r ApplicationEditResponseCcDurableObjectApplicationConstraintsJurisdiction) IsKnown() bool {
+	switch r {
+	case ApplicationEditResponseCcDurableObjectApplicationConstraintsJurisdictionEu, ApplicationEditResponseCcDurableObjectApplicationConstraintsJurisdictionFedramp, ApplicationEditResponseCcDurableObjectApplicationConstraintsJurisdictionUs:
+		return true
+	}
+	return false
 }
 
 // Aggregate current activity for the latest observed placement of each instance.
@@ -3405,7 +3546,8 @@ type ApplicationGetResponse struct {
 	// [ApplicationGetResponseCcDurableObjectApplicationConfiguration].
 	Configuration interface{} `json:"configuration"`
 	// This field can have the runtime type of
-	// [ApplicationGetResponseCcScheduledApplicationConstraints].
+	// [ApplicationGetResponseCcScheduledApplicationConstraints],
+	// [ApplicationGetResponseCcDurableObjectApplicationConstraints].
 	Constraints interface{} `json:"constraints"`
 	// This field can have the runtime type of
 	// [ApplicationGetResponseCcScheduledApplicationDurableObjects],
@@ -3889,33 +4031,33 @@ type ApplicationGetResponseCcScheduledApplicationHealthErrorsEvent struct {
 	Message string                 `json:"message" api:"required"`
 	// Name of the event that describes the kind event that happened.
 	//
-	//   - SchedulerPlaced: It's the first event that creates a container placement. It
-	//     happens when the Containers runtime was able to retrieve deployment resources
-	//     and start verifying everything is correct.
-	//   - NetworkingIPAssigned: It's sent when the Containers runtime maps the IP to the
-	//     container.
-	//   - VMStarted: It's sent when the Containers runtime starts the VM. The container
-	//     might remain unhealthy at this point.
-	//   - ImagePulled: It's sent when the Containers runtime pulls the image
-	//     successfully.
-	//   - ImagePullError: It's sent when the Containers runtime is having issues pulling
-	//     the image. The message and details have more information on what happened for
-	//     debugging.
-	//   - VMFailedToStart: It's sent when the Containers runtime was unable to boot the
-	//     VM.
-	//   - VMStopping: It's sent when the scheduler is stopping the VM.
-	//   - VMStopped: It's sent when the VM finally exits.
-	//   - VMFailed: It's sent when the scheduling of the VM failed in the current
-	//     location.
-	//   - RuntimeStartFailed: It's sent when the runtime hits an internal error.
-	//   - SSHStarted: It's sent when the container gains network connectivity and opens
-	//     the SSH port. Containers only send this event when SSH keys exist.
-	//   - CheckUpdate: Sent when the status of a health or readiness check changes. This
-	//     may also affect the health status of the placement.
-	//   - DurableObjectConnected: Sent when a durable object instance connects and gains
-	//     control of the deployment. This event is only sent for durable object
-	//     deployments. It is sent after VMStarted.
-	//   - ContainerStarted: It's sent when the container starts running.
+	// - SchedulerPlaced: It's the first event that creates a container placement. It
+	//   happens when the Containers runtime was able to retrieve deployment resources
+	//   and start verifying everything is correct.
+	// - NetworkingIPAssigned: It's sent when the Containers runtime maps the IP to the
+	//   container.
+	// - VMStarted: It's sent when the Containers runtime starts the VM. The container
+	//   might remain unhealthy at this point.
+	// - ImagePulled: It's sent when the Containers runtime pulls the image
+	//   successfully.
+	// - ImagePullError: It's sent when the Containers runtime is having issues pulling
+	//   the image. The message and details have more information on what happened for
+	//   debugging.
+	// - VMFailedToStart: It's sent when the Containers runtime was unable to boot the
+	//   VM.
+	// - VMStopping: It's sent when the scheduler is stopping the VM.
+	// - VMStopped: It's sent when the VM finally exits.
+	// - VMFailed: It's sent when the scheduling of the VM failed in the current
+	//   location.
+	// - RuntimeStartFailed: It's sent when the runtime hits an internal error.
+	// - SSHStarted: It's sent when the container gains network connectivity and opens
+	//   the SSH port. Containers only send this event when SSH keys exist.
+	// - CheckUpdate: Sent when the status of a health or readiness check changes. This
+	//   may also affect the health status of the placement.
+	// - DurableObjectConnected: Sent when a durable object instance connects and gains
+	//   control of the deployment. This event is only sent for durable object
+	//   deployments. It is sent after VMStarted.
+	// - ContainerStarted: It's sent when the container starts running.
 	Name         ApplicationGetResponseCcScheduledApplicationHealthErrorsEventName `json:"name" api:"required"`
 	StatusChange map[string]interface{}                                            `json:"statusChange" api:"required"`
 	// UTC timestamp string in ISO 8601 format.
@@ -4153,6 +4295,10 @@ type ApplicationGetResponseCcDurableObjectApplication struct {
 	UpdatedAt string `json:"updated_at" api:"required"`
 	// Application-wide settings for a Durable Object-managed application.
 	Configuration ApplicationGetResponseCcDurableObjectApplicationConfiguration `json:"configuration"`
+	// The jurisdiction of a Durable Object-managed application's primary control-plane
+	// object. Set this when creating the application; it cannot be changed afterwards.
+	// Other placement constraints are not supported by this scheduling policy.
+	Constraints ApplicationGetResponseCcDurableObjectApplicationConstraints `json:"constraints"`
 	// Aggregate current activity for the latest observed placement of each instance.
 	// Runtime snapshots feed periodic background sweeps. Counts refresh after each
 	// complete sweep. Instance listings retain their separate three-month history for
@@ -4176,6 +4322,7 @@ type applicationGetResponseCcDurableObjectApplicationJSON struct {
 	SchedulingPolicy apijson.Field
 	UpdatedAt        apijson.Field
 	Configuration    apijson.Field
+	Constraints      apijson.Field
 	Health           apijson.Field
 	Observability    apijson.Field
 	raw              string
@@ -4310,6 +4457,47 @@ func (r *ApplicationGetResponseCcDurableObjectApplicationConfigurationWranglerSS
 
 func (r applicationGetResponseCcDurableObjectApplicationConfigurationWranglerSSHJSON) RawJSON() string {
 	return r.raw
+}
+
+// The jurisdiction of a Durable Object-managed application's primary control-plane
+// object. Set this when creating the application; it cannot be changed afterwards.
+// Other placement constraints are not supported by this scheduling policy.
+type ApplicationGetResponseCcDurableObjectApplicationConstraints struct {
+	Jurisdiction ApplicationGetResponseCcDurableObjectApplicationConstraintsJurisdiction `json:"jurisdiction" api:"required"`
+	JSON         applicationGetResponseCcDurableObjectApplicationConstraintsJSON         `json:"-"`
+}
+
+// applicationGetResponseCcDurableObjectApplicationConstraintsJSON contains the
+// JSON metadata for the struct
+// [ApplicationGetResponseCcDurableObjectApplicationConstraints]
+type applicationGetResponseCcDurableObjectApplicationConstraintsJSON struct {
+	Jurisdiction apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ApplicationGetResponseCcDurableObjectApplicationConstraints) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r applicationGetResponseCcDurableObjectApplicationConstraintsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ApplicationGetResponseCcDurableObjectApplicationConstraintsJurisdiction string
+
+const (
+	ApplicationGetResponseCcDurableObjectApplicationConstraintsJurisdictionEu      ApplicationGetResponseCcDurableObjectApplicationConstraintsJurisdiction = "eu"
+	ApplicationGetResponseCcDurableObjectApplicationConstraintsJurisdictionFedramp ApplicationGetResponseCcDurableObjectApplicationConstraintsJurisdiction = "fedramp"
+	ApplicationGetResponseCcDurableObjectApplicationConstraintsJurisdictionUs      ApplicationGetResponseCcDurableObjectApplicationConstraintsJurisdiction = "us"
+)
+
+func (r ApplicationGetResponseCcDurableObjectApplicationConstraintsJurisdiction) IsKnown() bool {
+	switch r {
+	case ApplicationGetResponseCcDurableObjectApplicationConstraintsJurisdictionEu, ApplicationGetResponseCcDurableObjectApplicationConstraintsJurisdictionFedramp, ApplicationGetResponseCcDurableObjectApplicationConstraintsJurisdictionUs:
+		return true
+	}
+	return false
 }
 
 // Aggregate current activity for the latest observed placement of each instance.
@@ -4760,8 +4948,10 @@ func (r ApplicationNewParamsBodyCcContainersCreateScheduledApplicationRequestObs
 // Create a Durable Object-managed Containers application. Each Durable Object
 // creates and manages the lifecycle of its container instance. Supply `name`,
 // `scheduling_policy`, and `durable_objects`, with optional `configuration` and
-// top-level `observability` settings. Deployment configuration, instance counts,
-// scaling, constraints, versions, and rollouts do not apply.
+// top-level `observability` settings. `constraints.jurisdiction` selects the
+// jurisdiction of the application's primary control-plane object at creation time.
+// Deployment configuration, instance counts, scaling, other placement constraints,
+// versions, and rollouts do not apply.
 type ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequest struct {
 	// The customer-owned Durable Object namespace that owns this application and its
 	// instances.
@@ -4775,6 +4965,10 @@ type ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequest s
 	SchedulingPolicy param.Field[ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestSchedulingPolicy] `json:"scheduling_policy" api:"required"`
 	// Configuration for a Durable Object-managed application.
 	Configuration param.Field[ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestConfiguration] `json:"configuration"`
+	// The jurisdiction of a Durable Object-managed application's primary control-plane
+	// object. Set this when creating the application; it cannot be changed afterwards.
+	// Other placement constraints are not supported by this scheduling policy.
+	Constraints param.Field[ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestConstraints] `json:"constraints"`
 	// Application-wide logging settings for a Durable Object-managed application. The
 	// application publishes these settings to its runtime metadata. Updating them does
 	// not create a deployment or rollout.
@@ -4894,6 +5088,33 @@ type ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestCo
 
 func (r ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestConfigurationWranglerSSH) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// The jurisdiction of a Durable Object-managed application's primary control-plane
+// object. Set this when creating the application; it cannot be changed afterwards.
+// Other placement constraints are not supported by this scheduling policy.
+type ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestConstraints struct {
+	Jurisdiction param.Field[ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestConstraintsJurisdiction] `json:"jurisdiction" api:"required"`
+}
+
+func (r ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestConstraints) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestConstraintsJurisdiction string
+
+const (
+	ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestConstraintsJurisdictionEu      ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestConstraintsJurisdiction = "eu"
+	ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestConstraintsJurisdictionFedramp ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestConstraintsJurisdiction = "fedramp"
+	ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestConstraintsJurisdictionUs      ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestConstraintsJurisdiction = "us"
+)
+
+func (r ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestConstraintsJurisdiction) IsKnown() bool {
+	switch r {
+	case ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestConstraintsJurisdictionEu, ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestConstraintsJurisdictionFedramp, ApplicationNewParamsBodyCcContainersCreateDurableObjectApplicationRequestConstraintsJurisdictionUs:
+		return true
+	}
+	return false
 }
 
 // Application-wide logging settings for a Durable Object-managed application. The

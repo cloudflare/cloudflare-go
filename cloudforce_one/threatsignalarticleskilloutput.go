@@ -37,7 +37,9 @@ func NewThreatSignalArticleSkillOutputService(opts ...option.RequestOption) (r *
 	return
 }
 
-// Retrieves the stored output of a skill for a Threat Signals article.
+// Retrieves the stored output of a skill for a Threat Signals article. The
+// custom_output field is parsed JSON when the stored output is valid JSON,
+// otherwise the raw string.
 func (r *ThreatSignalArticleSkillOutputService) Get(ctx context.Context, articleID string, skillID string, query ThreatSignalArticleSkillOutputGetParams, opts ...option.RequestOption) (res *ThreatSignalArticleSkillOutputGetResponse, err error) {
 	var env ThreatSignalArticleSkillOutputGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -109,8 +111,8 @@ func (r threatSignalArticleSkillOutputGetResponseJSON) RawJSON() string {
 // JSON, otherwise raw text. Consumers must safely render or escape it.
 //
 // Union satisfied by [shared.UnionString], [shared.UnionFloat],
-// [shared.UnionBool], [ThreatSignalArticleSkillOutputGetResponseCustomOutputArray]
-// or [ThreatSignalArticleSkillOutputGetResponseCustomOutputMap].
+// [shared.UnionBool], [ThreatSignalArticleSkillOutputGetResponseCustomOutputMap]
+// or [ThreatSignalArticleSkillOutputGetResponseCustomOutputArray].
 type ThreatSignalArticleSkillOutputGetResponseCustomOutputUnion interface {
 	ImplementsThreatSignalArticleSkillOutputGetResponseCustomOutputUnion()
 }
@@ -137,23 +139,61 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ThreatSignalArticleSkillOutputGetResponseCustomOutputArray{}),
+			Type:       reflect.TypeOf(ThreatSignalArticleSkillOutputGetResponseCustomOutputMap{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ThreatSignalArticleSkillOutputGetResponseCustomOutputMap{}),
+			Type:       reflect.TypeOf(ThreatSignalArticleSkillOutputGetResponseCustomOutputArray{}),
 		},
 	)
-}
-
-type ThreatSignalArticleSkillOutputGetResponseCustomOutputArray []interface{}
-
-func (r ThreatSignalArticleSkillOutputGetResponseCustomOutputArray) ImplementsThreatSignalArticleSkillOutputGetResponseCustomOutputUnion() {
 }
 
 type ThreatSignalArticleSkillOutputGetResponseCustomOutputMap map[string]interface{}
 
 func (r ThreatSignalArticleSkillOutputGetResponseCustomOutputMap) ImplementsThreatSignalArticleSkillOutputGetResponseCustomOutputUnion() {
+}
+
+type ThreatSignalArticleSkillOutputGetResponseCustomOutputArray []ThreatSignalArticleSkillOutputGetResponseCustomOutputArrayUnionItem
+
+func (r ThreatSignalArticleSkillOutputGetResponseCustomOutputArray) ImplementsThreatSignalArticleSkillOutputGetResponseCustomOutputUnion() {
+}
+
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [ThreatSignalArticleSkillOutputGetResponseCustomOutputArrayMap].
+type ThreatSignalArticleSkillOutputGetResponseCustomOutputArrayUnionItem interface {
+	ImplementsThreatSignalArticleSkillOutputGetResponseCustomOutputArrayUnionItem()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ThreatSignalArticleSkillOutputGetResponseCustomOutputArrayUnionItem)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ThreatSignalArticleSkillOutputGetResponseCustomOutputArrayMap{}),
+		},
+	)
+}
+
+type ThreatSignalArticleSkillOutputGetResponseCustomOutputArrayMap map[string]interface{}
+
+func (r ThreatSignalArticleSkillOutputGetResponseCustomOutputArrayMap) ImplementsThreatSignalArticleSkillOutputGetResponseCustomOutputArrayUnionItem() {
 }
 
 // Whether custom_output was parsed from the stored completion text.

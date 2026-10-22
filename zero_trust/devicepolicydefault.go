@@ -98,6 +98,10 @@ type DevicePolicyDefaultEditResponse struct {
 	// List of DNS search suffixes to apply to clients. Suffixes are evaluated in
 	// order. Use an empty array to clear.
 	DNSSearchSuffixes []DevicePolicyDefaultEditResponseDNSSearchSuffix `json:"dns_search_suffixes"`
+	// Determines whether the WARP client can silently reauthenticate the user with
+	// device credentials (Microsoft Entra) instead of prompting for browser-based
+	// reauthentication.
+	EnableDeviceCredentialAuthentication bool `json:"enable_device_credential_authentication"`
 	// Whether the policy will be applied to matching devices.
 	Enabled bool `json:"enabled"`
 	// List of routes excluded in the WARP client's tunnel.
@@ -141,33 +145,34 @@ type DevicePolicyDefaultEditResponse struct {
 // devicePolicyDefaultEditResponseJSON contains the JSON metadata for the struct
 // [DevicePolicyDefaultEditResponse]
 type devicePolicyDefaultEditResponseJSON struct {
-	AllowModeSwitch            apijson.Field
-	AllowUpdates               apijson.Field
-	AllowedToLeave             apijson.Field
-	AutoConnect                apijson.Field
-	CaptivePortal              apijson.Field
-	Default                    apijson.Field
-	DisableAutoFallback        apijson.Field
-	DNSSearchSuffixes          apijson.Field
-	Enabled                    apijson.Field
-	Exclude                    apijson.Field
-	ExcludeOfficeIPs           apijson.Field
-	FallbackDomains            apijson.Field
-	GatewayUniqueID            apijson.Field
-	GlobalAcceleration         apijson.Field
-	Include                    apijson.Field
-	PolicyID                   apijson.Field
-	ProfileType                apijson.Field
-	RegisterInterfaceIPWithDNS apijson.Field
-	SccmVpnBoundarySupport     apijson.Field
-	ServiceModeV2              apijson.Field
-	SupportURL                 apijson.Field
-	SwitchLocked               apijson.Field
-	TunnelProtocol             apijson.Field
-	UninstallProtection        apijson.Field
-	VirtualNetworks            apijson.Field
-	raw                        string
-	ExtraFields                map[string]apijson.Field
+	AllowModeSwitch                      apijson.Field
+	AllowUpdates                         apijson.Field
+	AllowedToLeave                       apijson.Field
+	AutoConnect                          apijson.Field
+	CaptivePortal                        apijson.Field
+	Default                              apijson.Field
+	DisableAutoFallback                  apijson.Field
+	DNSSearchSuffixes                    apijson.Field
+	EnableDeviceCredentialAuthentication apijson.Field
+	Enabled                              apijson.Field
+	Exclude                              apijson.Field
+	ExcludeOfficeIPs                     apijson.Field
+	FallbackDomains                      apijson.Field
+	GatewayUniqueID                      apijson.Field
+	GlobalAcceleration                   apijson.Field
+	Include                              apijson.Field
+	PolicyID                             apijson.Field
+	ProfileType                          apijson.Field
+	RegisterInterfaceIPWithDNS           apijson.Field
+	SccmVpnBoundarySupport               apijson.Field
+	ServiceModeV2                        apijson.Field
+	SupportURL                           apijson.Field
+	SwitchLocked                         apijson.Field
+	TunnelProtocol                       apijson.Field
+	UninstallProtection                  apijson.Field
+	VirtualNetworks                      apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *DevicePolicyDefaultEditResponse) UnmarshalJSON(data []byte) (err error) {
@@ -334,6 +339,10 @@ type DevicePolicyDefaultGetResponse struct {
 	// List of DNS search suffixes to apply to clients. Suffixes are evaluated in
 	// order. Use an empty array to clear.
 	DNSSearchSuffixes []DevicePolicyDefaultGetResponseDNSSearchSuffix `json:"dns_search_suffixes"`
+	// Determines whether the WARP client can silently reauthenticate the user with
+	// device credentials (Microsoft Entra) instead of prompting for browser-based
+	// reauthentication.
+	EnableDeviceCredentialAuthentication bool `json:"enable_device_credential_authentication"`
 	// Whether the policy will be applied to matching devices.
 	Enabled bool `json:"enabled"`
 	// List of routes excluded in the WARP client's tunnel.
@@ -377,33 +386,34 @@ type DevicePolicyDefaultGetResponse struct {
 // devicePolicyDefaultGetResponseJSON contains the JSON metadata for the struct
 // [DevicePolicyDefaultGetResponse]
 type devicePolicyDefaultGetResponseJSON struct {
-	AllowModeSwitch            apijson.Field
-	AllowUpdates               apijson.Field
-	AllowedToLeave             apijson.Field
-	AutoConnect                apijson.Field
-	CaptivePortal              apijson.Field
-	Default                    apijson.Field
-	DisableAutoFallback        apijson.Field
-	DNSSearchSuffixes          apijson.Field
-	Enabled                    apijson.Field
-	Exclude                    apijson.Field
-	ExcludeOfficeIPs           apijson.Field
-	FallbackDomains            apijson.Field
-	GatewayUniqueID            apijson.Field
-	GlobalAcceleration         apijson.Field
-	Include                    apijson.Field
-	PolicyID                   apijson.Field
-	ProfileType                apijson.Field
-	RegisterInterfaceIPWithDNS apijson.Field
-	SccmVpnBoundarySupport     apijson.Field
-	ServiceModeV2              apijson.Field
-	SupportURL                 apijson.Field
-	SwitchLocked               apijson.Field
-	TunnelProtocol             apijson.Field
-	UninstallProtection        apijson.Field
-	VirtualNetworks            apijson.Field
-	raw                        string
-	ExtraFields                map[string]apijson.Field
+	AllowModeSwitch                      apijson.Field
+	AllowUpdates                         apijson.Field
+	AllowedToLeave                       apijson.Field
+	AutoConnect                          apijson.Field
+	CaptivePortal                        apijson.Field
+	Default                              apijson.Field
+	DisableAutoFallback                  apijson.Field
+	DNSSearchSuffixes                    apijson.Field
+	EnableDeviceCredentialAuthentication apijson.Field
+	Enabled                              apijson.Field
+	Exclude                              apijson.Field
+	ExcludeOfficeIPs                     apijson.Field
+	FallbackDomains                      apijson.Field
+	GatewayUniqueID                      apijson.Field
+	GlobalAcceleration                   apijson.Field
+	Include                              apijson.Field
+	PolicyID                             apijson.Field
+	ProfileType                          apijson.Field
+	RegisterInterfaceIPWithDNS           apijson.Field
+	SccmVpnBoundarySupport               apijson.Field
+	ServiceModeV2                        apijson.Field
+	SupportURL                           apijson.Field
+	SwitchLocked                         apijson.Field
+	TunnelProtocol                       apijson.Field
+	UninstallProtection                  apijson.Field
+	VirtualNetworks                      apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *DevicePolicyDefaultGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -569,6 +579,10 @@ type DevicePolicyDefaultEditParams struct {
 	// List of DNS search suffixes to apply to clients. Suffixes are evaluated in
 	// order. Use an empty array to clear.
 	DNSSearchSuffixes param.Field[[]DevicePolicyDefaultEditParamsDNSSearchSuffix] `json:"dns_search_suffixes"`
+	// Determines whether the WARP client can silently reauthenticate the user with
+	// device credentials (Microsoft Entra) instead of prompting for browser-based
+	// reauthentication.
+	EnableDeviceCredentialAuthentication param.Field[bool] `json:"enable_device_credential_authentication"`
 	// List of routes excluded in the WARP client's tunnel. Both 'exclude' and
 	// 'include' cannot be set in the same request.
 	Exclude param.Field[[]SplitTunnelExcludeUnionParam] `json:"exclude"`

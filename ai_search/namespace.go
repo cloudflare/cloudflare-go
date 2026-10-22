@@ -1994,10 +1994,15 @@ type NamespaceChatCompletionsParamsAISearchOptionsRetrieval struct {
 	// omitted, falls back to the instance-level retrieval_options.keyword_match_mode,
 	// then to 'and'.
 	KeywordMatchMode param.Field[NamespaceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
-	MatchThreshold   param.Field[float64]                                                                `json:"match_threshold"`
-	MaxNumResults    param.Field[int64]                                                                  `json:"max_num_results"`
-	RetrievalType    param.Field[NamespaceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType]    `json:"retrieval_type"`
-	ReturnOnFailure  param.Field[bool]                                                                   `json:"return_on_failure"`
+	// Minimum score a chunk must reach to be returned. When omitted, each instance's
+	// chunks are filtered by that instance's score_threshold, capped at the lower of
+	// the first instance's score_threshold and 0.4.
+	MatchThreshold param.Field[float64] `json:"match_threshold"`
+	// Maximum number of merged results to return. When omitted, defaults to the first
+	// instance's max_num_results, then 10.
+	MaxNumResults   param.Field[int64]                                                               `json:"max_num_results"`
+	RetrievalType   param.Field[NamespaceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType] `json:"retrieval_type"`
+	ReturnOnFailure param.Field[bool]                                                                `json:"return_on_failure"`
 }
 
 func (r NamespaceChatCompletionsParamsAISearchOptionsRetrieval) MarshalJSON() (data []byte, err error) {
@@ -2341,10 +2346,14 @@ type NamespaceSearchParamsAISearchOptionsRetrieval struct {
 	// omitted, falls back to the instance-level retrieval_options.keyword_match_mode,
 	// then to 'and'.
 	KeywordMatchMode param.Field[NamespaceSearchParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
-	MatchThreshold   param.Field[float64]                                                       `json:"match_threshold"`
-	MaxNumResults    param.Field[int64]                                                         `json:"max_num_results"`
-	RetrievalType    param.Field[NamespaceSearchParamsAISearchOptionsRetrievalRetrievalType]    `json:"retrieval_type"`
-	ReturnOnFailure  param.Field[bool]                                                          `json:"return_on_failure"`
+	// Minimum score a chunk must reach to be returned. When omitted, each instance's
+	// chunks are filtered by that instance's score_threshold, capped at 0.4.
+	MatchThreshold param.Field[float64] `json:"match_threshold"`
+	// Maximum number of merged results to return. When omitted, defaults to the sum of
+	// the searched instances' max_num_results (each falling back to 10), up to 50.
+	MaxNumResults   param.Field[int64]                                                      `json:"max_num_results"`
+	RetrievalType   param.Field[NamespaceSearchParamsAISearchOptionsRetrievalRetrievalType] `json:"retrieval_type"`
+	ReturnOnFailure param.Field[bool]                                                       `json:"return_on_failure"`
 }
 
 func (r NamespaceSearchParamsAISearchOptionsRetrieval) MarshalJSON() (data []byte, err error) {

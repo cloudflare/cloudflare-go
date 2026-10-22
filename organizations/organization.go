@@ -21,6 +21,17 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
+// User API tokens can list and create Organizations, but reading, updating, or
+// deleting an Organization requires a Global API key and your registered email
+// address. The `cloudflare_organization` Terraform resource therefore requires a
+// Global API key for its full lifecycle.
+//
+// See
+// [Organizations authentication limitations](https://developers.cloudflare.com/fundamentals/organizations/limitations/#api-authentication)
+// for credential compatibility by operation. Each endpoint’s **Security** section
+// lists its supported authentication methods, with **Accepted Permissions** where
+// applicable.
+//
 // OrganizationService contains methods and other services that help with
 // interacting with the cloudflare API.
 //

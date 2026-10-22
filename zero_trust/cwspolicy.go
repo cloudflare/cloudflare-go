@@ -38,8 +38,8 @@ func NewCWSPolicyService(opts ...option.RequestOption) (r *CWSPolicyService) {
 	return
 }
 
-// Creates a policy from inline Rego source and an entrypoint. Omit filter to apply
-// the policy to every request.
+// Creates a policy from inline Rego source, an entrypoint, and a filter
+// expression.
 func (r *CWSPolicyService) New(ctx context.Context, params CWSPolicyNewParams, opts ...option.RequestOption) (res *Policy, err error) {
 	var env CWSPolicyNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -56,8 +56,7 @@ func (r *CWSPolicyService) New(ctx context.Context, params CWSPolicyNewParams, o
 	return res, nil
 }
 
-// Replaces the policy's configuration. Omit filter to apply the policy to every
-// request. Omit tags or use {} to clear them.
+// Replaces the policy's configuration. Omit tags or use {} to clear them.
 func (r *CWSPolicyService) Update(ctx context.Context, policyID string, params CWSPolicyUpdateParams, opts ...option.RequestOption) (res *Policy, err error) {
 	var env CWSPolicyUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -155,9 +154,9 @@ type Policy struct {
 	// Non-function rule declared in rego_source. Evaluation uses
 	// data.<package_path>.<entrypoint>.
 	Entrypoint string `json:"entrypoint" api:"required"`
-	// Optional filter expression that determines whether this policy applies. Null
-	// means the policy applies to every request. Maximum 4096 UTF-8 bytes.
-	Filter string `json:"filter" api:"required,nullable"`
+	// Filter expression that determines whether this policy applies. Maximum 4096
+	// UTF-8 bytes.
+	Filter string `json:"filter" api:"required"`
 	// Human-readable name; unique per account
 	Name string `json:"name" api:"required"`
 	// Dotted path derived from rego_source. Begins with policy. and is unique per
@@ -225,6 +224,9 @@ type CWSPolicyNewParams struct {
 	// Non-function rule declared in rego_source. Evaluation uses
 	// data.<package_path>.<entrypoint>.
 	Entrypoint param.Field[string] `json:"entrypoint" api:"required"`
+	// Filter expression that determines whether this policy applies. Maximum 4096
+	// UTF-8 bytes.
+	Filter param.Field[string] `json:"filter" api:"required"`
 	// Name of the policy
 	Name param.Field[string] `json:"name" api:"required"`
 	// Inline Rego source with a package beginning with "policy." Maximum 16384 UTF-8
@@ -232,9 +234,6 @@ type CWSPolicyNewParams struct {
 	RegoSource param.Field[string] `json:"rego_source" api:"required"`
 	// Optional free-form description.
 	Description param.Field[string] `json:"description"`
-	// Optional filter expression that determines whether this policy applies. Omit or
-	// set null to apply the policy to every request. Maximum 4096 UTF-8 bytes.
-	Filter param.Field[string] `json:"filter"`
 	// Tags to attach. Keys are limited to 256 UTF-8 bytes and values to 1024 UTF-8
 	// bytes.
 	Tags param.Field[map[string]string] `json:"tags"`
@@ -369,6 +368,9 @@ type CWSPolicyUpdateParams struct {
 	// Non-function rule declared in rego_source. Evaluation uses
 	// data.<package_path>.<entrypoint>.
 	Entrypoint param.Field[string] `json:"entrypoint" api:"required"`
+	// Filter expression that determines whether this policy applies. Maximum 4096
+	// UTF-8 bytes.
+	Filter param.Field[string] `json:"filter" api:"required"`
 	// Name of the policy
 	Name param.Field[string] `json:"name" api:"required"`
 	// Inline Rego source with a package beginning with "policy." Maximum 16384 UTF-8
@@ -376,9 +378,6 @@ type CWSPolicyUpdateParams struct {
 	RegoSource param.Field[string] `json:"rego_source" api:"required"`
 	// Optional free-form description.
 	Description param.Field[string] `json:"description"`
-	// Optional filter expression that determines whether this policy applies. Omit or
-	// set null to apply the policy to every request. Maximum 4096 UTF-8 bytes.
-	Filter param.Field[string] `json:"filter"`
 	// Replacement tag set. Omit or use {} to clear. Keys are limited to 256 UTF-8
 	// bytes and values to 1024 UTF-8 bytes.
 	Tags param.Field[map[string]string] `json:"tags"`

@@ -132,7 +132,9 @@ func TestSuppressionEditWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("12345678"),
 			ExpiresAt: cloudflare.F(time.Now()),
 			Note:      cloudflare.F("Customer re-confirmed opt-in"),
-			Scope:     cloudflare.F[any](map[string]interface{}{}),
+			Scope: cloudflare.F[any](map[string]interface{}{
+				"type": "account",
+			}),
 		},
 	)
 	if err != nil {

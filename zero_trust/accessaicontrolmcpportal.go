@@ -245,6 +245,8 @@ type AccessAIControlMcpPortalNewResponseServer struct {
 	ModifiedAt                   time.Time `json:"modified_at" format:"date-time"`
 	ModifiedBy                   string    `json:"modified_by"`
 	OnBehalf                     bool      `json:"on_behalf"`
+	// Timestamp of the most recent successful admin OAuth registration.
+	RegisteredAt time.Time `json:"registered_at" api:"nullable" format:"date-time"`
 	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway.
 	SecureWebGateway bool `json:"secure_web_gateway"`
 	// Current sync state of the server
@@ -278,6 +280,7 @@ type accessAIControlMcpPortalNewResponseServerJSON struct {
 	ModifiedAt                   apijson.Field
 	ModifiedBy                   apijson.Field
 	OnBehalf                     apijson.Field
+	RegisteredAt                 apijson.Field
 	SecureWebGateway             apijson.Field
 	Status                       apijson.Field
 	UpdatedPrompts               apijson.Field
@@ -677,6 +680,8 @@ type AccessAIControlMcpPortalUpdateResponseServer struct {
 	ModifiedAt                   time.Time `json:"modified_at" format:"date-time"`
 	ModifiedBy                   string    `json:"modified_by"`
 	OnBehalf                     bool      `json:"on_behalf"`
+	// Timestamp of the most recent successful admin OAuth registration.
+	RegisteredAt time.Time `json:"registered_at" api:"nullable" format:"date-time"`
 	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway.
 	SecureWebGateway bool `json:"secure_web_gateway"`
 	// Current sync state of the server
@@ -710,6 +715,7 @@ type accessAIControlMcpPortalUpdateResponseServerJSON struct {
 	ModifiedAt                   apijson.Field
 	ModifiedBy                   apijson.Field
 	OnBehalf                     apijson.Field
+	RegisteredAt                 apijson.Field
 	SecureWebGateway             apijson.Field
 	Status                       apijson.Field
 	UpdatedPrompts               apijson.Field
@@ -1111,6 +1117,8 @@ type AccessAIControlMcpPortalListResponseServer struct {
 	ModifiedAt                   time.Time `json:"modified_at" format:"date-time"`
 	ModifiedBy                   string    `json:"modified_by"`
 	OnBehalf                     bool      `json:"on_behalf"`
+	// Timestamp of the most recent successful admin OAuth registration.
+	RegisteredAt time.Time `json:"registered_at" api:"nullable" format:"date-time"`
 	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway.
 	SecureWebGateway bool `json:"secure_web_gateway"`
 	// Current sync state of the server
@@ -1144,6 +1152,7 @@ type accessAIControlMcpPortalListResponseServerJSON struct {
 	ModifiedAt                   apijson.Field
 	ModifiedBy                   apijson.Field
 	OnBehalf                     apijson.Field
+	RegisteredAt                 apijson.Field
 	SecureWebGateway             apijson.Field
 	Status                       apijson.Field
 	UpdatedPrompts               apijson.Field
@@ -1626,6 +1635,8 @@ type AccessAIControlMcpPortalReadResponseServer struct {
 	ModifiedAt                   time.Time `json:"modified_at" format:"date-time"`
 	ModifiedBy                   string    `json:"modified_by"`
 	OnBehalf                     bool      `json:"on_behalf"`
+	// Timestamp of the most recent successful admin OAuth registration.
+	RegisteredAt time.Time `json:"registered_at" api:"nullable" format:"date-time"`
 	// Route outbound traffic to this MCP server through Zero Trust Secure Web Gateway.
 	SecureWebGateway bool `json:"secure_web_gateway"`
 	// Current sync state of the server
@@ -1659,6 +1670,7 @@ type accessAIControlMcpPortalReadResponseServerJSON struct {
 	ModifiedAt                   apijson.Field
 	ModifiedBy                   apijson.Field
 	OnBehalf                     apijson.Field
+	RegisteredAt                 apijson.Field
 	SecureWebGateway             apijson.Field
 	Status                       apijson.Field
 	UpdatedPrompts               apijson.Field

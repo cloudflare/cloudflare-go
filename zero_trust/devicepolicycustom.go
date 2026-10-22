@@ -194,6 +194,10 @@ type DevicePolicyCustomNewParams struct {
 	// List of DNS search suffixes to apply to clients. Suffixes are evaluated in
 	// order. Use an empty array to clear.
 	DNSSearchSuffixes param.Field[[]DevicePolicyCustomNewParamsDNSSearchSuffix] `json:"dns_search_suffixes"`
+	// Determines whether the WARP client can silently reauthenticate the user with
+	// device credentials (Microsoft Entra) instead of prompting for browser-based
+	// reauthentication.
+	EnableDeviceCredentialAuthentication param.Field[bool] `json:"enable_device_credential_authentication"`
 	// Whether the policy will be applied to matching devices.
 	Enabled param.Field[bool] `json:"enabled"`
 	// List of routes excluded in the WARP client's tunnel. Both 'exclude' and
@@ -463,6 +467,10 @@ type DevicePolicyCustomEditParams struct {
 	// List of DNS search suffixes to apply to clients. Suffixes are evaluated in
 	// order. Use an empty array to clear.
 	DNSSearchSuffixes param.Field[[]DevicePolicyCustomEditParamsDNSSearchSuffix] `json:"dns_search_suffixes"`
+	// Determines whether the WARP client can silently reauthenticate the user with
+	// device credentials (Microsoft Entra) instead of prompting for browser-based
+	// reauthentication.
+	EnableDeviceCredentialAuthentication param.Field[bool] `json:"enable_device_credential_authentication"`
 	// Whether the policy will be applied to matching devices.
 	Enabled param.Field[bool] `json:"enabled"`
 	// List of routes excluded in the WARP client's tunnel. Both 'exclude' and

@@ -566,19 +566,39 @@ type ThreatSignalArticleListParams struct {
 	// pagination, ordering, totals, and article filters come from the cursor. Sending
 	// `per_page`, `sort`, `include_total`, or any article filter alongside it returns
 	// a 400 `CursorFilterConflictError`.
-	Cursor          param.Field[string]                                  `query:"cursor"`
-	FeedCategory    param.Field[string]                                  `query:"feed_category"`
-	FeedID          param.Field[string]                                  `query:"feed_id" format:"uuid"`
-	FetchedAfter    param.Field[time.Time]                               `query:"fetched_after" format:"date-time"`
-	FetchedBefore   param.Field[time.Time]                               `query:"fetched_before" format:"date-time"`
-	IncludeTotal    param.Field[bool]                                    `query:"include_total"`
-	PerPage         param.Field[int64]                                   `query:"per_page"`
-	PublishedAfter  param.Field[time.Time]                               `query:"published_after" format:"date-time"`
-	PublishedBefore param.Field[time.Time]                               `query:"published_before" format:"date-time"`
-	Read            param.Field[bool]                                    `query:"read"`
-	Search          param.Field[string]                                  `query:"search"`
-	Sort            param.Field[string]                                  `query:"sort"`
-	SourceType      param.Field[ThreatSignalArticleListParamsSourceType] `query:"source_type"`
+	Cursor param.Field[string] `query:"cursor"`
+	// Exact feed-category filter after trimming. Omit to include every category.
+	FeedCategory param.Field[string] `query:"feed_category"`
+	// Feed UUID filter. Omit to include articles from every account feed.
+	FeedID param.Field[string] `query:"feed_id" format:"uuid"`
+	// Include articles fetched at or after this ISO 8601 date-time with Z or a numeric
+	// UTC offset; normalized to UTC.
+	FetchedAfter param.Field[time.Time] `query:"fetched_after" format:"date-time"`
+	// Include articles fetched at or before this ISO 8601 date-time with Z or a
+	// numeric UTC offset; normalized to UTC.
+	FetchedBefore param.Field[time.Time] `query:"fetched_before" format:"date-time"`
+	// When true on the first page, count matching articles and return an exact total.
+	// Defaults to false; cursor pages do not recalculate totals.
+	IncludeTotal param.Field[bool] `query:"include_total"`
+	// Number of articles per cursor page, from 1 to 100. Defaults to 20.
+	PerPage param.Field[int64] `query:"per_page"`
+	// Include articles published at or after this ISO 8601 date-time with Z or a
+	// numeric UTC offset; normalized to UTC.
+	PublishedAfter param.Field[time.Time] `query:"published_after" format:"date-time"`
+	// Include articles published at or before this ISO 8601 date-time with Z or a
+	// numeric UTC offset; normalized to UTC.
+	PublishedBefore param.Field[time.Time] `query:"published_before" format:"date-time"`
+	// Filter by read state. Accepts true, false, 1, or 0; omit to include read and
+	// unread articles.
+	Read param.Field[bool] `query:"read"`
+	// NFC-normalized, trimmed literal substring filter on article titles; ASCII
+	// case-insensitive, from 1 to 500 characters.
+	Search param.Field[string] `query:"search"`
+	// Sort by fetched_at, published_at, or title. Prefix the field with - for
+	// descending order; defaults to -fetched_at.
+	Sort param.Field[string] `query:"sort"`
+	// Filter by curated or custom feed source. Omit to include both source types.
+	SourceType param.Field[ThreatSignalArticleListParamsSourceType] `query:"source_type"`
 	// Legacy human-readable tag-value filter. Ignored when tag_id is supplied; prefer
 	// tag_id.
 	Tag param.Field[string] `query:"tag"`
@@ -604,6 +624,7 @@ func (r ThreatSignalArticleListParams) URLQuery() (v url.Values) {
 	})
 }
 
+// Filter by curated or custom feed source. Omit to include both source types.
 type ThreatSignalArticleListParamsSourceType string
 
 const (
@@ -698,9 +719,11 @@ func (r ThreatSignalArticleListResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ThreatSignalArticleBulkEditParams struct {
-	AccountID  param.Field[string]   `path:"account_id" api:"required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Array of article UUIDs to mark (1-50).
 	ArticleIDs param.Field[[]string] `json:"article_ids" api:"required" format:"uuid"`
-	Read       param.Field[bool]     `json:"read" api:"required"`
+	// True to mark read, false to mark unread.
+	Read param.Field[bool] `json:"read" api:"required"`
 }
 
 func (r ThreatSignalArticleBulkEditParams) MarshalJSON() (data []byte, err error) {
@@ -826,7 +849,8 @@ func (r ThreatSignalArticleBulkEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type ThreatSignalArticleEditParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Read      param.Field[bool]   `json:"read" api:"required"`
+	// True to mark the article read, false to mark unread.
+	Read param.Field[bool] `json:"read" api:"required"`
 }
 
 func (r ThreatSignalArticleEditParams) MarshalJSON() (data []byte, err error) {

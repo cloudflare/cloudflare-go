@@ -5,6 +5,7 @@ package pagination
 import (
 	"context"
 	"fmt"
+	"iter"
 	"net/http"
 	"strconv"
 
@@ -161,6 +162,16 @@ func (r *V4PagePaginationAutoPager[T]) Index() int {
 	return r.run
 }
 
+func (r *V4PagePaginationAutoPager[T]) All() iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for r.Next() {
+			if !yield(r.Current()) {
+				break
+			}
+		}
+	}
+}
+
 type V4PagePaginationArrayResultInfo struct {
 	Page    int64                               `json:"page"`
 	PerPage int64                               `json:"per_page"`
@@ -286,6 +297,16 @@ func (r *V4PagePaginationArrayAutoPager[T]) Err() error {
 
 func (r *V4PagePaginationArrayAutoPager[T]) Index() int {
 	return r.run
+}
+
+func (r *V4PagePaginationArrayAutoPager[T]) All() iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for r.Next() {
+			if !yield(r.Current()) {
+				break
+			}
+		}
+	}
 }
 
 type CursorPaginationResultInfo struct {
@@ -415,6 +436,16 @@ func (r *CursorPaginationAutoPager[T]) Err() error {
 
 func (r *CursorPaginationAutoPager[T]) Index() int {
 	return r.run
+}
+
+func (r *CursorPaginationAutoPager[T]) All() iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for r.Next() {
+			if !yield(r.Current()) {
+				break
+			}
+		}
+	}
 }
 
 type CursorPaginationAfterResultInfo struct {
@@ -563,6 +594,16 @@ func (r *CursorPaginationAfterAutoPager[T]) Index() int {
 	return r.run
 }
 
+func (r *CursorPaginationAfterAutoPager[T]) All() iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for r.Next() {
+			if !yield(r.Current()) {
+				break
+			}
+		}
+	}
+}
+
 type CursorLimitPaginationResultInfo struct {
 	Count   int64                               `json:"count"`
 	Cursor  string                              `json:"cursor"`
@@ -690,6 +731,16 @@ func (r *CursorLimitPaginationAutoPager[T]) Err() error {
 
 func (r *CursorLimitPaginationAutoPager[T]) Index() int {
 	return r.run
+}
+
+func (r *CursorLimitPaginationAutoPager[T]) All() iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for r.Next() {
+			if !yield(r.Current()) {
+				break
+			}
+		}
+	}
 }
 
 type ContainersInstancesV1PaginationResult[T any] struct {
@@ -842,6 +893,16 @@ func (r *ContainersInstancesV1PaginationAutoPager[T]) Index() int {
 	return r.run
 }
 
+func (r *ContainersInstancesV1PaginationAutoPager[T]) All() iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for r.Next() {
+			if !yield(r.Current()) {
+				break
+			}
+		}
+	}
+}
+
 type PageTokenPaginationResultInfo struct {
 	NextPageToken string                            `json:"next_page_token"`
 	PageToken     string                            `json:"page_token"`
@@ -971,6 +1032,16 @@ func (r *PageTokenPaginationAutoPager[T]) Index() int {
 	return r.run
 }
 
+func (r *PageTokenPaginationAutoPager[T]) All() iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for r.Next() {
+			if !yield(r.Current()) {
+				break
+			}
+		}
+	}
+}
+
 type SinglePage[T any] struct {
 	Result []T            `json:"result"`
 	JSON   singlePageJSON `json:"-"`
@@ -1067,4 +1138,14 @@ func (r *SinglePageAutoPager[T]) Err() error {
 
 func (r *SinglePageAutoPager[T]) Index() int {
 	return r.run
+}
+
+func (r *SinglePageAutoPager[T]) All() iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for r.Next() {
+			if !yield(r.Current()) {
+				break
+			}
+		}
+	}
 }

@@ -50,7 +50,7 @@ func TestObservabilityDestinationNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestObservabilityDestinationUpdate(t *testing.T) {
+func TestObservabilityDestinationUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -68,14 +68,15 @@ func TestObservabilityDestinationUpdate(t *testing.T) {
 		"slug",
 		workers.ObservabilityDestinationUpdateParams{
 			AccountID: cloudflare.F("account_id"),
+			Enabled:   cloudflare.F(true),
 			Configuration: cloudflare.F(workers.ObservabilityDestinationUpdateParamsConfiguration{
 				Headers: cloudflare.F(map[string]string{
 					"foo": "string",
 				}),
-				Type: cloudflare.F(workers.ObservabilityDestinationUpdateParamsConfigurationTypeLogpush),
-				URL:  cloudflare.F("url"),
+				Type:           cloudflare.F(workers.ObservabilityDestinationUpdateParamsConfigurationTypeLogpush),
+				URL:            cloudflare.F("url"),
+				ReplaceHeaders: cloudflare.F(true),
 			}),
-			Enabled: cloudflare.F(true),
 		},
 	)
 	if err != nil {

@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
-func TestBillingTopupConfigNew(t *testing.T) {
+func TestBillingTopupConfigNewWithOptionalParams(t *testing.T) {
 	t.Skip("HTTP 404 error from prism")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -31,8 +31,10 @@ func TestBillingTopupConfigNew(t *testing.T) {
 	)
 	_, err := client.AIGateway.Billing.Topup.Config.New(context.TODO(), ai_gateway.BillingTopupConfigNewParams{
 		AccountID: cloudflare.F("account_id"),
-		Amount:    cloudflare.F(int64(5000)),
-		Threshold: cloudflare.F(int64(500)),
+		Body: ai_gateway.BillingTopupConfigNewParamsBodyObject{
+			Amount:    cloudflare.F(int64(5000)),
+			Threshold: cloudflare.F(int64(500)),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

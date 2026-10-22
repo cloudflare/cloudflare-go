@@ -23,6 +23,7 @@ type DLPService struct {
 	Profiles           *DLPProfileService
 	Limits             *DLPLimitService
 	Entries            *DLPEntryService
+	Validators         *DLPValidatorService
 	SensitivityGroups  *DLPSensitivityGroupService
 	DataTagCategories  *DLPDataTagCategoryService
 	DataClasses        *DLPDataClassService
@@ -43,6 +44,7 @@ func NewDLPService(opts ...option.RequestOption) (r *DLPService) {
 	r.Profiles = NewDLPProfileService(opts...)
 	r.Limits = NewDLPLimitService(opts...)
 	r.Entries = NewDLPEntryService(opts...)
+	r.Validators = NewDLPValidatorService(opts...)
 	r.SensitivityGroups = NewDLPSensitivityGroupService(opts...)
 	r.DataTagCategories = NewDLPDataTagCategoryService(opts...)
 	r.DataClasses = NewDLPDataClassService(opts...)

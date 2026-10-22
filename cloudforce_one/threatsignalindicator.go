@@ -149,18 +149,28 @@ func (r threatSignalIndicatorListResponsePaginationJSON) RawJSON() string {
 }
 
 type ThreatSignalIndicatorListParams struct {
-	AccountID    param.Field[string] `path:"account_id" api:"required"`
-	ArticleID    param.Field[string] `query:"article_id" format:"uuid"`
-	Cursor       param.Field[string] `query:"cursor"`
-	FeedID       param.Field[string] `query:"feed_id" format:"uuid"`
-	IncludeTotal param.Field[bool]   `query:"include_total"`
-	PerPage      param.Field[int64]  `query:"per_page"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Article UUID filter. Omit to include indicators from every article.
+	ArticleID param.Field[string] `query:"article_id" format:"uuid"`
+	// Opaque cursor from the previous response's `pagination.cursor`. When provided,
+	// page size, ordering, and filters come from the cursor. Sending `per_page`,
+	// `sort`, `include_total`, `feed_id`, `article_id`, or `search` alongside it
+	// returns a 400 `CursorFilterConflictError`.
+	Cursor param.Field[string] `query:"cursor"`
+	// Feed UUID filter. Omit to include indicators from every account feed.
+	FeedID param.Field[string] `query:"feed_id" format:"uuid"`
+	// When true on the first page, count matching indicators and return an exact
+	// total. Defaults to false; cursor pages do not recalculate totals.
+	IncludeTotal param.Field[bool] `query:"include_total"`
+	// Number of indicators per cursor page, from 1 to 100. Defaults to 20.
+	PerPage param.Field[int64] `query:"per_page"`
 	// NFC-normalized and trimmed, case-insensitive literal substring search of
 	// indicator values. Requires 3–500 Unicode code points; the upper code-point bound
 	// is described here because OpenAPI string length cannot precisely express it
 	// without imposing UTF-16 semantics.
 	Search param.Field[string] `query:"search"`
-	Sort   param.Field[string] `query:"sort"`
+	// Sort by id. Use id for ascending or -id for descending order; defaults to id.
+	Sort param.Field[string] `query:"sort"`
 }
 
 // URLQuery serializes [ThreatSignalIndicatorListParams]'s query parameters as

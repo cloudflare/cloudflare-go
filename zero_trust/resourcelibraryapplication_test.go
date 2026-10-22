@@ -99,6 +99,7 @@ func TestResourceLibraryApplicationListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.ResourceLibrary.Applications.List(context.TODO(), zero_trust.ResourceLibraryApplicationListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Cursor:    cloudflare.F("cursor"),
 		Fields:    cloudflare.F("fields"),
 		Filter:    cloudflare.F("filter"),
 		Limit:     cloudflare.F(int64(0)),

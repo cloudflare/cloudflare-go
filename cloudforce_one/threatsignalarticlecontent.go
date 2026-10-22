@@ -35,7 +35,10 @@ func NewThreatSignalArticleContentService(opts ...option.RequestOption) (r *Thre
 	return
 }
 
-// Retrieves the stored body of a Threat Signals article as plain text or HTML.
+// Retrieves the stored content of a Threat Signals article, unchanged. Depending
+// on how the article was captured from its source, the content is HTML, Markdown,
+// or plain text. The format parameter sets only the response Content-Type; it does
+// not convert the content.
 func (r *ThreatSignalArticleContentService) Get(ctx context.Context, articleID string, params ThreatSignalArticleContentGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/html")}, opts...)
@@ -53,8 +56,10 @@ func (r *ThreatSignalArticleContentService) Get(ctx context.Context, articleID s
 }
 
 type ThreatSignalArticleContentGetParams struct {
-	AccountID param.Field[string]                                    `path:"account_id" api:"required"`
-	Format    param.Field[ThreatSignalArticleContentGetParamsFormat] `query:"format"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Response Content-Type: text (the default) for text/plain or html for text/html.
+	// Neither value converts the content. html is deprecated; use text.
+	Format param.Field[ThreatSignalArticleContentGetParamsFormat] `query:"format"`
 }
 
 // URLQuery serializes [ThreatSignalArticleContentGetParams]'s query parameters as
@@ -66,6 +71,8 @@ func (r ThreatSignalArticleContentGetParams) URLQuery() (v url.Values) {
 	})
 }
 
+// Response Content-Type: text (the default) for text/plain or html for text/html.
+// Neither value converts the content. html is deprecated; use text.
 type ThreatSignalArticleContentGetParamsFormat string
 
 const (

@@ -57,6 +57,7 @@ func (r *PrecursorService) Update(ctx context.Context, params PrecursorUpdatePar
 		opts = append(opts, option.WithHeader("Cloudflare-Version", fmt.Sprintf("%v", params.CloudflareVersion)))
 	}
 	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithHeader("Cloudflare-Version", "1.0")}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -78,6 +79,7 @@ func (r *PrecursorService) Get(ctx context.Context, params PrecursorGetParams, o
 		opts = append(opts, option.WithHeader("Cloudflare-Version", fmt.Sprintf("%v", params.CloudflareVersion)))
 	}
 	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithHeader("Cloudflare-Version", "1.0")}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err

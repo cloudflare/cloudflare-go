@@ -7,12 +7,14 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/tidwall/gjson"
 )
 
 // BillingTopupConfigService contains methods and other services that help with
@@ -34,8 +36,10 @@ func NewBillingTopupConfigService(opts ...option.RequestOption) (r *BillingTopup
 	return
 }
 
-// Configure auto top-up with a balance threshold and top-up amount. Dashboard
-// sessions only: API token, OAuth, and service credentials are rejected with 403.
+// Configure auto top-up with a balance threshold and top-up amount. Requests that
+// add a payment method first return authentication details. The configuration is
+// saved only after the authenticated setup is submitted. Dashboard sessions only:
+// API token, OAuth, and service credentials are rejected with 403.
 func (r *BillingTopupConfigService) New(ctx context.Context, params BillingTopupConfigNewParams, opts ...option.RequestOption) (res *BillingTopupConfigNewResponse, err error) {
 	var env BillingTopupConfigNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -88,26 +92,112 @@ func (r *BillingTopupConfigService) Get(ctx context.Context, query BillingTopupC
 }
 
 type BillingTopupConfigNewResponse struct {
-	Amount    float64                           `json:"amount" api:"required"`
-	Threshold float64                           `json:"threshold" api:"required"`
-	JSON      billingTopupConfigNewResponseJSON `json:"-"`
+	Amount        float64                             `json:"amount" api:"required"`
+	Threshold     float64                             `json:"threshold" api:"required"`
+	ClientSecret  string                              `json:"client_secret"`
+	SetupIntentID string                              `json:"setup_intent_id"`
+	Status        BillingTopupConfigNewResponseStatus `json:"status"`
+	JSON          billingTopupConfigNewResponseJSON   `json:"-"`
+	union         BillingTopupConfigNewResponseUnion
 }
 
 // billingTopupConfigNewResponseJSON contains the JSON metadata for the struct
 // [BillingTopupConfigNewResponse]
 type billingTopupConfigNewResponseJSON struct {
+	Amount        apijson.Field
+	Threshold     apijson.Field
+	ClientSecret  apijson.Field
+	SetupIntentID apijson.Field
+	Status        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r billingTopupConfigNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *BillingTopupConfigNewResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = BillingTopupConfigNewResponse{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [BillingTopupConfigNewResponseUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [BillingTopupConfigNewResponseObject],
+// [BillingTopupConfigNewResponseObject], [BillingTopupConfigNewResponseObject].
+func (r BillingTopupConfigNewResponse) AsUnion() BillingTopupConfigNewResponseUnion {
+	return r.union
+}
+
+// Union satisfied by [BillingTopupConfigNewResponseObject],
+// [BillingTopupConfigNewResponseObject] or [BillingTopupConfigNewResponseObject].
+type BillingTopupConfigNewResponseUnion interface {
+	implementsBillingTopupConfigNewResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*BillingTopupConfigNewResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(BillingTopupConfigNewResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(BillingTopupConfigNewResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(BillingTopupConfigNewResponseObject{}),
+		},
+	)
+}
+
+type BillingTopupConfigNewResponseObject struct {
+	Amount    float64                                 `json:"amount" api:"required"`
+	Threshold float64                                 `json:"threshold" api:"required"`
+	JSON      billingTopupConfigNewResponseObjectJSON `json:"-"`
+}
+
+// billingTopupConfigNewResponseObjectJSON contains the JSON metadata for the
+// struct [BillingTopupConfigNewResponseObject]
+type billingTopupConfigNewResponseObjectJSON struct {
 	Amount      apijson.Field
 	Threshold   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BillingTopupConfigNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *BillingTopupConfigNewResponseObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r billingTopupConfigNewResponseJSON) RawJSON() string {
+func (r billingTopupConfigNewResponseObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r BillingTopupConfigNewResponseObject) implementsBillingTopupConfigNewResponse() {}
+
+type BillingTopupConfigNewResponseStatus string
+
+const (
+	BillingTopupConfigNewResponseStatusConfigured     BillingTopupConfigNewResponseStatus = "configured"
+	BillingTopupConfigNewResponseStatusRequiresAction BillingTopupConfigNewResponseStatus = "requires_action"
+)
+
+func (r BillingTopupConfigNewResponseStatus) IsKnown() bool {
+	switch r {
+	case BillingTopupConfigNewResponseStatusConfigured, BillingTopupConfigNewResponseStatusRequiresAction:
+		return true
+	}
+	return false
 }
 
 type BillingTopupConfigDeleteResponse = interface{}
@@ -142,16 +232,54 @@ func (r billingTopupConfigGetResponseJSON) RawJSON() string {
 }
 
 type BillingTopupConfigNewParams struct {
-	AccountID param.Field[string] `path:"account_id" api:"required"`
+	AccountID param.Field[string]                  `path:"account_id" api:"required"`
+	Body      BillingTopupConfigNewParamsBodyUnion `json:"body" api:"required"`
+}
+
+func (r BillingTopupConfigNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type BillingTopupConfigNewParamsBody struct {
+	// Auto top-up amount in cents (min 1000).
+	Amount param.Field[int64] `json:"amount" api:"required"`
+	// Balance threshold in cents that triggers auto top-up (min 500).
+	Threshold param.Field[int64] `json:"threshold" api:"required"`
+	// Version of the off-session auto-top-up consent accepted by the user.
+	ConsentVersion param.Field[string] `json:"consent_version"`
+	// Card to authenticate for future automatic top-ups.
+	PaymentMethodID param.Field[string] `json:"payment_method_id"`
+	// Client-generated UUID that makes payment-method setup safe to retry.
+	SetupIdempotencyKey param.Field[string] `json:"setup_idempotency_key" format:"uuid"`
+	// Successfully confirmed payment-method setup identifier.
+	SetupIntentID param.Field[string] `json:"setup_intent_id"`
+}
+
+func (r BillingTopupConfigNewParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BillingTopupConfigNewParamsBody) implementsBillingTopupConfigNewParamsBodyUnion() {}
+
+// Satisfied by [ai_gateway.BillingTopupConfigNewParamsBodyObject],
+// [ai_gateway.BillingTopupConfigNewParamsBodyObject],
+// [BillingTopupConfigNewParamsBody].
+type BillingTopupConfigNewParamsBodyUnion interface {
+	implementsBillingTopupConfigNewParamsBodyUnion()
+}
+
+type BillingTopupConfigNewParamsBodyObject struct {
 	// Auto top-up amount in cents (min 1000).
 	Amount param.Field[int64] `json:"amount" api:"required"`
 	// Balance threshold in cents that triggers auto top-up (min 500).
 	Threshold param.Field[int64] `json:"threshold" api:"required"`
 }
 
-func (r BillingTopupConfigNewParams) MarshalJSON() (data []byte, err error) {
+func (r BillingTopupConfigNewParamsBodyObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+func (r BillingTopupConfigNewParamsBodyObject) implementsBillingTopupConfigNewParamsBodyUnion() {}
 
 type BillingTopupConfigNewResponseEnvelope struct {
 	Errors     []BillingTopupConfigNewResponseEnvelopeErrors   `json:"errors" api:"required"`

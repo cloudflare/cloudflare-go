@@ -111,9 +111,14 @@ func (r threatSignalSearchSearchResponseResultJSON) RawJSON() string {
 }
 
 type ThreatSignalSearchSearchParams struct {
-	AccountID  param.Field[string]                                   `path:"account_id" api:"required"`
-	Query      param.Field[string]                                   `query:"query" api:"required"`
-	FeedID     param.Field[string]                                   `query:"feed_id" format:"uuid"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Keyword and semantic article-search text, from 1 to 1000 characters.
+	Query param.Field[string] `query:"query" api:"required"`
+	// Optional feed UUID that restricts results to articles from that feed.
+	FeedID param.Field[string] `query:"feed_id" format:"uuid"`
+	// Maximum search matches to request, an integer from 1 to 50. Defaults to 20 when
+	// omitted or empty; multiple matches from one article can produce fewer returned
+	// articles.
 	MaxResults param.Field[ThreatSignalSearchSearchParamsMaxResults] `query:"max_results"`
 }
 
@@ -126,6 +131,9 @@ func (r ThreatSignalSearchSearchParams) URLQuery() (v url.Values) {
 	})
 }
 
+// Maximum search matches to request, an integer from 1 to 50. Defaults to 20 when
+// omitted or empty; multiple matches from one article can produce fewer returned
+// articles.
 type ThreatSignalSearchSearchParamsMaxResults string
 
 const (

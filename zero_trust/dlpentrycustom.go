@@ -155,23 +155,30 @@ type DLPEntryCustomNewResponse struct {
 	UpdatedAt   time.Time `json:"updated_at" api:"required" format:"date-time"`
 	Description string    `json:"description" api:"nullable"`
 	// Deprecated: deprecated
-	ProfileID string                        `json:"profile_id" api:"nullable" format:"uuid"`
-	JSON      dlpEntryCustomNewResponseJSON `json:"-"`
+	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
+	// Validators this entry references, by id, at most 10. An empty list means the
+	// entry references none.
+	//
+	// Returned by the entry endpoints. Not returned on entries embedded in other
+	// responses, such as profiles.
+	ValidatorIDs []string                      `json:"validator_ids" format:"uuid"`
+	JSON         dlpEntryCustomNewResponseJSON `json:"-"`
 }
 
 // dlpEntryCustomNewResponseJSON contains the JSON metadata for the struct
 // [DLPEntryCustomNewResponse]
 type dlpEntryCustomNewResponseJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	UpdatedAt   apijson.Field
-	Description apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID           apijson.Field
+	CreatedAt    apijson.Field
+	Enabled      apijson.Field
+	Name         apijson.Field
+	Pattern      apijson.Field
+	UpdatedAt    apijson.Field
+	Description  apijson.Field
+	ProfileID    apijson.Field
+	ValidatorIDs apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *DLPEntryCustomNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -192,23 +199,30 @@ type DLPEntryCustomUpdateResponse struct {
 	UpdatedAt   time.Time `json:"updated_at" api:"required" format:"date-time"`
 	Description string    `json:"description" api:"nullable"`
 	// Deprecated: deprecated
-	ProfileID string                           `json:"profile_id" api:"nullable" format:"uuid"`
-	JSON      dlpEntryCustomUpdateResponseJSON `json:"-"`
+	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
+	// Validators this entry references, by id, at most 10. An empty list means the
+	// entry references none.
+	//
+	// Returned by the entry endpoints. Not returned on entries embedded in other
+	// responses, such as profiles.
+	ValidatorIDs []string                         `json:"validator_ids" format:"uuid"`
+	JSON         dlpEntryCustomUpdateResponseJSON `json:"-"`
 }
 
 // dlpEntryCustomUpdateResponseJSON contains the JSON metadata for the struct
 // [DLPEntryCustomUpdateResponse]
 type dlpEntryCustomUpdateResponseJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	UpdatedAt   apijson.Field
-	Description apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID           apijson.Field
+	CreatedAt    apijson.Field
+	Enabled      apijson.Field
+	Name         apijson.Field
+	Pattern      apijson.Field
+	UpdatedAt    apijson.Field
+	Description  apijson.Field
+	ProfileID    apijson.Field
+	ValidatorIDs apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *DLPEntryCustomUpdateResponse) UnmarshalJSON(data []byte) (err error) {
@@ -242,6 +256,8 @@ type DLPEntryCustomListResponse struct {
 	Secret       bool                                   `json:"secret"`
 	UpdatedAt    time.Time                              `json:"updated_at" format:"date-time"`
 	UploadStatus DLPEntryCustomListResponseUploadStatus `json:"upload_status"`
+	// This field can have the runtime type of [[]string].
+	ValidatorIDs interface{} `json:"validator_ids"`
 	// This field can have the runtime type of
 	// [DLPEntryCustomListResponseObjectVariant].
 	Variant interface{} `json:"variant"`
@@ -268,6 +284,7 @@ type dlpEntryCustomListResponseJSON struct {
 	Secret        apijson.Field
 	UpdatedAt     apijson.Field
 	UploadStatus  apijson.Field
+	ValidatorIDs  apijson.Field
 	Variant       apijson.Field
 	WordList      apijson.Field
 	raw           string
@@ -354,7 +371,13 @@ type DLPEntryCustomListResponseObject struct {
 	// Deprecated: deprecated
 	ProfileID    string                                       `json:"profile_id" api:"nullable" format:"uuid"`
 	UploadStatus DLPEntryCustomListResponseObjectUploadStatus `json:"upload_status"`
-	JSON         dlpEntryCustomListResponseObjectJSON         `json:"-"`
+	// Validators this entry references, by id, at most 10. An empty list means the
+	// entry references none.
+	//
+	// Returned by the entry endpoints. Not returned on entries embedded in other
+	// responses, such as profiles.
+	ValidatorIDs []string                             `json:"validator_ids" format:"uuid"`
+	JSON         dlpEntryCustomListResponseObjectJSON `json:"-"`
 }
 
 // dlpEntryCustomListResponseObjectJSON contains the JSON metadata for the struct
@@ -370,6 +393,7 @@ type dlpEntryCustomListResponseObjectJSON struct {
 	Description  apijson.Field
 	ProfileID    apijson.Field
 	UploadStatus apijson.Field
+	ValidatorIDs apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -484,6 +508,8 @@ type DLPEntryCustomGetResponse struct {
 	Secret       bool                                  `json:"secret"`
 	UpdatedAt    time.Time                             `json:"updated_at" format:"date-time"`
 	UploadStatus DLPEntryCustomGetResponseUploadStatus `json:"upload_status"`
+	// This field can have the runtime type of [[]string].
+	ValidatorIDs interface{} `json:"validator_ids"`
 	// This field can have the runtime type of
 	// [DLPEntryCustomGetResponseObjectVariant].
 	Variant interface{} `json:"variant"`
@@ -511,6 +537,7 @@ type dlpEntryCustomGetResponseJSON struct {
 	Secret        apijson.Field
 	UpdatedAt     apijson.Field
 	UploadStatus  apijson.Field
+	ValidatorIDs  apijson.Field
 	Variant       apijson.Field
 	WordList      apijson.Field
 	raw           string
@@ -598,7 +625,13 @@ type DLPEntryCustomGetResponseObject struct {
 	ProfileID    string                                      `json:"profile_id" api:"nullable" format:"uuid"`
 	Profiles     []DLPEntryCustomGetResponseObjectProfile    `json:"profiles"`
 	UploadStatus DLPEntryCustomGetResponseObjectUploadStatus `json:"upload_status"`
-	JSON         dlpEntryCustomGetResponseObjectJSON         `json:"-"`
+	// Validators this entry references, by id, at most 10. An empty list means the
+	// entry references none.
+	//
+	// Returned by the entry endpoints. Not returned on entries embedded in other
+	// responses, such as profiles.
+	ValidatorIDs []string                            `json:"validator_ids" format:"uuid"`
+	JSON         dlpEntryCustomGetResponseObjectJSON `json:"-"`
 }
 
 // dlpEntryCustomGetResponseObjectJSON contains the JSON metadata for the struct
@@ -615,6 +648,7 @@ type dlpEntryCustomGetResponseObjectJSON struct {
 	ProfileID    apijson.Field
 	Profiles     apijson.Field
 	UploadStatus apijson.Field
+	ValidatorIDs apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -732,6 +766,8 @@ type DLPEntryCustomNewParams struct {
 	Pattern     param.Field[PatternParam] `json:"pattern" api:"required"`
 	Description param.Field[string]       `json:"description"`
 	ProfileID   param.Field[string]       `json:"profile_id" format:"uuid"`
+	// Validators the new entry should reference, by id, at most 10.
+	ValidatorIDs param.Field[[]string] `json:"validator_ids" format:"uuid"`
 }
 
 func (r DLPEntryCustomNewParams) MarshalJSON() (data []byte, err error) {
@@ -883,6 +919,13 @@ type DLPEntryCustomUpdateParams struct {
 	Name        param.Field[string]       `json:"name" api:"required"`
 	Pattern     param.Field[PatternParam] `json:"pattern" api:"required"`
 	Description param.Field[string]       `json:"description"`
+	// Validators this entry should reference, by id, at most 10. Replaces the current
+	// set.
+	//
+	// Optional, unlike the rest of this body: omitting it leaves the current
+	// attachments alone, so a client that predates validators cannot detach them by
+	// accident. Send `[]` to detach.
+	ValidatorIDs param.Field[[]string] `json:"validator_ids" format:"uuid"`
 }
 
 func (r DLPEntryCustomUpdateParams) MarshalJSON() (data []byte, err error) {

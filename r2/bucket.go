@@ -264,7 +264,7 @@ func (r BucketStorageClass) IsKnown() bool {
 }
 
 type BucketListResponse struct {
-	Buckets []Bucket               `json:"buckets"`
+	Buckets []Bucket               `json:"buckets" api:"required"`
 	JSON    bucketListResponseJSON `json:"-"`
 }
 
@@ -478,13 +478,13 @@ func (r BucketListParamsCfR2Jurisdiction) IsKnown() bool {
 }
 
 type BucketListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []string              `json:"messages" api:"required"`
-	Result   BucketListResponse    `json:"result" api:"required"`
+	Errors     []shared.ResponseInfo                `json:"errors" api:"required"`
+	Messages   []string                             `json:"messages" api:"required"`
+	Result     BucketListResponse                   `json:"result" api:"required"`
+	ResultInfo BucketListResponseEnvelopeResultInfo `json:"result_info" api:"required"`
 	// Whether the API call was successful.
-	Success    BucketListResponseEnvelopeSuccess    `json:"success" api:"required"`
-	ResultInfo BucketListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       bucketListResponseEnvelopeJSON       `json:"-"`
+	Success BucketListResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    bucketListResponseEnvelopeJSON    `json:"-"`
 }
 
 // bucketListResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -493,8 +493,8 @@ type bucketListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	ResultInfo  apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -504,6 +504,36 @@ func (r *BucketListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r bucketListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type BucketListResponseEnvelopeResultInfo struct {
+	// Total number of active buckets in the requested jurisdiction. This count is not
+	// affected by filtering or pagination and is eventually consistent for accounts
+	// with elevated bucket limits.
+	TotalCount int64 `json:"total_count" api:"required"`
+	// A continuation token that should be used to fetch the next page of results.
+	Cursor string `json:"cursor"`
+	// Maximum number of results on this page.
+	PerPage float64                                  `json:"per_page"`
+	JSON    bucketListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// bucketListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [BucketListResponseEnvelopeResultInfo]
+type bucketListResponseEnvelopeResultInfoJSON struct {
+	TotalCount  apijson.Field
+	Cursor      apijson.Field
+	PerPage     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BucketListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bucketListResponseEnvelopeResultInfoJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -520,31 +550,6 @@ func (r BucketListResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type BucketListResponseEnvelopeResultInfo struct {
-	// A continuation token that should be used to fetch the next page of results.
-	Cursor string `json:"cursor"`
-	// Maximum number of results on this page.
-	PerPage float64                                  `json:"per_page"`
-	JSON    bucketListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// bucketListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [BucketListResponseEnvelopeResultInfo]
-type bucketListResponseEnvelopeResultInfoJSON struct {
-	Cursor      apijson.Field
-	PerPage     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type BucketDeleteParams struct {

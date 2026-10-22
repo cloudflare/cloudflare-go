@@ -26,10 +26,12 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewAccessUserService] method instead.
 type AccessUserService struct {
-	Options          []option.RequestOption
-	ActiveSessions   *AccessUserActiveSessionService
-	LastSeenIdentity *AccessUserLastSeenIdentityService
-	FailedLogins     *AccessUserFailedLoginService
+	Options           []option.RequestOption
+	ActiveSessions    *AccessUserActiveSessionService
+	LastSeenIdentity  *AccessUserLastSeenIdentityService
+	FailedLogins      *AccessUserFailedLoginService
+	MfaAuthenticators *AccessUserMfaAuthenticatorService
+	Passkeys          *AccessUserPasskeyService
 }
 
 // NewAccessUserService generates a new service that applies the given options to
@@ -41,6 +43,8 @@ func NewAccessUserService(opts ...option.RequestOption) (r *AccessUserService) {
 	r.ActiveSessions = NewAccessUserActiveSessionService(opts...)
 	r.LastSeenIdentity = NewAccessUserLastSeenIdentityService(opts...)
 	r.FailedLogins = NewAccessUserFailedLoginService(opts...)
+	r.MfaAuthenticators = NewAccessUserMfaAuthenticatorService(opts...)
+	r.Passkeys = NewAccessUserPasskeyService(opts...)
 	return
 }
 

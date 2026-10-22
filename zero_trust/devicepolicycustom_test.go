@@ -48,7 +48,8 @@ func TestDevicePolicyCustomNewWithOptionalParams(t *testing.T) {
 			Suffix:      cloudflare.F("internal.corp"),
 			Description: cloudflare.F("Example internal domains"),
 		}}),
-		Enabled: cloudflare.F(true),
+		EnableDeviceCredentialAuthentication: cloudflare.F(false),
+		Enabled:                              cloudflare.F(true),
 		Exclude: cloudflare.F([]zero_trust.SplitTunnelExcludeUnionParam{zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressParam{
 			Address:     cloudflare.F("192.0.2.0/24"),
 			Description: cloudflare.F("Exclude testing domains from the tunnel"),
@@ -187,7 +188,8 @@ func TestDevicePolicyCustomEditWithOptionalParams(t *testing.T) {
 				Suffix:      cloudflare.F("internal.corp"),
 				Description: cloudflare.F("Example internal domains"),
 			}}),
-			Enabled: cloudflare.F(true),
+			EnableDeviceCredentialAuthentication: cloudflare.F(false),
+			Enabled:                              cloudflare.F(true),
 			Exclude: cloudflare.F([]zero_trust.SplitTunnelExcludeUnionParam{zero_trust.SplitTunnelExcludeTeamsDevicesExcludeSplitTunnelWithAddressParam{
 				Address:     cloudflare.F("192.0.2.0/24"),
 				Description: cloudflare.F("Exclude testing domains from the tunnel"),
