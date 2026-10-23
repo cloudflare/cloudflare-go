@@ -24,14 +24,14 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/cloudflare/cloudflare-go/v7@v7.13.0'
+go get -u 'github.com/cloudflare/cloudflare-go/v7@v7.13.1'
 ```
 
 <!-- x-release-please-end -->
 
 ## Requirements
 
-This library requires Go 1.22+.
+This library requires Go 1.26+.
 
 ## Usage
 
