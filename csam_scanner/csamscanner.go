@@ -40,6 +40,10 @@ func NewCsamScannerService(opts ...option.RequestOption) (r *CsamScannerService)
 // CSAM scanning, updating the notification email, and configuring scanning
 // sources.
 //
+// This is a partial update: fields omitted from `value` keep their current
+// setting, and `sources` is merged per source (`null` clears all sources). Send an
+// empty `email` to clear the notification address.
+//
 // When a new email is provided, email verification is triggered automatically. The
 // `enabled` field is a toggle; the server may adjust it based on whether the
 // notification email is verified.

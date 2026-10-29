@@ -34,7 +34,9 @@ func NewThreatEventTargetIndustryCatalogService(opts ...option.RequestOption) (r
 	return
 }
 
-// Lists all target industries from industry map catalog
+// Lists every predefined target industry, whether or not an event uses it. To list
+// only the industries used in specific datasets, use
+// `threat-intel events target-industries list`.
 func (r *ThreatEventTargetIndustryCatalogService) List(ctx context.Context, query ThreatEventTargetIndustryCatalogListParams, opts ...option.RequestOption) (res *ThreatEventTargetIndustryCatalogListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

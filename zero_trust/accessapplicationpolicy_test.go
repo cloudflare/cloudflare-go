@@ -113,6 +113,7 @@ func TestAccessApplicationPolicyUpdateWithOptionalParams(t *testing.T) {
 					MfaDisabled:           cloudflare.F(false),
 					SessionDuration:       cloudflare.F("24h"),
 				}),
+				PolicyResolutionAccountID: cloudflare.F("policy_resolution_account_id"),
 				Require: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.CertificateRuleParam{
 					Certificate: cloudflare.F(zero_trust.CertificateRuleCertificateParam{}),
 				}}),

@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // ConnectivitySettingService contains methods and other services that help with
@@ -133,9 +132,9 @@ func (r ConnectivitySettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConnectivitySettingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo           `json:"messages" api:"required"`
-	Result   ConnectivitySettingEditResponse `json:"result" api:"required"`
+	Errors   []ConnectivitySettingEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ConnectivitySettingEditResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ConnectivitySettingEditResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful
 	Success ConnectivitySettingEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    connectivitySettingEditResponseEnvelopeJSON    `json:"-"`
@@ -160,6 +159,58 @@ func (r connectivitySettingEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type ConnectivitySettingEditResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                            `json:"context"`
+	JSON    connectivitySettingEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// connectivitySettingEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [ConnectivitySettingEditResponseEnvelopeErrors]
+type connectivitySettingEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectivitySettingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectivitySettingEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectivitySettingEditResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                              `json:"context"`
+	JSON    connectivitySettingEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// connectivitySettingEditResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [ConnectivitySettingEditResponseEnvelopeMessages]
+type connectivitySettingEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectivitySettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectivitySettingEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type ConnectivitySettingEditResponseEnvelopeSuccess bool
 
@@ -181,9 +232,9 @@ type ConnectivitySettingGetParams struct {
 }
 
 type ConnectivitySettingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo          `json:"messages" api:"required"`
-	Result   ConnectivitySettingGetResponse `json:"result" api:"required"`
+	Errors   []ConnectivitySettingGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []ConnectivitySettingGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   ConnectivitySettingGetResponse                   `json:"result" api:"required"`
 	// Whether the API call was successful
 	Success ConnectivitySettingGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    connectivitySettingGetResponseEnvelopeJSON    `json:"-"`
@@ -205,6 +256,58 @@ func (r *ConnectivitySettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r connectivitySettingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectivitySettingGetResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                           `json:"context"`
+	JSON    connectivitySettingGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// connectivitySettingGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [ConnectivitySettingGetResponseEnvelopeErrors]
+type connectivitySettingGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectivitySettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectivitySettingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConnectivitySettingGetResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                             `json:"context"`
+	JSON    connectivitySettingGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// connectivitySettingGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [ConnectivitySettingGetResponseEnvelopeMessages]
+type connectivitySettingGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConnectivitySettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r connectivitySettingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

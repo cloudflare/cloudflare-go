@@ -178,7 +178,9 @@ type AIGatewayNewResponse struct {
 	ModifiedAt              time.Time `json:"modified_at" api:"required" format:"date-time"`
 	RateLimitingInterval    int64     `json:"rate_limiting_interval" api:"required,nullable"`
 	RateLimitingLimit       int64     `json:"rate_limiting_limit" api:"required,nullable"`
-	Authentication          bool      `json:"authentication"`
+	// Require authentication for gateway access. New gateways must have authentication
+	// enabled. Once enabled, authentication cannot be disabled.
+	Authentication bool `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
 	ByokOnly bool                    `json:"byok_only"`
@@ -447,6 +449,7 @@ type AIGatewayNewResponseGuardrailsPrompt struct {
 	S11  AIGatewayNewResponseGuardrailsPromptS11  `json:"S11"`
 	S12  AIGatewayNewResponseGuardrailsPromptS12  `json:"S12"`
 	S13  AIGatewayNewResponseGuardrailsPromptS13  `json:"S13"`
+	S14  AIGatewayNewResponseGuardrailsPromptS14  `json:"S14"`
 	S2   AIGatewayNewResponseGuardrailsPromptS2   `json:"S2"`
 	S3   AIGatewayNewResponseGuardrailsPromptS3   `json:"S3"`
 	S4   AIGatewayNewResponseGuardrailsPromptS4   `json:"S4"`
@@ -467,6 +470,7 @@ type aiGatewayNewResponseGuardrailsPromptJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -572,6 +576,21 @@ const (
 func (r AIGatewayNewResponseGuardrailsPromptS13) IsKnown() bool {
 	switch r {
 	case AIGatewayNewResponseGuardrailsPromptS13Flag, AIGatewayNewResponseGuardrailsPromptS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewResponseGuardrailsPromptS14 string
+
+const (
+	AIGatewayNewResponseGuardrailsPromptS14Flag  AIGatewayNewResponseGuardrailsPromptS14 = "FLAG"
+	AIGatewayNewResponseGuardrailsPromptS14Block AIGatewayNewResponseGuardrailsPromptS14 = "BLOCK"
+)
+
+func (r AIGatewayNewResponseGuardrailsPromptS14) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseGuardrailsPromptS14Flag, AIGatewayNewResponseGuardrailsPromptS14Block:
 		return true
 	}
 	return false
@@ -704,6 +723,7 @@ type AIGatewayNewResponseGuardrailsResponse struct {
 	S11  AIGatewayNewResponseGuardrailsResponseS11  `json:"S11"`
 	S12  AIGatewayNewResponseGuardrailsResponseS12  `json:"S12"`
 	S13  AIGatewayNewResponseGuardrailsResponseS13  `json:"S13"`
+	S14  AIGatewayNewResponseGuardrailsResponseS14  `json:"S14"`
 	S2   AIGatewayNewResponseGuardrailsResponseS2   `json:"S2"`
 	S3   AIGatewayNewResponseGuardrailsResponseS3   `json:"S3"`
 	S4   AIGatewayNewResponseGuardrailsResponseS4   `json:"S4"`
@@ -724,6 +744,7 @@ type aiGatewayNewResponseGuardrailsResponseJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -829,6 +850,21 @@ const (
 func (r AIGatewayNewResponseGuardrailsResponseS13) IsKnown() bool {
 	switch r {
 	case AIGatewayNewResponseGuardrailsResponseS13Flag, AIGatewayNewResponseGuardrailsResponseS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewResponseGuardrailsResponseS14 string
+
+const (
+	AIGatewayNewResponseGuardrailsResponseS14Flag  AIGatewayNewResponseGuardrailsResponseS14 = "FLAG"
+	AIGatewayNewResponseGuardrailsResponseS14Block AIGatewayNewResponseGuardrailsResponseS14 = "BLOCK"
+)
+
+func (r AIGatewayNewResponseGuardrailsResponseS14) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseGuardrailsResponseS14Flag, AIGatewayNewResponseGuardrailsResponseS14Block:
 		return true
 	}
 	return false
@@ -1418,7 +1454,9 @@ type AIGatewayUpdateResponse struct {
 	ModifiedAt              time.Time `json:"modified_at" api:"required" format:"date-time"`
 	RateLimitingInterval    int64     `json:"rate_limiting_interval" api:"required,nullable"`
 	RateLimitingLimit       int64     `json:"rate_limiting_limit" api:"required,nullable"`
-	Authentication          bool      `json:"authentication"`
+	// Require authentication for gateway access. New gateways must have authentication
+	// enabled. Once enabled, authentication cannot be disabled.
+	Authentication bool `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
 	ByokOnly bool                       `json:"byok_only"`
@@ -1688,6 +1726,7 @@ type AIGatewayUpdateResponseGuardrailsPrompt struct {
 	S11  AIGatewayUpdateResponseGuardrailsPromptS11  `json:"S11"`
 	S12  AIGatewayUpdateResponseGuardrailsPromptS12  `json:"S12"`
 	S13  AIGatewayUpdateResponseGuardrailsPromptS13  `json:"S13"`
+	S14  AIGatewayUpdateResponseGuardrailsPromptS14  `json:"S14"`
 	S2   AIGatewayUpdateResponseGuardrailsPromptS2   `json:"S2"`
 	S3   AIGatewayUpdateResponseGuardrailsPromptS3   `json:"S3"`
 	S4   AIGatewayUpdateResponseGuardrailsPromptS4   `json:"S4"`
@@ -1708,6 +1747,7 @@ type aiGatewayUpdateResponseGuardrailsPromptJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -1813,6 +1853,21 @@ const (
 func (r AIGatewayUpdateResponseGuardrailsPromptS13) IsKnown() bool {
 	switch r {
 	case AIGatewayUpdateResponseGuardrailsPromptS13Flag, AIGatewayUpdateResponseGuardrailsPromptS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayUpdateResponseGuardrailsPromptS14 string
+
+const (
+	AIGatewayUpdateResponseGuardrailsPromptS14Flag  AIGatewayUpdateResponseGuardrailsPromptS14 = "FLAG"
+	AIGatewayUpdateResponseGuardrailsPromptS14Block AIGatewayUpdateResponseGuardrailsPromptS14 = "BLOCK"
+)
+
+func (r AIGatewayUpdateResponseGuardrailsPromptS14) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseGuardrailsPromptS14Flag, AIGatewayUpdateResponseGuardrailsPromptS14Block:
 		return true
 	}
 	return false
@@ -1945,6 +2000,7 @@ type AIGatewayUpdateResponseGuardrailsResponse struct {
 	S11  AIGatewayUpdateResponseGuardrailsResponseS11  `json:"S11"`
 	S12  AIGatewayUpdateResponseGuardrailsResponseS12  `json:"S12"`
 	S13  AIGatewayUpdateResponseGuardrailsResponseS13  `json:"S13"`
+	S14  AIGatewayUpdateResponseGuardrailsResponseS14  `json:"S14"`
 	S2   AIGatewayUpdateResponseGuardrailsResponseS2   `json:"S2"`
 	S3   AIGatewayUpdateResponseGuardrailsResponseS3   `json:"S3"`
 	S4   AIGatewayUpdateResponseGuardrailsResponseS4   `json:"S4"`
@@ -1965,6 +2021,7 @@ type aiGatewayUpdateResponseGuardrailsResponseJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -2070,6 +2127,21 @@ const (
 func (r AIGatewayUpdateResponseGuardrailsResponseS13) IsKnown() bool {
 	switch r {
 	case AIGatewayUpdateResponseGuardrailsResponseS13Flag, AIGatewayUpdateResponseGuardrailsResponseS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayUpdateResponseGuardrailsResponseS14 string
+
+const (
+	AIGatewayUpdateResponseGuardrailsResponseS14Flag  AIGatewayUpdateResponseGuardrailsResponseS14 = "FLAG"
+	AIGatewayUpdateResponseGuardrailsResponseS14Block AIGatewayUpdateResponseGuardrailsResponseS14 = "BLOCK"
+)
+
+func (r AIGatewayUpdateResponseGuardrailsResponseS14) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseGuardrailsResponseS14Flag, AIGatewayUpdateResponseGuardrailsResponseS14Block:
 		return true
 	}
 	return false
@@ -2659,7 +2731,9 @@ type AIGatewayListResponse struct {
 	ModifiedAt              time.Time `json:"modified_at" api:"required" format:"date-time"`
 	RateLimitingInterval    int64     `json:"rate_limiting_interval" api:"required,nullable"`
 	RateLimitingLimit       int64     `json:"rate_limiting_limit" api:"required,nullable"`
-	Authentication          bool      `json:"authentication"`
+	// Require authentication for gateway access. New gateways must have authentication
+	// enabled. Once enabled, authentication cannot be disabled.
+	Authentication bool `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
 	ByokOnly bool                     `json:"byok_only"`
@@ -2929,6 +3003,7 @@ type AIGatewayListResponseGuardrailsPrompt struct {
 	S11  AIGatewayListResponseGuardrailsPromptS11  `json:"S11"`
 	S12  AIGatewayListResponseGuardrailsPromptS12  `json:"S12"`
 	S13  AIGatewayListResponseGuardrailsPromptS13  `json:"S13"`
+	S14  AIGatewayListResponseGuardrailsPromptS14  `json:"S14"`
 	S2   AIGatewayListResponseGuardrailsPromptS2   `json:"S2"`
 	S3   AIGatewayListResponseGuardrailsPromptS3   `json:"S3"`
 	S4   AIGatewayListResponseGuardrailsPromptS4   `json:"S4"`
@@ -2949,6 +3024,7 @@ type aiGatewayListResponseGuardrailsPromptJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -3054,6 +3130,21 @@ const (
 func (r AIGatewayListResponseGuardrailsPromptS13) IsKnown() bool {
 	switch r {
 	case AIGatewayListResponseGuardrailsPromptS13Flag, AIGatewayListResponseGuardrailsPromptS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayListResponseGuardrailsPromptS14 string
+
+const (
+	AIGatewayListResponseGuardrailsPromptS14Flag  AIGatewayListResponseGuardrailsPromptS14 = "FLAG"
+	AIGatewayListResponseGuardrailsPromptS14Block AIGatewayListResponseGuardrailsPromptS14 = "BLOCK"
+)
+
+func (r AIGatewayListResponseGuardrailsPromptS14) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseGuardrailsPromptS14Flag, AIGatewayListResponseGuardrailsPromptS14Block:
 		return true
 	}
 	return false
@@ -3186,6 +3277,7 @@ type AIGatewayListResponseGuardrailsResponse struct {
 	S11  AIGatewayListResponseGuardrailsResponseS11  `json:"S11"`
 	S12  AIGatewayListResponseGuardrailsResponseS12  `json:"S12"`
 	S13  AIGatewayListResponseGuardrailsResponseS13  `json:"S13"`
+	S14  AIGatewayListResponseGuardrailsResponseS14  `json:"S14"`
 	S2   AIGatewayListResponseGuardrailsResponseS2   `json:"S2"`
 	S3   AIGatewayListResponseGuardrailsResponseS3   `json:"S3"`
 	S4   AIGatewayListResponseGuardrailsResponseS4   `json:"S4"`
@@ -3206,6 +3298,7 @@ type aiGatewayListResponseGuardrailsResponseJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -3311,6 +3404,21 @@ const (
 func (r AIGatewayListResponseGuardrailsResponseS13) IsKnown() bool {
 	switch r {
 	case AIGatewayListResponseGuardrailsResponseS13Flag, AIGatewayListResponseGuardrailsResponseS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayListResponseGuardrailsResponseS14 string
+
+const (
+	AIGatewayListResponseGuardrailsResponseS14Flag  AIGatewayListResponseGuardrailsResponseS14 = "FLAG"
+	AIGatewayListResponseGuardrailsResponseS14Block AIGatewayListResponseGuardrailsResponseS14 = "BLOCK"
+)
+
+func (r AIGatewayListResponseGuardrailsResponseS14) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseGuardrailsResponseS14Flag, AIGatewayListResponseGuardrailsResponseS14Block:
 		return true
 	}
 	return false
@@ -3900,7 +4008,9 @@ type AIGatewayDeleteResponse struct {
 	ModifiedAt              time.Time `json:"modified_at" api:"required" format:"date-time"`
 	RateLimitingInterval    int64     `json:"rate_limiting_interval" api:"required,nullable"`
 	RateLimitingLimit       int64     `json:"rate_limiting_limit" api:"required,nullable"`
-	Authentication          bool      `json:"authentication"`
+	// Require authentication for gateway access. New gateways must have authentication
+	// enabled. Once enabled, authentication cannot be disabled.
+	Authentication bool `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
 	ByokOnly bool                       `json:"byok_only"`
@@ -4170,6 +4280,7 @@ type AIGatewayDeleteResponseGuardrailsPrompt struct {
 	S11  AIGatewayDeleteResponseGuardrailsPromptS11  `json:"S11"`
 	S12  AIGatewayDeleteResponseGuardrailsPromptS12  `json:"S12"`
 	S13  AIGatewayDeleteResponseGuardrailsPromptS13  `json:"S13"`
+	S14  AIGatewayDeleteResponseGuardrailsPromptS14  `json:"S14"`
 	S2   AIGatewayDeleteResponseGuardrailsPromptS2   `json:"S2"`
 	S3   AIGatewayDeleteResponseGuardrailsPromptS3   `json:"S3"`
 	S4   AIGatewayDeleteResponseGuardrailsPromptS4   `json:"S4"`
@@ -4190,6 +4301,7 @@ type aiGatewayDeleteResponseGuardrailsPromptJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -4295,6 +4407,21 @@ const (
 func (r AIGatewayDeleteResponseGuardrailsPromptS13) IsKnown() bool {
 	switch r {
 	case AIGatewayDeleteResponseGuardrailsPromptS13Flag, AIGatewayDeleteResponseGuardrailsPromptS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayDeleteResponseGuardrailsPromptS14 string
+
+const (
+	AIGatewayDeleteResponseGuardrailsPromptS14Flag  AIGatewayDeleteResponseGuardrailsPromptS14 = "FLAG"
+	AIGatewayDeleteResponseGuardrailsPromptS14Block AIGatewayDeleteResponseGuardrailsPromptS14 = "BLOCK"
+)
+
+func (r AIGatewayDeleteResponseGuardrailsPromptS14) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseGuardrailsPromptS14Flag, AIGatewayDeleteResponseGuardrailsPromptS14Block:
 		return true
 	}
 	return false
@@ -4427,6 +4554,7 @@ type AIGatewayDeleteResponseGuardrailsResponse struct {
 	S11  AIGatewayDeleteResponseGuardrailsResponseS11  `json:"S11"`
 	S12  AIGatewayDeleteResponseGuardrailsResponseS12  `json:"S12"`
 	S13  AIGatewayDeleteResponseGuardrailsResponseS13  `json:"S13"`
+	S14  AIGatewayDeleteResponseGuardrailsResponseS14  `json:"S14"`
 	S2   AIGatewayDeleteResponseGuardrailsResponseS2   `json:"S2"`
 	S3   AIGatewayDeleteResponseGuardrailsResponseS3   `json:"S3"`
 	S4   AIGatewayDeleteResponseGuardrailsResponseS4   `json:"S4"`
@@ -4447,6 +4575,7 @@ type aiGatewayDeleteResponseGuardrailsResponseJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -4552,6 +4681,21 @@ const (
 func (r AIGatewayDeleteResponseGuardrailsResponseS13) IsKnown() bool {
 	switch r {
 	case AIGatewayDeleteResponseGuardrailsResponseS13Flag, AIGatewayDeleteResponseGuardrailsResponseS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayDeleteResponseGuardrailsResponseS14 string
+
+const (
+	AIGatewayDeleteResponseGuardrailsResponseS14Flag  AIGatewayDeleteResponseGuardrailsResponseS14 = "FLAG"
+	AIGatewayDeleteResponseGuardrailsResponseS14Block AIGatewayDeleteResponseGuardrailsResponseS14 = "BLOCK"
+)
+
+func (r AIGatewayDeleteResponseGuardrailsResponseS14) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseGuardrailsResponseS14Flag, AIGatewayDeleteResponseGuardrailsResponseS14Block:
 		return true
 	}
 	return false
@@ -5141,7 +5285,9 @@ type AIGatewayGetResponse struct {
 	ModifiedAt              time.Time `json:"modified_at" api:"required" format:"date-time"`
 	RateLimitingInterval    int64     `json:"rate_limiting_interval" api:"required,nullable"`
 	RateLimitingLimit       int64     `json:"rate_limiting_limit" api:"required,nullable"`
-	Authentication          bool      `json:"authentication"`
+	// Require authentication for gateway access. New gateways must have authentication
+	// enabled. Once enabled, authentication cannot be disabled.
+	Authentication bool `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
 	ByokOnly bool                    `json:"byok_only"`
@@ -5410,6 +5556,7 @@ type AIGatewayGetResponseGuardrailsPrompt struct {
 	S11  AIGatewayGetResponseGuardrailsPromptS11  `json:"S11"`
 	S12  AIGatewayGetResponseGuardrailsPromptS12  `json:"S12"`
 	S13  AIGatewayGetResponseGuardrailsPromptS13  `json:"S13"`
+	S14  AIGatewayGetResponseGuardrailsPromptS14  `json:"S14"`
 	S2   AIGatewayGetResponseGuardrailsPromptS2   `json:"S2"`
 	S3   AIGatewayGetResponseGuardrailsPromptS3   `json:"S3"`
 	S4   AIGatewayGetResponseGuardrailsPromptS4   `json:"S4"`
@@ -5430,6 +5577,7 @@ type aiGatewayGetResponseGuardrailsPromptJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -5535,6 +5683,21 @@ const (
 func (r AIGatewayGetResponseGuardrailsPromptS13) IsKnown() bool {
 	switch r {
 	case AIGatewayGetResponseGuardrailsPromptS13Flag, AIGatewayGetResponseGuardrailsPromptS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayGetResponseGuardrailsPromptS14 string
+
+const (
+	AIGatewayGetResponseGuardrailsPromptS14Flag  AIGatewayGetResponseGuardrailsPromptS14 = "FLAG"
+	AIGatewayGetResponseGuardrailsPromptS14Block AIGatewayGetResponseGuardrailsPromptS14 = "BLOCK"
+)
+
+func (r AIGatewayGetResponseGuardrailsPromptS14) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseGuardrailsPromptS14Flag, AIGatewayGetResponseGuardrailsPromptS14Block:
 		return true
 	}
 	return false
@@ -5667,6 +5830,7 @@ type AIGatewayGetResponseGuardrailsResponse struct {
 	S11  AIGatewayGetResponseGuardrailsResponseS11  `json:"S11"`
 	S12  AIGatewayGetResponseGuardrailsResponseS12  `json:"S12"`
 	S13  AIGatewayGetResponseGuardrailsResponseS13  `json:"S13"`
+	S14  AIGatewayGetResponseGuardrailsResponseS14  `json:"S14"`
 	S2   AIGatewayGetResponseGuardrailsResponseS2   `json:"S2"`
 	S3   AIGatewayGetResponseGuardrailsResponseS3   `json:"S3"`
 	S4   AIGatewayGetResponseGuardrailsResponseS4   `json:"S4"`
@@ -5687,6 +5851,7 @@ type aiGatewayGetResponseGuardrailsResponseJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -5792,6 +5957,21 @@ const (
 func (r AIGatewayGetResponseGuardrailsResponseS13) IsKnown() bool {
 	switch r {
 	case AIGatewayGetResponseGuardrailsResponseS13Flag, AIGatewayGetResponseGuardrailsResponseS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayGetResponseGuardrailsResponseS14 string
+
+const (
+	AIGatewayGetResponseGuardrailsResponseS14Flag  AIGatewayGetResponseGuardrailsResponseS14 = "FLAG"
+	AIGatewayGetResponseGuardrailsResponseS14Block AIGatewayGetResponseGuardrailsResponseS14 = "BLOCK"
+)
+
+func (r AIGatewayGetResponseGuardrailsResponseS14) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseGuardrailsResponseS14Flag, AIGatewayGetResponseGuardrailsResponseS14Block:
 		return true
 	}
 	return false
@@ -6380,7 +6560,9 @@ type AIGatewayNewParams struct {
 	CollectLogs             param.Field[bool]   `json:"collect_logs" api:"required"`
 	RateLimitingInterval    param.Field[int64]  `json:"rate_limiting_interval" api:"required"`
 	RateLimitingLimit       param.Field[int64]  `json:"rate_limiting_limit" api:"required"`
-	Authentication          param.Field[bool]   `json:"authentication"`
+	// Require authentication for gateway access. New gateways must have authentication
+	// enabled. Once enabled, authentication cannot be disabled.
+	Authentication param.Field[bool] `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
 	ByokOnly              param.Field[bool]                                    `json:"byok_only"`
@@ -6493,6 +6675,7 @@ type AIGatewayNewParamsGuardrailsPrompt struct {
 	S11 param.Field[AIGatewayNewParamsGuardrailsPromptS11] `json:"S11"`
 	S12 param.Field[AIGatewayNewParamsGuardrailsPromptS12] `json:"S12"`
 	S13 param.Field[AIGatewayNewParamsGuardrailsPromptS13] `json:"S13"`
+	S14 param.Field[AIGatewayNewParamsGuardrailsPromptS14] `json:"S14"`
 	S2  param.Field[AIGatewayNewParamsGuardrailsPromptS2]  `json:"S2"`
 	S3  param.Field[AIGatewayNewParamsGuardrailsPromptS3]  `json:"S3"`
 	S4  param.Field[AIGatewayNewParamsGuardrailsPromptS4]  `json:"S4"`
@@ -6592,6 +6775,21 @@ const (
 func (r AIGatewayNewParamsGuardrailsPromptS13) IsKnown() bool {
 	switch r {
 	case AIGatewayNewParamsGuardrailsPromptS13Flag, AIGatewayNewParamsGuardrailsPromptS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsPromptS14 string
+
+const (
+	AIGatewayNewParamsGuardrailsPromptS14Flag  AIGatewayNewParamsGuardrailsPromptS14 = "FLAG"
+	AIGatewayNewParamsGuardrailsPromptS14Block AIGatewayNewParamsGuardrailsPromptS14 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsPromptS14) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsPromptS14Flag, AIGatewayNewParamsGuardrailsPromptS14Block:
 		return true
 	}
 	return false
@@ -6724,6 +6922,7 @@ type AIGatewayNewParamsGuardrailsResponse struct {
 	S11 param.Field[AIGatewayNewParamsGuardrailsResponseS11] `json:"S11"`
 	S12 param.Field[AIGatewayNewParamsGuardrailsResponseS12] `json:"S12"`
 	S13 param.Field[AIGatewayNewParamsGuardrailsResponseS13] `json:"S13"`
+	S14 param.Field[AIGatewayNewParamsGuardrailsResponseS14] `json:"S14"`
 	S2  param.Field[AIGatewayNewParamsGuardrailsResponseS2]  `json:"S2"`
 	S3  param.Field[AIGatewayNewParamsGuardrailsResponseS3]  `json:"S3"`
 	S4  param.Field[AIGatewayNewParamsGuardrailsResponseS4]  `json:"S4"`
@@ -6823,6 +7022,21 @@ const (
 func (r AIGatewayNewParamsGuardrailsResponseS13) IsKnown() bool {
 	switch r {
 	case AIGatewayNewParamsGuardrailsResponseS13Flag, AIGatewayNewParamsGuardrailsResponseS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsResponseS14 string
+
+const (
+	AIGatewayNewParamsGuardrailsResponseS14Flag  AIGatewayNewParamsGuardrailsResponseS14 = "FLAG"
+	AIGatewayNewParamsGuardrailsResponseS14Block AIGatewayNewParamsGuardrailsResponseS14 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsResponseS14) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsResponseS14Flag, AIGatewayNewParamsGuardrailsResponseS14Block:
 		return true
 	}
 	return false
@@ -7257,7 +7471,9 @@ type AIGatewayUpdateParams struct {
 	CollectLogs             param.Field[bool]   `json:"collect_logs" api:"required"`
 	RateLimitingInterval    param.Field[int64]  `json:"rate_limiting_interval" api:"required"`
 	RateLimitingLimit       param.Field[int64]  `json:"rate_limiting_limit" api:"required"`
-	Authentication          param.Field[bool]   `json:"authentication"`
+	// Require authentication for gateway access. New gateways must have authentication
+	// enabled. Once enabled, authentication cannot be disabled.
+	Authentication param.Field[bool] `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
 	ByokOnly              param.Field[bool]                                       `json:"byok_only"`
@@ -7370,6 +7586,7 @@ type AIGatewayUpdateParamsGuardrailsPrompt struct {
 	S11 param.Field[AIGatewayUpdateParamsGuardrailsPromptS11] `json:"S11"`
 	S12 param.Field[AIGatewayUpdateParamsGuardrailsPromptS12] `json:"S12"`
 	S13 param.Field[AIGatewayUpdateParamsGuardrailsPromptS13] `json:"S13"`
+	S14 param.Field[AIGatewayUpdateParamsGuardrailsPromptS14] `json:"S14"`
 	S2  param.Field[AIGatewayUpdateParamsGuardrailsPromptS2]  `json:"S2"`
 	S3  param.Field[AIGatewayUpdateParamsGuardrailsPromptS3]  `json:"S3"`
 	S4  param.Field[AIGatewayUpdateParamsGuardrailsPromptS4]  `json:"S4"`
@@ -7469,6 +7686,21 @@ const (
 func (r AIGatewayUpdateParamsGuardrailsPromptS13) IsKnown() bool {
 	switch r {
 	case AIGatewayUpdateParamsGuardrailsPromptS13Flag, AIGatewayUpdateParamsGuardrailsPromptS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayUpdateParamsGuardrailsPromptS14 string
+
+const (
+	AIGatewayUpdateParamsGuardrailsPromptS14Flag  AIGatewayUpdateParamsGuardrailsPromptS14 = "FLAG"
+	AIGatewayUpdateParamsGuardrailsPromptS14Block AIGatewayUpdateParamsGuardrailsPromptS14 = "BLOCK"
+)
+
+func (r AIGatewayUpdateParamsGuardrailsPromptS14) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateParamsGuardrailsPromptS14Flag, AIGatewayUpdateParamsGuardrailsPromptS14Block:
 		return true
 	}
 	return false
@@ -7601,6 +7833,7 @@ type AIGatewayUpdateParamsGuardrailsResponse struct {
 	S11 param.Field[AIGatewayUpdateParamsGuardrailsResponseS11] `json:"S11"`
 	S12 param.Field[AIGatewayUpdateParamsGuardrailsResponseS12] `json:"S12"`
 	S13 param.Field[AIGatewayUpdateParamsGuardrailsResponseS13] `json:"S13"`
+	S14 param.Field[AIGatewayUpdateParamsGuardrailsResponseS14] `json:"S14"`
 	S2  param.Field[AIGatewayUpdateParamsGuardrailsResponseS2]  `json:"S2"`
 	S3  param.Field[AIGatewayUpdateParamsGuardrailsResponseS3]  `json:"S3"`
 	S4  param.Field[AIGatewayUpdateParamsGuardrailsResponseS4]  `json:"S4"`
@@ -7700,6 +7933,21 @@ const (
 func (r AIGatewayUpdateParamsGuardrailsResponseS13) IsKnown() bool {
 	switch r {
 	case AIGatewayUpdateParamsGuardrailsResponseS13Flag, AIGatewayUpdateParamsGuardrailsResponseS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayUpdateParamsGuardrailsResponseS14 string
+
+const (
+	AIGatewayUpdateParamsGuardrailsResponseS14Flag  AIGatewayUpdateParamsGuardrailsResponseS14 = "FLAG"
+	AIGatewayUpdateParamsGuardrailsResponseS14Block AIGatewayUpdateParamsGuardrailsResponseS14 = "BLOCK"
+)
+
+func (r AIGatewayUpdateParamsGuardrailsResponseS14) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateParamsGuardrailsResponseS14Flag, AIGatewayUpdateParamsGuardrailsResponseS14Block:
 		return true
 	}
 	return false

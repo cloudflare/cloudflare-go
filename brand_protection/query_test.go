@@ -31,15 +31,18 @@ func TestQueryNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	err := client.BrandProtection.Queries.New(context.TODO(), brand_protection.QueryNewParams{
-		AccountID:     cloudflare.F("x"),
-		ID:            cloudflare.F("id"),
-		QueryScan:     cloudflare.F(true),
-		QueryTag:      cloudflare.F("tag"),
-		MaxTime:       cloudflare.F(time.Now()),
-		MinTime:       cloudflare.F(time.Now()),
-		BodyScan:      cloudflare.F(true),
-		StringMatches: cloudflare.F[any](map[string]interface{}{}),
-		BodyTag:       cloudflare.F("tag"),
+		AccountID: cloudflare.F("x"),
+		ID:        cloudflare.F("id"),
+		QueryScan: cloudflare.F(true),
+		QueryTag:  cloudflare.F("tag"),
+		MaxTime:   cloudflare.F(time.Now()),
+		MinTime:   cloudflare.F(time.Now()),
+		BodyScan:  cloudflare.F(true),
+		StringMatches: cloudflare.F([]brand_protection.QueryNewParamsStringMatch{{
+			Pattern:         cloudflare.F("pattern"),
+			MaxEditDistance: cloudflare.F(0.000000),
+		}}),
+		BodyTag: cloudflare.F("tag"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -98,7 +101,7 @@ func TestQueryBulkWithOptionalParams(t *testing.T) {
 	err := client.BrandProtection.Queries.Bulk(context.TODO(), brand_protection.QueryBulkParams{
 		AccountID: cloudflare.F("x"),
 		Queries: cloudflare.F([]map[string]interface{}{{
-			"foo": "bar",
+			"foo": map[string]interface{}{},
 		}}),
 	})
 	if err != nil {

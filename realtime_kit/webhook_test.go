@@ -201,9 +201,9 @@ func TestWebhookReplaceWebhookWithOptionalParams(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		realtime_kit.WebhookReplaceWebhookParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Events:    cloudflare.F([]realtime_kit.WebhookReplaceWebhookParamsEvent{realtime_kit.WebhookReplaceWebhookParamsEventMeetingStarted, realtime_kit.WebhookReplaceWebhookParamsEventMeetingEnded, realtime_kit.WebhookReplaceWebhookParamsEventMeetingParticipantJoined, realtime_kit.WebhookReplaceWebhookParamsEventMeetingParticipantLeft, realtime_kit.WebhookReplaceWebhookParamsEventMeetingChatSynced, realtime_kit.WebhookReplaceWebhookParamsEventRecordingStatusUpdate, realtime_kit.WebhookReplaceWebhookParamsEventLivestreamingStatusUpdate, realtime_kit.WebhookReplaceWebhookParamsEventMeetingTranscript, realtime_kit.WebhookReplaceWebhookParamsEventMeetingSummary}),
-			Name:      cloudflare.F("All events webhook"),
-			URL:       cloudflare.F("https://webhook.site/b23a5bbd-c7b0-4ced-a9e2-78ae7889897e"),
+			Events:    cloudflare.F([]realtime_kit.WebhookReplaceWebhookParamsEvent{realtime_kit.WebhookReplaceWebhookParamsEventMeetingStarted}),
+			Name:      cloudflare.F("My Webhook"),
+			URL:       cloudflare.F("https://example.com/webhook"),
 			Enabled:   cloudflare.F(true),
 		},
 	)

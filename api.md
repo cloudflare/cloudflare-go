@@ -189,8 +189,6 @@ Methods:
 
 # [MagicNetworkMonitoring](magic_network_monitoring/api.md)
 
-# [MagicCloudNetworking](magic_cloud_networking/api.md)
-
 # [Monetization](monetization/api.md)
 
 # [NetworkInterconnects](network_interconnects/api.md)

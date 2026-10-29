@@ -25,7 +25,6 @@ TEST_PATHS=(
 	accounts/speedsettingtransformation_test.go
 	accounts/paymentmethod_test.go
 	accounts/payinvoice_test.go
-	accounts/paybaddebt_test.go
 	accounts/receipt_test.go
 	accounts/invoice_test.go
 	accounts/clientsecret_test.go
@@ -113,7 +112,6 @@ TEST_PATHS=(
 	custom_hostnames/certificatepackcertificate_test.go
 	custom_hostnames/quota_test.go
 	custom_nameservers/customnameserver_test.go
-	tenant_custom_nameservers/tenantcustomnameserver_test.go
 	dns_firewall/dnsfirewall_test.go
 	dns_firewall/analyticsreport_test.go
 	dns_firewall/analyticsreportbytime_test.go
@@ -387,12 +385,6 @@ TEST_PATHS=(
 	magic_network_monitoring/configfull_test.go
 	magic_network_monitoring/rule_test.go
 	magic_network_monitoring/ruleadvertisement_test.go
-	magic_cloud_networking/catalogsync_test.go
-	magic_cloud_networking/catalogsyncprebuiltpolicy_test.go
-	magic_cloud_networking/onramp_test.go
-	magic_cloud_networking/onrampaddressspace_test.go
-	magic_cloud_networking/cloudintegration_test.go
-	magic_cloud_networking/resource_test.go
 	monetization/rule_test.go
 	network_interconnects/cni_test.go
 	network_interconnects/interconnect_test.go
@@ -458,6 +450,7 @@ TEST_PATHS=(
 	r2/bucketmetric_test.go
 	r2/bucketsippy_test.go
 	r2/bucketobject_test.go
+	r2/bucketjob_test.go
 	r2/temporarycredential_test.go
 	r2/superslurperjob_test.go
 	r2/superslurperjoblog_test.go
@@ -566,6 +559,7 @@ TEST_PATHS=(
 	zero_trust/casbpostureexport_test.go
 	zero_trust/casbposturefindingtype_test.go
 	zero_trust/casbposturefindingtyperemediationtype_test.go
+	zero_trust/casbpostureassetschema_test.go
 	zero_trust/casbposturecontent_test.go
 	zero_trust/casbpostureremediationjob_test.go
 	zero_trust/casbposturepolicy_test.go

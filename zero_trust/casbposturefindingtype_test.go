@@ -15,6 +15,75 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/zero_trust"
 )
 
+func TestCasbPostureFindingTypeNewWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.ZeroTrust.Casb.Posture.FindingTypes.New(context.TODO(), zero_trust.CasbPostureFindingTypeNewParams{
+		AccountID:                cloudflare.F("46148281d8a93d002ef242d8b0d5f9f6"),
+		AppliesToAllIntegrations: cloudflare.F(true),
+		AssetClass:               cloudflare.F("GoogleWorkspaceFile"),
+		AssetVendor:              cloudflare.F(zero_trust.CasbPostureFindingTypeNewParamsAssetVendorGoogleWorkspace),
+		Description:              cloudflare.F("Detects files shared with too many users"),
+		Expression:               cloudflare.F(`result := "pass"`),
+		Name:                     cloudflare.F("Excessive File Sharing"),
+		Severity:                 cloudflare.F(zero_trust.CasbPostureFindingTypeNewParamsSeverityHigh),
+		IntegrationIDs:           cloudflare.F([]string{"550e8400-e29b-41d4-a716-446655440000"}),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestCasbPostureFindingTypeUpdateWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.ZeroTrust.Casb.Posture.FindingTypes.Update(
+		context.TODO(),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		zero_trust.CasbPostureFindingTypeUpdateParams{
+			AccountID:                cloudflare.F("46148281d8a93d002ef242d8b0d5f9f6"),
+			AppliesToAllIntegrations: cloudflare.F(true),
+			Description:              cloudflare.F("Detects files shared with too many users"),
+			IntegrationIDs:           cloudflare.F([]string{"550e8400-e29b-41d4-a716-446655440000"}),
+			Name:                     cloudflare.F("Excessive File Sharing"),
+			Severity:                 cloudflare.F(zero_trust.CasbPostureFindingTypeUpdateParamsSeverityHigh),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestCasbPostureFindingTypeListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -53,6 +122,36 @@ func TestCasbPostureFindingTypeListWithOptionalParams(t *testing.T) {
 	}
 }
 
+func TestCasbPostureFindingTypeDelete(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	err := client.ZeroTrust.Casb.Posture.FindingTypes.Delete(
+		context.TODO(),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		zero_trust.CasbPostureFindingTypeDeleteParams{
+			AccountID: cloudflare.F("46148281d8a93d002ef242d8b0d5f9f6"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestCasbPostureFindingTypeGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -74,6 +173,40 @@ func TestCasbPostureFindingTypeGet(t *testing.T) {
 			AccountID: cloudflare.F("46148281d8a93d002ef242d8b0d5f9f6"),
 		},
 	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestCasbPostureFindingTypeValidateWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.ZeroTrust.Casb.Posture.FindingTypes.Validate(context.TODO(), zero_trust.CasbPostureFindingTypeValidateParams{
+		AccountID:                cloudflare.F("46148281d8a93d002ef242d8b0d5f9f6"),
+		AppliesToAllIntegrations: cloudflare.F(true),
+		AssetClass:               cloudflare.F("GoogleWorkspaceFile"),
+		AssetVendor:              cloudflare.F(zero_trust.CasbPostureFindingTypeValidateParamsAssetVendorGoogleWorkspace),
+		Description:              cloudflare.F("Detects files shared with too many users"),
+		Expression:               cloudflare.F(`result := "pass"`),
+		Name:                     cloudflare.F("Excessive File Sharing"),
+		Severity:                 cloudflare.F(zero_trust.CasbPostureFindingTypeValidateParamsSeverityHigh),
+		IntegrationIDs:           cloudflare.F([]string{"550e8400-e29b-41d4-a716-446655440000"}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

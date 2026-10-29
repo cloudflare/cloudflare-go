@@ -35,7 +35,8 @@ func NewThreatEventTargetIndustryByDatasetService(opts ...option.RequestOption) 
 	return
 }
 
-// Lists all target industries for a specific dataset
+// Legacy. Use `threat-intel events target-industries list`
+// (`GET /events/targetIndustries`) instead.
 func (r *ThreatEventTargetIndustryByDatasetService) List(ctx context.Context, datasetID string, query ThreatEventTargetIndustryByDatasetListParams, opts ...option.RequestOption) (res *ThreatEventTargetIndustryByDatasetListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

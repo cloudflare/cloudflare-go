@@ -40,8 +40,9 @@ func NewSettingAccountNameserverSetService(opts ...option.RequestOption) (r *Set
 	return
 }
 
-// Creates an immutable Custom Nameserver Set. To change a set, create a new one,
-// move any zone assignments, and delete the old set.
+// Creates a named Custom Nameserver Set. Only the customer-defined name can be
+// changed later. To change nameservers or addresses, create a new set, move any
+// zone assignments, and delete the old set.
 func (r *SettingAccountNameserverSetService) New(ctx context.Context, params SettingAccountNameserverSetNewParams, opts ...option.RequestOption) (res *SettingAccountNameserverSetNewResponse, err error) {
 	var env SettingAccountNameserverSetNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -138,6 +139,12 @@ type SettingAccountNameserverSetNewResponse struct {
 	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
 	// otherwise, they use disjoint address groups.
 	IPSet int64 `json:"ip_set" api:"required"`
+	// Customer-defined name, unique within the account by exact string equality
+	// (case-sensitive, with no Unicode normalization). Must be valid UTF-8 and at most
+	// 255 UTF-8 bytes, not 255 characters. Only graphical Unicode characters are
+	// allowed; leading or trailing whitespace is rejected. The name can be changed
+	// without changing the set's nameservers or addresses.
+	Name string `json:"name" api:"required"`
 	// This field can have the runtime type of
 	// [[]SettingAccountNameserverSetNewResponseDNSSettingsNameserverSetStandardResponseNameserver],
 	// [[]SettingAccountNameserverSetNewResponseDNSSettingsNameserverSetAdvancedResponseNameserver].
@@ -153,6 +160,7 @@ type settingAccountNameserverSetNewResponseJSON struct {
 	Advanced    apijson.Field
 	CreatedOn   apijson.Field
 	IPSet       apijson.Field
+	Name        apijson.Field
 	Nameservers apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -214,7 +222,13 @@ type SettingAccountNameserverSetNewResponseDNSSettingsNameserverSetStandardRespo
 	// Selects the account-specific IP set that supplies the nameserver addresses.
 	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
 	// otherwise, they use disjoint address groups.
-	IPSet       int64                                                                                      `json:"ip_set" api:"required"`
+	IPSet int64 `json:"ip_set" api:"required"`
+	// Customer-defined name, unique within the account by exact string equality
+	// (case-sensitive, with no Unicode normalization). Must be valid UTF-8 and at most
+	// 255 UTF-8 bytes, not 255 characters. Only graphical Unicode characters are
+	// allowed; leading or trailing whitespace is rejected. The name can be changed
+	// without changing the set's nameservers or addresses.
+	Name        string                                                                                     `json:"name" api:"required"`
 	Nameservers []SettingAccountNameserverSetNewResponseDNSSettingsNameserverSetStandardResponseNameserver `json:"nameservers" api:"required"`
 	JSON        settingAccountNameserverSetNewResponseDNSSettingsNameserverSetStandardResponseJSON         `json:"-"`
 }
@@ -227,6 +241,7 @@ type settingAccountNameserverSetNewResponseDNSSettingsNameserverSetStandardRespo
 	Advanced    apijson.Field
 	CreatedOn   apijson.Field
 	IPSet       apijson.Field
+	Name        apijson.Field
 	Nameservers apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -297,7 +312,13 @@ type SettingAccountNameserverSetNewResponseDNSSettingsNameserverSetAdvancedRespo
 	// Selects the account-specific IP set that supplies the nameserver addresses.
 	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
 	// otherwise, they use disjoint address groups.
-	IPSet       int64                                                                                      `json:"ip_set" api:"required"`
+	IPSet int64 `json:"ip_set" api:"required"`
+	// Customer-defined name, unique within the account by exact string equality
+	// (case-sensitive, with no Unicode normalization). Must be valid UTF-8 and at most
+	// 255 UTF-8 bytes, not 255 characters. Only graphical Unicode characters are
+	// allowed; leading or trailing whitespace is rejected. The name can be changed
+	// without changing the set's nameservers or addresses.
+	Name        string                                                                                     `json:"name" api:"required"`
 	Nameservers []SettingAccountNameserverSetNewResponseDNSSettingsNameserverSetAdvancedResponseNameserver `json:"nameservers" api:"required"`
 	JSON        settingAccountNameserverSetNewResponseDNSSettingsNameserverSetAdvancedResponseJSON         `json:"-"`
 }
@@ -310,6 +331,7 @@ type settingAccountNameserverSetNewResponseDNSSettingsNameserverSetAdvancedRespo
 	Advanced    apijson.Field
 	CreatedOn   apijson.Field
 	IPSet       apijson.Field
+	Name        apijson.Field
 	Nameservers apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -437,6 +459,12 @@ type SettingAccountNameserverSetListResponse struct {
 	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
 	// otherwise, they use disjoint address groups.
 	IPSet int64 `json:"ip_set" api:"required"`
+	// Customer-defined name, unique within the account by exact string equality
+	// (case-sensitive, with no Unicode normalization). Must be valid UTF-8 and at most
+	// 255 UTF-8 bytes, not 255 characters. Only graphical Unicode characters are
+	// allowed; leading or trailing whitespace is rejected. The name can be changed
+	// without changing the set's nameservers or addresses.
+	Name string `json:"name" api:"required"`
 	// This field can have the runtime type of
 	// [[]SettingAccountNameserverSetListResponseDNSSettingsNameserverSetStandardResponseNameserver],
 	// [[]SettingAccountNameserverSetListResponseDNSSettingsNameserverSetAdvancedResponseNameserver].
@@ -452,6 +480,7 @@ type settingAccountNameserverSetListResponseJSON struct {
 	Advanced    apijson.Field
 	CreatedOn   apijson.Field
 	IPSet       apijson.Field
+	Name        apijson.Field
 	Nameservers apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -513,7 +542,13 @@ type SettingAccountNameserverSetListResponseDNSSettingsNameserverSetStandardResp
 	// Selects the account-specific IP set that supplies the nameserver addresses.
 	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
 	// otherwise, they use disjoint address groups.
-	IPSet       int64                                                                                       `json:"ip_set" api:"required"`
+	IPSet int64 `json:"ip_set" api:"required"`
+	// Customer-defined name, unique within the account by exact string equality
+	// (case-sensitive, with no Unicode normalization). Must be valid UTF-8 and at most
+	// 255 UTF-8 bytes, not 255 characters. Only graphical Unicode characters are
+	// allowed; leading or trailing whitespace is rejected. The name can be changed
+	// without changing the set's nameservers or addresses.
+	Name        string                                                                                      `json:"name" api:"required"`
 	Nameservers []SettingAccountNameserverSetListResponseDNSSettingsNameserverSetStandardResponseNameserver `json:"nameservers" api:"required"`
 	JSON        settingAccountNameserverSetListResponseDNSSettingsNameserverSetStandardResponseJSON         `json:"-"`
 }
@@ -526,6 +561,7 @@ type settingAccountNameserverSetListResponseDNSSettingsNameserverSetStandardResp
 	Advanced    apijson.Field
 	CreatedOn   apijson.Field
 	IPSet       apijson.Field
+	Name        apijson.Field
 	Nameservers apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -596,7 +632,13 @@ type SettingAccountNameserverSetListResponseDNSSettingsNameserverSetAdvancedResp
 	// Selects the account-specific IP set that supplies the nameserver addresses.
 	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
 	// otherwise, they use disjoint address groups.
-	IPSet       int64                                                                                       `json:"ip_set" api:"required"`
+	IPSet int64 `json:"ip_set" api:"required"`
+	// Customer-defined name, unique within the account by exact string equality
+	// (case-sensitive, with no Unicode normalization). Must be valid UTF-8 and at most
+	// 255 UTF-8 bytes, not 255 characters. Only graphical Unicode characters are
+	// allowed; leading or trailing whitespace is rejected. The name can be changed
+	// without changing the set's nameservers or addresses.
+	Name        string                                                                                      `json:"name" api:"required"`
 	Nameservers []SettingAccountNameserverSetListResponseDNSSettingsNameserverSetAdvancedResponseNameserver `json:"nameservers" api:"required"`
 	JSON        settingAccountNameserverSetListResponseDNSSettingsNameserverSetAdvancedResponseJSON         `json:"-"`
 }
@@ -609,6 +651,7 @@ type settingAccountNameserverSetListResponseDNSSettingsNameserverSetAdvancedResp
 	Advanced    apijson.Field
 	CreatedOn   apijson.Field
 	IPSet       apijson.Field
+	Name        apijson.Field
 	Nameservers apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -758,6 +801,12 @@ type SettingAccountNameserverSetGetResponse struct {
 	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
 	// otherwise, they use disjoint address groups.
 	IPSet int64 `json:"ip_set" api:"required"`
+	// Customer-defined name, unique within the account by exact string equality
+	// (case-sensitive, with no Unicode normalization). Must be valid UTF-8 and at most
+	// 255 UTF-8 bytes, not 255 characters. Only graphical Unicode characters are
+	// allowed; leading or trailing whitespace is rejected. The name can be changed
+	// without changing the set's nameservers or addresses.
+	Name string `json:"name" api:"required"`
 	// This field can have the runtime type of
 	// [[]SettingAccountNameserverSetGetResponseDNSSettingsNameserverSetStandardResponseNameserver],
 	// [[]SettingAccountNameserverSetGetResponseDNSSettingsNameserverSetAdvancedResponseNameserver].
@@ -773,6 +822,7 @@ type settingAccountNameserverSetGetResponseJSON struct {
 	Advanced    apijson.Field
 	CreatedOn   apijson.Field
 	IPSet       apijson.Field
+	Name        apijson.Field
 	Nameservers apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -834,7 +884,13 @@ type SettingAccountNameserverSetGetResponseDNSSettingsNameserverSetStandardRespo
 	// Selects the account-specific IP set that supplies the nameserver addresses.
 	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
 	// otherwise, they use disjoint address groups.
-	IPSet       int64                                                                                      `json:"ip_set" api:"required"`
+	IPSet int64 `json:"ip_set" api:"required"`
+	// Customer-defined name, unique within the account by exact string equality
+	// (case-sensitive, with no Unicode normalization). Must be valid UTF-8 and at most
+	// 255 UTF-8 bytes, not 255 characters. Only graphical Unicode characters are
+	// allowed; leading or trailing whitespace is rejected. The name can be changed
+	// without changing the set's nameservers or addresses.
+	Name        string                                                                                     `json:"name" api:"required"`
 	Nameservers []SettingAccountNameserverSetGetResponseDNSSettingsNameserverSetStandardResponseNameserver `json:"nameservers" api:"required"`
 	JSON        settingAccountNameserverSetGetResponseDNSSettingsNameserverSetStandardResponseJSON         `json:"-"`
 }
@@ -847,6 +903,7 @@ type settingAccountNameserverSetGetResponseDNSSettingsNameserverSetStandardRespo
 	Advanced    apijson.Field
 	CreatedOn   apijson.Field
 	IPSet       apijson.Field
+	Name        apijson.Field
 	Nameservers apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -917,7 +974,13 @@ type SettingAccountNameserverSetGetResponseDNSSettingsNameserverSetAdvancedRespo
 	// Selects the account-specific IP set that supplies the nameserver addresses.
 	// Nameserver sets with the same `ip_set` and `advanced` value may reuse addresses;
 	// otherwise, they use disjoint address groups.
-	IPSet       int64                                                                                      `json:"ip_set" api:"required"`
+	IPSet int64 `json:"ip_set" api:"required"`
+	// Customer-defined name, unique within the account by exact string equality
+	// (case-sensitive, with no Unicode normalization). Must be valid UTF-8 and at most
+	// 255 UTF-8 bytes, not 255 characters. Only graphical Unicode characters are
+	// allowed; leading or trailing whitespace is rejected. The name can be changed
+	// without changing the set's nameservers or addresses.
+	Name        string                                                                                     `json:"name" api:"required"`
 	Nameservers []SettingAccountNameserverSetGetResponseDNSSettingsNameserverSetAdvancedResponseNameserver `json:"nameservers" api:"required"`
 	JSON        settingAccountNameserverSetGetResponseDNSSettingsNameserverSetAdvancedResponseJSON         `json:"-"`
 }
@@ -930,6 +993,7 @@ type settingAccountNameserverSetGetResponseDNSSettingsNameserverSetAdvancedRespo
 	Advanced    apijson.Field
 	CreatedOn   apijson.Field
 	IPSet       apijson.Field
+	Name        apijson.Field
 	Nameservers apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1049,6 +1113,12 @@ func (r SettingAccountNameserverSetGetResponseAdvanced) IsKnown() bool {
 type SettingAccountNameserverSetNewParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Customer-defined name, unique within the account by exact string equality
+	// (case-sensitive, with no Unicode normalization). Must be valid UTF-8 and at most
+	// 255 UTF-8 bytes, not 255 characters. Only graphical Unicode characters are
+	// allowed; leading or trailing whitespace is rejected. The name can be changed
+	// without changing the set's nameservers or addresses.
+	Name param.Field[string] `json:"name" api:"required"`
 	// Lists each nameserver and the number of addresses to allocate to it. Requires a
 	// unique name for each entry in the set.
 	Nameservers param.Field[[]SettingAccountNameserverSetNewParamsNameserver] `json:"nameservers" api:"required"`

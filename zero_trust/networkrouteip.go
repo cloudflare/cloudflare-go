@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // NetworkRouteIPService contains methods and other services that help with
@@ -80,9 +79,9 @@ func (r NetworkRouteIPGetParams) URLQuery() (v url.Values) {
 }
 
 type NetworkRouteIPGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	Result   Teamnet               `json:"result" api:"required"`
+	Errors   []NetworkRouteIPGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []NetworkRouteIPGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Teamnet                                     `json:"result" api:"required"`
 	// Whether the API call was successful
 	Success NetworkRouteIPGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkRouteIPGetResponseEnvelopeJSON    `json:"-"`
@@ -104,6 +103,58 @@ func (r *NetworkRouteIPGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r networkRouteIPGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkRouteIPGetResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                      `json:"context"`
+	JSON    networkRouteIPGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// networkRouteIPGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [NetworkRouteIPGetResponseEnvelopeErrors]
+type networkRouteIPGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkRouteIPGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkRouteIPGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkRouteIPGetResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                        `json:"context"`
+	JSON    networkRouteIPGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// networkRouteIPGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [NetworkRouteIPGetResponseEnvelopeMessages]
+type networkRouteIPGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkRouteIPGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkRouteIPGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

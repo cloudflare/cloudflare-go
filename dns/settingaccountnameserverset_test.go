@@ -30,6 +30,7 @@ func TestSettingAccountNameserverSetNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.DNS.Settings.Account.NameserverSets.New(context.TODO(), dns.SettingAccountNameserverSetNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:      cloudflare.F("Production nameservers"),
 		Nameservers: cloudflare.F([]dns.SettingAccountNameserverSetNewParamsNameserver{{
 			Name:    cloudflare.F("ns1.example.com"),
 			IPCount: cloudflare.F(int64(1)),

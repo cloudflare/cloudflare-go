@@ -33,8 +33,7 @@ func NewThreatEventIndicatorByDatasetTagService(opts ...option.RequestOption) (r
 	return
 }
 
-// Returns all mirrored tags from the indicator dataset (DO mirror table). No
-// pagination.
+// Lists the tags applied to indicators in a dataset. Results are not paginated.
 func (r *ThreatEventIndicatorByDatasetTagService) List(ctx context.Context, datasetID string, query ThreatEventIndicatorByDatasetTagListParams, opts ...option.RequestOption) (res *[]ThreatEventIndicatorByDatasetTagListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

@@ -249,8 +249,6 @@ type DirectoryServiceNewResponseInfraHTTPServiceConfig struct {
 	HTTPSPort int64                                                 `json:"https_port" api:"nullable"`
 	ServiceID string                                                `json:"service_id" format:"uuid"`
 	// TLS settings for a connectivity service.
-	//
-	// If omitted, the default mode (`verify_full`) is used.
 	TLSSettings DirectoryServiceNewResponseInfraHTTPServiceConfigTLSSettings `json:"tls_settings" api:"nullable"`
 	UpdatedAt   time.Time                                                    `json:"updated_at" format:"date-time"`
 	JSON        directoryServiceNewResponseInfraHTTPServiceConfigJSON        `json:"-"`
@@ -583,16 +581,21 @@ func (r DirectoryServiceNewResponseInfraHTTPServiceConfigType) IsKnown() bool {
 }
 
 // TLS settings for a connectivity service.
-//
-// If omitted, the default mode (`verify_full`) is used.
 type DirectoryServiceNewResponseInfraHTTPServiceConfigTLSSettings struct {
 	// TLS certificate verification mode for the connection to the origin.
 	//
 	// - `"verify_full"` — verify certificate chain and hostname (default)
 	// - `"verify_ca"` — verify certificate chain only, skip hostname check
 	// - `"disabled"` — do not verify the server certificate at all
-	CERTVerificationMode string                                                           `json:"cert_verification_mode" api:"required"`
-	JSON                 directoryServiceNewResponseInfraHTTPServiceConfigTLSSettingsJSON `json:"-"`
+	//
+	// `disabled` cannot be combined with `certificate_authority`: a custom CA is only
+	// used to verify the server certificate.
+	CERTVerificationMode string `json:"cert_verification_mode" api:"required"`
+	// UUID of the custom CA certificate or chain.
+	CertificateAuthority string `json:"certificate_authority" api:"nullable"`
+	// UUID of the mTLS client certificate and private key.
+	ClientCertificate string                                                           `json:"client_certificate" api:"nullable"`
+	JSON              directoryServiceNewResponseInfraHTTPServiceConfigTLSSettingsJSON `json:"-"`
 }
 
 // directoryServiceNewResponseInfraHTTPServiceConfigTLSSettingsJSON contains the
@@ -600,6 +603,8 @@ type DirectoryServiceNewResponseInfraHTTPServiceConfigTLSSettings struct {
 // [DirectoryServiceNewResponseInfraHTTPServiceConfigTLSSettings]
 type directoryServiceNewResponseInfraHTTPServiceConfigTLSSettingsJSON struct {
 	CERTVerificationMode apijson.Field
+	CertificateAuthority apijson.Field
+	ClientCertificate    apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -621,8 +626,6 @@ type DirectoryServiceNewResponseInfraTCPServiceConfig struct {
 	ServiceID   string                                                      `json:"service_id" format:"uuid"`
 	TCPPort     int64                                                       `json:"tcp_port" api:"nullable"`
 	// TLS settings for a connectivity service.
-	//
-	// If omitted, the default mode (`verify_full`) is used.
 	TLSSettings DirectoryServiceNewResponseInfraTCPServiceConfigTLSSettings `json:"tls_settings" api:"nullable"`
 	UpdatedAt   time.Time                                                   `json:"updated_at" format:"date-time"`
 	JSON        directoryServiceNewResponseInfraTCPServiceConfigJSON        `json:"-"`
@@ -970,16 +973,21 @@ func (r DirectoryServiceNewResponseInfraTCPServiceConfigAppProtocol) IsKnown() b
 }
 
 // TLS settings for a connectivity service.
-//
-// If omitted, the default mode (`verify_full`) is used.
 type DirectoryServiceNewResponseInfraTCPServiceConfigTLSSettings struct {
 	// TLS certificate verification mode for the connection to the origin.
 	//
 	// - `"verify_full"` — verify certificate chain and hostname (default)
 	// - `"verify_ca"` — verify certificate chain only, skip hostname check
 	// - `"disabled"` — do not verify the server certificate at all
-	CERTVerificationMode string                                                          `json:"cert_verification_mode" api:"required"`
-	JSON                 directoryServiceNewResponseInfraTCPServiceConfigTLSSettingsJSON `json:"-"`
+	//
+	// `disabled` cannot be combined with `certificate_authority`: a custom CA is only
+	// used to verify the server certificate.
+	CERTVerificationMode string `json:"cert_verification_mode" api:"required"`
+	// UUID of the custom CA certificate or chain.
+	CertificateAuthority string `json:"certificate_authority" api:"nullable"`
+	// UUID of the mTLS client certificate and private key.
+	ClientCertificate string                                                          `json:"client_certificate" api:"nullable"`
+	JSON              directoryServiceNewResponseInfraTCPServiceConfigTLSSettingsJSON `json:"-"`
 }
 
 // directoryServiceNewResponseInfraTCPServiceConfigTLSSettingsJSON contains the
@@ -987,6 +995,8 @@ type DirectoryServiceNewResponseInfraTCPServiceConfigTLSSettings struct {
 // [DirectoryServiceNewResponseInfraTCPServiceConfigTLSSettings]
 type directoryServiceNewResponseInfraTCPServiceConfigTLSSettingsJSON struct {
 	CERTVerificationMode apijson.Field
+	CertificateAuthority apijson.Field
+	ClientCertificate    apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -1134,8 +1144,6 @@ type DirectoryServiceUpdateResponseInfraHTTPServiceConfig struct {
 	HTTPSPort int64                                                    `json:"https_port" api:"nullable"`
 	ServiceID string                                                   `json:"service_id" format:"uuid"`
 	// TLS settings for a connectivity service.
-	//
-	// If omitted, the default mode (`verify_full`) is used.
 	TLSSettings DirectoryServiceUpdateResponseInfraHTTPServiceConfigTLSSettings `json:"tls_settings" api:"nullable"`
 	UpdatedAt   time.Time                                                       `json:"updated_at" format:"date-time"`
 	JSON        directoryServiceUpdateResponseInfraHTTPServiceConfigJSON        `json:"-"`
@@ -1471,16 +1479,21 @@ func (r DirectoryServiceUpdateResponseInfraHTTPServiceConfigType) IsKnown() bool
 }
 
 // TLS settings for a connectivity service.
-//
-// If omitted, the default mode (`verify_full`) is used.
 type DirectoryServiceUpdateResponseInfraHTTPServiceConfigTLSSettings struct {
 	// TLS certificate verification mode for the connection to the origin.
 	//
 	// - `"verify_full"` — verify certificate chain and hostname (default)
 	// - `"verify_ca"` — verify certificate chain only, skip hostname check
 	// - `"disabled"` — do not verify the server certificate at all
-	CERTVerificationMode string                                                              `json:"cert_verification_mode" api:"required"`
-	JSON                 directoryServiceUpdateResponseInfraHTTPServiceConfigTLSSettingsJSON `json:"-"`
+	//
+	// `disabled` cannot be combined with `certificate_authority`: a custom CA is only
+	// used to verify the server certificate.
+	CERTVerificationMode string `json:"cert_verification_mode" api:"required"`
+	// UUID of the custom CA certificate or chain.
+	CertificateAuthority string `json:"certificate_authority" api:"nullable"`
+	// UUID of the mTLS client certificate and private key.
+	ClientCertificate string                                                              `json:"client_certificate" api:"nullable"`
+	JSON              directoryServiceUpdateResponseInfraHTTPServiceConfigTLSSettingsJSON `json:"-"`
 }
 
 // directoryServiceUpdateResponseInfraHTTPServiceConfigTLSSettingsJSON contains the
@@ -1488,6 +1501,8 @@ type DirectoryServiceUpdateResponseInfraHTTPServiceConfigTLSSettings struct {
 // [DirectoryServiceUpdateResponseInfraHTTPServiceConfigTLSSettings]
 type directoryServiceUpdateResponseInfraHTTPServiceConfigTLSSettingsJSON struct {
 	CERTVerificationMode apijson.Field
+	CertificateAuthority apijson.Field
+	ClientCertificate    apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -1509,8 +1524,6 @@ type DirectoryServiceUpdateResponseInfraTCPServiceConfig struct {
 	ServiceID   string                                                         `json:"service_id" format:"uuid"`
 	TCPPort     int64                                                          `json:"tcp_port" api:"nullable"`
 	// TLS settings for a connectivity service.
-	//
-	// If omitted, the default mode (`verify_full`) is used.
 	TLSSettings DirectoryServiceUpdateResponseInfraTCPServiceConfigTLSSettings `json:"tls_settings" api:"nullable"`
 	UpdatedAt   time.Time                                                      `json:"updated_at" format:"date-time"`
 	JSON        directoryServiceUpdateResponseInfraTCPServiceConfigJSON        `json:"-"`
@@ -1860,16 +1873,21 @@ func (r DirectoryServiceUpdateResponseInfraTCPServiceConfigAppProtocol) IsKnown(
 }
 
 // TLS settings for a connectivity service.
-//
-// If omitted, the default mode (`verify_full`) is used.
 type DirectoryServiceUpdateResponseInfraTCPServiceConfigTLSSettings struct {
 	// TLS certificate verification mode for the connection to the origin.
 	//
 	// - `"verify_full"` — verify certificate chain and hostname (default)
 	// - `"verify_ca"` — verify certificate chain only, skip hostname check
 	// - `"disabled"` — do not verify the server certificate at all
-	CERTVerificationMode string                                                             `json:"cert_verification_mode" api:"required"`
-	JSON                 directoryServiceUpdateResponseInfraTCPServiceConfigTLSSettingsJSON `json:"-"`
+	//
+	// `disabled` cannot be combined with `certificate_authority`: a custom CA is only
+	// used to verify the server certificate.
+	CERTVerificationMode string `json:"cert_verification_mode" api:"required"`
+	// UUID of the custom CA certificate or chain.
+	CertificateAuthority string `json:"certificate_authority" api:"nullable"`
+	// UUID of the mTLS client certificate and private key.
+	ClientCertificate string                                                             `json:"client_certificate" api:"nullable"`
+	JSON              directoryServiceUpdateResponseInfraTCPServiceConfigTLSSettingsJSON `json:"-"`
 }
 
 // directoryServiceUpdateResponseInfraTCPServiceConfigTLSSettingsJSON contains the
@@ -1877,6 +1895,8 @@ type DirectoryServiceUpdateResponseInfraTCPServiceConfigTLSSettings struct {
 // [DirectoryServiceUpdateResponseInfraTCPServiceConfigTLSSettings]
 type directoryServiceUpdateResponseInfraTCPServiceConfigTLSSettingsJSON struct {
 	CERTVerificationMode apijson.Field
+	CertificateAuthority apijson.Field
+	ClientCertificate    apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -2024,8 +2044,6 @@ type DirectoryServiceListResponseInfraHTTPServiceConfig struct {
 	HTTPSPort int64                                                  `json:"https_port" api:"nullable"`
 	ServiceID string                                                 `json:"service_id" format:"uuid"`
 	// TLS settings for a connectivity service.
-	//
-	// If omitted, the default mode (`verify_full`) is used.
 	TLSSettings DirectoryServiceListResponseInfraHTTPServiceConfigTLSSettings `json:"tls_settings" api:"nullable"`
 	UpdatedAt   time.Time                                                     `json:"updated_at" format:"date-time"`
 	JSON        directoryServiceListResponseInfraHTTPServiceConfigJSON        `json:"-"`
@@ -2359,16 +2377,21 @@ func (r DirectoryServiceListResponseInfraHTTPServiceConfigType) IsKnown() bool {
 }
 
 // TLS settings for a connectivity service.
-//
-// If omitted, the default mode (`verify_full`) is used.
 type DirectoryServiceListResponseInfraHTTPServiceConfigTLSSettings struct {
 	// TLS certificate verification mode for the connection to the origin.
 	//
 	// - `"verify_full"` — verify certificate chain and hostname (default)
 	// - `"verify_ca"` — verify certificate chain only, skip hostname check
 	// - `"disabled"` — do not verify the server certificate at all
-	CERTVerificationMode string                                                            `json:"cert_verification_mode" api:"required"`
-	JSON                 directoryServiceListResponseInfraHTTPServiceConfigTLSSettingsJSON `json:"-"`
+	//
+	// `disabled` cannot be combined with `certificate_authority`: a custom CA is only
+	// used to verify the server certificate.
+	CERTVerificationMode string `json:"cert_verification_mode" api:"required"`
+	// UUID of the custom CA certificate or chain.
+	CertificateAuthority string `json:"certificate_authority" api:"nullable"`
+	// UUID of the mTLS client certificate and private key.
+	ClientCertificate string                                                            `json:"client_certificate" api:"nullable"`
+	JSON              directoryServiceListResponseInfraHTTPServiceConfigTLSSettingsJSON `json:"-"`
 }
 
 // directoryServiceListResponseInfraHTTPServiceConfigTLSSettingsJSON contains the
@@ -2376,6 +2399,8 @@ type DirectoryServiceListResponseInfraHTTPServiceConfigTLSSettings struct {
 // [DirectoryServiceListResponseInfraHTTPServiceConfigTLSSettings]
 type directoryServiceListResponseInfraHTTPServiceConfigTLSSettingsJSON struct {
 	CERTVerificationMode apijson.Field
+	CertificateAuthority apijson.Field
+	ClientCertificate    apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -2397,8 +2422,6 @@ type DirectoryServiceListResponseInfraTCPServiceConfig struct {
 	ServiceID   string                                                       `json:"service_id" format:"uuid"`
 	TCPPort     int64                                                        `json:"tcp_port" api:"nullable"`
 	// TLS settings for a connectivity service.
-	//
-	// If omitted, the default mode (`verify_full`) is used.
 	TLSSettings DirectoryServiceListResponseInfraTCPServiceConfigTLSSettings `json:"tls_settings" api:"nullable"`
 	UpdatedAt   time.Time                                                    `json:"updated_at" format:"date-time"`
 	JSON        directoryServiceListResponseInfraTCPServiceConfigJSON        `json:"-"`
@@ -2746,16 +2769,21 @@ func (r DirectoryServiceListResponseInfraTCPServiceConfigAppProtocol) IsKnown() 
 }
 
 // TLS settings for a connectivity service.
-//
-// If omitted, the default mode (`verify_full`) is used.
 type DirectoryServiceListResponseInfraTCPServiceConfigTLSSettings struct {
 	// TLS certificate verification mode for the connection to the origin.
 	//
 	// - `"verify_full"` — verify certificate chain and hostname (default)
 	// - `"verify_ca"` — verify certificate chain only, skip hostname check
 	// - `"disabled"` — do not verify the server certificate at all
-	CERTVerificationMode string                                                           `json:"cert_verification_mode" api:"required"`
-	JSON                 directoryServiceListResponseInfraTCPServiceConfigTLSSettingsJSON `json:"-"`
+	//
+	// `disabled` cannot be combined with `certificate_authority`: a custom CA is only
+	// used to verify the server certificate.
+	CERTVerificationMode string `json:"cert_verification_mode" api:"required"`
+	// UUID of the custom CA certificate or chain.
+	CertificateAuthority string `json:"certificate_authority" api:"nullable"`
+	// UUID of the mTLS client certificate and private key.
+	ClientCertificate string                                                           `json:"client_certificate" api:"nullable"`
+	JSON              directoryServiceListResponseInfraTCPServiceConfigTLSSettingsJSON `json:"-"`
 }
 
 // directoryServiceListResponseInfraTCPServiceConfigTLSSettingsJSON contains the
@@ -2763,6 +2791,8 @@ type DirectoryServiceListResponseInfraTCPServiceConfigTLSSettings struct {
 // [DirectoryServiceListResponseInfraTCPServiceConfigTLSSettings]
 type directoryServiceListResponseInfraTCPServiceConfigTLSSettingsJSON struct {
 	CERTVerificationMode apijson.Field
+	CertificateAuthority apijson.Field
+	ClientCertificate    apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -2910,8 +2940,6 @@ type DirectoryServiceGetResponseInfraHTTPServiceConfig struct {
 	HTTPSPort int64                                                 `json:"https_port" api:"nullable"`
 	ServiceID string                                                `json:"service_id" format:"uuid"`
 	// TLS settings for a connectivity service.
-	//
-	// If omitted, the default mode (`verify_full`) is used.
 	TLSSettings DirectoryServiceGetResponseInfraHTTPServiceConfigTLSSettings `json:"tls_settings" api:"nullable"`
 	UpdatedAt   time.Time                                                    `json:"updated_at" format:"date-time"`
 	JSON        directoryServiceGetResponseInfraHTTPServiceConfigJSON        `json:"-"`
@@ -3244,16 +3272,21 @@ func (r DirectoryServiceGetResponseInfraHTTPServiceConfigType) IsKnown() bool {
 }
 
 // TLS settings for a connectivity service.
-//
-// If omitted, the default mode (`verify_full`) is used.
 type DirectoryServiceGetResponseInfraHTTPServiceConfigTLSSettings struct {
 	// TLS certificate verification mode for the connection to the origin.
 	//
 	// - `"verify_full"` — verify certificate chain and hostname (default)
 	// - `"verify_ca"` — verify certificate chain only, skip hostname check
 	// - `"disabled"` — do not verify the server certificate at all
-	CERTVerificationMode string                                                           `json:"cert_verification_mode" api:"required"`
-	JSON                 directoryServiceGetResponseInfraHTTPServiceConfigTLSSettingsJSON `json:"-"`
+	//
+	// `disabled` cannot be combined with `certificate_authority`: a custom CA is only
+	// used to verify the server certificate.
+	CERTVerificationMode string `json:"cert_verification_mode" api:"required"`
+	// UUID of the custom CA certificate or chain.
+	CertificateAuthority string `json:"certificate_authority" api:"nullable"`
+	// UUID of the mTLS client certificate and private key.
+	ClientCertificate string                                                           `json:"client_certificate" api:"nullable"`
+	JSON              directoryServiceGetResponseInfraHTTPServiceConfigTLSSettingsJSON `json:"-"`
 }
 
 // directoryServiceGetResponseInfraHTTPServiceConfigTLSSettingsJSON contains the
@@ -3261,6 +3294,8 @@ type DirectoryServiceGetResponseInfraHTTPServiceConfigTLSSettings struct {
 // [DirectoryServiceGetResponseInfraHTTPServiceConfigTLSSettings]
 type directoryServiceGetResponseInfraHTTPServiceConfigTLSSettingsJSON struct {
 	CERTVerificationMode apijson.Field
+	CertificateAuthority apijson.Field
+	ClientCertificate    apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -3282,8 +3317,6 @@ type DirectoryServiceGetResponseInfraTCPServiceConfig struct {
 	ServiceID   string                                                      `json:"service_id" format:"uuid"`
 	TCPPort     int64                                                       `json:"tcp_port" api:"nullable"`
 	// TLS settings for a connectivity service.
-	//
-	// If omitted, the default mode (`verify_full`) is used.
 	TLSSettings DirectoryServiceGetResponseInfraTCPServiceConfigTLSSettings `json:"tls_settings" api:"nullable"`
 	UpdatedAt   time.Time                                                   `json:"updated_at" format:"date-time"`
 	JSON        directoryServiceGetResponseInfraTCPServiceConfigJSON        `json:"-"`
@@ -3631,16 +3664,21 @@ func (r DirectoryServiceGetResponseInfraTCPServiceConfigAppProtocol) IsKnown() b
 }
 
 // TLS settings for a connectivity service.
-//
-// If omitted, the default mode (`verify_full`) is used.
 type DirectoryServiceGetResponseInfraTCPServiceConfigTLSSettings struct {
 	// TLS certificate verification mode for the connection to the origin.
 	//
 	// - `"verify_full"` — verify certificate chain and hostname (default)
 	// - `"verify_ca"` — verify certificate chain only, skip hostname check
 	// - `"disabled"` — do not verify the server certificate at all
-	CERTVerificationMode string                                                          `json:"cert_verification_mode" api:"required"`
-	JSON                 directoryServiceGetResponseInfraTCPServiceConfigTLSSettingsJSON `json:"-"`
+	//
+	// `disabled` cannot be combined with `certificate_authority`: a custom CA is only
+	// used to verify the server certificate.
+	CERTVerificationMode string `json:"cert_verification_mode" api:"required"`
+	// UUID of the custom CA certificate or chain.
+	CertificateAuthority string `json:"certificate_authority" api:"nullable"`
+	// UUID of the mTLS client certificate and private key.
+	ClientCertificate string                                                          `json:"client_certificate" api:"nullable"`
+	JSON              directoryServiceGetResponseInfraTCPServiceConfigTLSSettingsJSON `json:"-"`
 }
 
 // directoryServiceGetResponseInfraTCPServiceConfigTLSSettingsJSON contains the
@@ -3648,6 +3686,8 @@ type DirectoryServiceGetResponseInfraTCPServiceConfigTLSSettings struct {
 // [DirectoryServiceGetResponseInfraTCPServiceConfigTLSSettings]
 type directoryServiceGetResponseInfraTCPServiceConfigTLSSettingsJSON struct {
 	CERTVerificationMode apijson.Field
+	CertificateAuthority apijson.Field
+	ClientCertificate    apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -3731,8 +3771,6 @@ type DirectoryServiceNewParamsBodyInfraHTTPServiceConfig struct {
 	HTTPPort  param.Field[int64]                                                        `json:"http_port"`
 	HTTPSPort param.Field[int64]                                                        `json:"https_port"`
 	// TLS settings for a connectivity service.
-	//
-	// If omitted, the default mode (`verify_full`) is used.
 	TLSSettings param.Field[DirectoryServiceNewParamsBodyInfraHTTPServiceConfigTLSSettings] `json:"tls_settings"`
 }
 
@@ -3866,15 +3904,20 @@ func (r DirectoryServiceNewParamsBodyInfraHTTPServiceConfigType) IsKnown() bool 
 }
 
 // TLS settings for a connectivity service.
-//
-// If omitted, the default mode (`verify_full`) is used.
 type DirectoryServiceNewParamsBodyInfraHTTPServiceConfigTLSSettings struct {
 	// TLS certificate verification mode for the connection to the origin.
 	//
 	// - `"verify_full"` — verify certificate chain and hostname (default)
 	// - `"verify_ca"` — verify certificate chain only, skip hostname check
 	// - `"disabled"` — do not verify the server certificate at all
+	//
+	// `disabled` cannot be combined with `certificate_authority`: a custom CA is only
+	// used to verify the server certificate.
 	CERTVerificationMode param.Field[string] `json:"cert_verification_mode" api:"required"`
+	// UUID of the custom CA certificate or chain.
+	CertificateAuthority param.Field[string] `json:"certificate_authority"`
+	// UUID of the mTLS client certificate and private key.
+	ClientCertificate param.Field[string] `json:"client_certificate"`
 }
 
 func (r DirectoryServiceNewParamsBodyInfraHTTPServiceConfigTLSSettings) MarshalJSON() (data []byte, err error) {
@@ -3888,8 +3931,6 @@ type DirectoryServiceNewParamsBodyInfraTCPServiceConfig struct {
 	AppProtocol param.Field[DirectoryServiceNewParamsBodyInfraTCPServiceConfigAppProtocol] `json:"app_protocol"`
 	TCPPort     param.Field[int64]                                                         `json:"tcp_port"`
 	// TLS settings for a connectivity service.
-	//
-	// If omitted, the default mode (`verify_full`) is used.
 	TLSSettings param.Field[DirectoryServiceNewParamsBodyInfraTCPServiceConfigTLSSettings] `json:"tls_settings"`
 }
 
@@ -4038,15 +4079,20 @@ func (r DirectoryServiceNewParamsBodyInfraTCPServiceConfigAppProtocol) IsKnown()
 }
 
 // TLS settings for a connectivity service.
-//
-// If omitted, the default mode (`verify_full`) is used.
 type DirectoryServiceNewParamsBodyInfraTCPServiceConfigTLSSettings struct {
 	// TLS certificate verification mode for the connection to the origin.
 	//
 	// - `"verify_full"` — verify certificate chain and hostname (default)
 	// - `"verify_ca"` — verify certificate chain only, skip hostname check
 	// - `"disabled"` — do not verify the server certificate at all
+	//
+	// `disabled` cannot be combined with `certificate_authority`: a custom CA is only
+	// used to verify the server certificate.
 	CERTVerificationMode param.Field[string] `json:"cert_verification_mode" api:"required"`
+	// UUID of the custom CA certificate or chain.
+	CertificateAuthority param.Field[string] `json:"certificate_authority"`
+	// UUID of the mTLS client certificate and private key.
+	ClientCertificate param.Field[string] `json:"client_certificate"`
 }
 
 func (r DirectoryServiceNewParamsBodyInfraTCPServiceConfigTLSSettings) MarshalJSON() (data []byte, err error) {
@@ -4263,8 +4309,6 @@ type DirectoryServiceUpdateParamsBodyInfraHTTPServiceConfig struct {
 	HTTPPort  param.Field[int64]                                                           `json:"http_port"`
 	HTTPSPort param.Field[int64]                                                           `json:"https_port"`
 	// TLS settings for a connectivity service.
-	//
-	// If omitted, the default mode (`verify_full`) is used.
 	TLSSettings param.Field[DirectoryServiceUpdateParamsBodyInfraHTTPServiceConfigTLSSettings] `json:"tls_settings"`
 }
 
@@ -4398,15 +4442,20 @@ func (r DirectoryServiceUpdateParamsBodyInfraHTTPServiceConfigType) IsKnown() bo
 }
 
 // TLS settings for a connectivity service.
-//
-// If omitted, the default mode (`verify_full`) is used.
 type DirectoryServiceUpdateParamsBodyInfraHTTPServiceConfigTLSSettings struct {
 	// TLS certificate verification mode for the connection to the origin.
 	//
 	// - `"verify_full"` — verify certificate chain and hostname (default)
 	// - `"verify_ca"` — verify certificate chain only, skip hostname check
 	// - `"disabled"` — do not verify the server certificate at all
+	//
+	// `disabled` cannot be combined with `certificate_authority`: a custom CA is only
+	// used to verify the server certificate.
 	CERTVerificationMode param.Field[string] `json:"cert_verification_mode" api:"required"`
+	// UUID of the custom CA certificate or chain.
+	CertificateAuthority param.Field[string] `json:"certificate_authority"`
+	// UUID of the mTLS client certificate and private key.
+	ClientCertificate param.Field[string] `json:"client_certificate"`
 }
 
 func (r DirectoryServiceUpdateParamsBodyInfraHTTPServiceConfigTLSSettings) MarshalJSON() (data []byte, err error) {
@@ -4420,8 +4469,6 @@ type DirectoryServiceUpdateParamsBodyInfraTCPServiceConfig struct {
 	AppProtocol param.Field[DirectoryServiceUpdateParamsBodyInfraTCPServiceConfigAppProtocol] `json:"app_protocol"`
 	TCPPort     param.Field[int64]                                                            `json:"tcp_port"`
 	// TLS settings for a connectivity service.
-	//
-	// If omitted, the default mode (`verify_full`) is used.
 	TLSSettings param.Field[DirectoryServiceUpdateParamsBodyInfraTCPServiceConfigTLSSettings] `json:"tls_settings"`
 }
 
@@ -4570,15 +4617,20 @@ func (r DirectoryServiceUpdateParamsBodyInfraTCPServiceConfigAppProtocol) IsKnow
 }
 
 // TLS settings for a connectivity service.
-//
-// If omitted, the default mode (`verify_full`) is used.
 type DirectoryServiceUpdateParamsBodyInfraTCPServiceConfigTLSSettings struct {
 	// TLS certificate verification mode for the connection to the origin.
 	//
 	// - `"verify_full"` — verify certificate chain and hostname (default)
 	// - `"verify_ca"` — verify certificate chain only, skip hostname check
 	// - `"disabled"` — do not verify the server certificate at all
+	//
+	// `disabled` cannot be combined with `certificate_authority`: a custom CA is only
+	// used to verify the server certificate.
 	CERTVerificationMode param.Field[string] `json:"cert_verification_mode" api:"required"`
+	// UUID of the custom CA certificate or chain.
+	CertificateAuthority param.Field[string] `json:"certificate_authority"`
+	// UUID of the mTLS client certificate and private key.
+	ClientCertificate param.Field[string] `json:"client_certificate"`
 }
 
 func (r DirectoryServiceUpdateParamsBodyInfraTCPServiceConfigTLSSettings) MarshalJSON() (data []byte, err error) {

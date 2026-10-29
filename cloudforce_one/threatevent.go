@@ -71,10 +71,9 @@ func NewThreatEventService(opts ...option.RequestOption) (r *ThreatEventService)
 	return
 }
 
-// To create a dataset, see the
-// [`Create Dataset`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/create/)
-// endpoint. When `datasetId` parameter is unspecified, it will be created in a
-// default dataset named `Cloudforce One Threat Events`.
+// Creates an event. Without `datasetId`, the event is created in the default
+// Cloudforce One Threat Events dataset. To create a dataset, use
+// `threat-intel datasets create`.
 func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParams, opts ...option.RequestOption) (res *ThreatEventNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.PathAccountID.Value == "" {
@@ -86,14 +85,12 @@ func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParam
 	return res, err
 }
 
-// Use one standalone `datasetId` scope value: 'all'/'\*' or 'operational' for
-// readable intelligence datasets (isAnalytics=false), or 'analytics' for readable
-// analytics datasets (isAnalytics=true). Scope values query at most 50 datasets
-// and must be used alone. When `datasetId` is unspecified, events are listed from
-// the default Cloudforce One Threat Events dataset. To list existing datasets, use
-// the
-// [`List Datasets`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/list/)
-// endpoint.
+// Lists events, with filters passed as query parameters. `datasetId` accepts
+// dataset UUIDs or one scope value used alone: `all` (or `*`) and `operational`
+// select the intelligence datasets you can read, and `analytics` selects the
+// analytics datasets you can read. A scope value covers at most 50 datasets.
+// Without `datasetId`, the default Cloudforce One Threat Events dataset is used.
+// To send filters in a JSON body instead, use `threat-intel events search`.
 func (r *ThreatEventService) List(ctx context.Context, params ThreatEventListParams, opts ...option.RequestOption) (res *[]ThreatEventListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -105,10 +102,9 @@ func (r *ThreatEventService) List(ctx context.Context, params ThreatEventListPar
 	return res, err
 }
 
-// The `datasetId` parameter must be defined. To list existing datasets (and their
-// IDs) in your account, use the
-// [`List Datasets`](https://developers.cloudflare.com/api/resources/cloudforce_one/subresources/threat_events/subresources/datasets/methods/list/)
-// endpoint.
+// Creates multiple events in one dataset. `datasetId` is required; to find dataset
+// IDs, use `threat-intel datasets list`. Set `includeCreatedEvents` to return the
+// UUIDs of the created events.
 func (r *ThreatEventService) BulkNew(ctx context.Context, params ThreatEventBulkNewParams, opts ...option.RequestOption) (res *ThreatEventBulkNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -120,7 +116,9 @@ func (r *ThreatEventService) BulkNew(ctx context.Context, params ThreatEventBulk
 	return res, err
 }
 
-// This method is deprecated. Please use `event_create_bulk` instead
+// Legacy. Use `threat-intel events bulk-create` (`POST /events/create/bulk`) and
+// `threat-intel events relationships create` (`POST /events/relationships/create`)
+// instead.
 //
 // Deprecated: This endpoint is deprecated and will be removed in a future version.
 func (r *ThreatEventService) BulkNewRelationships(ctx context.Context, params ThreatEventBulkNewRelationshipsParams, opts ...option.RequestOption) (res *ThreatEventBulkNewRelationshipsResponse, err error) {
@@ -134,8 +132,8 @@ func (r *ThreatEventService) BulkNewRelationships(ctx context.Context, params Th
 	return res, err
 }
 
-// Partially updates a threat event in Cloudforce One, modifying specific fields
-// without replacing the entire event.
+// Updates the given fields of an event and leaves the other fields unchanged.
+// `datasetId` is required.
 func (r *ThreatEventService) Edit(ctx context.Context, eventID string, params ThreatEventEditParams, opts ...option.RequestOption) (res *ThreatEventEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -151,8 +149,8 @@ func (r *ThreatEventService) Edit(ctx context.Context, eventID string, params Th
 	return res, err
 }
 
-// This Method is deprecated. Please use
-// /events/dataset/:dataset_id/events/:event_id instead.
+// Legacy. Use `threat-intel events get`
+// (`GET /events/dataset/{dataset_id}/events/{event_id}`) instead.
 //
 // Deprecated: Use datasets.events.get instead (GET
 // /accounts/{account_id}/cloudforce-one/events/dataset/{dataset_id}/events/{event_id}).

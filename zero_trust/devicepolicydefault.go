@@ -223,6 +223,9 @@ type DevicePolicyDefaultEditResponseGlobalAcceleration struct {
 	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
 	// or masque_endpoints must be provided.
 	WireguardEndpoints []string `json:"wireguard_endpoints" api:"required"`
+	// Whether WARP users may manually override the automatic Global Acceleration
+	// decision. Defaults to true when not provided.
+	AllowManualOverride bool `json:"allow_manual_override"`
 	// Automatically switch Global Acceleration regions based on device location.
 	// Defaults to false when not provided.
 	Autoswitch bool                                                  `json:"autoswitch"`
@@ -232,13 +235,14 @@ type DevicePolicyDefaultEditResponseGlobalAcceleration struct {
 // devicePolicyDefaultEditResponseGlobalAccelerationJSON contains the JSON metadata
 // for the struct [DevicePolicyDefaultEditResponseGlobalAcceleration]
 type devicePolicyDefaultEditResponseGlobalAccelerationJSON struct {
-	APIEndpoints       apijson.Field
-	Enabled            apijson.Field
-	MasqueEndpoints    apijson.Field
-	WireguardEndpoints apijson.Field
-	Autoswitch         apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	APIEndpoints        apijson.Field
+	Enabled             apijson.Field
+	MasqueEndpoints     apijson.Field
+	WireguardEndpoints  apijson.Field
+	AllowManualOverride apijson.Field
+	Autoswitch          apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
 }
 
 func (r *DevicePolicyDefaultEditResponseGlobalAcceleration) UnmarshalJSON(data []byte) (err error) {
@@ -464,6 +468,9 @@ type DevicePolicyDefaultGetResponseGlobalAcceleration struct {
 	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
 	// or masque_endpoints must be provided.
 	WireguardEndpoints []string `json:"wireguard_endpoints" api:"required"`
+	// Whether WARP users may manually override the automatic Global Acceleration
+	// decision. Defaults to true when not provided.
+	AllowManualOverride bool `json:"allow_manual_override"`
 	// Automatically switch Global Acceleration regions based on device location.
 	// Defaults to false when not provided.
 	Autoswitch bool                                                 `json:"autoswitch"`
@@ -473,13 +480,14 @@ type DevicePolicyDefaultGetResponseGlobalAcceleration struct {
 // devicePolicyDefaultGetResponseGlobalAccelerationJSON contains the JSON metadata
 // for the struct [DevicePolicyDefaultGetResponseGlobalAcceleration]
 type devicePolicyDefaultGetResponseGlobalAccelerationJSON struct {
-	APIEndpoints       apijson.Field
-	Enabled            apijson.Field
-	MasqueEndpoints    apijson.Field
-	WireguardEndpoints apijson.Field
-	Autoswitch         apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	APIEndpoints        apijson.Field
+	Enabled             apijson.Field
+	MasqueEndpoints     apijson.Field
+	WireguardEndpoints  apijson.Field
+	AllowManualOverride apijson.Field
+	Autoswitch          apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
 }
 
 func (r *DevicePolicyDefaultGetResponseGlobalAcceleration) UnmarshalJSON(data []byte) (err error) {
@@ -654,6 +662,9 @@ type DevicePolicyDefaultEditParamsGlobalAcceleration struct {
 	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
 	// or masque_endpoints must be provided.
 	WireguardEndpoints param.Field[[]string] `json:"wireguard_endpoints" api:"required"`
+	// Whether WARP users may manually override the automatic Global Acceleration
+	// decision. Defaults to true when not provided.
+	AllowManualOverride param.Field[bool] `json:"allow_manual_override"`
 	// Automatically switch Global Acceleration regions based on device location.
 	// Defaults to false when not provided.
 	Autoswitch param.Field[bool] `json:"autoswitch"`

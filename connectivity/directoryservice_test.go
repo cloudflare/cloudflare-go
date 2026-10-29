@@ -44,6 +44,8 @@ func TestDirectoryServiceNewWithOptionalParams(t *testing.T) {
 			HTTPSPort: cloudflare.F(int64(8443)),
 			TLSSettings: cloudflare.F(connectivity.DirectoryServiceNewParamsBodyInfraHTTPServiceConfigTLSSettings{
 				CERTVerificationMode: cloudflare.F("verify_full"),
+				CertificateAuthority: cloudflare.F("705db030-8247-489b-80dd-0d6256e5950d"),
+				ClientCertificate:    cloudflare.F("a493fbb4-34bc-4218-a63c-61a9323ac725"),
 			}),
 		},
 	})
@@ -88,6 +90,8 @@ func TestDirectoryServiceUpdateWithOptionalParams(t *testing.T) {
 				HTTPSPort: cloudflare.F(int64(8443)),
 				TLSSettings: cloudflare.F(connectivity.DirectoryServiceUpdateParamsBodyInfraHTTPServiceConfigTLSSettings{
 					CERTVerificationMode: cloudflare.F("verify_full"),
+					CertificateAuthority: cloudflare.F("705db030-8247-489b-80dd-0d6256e5950d"),
+					ClientCertificate:    cloudflare.F("a493fbb4-34bc-4218-a63c-61a9323ac725"),
 				}),
 			},
 		},

@@ -165,6 +165,9 @@ type DeviceDeviceListResponse struct {
 	Manufacturer string `json:"manufacturer" api:"nullable"`
 	// The model name of the device.
 	Model string `json:"model" api:"nullable"`
+	// True if this device is in
+	// [multi-user mode](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-multiuser/).
+	Multiuser bool `json:"multiuser"`
 	// The device operating system version number.
 	OSVersion string `json:"os_version" api:"nullable"`
 	// Additional operating system version details. For Windows, the UBR (Update Build
@@ -200,6 +203,7 @@ type deviceDeviceListResponseJSON struct {
 	MacAddress           apijson.Field
 	Manufacturer         apijson.Field
 	Model                apijson.Field
+	Multiuser            apijson.Field
 	OSVersion            apijson.Field
 	OSVersionExtra       apijson.Field
 	PublicIP             apijson.Field
@@ -341,6 +345,9 @@ type DeviceDeviceGetResponse struct {
 	Manufacturer string `json:"manufacturer" api:"nullable"`
 	// The model name of the device.
 	Model string `json:"model" api:"nullable"`
+	// True if this device is in
+	// [multi-user mode](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/deployment/mdm-deployment/windows-multiuser/).
+	Multiuser bool `json:"multiuser"`
 	// The device operating system version number.
 	OSVersion string `json:"os_version" api:"nullable"`
 	// Additional operating system version details. For Windows, the UBR (Update Build
@@ -376,6 +383,7 @@ type deviceDeviceGetResponseJSON struct {
 	MacAddress           apijson.Field
 	Manufacturer         apijson.Field
 	Model                apijson.Field
+	Multiuser            apijson.Field
 	OSVersion            apijson.Field
 	OSVersionExtra       apijson.Field
 	PublicIP             apijson.Field

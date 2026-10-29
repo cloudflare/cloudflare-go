@@ -76,7 +76,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/load_balancers"
 	"github.com/cloudflare/cloudflare-go/v7/logpush"
 	"github.com/cloudflare/cloudflare-go/v7/logs"
-	"github.com/cloudflare/cloudflare-go/v7/magic_cloud_networking"
 	"github.com/cloudflare/cloudflare-go/v7/magic_network_monitoring"
 	"github.com/cloudflare/cloudflare-go/v7/magic_transit"
 	"github.com/cloudflare/cloudflare-go/v7/managed_defense"
@@ -222,7 +221,6 @@ type Client struct {
 	MagicTransit           *magic_transit.MagicTransitService
 	DDoSProtection         *ddos_protection.DDoSProtectionService
 	MagicNetworkMonitoring *magic_network_monitoring.MagicNetworkMonitoringService
-	MagicCloudNetworking   *magic_cloud_networking.MagicCloudNetworkingService
 	Monetization           *monetization.MonetizationService
 	NetworkInterconnects   *network_interconnects.NetworkInterconnectService
 	MTLSCertificates       *mtls_certificates.MTLSCertificateService
@@ -595,7 +593,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.MagicTransit = magic_transit.NewMagicTransitService(opts...)
 	r.DDoSProtection = ddos_protection.NewDDoSProtectionService(opts...)
 	r.MagicNetworkMonitoring = magic_network_monitoring.NewMagicNetworkMonitoringService(opts...)
-	r.MagicCloudNetworking = magic_cloud_networking.NewMagicCloudNetworkingService(opts...)
 	r.Monetization = monetization.NewMonetizationService(opts...)
 	r.NetworkInterconnects = network_interconnects.NewNetworkInterconnectService(opts...)
 	r.MTLSCertificates = mtls_certificates.NewMTLSCertificateService(opts...)

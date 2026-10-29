@@ -3911,6 +3911,10 @@ type AccessApplicationNewResponseSelfHostedApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseSelfHostedApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -3945,6 +3949,7 @@ type accessApplicationNewResponseSelfHostedApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -4499,6 +4504,10 @@ type AccessApplicationNewResponseSaaSApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseSaaSApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -4532,6 +4541,7 @@ type accessApplicationNewResponseSaaSApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -6047,6 +6057,10 @@ type AccessApplicationNewResponseBrowserSSHApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseBrowserSSHApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -6081,6 +6095,7 @@ type accessApplicationNewResponseBrowserSSHApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -7446,6 +7461,10 @@ type AccessApplicationNewResponseBrowserVNCApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseBrowserVNCApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -7480,6 +7499,7 @@ type accessApplicationNewResponseBrowserVNCApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -8145,6 +8165,10 @@ type AccessApplicationNewResponseAppLauncherApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseAppLauncherApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -8179,6 +8203,7 @@ type accessApplicationNewResponseAppLauncherApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -8425,6 +8450,10 @@ type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy st
 	MfaConfig AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -8459,6 +8488,7 @@ type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicyJSO
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -8705,6 +8735,10 @@ type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy st
 	MfaConfig AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -8739,6 +8773,7 @@ type accessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicyJSO
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -8985,6 +9020,10 @@ type AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy s
 	MfaConfig AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -9019,6 +9058,7 @@ type accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicyJS
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -9248,6 +9288,10 @@ type AccessApplicationNewResponseBookmarkApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseBookmarkApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -9281,6 +9325,7 @@ type accessApplicationNewResponseBookmarkApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -9769,6 +9814,10 @@ type AccessApplicationNewResponseInfrastructureApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require   []AccessRule                                                    `json:"require"`
@@ -9780,18 +9829,19 @@ type AccessApplicationNewResponseInfrastructureApplicationPolicy struct {
 // JSON metadata for the struct
 // [AccessApplicationNewResponseInfrastructureApplicationPolicy]
 type accessApplicationNewResponseInfrastructureApplicationPolicyJSON struct {
-	ID              apijson.Field
-	ConnectionRules apijson.Field
-	CreatedAt       apijson.Field
-	Decision        apijson.Field
-	Exclude         apijson.Field
-	Include         apijson.Field
-	MfaConfig       apijson.Field
-	Name            apijson.Field
-	Require         apijson.Field
-	UpdatedAt       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	ID                        apijson.Field
+	ConnectionRules           apijson.Field
+	CreatedAt                 apijson.Field
+	Decision                  apijson.Field
+	Exclude                   apijson.Field
+	Include                   apijson.Field
+	MfaConfig                 apijson.Field
+	Name                      apijson.Field
+	PolicyResolutionAccountID apijson.Field
+	Require                   apijson.Field
+	UpdatedAt                 apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -11003,6 +11053,10 @@ type AccessApplicationNewResponseBrowserRDPApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseBrowserRDPApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -11037,6 +11091,7 @@ type accessApplicationNewResponseBrowserRDPApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -12268,6 +12323,10 @@ type AccessApplicationNewResponseMcpServerApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseMcpServerApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -12301,6 +12360,7 @@ type accessApplicationNewResponseMcpServerApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -13537,6 +13597,10 @@ type AccessApplicationNewResponseMcpServerPortalApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseMcpServerPortalApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -13571,6 +13635,7 @@ type accessApplicationNewResponseMcpServerPortalApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -15804,6 +15869,10 @@ type AccessApplicationUpdateResponseSelfHostedApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseSelfHostedApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -15838,6 +15907,7 @@ type accessApplicationUpdateResponseSelfHostedApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -16392,6 +16462,10 @@ type AccessApplicationUpdateResponseSaaSApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseSaaSApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -16425,6 +16499,7 @@ type accessApplicationUpdateResponseSaaSApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -17942,6 +18017,10 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -17976,6 +18055,7 @@ type accessApplicationUpdateResponseBrowserSSHApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -19342,6 +19422,10 @@ type AccessApplicationUpdateResponseBrowserVNCApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseBrowserVNCApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -19376,6 +19460,7 @@ type accessApplicationUpdateResponseBrowserVNCApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -20041,6 +20126,10 @@ type AccessApplicationUpdateResponseAppLauncherApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseAppLauncherApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -20075,6 +20164,7 @@ type accessApplicationUpdateResponseAppLauncherApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -20321,6 +20411,10 @@ type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy
 	MfaConfig AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -20355,6 +20449,7 @@ type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -20601,6 +20696,10 @@ type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy
 	MfaConfig AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -20635,6 +20734,7 @@ type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -20881,6 +20981,10 @@ type AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolic
 	MfaConfig AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -20915,6 +21019,7 @@ type accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolic
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -21145,6 +21250,10 @@ type AccessApplicationUpdateResponseBookmarkApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseBookmarkApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -21179,6 +21288,7 @@ type accessApplicationUpdateResponseBookmarkApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -21668,6 +21778,10 @@ type AccessApplicationUpdateResponseInfrastructureApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require   []AccessRule                                                       `json:"require"`
@@ -21679,18 +21793,19 @@ type AccessApplicationUpdateResponseInfrastructureApplicationPolicy struct {
 // JSON metadata for the struct
 // [AccessApplicationUpdateResponseInfrastructureApplicationPolicy]
 type accessApplicationUpdateResponseInfrastructureApplicationPolicyJSON struct {
-	ID              apijson.Field
-	ConnectionRules apijson.Field
-	CreatedAt       apijson.Field
-	Decision        apijson.Field
-	Exclude         apijson.Field
-	Include         apijson.Field
-	MfaConfig       apijson.Field
-	Name            apijson.Field
-	Require         apijson.Field
-	UpdatedAt       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	ID                        apijson.Field
+	ConnectionRules           apijson.Field
+	CreatedAt                 apijson.Field
+	Decision                  apijson.Field
+	Exclude                   apijson.Field
+	Include                   apijson.Field
+	MfaConfig                 apijson.Field
+	Name                      apijson.Field
+	PolicyResolutionAccountID apijson.Field
+	Require                   apijson.Field
+	UpdatedAt                 apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -22903,6 +23018,10 @@ type AccessApplicationUpdateResponseBrowserRDPApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseBrowserRDPApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -22937,6 +23056,7 @@ type accessApplicationUpdateResponseBrowserRDPApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -24169,6 +24289,10 @@ type AccessApplicationUpdateResponseMcpServerApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseMcpServerApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -24203,6 +24327,7 @@ type accessApplicationUpdateResponseMcpServerApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -25440,6 +25565,10 @@ type AccessApplicationUpdateResponseMcpServerPortalApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseMcpServerPortalApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -25474,6 +25603,7 @@ type accessApplicationUpdateResponseMcpServerPortalApplicationPolicyJSON struct 
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -27706,6 +27836,10 @@ type AccessApplicationListResponseSelfHostedApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseSelfHostedApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -27740,6 +27874,7 @@ type accessApplicationListResponseSelfHostedApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -28294,6 +28429,10 @@ type AccessApplicationListResponseSaaSApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseSaaSApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -28327,6 +28466,7 @@ type accessApplicationListResponseSaaSApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -29843,6 +29983,10 @@ type AccessApplicationListResponseBrowserSSHApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseBrowserSSHApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -29877,6 +30021,7 @@ type accessApplicationListResponseBrowserSSHApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -31243,6 +31388,10 @@ type AccessApplicationListResponseBrowserVNCApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseBrowserVNCApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -31277,6 +31426,7 @@ type accessApplicationListResponseBrowserVNCApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -31942,6 +32092,10 @@ type AccessApplicationListResponseAppLauncherApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseAppLauncherApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -31976,6 +32130,7 @@ type accessApplicationListResponseAppLauncherApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -32222,6 +32377,10 @@ type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy s
 	MfaConfig AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -32256,6 +32415,7 @@ type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicyJS
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -32502,6 +32662,10 @@ type AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy s
 	MfaConfig AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -32536,6 +32700,7 @@ type accessApplicationListResponseBrowserIsolationPermissionsApplicationPolicyJS
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -32782,6 +32947,10 @@ type AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy 
 	MfaConfig AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -32816,6 +32985,7 @@ type accessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicyJ
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -33045,6 +33215,10 @@ type AccessApplicationListResponseBookmarkApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseBookmarkApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -33078,6 +33252,7 @@ type accessApplicationListResponseBookmarkApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -33566,6 +33741,10 @@ type AccessApplicationListResponseInfrastructureApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require   []AccessRule                                                     `json:"require"`
@@ -33577,18 +33756,19 @@ type AccessApplicationListResponseInfrastructureApplicationPolicy struct {
 // JSON metadata for the struct
 // [AccessApplicationListResponseInfrastructureApplicationPolicy]
 type accessApplicationListResponseInfrastructureApplicationPolicyJSON struct {
-	ID              apijson.Field
-	ConnectionRules apijson.Field
-	CreatedAt       apijson.Field
-	Decision        apijson.Field
-	Exclude         apijson.Field
-	Include         apijson.Field
-	MfaConfig       apijson.Field
-	Name            apijson.Field
-	Require         apijson.Field
-	UpdatedAt       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	ID                        apijson.Field
+	ConnectionRules           apijson.Field
+	CreatedAt                 apijson.Field
+	Decision                  apijson.Field
+	Exclude                   apijson.Field
+	Include                   apijson.Field
+	MfaConfig                 apijson.Field
+	Name                      apijson.Field
+	PolicyResolutionAccountID apijson.Field
+	Require                   apijson.Field
+	UpdatedAt                 apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -34801,6 +34981,10 @@ type AccessApplicationListResponseBrowserRDPApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseBrowserRDPApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -34835,6 +35019,7 @@ type accessApplicationListResponseBrowserRDPApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -36067,6 +36252,10 @@ type AccessApplicationListResponseMcpServerApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseMcpServerApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -36101,6 +36290,7 @@ type accessApplicationListResponseMcpServerApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -37338,6 +37528,10 @@ type AccessApplicationListResponseMcpServerPortalApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseMcpServerPortalApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -37372,6 +37566,7 @@ type accessApplicationListResponseMcpServerPortalApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -39625,6 +39820,10 @@ type AccessApplicationGetResponseSelfHostedApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseSelfHostedApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -39659,6 +39858,7 @@ type accessApplicationGetResponseSelfHostedApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -40213,6 +40413,10 @@ type AccessApplicationGetResponseSaaSApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseSaaSApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -40246,6 +40450,7 @@ type accessApplicationGetResponseSaaSApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -41761,6 +41966,10 @@ type AccessApplicationGetResponseBrowserSSHApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseBrowserSSHApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -41795,6 +42004,7 @@ type accessApplicationGetResponseBrowserSSHApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -43160,6 +43370,10 @@ type AccessApplicationGetResponseBrowserVNCApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseBrowserVNCApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -43194,6 +43408,7 @@ type accessApplicationGetResponseBrowserVNCApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -43859,6 +44074,10 @@ type AccessApplicationGetResponseAppLauncherApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseAppLauncherApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -43893,6 +44112,7 @@ type accessApplicationGetResponseAppLauncherApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -44139,6 +44359,10 @@ type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy st
 	MfaConfig AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -44173,6 +44397,7 @@ type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicyJSO
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -44419,6 +44644,10 @@ type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy st
 	MfaConfig AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -44453,6 +44682,7 @@ type accessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicyJSO
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -44699,6 +44929,10 @@ type AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy s
 	MfaConfig AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -44733,6 +44967,7 @@ type accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicyJS
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -44962,6 +45197,10 @@ type AccessApplicationGetResponseBookmarkApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseBookmarkApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -44995,6 +45234,7 @@ type accessApplicationGetResponseBookmarkApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -45483,6 +45723,10 @@ type AccessApplicationGetResponseInfrastructureApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require   []AccessRule                                                    `json:"require"`
@@ -45494,18 +45738,19 @@ type AccessApplicationGetResponseInfrastructureApplicationPolicy struct {
 // JSON metadata for the struct
 // [AccessApplicationGetResponseInfrastructureApplicationPolicy]
 type accessApplicationGetResponseInfrastructureApplicationPolicyJSON struct {
-	ID              apijson.Field
-	ConnectionRules apijson.Field
-	CreatedAt       apijson.Field
-	Decision        apijson.Field
-	Exclude         apijson.Field
-	Include         apijson.Field
-	MfaConfig       apijson.Field
-	Name            apijson.Field
-	Require         apijson.Field
-	UpdatedAt       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	ID                        apijson.Field
+	ConnectionRules           apijson.Field
+	CreatedAt                 apijson.Field
+	Decision                  apijson.Field
+	Exclude                   apijson.Field
+	Include                   apijson.Field
+	MfaConfig                 apijson.Field
+	Name                      apijson.Field
+	PolicyResolutionAccountID apijson.Field
+	Require                   apijson.Field
+	UpdatedAt                 apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -46717,6 +46962,10 @@ type AccessApplicationGetResponseBrowserRDPApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseBrowserRDPApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -46751,6 +47000,7 @@ type accessApplicationGetResponseBrowserRDPApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -47982,6 +48232,10 @@ type AccessApplicationGetResponseMcpServerApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseMcpServerApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -48015,6 +48269,7 @@ type accessApplicationGetResponseMcpServerApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -49251,6 +49506,10 @@ type AccessApplicationGetResponseMcpServerPortalApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseMcpServerPortalApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -49285,6 +49544,7 @@ type accessApplicationGetResponseMcpServerPortalApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -55107,6 +55367,10 @@ type AccessApplicationNewParamsBodyInfrastructureApplicationPolicy struct {
 	// Configures multi-factor authentication (MFA) settings for infrastructure
 	// applications.
 	MfaConfig param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfig] `json:"mfa_config"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID param.Field[string] `json:"policy_resolution_account_id"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
@@ -63520,6 +63784,10 @@ type AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy struct {
 	// Configures multi-factor authentication (MFA) settings for infrastructure
 	// applications.
 	MfaConfig param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfig] `json:"mfa_config"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID param.Field[string] `json:"policy_resolution_account_id"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require param.Field[[]AccessRuleUnionParam] `json:"require"`

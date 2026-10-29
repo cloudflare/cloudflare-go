@@ -45,7 +45,7 @@ func NewBrandProtectionService(opts ...option.RequestOption) (r *BrandProtection
 	return
 }
 
-// Return new URL submissions
+// Return new URL submissions.
 func (r *BrandProtectionService) Submit(ctx context.Context, body BrandProtectionSubmitParams, opts ...option.RequestOption) (res *BrandProtectionSubmitResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
@@ -57,7 +57,7 @@ func (r *BrandProtectionService) Submit(ctx context.Context, body BrandProtectio
 	return res, err
 }
 
-// Return submitted URLs based on ID
+// Return submitted URLs based on ID.
 func (r *BrandProtectionService) URLInfo(ctx context.Context, query BrandProtectionURLInfoParams, opts ...option.RequestOption) (res *pagination.SinglePage[BrandProtectionURLInfoResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -79,7 +79,7 @@ func (r *BrandProtectionService) URLInfo(ctx context.Context, query BrandProtect
 	return res, nil
 }
 
-// Return submitted URLs based on ID
+// Return submitted URLs based on ID.
 func (r *BrandProtectionService) URLInfoAutoPaging(ctx context.Context, query BrandProtectionURLInfoParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[BrandProtectionURLInfoResponse] {
 	return pagination.NewSinglePageAutoPager(r.URLInfo(ctx, query, opts...))
 }

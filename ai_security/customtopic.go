@@ -46,7 +46,9 @@ func NewCustomTopicService(opts ...option.RequestOption) (r *CustomTopicService)
 //   - A zone can hold at most 20 topics.
 //   - `label` must be 2–20 characters, using only lowercase letters (a–z), digits
 //     (0–9), and hyphens.
-//   - `topic` must be 2–50 printable ASCII characters.
+//   - `topic` must be 2–50 UTF-8 bytes. Text in any language is supported, including
+//     spaces, numbers, punctuation, and symbols. Tabs, line breaks, invalid text,
+//     and invisible formatting characters are not allowed.
 //   - Labels must be unique within the zone, and so must topic descriptions.
 func (r *CustomTopicService) Update(ctx context.Context, params CustomTopicUpdateParams, opts ...option.RequestOption) (res *CustomTopicUpdateResponse, err error) {
 	var env CustomTopicUpdateResponseEnvelope
@@ -111,7 +113,10 @@ type CustomTopicUpdateResponseTopic struct {
 	// Unique label identifier. Must contain only lowercase letters (a–z), digits
 	// (0–9), and hyphens.
 	Label string `json:"label" api:"required"`
-	// Description of the topic category. Must contain only printable ASCII characters.
+	// Description of the topic category. Must contain 2–50 UTF-8 bytes. Text in any
+	// language is supported, including spaces, numbers, punctuation, and symbols.
+	// Tabs, line breaks, invalid text, and invisible formatting characters are not
+	// allowed.
 	Topic string                             `json:"topic" api:"required"`
 	JSON  customTopicUpdateResponseTopicJSON `json:"-"`
 }
@@ -159,7 +164,10 @@ type CustomTopicGetResponseTopic struct {
 	// Unique label identifier. Must contain only lowercase letters (a–z), digits
 	// (0–9), and hyphens.
 	Label string `json:"label" api:"required"`
-	// Description of the topic category. Must contain only printable ASCII characters.
+	// Description of the topic category. Must contain 2–50 UTF-8 bytes. Text in any
+	// language is supported, including spaces, numbers, punctuation, and symbols.
+	// Tabs, line breaks, invalid text, and invisible formatting characters are not
+	// allowed.
 	Topic string                          `json:"topic" api:"required"`
 	JSON  customTopicGetResponseTopicJSON `json:"-"`
 }
@@ -196,7 +204,10 @@ type CustomTopicUpdateParamsTopic struct {
 	// Unique label identifier. Must contain only lowercase letters (a–z), digits
 	// (0–9), and hyphens.
 	Label param.Field[string] `json:"label" api:"required"`
-	// Description of the topic category. Must contain only printable ASCII characters.
+	// Description of the topic category. Must contain 2–50 UTF-8 bytes. Text in any
+	// language is supported, including spaces, numbers, punctuation, and symbols.
+	// Tabs, line breaks, invalid text, and invisible formatting characters are not
+	// allowed.
 	Topic param.Field[string] `json:"topic" api:"required"`
 }
 

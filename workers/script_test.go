@@ -64,6 +64,9 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 					Enabled:           cloudflare.F(true),
 					CrossVersionCache: cloudflare.F(true),
 				}),
+				CodeUpdateStrategy: cloudflare.F[workers.ScriptUpdateParamsMetadataCodeUpdateStrategyUnion](workers.ScriptUpdateParamsMetadataCodeUpdateStrategyMode{
+					Mode: cloudflare.F(workers.ScriptUpdateParamsMetadataCodeUpdateStrategyModeModeImmediate),
+				}),
 				CompatibilityDate:  cloudflare.F("2021-01-01T00:00:00Z"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
 				Exports: cloudflare.F(map[string]workers.ScriptUpdateParamsMetadataExportsUnion{

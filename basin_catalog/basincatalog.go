@@ -101,10 +101,10 @@ func (r *BasinCatalogService) Disable(ctx context.Context, bucketName string, bo
 // Enable an R2 bucket as an Apache Iceberg catalog. This operation creates the
 // necessary catalog infrastructure and activates the bucket for storing Iceberg
 // metadata and data files.
-func (r *BasinCatalogService) Enable(ctx context.Context, bucketName string, body BasinCatalogEnableParams, opts ...option.RequestOption) (res *BasinCatalogEnableResponse, err error) {
+func (r *BasinCatalogService) Enable(ctx context.Context, bucketName string, params BasinCatalogEnableParams, opts ...option.RequestOption) (res *BasinCatalogEnableResponse, err error) {
 	var env BasinCatalogEnableResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if body.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -112,8 +112,8 @@ func (r *BasinCatalogService) Enable(ctx context.Context, bucketName string, bod
 		err = errors.New("missing required bucket_name parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/basin-catalog/%s/enable", body.AccountID, bucketName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/basin-catalog/%s/enable", params.AccountID, bucketName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -178,6 +178,9 @@ type BasinCatalogListResponseWarehouse struct {
 	Status BasinCatalogListResponseWarehousesStatus `json:"status" api:"required"`
 	// Shows the credential configuration status.
 	CredentialStatus BasinCatalogListResponseWarehousesCredentialStatus `json:"credential_status" api:"nullable"`
+	// Specifies the data-locality jurisdiction of the catalog. The first enable sets
+	// it, and it cannot change. Currently always `default`.
+	Jurisdiction string `json:"jurisdiction"`
 	// Configures maintenance for the catalog.
 	MaintenanceConfig BasinCatalogListResponseWarehousesMaintenanceConfig `json:"maintenance_config" api:"nullable"`
 	JSON              basinCatalogListResponseWarehouseJSON               `json:"-"`
@@ -191,6 +194,7 @@ type basinCatalogListResponseWarehouseJSON struct {
 	Name              apijson.Field
 	Status            apijson.Field
 	CredentialStatus  apijson.Field
+	Jurisdiction      apijson.Field
 	MaintenanceConfig apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
@@ -413,6 +417,9 @@ type BasinCatalogGetResponse struct {
 	Status BasinCatalogGetResponseStatus `json:"status" api:"required"`
 	// Shows the credential configuration status.
 	CredentialStatus BasinCatalogGetResponseCredentialStatus `json:"credential_status" api:"nullable"`
+	// Specifies the data-locality jurisdiction of the catalog. The first enable sets
+	// it, and it cannot change. Currently always `default`.
+	Jurisdiction string `json:"jurisdiction"`
 	// Configures maintenance for the catalog.
 	MaintenanceConfig BasinCatalogGetResponseMaintenanceConfig `json:"maintenance_config" api:"nullable"`
 	JSON              basinCatalogGetResponseJSON              `json:"-"`
@@ -426,6 +433,7 @@ type basinCatalogGetResponseJSON struct {
 	Name              apijson.Field
 	Status            apijson.Field
 	CredentialStatus  apijson.Field
+	Jurisdiction      apijson.Field
 	MaintenanceConfig apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
@@ -719,6 +727,22 @@ type BasinCatalogDisableParams struct {
 type BasinCatalogEnableParams struct {
 	// Use this to identify the account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Contains request to store catalog credentials.
+	Credential param.Field[BasinCatalogEnableParamsCredential] `json:"credential"`
+}
+
+func (r BasinCatalogEnableParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Contains request to store catalog credentials.
+type BasinCatalogEnableParamsCredential struct {
+	// Provides the Cloudflare API token for accessing R2.
+	Token param.Field[string] `json:"token" api:"required"`
+}
+
+func (r BasinCatalogEnableParamsCredential) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type BasinCatalogEnableResponseEnvelope struct {

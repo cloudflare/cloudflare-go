@@ -39,8 +39,8 @@ func NewThreatEventIndicatorByDatasetService(opts ...option.RequestOption) (r *T
 	return
 }
 
-// This method is deprecated. Please use /events/indicators to retrieve a paginated
-// list of indicators.
+// Legacy. Use `threat-intel indicators list` (`GET /events/indicators`) instead.
+// It supports multiple datasets and cursor pagination.
 //
 // Deprecated: Use indicators.list instead (GET
 // /accounts/{account_id}/cloudforce-one/events/indicators).
@@ -59,7 +59,7 @@ func (r *ThreatEventIndicatorByDatasetService) List(ctx context.Context, dataset
 	return res, err
 }
 
-// Retrieves a specific indicator by its UUID.
+// Returns an indicator by its UUID.
 func (r *ThreatEventIndicatorByDatasetService) Get(ctx context.Context, datasetID string, indicatorID string, query ThreatEventIndicatorByDatasetGetParams, opts ...option.RequestOption) (res *ThreatEventIndicatorByDatasetGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

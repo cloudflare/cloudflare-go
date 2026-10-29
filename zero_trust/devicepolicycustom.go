@@ -311,6 +311,9 @@ type DevicePolicyCustomNewParamsGlobalAcceleration struct {
 	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
 	// or masque_endpoints must be provided.
 	WireguardEndpoints param.Field[[]string] `json:"wireguard_endpoints" api:"required"`
+	// Whether WARP users may manually override the automatic Global Acceleration
+	// decision. Defaults to true when not provided.
+	AllowManualOverride param.Field[bool] `json:"allow_manual_override"`
 	// Automatically switch Global Acceleration regions based on device location.
 	// Defaults to false when not provided.
 	Autoswitch param.Field[bool] `json:"autoswitch"`
@@ -583,6 +586,9 @@ type DevicePolicyCustomEditParamsGlobalAcceleration struct {
 	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
 	// or masque_endpoints must be provided.
 	WireguardEndpoints param.Field[[]string] `json:"wireguard_endpoints" api:"required"`
+	// Whether WARP users may manually override the automatic Global Acceleration
+	// decision. Defaults to true when not provided.
+	AllowManualOverride param.Field[bool] `json:"allow_manual_override"`
 	// Automatically switch Global Acceleration regions based on device location.
 	// Defaults to false when not provided.
 	Autoswitch param.Field[bool] `json:"autoswitch"`

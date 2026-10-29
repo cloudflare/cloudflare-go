@@ -38,7 +38,7 @@ func NewSubscriptionBulkService(opts ...option.RequestOption) (r *SubscriptionBu
 }
 
 // Creates multiple subscriptions for an account in a single request.
-func (r *SubscriptionBulkService) New(ctx context.Context, params SubscriptionBulkNewParams, opts ...option.RequestOption) (res *[]SubscriptionBulkNewResponse, err error) {
+func (r *SubscriptionBulkService) New(ctx context.Context, params SubscriptionBulkNewParams, opts ...option.RequestOption) (res *SubscriptionBulkNewResponse, err error) {
 	var env SubscriptionBulkNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -54,7 +54,28 @@ func (r *SubscriptionBulkService) New(ctx context.Context, params SubscriptionBu
 	return res, nil
 }
 
-type SubscriptionBulkNewResponse = interface{}
+type SubscriptionBulkNewResponse struct {
+	ClientSecrets []string                        `json:"client_secrets" api:"nullable"`
+	Subscriptions []shared.Subscription           `json:"subscriptions"`
+	JSON          subscriptionBulkNewResponseJSON `json:"-"`
+}
+
+// subscriptionBulkNewResponseJSON contains the JSON metadata for the struct
+// [SubscriptionBulkNewResponse]
+type subscriptionBulkNewResponseJSON struct {
+	ClientSecrets apijson.Field
+	Subscriptions apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *SubscriptionBulkNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subscriptionBulkNewResponseJSON) RawJSON() string {
+	return r.raw
+}
 
 type SubscriptionBulkNewParams struct {
 	// Identifier
@@ -80,13 +101,12 @@ func (r SubscriptionBulkNewParams) URLQuery() (v url.Values) {
 }
 
 type SubscriptionBulkNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo         `json:"messages" api:"required"`
-	Result   []SubscriptionBulkNewResponse `json:"result" api:"required,nullable"`
+	Errors   []shared.ResponseInfo       `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo       `json:"messages" api:"required"`
+	Result   SubscriptionBulkNewResponse `json:"result" api:"required"`
 	// Whether the API call was successful
-	Success    SubscriptionBulkNewResponseEnvelopeSuccess    `json:"success" api:"required"`
-	ResultInfo SubscriptionBulkNewResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       subscriptionBulkNewResponseEnvelopeJSON       `json:"-"`
+	Success SubscriptionBulkNewResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    subscriptionBulkNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // subscriptionBulkNewResponseEnvelopeJSON contains the JSON metadata for the
@@ -96,7 +116,6 @@ type subscriptionBulkNewResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -122,35 +141,4 @@ func (r SubscriptionBulkNewResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type SubscriptionBulkNewResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                           `json:"total_count"`
-	JSON       subscriptionBulkNewResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// subscriptionBulkNewResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [SubscriptionBulkNewResponseEnvelopeResultInfo]
-type subscriptionBulkNewResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionBulkNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionBulkNewResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

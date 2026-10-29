@@ -106,6 +106,15 @@ func (UnionString) ImplementsObservabilitySharedQueryNewParamsParametersNeedleVa
 func (UnionString) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()    {}
 func (UnionString) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
 func (UnionString) ImplementsNamespaceValueUpdateParamsValueUnion()                         {}
+func (UnionString) ImplementsRulesetNewResponseUnion()                                      {}
+func (UnionString) ImplementsRulesetUpdateResponseUnion()                                   {}
+func (UnionString) ImplementsRulesetListResponseUnion()                                     {}
+func (UnionString) ImplementsPhaseUpdateResponseUnion()                                     {}
+func (UnionString) ImplementsPhaseVersionListResponseUnion()                                {}
+func (UnionString) ImplementsRuleNewResponseUnion()                                         {}
+func (UnionString) ImplementsRuleDeleteResponseUnion()                                      {}
+func (UnionString) ImplementsRuleEditResponseUnion()                                        {}
+func (UnionString) ImplementsVersionListResponseUnion()                                     {}
 func (UnionString) ImplementsOriginPortUnionParam()                                         {}
 func (UnionString) ImplementsOriginPortUnion()                                              {}
 func (UnionString) ImplementsUsageGetResponseTagsUnion()                                    {}
@@ -232,101 +241,101 @@ func (UnionString) ImplementsEvaluationNewResponseDatasetsFiltersValueUnion()   
 func (UnionString) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()                     {}
 func (UnionString) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()                   {}
 func (UnionString) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                      {}
-func (UnionString) ImplementsAppFlagNewResponseRulesConditionsObjectValueUnion()                   {}
-func (UnionString) ImplementsAppFlagNewResponseRulesConditionsObjectClausesObjectValueUnion()      {}
-func (UnionString) ImplementsAppFlagNewResponseRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagNewResponseRulesConditionsFlagshipBaseConditionValueUnion()    {}
+func (UnionString) ImplementsAppFlagNewResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagNewResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagNewResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagNewResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagNewResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagNewResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagNewResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagNewResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesUnion() {
+func (UnionString) ImplementsAppFlagNewResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
-func (UnionString) ImplementsAppFlagNewResponseVariationsUnion()                                 {}
-func (UnionString) ImplementsAppFlagUpdateResponseRulesConditionsObjectValueUnion()              {}
-func (UnionString) ImplementsAppFlagUpdateResponseRulesConditionsObjectClausesObjectValueUnion() {}
-func (UnionString) ImplementsAppFlagUpdateResponseRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagNewResponseVariationsUnion()                                   {}
+func (UnionString) ImplementsAppFlagNewResponseMetadataUnion()                                     {}
+func (UnionString) ImplementsAppFlagUpdateResponseRulesConditionsFlagshipBaseConditionValueUnion() {}
+func (UnionString) ImplementsAppFlagUpdateResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagUpdateResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagUpdateResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagUpdateResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagUpdateResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagUpdateResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagUpdateResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagUpdateResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesUnion() {
+func (UnionString) ImplementsAppFlagUpdateResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
-func (UnionString) ImplementsAppFlagUpdateResponseVariationsUnion()                            {}
-func (UnionString) ImplementsAppFlagListResponseRulesConditionsObjectValueUnion()              {}
-func (UnionString) ImplementsAppFlagListResponseRulesConditionsObjectClausesObjectValueUnion() {}
-func (UnionString) ImplementsAppFlagListResponseRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagUpdateResponseVariationsUnion()                              {}
+func (UnionString) ImplementsAppFlagUpdateResponseMetadataUnion()                                {}
+func (UnionString) ImplementsAppFlagListResponseRulesConditionsFlagshipBaseConditionValueUnion() {}
+func (UnionString) ImplementsAppFlagListResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagListResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagListResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagListResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagListResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagListResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagListResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagListResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesUnion() {
+func (UnionString) ImplementsAppFlagListResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
-func (UnionString) ImplementsAppFlagListResponseVariationsUnion()                             {}
-func (UnionString) ImplementsAppFlagGetResponseRulesConditionsObjectValueUnion()              {}
-func (UnionString) ImplementsAppFlagGetResponseRulesConditionsObjectClausesObjectValueUnion() {}
-func (UnionString) ImplementsAppFlagGetResponseRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagListResponseVariationsUnion()                               {}
+func (UnionString) ImplementsAppFlagListResponseMetadataUnion()                                 {}
+func (UnionString) ImplementsAppFlagGetResponseRulesConditionsFlagshipBaseConditionValueUnion() {}
+func (UnionString) ImplementsAppFlagGetResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagGetResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagGetResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagGetResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagGetResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagGetResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagGetResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagGetResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesUnion() {
+func (UnionString) ImplementsAppFlagGetResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
-func (UnionString) ImplementsAppFlagGetResponseVariationsUnion()                            {}
-func (UnionString) ImplementsAppFlagNewParamsRulesConditionsObjectValueUnion()              {}
-func (UnionString) ImplementsAppFlagNewParamsRulesConditionsObjectClausesObjectValueUnion() {}
-func (UnionString) ImplementsAppFlagNewParamsRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagGetResponseVariationsUnion()                              {}
+func (UnionString) ImplementsAppFlagGetResponseMetadataUnion()                                {}
+func (UnionString) ImplementsAppFlagNewParamsRulesConditionsFlagshipBaseConditionValueUnion() {}
+func (UnionString) ImplementsAppFlagNewParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagNewParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagNewParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagNewParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagNewParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagNewParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagNewParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagNewParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClauseUnion() {
+func (UnionString) ImplementsAppFlagNewParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
-func (UnionString) ImplementsAppFlagNewParamsVariationsUnion()                                 {}
-func (UnionString) ImplementsAppFlagUpdateParamsRulesConditionsObjectValueUnion()              {}
-func (UnionString) ImplementsAppFlagUpdateParamsRulesConditionsObjectClausesObjectValueUnion() {}
-func (UnionString) ImplementsAppFlagUpdateParamsRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagNewParamsVariationsUnion()                                   {}
+func (UnionString) ImplementsAppFlagNewParamsMetadataUnion()                                     {}
+func (UnionString) ImplementsAppFlagUpdateParamsRulesConditionsFlagshipBaseConditionValueUnion() {}
+func (UnionString) ImplementsAppFlagUpdateParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagUpdateParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagUpdateParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagUpdateParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagUpdateParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagUpdateParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagUpdateParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagUpdateParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClauseUnion() {
+func (UnionString) ImplementsAppFlagUpdateParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
 func (UnionString) ImplementsAppFlagUpdateParamsVariationsUnion() {}
-func (UnionString) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectValueUnion() {
+func (UnionString) ImplementsAppFlagUpdateParamsMetadataUnion()   {}
+func (UnionString) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionString) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionString) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
-}
-func (UnionString) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesUnion() {
+func (UnionString) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
 func (UnionString) ImplementsAppFlagChangelogListResponseObjectAfterVariationsUnion()              {}
+func (UnionString) ImplementsAppFlagChangelogListResponseObjectAfterMetadataUnion()                {}
 func (UnionString) ImplementsAppFlagChangelogListResponseObjectDiffFromUnion()                     {}
 func (UnionString) ImplementsAppFlagChangelogListResponseObjectDiffToUnion()                       {}
+func (UnionString) ImplementsAppEvaluateGetResponseMetadataUnion()                                 {}
 func (UnionString) ImplementsAppEvaluateGetResponseValueUnion()                                    {}
 func (UnionString) ImplementsWorkflowUpdateParamsDefaultRetentionErrorRetentionUnion()             {}
 func (UnionString) ImplementsWorkflowUpdateParamsDefaultRetentionSuccessRetentionUnion()           {}
@@ -448,6 +457,15 @@ func (UnionBool) ImplementsObservabilitySharedQueryNewParamsParametersFiltersWor
 func (UnionBool) ImplementsObservabilitySharedQueryNewParamsParametersNeedleValueUnion()  {}
 func (UnionBool) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()    {}
 func (UnionBool) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion() {}
+func (UnionBool) ImplementsRulesetNewResponseUnion()                                      {}
+func (UnionBool) ImplementsRulesetUpdateResponseUnion()                                   {}
+func (UnionBool) ImplementsRulesetListResponseUnion()                                     {}
+func (UnionBool) ImplementsPhaseUpdateResponseUnion()                                     {}
+func (UnionBool) ImplementsPhaseVersionListResponseUnion()                                {}
+func (UnionBool) ImplementsRuleNewResponseUnion()                                         {}
+func (UnionBool) ImplementsRuleDeleteResponseUnion()                                      {}
+func (UnionBool) ImplementsRuleEditResponseUnion()                                        {}
+func (UnionBool) ImplementsVersionListResponseUnion()                                     {}
 func (UnionBool) ImplementsDispatchNamespaceScriptUpdateParamsMetadataAssetsConfigRunWorkerFirstUnion() {
 }
 func (UnionBool) ImplementsCasbPostureRemediationJobNewResponseCreatedAssetFieldsValueUnion() {}
@@ -478,100 +496,101 @@ func (UnionBool) ImplementsEvaluationNewResponseDatasetsFiltersValueUnion()     
 func (UnionBool) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()                     {}
 func (UnionBool) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()                   {}
 func (UnionBool) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                      {}
-func (UnionBool) ImplementsAppFlagNewResponseRulesConditionsObjectValueUnion()                   {}
-func (UnionBool) ImplementsAppFlagNewResponseRulesConditionsObjectClausesObjectValueUnion()      {}
-func (UnionBool) ImplementsAppFlagNewResponseRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagNewResponseRulesConditionsFlagshipBaseConditionValueUnion()    {}
+func (UnionBool) ImplementsAppFlagNewResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagNewResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagNewResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagNewResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagNewResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagNewResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagNewResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagNewResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesUnion() {
+func (UnionBool) ImplementsAppFlagNewResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagNewResponseVariationsUnion()                                 {}
-func (UnionBool) ImplementsAppFlagUpdateResponseRulesConditionsObjectValueUnion()              {}
-func (UnionBool) ImplementsAppFlagUpdateResponseRulesConditionsObjectClausesObjectValueUnion() {}
-func (UnionBool) ImplementsAppFlagUpdateResponseRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagNewResponseVariationsUnion()                                   {}
+func (UnionBool) ImplementsAppFlagNewResponseMetadataUnion()                                     {}
+func (UnionBool) ImplementsAppFlagUpdateResponseRulesConditionsFlagshipBaseConditionValueUnion() {}
+func (UnionBool) ImplementsAppFlagUpdateResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagUpdateResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagUpdateResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagUpdateResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagUpdateResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagUpdateResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagUpdateResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagUpdateResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesUnion() {
+func (UnionBool) ImplementsAppFlagUpdateResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagUpdateResponseVariationsUnion()                            {}
-func (UnionBool) ImplementsAppFlagListResponseRulesConditionsObjectValueUnion()              {}
-func (UnionBool) ImplementsAppFlagListResponseRulesConditionsObjectClausesObjectValueUnion() {}
-func (UnionBool) ImplementsAppFlagListResponseRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagUpdateResponseVariationsUnion()                              {}
+func (UnionBool) ImplementsAppFlagUpdateResponseMetadataUnion()                                {}
+func (UnionBool) ImplementsAppFlagListResponseRulesConditionsFlagshipBaseConditionValueUnion() {}
+func (UnionBool) ImplementsAppFlagListResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagListResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagListResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagListResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagListResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagListResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagListResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagListResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesUnion() {
+func (UnionBool) ImplementsAppFlagListResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagListResponseVariationsUnion()                             {}
-func (UnionBool) ImplementsAppFlagGetResponseRulesConditionsObjectValueUnion()              {}
-func (UnionBool) ImplementsAppFlagGetResponseRulesConditionsObjectClausesObjectValueUnion() {}
-func (UnionBool) ImplementsAppFlagGetResponseRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagListResponseVariationsUnion()                               {}
+func (UnionBool) ImplementsAppFlagListResponseMetadataUnion()                                 {}
+func (UnionBool) ImplementsAppFlagGetResponseRulesConditionsFlagshipBaseConditionValueUnion() {}
+func (UnionBool) ImplementsAppFlagGetResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagGetResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagGetResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagGetResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagGetResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagGetResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagGetResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagGetResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesUnion() {
+func (UnionBool) ImplementsAppFlagGetResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagGetResponseVariationsUnion()                            {}
-func (UnionBool) ImplementsAppFlagNewParamsRulesConditionsObjectValueUnion()              {}
-func (UnionBool) ImplementsAppFlagNewParamsRulesConditionsObjectClausesObjectValueUnion() {}
-func (UnionBool) ImplementsAppFlagNewParamsRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagGetResponseVariationsUnion()                              {}
+func (UnionBool) ImplementsAppFlagGetResponseMetadataUnion()                                {}
+func (UnionBool) ImplementsAppFlagNewParamsRulesConditionsFlagshipBaseConditionValueUnion() {}
+func (UnionBool) ImplementsAppFlagNewParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagNewParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagNewParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagNewParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagNewParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagNewParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagNewParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagNewParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClauseUnion() {
+func (UnionBool) ImplementsAppFlagNewParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagNewParamsVariationsUnion()                                 {}
-func (UnionBool) ImplementsAppFlagUpdateParamsRulesConditionsObjectValueUnion()              {}
-func (UnionBool) ImplementsAppFlagUpdateParamsRulesConditionsObjectClausesObjectValueUnion() {}
-func (UnionBool) ImplementsAppFlagUpdateParamsRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagNewParamsVariationsUnion()                                   {}
+func (UnionBool) ImplementsAppFlagNewParamsMetadataUnion()                                     {}
+func (UnionBool) ImplementsAppFlagUpdateParamsRulesConditionsFlagshipBaseConditionValueUnion() {}
+func (UnionBool) ImplementsAppFlagUpdateParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagUpdateParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagUpdateParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagUpdateParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagUpdateParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagUpdateParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagUpdateParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagUpdateParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClauseUnion() {
+func (UnionBool) ImplementsAppFlagUpdateParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagUpdateParamsVariationsUnion()                                     {}
-func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectValueUnion() {}
-func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagUpdateParamsVariationsUnion() {}
+func (UnionBool) ImplementsAppFlagUpdateParamsMetadataUnion()   {}
+func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesUnion() {
+func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
 func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterVariationsUnion()           {}
+func (UnionBool) ImplementsAppFlagChangelogListResponseObjectAfterMetadataUnion()             {}
 func (UnionBool) ImplementsAppFlagChangelogListResponseObjectDiffFromUnion()                  {}
 func (UnionBool) ImplementsAppFlagChangelogListResponseObjectDiffToUnion()                    {}
+func (UnionBool) ImplementsAppEvaluateGetResponseMetadataUnion()                              {}
 func (UnionBool) ImplementsAppEvaluateGetResponseValueUnion()                                 {}
 func (UnionBool) ImplementsNamespaceChatCompletionsParamsAISearchOptionsCustomMetadataUnion() {}
 func (UnionBool) ImplementsNamespaceSearchParamsAISearchOptionsCustomMetadataUnion()          {}
@@ -676,6 +695,15 @@ func (UnionFloat) ImplementsObservabilitySharedQueryNewParamsParametersFiltersWo
 func (UnionFloat) ImplementsObservabilitySharedQueryNewParamsParametersNeedleValueUnion()      {}
 func (UnionFloat) ImplementsNamespaceBulkGetResponseWorkersKVBulkGetResultValuesUnion()        {}
 func (UnionFloat) ImplementsNamespaceKeyBulkGetResponseWorkersKVBulkGetResultValuesUnion()     {}
+func (UnionFloat) ImplementsRulesetNewResponseUnion()                                          {}
+func (UnionFloat) ImplementsRulesetUpdateResponseUnion()                                       {}
+func (UnionFloat) ImplementsRulesetListResponseUnion()                                         {}
+func (UnionFloat) ImplementsPhaseUpdateResponseUnion()                                         {}
+func (UnionFloat) ImplementsPhaseVersionListResponseUnion()                                    {}
+func (UnionFloat) ImplementsRuleNewResponseUnion()                                             {}
+func (UnionFloat) ImplementsRuleDeleteResponseUnion()                                          {}
+func (UnionFloat) ImplementsRuleEditResponseUnion()                                            {}
+func (UnionFloat) ImplementsVersionListResponseUnion()                                         {}
 func (UnionFloat) ImplementsV2QueryGetResponseEnvelopeErrorsCode()                             {}
 func (UnionFloat) ImplementsV2QueryGetResponseEnvelopeMessagesCode()                           {}
 func (UnionFloat) ImplementsCasbPostureRemediationJobNewResponseCreatedAssetFieldsValueUnion() {}
@@ -709,101 +737,101 @@ func (UnionFloat) ImplementsEvaluationNewResponseDatasetsFiltersValueUnion()    
 func (UnionFloat) ImplementsEvaluationListResponseDatasetsFiltersValueUnion()                     {}
 func (UnionFloat) ImplementsEvaluationDeleteResponseDatasetsFiltersValueUnion()                   {}
 func (UnionFloat) ImplementsEvaluationGetResponseDatasetsFiltersValueUnion()                      {}
-func (UnionFloat) ImplementsAppFlagNewResponseRulesConditionsObjectValueUnion()                   {}
-func (UnionFloat) ImplementsAppFlagNewResponseRulesConditionsObjectClausesObjectValueUnion()      {}
-func (UnionFloat) ImplementsAppFlagNewResponseRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagNewResponseRulesConditionsFlagshipBaseConditionValueUnion()    {}
+func (UnionFloat) ImplementsAppFlagNewResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagNewResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagNewResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagNewResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagNewResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagNewResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagNewResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagNewResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesUnion() {
+func (UnionFloat) ImplementsAppFlagNewResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagNewResponseVariationsUnion()                                 {}
-func (UnionFloat) ImplementsAppFlagUpdateResponseRulesConditionsObjectValueUnion()              {}
-func (UnionFloat) ImplementsAppFlagUpdateResponseRulesConditionsObjectClausesObjectValueUnion() {}
-func (UnionFloat) ImplementsAppFlagUpdateResponseRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagNewResponseVariationsUnion()                                   {}
+func (UnionFloat) ImplementsAppFlagNewResponseMetadataUnion()                                     {}
+func (UnionFloat) ImplementsAppFlagUpdateResponseRulesConditionsFlagshipBaseConditionValueUnion() {}
+func (UnionFloat) ImplementsAppFlagUpdateResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagUpdateResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagUpdateResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagUpdateResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagUpdateResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagUpdateResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagUpdateResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagUpdateResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesUnion() {
+func (UnionFloat) ImplementsAppFlagUpdateResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagUpdateResponseVariationsUnion()                            {}
-func (UnionFloat) ImplementsAppFlagListResponseRulesConditionsObjectValueUnion()              {}
-func (UnionFloat) ImplementsAppFlagListResponseRulesConditionsObjectClausesObjectValueUnion() {}
-func (UnionFloat) ImplementsAppFlagListResponseRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagUpdateResponseVariationsUnion()                              {}
+func (UnionFloat) ImplementsAppFlagUpdateResponseMetadataUnion()                                {}
+func (UnionFloat) ImplementsAppFlagListResponseRulesConditionsFlagshipBaseConditionValueUnion() {}
+func (UnionFloat) ImplementsAppFlagListResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagListResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagListResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagListResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagListResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagListResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagListResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagListResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesUnion() {
+func (UnionFloat) ImplementsAppFlagListResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagListResponseVariationsUnion()                             {}
-func (UnionFloat) ImplementsAppFlagGetResponseRulesConditionsObjectValueUnion()              {}
-func (UnionFloat) ImplementsAppFlagGetResponseRulesConditionsObjectClausesObjectValueUnion() {}
-func (UnionFloat) ImplementsAppFlagGetResponseRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagListResponseVariationsUnion()                               {}
+func (UnionFloat) ImplementsAppFlagListResponseMetadataUnion()                                 {}
+func (UnionFloat) ImplementsAppFlagGetResponseRulesConditionsFlagshipBaseConditionValueUnion() {}
+func (UnionFloat) ImplementsAppFlagGetResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagGetResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagGetResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagGetResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagGetResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagGetResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagGetResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagGetResponseRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesUnion() {
+func (UnionFloat) ImplementsAppFlagGetResponseRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagGetResponseVariationsUnion()                            {}
-func (UnionFloat) ImplementsAppFlagNewParamsRulesConditionsObjectValueUnion()              {}
-func (UnionFloat) ImplementsAppFlagNewParamsRulesConditionsObjectClausesObjectValueUnion() {}
-func (UnionFloat) ImplementsAppFlagNewParamsRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagGetResponseVariationsUnion()                              {}
+func (UnionFloat) ImplementsAppFlagGetResponseMetadataUnion()                                {}
+func (UnionFloat) ImplementsAppFlagNewParamsRulesConditionsFlagshipBaseConditionValueUnion() {}
+func (UnionFloat) ImplementsAppFlagNewParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagNewParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagNewParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagNewParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagNewParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagNewParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagNewParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagNewParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClauseUnion() {
+func (UnionFloat) ImplementsAppFlagNewParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagNewParamsVariationsUnion()                                 {}
-func (UnionFloat) ImplementsAppFlagUpdateParamsRulesConditionsObjectValueUnion()              {}
-func (UnionFloat) ImplementsAppFlagUpdateParamsRulesConditionsObjectClausesObjectValueUnion() {}
-func (UnionFloat) ImplementsAppFlagUpdateParamsRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagNewParamsVariationsUnion()                                   {}
+func (UnionFloat) ImplementsAppFlagNewParamsMetadataUnion()                                     {}
+func (UnionFloat) ImplementsAppFlagUpdateParamsRulesConditionsFlagshipBaseConditionValueUnion() {}
+func (UnionFloat) ImplementsAppFlagUpdateParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagUpdateParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagUpdateParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagUpdateParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagUpdateParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagUpdateParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagUpdateParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagUpdateParamsRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClauseUnion() {
+func (UnionFloat) ImplementsAppFlagUpdateParamsRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
 func (UnionFloat) ImplementsAppFlagUpdateParamsVariationsUnion() {}
-func (UnionFloat) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagUpdateParamsMetadataUnion()   {}
+func (UnionFloat) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsFlagshipLogicalConditionClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
+func (UnionFloat) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipBaseConditionValueUnion() {
 }
-func (UnionFloat) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectValueUnion() {
-}
-func (UnionFloat) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesObjectClausesUnion() {
+func (UnionFloat) ImplementsAppFlagChangelogListResponseObjectAfterRulesConditionsFlagshipLogicalConditionClausesFlagshipLogicalCondition1ClausesFlagshipLogicalCondition2ClausesFlagshipLogicalCondition3ClausesFlagshipLogicalCondition4ClausesValueUnion() {
 }
 func (UnionFloat) ImplementsAppFlagChangelogListResponseObjectAfterVariationsUnion()              {}
+func (UnionFloat) ImplementsAppFlagChangelogListResponseObjectAfterMetadataUnion()                {}
 func (UnionFloat) ImplementsAppFlagChangelogListResponseObjectDiffFromUnion()                     {}
 func (UnionFloat) ImplementsAppFlagChangelogListResponseObjectDiffToUnion()                       {}
+func (UnionFloat) ImplementsAppEvaluateGetResponseMetadataUnion()                                 {}
 func (UnionFloat) ImplementsAppEvaluateGetResponseValueUnion()                                    {}
 func (UnionFloat) ImplementsInstanceGetResponseOutputUnion()                                      {}
 func (UnionFloat) ImplementsInstanceGetResponseStepsObjectConfigRetriesDelayUnion()               {}

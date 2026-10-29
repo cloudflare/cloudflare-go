@@ -60,6 +60,7 @@ func TestAccessPolicyNewWithOptionalParams(t *testing.T) {
 			MfaDisabled:           cloudflare.F(false),
 			SessionDuration:       cloudflare.F("24h"),
 		}),
+		PolicyResolutionAccountID:    cloudflare.F("policy_resolution_account_id"),
 		PurposeJustificationPrompt:   cloudflare.F("Please enter a justification for entering this protected domain."),
 		PurposeJustificationRequired: cloudflare.F(true),
 		Require: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.CertificateRuleParam{
@@ -125,6 +126,7 @@ func TestAccessPolicyUpdateWithOptionalParams(t *testing.T) {
 				MfaDisabled:           cloudflare.F(false),
 				SessionDuration:       cloudflare.F("24h"),
 			}),
+			PolicyResolutionAccountID:    cloudflare.F("policy_resolution_account_id"),
 			PurposeJustificationPrompt:   cloudflare.F("Please enter a justification for entering this protected domain."),
 			PurposeJustificationRequired: cloudflare.F(true),
 			Require: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.CertificateRuleParam{

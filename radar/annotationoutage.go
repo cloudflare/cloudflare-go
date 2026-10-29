@@ -187,20 +187,24 @@ func (r annotationOutageGetResponseAnnotationsASNsDetailsLocationJSON) RawJSON()
 }
 
 type AnnotationOutageGetResponseAnnotationsEntity struct {
-	EntityName  string                                           `json:"entityName" api:"required,nullable"`
-	EntityType  string                                           `json:"entityType" api:"required"`
-	EntityValue string                                           `json:"entityValue" api:"required"`
-	JSON        annotationOutageGetResponseAnnotationsEntityJSON `json:"-"`
+	// Alpha-2 code of the country the entity belongs to (GEOLOCATION and AS entities
+	// only).
+	EntityLocation string                                           `json:"entityLocation" api:"required,nullable"`
+	EntityName     string                                           `json:"entityName" api:"required,nullable"`
+	EntityType     string                                           `json:"entityType" api:"required"`
+	EntityValue    string                                           `json:"entityValue" api:"required"`
+	JSON           annotationOutageGetResponseAnnotationsEntityJSON `json:"-"`
 }
 
 // annotationOutageGetResponseAnnotationsEntityJSON contains the JSON metadata for
 // the struct [AnnotationOutageGetResponseAnnotationsEntity]
 type annotationOutageGetResponseAnnotationsEntityJSON struct {
-	EntityName  apijson.Field
-	EntityType  apijson.Field
-	EntityValue apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	EntityLocation apijson.Field
+	EntityName     apijson.Field
+	EntityType     apijson.Field
+	EntityValue    apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *AnnotationOutageGetResponseAnnotationsEntity) UnmarshalJSON(data []byte) (err error) {

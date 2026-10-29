@@ -235,10 +235,10 @@ type AccessAIControlMcpPortalNewResponseServer struct {
 	Description  string                                                 `json:"description" api:"nullable"`
 	Error        string                                                 `json:"error"`
 	ErrorDetails AccessAIControlMcpPortalNewResponseServersErrorDetails `json:"error_details"`
-	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
-	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
-	// customer portal hostname. Defaults to false (off); opt in per server by setting
-	// true.
+	// When true, per-user authorization uses the shared Cloudflare callback URL as the
+	// 'redirect_uri' instead of the portal callback URL. The default is false. Set
+	// 'is_shared_oauth_callback_enabled' to true to enable the shared Cloudflare
+	// callback URL for this MCP server.
 	IsSharedOAuthCallbackEnabled bool      `json:"is_shared_oauth_callback_enabled"`
 	LastSuccessfulSync           time.Time `json:"last_successful_sync" format:"date-time"`
 	LastSynced                   time.Time `json:"last_synced" format:"date-time"`
@@ -670,10 +670,10 @@ type AccessAIControlMcpPortalUpdateResponseServer struct {
 	Description  string                                                    `json:"description" api:"nullable"`
 	Error        string                                                    `json:"error"`
 	ErrorDetails AccessAIControlMcpPortalUpdateResponseServersErrorDetails `json:"error_details"`
-	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
-	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
-	// customer portal hostname. Defaults to false (off); opt in per server by setting
-	// true.
+	// When true, per-user authorization uses the shared Cloudflare callback URL as the
+	// 'redirect_uri' instead of the portal callback URL. The default is false. Set
+	// 'is_shared_oauth_callback_enabled' to true to enable the shared Cloudflare
+	// callback URL for this MCP server.
 	IsSharedOAuthCallbackEnabled bool      `json:"is_shared_oauth_callback_enabled"`
 	LastSuccessfulSync           time.Time `json:"last_successful_sync" format:"date-time"`
 	LastSynced                   time.Time `json:"last_synced" format:"date-time"`
@@ -1107,10 +1107,10 @@ type AccessAIControlMcpPortalListResponseServer struct {
 	Description  string                                                  `json:"description" api:"nullable"`
 	Error        string                                                  `json:"error"`
 	ErrorDetails AccessAIControlMcpPortalListResponseServersErrorDetails `json:"error_details"`
-	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
-	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
-	// customer portal hostname. Defaults to false (off); opt in per server by setting
-	// true.
+	// When true, per-user authorization uses the shared Cloudflare callback URL as the
+	// 'redirect_uri' instead of the portal callback URL. The default is false. Set
+	// 'is_shared_oauth_callback_enabled' to true to enable the shared Cloudflare
+	// callback URL for this MCP server.
 	IsSharedOAuthCallbackEnabled bool      `json:"is_shared_oauth_callback_enabled"`
 	LastSuccessfulSync           time.Time `json:"last_successful_sync" format:"date-time"`
 	LastSynced                   time.Time `json:"last_synced" format:"date-time"`
@@ -1625,10 +1625,10 @@ type AccessAIControlMcpPortalReadResponseServer struct {
 	Description  string                                                  `json:"description" api:"nullable"`
 	Error        string                                                  `json:"error"`
 	ErrorDetails AccessAIControlMcpPortalReadResponseServersErrorDetails `json:"error_details"`
-	// When true, the gateway worker uses the shared Cloudflare-owned OAuth callback
-	// endpoint as the redirect_uri for upstream on-behalf OAuth, instead of the
-	// customer portal hostname. Defaults to false (off); opt in per server by setting
-	// true.
+	// When true, per-user authorization uses the shared Cloudflare callback URL as the
+	// 'redirect_uri' instead of the portal callback URL. The default is false. Set
+	// 'is_shared_oauth_callback_enabled' to true to enable the shared Cloudflare
+	// callback URL for this MCP server.
 	IsSharedOAuthCallbackEnabled bool      `json:"is_shared_oauth_callback_enabled"`
 	LastSuccessfulSync           time.Time `json:"last_successful_sync" format:"date-time"`
 	LastSynced                   time.Time `json:"last_synced" format:"date-time"`

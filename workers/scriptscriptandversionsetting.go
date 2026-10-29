@@ -225,7 +225,8 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format ScriptScriptAndVersionSettingEditResponseBindingsFormat `json:"format"`
 	// Enables Gateway identity for the binding. Requires network_id to be
-	// "cf1:network" and cannot be combined with tunnel_id.
+	// "cf1:network" and cannot be combined with tunnel_id or an explicit
+	// "cf1:vnet:<UUID>" network_id.
 	Identity ScriptScriptAndVersionSettingEditResponseBindingsIdentity `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
@@ -245,8 +246,9 @@ type ScriptScriptAndVersionSettingEditResponseBinding struct {
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
-	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
-	// Mutually exclusive with tunnel_id.
+	// Identifier of the network to bind to. Use "cf1:network" to select the account's
+	// default virtual network at runtime, or "cf1:vnet:<UUID>" to select an explicit
+	// virtual network in the Worker's account. Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
@@ -2641,10 +2643,12 @@ type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetwo
 	// The kind of resource that the binding provides.
 	Type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkType `json:"type" api:"required"`
 	// Enables Gateway identity for the binding. Requires network_id to be
-	// "cf1:network" and cannot be combined with tunnel_id.
+	// "cf1:network" and cannot be combined with tunnel_id or an explicit
+	// "cf1:vnet:<UUID>" network_id.
 	Identity ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkIdentity `json:"identity"`
-	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
-	// Mutually exclusive with tunnel_id.
+	// Identifier of the network to bind to. Use "cf1:network" to select the account's
+	// default virtual network at runtime, or "cf1:vnet:<UUID>" to select an explicit
+	// virtual network in the Worker's account. Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
 	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
 	TunnelID string                                                                            `json:"tunnel_id"`
@@ -2691,7 +2695,8 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNe
 }
 
 // Enables Gateway identity for the binding. Requires network_id to be
-// "cf1:network" and cannot be combined with tunnel_id.
+// "cf1:network" and cannot be combined with tunnel_id or an explicit
+// "cf1:vnet:<UUID>" network_id.
 type ScriptScriptAndVersionSettingEditResponseBindingsWorkersBindingKindVPCNetworkIdentity string
 
 const (
@@ -2778,7 +2783,8 @@ func (r ScriptScriptAndVersionSettingEditResponseBindingsFormat) IsKnown() bool 
 }
 
 // Enables Gateway identity for the binding. Requires network_id to be
-// "cf1:network" and cannot be combined with tunnel_id.
+// "cf1:network" and cannot be combined with tunnel_id or an explicit
+// "cf1:vnet:<UUID>" network_id.
 type ScriptScriptAndVersionSettingEditResponseBindingsIdentity string
 
 const (
@@ -4563,7 +4569,8 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format ScriptScriptAndVersionSettingGetResponseBindingsFormat `json:"format"`
 	// Enables Gateway identity for the binding. Requires network_id to be
-	// "cf1:network" and cannot be combined with tunnel_id.
+	// "cf1:network" and cannot be combined with tunnel_id or an explicit
+	// "cf1:vnet:<UUID>" network_id.
 	Identity ScriptScriptAndVersionSettingGetResponseBindingsIdentity `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
@@ -4583,8 +4590,9 @@ type ScriptScriptAndVersionSettingGetResponseBinding struct {
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
-	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
-	// Mutually exclusive with tunnel_id.
+	// Identifier of the network to bind to. Use "cf1:network" to select the account's
+	// default virtual network at runtime, or "cf1:vnet:<UUID>" to select an explicit
+	// virtual network in the Worker's account. Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
@@ -6979,10 +6987,12 @@ type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetwor
 	// The kind of resource that the binding provides.
 	Type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkType `json:"type" api:"required"`
 	// Enables Gateway identity for the binding. Requires network_id to be
-	// "cf1:network" and cannot be combined with tunnel_id.
+	// "cf1:network" and cannot be combined with tunnel_id or an explicit
+	// "cf1:vnet:<UUID>" network_id.
 	Identity ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkIdentity `json:"identity"`
-	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
-	// Mutually exclusive with tunnel_id.
+	// Identifier of the network to bind to. Use "cf1:network" to select the account's
+	// default virtual network at runtime, or "cf1:vnet:<UUID>" to select an explicit
+	// virtual network in the Worker's account. Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
 	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
 	TunnelID string                                                                           `json:"tunnel_id"`
@@ -7029,7 +7039,8 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNet
 }
 
 // Enables Gateway identity for the binding. Requires network_id to be
-// "cf1:network" and cannot be combined with tunnel_id.
+// "cf1:network" and cannot be combined with tunnel_id or an explicit
+// "cf1:vnet:<UUID>" network_id.
 type ScriptScriptAndVersionSettingGetResponseBindingsWorkersBindingKindVPCNetworkIdentity string
 
 const (
@@ -7116,7 +7127,8 @@ func (r ScriptScriptAndVersionSettingGetResponseBindingsFormat) IsKnown() bool {
 }
 
 // Enables Gateway identity for the binding. Requires network_id to be
-// "cf1:network" and cannot be combined with tunnel_id.
+// "cf1:network" and cannot be combined with tunnel_id or an explicit
+// "cf1:vnet:<UUID>" network_id.
 type ScriptScriptAndVersionSettingGetResponseBindingsIdentity string
 
 const (
@@ -8876,7 +8888,8 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormat] `json:"format"`
 	// Enables Gateway identity for the binding. Requires network_id to be
-	// "cf1:network" and cannot be combined with tunnel_id.
+	// "cf1:network" and cannot be combined with tunnel_id or an explicit
+	// "cf1:vnet:<UUID>" network_id.
 	Identity param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsIdentity] `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName param.Field[string] `json:"index_name"`
@@ -8896,8 +8909,9 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBinding struct {
 	Namespace param.Field[string] `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID param.Field[string] `json:"namespace_id"`
-	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
-	// Mutually exclusive with tunnel_id.
+	// Identifier of the network to bind to. Use "cf1:network" to select the account's
+	// default virtual network at runtime, or "cf1:vnet:<UUID>" to select an explicit
+	// virtual network in the Worker's account. Mutually exclusive with tunnel_id.
 	NetworkID param.Field[string] `json:"network_id"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
@@ -10328,10 +10342,12 @@ type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVP
 	// The kind of resource that the binding provides.
 	Type param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkType] `json:"type" api:"required"`
 	// Enables Gateway identity for the binding. Requires network_id to be
-	// "cf1:network" and cannot be combined with tunnel_id.
+	// "cf1:network" and cannot be combined with tunnel_id or an explicit
+	// "cf1:vnet:<UUID>" network_id.
 	Identity param.Field[ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkIdentity] `json:"identity"`
-	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
-	// Mutually exclusive with tunnel_id.
+	// Identifier of the network to bind to. Use "cf1:network" to select the account's
+	// default virtual network at runtime, or "cf1:vnet:<UUID>" to select an explicit
+	// virtual network in the Worker's account. Mutually exclusive with tunnel_id.
 	NetworkID param.Field[string] `json:"network_id"`
 	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
 	TunnelID param.Field[string] `json:"tunnel_id"`
@@ -10360,7 +10376,8 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKin
 }
 
 // Enables Gateway identity for the binding. Requires network_id to be
-// "cf1:network" and cannot be combined with tunnel_id.
+// "cf1:network" and cannot be combined with tunnel_id or an explicit
+// "cf1:vnet:<UUID>" network_id.
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsWorkersBindingKindVPCNetworkIdentity string
 
 const (
@@ -10447,7 +10464,8 @@ func (r ScriptScriptAndVersionSettingEditParamsSettingsBindingsFormat) IsKnown()
 }
 
 // Enables Gateway identity for the binding. Requires network_id to be
-// "cf1:network" and cannot be combined with tunnel_id.
+// "cf1:network" and cannot be combined with tunnel_id or an explicit
+// "cf1:vnet:<UUID>" network_id.
 type ScriptScriptAndVersionSettingEditParamsSettingsBindingsIdentity string
 
 const (

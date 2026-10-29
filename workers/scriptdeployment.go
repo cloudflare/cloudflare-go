@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"slices"
 	"time"
 
@@ -17,6 +18,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
+	"github.com/tidwall/gjson"
 )
 
 // ScriptDeploymentService contains methods and other services that help with
@@ -243,6 +245,155 @@ func (r deploymentAnnotationsJSON) RawJSON() string {
 	return r.raw
 }
 
+// Choose whether to apply Durable Object code updates immediately or defer them.
+// When omitted, the default strategy applies.
+type DeploymentCodeUpdateStrategy struct {
+	// Apply Durable Object code updates immediately.
+	Mode DeploymentCodeUpdateStrategyMode `json:"mode" api:"required"`
+	// Set the maximum number of seconds to wait before forcing the update. When
+	// omitted, the default maximum delay applies.
+	MaxDelay float64                          `json:"max_delay" api:"nullable"`
+	JSON     deploymentCodeUpdateStrategyJSON `json:"-"`
+	union    DeploymentCodeUpdateStrategyUnion
+}
+
+// deploymentCodeUpdateStrategyJSON contains the JSON metadata for the struct
+// [DeploymentCodeUpdateStrategy]
+type deploymentCodeUpdateStrategyJSON struct {
+	Mode        apijson.Field
+	MaxDelay    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r deploymentCodeUpdateStrategyJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *DeploymentCodeUpdateStrategy) UnmarshalJSON(data []byte) (err error) {
+	*r = DeploymentCodeUpdateStrategy{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [DeploymentCodeUpdateStrategyUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [DeploymentCodeUpdateStrategyMode],
+// [DeploymentCodeUpdateStrategyObject].
+func (r DeploymentCodeUpdateStrategy) AsUnion() DeploymentCodeUpdateStrategyUnion {
+	return r.union
+}
+
+// Choose whether to apply Durable Object code updates immediately or defer them.
+// When omitted, the default strategy applies.
+//
+// Union satisfied by [DeploymentCodeUpdateStrategyMode] or
+// [DeploymentCodeUpdateStrategyObject].
+type DeploymentCodeUpdateStrategyUnion interface {
+	implementsDeploymentCodeUpdateStrategy()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DeploymentCodeUpdateStrategyUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DeploymentCodeUpdateStrategyMode{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DeploymentCodeUpdateStrategyObject{}),
+		},
+	)
+}
+
+type DeploymentCodeUpdateStrategyMode struct {
+	// Apply Durable Object code updates immediately.
+	Mode DeploymentCodeUpdateStrategyModeMode `json:"mode" api:"required"`
+	JSON deploymentCodeUpdateStrategyModeJSON `json:"-"`
+}
+
+// deploymentCodeUpdateStrategyModeJSON contains the JSON metadata for the struct
+// [DeploymentCodeUpdateStrategyMode]
+type deploymentCodeUpdateStrategyModeJSON struct {
+	Mode        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeploymentCodeUpdateStrategyMode) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deploymentCodeUpdateStrategyModeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DeploymentCodeUpdateStrategyMode) implementsDeploymentCodeUpdateStrategy() {}
+
+// Apply Durable Object code updates immediately.
+type DeploymentCodeUpdateStrategyModeMode string
+
+const (
+	DeploymentCodeUpdateStrategyModeModeImmediate DeploymentCodeUpdateStrategyModeMode = "immediate"
+)
+
+func (r DeploymentCodeUpdateStrategyModeMode) IsKnown() bool {
+	switch r {
+	case DeploymentCodeUpdateStrategyModeModeImmediate:
+		return true
+	}
+	return false
+}
+
+type DeploymentCodeUpdateStrategyObject struct {
+	// Allow active Durable Objects to hibernate before updating their code.
+	Mode DeploymentCodeUpdateStrategyObjectMode `json:"mode" api:"required"`
+	// Set the maximum number of seconds to wait before forcing the update. When
+	// omitted, the default maximum delay applies.
+	MaxDelay float64                                `json:"max_delay" api:"nullable"`
+	JSON     deploymentCodeUpdateStrategyObjectJSON `json:"-"`
+}
+
+// deploymentCodeUpdateStrategyObjectJSON contains the JSON metadata for the struct
+// [DeploymentCodeUpdateStrategyObject]
+type deploymentCodeUpdateStrategyObjectJSON struct {
+	Mode        apijson.Field
+	MaxDelay    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeploymentCodeUpdateStrategyObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deploymentCodeUpdateStrategyObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DeploymentCodeUpdateStrategyObject) implementsDeploymentCodeUpdateStrategy() {}
+
+// Allow active Durable Objects to hibernate before updating their code.
+type DeploymentCodeUpdateStrategyObjectMode string
+
+const (
+	DeploymentCodeUpdateStrategyObjectModeDeferred DeploymentCodeUpdateStrategyObjectMode = "deferred"
+)
+
+func (r DeploymentCodeUpdateStrategyObjectMode) IsKnown() bool {
+	switch r {
+	case DeploymentCodeUpdateStrategyObjectModeDeferred:
+		return true
+	}
+	return false
+}
+
 type DeploymentParam struct {
 	Strategy param.Field[DeploymentStrategy] `json:"strategy" api:"required"`
 	// Worker versions included in this deployment. Each object must contain a
@@ -253,6 +404,9 @@ type DeploymentParam struct {
 	// or from a JSON file with `--versions @versions.json`.
 	Versions    param.Field[[]DeploymentVersionParam]   `json:"versions" api:"required"`
 	Annotations param.Field[DeploymentAnnotationsParam] `json:"annotations"`
+	// Choose whether to apply Durable Object code updates immediately or defer them.
+	// When omitted, the default strategy applies.
+	CodeUpdateStrategy param.Field[DeploymentCodeUpdateStrategyUnionParam] `json:"code_update_strategy"`
 }
 
 func (r DeploymentParam) MarshalJSON() (data []byte, err error) {
@@ -278,6 +432,59 @@ type DeploymentAnnotationsParam struct {
 func (r DeploymentAnnotationsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// Choose whether to apply Durable Object code updates immediately or defer them.
+// When omitted, the default strategy applies.
+type DeploymentCodeUpdateStrategyParam struct {
+	// Apply Durable Object code updates immediately.
+	Mode param.Field[DeploymentCodeUpdateStrategyMode] `json:"mode" api:"required"`
+	// Set the maximum number of seconds to wait before forcing the update. When
+	// omitted, the default maximum delay applies.
+	MaxDelay param.Field[float64] `json:"max_delay"`
+}
+
+func (r DeploymentCodeUpdateStrategyParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DeploymentCodeUpdateStrategyParam) implementsDeploymentCodeUpdateStrategyUnionParam() {}
+
+// Choose whether to apply Durable Object code updates immediately or defer them.
+// When omitted, the default strategy applies.
+//
+// Satisfied by [workers.DeploymentCodeUpdateStrategyModeParam],
+// [workers.DeploymentCodeUpdateStrategyObjectParam],
+// [DeploymentCodeUpdateStrategyParam].
+//
+// Use [Raw()] to specify an arbitrary value for this param
+type DeploymentCodeUpdateStrategyUnionParam interface {
+	implementsDeploymentCodeUpdateStrategyUnionParam()
+}
+
+type DeploymentCodeUpdateStrategyModeParam struct {
+	// Apply Durable Object code updates immediately.
+	Mode param.Field[DeploymentCodeUpdateStrategyModeMode] `json:"mode" api:"required"`
+}
+
+func (r DeploymentCodeUpdateStrategyModeParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DeploymentCodeUpdateStrategyModeParam) implementsDeploymentCodeUpdateStrategyUnionParam() {}
+
+type DeploymentCodeUpdateStrategyObjectParam struct {
+	// Allow active Durable Objects to hibernate before updating their code.
+	Mode param.Field[DeploymentCodeUpdateStrategyObjectMode] `json:"mode" api:"required"`
+	// Set the maximum number of seconds to wait before forcing the update. When
+	// omitted, the default maximum delay applies.
+	MaxDelay param.Field[float64] `json:"max_delay"`
+}
+
+func (r DeploymentCodeUpdateStrategyObjectParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DeploymentCodeUpdateStrategyObjectParam) implementsDeploymentCodeUpdateStrategyUnionParam() {}
 
 type ScriptDeploymentListResponse struct {
 	Deployments []Deployment                     `json:"deployments" api:"required"`

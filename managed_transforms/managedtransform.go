@@ -7,12 +7,14 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/tidwall/gjson"
 )
 
 // ManagedTransformService contains methods and other services that help with
@@ -83,11 +85,14 @@ func (r *ManagedTransformService) Edit(ctx context.Context, params ManagedTransf
 
 // A result.
 type ManagedTransformListResponse struct {
-	// The list of Managed Request Transforms.
-	ManagedRequestHeaders []ManagedTransformListResponseManagedRequestHeader `json:"managed_request_headers" api:"required"`
-	// The list of Managed Response Transforms.
-	ManagedResponseHeaders []ManagedTransformListResponseManagedResponseHeader `json:"managed_response_headers" api:"required"`
-	JSON                   managedTransformListResponseJSON                    `json:"-"`
+	// This field can have the runtime type of
+	// [[]ManagedTransformListResponseObjectManagedRequestHeader].
+	ManagedRequestHeaders interface{} `json:"managed_request_headers"`
+	// This field can have the runtime type of
+	// [[]ManagedTransformListResponseObjectManagedResponseHeader].
+	ManagedResponseHeaders interface{}                      `json:"managed_response_headers"`
+	JSON                   managedTransformListResponseJSON `json:"-"`
+	union                  ManagedTransformListResponseUnion
 }
 
 // managedTransformListResponseJSON contains the JSON metadata for the struct
@@ -99,16 +104,94 @@ type managedTransformListResponseJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *ManagedTransformListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 func (r managedTransformListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r *ManagedTransformListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = ManagedTransformListResponse{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ManagedTransformListResponseUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [ManagedTransformListResponseObject],
+// [ManagedTransformListResponseObject], [ManagedTransformListResponseObject],
+// [ManagedTransformListResponseObject], [ManagedTransformListResponseObject].
+func (r ManagedTransformListResponse) AsUnion() ManagedTransformListResponseUnion {
+	return r.union
+}
+
+// A result.
+//
+// Union satisfied by [ManagedTransformListResponseObject],
+// [ManagedTransformListResponseObject], [ManagedTransformListResponseObject],
+// [ManagedTransformListResponseObject] or [ManagedTransformListResponseObject].
+type ManagedTransformListResponseUnion interface {
+	implementsManagedTransformListResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ManagedTransformListResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ManagedTransformListResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ManagedTransformListResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ManagedTransformListResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ManagedTransformListResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ManagedTransformListResponseObject{}),
+		},
+	)
+}
+
+type ManagedTransformListResponseObject struct {
+	// The list of Managed Request Transforms.
+	ManagedRequestHeaders []ManagedTransformListResponseObjectManagedRequestHeader `json:"managed_request_headers"`
+	// The list of Managed Response Transforms.
+	ManagedResponseHeaders []ManagedTransformListResponseObjectManagedResponseHeader `json:"managed_response_headers"`
+	JSON                   managedTransformListResponseObjectJSON                    `json:"-"`
+}
+
+// managedTransformListResponseObjectJSON contains the JSON metadata for the struct
+// [ManagedTransformListResponseObject]
+type managedTransformListResponseObjectJSON struct {
+	ManagedRequestHeaders  apijson.Field
+	ManagedResponseHeaders apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *ManagedTransformListResponseObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r managedTransformListResponseObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ManagedTransformListResponseObject) implementsManagedTransformListResponse() {}
+
 // A Managed Transform object.
-type ManagedTransformListResponseManagedRequestHeader struct {
+type ManagedTransformListResponseObjectManagedRequestHeader struct {
 	// The human-readable identifier of the Managed Transform.
 	ID string `json:"id" api:"required"`
 	// Whether the Managed Transform is enabled.
@@ -117,13 +200,13 @@ type ManagedTransformListResponseManagedRequestHeader struct {
 	// Transforms.
 	HasConflict bool `json:"has_conflict" api:"required"`
 	// The Managed Transforms that this Managed Transform conflicts with.
-	ConflictsWith []string                                             `json:"conflicts_with"`
-	JSON          managedTransformListResponseManagedRequestHeaderJSON `json:"-"`
+	ConflictsWith []string                                                   `json:"conflicts_with"`
+	JSON          managedTransformListResponseObjectManagedRequestHeaderJSON `json:"-"`
 }
 
-// managedTransformListResponseManagedRequestHeaderJSON contains the JSON metadata
-// for the struct [ManagedTransformListResponseManagedRequestHeader]
-type managedTransformListResponseManagedRequestHeaderJSON struct {
+// managedTransformListResponseObjectManagedRequestHeaderJSON contains the JSON
+// metadata for the struct [ManagedTransformListResponseObjectManagedRequestHeader]
+type managedTransformListResponseObjectManagedRequestHeaderJSON struct {
 	ID            apijson.Field
 	Enabled       apijson.Field
 	HasConflict   apijson.Field
@@ -132,16 +215,16 @@ type managedTransformListResponseManagedRequestHeaderJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ManagedTransformListResponseManagedRequestHeader) UnmarshalJSON(data []byte) (err error) {
+func (r *ManagedTransformListResponseObjectManagedRequestHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r managedTransformListResponseManagedRequestHeaderJSON) RawJSON() string {
+func (r managedTransformListResponseObjectManagedRequestHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
 // A Managed Transform object.
-type ManagedTransformListResponseManagedResponseHeader struct {
+type ManagedTransformListResponseObjectManagedResponseHeader struct {
 	// The human-readable identifier of the Managed Transform.
 	ID string `json:"id" api:"required"`
 	// Whether the Managed Transform is enabled.
@@ -150,13 +233,14 @@ type ManagedTransformListResponseManagedResponseHeader struct {
 	// Transforms.
 	HasConflict bool `json:"has_conflict" api:"required"`
 	// The Managed Transforms that this Managed Transform conflicts with.
-	ConflictsWith []string                                              `json:"conflicts_with"`
-	JSON          managedTransformListResponseManagedResponseHeaderJSON `json:"-"`
+	ConflictsWith []string                                                    `json:"conflicts_with"`
+	JSON          managedTransformListResponseObjectManagedResponseHeaderJSON `json:"-"`
 }
 
-// managedTransformListResponseManagedResponseHeaderJSON contains the JSON metadata
-// for the struct [ManagedTransformListResponseManagedResponseHeader]
-type managedTransformListResponseManagedResponseHeaderJSON struct {
+// managedTransformListResponseObjectManagedResponseHeaderJSON contains the JSON
+// metadata for the struct
+// [ManagedTransformListResponseObjectManagedResponseHeader]
+type managedTransformListResponseObjectManagedResponseHeaderJSON struct {
 	ID            apijson.Field
 	Enabled       apijson.Field
 	HasConflict   apijson.Field
@@ -165,21 +249,24 @@ type managedTransformListResponseManagedResponseHeaderJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ManagedTransformListResponseManagedResponseHeader) UnmarshalJSON(data []byte) (err error) {
+func (r *ManagedTransformListResponseObjectManagedResponseHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r managedTransformListResponseManagedResponseHeaderJSON) RawJSON() string {
+func (r managedTransformListResponseObjectManagedResponseHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
 // A result.
 type ManagedTransformEditResponse struct {
-	// The list of Managed Request Transforms.
-	ManagedRequestHeaders []ManagedTransformEditResponseManagedRequestHeader `json:"managed_request_headers" api:"required"`
-	// The list of Managed Response Transforms.
-	ManagedResponseHeaders []ManagedTransformEditResponseManagedResponseHeader `json:"managed_response_headers" api:"required"`
-	JSON                   managedTransformEditResponseJSON                    `json:"-"`
+	// This field can have the runtime type of
+	// [[]ManagedTransformEditResponseObjectManagedRequestHeader].
+	ManagedRequestHeaders interface{} `json:"managed_request_headers"`
+	// This field can have the runtime type of
+	// [[]ManagedTransformEditResponseObjectManagedResponseHeader].
+	ManagedResponseHeaders interface{}                      `json:"managed_response_headers"`
+	JSON                   managedTransformEditResponseJSON `json:"-"`
+	union                  ManagedTransformEditResponseUnion
 }
 
 // managedTransformEditResponseJSON contains the JSON metadata for the struct
@@ -191,16 +278,94 @@ type managedTransformEditResponseJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *ManagedTransformEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 func (r managedTransformEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r *ManagedTransformEditResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = ManagedTransformEditResponse{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ManagedTransformEditResponseUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [ManagedTransformEditResponseObject],
+// [ManagedTransformEditResponseObject], [ManagedTransformEditResponseObject],
+// [ManagedTransformEditResponseObject], [ManagedTransformEditResponseObject].
+func (r ManagedTransformEditResponse) AsUnion() ManagedTransformEditResponseUnion {
+	return r.union
+}
+
+// A result.
+//
+// Union satisfied by [ManagedTransformEditResponseObject],
+// [ManagedTransformEditResponseObject], [ManagedTransformEditResponseObject],
+// [ManagedTransformEditResponseObject] or [ManagedTransformEditResponseObject].
+type ManagedTransformEditResponseUnion interface {
+	implementsManagedTransformEditResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ManagedTransformEditResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ManagedTransformEditResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ManagedTransformEditResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ManagedTransformEditResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ManagedTransformEditResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ManagedTransformEditResponseObject{}),
+		},
+	)
+}
+
+type ManagedTransformEditResponseObject struct {
+	// The list of Managed Request Transforms.
+	ManagedRequestHeaders []ManagedTransformEditResponseObjectManagedRequestHeader `json:"managed_request_headers"`
+	// The list of Managed Response Transforms.
+	ManagedResponseHeaders []ManagedTransformEditResponseObjectManagedResponseHeader `json:"managed_response_headers"`
+	JSON                   managedTransformEditResponseObjectJSON                    `json:"-"`
+}
+
+// managedTransformEditResponseObjectJSON contains the JSON metadata for the struct
+// [ManagedTransformEditResponseObject]
+type managedTransformEditResponseObjectJSON struct {
+	ManagedRequestHeaders  apijson.Field
+	ManagedResponseHeaders apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *ManagedTransformEditResponseObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r managedTransformEditResponseObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ManagedTransformEditResponseObject) implementsManagedTransformEditResponse() {}
+
 // A Managed Transform object.
-type ManagedTransformEditResponseManagedRequestHeader struct {
+type ManagedTransformEditResponseObjectManagedRequestHeader struct {
 	// The human-readable identifier of the Managed Transform.
 	ID string `json:"id" api:"required"`
 	// Whether the Managed Transform is enabled.
@@ -209,13 +374,13 @@ type ManagedTransformEditResponseManagedRequestHeader struct {
 	// Transforms.
 	HasConflict bool `json:"has_conflict" api:"required"`
 	// The Managed Transforms that this Managed Transform conflicts with.
-	ConflictsWith []string                                             `json:"conflicts_with"`
-	JSON          managedTransformEditResponseManagedRequestHeaderJSON `json:"-"`
+	ConflictsWith []string                                                   `json:"conflicts_with"`
+	JSON          managedTransformEditResponseObjectManagedRequestHeaderJSON `json:"-"`
 }
 
-// managedTransformEditResponseManagedRequestHeaderJSON contains the JSON metadata
-// for the struct [ManagedTransformEditResponseManagedRequestHeader]
-type managedTransformEditResponseManagedRequestHeaderJSON struct {
+// managedTransformEditResponseObjectManagedRequestHeaderJSON contains the JSON
+// metadata for the struct [ManagedTransformEditResponseObjectManagedRequestHeader]
+type managedTransformEditResponseObjectManagedRequestHeaderJSON struct {
 	ID            apijson.Field
 	Enabled       apijson.Field
 	HasConflict   apijson.Field
@@ -224,16 +389,16 @@ type managedTransformEditResponseManagedRequestHeaderJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ManagedTransformEditResponseManagedRequestHeader) UnmarshalJSON(data []byte) (err error) {
+func (r *ManagedTransformEditResponseObjectManagedRequestHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r managedTransformEditResponseManagedRequestHeaderJSON) RawJSON() string {
+func (r managedTransformEditResponseObjectManagedRequestHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
 // A Managed Transform object.
-type ManagedTransformEditResponseManagedResponseHeader struct {
+type ManagedTransformEditResponseObjectManagedResponseHeader struct {
 	// The human-readable identifier of the Managed Transform.
 	ID string `json:"id" api:"required"`
 	// Whether the Managed Transform is enabled.
@@ -242,13 +407,14 @@ type ManagedTransformEditResponseManagedResponseHeader struct {
 	// Transforms.
 	HasConflict bool `json:"has_conflict" api:"required"`
 	// The Managed Transforms that this Managed Transform conflicts with.
-	ConflictsWith []string                                              `json:"conflicts_with"`
-	JSON          managedTransformEditResponseManagedResponseHeaderJSON `json:"-"`
+	ConflictsWith []string                                                    `json:"conflicts_with"`
+	JSON          managedTransformEditResponseObjectManagedResponseHeaderJSON `json:"-"`
 }
 
-// managedTransformEditResponseManagedResponseHeaderJSON contains the JSON metadata
-// for the struct [ManagedTransformEditResponseManagedResponseHeader]
-type managedTransformEditResponseManagedResponseHeaderJSON struct {
+// managedTransformEditResponseObjectManagedResponseHeaderJSON contains the JSON
+// metadata for the struct
+// [ManagedTransformEditResponseObjectManagedResponseHeader]
+type managedTransformEditResponseObjectManagedResponseHeaderJSON struct {
 	ID            apijson.Field
 	Enabled       apijson.Field
 	HasConflict   apijson.Field
@@ -257,11 +423,11 @@ type managedTransformEditResponseManagedResponseHeaderJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ManagedTransformEditResponseManagedResponseHeader) UnmarshalJSON(data []byte) (err error) {
+func (r *ManagedTransformEditResponseObjectManagedResponseHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r managedTransformEditResponseManagedResponseHeaderJSON) RawJSON() string {
+func (r managedTransformEditResponseObjectManagedResponseHeaderJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -40,8 +40,8 @@ func NewThreatEventDatasetService(opts ...option.RequestOption) (r *ThreatEventD
 	return
 }
 
-// Creates a new threat event dataset in Cloudforce One for organizing related
-// threat events.
+// Creates a dataset for grouping events. Set `isPublic` to true to let anyone
+// search it; otherwise only the account can.
 func (r *ThreatEventDatasetService) New(ctx context.Context, params ThreatEventDatasetNewParams, opts ...option.RequestOption) (res *ThreatEventDatasetNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -53,7 +53,7 @@ func (r *ThreatEventDatasetService) New(ctx context.Context, params ThreatEventD
 	return res, err
 }
 
-// Lists all threat event datasets configured in Cloudforce One.
+// Lists the account's datasets. Set `includeDeleted` to include deleted datasets.
 func (r *ThreatEventDatasetService) List(ctx context.Context, params ThreatEventDatasetListParams, opts ...option.RequestOption) (res *[]ThreatEventDatasetListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -65,7 +65,8 @@ func (r *ThreatEventDatasetService) List(ctx context.Context, params ThreatEvent
 	return res, err
 }
 
-// Soft-deletes a dataset given a datasetId.
+// Deletes a dataset. To see deleted datasets, use `threat-intel datasets list`
+// with `includeDeleted`.
 func (r *ThreatEventDatasetService) Delete(ctx context.Context, datasetID string, body ThreatEventDatasetDeleteParams, opts ...option.RequestOption) (res *ThreatEventDatasetDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
@@ -81,8 +82,7 @@ func (r *ThreatEventDatasetService) Delete(ctx context.Context, datasetID string
 	return res, err
 }
 
-// Partially updates a threat event dataset in Cloudforce One, modifying specific
-// fields without replacing the entire dataset configuration.
+// Updates a dataset's `name` and `isPublic` setting. Both fields are required.
 func (r *ThreatEventDatasetService) Edit(ctx context.Context, datasetID string, params ThreatEventDatasetEditParams, opts ...option.RequestOption) (res *ThreatEventDatasetEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -98,7 +98,7 @@ func (r *ThreatEventDatasetService) Edit(ctx context.Context, datasetID string, 
 	return res, err
 }
 
-// Retrieves details for a specific threat event dataset.
+// Returns a dataset by its ID.
 func (r *ThreatEventDatasetService) Get(ctx context.Context, datasetID string, query ThreatEventDatasetGetParams, opts ...option.RequestOption) (res *ThreatEventDatasetGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
@@ -114,8 +114,9 @@ func (r *ThreatEventDatasetService) Get(ctx context.Context, datasetID string, q
 	return res, err
 }
 
-// Deprecated; use GET /events/datasets/{dataset_id}/events/{event_id}/raw.
-// Available through 2026-11-28.
+// Legacy. Use `threat-intel events raw get`
+// (`GET /events/datasets/{dataset_id}/events/{event_id}/raw`) instead. Available
+// through 2026-11-28.
 //
 // Deprecated: Use GET /events/datasets/{dataset_id}/events/{event_id}/raw before
 // 2026-11-28.

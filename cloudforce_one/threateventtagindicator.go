@@ -39,11 +39,10 @@ func NewThreatEventTagIndicatorService(opts ...option.RequestOption) (r *ThreatE
 	return
 }
 
-// Returns indicators associated with the provided tag UUID, with pagination. By
-// default fans out across every intelligence (isAnalytics=false) indicator dataset
-// the account can read; pass datasetIds to scope to dataset UUIDs or a scope
-// value. Analytics datasets do not expose tag associations, so the analytics scope
-// returns an empty result.
+// Lists the indicators that carry a tag, with pagination. By default, every
+// intelligence dataset you can read is searched; use `datasetIds` to limit the
+// search to specific datasets or a scope value. Analytics datasets don't store tag
+// associations, so the `analytics` scope returns no results.
 func (r *ThreatEventTagIndicatorService) List(ctx context.Context, tagUUID string, params ThreatEventTagIndicatorListParams, opts ...option.RequestOption) (res *ThreatEventTagIndicatorListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {

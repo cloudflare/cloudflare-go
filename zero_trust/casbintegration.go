@@ -375,8 +375,8 @@ type CasbIntegrationListResponse struct {
 	// When the integration was last updated.
 	Updated time.Time `json:"updated" api:"required" format:"date-time"`
 	// Use cases enabled for the integration.
-	UseCases []CasbIntegrationListResponseUseCase `json:"use_cases" api:"required"`
-	JSON     casbIntegrationListResponseJSON      `json:"-"`
+	UseCases []string                        `json:"use_cases" api:"required"`
+	JSON     casbIntegrationListResponseJSON `json:"-"`
 }
 
 // casbIntegrationListResponseJSON contains the JSON metadata for the struct
@@ -424,29 +424,6 @@ func (r *CasbIntegrationListResponseAuthMethod) UnmarshalJSON(data []byte) (err 
 }
 
 func (r casbIntegrationListResponseAuthMethodJSON) RawJSON() string {
-	return r.raw
-}
-
-type CasbIntegrationListResponseUseCase struct {
-	ID        string                                 `json:"id" api:"required"`
-	IsEnabled bool                                   `json:"is_enabled" api:"required"`
-	JSON      casbIntegrationListResponseUseCaseJSON `json:"-"`
-}
-
-// casbIntegrationListResponseUseCaseJSON contains the JSON metadata for the struct
-// [CasbIntegrationListResponseUseCase]
-type casbIntegrationListResponseUseCaseJSON struct {
-	ID          apijson.Field
-	IsEnabled   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CasbIntegrationListResponseUseCase) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r casbIntegrationListResponseUseCaseJSON) RawJSON() string {
 	return r.raw
 }
 

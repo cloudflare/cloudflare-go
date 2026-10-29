@@ -134,17 +134,20 @@ func (r *WorkflowService) Get(ctx context.Context, workflowName string, query Wo
 }
 
 type WorkflowUpdateResponse struct {
-	ID                string                     `json:"id" api:"required" format:"uuid"`
-	ClassName         string                     `json:"class_name" api:"required"`
-	CreatedOn         time.Time                  `json:"created_on" api:"required" format:"date-time"`
-	IsDeleted         float64                    `json:"is_deleted" api:"required"`
-	ModifiedOn        time.Time                  `json:"modified_on" api:"required" format:"date-time"`
-	Name              string                     `json:"name" api:"required"`
-	ScriptName        string                     `json:"script_name" api:"required"`
-	TerminatorRunning float64                    `json:"terminator_running" api:"required"`
-	TriggeredOn       time.Time                  `json:"triggered_on" api:"required,nullable" format:"date-time"`
-	VersionID         string                     `json:"version_id" api:"required" format:"uuid"`
-	JSON              workflowUpdateResponseJSON `json:"-"`
+	ID                string    `json:"id" api:"required" format:"uuid"`
+	ClassName         string    `json:"class_name" api:"required"`
+	CreatedOn         time.Time `json:"created_on" api:"required" format:"date-time"`
+	IsDeleted         float64   `json:"is_deleted" api:"required"`
+	ModifiedOn        time.Time `json:"modified_on" api:"required" format:"date-time"`
+	Name              string    `json:"name" api:"required"`
+	ScriptName        string    `json:"script_name" api:"required"`
+	TerminatorRunning float64   `json:"terminator_running" api:"required"`
+	TriggeredOn       time.Time `json:"triggered_on" api:"required,nullable" format:"date-time"`
+	VersionID         string    `json:"version_id" api:"required" format:"uuid"`
+	// Jurisdiction where instances of this workflow run and store data. Set when the
+	// workflow is created and cannot be changed.
+	Jurisdiction WorkflowUpdateResponseJurisdiction `json:"jurisdiction" api:"nullable"`
+	JSON         workflowUpdateResponseJSON         `json:"-"`
 }
 
 // workflowUpdateResponseJSON contains the JSON metadata for the struct
@@ -160,6 +163,7 @@ type workflowUpdateResponseJSON struct {
 	TerminatorRunning apijson.Field
 	TriggeredOn       apijson.Field
 	VersionID         apijson.Field
+	Jurisdiction      apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
@@ -172,16 +176,37 @@ func (r workflowUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Jurisdiction where instances of this workflow run and store data. Set when the
+// workflow is created and cannot be changed.
+type WorkflowUpdateResponseJurisdiction string
+
+const (
+	WorkflowUpdateResponseJurisdictionEu      WorkflowUpdateResponseJurisdiction = "eu"
+	WorkflowUpdateResponseJurisdictionFedramp WorkflowUpdateResponseJurisdiction = "fedramp"
+	WorkflowUpdateResponseJurisdictionUs      WorkflowUpdateResponseJurisdiction = "us"
+)
+
+func (r WorkflowUpdateResponseJurisdiction) IsKnown() bool {
+	switch r {
+	case WorkflowUpdateResponseJurisdictionEu, WorkflowUpdateResponseJurisdictionFedramp, WorkflowUpdateResponseJurisdictionUs:
+		return true
+	}
+	return false
+}
+
 type WorkflowListResponse struct {
-	ID          string                         `json:"id" api:"required" format:"uuid"`
-	ClassName   string                         `json:"class_name" api:"required"`
-	CreatedOn   time.Time                      `json:"created_on" api:"required" format:"date-time"`
-	Instances   map[string]float64             `json:"instances" api:"required"`
-	ModifiedOn  time.Time                      `json:"modified_on" api:"required" format:"date-time"`
-	Name        string                         `json:"name" api:"required"`
-	ScriptName  string                         `json:"script_name" api:"required"`
-	TriggeredOn time.Time                      `json:"triggered_on" api:"required,nullable" format:"date-time"`
-	Schedules   []WorkflowListResponseSchedule `json:"schedules"`
+	ID          string             `json:"id" api:"required" format:"uuid"`
+	ClassName   string             `json:"class_name" api:"required"`
+	CreatedOn   time.Time          `json:"created_on" api:"required" format:"date-time"`
+	Instances   map[string]float64 `json:"instances" api:"required"`
+	ModifiedOn  time.Time          `json:"modified_on" api:"required" format:"date-time"`
+	Name        string             `json:"name" api:"required"`
+	ScriptName  string             `json:"script_name" api:"required"`
+	TriggeredOn time.Time          `json:"triggered_on" api:"required,nullable" format:"date-time"`
+	// Jurisdiction where instances of this workflow run and store data. Set when the
+	// workflow is created and cannot be changed.
+	Jurisdiction WorkflowListResponseJurisdiction `json:"jurisdiction" api:"nullable"`
+	Schedules    []WorkflowListResponseSchedule   `json:"schedules"`
 	// Whether the bound Worker was deleted, leaving this Workflow inactive.
 	ScriptDeleted bool                     `json:"script_deleted"`
 	JSON          workflowListResponseJSON `json:"-"`
@@ -198,6 +223,7 @@ type workflowListResponseJSON struct {
 	Name          apijson.Field
 	ScriptName    apijson.Field
 	TriggeredOn   apijson.Field
+	Jurisdiction  apijson.Field
 	Schedules     apijson.Field
 	ScriptDeleted apijson.Field
 	raw           string
@@ -210,6 +236,24 @@ func (r *WorkflowListResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r workflowListResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Jurisdiction where instances of this workflow run and store data. Set when the
+// workflow is created and cannot be changed.
+type WorkflowListResponseJurisdiction string
+
+const (
+	WorkflowListResponseJurisdictionEu      WorkflowListResponseJurisdiction = "eu"
+	WorkflowListResponseJurisdictionFedramp WorkflowListResponseJurisdiction = "fedramp"
+	WorkflowListResponseJurisdictionUs      WorkflowListResponseJurisdiction = "us"
+)
+
+func (r WorkflowListResponseJurisdiction) IsKnown() bool {
+	switch r {
+	case WorkflowListResponseJurisdictionEu, WorkflowListResponseJurisdictionFedramp, WorkflowListResponseJurisdictionUs:
+		return true
+	}
+	return false
 }
 
 type WorkflowListResponseSchedule struct {
@@ -273,15 +317,18 @@ func (r WorkflowDeleteResponseStatus) IsKnown() bool {
 }
 
 type WorkflowGetResponse struct {
-	ID          string                        `json:"id" api:"required" format:"uuid"`
-	ClassName   string                        `json:"class_name" api:"required"`
-	CreatedOn   time.Time                     `json:"created_on" api:"required" format:"date-time"`
-	Instances   map[string]float64            `json:"instances" api:"required"`
-	ModifiedOn  time.Time                     `json:"modified_on" api:"required" format:"date-time"`
-	Name        string                        `json:"name" api:"required"`
-	ScriptName  string                        `json:"script_name" api:"required"`
-	TriggeredOn time.Time                     `json:"triggered_on" api:"required,nullable" format:"date-time"`
-	Schedules   []WorkflowGetResponseSchedule `json:"schedules"`
+	ID          string             `json:"id" api:"required" format:"uuid"`
+	ClassName   string             `json:"class_name" api:"required"`
+	CreatedOn   time.Time          `json:"created_on" api:"required" format:"date-time"`
+	Instances   map[string]float64 `json:"instances" api:"required"`
+	ModifiedOn  time.Time          `json:"modified_on" api:"required" format:"date-time"`
+	Name        string             `json:"name" api:"required"`
+	ScriptName  string             `json:"script_name" api:"required"`
+	TriggeredOn time.Time          `json:"triggered_on" api:"required,nullable" format:"date-time"`
+	// Jurisdiction where instances of this workflow run and store data. Set when the
+	// workflow is created and cannot be changed.
+	Jurisdiction WorkflowGetResponseJurisdiction `json:"jurisdiction" api:"nullable"`
+	Schedules    []WorkflowGetResponseSchedule   `json:"schedules"`
 	// Whether the bound Worker was deleted, leaving this Workflow inactive.
 	ScriptDeleted bool                    `json:"script_deleted"`
 	JSON          workflowGetResponseJSON `json:"-"`
@@ -298,6 +345,7 @@ type workflowGetResponseJSON struct {
 	Name          apijson.Field
 	ScriptName    apijson.Field
 	TriggeredOn   apijson.Field
+	Jurisdiction  apijson.Field
 	Schedules     apijson.Field
 	ScriptDeleted apijson.Field
 	raw           string
@@ -310,6 +358,24 @@ func (r *WorkflowGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r workflowGetResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Jurisdiction where instances of this workflow run and store data. Set when the
+// workflow is created and cannot be changed.
+type WorkflowGetResponseJurisdiction string
+
+const (
+	WorkflowGetResponseJurisdictionEu      WorkflowGetResponseJurisdiction = "eu"
+	WorkflowGetResponseJurisdictionFedramp WorkflowGetResponseJurisdiction = "fedramp"
+	WorkflowGetResponseJurisdictionUs      WorkflowGetResponseJurisdiction = "us"
+)
+
+func (r WorkflowGetResponseJurisdiction) IsKnown() bool {
+	switch r {
+	case WorkflowGetResponseJurisdictionEu, WorkflowGetResponseJurisdictionFedramp, WorkflowGetResponseJurisdictionUs:
+		return true
+	}
+	return false
 }
 
 type WorkflowGetResponseSchedule struct {
@@ -343,8 +409,12 @@ type WorkflowUpdateParams struct {
 	// Default retention applied to instances of this version when they do not set
 	// their own retention.
 	DefaultRetention param.Field[WorkflowUpdateParamsDefaultRetention] `json:"default_retention"`
-	Limits           param.Field[WorkflowUpdateParamsLimits]           `json:"limits"`
-	Schedules        param.Field[[]WorkflowUpdateParamsSchedule]       `json:"schedules"`
+	// Jurisdiction where instances of this workflow run and store data. Can only be
+	// set when the workflow is created and cannot be changed afterwards; omit it to
+	// keep the existing jurisdiction.
+	Jurisdiction param.Field[WorkflowUpdateParamsJurisdiction] `json:"jurisdiction"`
+	Limits       param.Field[WorkflowUpdateParamsLimits]       `json:"limits"`
+	Schedules    param.Field[[]WorkflowUpdateParamsSchedule]   `json:"schedules"`
 }
 
 func (r WorkflowUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -387,6 +457,25 @@ type WorkflowUpdateParamsDefaultRetentionErrorRetentionUnion interface {
 // Satisfied by [shared.UnionInt], [shared.UnionString].
 type WorkflowUpdateParamsDefaultRetentionSuccessRetentionUnion interface {
 	ImplementsWorkflowUpdateParamsDefaultRetentionSuccessRetentionUnion()
+}
+
+// Jurisdiction where instances of this workflow run and store data. Can only be
+// set when the workflow is created and cannot be changed afterwards; omit it to
+// keep the existing jurisdiction.
+type WorkflowUpdateParamsJurisdiction string
+
+const (
+	WorkflowUpdateParamsJurisdictionEu      WorkflowUpdateParamsJurisdiction = "eu"
+	WorkflowUpdateParamsJurisdictionFedramp WorkflowUpdateParamsJurisdiction = "fedramp"
+	WorkflowUpdateParamsJurisdictionUs      WorkflowUpdateParamsJurisdiction = "us"
+)
+
+func (r WorkflowUpdateParamsJurisdiction) IsKnown() bool {
+	switch r {
+	case WorkflowUpdateParamsJurisdictionEu, WorkflowUpdateParamsJurisdictionFedramp, WorkflowUpdateParamsJurisdictionUs:
+		return true
+	}
+	return false
 }
 
 type WorkflowUpdateParamsLimits struct {

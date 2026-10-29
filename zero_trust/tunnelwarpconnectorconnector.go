@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // TunnelWARPConnectorConnectorService contains methods and other services that
@@ -162,8 +161,8 @@ type TunnelWARPConnectorConnectorGetParams struct {
 }
 
 type TunnelWARPConnectorConnectorGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Errors   []TunnelWARPConnectorConnectorGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []TunnelWARPConnectorConnectorGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// A Mesh node connector that maintains a connection to a Cloudflare data center.
 	Result TunnelWARPConnectorConnectorGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful
@@ -187,6 +186,59 @@ func (r *TunnelWARPConnectorConnectorGetResponseEnvelope) UnmarshalJSON(data []b
 }
 
 func (r tunnelWARPConnectorConnectorGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelWARPConnectorConnectorGetResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                                    `json:"context"`
+	JSON    tunnelWARPConnectorConnectorGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// tunnelWARPConnectorConnectorGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [TunnelWARPConnectorConnectorGetResponseEnvelopeErrors]
+type tunnelWARPConnectorConnectorGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelWARPConnectorConnectorGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelWARPConnectorConnectorGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelWARPConnectorConnectorGetResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                                      `json:"context"`
+	JSON    tunnelWARPConnectorConnectorGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// tunnelWARPConnectorConnectorGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [TunnelWARPConnectorConnectorGetResponseEnvelopeMessages]
+type tunnelWARPConnectorConnectorGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelWARPConnectorConnectorGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelWARPConnectorConnectorGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

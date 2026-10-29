@@ -34,7 +34,8 @@ func NewThreatEventQueryService(opts ...option.RequestOption) (r *ThreatEventQue
 	return
 }
 
-// Create a new saved event query for the account
+// Saves an event query under a unique `name`. `query_json` holds the query
+// parameters as a JSON string.
 func (r *ThreatEventQueryService) New(ctx context.Context, params ThreatEventQueryNewParams, opts ...option.RequestOption) (res *ThreatEventQueryNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -46,7 +47,7 @@ func (r *ThreatEventQueryService) New(ctx context.Context, params ThreatEventQue
 	return res, err
 }
 
-// Retrieve all saved event queries for the account
+// Lists the account's saved event queries.
 func (r *ThreatEventQueryService) List(ctx context.Context, query ThreatEventQueryListParams, opts ...option.RequestOption) (res *[]ThreatEventQueryListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
@@ -58,7 +59,7 @@ func (r *ThreatEventQueryService) List(ctx context.Context, query ThreatEventQue
 	return res, err
 }
 
-// Delete a saved event query by its ID
+// Deletes a saved event query by its ID.
 func (r *ThreatEventQueryService) Delete(ctx context.Context, queryID int64, body ThreatEventQueryDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -71,7 +72,7 @@ func (r *ThreatEventQueryService) Delete(ctx context.Context, queryID int64, bod
 	return err
 }
 
-// Update an existing saved event query by its ID
+// Updates the given fields of a saved event query.
 func (r *ThreatEventQueryService) Edit(ctx context.Context, queryID int64, params ThreatEventQueryEditParams, opts ...option.RequestOption) (res *ThreatEventQueryEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -83,7 +84,7 @@ func (r *ThreatEventQueryService) Edit(ctx context.Context, queryID int64, param
 	return res, err
 }
 
-// Retrieve a saved event query by its ID
+// Returns a saved event query by its ID.
 func (r *ThreatEventQueryService) Get(ctx context.Context, queryID int64, query ThreatEventQueryGetParams, opts ...option.RequestOption) (res *ThreatEventQueryGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

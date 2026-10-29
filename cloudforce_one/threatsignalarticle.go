@@ -98,7 +98,8 @@ func (r *ThreatSignalArticleService) Edit(ctx context.Context, articleID string,
 	return res, nil
 }
 
-// Retrieves a Threat Signals article with its summary, tags and indicator status.
+// Retrieves a Threat Signals article with its summary, tags, indicator status and
+// relevance to the account's Priority Intelligence Requirements.
 func (r *ThreatSignalArticleService) Get(ctx context.Context, articleID string, query ThreatSignalArticleGetParams, opts ...option.RequestOption) (res *ThreatSignalArticleGetResponse, err error) {
 	var env ThreatSignalArticleGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -163,6 +164,16 @@ type ThreatSignalArticleListResponseArticle struct {
 	PublishedAt     string `json:"published_at" api:"required,nullable"`
 	Read            bool   `json:"read" api:"required"`
 	ReadAt          string `json:"read_at" api:"required,nullable"`
+	// Beta. The article's relevance to the account's active Priority Intelligence
+	// Requirements. Null when the article has not been scored against them, including
+	// when the account has no active PIRs, or has not been scored against the
+	// requested pir_id.
+	Relevance ThreatSignalArticleListResponseArticlesRelevance `json:"relevance" api:"required,nullable"`
+	// Beta. Intrinsic article severity band, from informational to critical,
+	// independent of any organisation or Priority Intelligence Requirement. Null when
+	// the account has no active Priority Intelligence Requirements, scoring has not
+	// completed, or a historic article has not entered an automatic rescore window.
+	Severity ThreatSignalArticleListResponseArticlesSeverity `json:"severity" api:"required,nullable"`
 	// Persisted enrichment summary. Null until enrichment produces a summary.
 	Summary string                                       `json:"summary" api:"required,nullable"`
 	Tags    []ThreatSignalArticleListResponseArticlesTag `json:"tags" api:"required"`
@@ -183,6 +194,8 @@ type threatSignalArticleListResponseArticleJSON struct {
 	PublishedAt     apijson.Field
 	Read            apijson.Field
 	ReadAt          apijson.Field
+	Relevance       apijson.Field
+	Severity        apijson.Field
 	Summary         apijson.Field
 	Tags            apijson.Field
 	Title           apijson.Field
@@ -196,6 +209,128 @@ func (r *ThreatSignalArticleListResponseArticle) UnmarshalJSON(data []byte) (err
 
 func (r threatSignalArticleListResponseArticleJSON) RawJSON() string {
 	return r.raw
+}
+
+// Beta. The article's relevance to the account's active Priority Intelligence
+// Requirements. Null when the article has not been scored against them, including
+// when the account has no active PIRs, or has not been scored against the
+// requested pir_id.
+type ThreatSignalArticleListResponseArticlesRelevance struct {
+	// Beta. How relevant the article is to a Priority Intelligence Requirement: high,
+	// medium, or low. Cloudflare may change the scores behind each band as relevance
+	// scoring is calibrated.
+	Band ThreatSignalArticleListResponseArticlesRelevanceBand `json:"band" api:"required"`
+	// Beta. The pir_id requested from the article list, or otherwise the account's
+	// most relevant active PIR for this article.
+	PirID string `json:"pir_id" api:"required" format:"uuid"`
+	// Beta. Every active PIR the article was scored against, most relevant first.
+	// Draft and deleted PIRs are excluded.
+	Pirs []ThreatSignalArticleListResponseArticlesRelevancePir `json:"pirs" api:"required"`
+	JSON threatSignalArticleListResponseArticlesRelevanceJSON  `json:"-"`
+}
+
+// threatSignalArticleListResponseArticlesRelevanceJSON contains the JSON metadata
+// for the struct [ThreatSignalArticleListResponseArticlesRelevance]
+type threatSignalArticleListResponseArticlesRelevanceJSON struct {
+	Band        apijson.Field
+	PirID       apijson.Field
+	Pirs        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatSignalArticleListResponseArticlesRelevance) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatSignalArticleListResponseArticlesRelevanceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Beta. How relevant the article is to a Priority Intelligence Requirement: high,
+// medium, or low. Cloudflare may change the scores behind each band as relevance
+// scoring is calibrated.
+type ThreatSignalArticleListResponseArticlesRelevanceBand string
+
+const (
+	ThreatSignalArticleListResponseArticlesRelevanceBandLow    ThreatSignalArticleListResponseArticlesRelevanceBand = "low"
+	ThreatSignalArticleListResponseArticlesRelevanceBandMedium ThreatSignalArticleListResponseArticlesRelevanceBand = "medium"
+	ThreatSignalArticleListResponseArticlesRelevanceBandHigh   ThreatSignalArticleListResponseArticlesRelevanceBand = "high"
+)
+
+func (r ThreatSignalArticleListResponseArticlesRelevanceBand) IsKnown() bool {
+	switch r {
+	case ThreatSignalArticleListResponseArticlesRelevanceBandLow, ThreatSignalArticleListResponseArticlesRelevanceBandMedium, ThreatSignalArticleListResponseArticlesRelevanceBandHigh:
+		return true
+	}
+	return false
+}
+
+type ThreatSignalArticleListResponseArticlesRelevancePir struct {
+	// Beta. How relevant the article is to a Priority Intelligence Requirement: high,
+	// medium, or low. Cloudflare may change the scores behind each band as relevance
+	// scoring is calibrated.
+	Band  ThreatSignalArticleListResponseArticlesRelevancePirsBand `json:"band" api:"required"`
+	PirID string                                                   `json:"pir_id" api:"required" format:"uuid"`
+	JSON  threatSignalArticleListResponseArticlesRelevancePirJSON  `json:"-"`
+}
+
+// threatSignalArticleListResponseArticlesRelevancePirJSON contains the JSON
+// metadata for the struct [ThreatSignalArticleListResponseArticlesRelevancePir]
+type threatSignalArticleListResponseArticlesRelevancePirJSON struct {
+	Band        apijson.Field
+	PirID       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatSignalArticleListResponseArticlesRelevancePir) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatSignalArticleListResponseArticlesRelevancePirJSON) RawJSON() string {
+	return r.raw
+}
+
+// Beta. How relevant the article is to a Priority Intelligence Requirement: high,
+// medium, or low. Cloudflare may change the scores behind each band as relevance
+// scoring is calibrated.
+type ThreatSignalArticleListResponseArticlesRelevancePirsBand string
+
+const (
+	ThreatSignalArticleListResponseArticlesRelevancePirsBandLow    ThreatSignalArticleListResponseArticlesRelevancePirsBand = "low"
+	ThreatSignalArticleListResponseArticlesRelevancePirsBandMedium ThreatSignalArticleListResponseArticlesRelevancePirsBand = "medium"
+	ThreatSignalArticleListResponseArticlesRelevancePirsBandHigh   ThreatSignalArticleListResponseArticlesRelevancePirsBand = "high"
+)
+
+func (r ThreatSignalArticleListResponseArticlesRelevancePirsBand) IsKnown() bool {
+	switch r {
+	case ThreatSignalArticleListResponseArticlesRelevancePirsBandLow, ThreatSignalArticleListResponseArticlesRelevancePirsBandMedium, ThreatSignalArticleListResponseArticlesRelevancePirsBandHigh:
+		return true
+	}
+	return false
+}
+
+// Beta. Intrinsic article severity band, from informational to critical,
+// independent of any organisation or Priority Intelligence Requirement. Null when
+// the account has no active Priority Intelligence Requirements, scoring has not
+// completed, or a historic article has not entered an automatic rescore window.
+type ThreatSignalArticleListResponseArticlesSeverity string
+
+const (
+	ThreatSignalArticleListResponseArticlesSeverityInformational ThreatSignalArticleListResponseArticlesSeverity = "informational"
+	ThreatSignalArticleListResponseArticlesSeverityLow           ThreatSignalArticleListResponseArticlesSeverity = "low"
+	ThreatSignalArticleListResponseArticlesSeverityMedium        ThreatSignalArticleListResponseArticlesSeverity = "medium"
+	ThreatSignalArticleListResponseArticlesSeverityHigh          ThreatSignalArticleListResponseArticlesSeverity = "high"
+	ThreatSignalArticleListResponseArticlesSeverityCritical      ThreatSignalArticleListResponseArticlesSeverity = "critical"
+)
+
+func (r ThreatSignalArticleListResponseArticlesSeverity) IsKnown() bool {
+	switch r {
+	case ThreatSignalArticleListResponseArticlesSeverityInformational, ThreatSignalArticleListResponseArticlesSeverityLow, ThreatSignalArticleListResponseArticlesSeverityMedium, ThreatSignalArticleListResponseArticlesSeverityHigh, ThreatSignalArticleListResponseArticlesSeverityCritical:
+		return true
+	}
+	return false
 }
 
 type ThreatSignalArticleListResponseArticlesTag struct {
@@ -277,7 +412,12 @@ type ThreatSignalArticleEditResponse struct {
 	PublishedAt               string                                                   `json:"published_at" api:"required,nullable"`
 	Read                      bool                                                     `json:"read" api:"required"`
 	ReadAt                    string                                                   `json:"read_at" api:"required,nullable"`
-	SourceCount               float64                                                  `json:"source_count" api:"required"`
+	// Beta. Intrinsic article severity band, from informational to critical,
+	// independent of any organisation or Priority Intelligence Requirement. Null when
+	// the account has no active Priority Intelligence Requirements, scoring has not
+	// completed, or a historic article has not entered an automatic rescore window.
+	Severity    ThreatSignalArticleEditResponseSeverity `json:"severity" api:"required,nullable"`
+	SourceCount float64                                 `json:"source_count" api:"required"`
 	// Persisted enrichment summary. Null until enrichment produces a summary.
 	Summary         string                               `json:"summary" api:"required,nullable"`
 	SummaryR2Key    string                               `json:"summary_r2_key" api:"required,nullable"`
@@ -303,6 +443,7 @@ type threatSignalArticleEditResponseJSON struct {
 	PublishedAt               apijson.Field
 	Read                      apijson.Field
 	ReadAt                    apijson.Field
+	Severity                  apijson.Field
 	SourceCount               apijson.Field
 	Summary                   apijson.Field
 	SummaryR2Key              apijson.Field
@@ -366,6 +507,28 @@ func (r ThreatSignalArticleEditResponseIndicatorExtractionStatus) IsKnown() bool
 	return false
 }
 
+// Beta. Intrinsic article severity band, from informational to critical,
+// independent of any organisation or Priority Intelligence Requirement. Null when
+// the account has no active Priority Intelligence Requirements, scoring has not
+// completed, or a historic article has not entered an automatic rescore window.
+type ThreatSignalArticleEditResponseSeverity string
+
+const (
+	ThreatSignalArticleEditResponseSeverityInformational ThreatSignalArticleEditResponseSeverity = "informational"
+	ThreatSignalArticleEditResponseSeverityLow           ThreatSignalArticleEditResponseSeverity = "low"
+	ThreatSignalArticleEditResponseSeverityMedium        ThreatSignalArticleEditResponseSeverity = "medium"
+	ThreatSignalArticleEditResponseSeverityHigh          ThreatSignalArticleEditResponseSeverity = "high"
+	ThreatSignalArticleEditResponseSeverityCritical      ThreatSignalArticleEditResponseSeverity = "critical"
+)
+
+func (r ThreatSignalArticleEditResponseSeverity) IsKnown() bool {
+	switch r {
+	case ThreatSignalArticleEditResponseSeverityInformational, ThreatSignalArticleEditResponseSeverityLow, ThreatSignalArticleEditResponseSeverityMedium, ThreatSignalArticleEditResponseSeverityHigh, ThreatSignalArticleEditResponseSeverityCritical:
+		return true
+	}
+	return false
+}
+
 type ThreatSignalArticleEditResponseTag struct {
 	AppliedBy  ThreatSignalArticleEditResponseTagsAppliedBy `json:"applied_by" api:"required"`
 	CategoryID string                                       `json:"categoryId" api:"required,nullable" format:"uuid"`
@@ -424,7 +587,17 @@ type ThreatSignalArticleGetResponse struct {
 	PublishedAt               string                                                  `json:"published_at" api:"required,nullable"`
 	Read                      bool                                                    `json:"read" api:"required"`
 	ReadAt                    string                                                  `json:"read_at" api:"required,nullable"`
-	SourceCount               float64                                                 `json:"source_count" api:"required"`
+	// Beta. The article's relevance to the account's active Priority Intelligence
+	// Requirements. Null when the article has not been scored against them, including
+	// when the account has no active PIRs, or has not been scored against the
+	// requested pir_id.
+	Relevance ThreatSignalArticleGetResponseRelevance `json:"relevance" api:"required,nullable"`
+	// Beta. Intrinsic article severity band, from informational to critical,
+	// independent of any organisation or Priority Intelligence Requirement. Null when
+	// the account has no active Priority Intelligence Requirements, scoring has not
+	// completed, or a historic article has not entered an automatic rescore window.
+	Severity    ThreatSignalArticleGetResponseSeverity `json:"severity" api:"required,nullable"`
+	SourceCount float64                                `json:"source_count" api:"required"`
 	// Persisted enrichment summary. Null until enrichment produces a summary.
 	Summary         string                              `json:"summary" api:"required,nullable"`
 	SummaryR2Key    string                              `json:"summary_r2_key" api:"required,nullable"`
@@ -450,6 +623,8 @@ type threatSignalArticleGetResponseJSON struct {
 	PublishedAt               apijson.Field
 	Read                      apijson.Field
 	ReadAt                    apijson.Field
+	Relevance                 apijson.Field
+	Severity                  apijson.Field
 	SourceCount               apijson.Field
 	Summary                   apijson.Field
 	SummaryR2Key              apijson.Field
@@ -508,6 +683,128 @@ const (
 func (r ThreatSignalArticleGetResponseIndicatorExtractionStatus) IsKnown() bool {
 	switch r {
 	case ThreatSignalArticleGetResponseIndicatorExtractionStatusInProgress, ThreatSignalArticleGetResponseIndicatorExtractionStatusComplete, ThreatSignalArticleGetResponseIndicatorExtractionStatusFailed, ThreatSignalArticleGetResponseIndicatorExtractionStatusUnknown:
+		return true
+	}
+	return false
+}
+
+// Beta. The article's relevance to the account's active Priority Intelligence
+// Requirements. Null when the article has not been scored against them, including
+// when the account has no active PIRs, or has not been scored against the
+// requested pir_id.
+type ThreatSignalArticleGetResponseRelevance struct {
+	// Beta. How relevant the article is to a Priority Intelligence Requirement: high,
+	// medium, or low. Cloudflare may change the scores behind each band as relevance
+	// scoring is calibrated.
+	Band ThreatSignalArticleGetResponseRelevanceBand `json:"band" api:"required"`
+	// Beta. The pir_id requested from the article list, or otherwise the account's
+	// most relevant active PIR for this article.
+	PirID string `json:"pir_id" api:"required" format:"uuid"`
+	// Beta. Every active PIR the article was scored against, most relevant first.
+	// Draft and deleted PIRs are excluded.
+	Pirs []ThreatSignalArticleGetResponseRelevancePir `json:"pirs" api:"required"`
+	JSON threatSignalArticleGetResponseRelevanceJSON  `json:"-"`
+}
+
+// threatSignalArticleGetResponseRelevanceJSON contains the JSON metadata for the
+// struct [ThreatSignalArticleGetResponseRelevance]
+type threatSignalArticleGetResponseRelevanceJSON struct {
+	Band        apijson.Field
+	PirID       apijson.Field
+	Pirs        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatSignalArticleGetResponseRelevance) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatSignalArticleGetResponseRelevanceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Beta. How relevant the article is to a Priority Intelligence Requirement: high,
+// medium, or low. Cloudflare may change the scores behind each band as relevance
+// scoring is calibrated.
+type ThreatSignalArticleGetResponseRelevanceBand string
+
+const (
+	ThreatSignalArticleGetResponseRelevanceBandLow    ThreatSignalArticleGetResponseRelevanceBand = "low"
+	ThreatSignalArticleGetResponseRelevanceBandMedium ThreatSignalArticleGetResponseRelevanceBand = "medium"
+	ThreatSignalArticleGetResponseRelevanceBandHigh   ThreatSignalArticleGetResponseRelevanceBand = "high"
+)
+
+func (r ThreatSignalArticleGetResponseRelevanceBand) IsKnown() bool {
+	switch r {
+	case ThreatSignalArticleGetResponseRelevanceBandLow, ThreatSignalArticleGetResponseRelevanceBandMedium, ThreatSignalArticleGetResponseRelevanceBandHigh:
+		return true
+	}
+	return false
+}
+
+type ThreatSignalArticleGetResponseRelevancePir struct {
+	// Beta. How relevant the article is to a Priority Intelligence Requirement: high,
+	// medium, or low. Cloudflare may change the scores behind each band as relevance
+	// scoring is calibrated.
+	Band  ThreatSignalArticleGetResponseRelevancePirsBand `json:"band" api:"required"`
+	PirID string                                          `json:"pir_id" api:"required" format:"uuid"`
+	JSON  threatSignalArticleGetResponseRelevancePirJSON  `json:"-"`
+}
+
+// threatSignalArticleGetResponseRelevancePirJSON contains the JSON metadata for
+// the struct [ThreatSignalArticleGetResponseRelevancePir]
+type threatSignalArticleGetResponseRelevancePirJSON struct {
+	Band        apijson.Field
+	PirID       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ThreatSignalArticleGetResponseRelevancePir) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r threatSignalArticleGetResponseRelevancePirJSON) RawJSON() string {
+	return r.raw
+}
+
+// Beta. How relevant the article is to a Priority Intelligence Requirement: high,
+// medium, or low. Cloudflare may change the scores behind each band as relevance
+// scoring is calibrated.
+type ThreatSignalArticleGetResponseRelevancePirsBand string
+
+const (
+	ThreatSignalArticleGetResponseRelevancePirsBandLow    ThreatSignalArticleGetResponseRelevancePirsBand = "low"
+	ThreatSignalArticleGetResponseRelevancePirsBandMedium ThreatSignalArticleGetResponseRelevancePirsBand = "medium"
+	ThreatSignalArticleGetResponseRelevancePirsBandHigh   ThreatSignalArticleGetResponseRelevancePirsBand = "high"
+)
+
+func (r ThreatSignalArticleGetResponseRelevancePirsBand) IsKnown() bool {
+	switch r {
+	case ThreatSignalArticleGetResponseRelevancePirsBandLow, ThreatSignalArticleGetResponseRelevancePirsBandMedium, ThreatSignalArticleGetResponseRelevancePirsBandHigh:
+		return true
+	}
+	return false
+}
+
+// Beta. Intrinsic article severity band, from informational to critical,
+// independent of any organisation or Priority Intelligence Requirement. Null when
+// the account has no active Priority Intelligence Requirements, scoring has not
+// completed, or a historic article has not entered an automatic rescore window.
+type ThreatSignalArticleGetResponseSeverity string
+
+const (
+	ThreatSignalArticleGetResponseSeverityInformational ThreatSignalArticleGetResponseSeverity = "informational"
+	ThreatSignalArticleGetResponseSeverityLow           ThreatSignalArticleGetResponseSeverity = "low"
+	ThreatSignalArticleGetResponseSeverityMedium        ThreatSignalArticleGetResponseSeverity = "medium"
+	ThreatSignalArticleGetResponseSeverityHigh          ThreatSignalArticleGetResponseSeverity = "high"
+	ThreatSignalArticleGetResponseSeverityCritical      ThreatSignalArticleGetResponseSeverity = "critical"
+)
+
+func (r ThreatSignalArticleGetResponseSeverity) IsKnown() bool {
+	switch r {
+	case ThreatSignalArticleGetResponseSeverityInformational, ThreatSignalArticleGetResponseSeverityLow, ThreatSignalArticleGetResponseSeverityMedium, ThreatSignalArticleGetResponseSeverityHigh, ThreatSignalArticleGetResponseSeverityCritical:
 		return true
 	}
 	return false
@@ -580,8 +877,16 @@ type ThreatSignalArticleListParams struct {
 	// When true on the first page, count matching articles and return an exact total.
 	// Defaults to false; cursor pages do not recalculate totals.
 	IncludeTotal param.Field[bool] `query:"include_total"`
+	// Beta. Return only articles at or above this relevance band for pir_id, or for
+	// any active PIR when pir_id is omitted. Excludes articles that have not been
+	// scored.
+	MinRelevance param.Field[ThreatSignalArticleListParamsMinRelevance] `query:"min_relevance"`
 	// Number of articles per cursor page, from 1 to 100. Defaults to 20.
 	PerPage param.Field[int64] `query:"per_page"`
+	// Beta. Active Priority Intelligence Requirement to report, filter, and sort
+	// relevance by. Omit to use each article's most relevant active PIR. Returns a 400
+	// error unless the PIR is active.
+	PirID param.Field[string] `query:"pir_id" format:"uuid"`
 	// Include articles published at or after this ISO 8601 date-time with Z or a
 	// numeric UTC offset; normalized to UTC.
 	PublishedAfter param.Field[time.Time] `query:"published_after" format:"date-time"`
@@ -594,8 +899,15 @@ type ThreatSignalArticleListParams struct {
 	// NFC-normalized, trimmed literal substring filter on article titles; ASCII
 	// case-insensitive, from 1 to 500 characters.
 	Search param.Field[string] `query:"search"`
-	// Sort by fetched_at, published_at, or title. Prefix the field with - for
-	// descending order; defaults to -fetched_at.
+	// Beta. Repeatable intrinsic severity band filter. An article matches any selected
+	// band, the band reported as its severity. Excludes articles without a severity.
+	// Like the severity field, severity is reported only while the account has an
+	// active Priority Intelligence Requirement; otherwise no articles match.
+	Severity param.Field[[]ThreatSignalArticleListParamsSeverity] `query:"severity"`
+	// Sort by fetched_at, published_at, title, or relevance (beta). Prefix the field
+	// with - for descending order; defaults to -fetched_at. -relevance lists the most
+	// relevant articles first, by pir_id or by each article's most relevant active
+	// PIR, with unscored articles last.
 	Sort param.Field[string] `query:"sort"`
 	// Filter by curated or custom feed source. Omit to include both source types.
 	SourceType param.Field[ThreatSignalArticleListParamsSourceType] `query:"source_type"`
@@ -622,6 +934,43 @@ func (r ThreatSignalArticleListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Beta. Return only articles at or above this relevance band for pir_id, or for
+// any active PIR when pir_id is omitted. Excludes articles that have not been
+// scored.
+type ThreatSignalArticleListParamsMinRelevance string
+
+const (
+	ThreatSignalArticleListParamsMinRelevanceLow    ThreatSignalArticleListParamsMinRelevance = "low"
+	ThreatSignalArticleListParamsMinRelevanceMedium ThreatSignalArticleListParamsMinRelevance = "medium"
+	ThreatSignalArticleListParamsMinRelevanceHigh   ThreatSignalArticleListParamsMinRelevance = "high"
+)
+
+func (r ThreatSignalArticleListParamsMinRelevance) IsKnown() bool {
+	switch r {
+	case ThreatSignalArticleListParamsMinRelevanceLow, ThreatSignalArticleListParamsMinRelevanceMedium, ThreatSignalArticleListParamsMinRelevanceHigh:
+		return true
+	}
+	return false
+}
+
+type ThreatSignalArticleListParamsSeverity string
+
+const (
+	ThreatSignalArticleListParamsSeverityInformational ThreatSignalArticleListParamsSeverity = "informational"
+	ThreatSignalArticleListParamsSeverityLow           ThreatSignalArticleListParamsSeverity = "low"
+	ThreatSignalArticleListParamsSeverityMedium        ThreatSignalArticleListParamsSeverity = "medium"
+	ThreatSignalArticleListParamsSeverityHigh          ThreatSignalArticleListParamsSeverity = "high"
+	ThreatSignalArticleListParamsSeverityCritical      ThreatSignalArticleListParamsSeverity = "critical"
+)
+
+func (r ThreatSignalArticleListParamsSeverity) IsKnown() bool {
+	switch r {
+	case ThreatSignalArticleListParamsSeverityInformational, ThreatSignalArticleListParamsSeverityLow, ThreatSignalArticleListParamsSeverityMedium, ThreatSignalArticleListParamsSeverityHigh, ThreatSignalArticleListParamsSeverityCritical:
+		return true
+	}
+	return false
 }
 
 // Filter by curated or custom feed source. Omit to include both source types.

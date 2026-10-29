@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package tenant_custom_nameservers_test
+package zero_trust_test
 
 import (
 	"context"
@@ -11,10 +11,10 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/tenant_custom_nameservers"
+	"github.com/cloudflare/cloudflare-go/v7/zero_trust"
 )
 
-func TestTenantCustomNameserverNewWithOptionalParams(t *testing.T) {
+func TestCasbPostureAssetSchemaListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,66 +28,40 @@ func TestTenantCustomNameserverNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.TenantCustomNameservers.New(
+	_, err := client.ZeroTrust.Casb.Posture.AssetSchemas.List(context.TODO(), zero_trust.CasbPostureAssetSchemaListParams{
+		AccountID: cloudflare.F("46148281d8a93d002ef242d8b0d5f9f6"),
+		Vendor:    cloudflare.F(zero_trust.CasbPostureAssetSchemaListParamsVendorAnthropic),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestCasbPostureAssetSchemaGet(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.ZeroTrust.Casb.Posture.AssetSchemas.Get(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
-		tenant_custom_nameservers.TenantCustomNameserverNewParams{
-			NSName: cloudflare.F("ns1.example.com"),
-			NSSet:  cloudflare.F(1.000000),
+		"AnthropicApiKey",
+		zero_trust.CasbPostureAssetSchemaGetParams{
+			AccountID: cloudflare.F("46148281d8a93d002ef242d8b0d5f9f6"),
 		},
 	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestTenantCustomNameserverDelete(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.TenantCustomNameservers.Delete(
-		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
-		"ns1.example.com",
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestTenantCustomNameserverGet(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.TenantCustomNameservers.Get(context.TODO(), "699d98642c564d2e855e9661899b7252")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

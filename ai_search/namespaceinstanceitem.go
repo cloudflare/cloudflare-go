@@ -435,24 +435,36 @@ func (r namespaceInstanceItemDeleteResponseJSON) RawJSON() string {
 }
 
 type NamespaceInstanceItemChunksResponse struct {
-	ID        string                                  `json:"id" api:"required"`
-	Item      NamespaceInstanceItemChunksResponseItem `json:"item" api:"required"`
-	Text      string                                  `json:"text" api:"required"`
-	EndByte   float64                                 `json:"end_byte"`
-	StartByte float64                                 `json:"start_byte"`
-	JSON      namespaceInstanceItemChunksResponseJSON `json:"-"`
+	ID      string                                  `json:"id" api:"required"`
+	Item    NamespaceInstanceItemChunksResponseItem `json:"item" api:"required"`
+	Text    string                                  `json:"text" api:"required"`
+	EndByte float64                                 `json:"end_byte"`
+	// Audio/video transcript chunks only: end, in milliseconds from the start of the
+	// media (whole seconds), of the last transcript section the chunk covers.
+	MediaEndMs int64 `json:"media_end_ms"`
+	// Audio/video transcript chunks only: start, in milliseconds from the start of the
+	// media (whole seconds), of the transcript section the chunk begins in.
+	MediaStartMs int64 `json:"media_start_ms"`
+	// Audio/video transcript chunks only: type of the source media file. Omitted for
+	// all other chunks.
+	SourceMediaType NamespaceInstanceItemChunksResponseSourceMediaType `json:"source_media_type"`
+	StartByte       float64                                            `json:"start_byte"`
+	JSON            namespaceInstanceItemChunksResponseJSON            `json:"-"`
 }
 
 // namespaceInstanceItemChunksResponseJSON contains the JSON metadata for the
 // struct [NamespaceInstanceItemChunksResponse]
 type namespaceInstanceItemChunksResponseJSON struct {
-	ID          apijson.Field
-	Item        apijson.Field
-	Text        apijson.Field
-	EndByte     apijson.Field
-	StartByte   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID              apijson.Field
+	Item            apijson.Field
+	Text            apijson.Field
+	EndByte         apijson.Field
+	MediaEndMs      apijson.Field
+	MediaStartMs    apijson.Field
+	SourceMediaType apijson.Field
+	StartByte       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *NamespaceInstanceItemChunksResponse) UnmarshalJSON(data []byte) (err error) {
@@ -486,6 +498,23 @@ func (r *NamespaceInstanceItemChunksResponseItem) UnmarshalJSON(data []byte) (er
 
 func (r namespaceInstanceItemChunksResponseItemJSON) RawJSON() string {
 	return r.raw
+}
+
+// Audio/video transcript chunks only: type of the source media file. Omitted for
+// all other chunks.
+type NamespaceInstanceItemChunksResponseSourceMediaType string
+
+const (
+	NamespaceInstanceItemChunksResponseSourceMediaTypeAudio NamespaceInstanceItemChunksResponseSourceMediaType = "audio"
+	NamespaceInstanceItemChunksResponseSourceMediaTypeVideo NamespaceInstanceItemChunksResponseSourceMediaType = "video"
+)
+
+func (r NamespaceInstanceItemChunksResponseSourceMediaType) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceItemChunksResponseSourceMediaTypeAudio, NamespaceInstanceItemChunksResponseSourceMediaTypeVideo:
+		return true
+	}
+	return false
 }
 
 type NamespaceInstanceItemNewOrUpdateResponse struct {

@@ -17,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // NetworkHostnameRouteService contains methods and other services that help with
@@ -226,9 +225,9 @@ func (r NetworkHostnameRouteNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkHostnameRouteNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	Result   HostnameRoute         `json:"result" api:"required"`
+	Errors   []NetworkHostnameRouteNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []NetworkHostnameRouteNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   HostnameRoute                                     `json:"result" api:"required"`
 	// Whether the API call was successful
 	Success NetworkHostnameRouteNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkHostnameRouteNewResponseEnvelopeJSON    `json:"-"`
@@ -250,6 +249,58 @@ func (r *NetworkHostnameRouteNewResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r networkHostnameRouteNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkHostnameRouteNewResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                            `json:"context"`
+	JSON    networkHostnameRouteNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// networkHostnameRouteNewResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [NetworkHostnameRouteNewResponseEnvelopeErrors]
+type networkHostnameRouteNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkHostnameRouteNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkHostnameRouteNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkHostnameRouteNewResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                              `json:"context"`
+	JSON    networkHostnameRouteNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// networkHostnameRouteNewResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [NetworkHostnameRouteNewResponseEnvelopeMessages]
+type networkHostnameRouteNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkHostnameRouteNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkHostnameRouteNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -307,9 +358,9 @@ type NetworkHostnameRouteDeleteParams struct {
 }
 
 type NetworkHostnameRouteDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	Result   HostnameRoute         `json:"result" api:"required"`
+	Errors   []NetworkHostnameRouteDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []NetworkHostnameRouteDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   HostnameRoute                                        `json:"result" api:"required"`
 	// Whether the API call was successful
 	Success NetworkHostnameRouteDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkHostnameRouteDeleteResponseEnvelopeJSON    `json:"-"`
@@ -331,6 +382,58 @@ func (r *NetworkHostnameRouteDeleteResponseEnvelope) UnmarshalJSON(data []byte) 
 }
 
 func (r networkHostnameRouteDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkHostnameRouteDeleteResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                               `json:"context"`
+	JSON    networkHostnameRouteDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// networkHostnameRouteDeleteResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [NetworkHostnameRouteDeleteResponseEnvelopeErrors]
+type networkHostnameRouteDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkHostnameRouteDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkHostnameRouteDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkHostnameRouteDeleteResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                                 `json:"context"`
+	JSON    networkHostnameRouteDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// networkHostnameRouteDeleteResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [NetworkHostnameRouteDeleteResponseEnvelopeMessages]
+type networkHostnameRouteDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkHostnameRouteDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkHostnameRouteDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -365,9 +468,9 @@ func (r NetworkHostnameRouteEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkHostnameRouteEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	Result   HostnameRoute         `json:"result" api:"required"`
+	Errors   []NetworkHostnameRouteEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []NetworkHostnameRouteEditResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   HostnameRoute                                      `json:"result" api:"required"`
 	// Whether the API call was successful
 	Success NetworkHostnameRouteEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkHostnameRouteEditResponseEnvelopeJSON    `json:"-"`
@@ -392,6 +495,58 @@ func (r networkHostnameRouteEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type NetworkHostnameRouteEditResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                             `json:"context"`
+	JSON    networkHostnameRouteEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// networkHostnameRouteEditResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [NetworkHostnameRouteEditResponseEnvelopeErrors]
+type networkHostnameRouteEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkHostnameRouteEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkHostnameRouteEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkHostnameRouteEditResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                               `json:"context"`
+	JSON    networkHostnameRouteEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// networkHostnameRouteEditResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [NetworkHostnameRouteEditResponseEnvelopeMessages]
+type networkHostnameRouteEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkHostnameRouteEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkHostnameRouteEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type NetworkHostnameRouteEditResponseEnvelopeSuccess bool
 
@@ -413,9 +568,9 @@ type NetworkHostnameRouteGetParams struct {
 }
 
 type NetworkHostnameRouteGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	Result   HostnameRoute         `json:"result" api:"required"`
+	Errors   []NetworkHostnameRouteGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []NetworkHostnameRouteGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   HostnameRoute                                     `json:"result" api:"required"`
 	// Whether the API call was successful
 	Success NetworkHostnameRouteGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkHostnameRouteGetResponseEnvelopeJSON    `json:"-"`
@@ -437,6 +592,58 @@ func (r *NetworkHostnameRouteGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r networkHostnameRouteGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkHostnameRouteGetResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                            `json:"context"`
+	JSON    networkHostnameRouteGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// networkHostnameRouteGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [NetworkHostnameRouteGetResponseEnvelopeErrors]
+type networkHostnameRouteGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkHostnameRouteGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkHostnameRouteGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkHostnameRouteGetResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                              `json:"context"`
+	JSON    networkHostnameRouteGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// networkHostnameRouteGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [NetworkHostnameRouteGetResponseEnvelopeMessages]
+type networkHostnameRouteGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkHostnameRouteGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkHostnameRouteGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

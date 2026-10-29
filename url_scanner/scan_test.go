@@ -36,7 +36,7 @@ func TestScanNewWithOptionalParams(t *testing.T) {
 		AccountID:      cloudflare.F("account_id"),
 		URL:            cloudflare.F("https://www.example.com"),
 		AgentReadiness: cloudflare.F(true),
-		Country:        cloudflare.F(url_scanner.ScanNewParamsCountryAf),
+		Country:        cloudflare.F(url_scanner.ScanNewParamsCountryAe),
 		Customagent:    cloudflare.F("customagent"),
 		CustomHeaders: cloudflare.F(map[string]string{
 			"foo": "string",

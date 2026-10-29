@@ -43,11 +43,10 @@ func NewThreatEventIndicatorService(opts ...option.RequestOption) (r *ThreatEven
 	return
 }
 
-// Retrieves indicators across specified datasets, ordered by createdAt descending
-// then UUID, dataset ID, and shard ID ascending. Use one standalone datasetIds
-// scope value: 'all'/'\*' or 'operational' for readable intelligence datasets
-// (isAnalytics=false), or 'analytics' for readable analytics datasets
-// (isAnalytics=true). If no datasetIds are provided, uses the default dataset.
+// Lists indicators across datasets, newest first. `datasetIds` accepts dataset
+// UUIDs or one scope value used alone: `all` (or `*`) and `operational` select the
+// intelligence datasets you can read, and `analytics` selects the analytics
+// datasets you can read. Without `datasetIds`, the default dataset is used.
 func (r *ThreatEventIndicatorService) List(ctx context.Context, params ThreatEventIndicatorListParams, opts ...option.RequestOption) (res *ThreatEventIndicatorListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {

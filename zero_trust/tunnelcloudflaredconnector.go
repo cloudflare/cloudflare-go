@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // TunnelCloudflaredConnectorService contains methods and other services that help
@@ -68,8 +67,8 @@ type TunnelCloudflaredConnectorGetParams struct {
 }
 
 type TunnelCloudflaredConnectorGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Errors   []TunnelCloudflaredConnectorGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []TunnelCloudflaredConnectorGetResponseEnvelopeMessages `json:"messages" api:"required"`
 	// A client (typically cloudflared) that maintains connections to a Cloudflare data
 	// center.
 	Result Client `json:"result" api:"required"`
@@ -94,6 +93,58 @@ func (r *TunnelCloudflaredConnectorGetResponseEnvelope) UnmarshalJSON(data []byt
 }
 
 func (r tunnelCloudflaredConnectorGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredConnectorGetResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                                  `json:"context"`
+	JSON    tunnelCloudflaredConnectorGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// tunnelCloudflaredConnectorGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [TunnelCloudflaredConnectorGetResponseEnvelopeErrors]
+type tunnelCloudflaredConnectorGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredConnectorGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredConnectorGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredConnectorGetResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                                    `json:"context"`
+	JSON    tunnelCloudflaredConnectorGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// tunnelCloudflaredConnectorGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [TunnelCloudflaredConnectorGetResponseEnvelopeMessages]
+type tunnelCloudflaredConnectorGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredConnectorGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredConnectorGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

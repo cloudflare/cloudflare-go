@@ -38,10 +38,10 @@ func TestAppFlagNewWithOptionalParams(t *testing.T) {
 			Enabled:          cloudflare.F(true),
 			Key:              cloudflare.F("x"),
 			Rules: cloudflare.F([]flagship.AppFlagNewParamsRule{{
-				Conditions: cloudflare.F([]flagship.AppFlagNewParamsRulesConditionUnion{flagship.AppFlagNewParamsRulesConditionsObject{
+				Conditions: cloudflare.F([]flagship.AppFlagNewParamsRulesConditionUnion{flagship.AppFlagNewParamsRulesConditionsFlagshipBaseCondition{
 					Attribute: cloudflare.F("x"),
-					Operator:  cloudflare.F(flagship.AppFlagNewParamsRulesConditionsObjectOperatorEquals),
-					Value:     cloudflare.F[flagship.AppFlagNewParamsRulesConditionsObjectValueUnion](shared.UnionString("string")),
+					Operator:  cloudflare.F(flagship.AppFlagNewParamsRulesConditionsFlagshipBaseConditionOperatorEquals),
+					Value:     cloudflare.F[flagship.AppFlagNewParamsRulesConditionsFlagshipBaseConditionValueUnion](shared.UnionString("string")),
 				}}),
 				Priority:       cloudflare.F(int64(1)),
 				ServeVariation: cloudflare.F("x"),
@@ -54,7 +54,10 @@ func TestAppFlagNewWithOptionalParams(t *testing.T) {
 				"foo": shared.UnionString("string"),
 			}),
 			Description: cloudflare.F("description"),
-			Type:        cloudflare.F(flagship.AppFlagNewParamsTypeBoolean),
+			Metadata: cloudflare.F(map[string]flagship.AppFlagNewParamsMetadataUnion{
+				"foo": shared.UnionBool(true),
+			}),
+			Type: cloudflare.F(flagship.AppFlagNewParamsTypeBoolean),
 		},
 	)
 	if err != nil {
@@ -90,10 +93,10 @@ func TestAppFlagUpdateWithOptionalParams(t *testing.T) {
 			Enabled:          cloudflare.F(true),
 			Key:              cloudflare.F("x"),
 			Rules: cloudflare.F([]flagship.AppFlagUpdateParamsRule{{
-				Conditions: cloudflare.F([]flagship.AppFlagUpdateParamsRulesConditionUnion{flagship.AppFlagUpdateParamsRulesConditionsObject{
+				Conditions: cloudflare.F([]flagship.AppFlagUpdateParamsRulesConditionUnion{flagship.AppFlagUpdateParamsRulesConditionsFlagshipBaseCondition{
 					Attribute: cloudflare.F("x"),
-					Operator:  cloudflare.F(flagship.AppFlagUpdateParamsRulesConditionsObjectOperatorEquals),
-					Value:     cloudflare.F[flagship.AppFlagUpdateParamsRulesConditionsObjectValueUnion](shared.UnionString("string")),
+					Operator:  cloudflare.F(flagship.AppFlagUpdateParamsRulesConditionsFlagshipBaseConditionOperatorEquals),
+					Value:     cloudflare.F[flagship.AppFlagUpdateParamsRulesConditionsFlagshipBaseConditionValueUnion](shared.UnionString("string")),
 				}}),
 				Priority:       cloudflare.F(int64(1)),
 				ServeVariation: cloudflare.F("x"),
@@ -106,7 +109,10 @@ func TestAppFlagUpdateWithOptionalParams(t *testing.T) {
 				"foo": shared.UnionString("string"),
 			}),
 			Description: cloudflare.F("description"),
-			Type:        cloudflare.F(flagship.AppFlagUpdateParamsTypeBoolean),
+			Metadata: cloudflare.F(map[string]flagship.AppFlagUpdateParamsMetadataUnion{
+				"foo": shared.UnionBool(true),
+			}),
+			Type: cloudflare.F(flagship.AppFlagUpdateParamsTypeBoolean),
 		},
 	)
 	if err != nil {
