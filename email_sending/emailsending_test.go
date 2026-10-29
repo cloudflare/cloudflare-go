@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/email_sending"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 func TestEmailSendingSendWithOptionalParams(t *testing.T) {
