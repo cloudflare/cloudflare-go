@@ -87,7 +87,7 @@ type AdvancedDDoS struct {
 	// ID of the zone setting.
 	ID AdvancedDDoSID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value AdvancedDDoSValue `json:"value" api:"required"`
+	Value AdvancedDDoSValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable AdvancedDDoSEditable `json:"editable"`
@@ -134,20 +134,43 @@ func (r AdvancedDDoSID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type AdvancedDDoSValue string
-
-const (
-	AdvancedDDoSValueOn  AdvancedDDoSValue = "on"
-	AdvancedDDoSValueOff AdvancedDDoSValue = "off"
-)
-
-func (r AdvancedDDoSValue) IsKnown() bool {
-	switch r {
-	case AdvancedDDoSValueOn, AdvancedDDoSValueOff:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [AdvancedDDoSValueArray].
+type AdvancedDDoSValueUnion interface {
+	ImplementsAdvancedDDoSValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AdvancedDDoSValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AdvancedDDoSValueArray{}),
+		},
+	)
+}
+
+type AdvancedDDoSValueArray []string
+
+func (r AdvancedDDoSValueArray) ImplementsAdvancedDDoSValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -175,7 +198,7 @@ type AlwaysOnline struct {
 	// ID of the zone setting.
 	ID AlwaysOnlineID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value AlwaysOnlineValue `json:"value" api:"required"`
+	Value AlwaysOnlineValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable AlwaysOnlineEditable `json:"editable"`
@@ -222,20 +245,43 @@ func (r AlwaysOnlineID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type AlwaysOnlineValue string
-
-const (
-	AlwaysOnlineValueOn  AlwaysOnlineValue = "on"
-	AlwaysOnlineValueOff AlwaysOnlineValue = "off"
-)
-
-func (r AlwaysOnlineValue) IsKnown() bool {
-	switch r {
-	case AlwaysOnlineValueOn, AlwaysOnlineValueOff:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [AlwaysOnlineValueArray].
+type AlwaysOnlineValueUnion interface {
+	ImplementsAlwaysOnlineValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AlwaysOnlineValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AlwaysOnlineValueArray{}),
+		},
+	)
+}
+
+type AlwaysOnlineValueArray []string
+
+func (r AlwaysOnlineValueArray) ImplementsAlwaysOnlineValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -385,48 +431,6 @@ func (r AutomaticHTTPSRewritesParam) ImplementsPageRuleUpdateParamsActionUnion()
 
 func (r AutomaticHTTPSRewritesParam) ImplementsPageRuleEditParamsActionUnion() {}
 
-type AutomaticPlatformOptimization struct {
-	// Indicates whether or not
-	// [cache by device type](https://developers.cloudflare.com/automatic-platform-optimization/reference/cache-device-type/)
-	// is enabled.
-	CacheByDeviceType bool `json:"cache_by_device_type" api:"required"`
-	// Indicates whether or not Cloudflare proxy is enabled.
-	Cf bool `json:"cf" api:"required"`
-	// Indicates whether or not Automatic Platform Optimization is enabled.
-	Enabled bool `json:"enabled" api:"required"`
-	// An array of hostnames where Automatic Platform Optimization for WordPress is
-	// activated.
-	Hostnames []string `json:"hostnames" api:"required" format:"hostname"`
-	// Indicates whether or not site is powered by WordPress.
-	Wordpress bool `json:"wordpress" api:"required"`
-	// Indicates whether or not
-	// [Cloudflare for WordPress plugin](https://wordpress.org/plugins/cloudflare/) is
-	// installed.
-	WpPlugin bool                              `json:"wp_plugin" api:"required"`
-	JSON     automaticPlatformOptimizationJSON `json:"-"`
-}
-
-// automaticPlatformOptimizationJSON contains the JSON metadata for the struct
-// [AutomaticPlatformOptimization]
-type automaticPlatformOptimizationJSON struct {
-	CacheByDeviceType apijson.Field
-	Cf                apijson.Field
-	Enabled           apijson.Field
-	Hostnames         apijson.Field
-	Wordpress         apijson.Field
-	WpPlugin          apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *AutomaticPlatformOptimization) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r automaticPlatformOptimizationJSON) RawJSON() string {
-	return r.raw
-}
-
 type AutomaticPlatformOptimizationParam struct {
 	// Indicates whether or not
 	// [cache by device type](https://developers.cloudflare.com/automatic-platform-optimization/reference/cache-device-type/)
@@ -459,7 +463,7 @@ type Brotli struct {
 	// ID of the zone setting.
 	ID BrotliID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value BrotliValue `json:"value" api:"required"`
+	Value BrotliValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable BrotliEditable `json:"editable"`
@@ -506,20 +510,43 @@ func (r BrotliID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type BrotliValue string
-
-const (
-	BrotliValueOff BrotliValue = "off"
-	BrotliValueOn  BrotliValue = "on"
-)
-
-func (r BrotliValue) IsKnown() bool {
-	switch r {
-	case BrotliValueOff, BrotliValueOn:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [BrotliValueArray].
+type BrotliValueUnion interface {
+	ImplementsBrotliValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*BrotliValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(BrotliValueArray{}),
+		},
+	)
+}
+
+type BrotliValueArray []string
+
+func (r BrotliValueArray) ImplementsBrotliValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -782,7 +809,7 @@ type ChallengeTTL struct {
 	// ID of the zone setting.
 	ID ChallengeTTLID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value ChallengeTTLValue `json:"value" api:"required"`
+	Value ChallengeTTLValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ChallengeTTLEditable `json:"editable"`
@@ -829,32 +856,43 @@ func (r ChallengeTTLID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type ChallengeTTLValue float64
-
-const (
-	ChallengeTTLValue300      ChallengeTTLValue = 300
-	ChallengeTTLValue900      ChallengeTTLValue = 900
-	ChallengeTTLValue1800     ChallengeTTLValue = 1800
-	ChallengeTTLValue2700     ChallengeTTLValue = 2700
-	ChallengeTTLValue3600     ChallengeTTLValue = 3600
-	ChallengeTTLValue7200     ChallengeTTLValue = 7200
-	ChallengeTTLValue10800    ChallengeTTLValue = 10800
-	ChallengeTTLValue14400    ChallengeTTLValue = 14400
-	ChallengeTTLValue28800    ChallengeTTLValue = 28800
-	ChallengeTTLValue57600    ChallengeTTLValue = 57600
-	ChallengeTTLValue86400    ChallengeTTLValue = 86400
-	ChallengeTTLValue604800   ChallengeTTLValue = 604800
-	ChallengeTTLValue2592000  ChallengeTTLValue = 2592000
-	ChallengeTTLValue31536000 ChallengeTTLValue = 31536000
-)
-
-func (r ChallengeTTLValue) IsKnown() bool {
-	switch r {
-	case ChallengeTTLValue300, ChallengeTTLValue900, ChallengeTTLValue1800, ChallengeTTLValue2700, ChallengeTTLValue3600, ChallengeTTLValue7200, ChallengeTTLValue10800, ChallengeTTLValue14400, ChallengeTTLValue28800, ChallengeTTLValue57600, ChallengeTTLValue86400, ChallengeTTLValue604800, ChallengeTTLValue2592000, ChallengeTTLValue31536000:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [ChallengeTTLValueArray].
+type ChallengeTTLValueUnion interface {
+	ImplementsChallengeTTLValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ChallengeTTLValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ChallengeTTLValueArray{}),
+		},
+	)
+}
+
+type ChallengeTTLValueArray []string
+
+func (r ChallengeTTLValueArray) ImplementsChallengeTTLValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -879,7 +917,7 @@ type Ciphers struct {
 	// ID of the zone setting.
 	ID CiphersID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value []string `json:"value" api:"required"`
+	Value CiphersValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable CiphersEditable `json:"editable"`
@@ -925,6 +963,45 @@ func (r CiphersID) IsKnown() bool {
 	return false
 }
 
+// Current value of the zone setting.
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [CiphersValueArray].
+type CiphersValueUnion interface {
+	ImplementsCiphersValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*CiphersValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(CiphersValueArray{}),
+		},
+	)
+}
+
+type CiphersValueArray []string
+
+func (r CiphersValueArray) ImplementsCiphersValueUnion() {}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type CiphersEditable bool
@@ -952,7 +1029,7 @@ type DevelopmentMode struct {
 	// ID of the zone setting.
 	ID DevelopmentModeID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value DevelopmentModeValue `json:"value" api:"required"`
+	Value DevelopmentModeValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable DevelopmentModeEditable `json:"editable"`
@@ -1004,20 +1081,43 @@ func (r DevelopmentModeID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type DevelopmentModeValue string
-
-const (
-	DevelopmentModeValueOn  DevelopmentModeValue = "on"
-	DevelopmentModeValueOff DevelopmentModeValue = "off"
-)
-
-func (r DevelopmentModeValue) IsKnown() bool {
-	switch r {
-	case DevelopmentModeValueOn, DevelopmentModeValueOff:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [DevelopmentModeValueArray].
+type DevelopmentModeValueUnion interface {
+	ImplementsDevelopmentModeValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DevelopmentModeValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DevelopmentModeValueArray{}),
+		},
+	)
+}
+
+type DevelopmentModeValueArray []string
+
+func (r DevelopmentModeValueArray) ImplementsDevelopmentModeValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -1044,7 +1144,7 @@ type EarlyHints struct {
 	// ID of the zone setting.
 	ID EarlyHintsID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value EarlyHintsValue `json:"value" api:"required"`
+	Value EarlyHintsValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable EarlyHintsEditable `json:"editable"`
@@ -1091,20 +1191,43 @@ func (r EarlyHintsID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type EarlyHintsValue string
-
-const (
-	EarlyHintsValueOn  EarlyHintsValue = "on"
-	EarlyHintsValueOff EarlyHintsValue = "off"
-)
-
-func (r EarlyHintsValue) IsKnown() bool {
-	switch r {
-	case EarlyHintsValueOn, EarlyHintsValueOff:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [EarlyHintsValueArray].
+type EarlyHintsValueUnion interface {
+	ImplementsEarlyHintsValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*EarlyHintsValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(EarlyHintsValueArray{}),
+		},
+	)
+}
+
+type EarlyHintsValueArray []string
+
+func (r EarlyHintsValueArray) ImplementsEarlyHintsValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -1205,7 +1328,7 @@ type H2Prioritization struct {
 	// ID of the zone setting.
 	ID H2PrioritizationID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value H2PrioritizationValue `json:"value" api:"required"`
+	Value H2PrioritizationValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable H2PrioritizationEditable `json:"editable"`
@@ -1253,21 +1376,43 @@ func (r H2PrioritizationID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type H2PrioritizationValue string
-
-const (
-	H2PrioritizationValueOn     H2PrioritizationValue = "on"
-	H2PrioritizationValueOff    H2PrioritizationValue = "off"
-	H2PrioritizationValueCustom H2PrioritizationValue = "custom"
-)
-
-func (r H2PrioritizationValue) IsKnown() bool {
-	switch r {
-	case H2PrioritizationValueOn, H2PrioritizationValueOff, H2PrioritizationValueCustom:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [H2PrioritizationValueArray].
+type H2PrioritizationValueUnion interface {
+	ImplementsH2PrioritizationValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*H2PrioritizationValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(H2PrioritizationValueArray{}),
+		},
+	)
+}
+
+type H2PrioritizationValueArray []string
+
+func (r H2PrioritizationValueArray) ImplementsH2PrioritizationValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -1297,7 +1442,7 @@ type HotlinkProtection struct {
 	// ID of the zone setting.
 	ID HotlinkProtectionID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value HotlinkProtectionValue `json:"value" api:"required"`
+	Value HotlinkProtectionValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable HotlinkProtectionEditable `json:"editable"`
@@ -1345,20 +1490,43 @@ func (r HotlinkProtectionID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type HotlinkProtectionValue string
-
-const (
-	HotlinkProtectionValueOn  HotlinkProtectionValue = "on"
-	HotlinkProtectionValueOff HotlinkProtectionValue = "off"
-)
-
-func (r HotlinkProtectionValue) IsKnown() bool {
-	switch r {
-	case HotlinkProtectionValueOn, HotlinkProtectionValueOff:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [HotlinkProtectionValueArray].
+type HotlinkProtectionValueUnion interface {
+	ImplementsHotlinkProtectionValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*HotlinkProtectionValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(HotlinkProtectionValueArray{}),
+		},
+	)
+}
+
+type HotlinkProtectionValueArray []string
+
+func (r HotlinkProtectionValueArray) ImplementsHotlinkProtectionValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -1382,7 +1550,7 @@ type HTTP2 struct {
 	// ID of the zone setting.
 	ID HTTP2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value HTTP2Value `json:"value" api:"required"`
+	Value HTTP2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable HTTP2Editable `json:"editable"`
@@ -1429,20 +1597,43 @@ func (r HTTP2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type HTTP2Value string
-
-const (
-	HTTP2ValueOn  HTTP2Value = "on"
-	HTTP2ValueOff HTTP2Value = "off"
-)
-
-func (r HTTP2Value) IsKnown() bool {
-	switch r {
-	case HTTP2ValueOn, HTTP2ValueOff:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [HTTP2ValueArray].
+type HTTP2ValueUnion interface {
+	ImplementsHTTP2ValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*HTTP2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(HTTP2ValueArray{}),
+		},
+	)
+}
+
+type HTTP2ValueArray []string
+
+func (r HTTP2ValueArray) ImplementsHTTP2ValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -1466,7 +1657,7 @@ type HTTP3 struct {
 	// ID of the zone setting.
 	ID HTTP3ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value HTTP3Value `json:"value" api:"required"`
+	Value HTTP3ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable HTTP3Editable `json:"editable"`
@@ -1513,20 +1704,43 @@ func (r HTTP3ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type HTTP3Value string
-
-const (
-	HTTP3ValueOn  HTTP3Value = "on"
-	HTTP3ValueOff HTTP3Value = "off"
-)
-
-func (r HTTP3Value) IsKnown() bool {
-	switch r {
-	case HTTP3ValueOn, HTTP3ValueOff:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [HTTP3ValueArray].
+type HTTP3ValueUnion interface {
+	ImplementsHTTP3ValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*HTTP3ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(HTTP3ValueArray{}),
+		},
+	)
+}
+
+type HTTP3ValueArray []string
+
+func (r HTTP3ValueArray) ImplementsHTTP3ValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -1553,7 +1767,7 @@ type ImageResizing struct {
 	// ID of the zone setting.
 	ID ImageResizingID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value ImageResizingValue `json:"value" api:"required"`
+	Value ImageResizingValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ImageResizingEditable `json:"editable"`
@@ -1600,21 +1814,43 @@ func (r ImageResizingID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type ImageResizingValue string
-
-const (
-	ImageResizingValueOn   ImageResizingValue = "on"
-	ImageResizingValueOff  ImageResizingValue = "off"
-	ImageResizingValueOpen ImageResizingValue = "open"
-)
-
-func (r ImageResizingValue) IsKnown() bool {
-	switch r {
-	case ImageResizingValueOn, ImageResizingValueOff, ImageResizingValueOpen:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [ImageResizingValueArray].
+type ImageResizingValueUnion interface {
+	ImplementsImageResizingValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ImageResizingValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ImageResizingValueArray{}),
+		},
+	)
+}
+
+type ImageResizingValueArray []string
+
+func (r ImageResizingValueArray) ImplementsImageResizingValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -1716,7 +1952,7 @@ type IPV6 struct {
 	// ID of the zone setting.
 	ID IPV6ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value IPV6Value `json:"value" api:"required"`
+	Value IPV6ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable IPV6Editable `json:"editable"`
@@ -1763,20 +1999,43 @@ func (r IPV6ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type IPV6Value string
-
-const (
-	IPV6ValueOff IPV6Value = "off"
-	IPV6ValueOn  IPV6Value = "on"
-)
-
-func (r IPV6Value) IsKnown() bool {
-	switch r {
-	case IPV6ValueOff, IPV6ValueOn:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [IPV6ValueArray].
+type IPV6ValueUnion interface {
+	ImplementsIPV6ValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*IPV6ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(IPV6ValueArray{}),
+		},
+	)
+}
+
+type IPV6ValueArray []string
+
+func (r IPV6ValueArray) ImplementsIPV6ValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -1802,7 +2061,7 @@ type MinTLSVersion struct {
 	// ID of the zone setting.
 	ID MinTLSVersionID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value MinTLSVersionValue `json:"value" api:"required"`
+	Value MinTLSVersionValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable MinTLSVersionEditable `json:"editable"`
@@ -1849,22 +2108,43 @@ func (r MinTLSVersionID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type MinTLSVersionValue string
-
-const (
-	MinTLSVersionValue1_0 MinTLSVersionValue = "1.0"
-	MinTLSVersionValue1_1 MinTLSVersionValue = "1.1"
-	MinTLSVersionValue1_2 MinTLSVersionValue = "1.2"
-	MinTLSVersionValue1_3 MinTLSVersionValue = "1.3"
-)
-
-func (r MinTLSVersionValue) IsKnown() bool {
-	switch r {
-	case MinTLSVersionValue1_0, MinTLSVersionValue1_1, MinTLSVersionValue1_2, MinTLSVersionValue1_3:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [MinTLSVersionValueArray].
+type MinTLSVersionValueUnion interface {
+	ImplementsMinTLSVersionValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*MinTLSVersionValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(MinTLSVersionValueArray{}),
+		},
+	)
+}
+
+type MinTLSVersionValueArray []string
+
+func (r MinTLSVersionValueArray) ImplementsMinTLSVersionValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -2024,6 +2304,7 @@ func (r NELID) IsKnown() bool {
 type NELValue struct {
 	Enabled bool         `json:"enabled"`
 	JSON    nelValueJSON `json:"-"`
+	union   NELValueUnion
 }
 
 // nelValueJSON contains the JSON metadata for the struct [NELValue]
@@ -2033,13 +2314,84 @@ type nelValueJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *NELValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 func (r nelValueJSON) RawJSON() string {
 	return r.raw
 }
+
+func (r *NELValue) UnmarshalJSON(data []byte) (err error) {
+	*r = NELValue{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [NELValueUnion] interface which you can cast to the specific
+// types for more type safety.
+//
+// Possible runtime types of the union are [NELValueEnabled], [NELValueEnabled],
+// [NELValueEnabled], [NELValueEnabled], [NELValueEnabled].
+func (r NELValue) AsUnion() NELValueUnion {
+	return r.union
+}
+
+// Current value of the zone setting.
+//
+// Union satisfied by [NELValueEnabled], [NELValueEnabled], [NELValueEnabled],
+// [NELValueEnabled] or [NELValueEnabled].
+type NELValueUnion interface {
+	implementsNELValue()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*NELValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(NELValueEnabled{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(NELValueEnabled{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(NELValueEnabled{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(NELValueEnabled{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(NELValueEnabled{}),
+		},
+	)
+}
+
+type NELValueEnabled struct {
+	Enabled bool                `json:"enabled"`
+	JSON    nelValueEnabledJSON `json:"-"`
+}
+
+// nelValueEnabledJSON contains the JSON metadata for the struct [NELValueEnabled]
+type nelValueEnabledJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NELValueEnabled) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r nelValueEnabledJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r NELValueEnabled) implementsNELValue() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -2145,7 +2497,7 @@ type OpportunisticOnion struct {
 	// ID of the zone setting.
 	ID OpportunisticOnionID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value OpportunisticOnionValue `json:"value" api:"required"`
+	Value OpportunisticOnionValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable OpportunisticOnionEditable `json:"editable"`
@@ -2193,20 +2545,43 @@ func (r OpportunisticOnionID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type OpportunisticOnionValue string
-
-const (
-	OpportunisticOnionValueOn  OpportunisticOnionValue = "on"
-	OpportunisticOnionValueOff OpportunisticOnionValue = "off"
-)
-
-func (r OpportunisticOnionValue) IsKnown() bool {
-	switch r {
-	case OpportunisticOnionValueOn, OpportunisticOnionValueOff:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [OpportunisticOnionValueArray].
+type OpportunisticOnionValueUnion interface {
+	ImplementsOpportunisticOnionValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*OpportunisticOnionValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(OpportunisticOnionValueArray{}),
+		},
+	)
+}
+
+type OpportunisticOnionValueArray []string
+
+func (r OpportunisticOnionValueArray) ImplementsOpportunisticOnionValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -2236,12 +2611,7 @@ type OrangeToOrange struct {
 	// ID of the zone setting.
 	ID OrangeToOrangeID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	//
-	// Deprecated: This setting is deprecated. Orange to Orange (O2O) is applied
-	// automatically for eligible zones and no longer requires configuration; this
-	// setting only controlled the legacy O2O v1 (Managed CNAME) path. More information
-	// at https://developers.cloudflare.com/fundamentals/api/reference/deprecations/
-	Value OrangeToOrangeValue `json:"value" api:"required"`
+	Value OrangeToOrangeValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable OrangeToOrangeEditable `json:"editable"`
@@ -2288,20 +2658,43 @@ func (r OrangeToOrangeID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type OrangeToOrangeValue string
-
-const (
-	OrangeToOrangeValueOn  OrangeToOrangeValue = "on"
-	OrangeToOrangeValueOff OrangeToOrangeValue = "off"
-)
-
-func (r OrangeToOrangeValue) IsKnown() bool {
-	switch r {
-	case OrangeToOrangeValueOn, OrangeToOrangeValueOff:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [OrangeToOrangeValueArray].
+type OrangeToOrangeValueUnion interface {
+	ImplementsOrangeToOrangeValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*OrangeToOrangeValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(OrangeToOrangeValueArray{}),
+		},
+	)
+}
+
+type OrangeToOrangeValueArray []string
+
+func (r OrangeToOrangeValueArray) ImplementsOrangeToOrangeValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -2479,7 +2872,7 @@ type PrefetchPreload struct {
 	// ID of the zone setting.
 	ID PrefetchPreloadID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value PrefetchPreloadValue `json:"value" api:"required"`
+	Value PrefetchPreloadValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable PrefetchPreloadEditable `json:"editable"`
@@ -2526,20 +2919,43 @@ func (r PrefetchPreloadID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type PrefetchPreloadValue string
-
-const (
-	PrefetchPreloadValueOn  PrefetchPreloadValue = "on"
-	PrefetchPreloadValueOff PrefetchPreloadValue = "off"
-)
-
-func (r PrefetchPreloadValue) IsKnown() bool {
-	switch r {
-	case PrefetchPreloadValueOn, PrefetchPreloadValueOff:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [PrefetchPreloadValueArray].
+type PrefetchPreloadValueUnion interface {
+	ImplementsPrefetchPreloadValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*PrefetchPreloadValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(PrefetchPreloadValueArray{}),
+		},
+	)
+}
+
+type PrefetchPreloadValueArray []string
+
+func (r PrefetchPreloadValueArray) ImplementsPrefetchPreloadValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -2562,8 +2978,8 @@ func (r PrefetchPreloadEditable) IsKnown() bool {
 type ProxyReadTimeout struct {
 	// ID of the zone setting.
 	ID ProxyReadTimeoutID `json:"id" api:"required"`
-	// Current value of the zone setting.
-	Value float64 `json:"value" api:"required"`
+	// Value of the zone setting. Notes: Value must be between 1 and 6000
+	Value ProxyReadTimeoutValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ProxyReadTimeoutEditable `json:"editable"`
@@ -2610,6 +3026,45 @@ func (r ProxyReadTimeoutID) IsKnown() bool {
 	return false
 }
 
+// Value of the zone setting. Notes: Value must be between 1 and 6000
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [ProxyReadTimeoutValueArray].
+type ProxyReadTimeoutValueUnion interface {
+	ImplementsProxyReadTimeoutValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ProxyReadTimeoutValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProxyReadTimeoutValueArray{}),
+		},
+	)
+}
+
+type ProxyReadTimeoutValueArray []string
+
+func (r ProxyReadTimeoutValueArray) ImplementsProxyReadTimeoutValueUnion() {}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ProxyReadTimeoutEditable bool
@@ -2632,7 +3087,7 @@ type PseudoIPV4 struct {
 	// Value of the Pseudo IPv4 setting.
 	ID PseudoIPV4ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value PseudoIPV4Value `json:"value" api:"required"`
+	Value PseudoIPV4ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable PseudoIPV4Editable `json:"editable"`
@@ -2679,21 +3134,43 @@ func (r PseudoIPV4ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type PseudoIPV4Value string
-
-const (
-	PseudoIPV4ValueOff             PseudoIPV4Value = "off"
-	PseudoIPV4ValueAddHeader       PseudoIPV4Value = "add_header"
-	PseudoIPV4ValueOverwriteHeader PseudoIPV4Value = "overwrite_header"
-)
-
-func (r PseudoIPV4Value) IsKnown() bool {
-	switch r {
-	case PseudoIPV4ValueOff, PseudoIPV4ValueAddHeader, PseudoIPV4ValueOverwriteHeader:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [PseudoIPV4ValueArray].
+type PseudoIPV4ValueUnion interface {
+	ImplementsPseudoIPV4ValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*PseudoIPV4ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(PseudoIPV4ValueArray{}),
+		},
+	)
+}
+
+type PseudoIPV4ValueArray []string
+
+func (r PseudoIPV4ValueArray) ImplementsPseudoIPV4ValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -2924,9 +3401,11 @@ func (r SecurityHeadersID) IsKnown() bool {
 
 // Current value of the zone setting.
 type SecurityHeadersValue struct {
-	// Strict Transport Security.
-	StrictTransportSecurity SecurityHeadersValueStrictTransportSecurity `json:"strict_transport_security"`
-	JSON                    securityHeadersValueJSON                    `json:"-"`
+	// This field can have the runtime type of
+	// [SecurityHeadersValueStrictTransportSecurityStrictTransportSecurity].
+	StrictTransportSecurity interface{}              `json:"strict_transport_security"`
+	JSON                    securityHeadersValueJSON `json:"-"`
+	union                   SecurityHeadersValueUnion
 }
 
 // securityHeadersValueJSON contains the JSON metadata for the struct
@@ -2937,16 +3416,96 @@ type securityHeadersValueJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *SecurityHeadersValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 func (r securityHeadersValueJSON) RawJSON() string {
 	return r.raw
 }
 
-// Strict Transport Security.
+func (r *SecurityHeadersValue) UnmarshalJSON(data []byte) (err error) {
+	*r = SecurityHeadersValue{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [SecurityHeadersValueUnion] interface which you can cast to
+// the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [SecurityHeadersValueStrictTransportSecurity],
+// [SecurityHeadersValueStrictTransportSecurity],
+// [SecurityHeadersValueStrictTransportSecurity],
+// [SecurityHeadersValueStrictTransportSecurity],
+// [SecurityHeadersValueStrictTransportSecurity].
+func (r SecurityHeadersValue) AsUnion() SecurityHeadersValueUnion {
+	return r.union
+}
+
+// Current value of the zone setting.
+//
+// Union satisfied by [SecurityHeadersValueStrictTransportSecurity],
+// [SecurityHeadersValueStrictTransportSecurity],
+// [SecurityHeadersValueStrictTransportSecurity],
+// [SecurityHeadersValueStrictTransportSecurity] or
+// [SecurityHeadersValueStrictTransportSecurity].
+type SecurityHeadersValueUnion interface {
+	implementsSecurityHeadersValue()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SecurityHeadersValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SecurityHeadersValueStrictTransportSecurity{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SecurityHeadersValueStrictTransportSecurity{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SecurityHeadersValueStrictTransportSecurity{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SecurityHeadersValueStrictTransportSecurity{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SecurityHeadersValueStrictTransportSecurity{}),
+		},
+	)
+}
+
 type SecurityHeadersValueStrictTransportSecurity struct {
+	// Strict Transport Security.
+	StrictTransportSecurity SecurityHeadersValueStrictTransportSecurityStrictTransportSecurity `json:"strict_transport_security"`
+	JSON                    securityHeadersValueStrictTransportSecurityJSON                    `json:"-"`
+}
+
+// securityHeadersValueStrictTransportSecurityJSON contains the JSON metadata for
+// the struct [SecurityHeadersValueStrictTransportSecurity]
+type securityHeadersValueStrictTransportSecurityJSON struct {
+	StrictTransportSecurity apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *SecurityHeadersValueStrictTransportSecurity) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r securityHeadersValueStrictTransportSecurityJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SecurityHeadersValueStrictTransportSecurity) implementsSecurityHeadersValue() {}
+
+// Strict Transport Security.
+type SecurityHeadersValueStrictTransportSecurityStrictTransportSecurity struct {
 	// Whether or not strict transport security is enabled.
 	Enabled bool `json:"enabled"`
 	// Include all subdomains for strict transport security.
@@ -2956,13 +3515,14 @@ type SecurityHeadersValueStrictTransportSecurity struct {
 	// Whether or not to include 'X-Content-Type-Options: nosniff' header.
 	Nosniff bool `json:"nosniff"`
 	// Enable automatic preload of the HSTS configuration.
-	Preload bool                                            `json:"preload"`
-	JSON    securityHeadersValueStrictTransportSecurityJSON `json:"-"`
+	Preload bool                                                                   `json:"preload"`
+	JSON    securityHeadersValueStrictTransportSecurityStrictTransportSecurityJSON `json:"-"`
 }
 
-// securityHeadersValueStrictTransportSecurityJSON contains the JSON metadata for
-// the struct [SecurityHeadersValueStrictTransportSecurity]
-type securityHeadersValueStrictTransportSecurityJSON struct {
+// securityHeadersValueStrictTransportSecurityStrictTransportSecurityJSON contains
+// the JSON metadata for the struct
+// [SecurityHeadersValueStrictTransportSecurityStrictTransportSecurity]
+type securityHeadersValueStrictTransportSecurityStrictTransportSecurityJSON struct {
 	Enabled           apijson.Field
 	IncludeSubdomains apijson.Field
 	MaxAge            apijson.Field
@@ -2972,11 +3532,11 @@ type securityHeadersValueStrictTransportSecurityJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *SecurityHeadersValueStrictTransportSecurity) UnmarshalJSON(data []byte) (err error) {
+func (r *SecurityHeadersValueStrictTransportSecurityStrictTransportSecurity) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r securityHeadersValueStrictTransportSecurityJSON) RawJSON() string {
+func (r securityHeadersValueStrictTransportSecurityStrictTransportSecurityJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3087,7 +3647,7 @@ type ServerSideExcludes struct {
 	// ID of the zone setting.
 	ID ServerSideExcludesID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value ServerSideExcludesValue `json:"value" api:"required"`
+	Value ServerSideExcludesValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ServerSideExcludesEditable `json:"editable"`
@@ -3135,20 +3695,43 @@ func (r ServerSideExcludesID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type ServerSideExcludesValue string
-
-const (
-	ServerSideExcludesValueOn  ServerSideExcludesValue = "on"
-	ServerSideExcludesValueOff ServerSideExcludesValue = "off"
-)
-
-func (r ServerSideExcludesValue) IsKnown() bool {
-	switch r {
-	case ServerSideExcludesValueOn, ServerSideExcludesValueOff:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [ServerSideExcludesValueArray].
+type ServerSideExcludesValueUnion interface {
+	ImplementsServerSideExcludesValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ServerSideExcludesValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ServerSideExcludesValueArray{}),
+		},
+	)
+}
+
+type ServerSideExcludesValueArray []string
+
+func (r ServerSideExcludesValueArray) ImplementsServerSideExcludesValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -3376,7 +3959,7 @@ type TLS1_3 struct {
 	// ID of the zone setting.
 	ID TLS1_3ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value TLS1_3Value `json:"value" api:"required"`
+	Value TLS1_3ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable TLS1_3Editable `json:"editable"`
@@ -3423,21 +4006,43 @@ func (r TLS1_3ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type TLS1_3Value string
-
-const (
-	TLS1_3ValueOn  TLS1_3Value = "on"
-	TLS1_3ValueOff TLS1_3Value = "off"
-	TLS1_3ValueZrt TLS1_3Value = "zrt"
-)
-
-func (r TLS1_3Value) IsKnown() bool {
-	switch r {
-	case TLS1_3ValueOn, TLS1_3ValueOff, TLS1_3ValueZrt:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [TLS1_3ValueArray].
+type TLS1_3ValueUnion interface {
+	ImplementsTls1_3ValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*TLS1_3ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(TLS1_3ValueArray{}),
+		},
+	)
+}
+
+type TLS1_3ValueArray []string
+
+func (r TLS1_3ValueArray) ImplementsTls1_3ValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -3462,7 +4067,7 @@ type TLSClientAuth struct {
 	// ID of the zone setting.
 	ID TLSClientAuthID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value TLSClientAuthValue `json:"value" api:"required"`
+	Value TLSClientAuthValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable TLSClientAuthEditable `json:"editable"`
@@ -3509,20 +4114,43 @@ func (r TLSClientAuthID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type TLSClientAuthValue string
-
-const (
-	TLSClientAuthValueOn  TLSClientAuthValue = "on"
-	TLSClientAuthValueOff TLSClientAuthValue = "off"
-)
-
-func (r TLSClientAuthValue) IsKnown() bool {
-	switch r {
-	case TLSClientAuthValueOn, TLSClientAuthValueOff:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [TLSClientAuthValueArray].
+type TLSClientAuthValueUnion interface {
+	ImplementsTLSClientAuthValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*TLSClientAuthValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(TLSClientAuthValueArray{}),
+		},
+	)
+}
+
+type TLSClientAuthValueArray []string
+
+func (r TLSClientAuthValueArray) ImplementsTLSClientAuthValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -3703,7 +4331,7 @@ type WebP struct {
 	// ID of the zone setting.
 	ID WebPID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value WebPValue `json:"value" api:"required"`
+	Value WebPValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable WebPEditable `json:"editable"`
@@ -3750,20 +4378,43 @@ func (r WebPID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type WebPValue string
-
-const (
-	WebPValueOff WebPValue = "off"
-	WebPValueOn  WebPValue = "on"
-)
-
-func (r WebPValue) IsKnown() bool {
-	switch r {
-	case WebPValueOff, WebPValueOn:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [WebPValueArray].
+type WebPValueUnion interface {
+	ImplementsWebPValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WebPValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WebPValueArray{}),
+		},
+	)
+}
+
+type WebPValueArray []string
+
+func (r WebPValueArray) ImplementsWebPValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -3793,7 +4444,7 @@ type Websocket struct {
 	// ID of the zone setting.
 	ID WebsocketID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value WebsocketValue `json:"value" api:"required"`
+	Value WebsocketValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable WebsocketEditable `json:"editable"`
@@ -3840,20 +4491,43 @@ func (r WebsocketID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type WebsocketValue string
-
-const (
-	WebsocketValueOff WebsocketValue = "off"
-	WebsocketValueOn  WebsocketValue = "on"
-)
-
-func (r WebsocketValue) IsKnown() bool {
-	switch r {
-	case WebsocketValueOff, WebsocketValueOn:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [WebsocketValueArray].
+type WebsocketValueUnion interface {
+	ImplementsWebsocketValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WebsocketValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WebsocketValueArray{}),
+		},
+	)
+}
+
+type WebsocketValueArray []string
+
+func (r WebsocketValueArray) ImplementsWebsocketValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -3877,7 +4551,7 @@ type ZeroRTT struct {
 	// ID of the zone setting.
 	ID ZeroRTTID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value ZeroRTTValue `json:"value" api:"required"`
+	Value ZeroRTTValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZeroRTTEditable `json:"editable"`
@@ -3924,20 +4598,43 @@ func (r ZeroRTTID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type ZeroRTTValue string
-
-const (
-	ZeroRTTValueOn  ZeroRTTValue = "on"
-	ZeroRTTValueOff ZeroRTTValue = "off"
-)
-
-func (r ZeroRTTValue) IsKnown() bool {
-	switch r {
-	case ZeroRTTValueOn, ZeroRTTValueOff:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [ZeroRTTValueArray].
+type ZeroRTTValueUnion interface {
+	ImplementsZeroRTTValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroRTTValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroRTTValueArray{}),
+		},
+	)
+}
+
+type ZeroRTTValueArray []string
+
+func (r ZeroRTTValueArray) ImplementsZeroRTTValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -3971,42 +4668,51 @@ type SettingEditResponse struct {
 	// development mode expires (positive integer) or last expired (negative integer)
 	// for the domain. If development mode has never been enabled, this value is false.
 	TimeRemaining float64 `json:"time_remaining"`
-	// This field can have the runtime type of [ZeroRTTValue], [AdvancedDDoSValue],
-	// [SettingEditResponseZonesCacheRulesAegisValue], [AlwaysOnlineValue],
-	// [SettingEditResponseZonesAlwaysUseHTTPS2Value],
-	// [SettingEditResponseZonesAutomaticHTTPSRewrites2Value], [BrotliValue], [int64],
-	// [SettingEditResponseZonesBrowserCheck2Value],
-	// [SettingEditResponseZonesCacheLevel2Value], [ChallengeTTLValue],
-	// [SettingEditResponseZonesChinaNetworkEnabledValue],
-	// [SettingEditResponseZonesContentConverterValue], [[]string],
-	// [SettingEditResponseZonesCNAMEFlatteningValue], [DevelopmentModeValue],
-	// [EarlyHintsValue], [SettingEditResponseZonesEdgeCacheTTL2Value],
-	// [SettingEditResponseZonesEmailObfuscation2Value], [H2PrioritizationValue],
-	// [HotlinkProtectionValue], [HTTP2Value], [HTTP3Value], [ImageResizingValue],
-	// [SettingEditResponseZonesIPGeolocation2Value], [IPV6Value],
-	// [SettingEditResponseZonesMaxUploadValue], [MinTLSVersionValue],
-	// [SettingEditResponseZonesMirage2Value], [NELValue],
-	// [SettingEditResponseZonesOpportunisticEncryption2Value],
-	// [OpportunisticOnionValue], [OrangeToOrangeValue],
-	// [SettingEditResponseZonesOriginErrorPagePassThru2Value],
+	// This field can have the runtime type of [ZeroRTTValueUnion],
+	// [AdvancedDDoSValueUnion], [SettingEditResponseZonesCacheRulesAegisValue],
+	// [AlwaysOnlineValueUnion], [SettingEditResponseZonesAlwaysUseHTTPS2ValueUnion],
+	// [SettingEditResponseZonesAutomaticHTTPSRewrites2ValueUnion], [BrotliValueUnion],
+	// [SettingEditResponseZonesBrowserCacheTTL2ValueUnion],
+	// [SettingEditResponseZonesBrowserCheck2ValueUnion],
+	// [SettingEditResponseZonesCacheLevel2ValueUnion], [ChallengeTTLValueUnion],
+	// [SettingEditResponseZonesChinaNetworkEnabledValueUnion],
+	// [SettingEditResponseZonesContentConverterValueUnion], [CiphersValueUnion],
+	// [SettingEditResponseZonesCNAMEFlatteningValueUnion],
+	// [DevelopmentModeValueUnion], [EarlyHintsValueUnion],
+	// [SettingEditResponseZonesEdgeCacheTTL2ValueUnion],
+	// [SettingEditResponseZonesEmailObfuscation2ValueUnion],
+	// [H2PrioritizationValueUnion], [HotlinkProtectionValueUnion], [HTTP2ValueUnion],
+	// [HTTP3ValueUnion], [ImageResizingValueUnion],
+	// [SettingEditResponseZonesIPGeolocation2ValueUnion], [IPV6ValueUnion],
+	// [SettingEditResponseZonesMaxUploadValueUnion], [MinTLSVersionValueUnion],
+	// [SettingEditResponseZonesMirage2ValueUnion], [NELValue],
+	// [SettingEditResponseZonesOpportunisticEncryption2ValueUnion],
+	// [OpportunisticOnionValueUnion], [OrangeToOrangeValueUnion],
+	// [SettingEditResponseZonesOriginErrorPagePassThru2ValueUnion], [int64],
 	// [SettingEditResponseZonesCacheRulesOriginMaxHTTPVersionValue],
-	// [SettingEditResponseZonesPolish2Value], [PrefetchPreloadValue],
-	// [SettingEditResponseZonesPreRenderValue],
-	// [SettingEditResponseZonesPrivacyPassValue], [float64], [PseudoIPV4Value],
-	// [SettingEditResponseZonesRedirectsForAITrainingValue],
-	// [SettingEditResponseZonesReplaceInsecureJSValue],
-	// [SettingEditResponseZonesResponseBuffering2Value],
-	// [SettingEditResponseZonesRocketLoader2Value], [AutomaticPlatformOptimization],
-	// [SettingEditResponseZonesSearchForAgentsValue], [SecurityHeadersValue],
-	// [SettingEditResponseZonesSecurityLevel2Value], [ServerSideExcludesValue],
-	// [SettingEditResponseZonesSha1SupportValue],
-	// [SettingEditResponseZonesSortQueryStringForCache2Value],
-	// [SettingEditResponseZonesSSL2Value], [SettingEditResponseZonesTLS1_2OnlyValue],
-	// [TLS1_3Value], [TLSClientAuthValue],
-	// [SettingEditResponseZonesTransformationsValue], [string],
-	// [SettingEditResponseZonesTrueClientIPHeader2Value],
-	// [SettingEditResponseZonesWAF2Value],
-	// [SettingEditResponseZonesWebmcpEnabledValue], [WebPValue], [WebsocketValue].
+	// [SettingEditResponseZonesPolish2ValueUnion], [PrefetchPreloadValueUnion],
+	// [SettingEditResponseZonesPreRenderValueUnion],
+	// [SettingEditResponseZonesPrivacyPassValueUnion], [ProxyReadTimeoutValueUnion],
+	// [PseudoIPV4ValueUnion],
+	// [SettingEditResponseZonesRedirectsForAITrainingValueUnion],
+	// [SettingEditResponseZonesReplaceInsecureJSValueUnion],
+	// [SettingEditResponseZonesResponseBuffering2ValueUnion],
+	// [SettingEditResponseZonesRocketLoader2ValueUnion],
+	// [SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValue],
+	// [SettingEditResponseZonesSearchForAgentsValueUnion], [SecurityHeadersValue],
+	// [SettingEditResponseZonesSecurityLevel2ValueUnion],
+	// [ServerSideExcludesValueUnion], [SettingEditResponseZonesSha1SupportValueUnion],
+	// [SettingEditResponseZonesSortQueryStringForCache2ValueUnion],
+	// [SettingEditResponseZonesSSL2ValueUnion],
+	// [SettingEditResponseZonesTLS1_2OnlyValueUnion], [TLS1_3ValueUnion],
+	// [TLSClientAuthValueUnion], [SettingEditResponseZonesTransformationsValueUnion],
+	// [SettingEditResponseZonesTransformationsAllowedOriginsValueUnion],
+	// [SettingEditResponseZonesTrueClientIPHeader2ValueUnion],
+	// [SettingEditResponseZonesWAF2ValueUnion],
+	// [SettingEditResponseZonesWebmcpEnabledValueUnion],
+	// [SettingEditResponseZonesWebmcpMcpURLValueUnion],
+	// [SettingEditResponseZonesWebmcpPacksValueUnion], [WebPValueUnion],
+	// [WebsocketValueUnion].
 	Value interface{}             `json:"value"`
 	JSON  settingEditResponseJSON `json:"-"`
 	union SettingEditResponseUnion
@@ -4485,7 +5191,7 @@ type SettingEditResponseZonesAlwaysUseHTTPS2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesAlwaysUseHTTPS2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesAlwaysUseHTTPS2Value `json:"value" api:"required"`
+	Value SettingEditResponseZonesAlwaysUseHTTPS2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesAlwaysUseHTTPS2Editable `json:"editable"`
@@ -4531,19 +5237,43 @@ func (r SettingEditResponseZonesAlwaysUseHTTPS2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesAlwaysUseHTTPS2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesAlwaysUseHTTPS2ValueArray].
+type SettingEditResponseZonesAlwaysUseHTTPS2ValueUnion interface {
+	ImplementsSettingEditResponseZonesAlwaysUseHttps2ValueUnion()
+}
 
-const (
-	SettingEditResponseZonesAlwaysUseHTTPS2ValueOn  SettingEditResponseZonesAlwaysUseHTTPS2Value = "on"
-	SettingEditResponseZonesAlwaysUseHTTPS2ValueOff SettingEditResponseZonesAlwaysUseHTTPS2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesAlwaysUseHTTPS2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesAlwaysUseHTTPS2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesAlwaysUseHTTPS2Value) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesAlwaysUseHTTPS2ValueOn, SettingEditResponseZonesAlwaysUseHTTPS2ValueOff:
-		return true
-	}
-	return false
+type SettingEditResponseZonesAlwaysUseHTTPS2ValueArray []string
+
+func (r SettingEditResponseZonesAlwaysUseHTTPS2ValueArray) ImplementsSettingEditResponseZonesAlwaysUseHttps2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -4568,7 +5298,7 @@ type SettingEditResponseZonesAutomaticHTTPSRewrites2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesAutomaticHTTPSRewrites2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesAutomaticHTTPSRewrites2Value `json:"value" api:"required"`
+	Value SettingEditResponseZonesAutomaticHTTPSRewrites2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesAutomaticHTTPSRewrites2Editable `json:"editable"`
@@ -4614,19 +5344,43 @@ func (r SettingEditResponseZonesAutomaticHTTPSRewrites2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesAutomaticHTTPSRewrites2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesAutomaticHTTPSRewrites2ValueArray].
+type SettingEditResponseZonesAutomaticHTTPSRewrites2ValueUnion interface {
+	ImplementsSettingEditResponseZonesAutomaticHTTPSRewrites2ValueUnion()
+}
 
-const (
-	SettingEditResponseZonesAutomaticHTTPSRewrites2ValueOn  SettingEditResponseZonesAutomaticHTTPSRewrites2Value = "on"
-	SettingEditResponseZonesAutomaticHTTPSRewrites2ValueOff SettingEditResponseZonesAutomaticHTTPSRewrites2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesAutomaticHTTPSRewrites2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesAutomaticHTTPSRewrites2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesAutomaticHTTPSRewrites2Value) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesAutomaticHTTPSRewrites2ValueOn, SettingEditResponseZonesAutomaticHTTPSRewrites2ValueOff:
-		return true
-	}
-	return false
+type SettingEditResponseZonesAutomaticHTTPSRewrites2ValueArray []string
+
+func (r SettingEditResponseZonesAutomaticHTTPSRewrites2ValueArray) ImplementsSettingEditResponseZonesAutomaticHTTPSRewrites2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -4653,8 +5407,14 @@ func (r SettingEditResponseZonesAutomaticHTTPSRewrites2Editable) IsKnown() bool 
 type SettingEditResponseZonesBrowserCacheTTL2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesBrowserCacheTTL2ID `json:"id" api:"required"`
-	// Current value of the zone setting.
-	Value int64 `json:"value" api:"required"`
+	// Value of the zone setting in seconds. Minimum values by plan:
+	//
+	// - Free: 1 second
+	// - Pro: 1 second
+	// - Business: 1 second
+	// - Enterprise: 1 second Setting a TTL of 0 is equivalent to selecting
+	//   `Respect Existing Headers` and is allowed for all plans.
+	Value SettingEditResponseZonesBrowserCacheTTL2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesBrowserCacheTTL2Editable `json:"editable"`
@@ -4699,6 +5459,52 @@ func (r SettingEditResponseZonesBrowserCacheTTL2ID) IsKnown() bool {
 	return false
 }
 
+// Value of the zone setting in seconds. Minimum values by plan:
+//
+//   - Free: 1 second
+//   - Pro: 1 second
+//   - Business: 1 second
+//   - Enterprise: 1 second Setting a TTL of 0 is equivalent to selecting
+//     `Respect Existing Headers` and is allowed for all plans.
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesBrowserCacheTTL2ValueArray].
+type SettingEditResponseZonesBrowserCacheTTL2ValueUnion interface {
+	ImplementsSettingEditResponseZonesBrowserCacheTtl2ValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesBrowserCacheTTL2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesBrowserCacheTTL2ValueArray{}),
+		},
+	)
+}
+
+type SettingEditResponseZonesBrowserCacheTTL2ValueArray []string
+
+func (r SettingEditResponseZonesBrowserCacheTTL2ValueArray) ImplementsSettingEditResponseZonesBrowserCacheTtl2ValueUnion() {
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type SettingEditResponseZonesBrowserCacheTTL2Editable bool
@@ -4725,7 +5531,7 @@ type SettingEditResponseZonesBrowserCheck2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesBrowserCheck2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesBrowserCheck2Value `json:"value" api:"required"`
+	Value SettingEditResponseZonesBrowserCheck2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesBrowserCheck2Editable `json:"editable"`
@@ -4771,19 +5577,43 @@ func (r SettingEditResponseZonesBrowserCheck2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesBrowserCheck2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesBrowserCheck2ValueArray].
+type SettingEditResponseZonesBrowserCheck2ValueUnion interface {
+	ImplementsSettingEditResponseZonesBrowserCheck2ValueUnion()
+}
 
-const (
-	SettingEditResponseZonesBrowserCheck2ValueOn  SettingEditResponseZonesBrowserCheck2Value = "on"
-	SettingEditResponseZonesBrowserCheck2ValueOff SettingEditResponseZonesBrowserCheck2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesBrowserCheck2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesBrowserCheck2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesBrowserCheck2Value) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesBrowserCheck2ValueOn, SettingEditResponseZonesBrowserCheck2ValueOff:
-		return true
-	}
-	return false
+type SettingEditResponseZonesBrowserCheck2ValueArray []string
+
+func (r SettingEditResponseZonesBrowserCheck2ValueArray) ImplementsSettingEditResponseZonesBrowserCheck2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -4812,7 +5642,7 @@ type SettingEditResponseZonesCacheLevel2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesCacheLevel2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesCacheLevel2Value `json:"value" api:"required"`
+	Value SettingEditResponseZonesCacheLevel2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesCacheLevel2Editable `json:"editable"`
@@ -4858,20 +5688,43 @@ func (r SettingEditResponseZonesCacheLevel2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesCacheLevel2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesCacheLevel2ValueArray].
+type SettingEditResponseZonesCacheLevel2ValueUnion interface {
+	ImplementsSettingEditResponseZonesCacheLevel2ValueUnion()
+}
 
-const (
-	SettingEditResponseZonesCacheLevel2ValueAggressive SettingEditResponseZonesCacheLevel2Value = "aggressive"
-	SettingEditResponseZonesCacheLevel2ValueBasic      SettingEditResponseZonesCacheLevel2Value = "basic"
-	SettingEditResponseZonesCacheLevel2ValueSimplified SettingEditResponseZonesCacheLevel2Value = "simplified"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesCacheLevel2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesCacheLevel2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesCacheLevel2Value) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesCacheLevel2ValueAggressive, SettingEditResponseZonesCacheLevel2ValueBasic, SettingEditResponseZonesCacheLevel2ValueSimplified:
-		return true
-	}
-	return false
+type SettingEditResponseZonesCacheLevel2ValueArray []string
+
+func (r SettingEditResponseZonesCacheLevel2ValueArray) ImplementsSettingEditResponseZonesCacheLevel2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -4896,7 +5749,7 @@ type SettingEditResponseZonesChinaNetworkEnabled struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesChinaNetworkEnabledID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesChinaNetworkEnabledValue `json:"value" api:"required"`
+	Value SettingEditResponseZonesChinaNetworkEnabledValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesChinaNetworkEnabledEditable `json:"editable"`
@@ -4942,19 +5795,43 @@ func (r SettingEditResponseZonesChinaNetworkEnabledID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesChinaNetworkEnabledValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesChinaNetworkEnabledValueArray].
+type SettingEditResponseZonesChinaNetworkEnabledValueUnion interface {
+	ImplementsSettingEditResponseZonesChinaNetworkEnabledValueUnion()
+}
 
-const (
-	SettingEditResponseZonesChinaNetworkEnabledValueOn  SettingEditResponseZonesChinaNetworkEnabledValue = "on"
-	SettingEditResponseZonesChinaNetworkEnabledValueOff SettingEditResponseZonesChinaNetworkEnabledValue = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesChinaNetworkEnabledValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesChinaNetworkEnabledValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesChinaNetworkEnabledValue) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesChinaNetworkEnabledValueOn, SettingEditResponseZonesChinaNetworkEnabledValueOff:
-		return true
-	}
-	return false
+type SettingEditResponseZonesChinaNetworkEnabledValueArray []string
+
+func (r SettingEditResponseZonesChinaNetworkEnabledValueArray) ImplementsSettingEditResponseZonesChinaNetworkEnabledValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -4983,7 +5860,7 @@ type SettingEditResponseZonesContentConverter struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesContentConverterID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesContentConverterValue `json:"value" api:"required"`
+	Value SettingEditResponseZonesContentConverterValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesContentConverterEditable `json:"editable"`
@@ -5029,19 +5906,43 @@ func (r SettingEditResponseZonesContentConverterID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesContentConverterValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesContentConverterValueArray].
+type SettingEditResponseZonesContentConverterValueUnion interface {
+	ImplementsSettingEditResponseZonesContentConverterValueUnion()
+}
 
-const (
-	SettingEditResponseZonesContentConverterValueOff SettingEditResponseZonesContentConverterValue = "off"
-	SettingEditResponseZonesContentConverterValueOn  SettingEditResponseZonesContentConverterValue = "on"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesContentConverterValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesContentConverterValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesContentConverterValue) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesContentConverterValueOff, SettingEditResponseZonesContentConverterValueOn:
-		return true
-	}
-	return false
+type SettingEditResponseZonesContentConverterValueArray []string
+
+func (r SettingEditResponseZonesContentConverterValueArray) ImplementsSettingEditResponseZonesContentConverterValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -5070,11 +5971,7 @@ type SettingEditResponseZonesCNAMEFlattening struct {
 	// How to flatten the cname destination.
 	ID SettingEditResponseZonesCNAMEFlatteningID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	//
-	// Deprecated: This zone setting is deprecated; please use the DNS Settings route
-	// instead. More information at
-	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2025-03-21
-	Value SettingEditResponseZonesCNAMEFlatteningValue `json:"value" api:"required"`
+	Value SettingEditResponseZonesCNAMEFlatteningValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesCNAMEFlatteningEditable `json:"editable"`
@@ -5120,19 +6017,43 @@ func (r SettingEditResponseZonesCNAMEFlatteningID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesCNAMEFlatteningValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesCNAMEFlatteningValueArray].
+type SettingEditResponseZonesCNAMEFlatteningValueUnion interface {
+	ImplementsSettingEditResponseZonesCNAMEFlatteningValueUnion()
+}
 
-const (
-	SettingEditResponseZonesCNAMEFlatteningValueFlattenAtRoot SettingEditResponseZonesCNAMEFlatteningValue = "flatten_at_root"
-	SettingEditResponseZonesCNAMEFlatteningValueFlattenAll    SettingEditResponseZonesCNAMEFlatteningValue = "flatten_all"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesCNAMEFlatteningValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesCNAMEFlatteningValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesCNAMEFlatteningValue) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesCNAMEFlatteningValueFlattenAtRoot, SettingEditResponseZonesCNAMEFlatteningValueFlattenAll:
-		return true
-	}
-	return false
+type SettingEditResponseZonesCNAMEFlatteningValueArray []string
+
+func (r SettingEditResponseZonesCNAMEFlatteningValueArray) ImplementsSettingEditResponseZonesCNAMEFlatteningValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -5158,7 +6079,7 @@ type SettingEditResponseZonesEdgeCacheTTL2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesEdgeCacheTTL2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesEdgeCacheTTL2Value `json:"value" api:"required"`
+	Value SettingEditResponseZonesEdgeCacheTTL2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesEdgeCacheTTL2Editable `json:"editable"`
@@ -5204,38 +6125,43 @@ func (r SettingEditResponseZonesEdgeCacheTTL2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesEdgeCacheTTL2Value float64
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesEdgeCacheTTL2ValueArray].
+type SettingEditResponseZonesEdgeCacheTTL2ValueUnion interface {
+	ImplementsSettingEditResponseZonesEdgeCacheTtl2ValueUnion()
+}
 
-const (
-	SettingEditResponseZonesEdgeCacheTTL2Value30     SettingEditResponseZonesEdgeCacheTTL2Value = 30
-	SettingEditResponseZonesEdgeCacheTTL2Value60     SettingEditResponseZonesEdgeCacheTTL2Value = 60
-	SettingEditResponseZonesEdgeCacheTTL2Value300    SettingEditResponseZonesEdgeCacheTTL2Value = 300
-	SettingEditResponseZonesEdgeCacheTTL2Value1200   SettingEditResponseZonesEdgeCacheTTL2Value = 1200
-	SettingEditResponseZonesEdgeCacheTTL2Value1800   SettingEditResponseZonesEdgeCacheTTL2Value = 1800
-	SettingEditResponseZonesEdgeCacheTTL2Value3600   SettingEditResponseZonesEdgeCacheTTL2Value = 3600
-	SettingEditResponseZonesEdgeCacheTTL2Value7200   SettingEditResponseZonesEdgeCacheTTL2Value = 7200
-	SettingEditResponseZonesEdgeCacheTTL2Value10800  SettingEditResponseZonesEdgeCacheTTL2Value = 10800
-	SettingEditResponseZonesEdgeCacheTTL2Value14400  SettingEditResponseZonesEdgeCacheTTL2Value = 14400
-	SettingEditResponseZonesEdgeCacheTTL2Value18000  SettingEditResponseZonesEdgeCacheTTL2Value = 18000
-	SettingEditResponseZonesEdgeCacheTTL2Value28800  SettingEditResponseZonesEdgeCacheTTL2Value = 28800
-	SettingEditResponseZonesEdgeCacheTTL2Value43200  SettingEditResponseZonesEdgeCacheTTL2Value = 43200
-	SettingEditResponseZonesEdgeCacheTTL2Value57600  SettingEditResponseZonesEdgeCacheTTL2Value = 57600
-	SettingEditResponseZonesEdgeCacheTTL2Value72000  SettingEditResponseZonesEdgeCacheTTL2Value = 72000
-	SettingEditResponseZonesEdgeCacheTTL2Value86400  SettingEditResponseZonesEdgeCacheTTL2Value = 86400
-	SettingEditResponseZonesEdgeCacheTTL2Value172800 SettingEditResponseZonesEdgeCacheTTL2Value = 172800
-	SettingEditResponseZonesEdgeCacheTTL2Value259200 SettingEditResponseZonesEdgeCacheTTL2Value = 259200
-	SettingEditResponseZonesEdgeCacheTTL2Value345600 SettingEditResponseZonesEdgeCacheTTL2Value = 345600
-	SettingEditResponseZonesEdgeCacheTTL2Value432000 SettingEditResponseZonesEdgeCacheTTL2Value = 432000
-	SettingEditResponseZonesEdgeCacheTTL2Value518400 SettingEditResponseZonesEdgeCacheTTL2Value = 518400
-	SettingEditResponseZonesEdgeCacheTTL2Value604800 SettingEditResponseZonesEdgeCacheTTL2Value = 604800
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesEdgeCacheTTL2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesEdgeCacheTTL2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesEdgeCacheTTL2Value) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesEdgeCacheTTL2Value30, SettingEditResponseZonesEdgeCacheTTL2Value60, SettingEditResponseZonesEdgeCacheTTL2Value300, SettingEditResponseZonesEdgeCacheTTL2Value1200, SettingEditResponseZonesEdgeCacheTTL2Value1800, SettingEditResponseZonesEdgeCacheTTL2Value3600, SettingEditResponseZonesEdgeCacheTTL2Value7200, SettingEditResponseZonesEdgeCacheTTL2Value10800, SettingEditResponseZonesEdgeCacheTTL2Value14400, SettingEditResponseZonesEdgeCacheTTL2Value18000, SettingEditResponseZonesEdgeCacheTTL2Value28800, SettingEditResponseZonesEdgeCacheTTL2Value43200, SettingEditResponseZonesEdgeCacheTTL2Value57600, SettingEditResponseZonesEdgeCacheTTL2Value72000, SettingEditResponseZonesEdgeCacheTTL2Value86400, SettingEditResponseZonesEdgeCacheTTL2Value172800, SettingEditResponseZonesEdgeCacheTTL2Value259200, SettingEditResponseZonesEdgeCacheTTL2Value345600, SettingEditResponseZonesEdgeCacheTTL2Value432000, SettingEditResponseZonesEdgeCacheTTL2Value518400, SettingEditResponseZonesEdgeCacheTTL2Value604800:
-		return true
-	}
-	return false
+type SettingEditResponseZonesEdgeCacheTTL2ValueArray []string
+
+func (r SettingEditResponseZonesEdgeCacheTTL2ValueArray) ImplementsSettingEditResponseZonesEdgeCacheTtl2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -5261,7 +6187,7 @@ type SettingEditResponseZonesEmailObfuscation2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesEmailObfuscation2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesEmailObfuscation2Value `json:"value" api:"required"`
+	Value SettingEditResponseZonesEmailObfuscation2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesEmailObfuscation2Editable `json:"editable"`
@@ -5307,19 +6233,43 @@ func (r SettingEditResponseZonesEmailObfuscation2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesEmailObfuscation2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesEmailObfuscation2ValueArray].
+type SettingEditResponseZonesEmailObfuscation2ValueUnion interface {
+	ImplementsSettingEditResponseZonesEmailObfuscation2ValueUnion()
+}
 
-const (
-	SettingEditResponseZonesEmailObfuscation2ValueOn  SettingEditResponseZonesEmailObfuscation2Value = "on"
-	SettingEditResponseZonesEmailObfuscation2ValueOff SettingEditResponseZonesEmailObfuscation2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesEmailObfuscation2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesEmailObfuscation2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesEmailObfuscation2Value) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesEmailObfuscation2ValueOn, SettingEditResponseZonesEmailObfuscation2ValueOff:
-		return true
-	}
-	return false
+type SettingEditResponseZonesEmailObfuscation2ValueArray []string
+
+func (r SettingEditResponseZonesEmailObfuscation2ValueArray) ImplementsSettingEditResponseZonesEmailObfuscation2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -5346,7 +6296,7 @@ type SettingEditResponseZonesIPGeolocation2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesIPGeolocation2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesIPGeolocation2Value `json:"value" api:"required"`
+	Value SettingEditResponseZonesIPGeolocation2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesIPGeolocation2Editable `json:"editable"`
@@ -5392,19 +6342,43 @@ func (r SettingEditResponseZonesIPGeolocation2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesIPGeolocation2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesIPGeolocation2ValueArray].
+type SettingEditResponseZonesIPGeolocation2ValueUnion interface {
+	ImplementsSettingEditResponseZonesIPGeolocation2ValueUnion()
+}
 
-const (
-	SettingEditResponseZonesIPGeolocation2ValueOn  SettingEditResponseZonesIPGeolocation2Value = "on"
-	SettingEditResponseZonesIPGeolocation2ValueOff SettingEditResponseZonesIPGeolocation2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesIPGeolocation2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesIPGeolocation2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesIPGeolocation2Value) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesIPGeolocation2ValueOn, SettingEditResponseZonesIPGeolocation2ValueOff:
-		return true
-	}
-	return false
+type SettingEditResponseZonesIPGeolocation2ValueArray []string
+
+func (r SettingEditResponseZonesIPGeolocation2ValueArray) ImplementsSettingEditResponseZonesIPGeolocation2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -5429,7 +6403,7 @@ type SettingEditResponseZonesMaxUpload struct {
 	// identifier of the zone setting.
 	ID SettingEditResponseZonesMaxUploadID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesMaxUploadValue `json:"value" api:"required"`
+	Value SettingEditResponseZonesMaxUploadValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesMaxUploadEditable `json:"editable"`
@@ -5475,43 +6449,43 @@ func (r SettingEditResponseZonesMaxUploadID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesMaxUploadValue int64
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesMaxUploadValueArray].
+type SettingEditResponseZonesMaxUploadValueUnion interface {
+	ImplementsSettingEditResponseZonesMaxUploadValueUnion()
+}
 
-const (
-	SettingEditResponseZonesMaxUploadValue100  SettingEditResponseZonesMaxUploadValue = 100
-	SettingEditResponseZonesMaxUploadValue125  SettingEditResponseZonesMaxUploadValue = 125
-	SettingEditResponseZonesMaxUploadValue150  SettingEditResponseZonesMaxUploadValue = 150
-	SettingEditResponseZonesMaxUploadValue175  SettingEditResponseZonesMaxUploadValue = 175
-	SettingEditResponseZonesMaxUploadValue200  SettingEditResponseZonesMaxUploadValue = 200
-	SettingEditResponseZonesMaxUploadValue225  SettingEditResponseZonesMaxUploadValue = 225
-	SettingEditResponseZonesMaxUploadValue250  SettingEditResponseZonesMaxUploadValue = 250
-	SettingEditResponseZonesMaxUploadValue275  SettingEditResponseZonesMaxUploadValue = 275
-	SettingEditResponseZonesMaxUploadValue300  SettingEditResponseZonesMaxUploadValue = 300
-	SettingEditResponseZonesMaxUploadValue325  SettingEditResponseZonesMaxUploadValue = 325
-	SettingEditResponseZonesMaxUploadValue350  SettingEditResponseZonesMaxUploadValue = 350
-	SettingEditResponseZonesMaxUploadValue375  SettingEditResponseZonesMaxUploadValue = 375
-	SettingEditResponseZonesMaxUploadValue400  SettingEditResponseZonesMaxUploadValue = 400
-	SettingEditResponseZonesMaxUploadValue425  SettingEditResponseZonesMaxUploadValue = 425
-	SettingEditResponseZonesMaxUploadValue450  SettingEditResponseZonesMaxUploadValue = 450
-	SettingEditResponseZonesMaxUploadValue475  SettingEditResponseZonesMaxUploadValue = 475
-	SettingEditResponseZonesMaxUploadValue500  SettingEditResponseZonesMaxUploadValue = 500
-	SettingEditResponseZonesMaxUploadValue1000 SettingEditResponseZonesMaxUploadValue = 1000
-	SettingEditResponseZonesMaxUploadValue1500 SettingEditResponseZonesMaxUploadValue = 1500
-	SettingEditResponseZonesMaxUploadValue2000 SettingEditResponseZonesMaxUploadValue = 2000
-	SettingEditResponseZonesMaxUploadValue2500 SettingEditResponseZonesMaxUploadValue = 2500
-	SettingEditResponseZonesMaxUploadValue3000 SettingEditResponseZonesMaxUploadValue = 3000
-	SettingEditResponseZonesMaxUploadValue3500 SettingEditResponseZonesMaxUploadValue = 3500
-	SettingEditResponseZonesMaxUploadValue4000 SettingEditResponseZonesMaxUploadValue = 4000
-	SettingEditResponseZonesMaxUploadValue4500 SettingEditResponseZonesMaxUploadValue = 4500
-	SettingEditResponseZonesMaxUploadValue5000 SettingEditResponseZonesMaxUploadValue = 5000
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesMaxUploadValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesMaxUploadValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesMaxUploadValue) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesMaxUploadValue100, SettingEditResponseZonesMaxUploadValue125, SettingEditResponseZonesMaxUploadValue150, SettingEditResponseZonesMaxUploadValue175, SettingEditResponseZonesMaxUploadValue200, SettingEditResponseZonesMaxUploadValue225, SettingEditResponseZonesMaxUploadValue250, SettingEditResponseZonesMaxUploadValue275, SettingEditResponseZonesMaxUploadValue300, SettingEditResponseZonesMaxUploadValue325, SettingEditResponseZonesMaxUploadValue350, SettingEditResponseZonesMaxUploadValue375, SettingEditResponseZonesMaxUploadValue400, SettingEditResponseZonesMaxUploadValue425, SettingEditResponseZonesMaxUploadValue450, SettingEditResponseZonesMaxUploadValue475, SettingEditResponseZonesMaxUploadValue500, SettingEditResponseZonesMaxUploadValue1000, SettingEditResponseZonesMaxUploadValue1500, SettingEditResponseZonesMaxUploadValue2000, SettingEditResponseZonesMaxUploadValue2500, SettingEditResponseZonesMaxUploadValue3000, SettingEditResponseZonesMaxUploadValue3500, SettingEditResponseZonesMaxUploadValue4000, SettingEditResponseZonesMaxUploadValue4500, SettingEditResponseZonesMaxUploadValue5000:
-		return true
-	}
-	return false
+type SettingEditResponseZonesMaxUploadValueArray []string
+
+func (r SettingEditResponseZonesMaxUploadValueArray) ImplementsSettingEditResponseZonesMaxUploadValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -5542,10 +6516,7 @@ type SettingEditResponseZonesMirage2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesMirage2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	//
-	// Deprecated: Mirage is being deprecated. More information at
-	// https://developers.cloudflare.com/speed/optimization/images/mirage/
-	Value SettingEditResponseZonesMirage2Value `json:"value" api:"required"`
+	Value SettingEditResponseZonesMirage2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesMirage2Editable `json:"editable"`
@@ -5591,19 +6562,43 @@ func (r SettingEditResponseZonesMirage2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesMirage2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesMirage2ValueArray].
+type SettingEditResponseZonesMirage2ValueUnion interface {
+	ImplementsSettingEditResponseZonesMirage2ValueUnion()
+}
 
-const (
-	SettingEditResponseZonesMirage2ValueOn  SettingEditResponseZonesMirage2Value = "on"
-	SettingEditResponseZonesMirage2ValueOff SettingEditResponseZonesMirage2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesMirage2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesMirage2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesMirage2Value) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesMirage2ValueOn, SettingEditResponseZonesMirage2ValueOff:
-		return true
-	}
-	return false
+type SettingEditResponseZonesMirage2ValueArray []string
+
+func (r SettingEditResponseZonesMirage2ValueArray) ImplementsSettingEditResponseZonesMirage2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -5628,7 +6623,7 @@ type SettingEditResponseZonesOpportunisticEncryption2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesOpportunisticEncryption2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesOpportunisticEncryption2Value `json:"value" api:"required"`
+	Value SettingEditResponseZonesOpportunisticEncryption2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesOpportunisticEncryption2Editable `json:"editable"`
@@ -5674,19 +6669,43 @@ func (r SettingEditResponseZonesOpportunisticEncryption2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesOpportunisticEncryption2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesOpportunisticEncryption2ValueArray].
+type SettingEditResponseZonesOpportunisticEncryption2ValueUnion interface {
+	ImplementsSettingEditResponseZonesOpportunisticEncryption2ValueUnion()
+}
 
-const (
-	SettingEditResponseZonesOpportunisticEncryption2ValueOn  SettingEditResponseZonesOpportunisticEncryption2Value = "on"
-	SettingEditResponseZonesOpportunisticEncryption2ValueOff SettingEditResponseZonesOpportunisticEncryption2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesOpportunisticEncryption2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesOpportunisticEncryption2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesOpportunisticEncryption2Value) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesOpportunisticEncryption2ValueOn, SettingEditResponseZonesOpportunisticEncryption2ValueOff:
-		return true
-	}
-	return false
+type SettingEditResponseZonesOpportunisticEncryption2ValueArray []string
+
+func (r SettingEditResponseZonesOpportunisticEncryption2ValueArray) ImplementsSettingEditResponseZonesOpportunisticEncryption2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -5713,7 +6732,7 @@ type SettingEditResponseZonesOriginErrorPagePassThru2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesOriginErrorPagePassThru2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesOriginErrorPagePassThru2Value `json:"value" api:"required"`
+	Value SettingEditResponseZonesOriginErrorPagePassThru2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesOriginErrorPagePassThru2Editable `json:"editable"`
@@ -5759,19 +6778,43 @@ func (r SettingEditResponseZonesOriginErrorPagePassThru2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesOriginErrorPagePassThru2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesOriginErrorPagePassThru2ValueArray].
+type SettingEditResponseZonesOriginErrorPagePassThru2ValueUnion interface {
+	ImplementsSettingEditResponseZonesOriginErrorPagePassThru2ValueUnion()
+}
 
-const (
-	SettingEditResponseZonesOriginErrorPagePassThru2ValueOn  SettingEditResponseZonesOriginErrorPagePassThru2Value = "on"
-	SettingEditResponseZonesOriginErrorPagePassThru2ValueOff SettingEditResponseZonesOriginErrorPagePassThru2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesOriginErrorPagePassThru2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesOriginErrorPagePassThru2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesOriginErrorPagePassThru2Value) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesOriginErrorPagePassThru2ValueOn, SettingEditResponseZonesOriginErrorPagePassThru2ValueOff:
-		return true
-	}
-	return false
+type SettingEditResponseZonesOriginErrorPagePassThru2ValueArray []string
+
+func (r SettingEditResponseZonesOriginErrorPagePassThru2ValueArray) ImplementsSettingEditResponseZonesOriginErrorPagePassThru2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -5919,7 +6962,7 @@ type SettingEditResponseZonesPolish2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesPolish2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesPolish2Value `json:"value" api:"required"`
+	Value SettingEditResponseZonesPolish2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesPolish2Editable `json:"editable"`
@@ -5965,20 +7008,43 @@ func (r SettingEditResponseZonesPolish2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesPolish2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesPolish2ValueArray].
+type SettingEditResponseZonesPolish2ValueUnion interface {
+	ImplementsSettingEditResponseZonesPolish2ValueUnion()
+}
 
-const (
-	SettingEditResponseZonesPolish2ValueOff      SettingEditResponseZonesPolish2Value = "off"
-	SettingEditResponseZonesPolish2ValueLossless SettingEditResponseZonesPolish2Value = "lossless"
-	SettingEditResponseZonesPolish2ValueLossy    SettingEditResponseZonesPolish2Value = "lossy"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesPolish2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesPolish2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesPolish2Value) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesPolish2ValueOff, SettingEditResponseZonesPolish2ValueLossless, SettingEditResponseZonesPolish2ValueLossy:
-		return true
-	}
-	return false
+type SettingEditResponseZonesPolish2ValueArray []string
+
+func (r SettingEditResponseZonesPolish2ValueArray) ImplementsSettingEditResponseZonesPolish2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -6004,7 +7070,7 @@ type SettingEditResponseZonesPreRender struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesPreRenderID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesPreRenderValue `json:"value" api:"required"`
+	Value SettingEditResponseZonesPreRenderValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesPreRenderEditable `json:"editable"`
@@ -6050,19 +7116,43 @@ func (r SettingEditResponseZonesPreRenderID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesPreRenderValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesPreRenderValueArray].
+type SettingEditResponseZonesPreRenderValueUnion interface {
+	ImplementsSettingEditResponseZonesPreRenderValueUnion()
+}
 
-const (
-	SettingEditResponseZonesPreRenderValueOff SettingEditResponseZonesPreRenderValue = "off"
-	SettingEditResponseZonesPreRenderValueOn  SettingEditResponseZonesPreRenderValue = "on"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesPreRenderValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesPreRenderValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesPreRenderValue) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesPreRenderValueOff, SettingEditResponseZonesPreRenderValueOn:
-		return true
-	}
-	return false
+type SettingEditResponseZonesPreRenderValueArray []string
+
+func (r SettingEditResponseZonesPreRenderValueArray) ImplementsSettingEditResponseZonesPreRenderValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -6095,12 +7185,7 @@ type SettingEditResponseZonesPrivacyPass struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesPrivacyPassID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	//
-	// Deprecated: Privacy Pass v1 was deprecated in 2023. (Announcement -
-	// https://blog.cloudflare.com/privacy-pass-standard/) and (API deprecation
-	// details -
-	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2024-03-31)
-	Value SettingEditResponseZonesPrivacyPassValue `json:"value" api:"required"`
+	Value SettingEditResponseZonesPrivacyPassValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesPrivacyPassEditable `json:"editable"`
@@ -6146,19 +7231,43 @@ func (r SettingEditResponseZonesPrivacyPassID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesPrivacyPassValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesPrivacyPassValueArray].
+type SettingEditResponseZonesPrivacyPassValueUnion interface {
+	ImplementsSettingEditResponseZonesPrivacyPassValueUnion()
+}
 
-const (
-	SettingEditResponseZonesPrivacyPassValueOn  SettingEditResponseZonesPrivacyPassValue = "on"
-	SettingEditResponseZonesPrivacyPassValueOff SettingEditResponseZonesPrivacyPassValue = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesPrivacyPassValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesPrivacyPassValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesPrivacyPassValue) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesPrivacyPassValueOn, SettingEditResponseZonesPrivacyPassValueOff:
-		return true
-	}
-	return false
+type SettingEditResponseZonesPrivacyPassValueArray []string
+
+func (r SettingEditResponseZonesPrivacyPassValueArray) ImplementsSettingEditResponseZonesPrivacyPassValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -6185,7 +7294,7 @@ type SettingEditResponseZonesRedirectsForAITraining struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesRedirectsForAITrainingID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesRedirectsForAITrainingValue `json:"value" api:"required"`
+	Value SettingEditResponseZonesRedirectsForAITrainingValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesRedirectsForAITrainingEditable `json:"editable"`
@@ -6231,19 +7340,43 @@ func (r SettingEditResponseZonesRedirectsForAITrainingID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesRedirectsForAITrainingValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesRedirectsForAITrainingValueArray].
+type SettingEditResponseZonesRedirectsForAITrainingValueUnion interface {
+	ImplementsSettingEditResponseZonesRedirectsForAITrainingValueUnion()
+}
 
-const (
-	SettingEditResponseZonesRedirectsForAITrainingValueOff SettingEditResponseZonesRedirectsForAITrainingValue = "off"
-	SettingEditResponseZonesRedirectsForAITrainingValueOn  SettingEditResponseZonesRedirectsForAITrainingValue = "on"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesRedirectsForAITrainingValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesRedirectsForAITrainingValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesRedirectsForAITrainingValue) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesRedirectsForAITrainingValueOff, SettingEditResponseZonesRedirectsForAITrainingValueOn:
-		return true
-	}
-	return false
+type SettingEditResponseZonesRedirectsForAITrainingValueArray []string
+
+func (r SettingEditResponseZonesRedirectsForAITrainingValueArray) ImplementsSettingEditResponseZonesRedirectsForAITrainingValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -6270,7 +7403,7 @@ type SettingEditResponseZonesReplaceInsecureJS struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesReplaceInsecureJSID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesReplaceInsecureJSValue `json:"value" api:"required"`
+	Value SettingEditResponseZonesReplaceInsecureJSValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesReplaceInsecureJSEditable `json:"editable"`
@@ -6316,19 +7449,43 @@ func (r SettingEditResponseZonesReplaceInsecureJSID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesReplaceInsecureJSValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesReplaceInsecureJSValueArray].
+type SettingEditResponseZonesReplaceInsecureJSValueUnion interface {
+	ImplementsSettingEditResponseZonesReplaceInsecureJSValueUnion()
+}
 
-const (
-	SettingEditResponseZonesReplaceInsecureJSValueOn  SettingEditResponseZonesReplaceInsecureJSValue = "on"
-	SettingEditResponseZonesReplaceInsecureJSValueOff SettingEditResponseZonesReplaceInsecureJSValue = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesReplaceInsecureJSValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesReplaceInsecureJSValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesReplaceInsecureJSValue) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesReplaceInsecureJSValueOn, SettingEditResponseZonesReplaceInsecureJSValueOff:
-		return true
-	}
-	return false
+type SettingEditResponseZonesReplaceInsecureJSValueArray []string
+
+func (r SettingEditResponseZonesReplaceInsecureJSValueArray) ImplementsSettingEditResponseZonesReplaceInsecureJSValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -6359,7 +7516,7 @@ type SettingEditResponseZonesResponseBuffering2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesResponseBuffering2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesResponseBuffering2Value `json:"value" api:"required"`
+	Value SettingEditResponseZonesResponseBuffering2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesResponseBuffering2Editable `json:"editable"`
@@ -6405,19 +7562,43 @@ func (r SettingEditResponseZonesResponseBuffering2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesResponseBuffering2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesResponseBuffering2ValueArray].
+type SettingEditResponseZonesResponseBuffering2ValueUnion interface {
+	ImplementsSettingEditResponseZonesResponseBuffering2ValueUnion()
+}
 
-const (
-	SettingEditResponseZonesResponseBuffering2ValueOn  SettingEditResponseZonesResponseBuffering2Value = "on"
-	SettingEditResponseZonesResponseBuffering2ValueOff SettingEditResponseZonesResponseBuffering2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesResponseBuffering2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesResponseBuffering2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesResponseBuffering2Value) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesResponseBuffering2ValueOn, SettingEditResponseZonesResponseBuffering2ValueOff:
-		return true
-	}
-	return false
+type SettingEditResponseZonesResponseBuffering2ValueArray []string
+
+func (r SettingEditResponseZonesResponseBuffering2ValueArray) ImplementsSettingEditResponseZonesResponseBuffering2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -6451,7 +7632,7 @@ type SettingEditResponseZonesRocketLoader2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesRocketLoader2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesRocketLoader2Value `json:"value" api:"required"`
+	Value SettingEditResponseZonesRocketLoader2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesRocketLoader2Editable `json:"editable"`
@@ -6497,19 +7678,43 @@ func (r SettingEditResponseZonesRocketLoader2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesRocketLoader2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesRocketLoader2ValueArray].
+type SettingEditResponseZonesRocketLoader2ValueUnion interface {
+	ImplementsSettingEditResponseZonesRocketLoader2ValueUnion()
+}
 
-const (
-	SettingEditResponseZonesRocketLoader2ValueOn  SettingEditResponseZonesRocketLoader2Value = "on"
-	SettingEditResponseZonesRocketLoader2ValueOff SettingEditResponseZonesRocketLoader2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesRocketLoader2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesRocketLoader2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesRocketLoader2Value) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesRocketLoader2ValueOn, SettingEditResponseZonesRocketLoader2ValueOff:
-		return true
-	}
-	return false
+type SettingEditResponseZonesRocketLoader2ValueArray []string
+
+func (r SettingEditResponseZonesRocketLoader2ValueArray) ImplementsSettingEditResponseZonesRocketLoader2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -6536,7 +7741,7 @@ type SettingEditResponseZonesSchemasAutomaticPlatformOptimization struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesSchemasAutomaticPlatformOptimizationID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value AutomaticPlatformOptimization `json:"value" api:"required"`
+	Value SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValue `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesSchemasAutomaticPlatformOptimizationEditable `json:"editable"`
@@ -6583,6 +7788,154 @@ func (r SettingEditResponseZonesSchemasAutomaticPlatformOptimizationID) IsKnown(
 	return false
 }
 
+// Current value of the zone setting.
+type SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValue struct {
+	// Indicates whether or not
+	// [cache by device type](https://developers.cloudflare.com/automatic-platform-optimization/reference/cache-device-type/)
+	// is enabled.
+	CacheByDeviceType bool `json:"cache_by_device_type"`
+	// Indicates whether or not Cloudflare proxy is enabled.
+	Cf bool `json:"cf"`
+	// Indicates whether or not Automatic Platform Optimization is enabled.
+	Enabled bool `json:"enabled"`
+	// This field can have the runtime type of [[]string].
+	Hostnames interface{} `json:"hostnames"`
+	// Indicates whether or not site is powered by WordPress.
+	Wordpress bool `json:"wordpress"`
+	// Indicates whether or not
+	// [Cloudflare for WordPress plugin](https://wordpress.org/plugins/cloudflare/) is
+	// installed.
+	WpPlugin bool                                                                  `json:"wp_plugin"`
+	JSON     settingEditResponseZonesSchemasAutomaticPlatformOptimizationValueJSON `json:"-"`
+	union    SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueUnion
+}
+
+// settingEditResponseZonesSchemasAutomaticPlatformOptimizationValueJSON contains
+// the JSON metadata for the struct
+// [SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValue]
+type settingEditResponseZonesSchemasAutomaticPlatformOptimizationValueJSON struct {
+	CacheByDeviceType apijson.Field
+	Cf                apijson.Field
+	Enabled           apijson.Field
+	Hostnames         apijson.Field
+	Wordpress         apijson.Field
+	WpPlugin          apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r settingEditResponseZonesSchemasAutomaticPlatformOptimizationValueJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValue) UnmarshalJSON(data []byte) (err error) {
+	*r = SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValue{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject],
+// [SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject],
+// [SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject],
+// [SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject],
+// [SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject].
+func (r SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValue) AsUnion() SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueUnion {
+	return r.union
+}
+
+// Current value of the zone setting.
+//
+// Union satisfied by
+// [SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject],
+// [SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject],
+// [SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject],
+// [SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject] or
+// [SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject].
+type SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueUnion interface {
+	implementsSettingEditResponseZonesSchemasAutomaticPlatformOptimizationValue()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject{}),
+		},
+	)
+}
+
+type SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject struct {
+	// Indicates whether or not
+	// [cache by device type](https://developers.cloudflare.com/automatic-platform-optimization/reference/cache-device-type/)
+	// is enabled.
+	CacheByDeviceType bool `json:"cache_by_device_type"`
+	// Indicates whether or not Cloudflare proxy is enabled.
+	Cf bool `json:"cf"`
+	// Indicates whether or not Automatic Platform Optimization is enabled.
+	Enabled bool `json:"enabled"`
+	// An array of hostnames where Automatic Platform Optimization for WordPress is
+	// activated.
+	Hostnames []string `json:"hostnames" format:"hostname"`
+	// Indicates whether or not site is powered by WordPress.
+	Wordpress bool `json:"wordpress"`
+	// Indicates whether or not
+	// [Cloudflare for WordPress plugin](https://wordpress.org/plugins/cloudflare/) is
+	// installed.
+	WpPlugin bool                                                                        `json:"wp_plugin"`
+	JSON     settingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObjectJSON `json:"-"`
+}
+
+// settingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObjectJSON
+// contains the JSON metadata for the struct
+// [SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject]
+type settingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObjectJSON struct {
+	CacheByDeviceType apijson.Field
+	Cf                apijson.Field
+	Enabled           apijson.Field
+	Hostnames         apijson.Field
+	Wordpress         apijson.Field
+	WpPlugin          apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueObject) implementsSettingEditResponseZonesSchemasAutomaticPlatformOptimizationValue() {
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type SettingEditResponseZonesSchemasAutomaticPlatformOptimizationEditable bool
@@ -6608,7 +7961,7 @@ type SettingEditResponseZonesSearchForAgents struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesSearchForAgentsID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesSearchForAgentsValue `json:"value" api:"required"`
+	Value SettingEditResponseZonesSearchForAgentsValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesSearchForAgentsEditable `json:"editable"`
@@ -6654,19 +8007,43 @@ func (r SettingEditResponseZonesSearchForAgentsID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesSearchForAgentsValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesSearchForAgentsValueArray].
+type SettingEditResponseZonesSearchForAgentsValueUnion interface {
+	ImplementsSettingEditResponseZonesSearchForAgentsValueUnion()
+}
 
-const (
-	SettingEditResponseZonesSearchForAgentsValueOff SettingEditResponseZonesSearchForAgentsValue = "off"
-	SettingEditResponseZonesSearchForAgentsValueOn  SettingEditResponseZonesSearchForAgentsValue = "on"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesSearchForAgentsValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesSearchForAgentsValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesSearchForAgentsValue) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesSearchForAgentsValueOff, SettingEditResponseZonesSearchForAgentsValueOn:
-		return true
-	}
-	return false
+type SettingEditResponseZonesSearchForAgentsValueArray []string
+
+func (r SettingEditResponseZonesSearchForAgentsValueArray) ImplementsSettingEditResponseZonesSearchForAgentsValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -6694,7 +8071,7 @@ type SettingEditResponseZonesSecurityLevel2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesSecurityLevel2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesSecurityLevel2Value `json:"value" api:"required"`
+	Value SettingEditResponseZonesSecurityLevel2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesSecurityLevel2Editable `json:"editable"`
@@ -6740,23 +8117,43 @@ func (r SettingEditResponseZonesSecurityLevel2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesSecurityLevel2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesSecurityLevel2ValueArray].
+type SettingEditResponseZonesSecurityLevel2ValueUnion interface {
+	ImplementsSettingEditResponseZonesSecurityLevel2ValueUnion()
+}
 
-const (
-	SettingEditResponseZonesSecurityLevel2ValueOff            SettingEditResponseZonesSecurityLevel2Value = "off"
-	SettingEditResponseZonesSecurityLevel2ValueEssentiallyOff SettingEditResponseZonesSecurityLevel2Value = "essentially_off"
-	SettingEditResponseZonesSecurityLevel2ValueLow            SettingEditResponseZonesSecurityLevel2Value = "low"
-	SettingEditResponseZonesSecurityLevel2ValueMedium         SettingEditResponseZonesSecurityLevel2Value = "medium"
-	SettingEditResponseZonesSecurityLevel2ValueHigh           SettingEditResponseZonesSecurityLevel2Value = "high"
-	SettingEditResponseZonesSecurityLevel2ValueUnderAttack    SettingEditResponseZonesSecurityLevel2Value = "under_attack"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesSecurityLevel2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesSecurityLevel2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesSecurityLevel2Value) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesSecurityLevel2ValueOff, SettingEditResponseZonesSecurityLevel2ValueEssentiallyOff, SettingEditResponseZonesSecurityLevel2ValueLow, SettingEditResponseZonesSecurityLevel2ValueMedium, SettingEditResponseZonesSecurityLevel2ValueHigh, SettingEditResponseZonesSecurityLevel2ValueUnderAttack:
-		return true
-	}
-	return false
+type SettingEditResponseZonesSecurityLevel2ValueArray []string
+
+func (r SettingEditResponseZonesSecurityLevel2ValueArray) ImplementsSettingEditResponseZonesSecurityLevel2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -6781,7 +8178,7 @@ type SettingEditResponseZonesSha1Support struct {
 	// Zone setting identifier.
 	ID SettingEditResponseZonesSha1SupportID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesSha1SupportValue `json:"value" api:"required"`
+	Value SettingEditResponseZonesSha1SupportValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesSha1SupportEditable `json:"editable"`
@@ -6827,19 +8224,43 @@ func (r SettingEditResponseZonesSha1SupportID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesSha1SupportValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesSha1SupportValueArray].
+type SettingEditResponseZonesSha1SupportValueUnion interface {
+	ImplementsSettingEditResponseZonesSha1SupportValueUnion()
+}
 
-const (
-	SettingEditResponseZonesSha1SupportValueOff SettingEditResponseZonesSha1SupportValue = "off"
-	SettingEditResponseZonesSha1SupportValueOn  SettingEditResponseZonesSha1SupportValue = "on"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesSha1SupportValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesSha1SupportValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesSha1SupportValue) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesSha1SupportValueOff, SettingEditResponseZonesSha1SupportValueOn:
-		return true
-	}
-	return false
+type SettingEditResponseZonesSha1SupportValueArray []string
+
+func (r SettingEditResponseZonesSha1SupportValueArray) ImplementsSettingEditResponseZonesSha1SupportValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -6866,7 +8287,7 @@ type SettingEditResponseZonesSortQueryStringForCache2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesSortQueryStringForCache2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesSortQueryStringForCache2Value `json:"value" api:"required"`
+	Value SettingEditResponseZonesSortQueryStringForCache2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesSortQueryStringForCache2Editable `json:"editable"`
@@ -6912,19 +8333,43 @@ func (r SettingEditResponseZonesSortQueryStringForCache2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesSortQueryStringForCache2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesSortQueryStringForCache2ValueArray].
+type SettingEditResponseZonesSortQueryStringForCache2ValueUnion interface {
+	ImplementsSettingEditResponseZonesSortQueryStringForCache2ValueUnion()
+}
 
-const (
-	SettingEditResponseZonesSortQueryStringForCache2ValueOn  SettingEditResponseZonesSortQueryStringForCache2Value = "on"
-	SettingEditResponseZonesSortQueryStringForCache2ValueOff SettingEditResponseZonesSortQueryStringForCache2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesSortQueryStringForCache2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesSortQueryStringForCache2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesSortQueryStringForCache2Value) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesSortQueryStringForCache2ValueOn, SettingEditResponseZonesSortQueryStringForCache2ValueOff:
-		return true
-	}
-	return false
+type SettingEditResponseZonesSortQueryStringForCache2ValueArray []string
+
+func (r SettingEditResponseZonesSortQueryStringForCache2ValueArray) ImplementsSettingEditResponseZonesSortQueryStringForCache2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -6964,7 +8409,7 @@ type SettingEditResponseZonesSSL2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesSSL2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesSSL2Value `json:"value" api:"required"`
+	Value SettingEditResponseZonesSSL2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesSSL2Editable `json:"editable"`
@@ -7010,22 +8455,43 @@ func (r SettingEditResponseZonesSSL2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesSSL2Value string
-
-const (
-	SettingEditResponseZonesSSL2ValueOff      SettingEditResponseZonesSSL2Value = "off"
-	SettingEditResponseZonesSSL2ValueFlexible SettingEditResponseZonesSSL2Value = "flexible"
-	SettingEditResponseZonesSSL2ValueFull     SettingEditResponseZonesSSL2Value = "full"
-	SettingEditResponseZonesSSL2ValueStrict   SettingEditResponseZonesSSL2Value = "strict"
-)
-
-func (r SettingEditResponseZonesSSL2Value) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesSSL2ValueOff, SettingEditResponseZonesSSL2ValueFlexible, SettingEditResponseZonesSSL2ValueFull, SettingEditResponseZonesSSL2ValueStrict:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesSSL2ValueArray].
+type SettingEditResponseZonesSSL2ValueUnion interface {
+	ImplementsSettingEditResponseZonesSsl2ValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesSSL2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesSSL2ValueArray{}),
+		},
+	)
+}
+
+type SettingEditResponseZonesSSL2ValueArray []string
+
+func (r SettingEditResponseZonesSSL2ValueArray) ImplementsSettingEditResponseZonesSsl2ValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -7049,7 +8515,7 @@ type SettingEditResponseZonesTLS1_2Only struct {
 	// Zone setting identifier.
 	ID SettingEditResponseZonesTLS1_2OnlyID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesTLS1_2OnlyValue `json:"value" api:"required"`
+	Value SettingEditResponseZonesTLS1_2OnlyValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesTLS1_2OnlyEditable `json:"editable"`
@@ -7095,19 +8561,43 @@ func (r SettingEditResponseZonesTLS1_2OnlyID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesTLS1_2OnlyValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesTLS1_2OnlyValueArray].
+type SettingEditResponseZonesTLS1_2OnlyValueUnion interface {
+	ImplementsSettingEditResponseZonesTls1_2OnlyValueUnion()
+}
 
-const (
-	SettingEditResponseZonesTLS1_2OnlyValueOff SettingEditResponseZonesTLS1_2OnlyValue = "off"
-	SettingEditResponseZonesTLS1_2OnlyValueOn  SettingEditResponseZonesTLS1_2OnlyValue = "on"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesTLS1_2OnlyValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesTLS1_2OnlyValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesTLS1_2OnlyValue) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesTLS1_2OnlyValueOff, SettingEditResponseZonesTLS1_2OnlyValueOn:
-		return true
-	}
-	return false
+type SettingEditResponseZonesTLS1_2OnlyValueArray []string
+
+func (r SettingEditResponseZonesTLS1_2OnlyValueArray) ImplementsSettingEditResponseZonesTls1_2OnlyValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -7137,7 +8627,7 @@ type SettingEditResponseZonesTransformations struct {
 	// Transformations.
 	ID SettingEditResponseZonesTransformationsID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesTransformationsValue `json:"value" api:"required"`
+	Value SettingEditResponseZonesTransformationsValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesTransformationsEditable `json:"editable"`
@@ -7184,20 +8674,43 @@ func (r SettingEditResponseZonesTransformationsID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesTransformationsValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesTransformationsValueArray].
+type SettingEditResponseZonesTransformationsValueUnion interface {
+	ImplementsSettingEditResponseZonesTransformationsValueUnion()
+}
 
-const (
-	SettingEditResponseZonesTransformationsValueOn   SettingEditResponseZonesTransformationsValue = "on"
-	SettingEditResponseZonesTransformationsValueOff  SettingEditResponseZonesTransformationsValue = "off"
-	SettingEditResponseZonesTransformationsValueOpen SettingEditResponseZonesTransformationsValue = "open"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesTransformationsValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesTransformationsValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesTransformationsValue) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesTransformationsValueOn, SettingEditResponseZonesTransformationsValueOff, SettingEditResponseZonesTransformationsValueOpen:
-		return true
-	}
-	return false
+type SettingEditResponseZonesTransformationsValueArray []string
+
+func (r SettingEditResponseZonesTransformationsValueArray) ImplementsSettingEditResponseZonesTransformationsValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -7226,8 +8739,12 @@ type SettingEditResponseZonesTransformationsAllowedOrigins struct {
 	// ID of the zone setting. Shared between Image Transformations and Video
 	// Transformations.
 	ID SettingEditResponseZonesTransformationsAllowedOriginsID `json:"id" api:"required"`
-	// Current value of the zone setting.
-	Value string `json:"value" api:"required"`
+	// Comma-separated list of allowed origins. Refer to the
+	// [Image Transformations](https://developers.cloudflare.com/images/transform-images/sources/)
+	// and
+	// [Video Transformations](https://developers.cloudflare.com/stream/transform-videos/#getting-started)
+	// documentation for more information.
+	Value SettingEditResponseZonesTransformationsAllowedOriginsValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesTransformationsAllowedOriginsEditable `json:"editable"`
@@ -7273,6 +8790,50 @@ func (r SettingEditResponseZonesTransformationsAllowedOriginsID) IsKnown() bool 
 	return false
 }
 
+// Comma-separated list of allowed origins. Refer to the
+// [Image Transformations](https://developers.cloudflare.com/images/transform-images/sources/)
+// and
+// [Video Transformations](https://developers.cloudflare.com/stream/transform-videos/#getting-started)
+// documentation for more information.
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesTransformationsAllowedOriginsValueArray].
+type SettingEditResponseZonesTransformationsAllowedOriginsValueUnion interface {
+	ImplementsSettingEditResponseZonesTransformationsAllowedOriginsValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesTransformationsAllowedOriginsValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesTransformationsAllowedOriginsValueArray{}),
+		},
+	)
+}
+
+type SettingEditResponseZonesTransformationsAllowedOriginsValueArray []string
+
+func (r SettingEditResponseZonesTransformationsAllowedOriginsValueArray) ImplementsSettingEditResponseZonesTransformationsAllowedOriginsValueUnion() {
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type SettingEditResponseZonesTransformationsAllowedOriginsEditable bool
@@ -7296,7 +8857,7 @@ type SettingEditResponseZonesTrueClientIPHeader2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesTrueClientIPHeader2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesTrueClientIPHeader2Value `json:"value" api:"required"`
+	Value SettingEditResponseZonesTrueClientIPHeader2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesTrueClientIPHeader2Editable `json:"editable"`
@@ -7342,19 +8903,43 @@ func (r SettingEditResponseZonesTrueClientIPHeader2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesTrueClientIPHeader2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesTrueClientIPHeader2ValueArray].
+type SettingEditResponseZonesTrueClientIPHeader2ValueUnion interface {
+	ImplementsSettingEditResponseZonesTrueClientIPHeader2ValueUnion()
+}
 
-const (
-	SettingEditResponseZonesTrueClientIPHeader2ValueOn  SettingEditResponseZonesTrueClientIPHeader2Value = "on"
-	SettingEditResponseZonesTrueClientIPHeader2ValueOff SettingEditResponseZonesTrueClientIPHeader2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesTrueClientIPHeader2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesTrueClientIPHeader2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesTrueClientIPHeader2Value) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesTrueClientIPHeader2ValueOn, SettingEditResponseZonesTrueClientIPHeader2ValueOff:
-		return true
-	}
-	return false
+type SettingEditResponseZonesTrueClientIPHeader2ValueArray []string
+
+func (r SettingEditResponseZonesTrueClientIPHeader2ValueArray) ImplementsSettingEditResponseZonesTrueClientIPHeader2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -7388,7 +8973,7 @@ type SettingEditResponseZonesWAF2 struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesWAF2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesWAF2Value `json:"value" api:"required"`
+	Value SettingEditResponseZonesWAF2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesWAF2Editable `json:"editable"`
@@ -7434,20 +9019,43 @@ func (r SettingEditResponseZonesWAF2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesWAF2Value string
-
-const (
-	SettingEditResponseZonesWAF2ValueOn  SettingEditResponseZonesWAF2Value = "on"
-	SettingEditResponseZonesWAF2ValueOff SettingEditResponseZonesWAF2Value = "off"
-)
-
-func (r SettingEditResponseZonesWAF2Value) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesWAF2ValueOn, SettingEditResponseZonesWAF2ValueOff:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesWAF2ValueArray].
+type SettingEditResponseZonesWAF2ValueUnion interface {
+	ImplementsSettingEditResponseZonesWaf2ValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesWAF2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesWAF2ValueArray{}),
+		},
+	)
+}
+
+type SettingEditResponseZonesWAF2ValueArray []string
+
+func (r SettingEditResponseZonesWAF2ValueArray) ImplementsSettingEditResponseZonesWaf2ValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -7474,7 +9082,7 @@ type SettingEditResponseZonesWebmcpEnabled struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesWebmcpEnabledID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesWebmcpEnabledValue `json:"value" api:"required"`
+	Value SettingEditResponseZonesWebmcpEnabledValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesWebmcpEnabledEditable `json:"editable"`
@@ -7520,19 +9128,43 @@ func (r SettingEditResponseZonesWebmcpEnabledID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingEditResponseZonesWebmcpEnabledValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesWebmcpEnabledValueArray].
+type SettingEditResponseZonesWebmcpEnabledValueUnion interface {
+	ImplementsSettingEditResponseZonesWebmcpEnabledValueUnion()
+}
 
-const (
-	SettingEditResponseZonesWebmcpEnabledValueOff SettingEditResponseZonesWebmcpEnabledValue = "off"
-	SettingEditResponseZonesWebmcpEnabledValueOn  SettingEditResponseZonesWebmcpEnabledValue = "on"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesWebmcpEnabledValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesWebmcpEnabledValueArray{}),
+		},
+	)
+}
 
-func (r SettingEditResponseZonesWebmcpEnabledValue) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesWebmcpEnabledValueOff, SettingEditResponseZonesWebmcpEnabledValueOn:
-		return true
-	}
-	return false
+type SettingEditResponseZonesWebmcpEnabledValueArray []string
+
+func (r SettingEditResponseZonesWebmcpEnabledValueArray) ImplementsSettingEditResponseZonesWebmcpEnabledValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -7561,8 +9193,12 @@ func (r SettingEditResponseZonesWebmcpEnabledEditable) IsKnown() bool {
 type SettingEditResponseZonesWebmcpMcpURL struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesWebmcpMcpURLID `json:"id" api:"required"`
-	// Current value of the zone setting.
-	Value string `json:"value" api:"required"`
+	// Root-relative path (with optional query string) of this zone's MCP endpoint, for
+	// example "/api/mcp". Surfaced to the injected bridge as the data-mcp-url
+	// attribute. Absolute and protocol-relative URLs, fragments, and characters
+	// outside RFC 3986 paths and queries are rejected. An empty value clears the
+	// override so the bridge uses /mcp.
+	Value SettingEditResponseZonesWebmcpMcpURLValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesWebmcpMcpURLEditable `json:"editable"`
@@ -7607,6 +9243,50 @@ func (r SettingEditResponseZonesWebmcpMcpURLID) IsKnown() bool {
 	return false
 }
 
+// Root-relative path (with optional query string) of this zone's MCP endpoint, for
+// example "/api/mcp". Surfaced to the injected bridge as the data-mcp-url
+// attribute. Absolute and protocol-relative URLs, fragments, and characters
+// outside RFC 3986 paths and queries are rejected. An empty value clears the
+// override so the bridge uses /mcp.
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesWebmcpMcpURLValueArray].
+type SettingEditResponseZonesWebmcpMcpURLValueUnion interface {
+	ImplementsSettingEditResponseZonesWebmcpMcpURLValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesWebmcpMcpURLValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesWebmcpMcpURLValueArray{}),
+		},
+	)
+}
+
+type SettingEditResponseZonesWebmcpMcpURLValueArray []string
+
+func (r SettingEditResponseZonesWebmcpMcpURLValueArray) ImplementsSettingEditResponseZonesWebmcpMcpURLValueUnion() {
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type SettingEditResponseZonesWebmcpMcpURLEditable bool
@@ -7631,8 +9311,11 @@ func (r SettingEditResponseZonesWebmcpMcpURLEditable) IsKnown() bool {
 type SettingEditResponseZonesWebmcpPacks struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesWebmcpPacksID `json:"id" api:"required"`
-	// Current value of the zone setting.
-	Value string `json:"value" api:"required"`
+	// Comma-separated list of WebMCP tool-pack names to activate for this zone (for
+	// example, "c2pa,mcp-server-client"), surfaced to the injected bridge as the
+	// data-packs attribute. An empty value clears the override so the bridge uses its
+	// built-in default pack set.
+	Value SettingEditResponseZonesWebmcpPacksValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesWebmcpPacksEditable `json:"editable"`
@@ -7675,6 +9358,49 @@ func (r SettingEditResponseZonesWebmcpPacksID) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Comma-separated list of WebMCP tool-pack names to activate for this zone (for
+// example, "c2pa,mcp-server-client"), surfaced to the injected bridge as the
+// data-packs attribute. An empty value clears the override so the bridge uses its
+// built-in default pack set.
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesWebmcpPacksValueArray].
+type SettingEditResponseZonesWebmcpPacksValueUnion interface {
+	ImplementsSettingEditResponseZonesWebmcpPacksValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesWebmcpPacksValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesWebmcpPacksValueArray{}),
+		},
+	)
+}
+
+type SettingEditResponseZonesWebmcpPacksValueArray []string
+
+func (r SettingEditResponseZonesWebmcpPacksValueArray) ImplementsSettingEditResponseZonesWebmcpPacksValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -7807,42 +9533,50 @@ type SettingGetResponse struct {
 	// development mode expires (positive integer) or last expired (negative integer)
 	// for the domain. If development mode has never been enabled, this value is false.
 	TimeRemaining float64 `json:"time_remaining"`
-	// This field can have the runtime type of [ZeroRTTValue], [AdvancedDDoSValue],
-	// [SettingGetResponseZonesCacheRulesAegisValue], [AlwaysOnlineValue],
-	// [SettingGetResponseZonesAlwaysUseHTTPS2Value],
-	// [SettingGetResponseZonesAutomaticHTTPSRewrites2Value], [BrotliValue], [int64],
-	// [SettingGetResponseZonesBrowserCheck2Value],
-	// [SettingGetResponseZonesCacheLevel2Value], [ChallengeTTLValue],
-	// [SettingGetResponseZonesChinaNetworkEnabledValue],
-	// [SettingGetResponseZonesContentConverterValue], [[]string],
-	// [SettingGetResponseZonesCNAMEFlatteningValue], [DevelopmentModeValue],
-	// [EarlyHintsValue], [SettingGetResponseZonesEdgeCacheTTL2Value],
-	// [SettingGetResponseZonesEmailObfuscation2Value], [H2PrioritizationValue],
-	// [HotlinkProtectionValue], [HTTP2Value], [HTTP3Value], [ImageResizingValue],
-	// [SettingGetResponseZonesIPGeolocation2Value], [IPV6Value],
-	// [SettingGetResponseZonesMaxUploadValue], [MinTLSVersionValue],
-	// [SettingGetResponseZonesMirage2Value], [NELValue],
-	// [SettingGetResponseZonesOpportunisticEncryption2Value],
-	// [OpportunisticOnionValue], [OrangeToOrangeValue],
-	// [SettingGetResponseZonesOriginErrorPagePassThru2Value],
+	// This field can have the runtime type of [ZeroRTTValueUnion],
+	// [AdvancedDDoSValueUnion], [SettingGetResponseZonesCacheRulesAegisValue],
+	// [AlwaysOnlineValueUnion], [SettingGetResponseZonesAlwaysUseHTTPS2ValueUnion],
+	// [SettingGetResponseZonesAutomaticHTTPSRewrites2ValueUnion], [BrotliValueUnion],
+	// [SettingGetResponseZonesBrowserCacheTTL2ValueUnion],
+	// [SettingGetResponseZonesBrowserCheck2ValueUnion],
+	// [SettingGetResponseZonesCacheLevel2ValueUnion], [ChallengeTTLValueUnion],
+	// [SettingGetResponseZonesChinaNetworkEnabledValueUnion],
+	// [SettingGetResponseZonesContentConverterValueUnion], [CiphersValueUnion],
+	// [SettingGetResponseZonesCNAMEFlatteningValueUnion], [DevelopmentModeValueUnion],
+	// [EarlyHintsValueUnion], [SettingGetResponseZonesEdgeCacheTTL2ValueUnion],
+	// [SettingGetResponseZonesEmailObfuscation2ValueUnion],
+	// [H2PrioritizationValueUnion], [HotlinkProtectionValueUnion], [HTTP2ValueUnion],
+	// [HTTP3ValueUnion], [ImageResizingValueUnion],
+	// [SettingGetResponseZonesIPGeolocation2ValueUnion], [IPV6ValueUnion],
+	// [SettingGetResponseZonesMaxUploadValueUnion], [MinTLSVersionValueUnion],
+	// [SettingGetResponseZonesMirage2ValueUnion], [NELValue],
+	// [SettingGetResponseZonesOpportunisticEncryption2ValueUnion],
+	// [OpportunisticOnionValueUnion], [OrangeToOrangeValueUnion],
+	// [SettingGetResponseZonesOriginErrorPagePassThru2ValueUnion], [int64],
 	// [SettingGetResponseZonesCacheRulesOriginMaxHTTPVersionValue],
-	// [SettingGetResponseZonesPolish2Value], [PrefetchPreloadValue],
-	// [SettingGetResponseZonesPreRenderValue],
-	// [SettingGetResponseZonesPrivacyPassValue], [float64], [PseudoIPV4Value],
-	// [SettingGetResponseZonesRedirectsForAITrainingValue],
-	// [SettingGetResponseZonesReplaceInsecureJSValue],
-	// [SettingGetResponseZonesResponseBuffering2Value],
-	// [SettingGetResponseZonesRocketLoader2Value], [AutomaticPlatformOptimization],
-	// [SettingGetResponseZonesSearchForAgentsValue], [SecurityHeadersValue],
-	// [SettingGetResponseZonesSecurityLevel2Value], [ServerSideExcludesValue],
-	// [SettingGetResponseZonesSha1SupportValue],
-	// [SettingGetResponseZonesSortQueryStringForCache2Value],
-	// [SettingGetResponseZonesSSL2Value], [SettingGetResponseZonesTLS1_2OnlyValue],
-	// [TLS1_3Value], [TLSClientAuthValue],
-	// [SettingGetResponseZonesTransformationsValue], [string],
-	// [SettingGetResponseZonesTrueClientIPHeader2Value],
-	// [SettingGetResponseZonesWAF2Value], [SettingGetResponseZonesWebmcpEnabledValue],
-	// [WebPValue], [WebsocketValue].
+	// [SettingGetResponseZonesPolish2ValueUnion], [PrefetchPreloadValueUnion],
+	// [SettingGetResponseZonesPreRenderValueUnion],
+	// [SettingGetResponseZonesPrivacyPassValueUnion], [ProxyReadTimeoutValueUnion],
+	// [PseudoIPV4ValueUnion],
+	// [SettingGetResponseZonesRedirectsForAITrainingValueUnion],
+	// [SettingGetResponseZonesReplaceInsecureJSValueUnion],
+	// [SettingGetResponseZonesResponseBuffering2ValueUnion],
+	// [SettingGetResponseZonesRocketLoader2ValueUnion],
+	// [SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValue],
+	// [SettingGetResponseZonesSearchForAgentsValueUnion], [SecurityHeadersValue],
+	// [SettingGetResponseZonesSecurityLevel2ValueUnion],
+	// [ServerSideExcludesValueUnion], [SettingGetResponseZonesSha1SupportValueUnion],
+	// [SettingGetResponseZonesSortQueryStringForCache2ValueUnion],
+	// [SettingGetResponseZonesSSL2ValueUnion],
+	// [SettingGetResponseZonesTLS1_2OnlyValueUnion], [TLS1_3ValueUnion],
+	// [TLSClientAuthValueUnion], [SettingGetResponseZonesTransformationsValueUnion],
+	// [SettingGetResponseZonesTransformationsAllowedOriginsValueUnion],
+	// [SettingGetResponseZonesTrueClientIPHeader2ValueUnion],
+	// [SettingGetResponseZonesWAF2ValueUnion],
+	// [SettingGetResponseZonesWebmcpEnabledValueUnion],
+	// [SettingGetResponseZonesWebmcpMcpURLValueUnion],
+	// [SettingGetResponseZonesWebmcpPacksValueUnion], [WebPValueUnion],
+	// [WebsocketValueUnion].
 	Value interface{}            `json:"value"`
 	JSON  settingGetResponseJSON `json:"-"`
 	union SettingGetResponseUnion
@@ -8321,7 +10055,7 @@ type SettingGetResponseZonesAlwaysUseHTTPS2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesAlwaysUseHTTPS2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesAlwaysUseHTTPS2Value `json:"value" api:"required"`
+	Value SettingGetResponseZonesAlwaysUseHTTPS2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesAlwaysUseHTTPS2Editable `json:"editable"`
@@ -8367,19 +10101,43 @@ func (r SettingGetResponseZonesAlwaysUseHTTPS2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesAlwaysUseHTTPS2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesAlwaysUseHTTPS2ValueArray].
+type SettingGetResponseZonesAlwaysUseHTTPS2ValueUnion interface {
+	ImplementsSettingGetResponseZonesAlwaysUseHttps2ValueUnion()
+}
 
-const (
-	SettingGetResponseZonesAlwaysUseHTTPS2ValueOn  SettingGetResponseZonesAlwaysUseHTTPS2Value = "on"
-	SettingGetResponseZonesAlwaysUseHTTPS2ValueOff SettingGetResponseZonesAlwaysUseHTTPS2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesAlwaysUseHTTPS2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesAlwaysUseHTTPS2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesAlwaysUseHTTPS2Value) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesAlwaysUseHTTPS2ValueOn, SettingGetResponseZonesAlwaysUseHTTPS2ValueOff:
-		return true
-	}
-	return false
+type SettingGetResponseZonesAlwaysUseHTTPS2ValueArray []string
+
+func (r SettingGetResponseZonesAlwaysUseHTTPS2ValueArray) ImplementsSettingGetResponseZonesAlwaysUseHttps2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -8404,7 +10162,7 @@ type SettingGetResponseZonesAutomaticHTTPSRewrites2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesAutomaticHTTPSRewrites2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesAutomaticHTTPSRewrites2Value `json:"value" api:"required"`
+	Value SettingGetResponseZonesAutomaticHTTPSRewrites2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesAutomaticHTTPSRewrites2Editable `json:"editable"`
@@ -8450,19 +10208,43 @@ func (r SettingGetResponseZonesAutomaticHTTPSRewrites2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesAutomaticHTTPSRewrites2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesAutomaticHTTPSRewrites2ValueArray].
+type SettingGetResponseZonesAutomaticHTTPSRewrites2ValueUnion interface {
+	ImplementsSettingGetResponseZonesAutomaticHTTPSRewrites2ValueUnion()
+}
 
-const (
-	SettingGetResponseZonesAutomaticHTTPSRewrites2ValueOn  SettingGetResponseZonesAutomaticHTTPSRewrites2Value = "on"
-	SettingGetResponseZonesAutomaticHTTPSRewrites2ValueOff SettingGetResponseZonesAutomaticHTTPSRewrites2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesAutomaticHTTPSRewrites2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesAutomaticHTTPSRewrites2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesAutomaticHTTPSRewrites2Value) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesAutomaticHTTPSRewrites2ValueOn, SettingGetResponseZonesAutomaticHTTPSRewrites2ValueOff:
-		return true
-	}
-	return false
+type SettingGetResponseZonesAutomaticHTTPSRewrites2ValueArray []string
+
+func (r SettingGetResponseZonesAutomaticHTTPSRewrites2ValueArray) ImplementsSettingGetResponseZonesAutomaticHTTPSRewrites2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -8489,8 +10271,14 @@ func (r SettingGetResponseZonesAutomaticHTTPSRewrites2Editable) IsKnown() bool {
 type SettingGetResponseZonesBrowserCacheTTL2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesBrowserCacheTTL2ID `json:"id" api:"required"`
-	// Current value of the zone setting.
-	Value int64 `json:"value" api:"required"`
+	// Value of the zone setting in seconds. Minimum values by plan:
+	//
+	// - Free: 1 second
+	// - Pro: 1 second
+	// - Business: 1 second
+	// - Enterprise: 1 second Setting a TTL of 0 is equivalent to selecting
+	//   `Respect Existing Headers` and is allowed for all plans.
+	Value SettingGetResponseZonesBrowserCacheTTL2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesBrowserCacheTTL2Editable `json:"editable"`
@@ -8535,6 +10323,52 @@ func (r SettingGetResponseZonesBrowserCacheTTL2ID) IsKnown() bool {
 	return false
 }
 
+// Value of the zone setting in seconds. Minimum values by plan:
+//
+//   - Free: 1 second
+//   - Pro: 1 second
+//   - Business: 1 second
+//   - Enterprise: 1 second Setting a TTL of 0 is equivalent to selecting
+//     `Respect Existing Headers` and is allowed for all plans.
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesBrowserCacheTTL2ValueArray].
+type SettingGetResponseZonesBrowserCacheTTL2ValueUnion interface {
+	ImplementsSettingGetResponseZonesBrowserCacheTtl2ValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesBrowserCacheTTL2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesBrowserCacheTTL2ValueArray{}),
+		},
+	)
+}
+
+type SettingGetResponseZonesBrowserCacheTTL2ValueArray []string
+
+func (r SettingGetResponseZonesBrowserCacheTTL2ValueArray) ImplementsSettingGetResponseZonesBrowserCacheTtl2ValueUnion() {
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type SettingGetResponseZonesBrowserCacheTTL2Editable bool
@@ -8561,7 +10395,7 @@ type SettingGetResponseZonesBrowserCheck2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesBrowserCheck2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesBrowserCheck2Value `json:"value" api:"required"`
+	Value SettingGetResponseZonesBrowserCheck2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesBrowserCheck2Editable `json:"editable"`
@@ -8607,19 +10441,43 @@ func (r SettingGetResponseZonesBrowserCheck2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesBrowserCheck2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesBrowserCheck2ValueArray].
+type SettingGetResponseZonesBrowserCheck2ValueUnion interface {
+	ImplementsSettingGetResponseZonesBrowserCheck2ValueUnion()
+}
 
-const (
-	SettingGetResponseZonesBrowserCheck2ValueOn  SettingGetResponseZonesBrowserCheck2Value = "on"
-	SettingGetResponseZonesBrowserCheck2ValueOff SettingGetResponseZonesBrowserCheck2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesBrowserCheck2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesBrowserCheck2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesBrowserCheck2Value) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesBrowserCheck2ValueOn, SettingGetResponseZonesBrowserCheck2ValueOff:
-		return true
-	}
-	return false
+type SettingGetResponseZonesBrowserCheck2ValueArray []string
+
+func (r SettingGetResponseZonesBrowserCheck2ValueArray) ImplementsSettingGetResponseZonesBrowserCheck2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -8648,7 +10506,7 @@ type SettingGetResponseZonesCacheLevel2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesCacheLevel2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesCacheLevel2Value `json:"value" api:"required"`
+	Value SettingGetResponseZonesCacheLevel2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesCacheLevel2Editable `json:"editable"`
@@ -8694,20 +10552,43 @@ func (r SettingGetResponseZonesCacheLevel2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesCacheLevel2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesCacheLevel2ValueArray].
+type SettingGetResponseZonesCacheLevel2ValueUnion interface {
+	ImplementsSettingGetResponseZonesCacheLevel2ValueUnion()
+}
 
-const (
-	SettingGetResponseZonesCacheLevel2ValueAggressive SettingGetResponseZonesCacheLevel2Value = "aggressive"
-	SettingGetResponseZonesCacheLevel2ValueBasic      SettingGetResponseZonesCacheLevel2Value = "basic"
-	SettingGetResponseZonesCacheLevel2ValueSimplified SettingGetResponseZonesCacheLevel2Value = "simplified"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesCacheLevel2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesCacheLevel2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesCacheLevel2Value) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesCacheLevel2ValueAggressive, SettingGetResponseZonesCacheLevel2ValueBasic, SettingGetResponseZonesCacheLevel2ValueSimplified:
-		return true
-	}
-	return false
+type SettingGetResponseZonesCacheLevel2ValueArray []string
+
+func (r SettingGetResponseZonesCacheLevel2ValueArray) ImplementsSettingGetResponseZonesCacheLevel2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -8732,7 +10613,7 @@ type SettingGetResponseZonesChinaNetworkEnabled struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesChinaNetworkEnabledID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesChinaNetworkEnabledValue `json:"value" api:"required"`
+	Value SettingGetResponseZonesChinaNetworkEnabledValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesChinaNetworkEnabledEditable `json:"editable"`
@@ -8778,19 +10659,43 @@ func (r SettingGetResponseZonesChinaNetworkEnabledID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesChinaNetworkEnabledValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesChinaNetworkEnabledValueArray].
+type SettingGetResponseZonesChinaNetworkEnabledValueUnion interface {
+	ImplementsSettingGetResponseZonesChinaNetworkEnabledValueUnion()
+}
 
-const (
-	SettingGetResponseZonesChinaNetworkEnabledValueOn  SettingGetResponseZonesChinaNetworkEnabledValue = "on"
-	SettingGetResponseZonesChinaNetworkEnabledValueOff SettingGetResponseZonesChinaNetworkEnabledValue = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesChinaNetworkEnabledValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesChinaNetworkEnabledValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesChinaNetworkEnabledValue) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesChinaNetworkEnabledValueOn, SettingGetResponseZonesChinaNetworkEnabledValueOff:
-		return true
-	}
-	return false
+type SettingGetResponseZonesChinaNetworkEnabledValueArray []string
+
+func (r SettingGetResponseZonesChinaNetworkEnabledValueArray) ImplementsSettingGetResponseZonesChinaNetworkEnabledValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -8819,7 +10724,7 @@ type SettingGetResponseZonesContentConverter struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesContentConverterID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesContentConverterValue `json:"value" api:"required"`
+	Value SettingGetResponseZonesContentConverterValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesContentConverterEditable `json:"editable"`
@@ -8865,19 +10770,43 @@ func (r SettingGetResponseZonesContentConverterID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesContentConverterValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesContentConverterValueArray].
+type SettingGetResponseZonesContentConverterValueUnion interface {
+	ImplementsSettingGetResponseZonesContentConverterValueUnion()
+}
 
-const (
-	SettingGetResponseZonesContentConverterValueOff SettingGetResponseZonesContentConverterValue = "off"
-	SettingGetResponseZonesContentConverterValueOn  SettingGetResponseZonesContentConverterValue = "on"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesContentConverterValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesContentConverterValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesContentConverterValue) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesContentConverterValueOff, SettingGetResponseZonesContentConverterValueOn:
-		return true
-	}
-	return false
+type SettingGetResponseZonesContentConverterValueArray []string
+
+func (r SettingGetResponseZonesContentConverterValueArray) ImplementsSettingGetResponseZonesContentConverterValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -8906,11 +10835,7 @@ type SettingGetResponseZonesCNAMEFlattening struct {
 	// How to flatten the cname destination.
 	ID SettingGetResponseZonesCNAMEFlatteningID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	//
-	// Deprecated: This zone setting is deprecated; please use the DNS Settings route
-	// instead. More information at
-	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2025-03-21
-	Value SettingGetResponseZonesCNAMEFlatteningValue `json:"value" api:"required"`
+	Value SettingGetResponseZonesCNAMEFlatteningValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesCNAMEFlatteningEditable `json:"editable"`
@@ -8956,19 +10881,43 @@ func (r SettingGetResponseZonesCNAMEFlatteningID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesCNAMEFlatteningValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesCNAMEFlatteningValueArray].
+type SettingGetResponseZonesCNAMEFlatteningValueUnion interface {
+	ImplementsSettingGetResponseZonesCNAMEFlatteningValueUnion()
+}
 
-const (
-	SettingGetResponseZonesCNAMEFlatteningValueFlattenAtRoot SettingGetResponseZonesCNAMEFlatteningValue = "flatten_at_root"
-	SettingGetResponseZonesCNAMEFlatteningValueFlattenAll    SettingGetResponseZonesCNAMEFlatteningValue = "flatten_all"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesCNAMEFlatteningValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesCNAMEFlatteningValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesCNAMEFlatteningValue) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesCNAMEFlatteningValueFlattenAtRoot, SettingGetResponseZonesCNAMEFlatteningValueFlattenAll:
-		return true
-	}
-	return false
+type SettingGetResponseZonesCNAMEFlatteningValueArray []string
+
+func (r SettingGetResponseZonesCNAMEFlatteningValueArray) ImplementsSettingGetResponseZonesCNAMEFlatteningValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -8994,7 +10943,7 @@ type SettingGetResponseZonesEdgeCacheTTL2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesEdgeCacheTTL2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesEdgeCacheTTL2Value `json:"value" api:"required"`
+	Value SettingGetResponseZonesEdgeCacheTTL2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesEdgeCacheTTL2Editable `json:"editable"`
@@ -9040,38 +10989,43 @@ func (r SettingGetResponseZonesEdgeCacheTTL2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesEdgeCacheTTL2Value float64
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesEdgeCacheTTL2ValueArray].
+type SettingGetResponseZonesEdgeCacheTTL2ValueUnion interface {
+	ImplementsSettingGetResponseZonesEdgeCacheTtl2ValueUnion()
+}
 
-const (
-	SettingGetResponseZonesEdgeCacheTTL2Value30     SettingGetResponseZonesEdgeCacheTTL2Value = 30
-	SettingGetResponseZonesEdgeCacheTTL2Value60     SettingGetResponseZonesEdgeCacheTTL2Value = 60
-	SettingGetResponseZonesEdgeCacheTTL2Value300    SettingGetResponseZonesEdgeCacheTTL2Value = 300
-	SettingGetResponseZonesEdgeCacheTTL2Value1200   SettingGetResponseZonesEdgeCacheTTL2Value = 1200
-	SettingGetResponseZonesEdgeCacheTTL2Value1800   SettingGetResponseZonesEdgeCacheTTL2Value = 1800
-	SettingGetResponseZonesEdgeCacheTTL2Value3600   SettingGetResponseZonesEdgeCacheTTL2Value = 3600
-	SettingGetResponseZonesEdgeCacheTTL2Value7200   SettingGetResponseZonesEdgeCacheTTL2Value = 7200
-	SettingGetResponseZonesEdgeCacheTTL2Value10800  SettingGetResponseZonesEdgeCacheTTL2Value = 10800
-	SettingGetResponseZonesEdgeCacheTTL2Value14400  SettingGetResponseZonesEdgeCacheTTL2Value = 14400
-	SettingGetResponseZonesEdgeCacheTTL2Value18000  SettingGetResponseZonesEdgeCacheTTL2Value = 18000
-	SettingGetResponseZonesEdgeCacheTTL2Value28800  SettingGetResponseZonesEdgeCacheTTL2Value = 28800
-	SettingGetResponseZonesEdgeCacheTTL2Value43200  SettingGetResponseZonesEdgeCacheTTL2Value = 43200
-	SettingGetResponseZonesEdgeCacheTTL2Value57600  SettingGetResponseZonesEdgeCacheTTL2Value = 57600
-	SettingGetResponseZonesEdgeCacheTTL2Value72000  SettingGetResponseZonesEdgeCacheTTL2Value = 72000
-	SettingGetResponseZonesEdgeCacheTTL2Value86400  SettingGetResponseZonesEdgeCacheTTL2Value = 86400
-	SettingGetResponseZonesEdgeCacheTTL2Value172800 SettingGetResponseZonesEdgeCacheTTL2Value = 172800
-	SettingGetResponseZonesEdgeCacheTTL2Value259200 SettingGetResponseZonesEdgeCacheTTL2Value = 259200
-	SettingGetResponseZonesEdgeCacheTTL2Value345600 SettingGetResponseZonesEdgeCacheTTL2Value = 345600
-	SettingGetResponseZonesEdgeCacheTTL2Value432000 SettingGetResponseZonesEdgeCacheTTL2Value = 432000
-	SettingGetResponseZonesEdgeCacheTTL2Value518400 SettingGetResponseZonesEdgeCacheTTL2Value = 518400
-	SettingGetResponseZonesEdgeCacheTTL2Value604800 SettingGetResponseZonesEdgeCacheTTL2Value = 604800
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesEdgeCacheTTL2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesEdgeCacheTTL2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesEdgeCacheTTL2Value) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesEdgeCacheTTL2Value30, SettingGetResponseZonesEdgeCacheTTL2Value60, SettingGetResponseZonesEdgeCacheTTL2Value300, SettingGetResponseZonesEdgeCacheTTL2Value1200, SettingGetResponseZonesEdgeCacheTTL2Value1800, SettingGetResponseZonesEdgeCacheTTL2Value3600, SettingGetResponseZonesEdgeCacheTTL2Value7200, SettingGetResponseZonesEdgeCacheTTL2Value10800, SettingGetResponseZonesEdgeCacheTTL2Value14400, SettingGetResponseZonesEdgeCacheTTL2Value18000, SettingGetResponseZonesEdgeCacheTTL2Value28800, SettingGetResponseZonesEdgeCacheTTL2Value43200, SettingGetResponseZonesEdgeCacheTTL2Value57600, SettingGetResponseZonesEdgeCacheTTL2Value72000, SettingGetResponseZonesEdgeCacheTTL2Value86400, SettingGetResponseZonesEdgeCacheTTL2Value172800, SettingGetResponseZonesEdgeCacheTTL2Value259200, SettingGetResponseZonesEdgeCacheTTL2Value345600, SettingGetResponseZonesEdgeCacheTTL2Value432000, SettingGetResponseZonesEdgeCacheTTL2Value518400, SettingGetResponseZonesEdgeCacheTTL2Value604800:
-		return true
-	}
-	return false
+type SettingGetResponseZonesEdgeCacheTTL2ValueArray []string
+
+func (r SettingGetResponseZonesEdgeCacheTTL2ValueArray) ImplementsSettingGetResponseZonesEdgeCacheTtl2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -9097,7 +11051,7 @@ type SettingGetResponseZonesEmailObfuscation2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesEmailObfuscation2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesEmailObfuscation2Value `json:"value" api:"required"`
+	Value SettingGetResponseZonesEmailObfuscation2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesEmailObfuscation2Editable `json:"editable"`
@@ -9143,19 +11097,43 @@ func (r SettingGetResponseZonesEmailObfuscation2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesEmailObfuscation2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesEmailObfuscation2ValueArray].
+type SettingGetResponseZonesEmailObfuscation2ValueUnion interface {
+	ImplementsSettingGetResponseZonesEmailObfuscation2ValueUnion()
+}
 
-const (
-	SettingGetResponseZonesEmailObfuscation2ValueOn  SettingGetResponseZonesEmailObfuscation2Value = "on"
-	SettingGetResponseZonesEmailObfuscation2ValueOff SettingGetResponseZonesEmailObfuscation2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesEmailObfuscation2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesEmailObfuscation2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesEmailObfuscation2Value) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesEmailObfuscation2ValueOn, SettingGetResponseZonesEmailObfuscation2ValueOff:
-		return true
-	}
-	return false
+type SettingGetResponseZonesEmailObfuscation2ValueArray []string
+
+func (r SettingGetResponseZonesEmailObfuscation2ValueArray) ImplementsSettingGetResponseZonesEmailObfuscation2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -9182,7 +11160,7 @@ type SettingGetResponseZonesIPGeolocation2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesIPGeolocation2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesIPGeolocation2Value `json:"value" api:"required"`
+	Value SettingGetResponseZonesIPGeolocation2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesIPGeolocation2Editable `json:"editable"`
@@ -9228,19 +11206,43 @@ func (r SettingGetResponseZonesIPGeolocation2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesIPGeolocation2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesIPGeolocation2ValueArray].
+type SettingGetResponseZonesIPGeolocation2ValueUnion interface {
+	ImplementsSettingGetResponseZonesIPGeolocation2ValueUnion()
+}
 
-const (
-	SettingGetResponseZonesIPGeolocation2ValueOn  SettingGetResponseZonesIPGeolocation2Value = "on"
-	SettingGetResponseZonesIPGeolocation2ValueOff SettingGetResponseZonesIPGeolocation2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesIPGeolocation2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesIPGeolocation2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesIPGeolocation2Value) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesIPGeolocation2ValueOn, SettingGetResponseZonesIPGeolocation2ValueOff:
-		return true
-	}
-	return false
+type SettingGetResponseZonesIPGeolocation2ValueArray []string
+
+func (r SettingGetResponseZonesIPGeolocation2ValueArray) ImplementsSettingGetResponseZonesIPGeolocation2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -9265,7 +11267,7 @@ type SettingGetResponseZonesMaxUpload struct {
 	// identifier of the zone setting.
 	ID SettingGetResponseZonesMaxUploadID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesMaxUploadValue `json:"value" api:"required"`
+	Value SettingGetResponseZonesMaxUploadValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesMaxUploadEditable `json:"editable"`
@@ -9311,43 +11313,43 @@ func (r SettingGetResponseZonesMaxUploadID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesMaxUploadValue int64
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesMaxUploadValueArray].
+type SettingGetResponseZonesMaxUploadValueUnion interface {
+	ImplementsSettingGetResponseZonesMaxUploadValueUnion()
+}
 
-const (
-	SettingGetResponseZonesMaxUploadValue100  SettingGetResponseZonesMaxUploadValue = 100
-	SettingGetResponseZonesMaxUploadValue125  SettingGetResponseZonesMaxUploadValue = 125
-	SettingGetResponseZonesMaxUploadValue150  SettingGetResponseZonesMaxUploadValue = 150
-	SettingGetResponseZonesMaxUploadValue175  SettingGetResponseZonesMaxUploadValue = 175
-	SettingGetResponseZonesMaxUploadValue200  SettingGetResponseZonesMaxUploadValue = 200
-	SettingGetResponseZonesMaxUploadValue225  SettingGetResponseZonesMaxUploadValue = 225
-	SettingGetResponseZonesMaxUploadValue250  SettingGetResponseZonesMaxUploadValue = 250
-	SettingGetResponseZonesMaxUploadValue275  SettingGetResponseZonesMaxUploadValue = 275
-	SettingGetResponseZonesMaxUploadValue300  SettingGetResponseZonesMaxUploadValue = 300
-	SettingGetResponseZonesMaxUploadValue325  SettingGetResponseZonesMaxUploadValue = 325
-	SettingGetResponseZonesMaxUploadValue350  SettingGetResponseZonesMaxUploadValue = 350
-	SettingGetResponseZonesMaxUploadValue375  SettingGetResponseZonesMaxUploadValue = 375
-	SettingGetResponseZonesMaxUploadValue400  SettingGetResponseZonesMaxUploadValue = 400
-	SettingGetResponseZonesMaxUploadValue425  SettingGetResponseZonesMaxUploadValue = 425
-	SettingGetResponseZonesMaxUploadValue450  SettingGetResponseZonesMaxUploadValue = 450
-	SettingGetResponseZonesMaxUploadValue475  SettingGetResponseZonesMaxUploadValue = 475
-	SettingGetResponseZonesMaxUploadValue500  SettingGetResponseZonesMaxUploadValue = 500
-	SettingGetResponseZonesMaxUploadValue1000 SettingGetResponseZonesMaxUploadValue = 1000
-	SettingGetResponseZonesMaxUploadValue1500 SettingGetResponseZonesMaxUploadValue = 1500
-	SettingGetResponseZonesMaxUploadValue2000 SettingGetResponseZonesMaxUploadValue = 2000
-	SettingGetResponseZonesMaxUploadValue2500 SettingGetResponseZonesMaxUploadValue = 2500
-	SettingGetResponseZonesMaxUploadValue3000 SettingGetResponseZonesMaxUploadValue = 3000
-	SettingGetResponseZonesMaxUploadValue3500 SettingGetResponseZonesMaxUploadValue = 3500
-	SettingGetResponseZonesMaxUploadValue4000 SettingGetResponseZonesMaxUploadValue = 4000
-	SettingGetResponseZonesMaxUploadValue4500 SettingGetResponseZonesMaxUploadValue = 4500
-	SettingGetResponseZonesMaxUploadValue5000 SettingGetResponseZonesMaxUploadValue = 5000
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesMaxUploadValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesMaxUploadValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesMaxUploadValue) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesMaxUploadValue100, SettingGetResponseZonesMaxUploadValue125, SettingGetResponseZonesMaxUploadValue150, SettingGetResponseZonesMaxUploadValue175, SettingGetResponseZonesMaxUploadValue200, SettingGetResponseZonesMaxUploadValue225, SettingGetResponseZonesMaxUploadValue250, SettingGetResponseZonesMaxUploadValue275, SettingGetResponseZonesMaxUploadValue300, SettingGetResponseZonesMaxUploadValue325, SettingGetResponseZonesMaxUploadValue350, SettingGetResponseZonesMaxUploadValue375, SettingGetResponseZonesMaxUploadValue400, SettingGetResponseZonesMaxUploadValue425, SettingGetResponseZonesMaxUploadValue450, SettingGetResponseZonesMaxUploadValue475, SettingGetResponseZonesMaxUploadValue500, SettingGetResponseZonesMaxUploadValue1000, SettingGetResponseZonesMaxUploadValue1500, SettingGetResponseZonesMaxUploadValue2000, SettingGetResponseZonesMaxUploadValue2500, SettingGetResponseZonesMaxUploadValue3000, SettingGetResponseZonesMaxUploadValue3500, SettingGetResponseZonesMaxUploadValue4000, SettingGetResponseZonesMaxUploadValue4500, SettingGetResponseZonesMaxUploadValue5000:
-		return true
-	}
-	return false
+type SettingGetResponseZonesMaxUploadValueArray []string
+
+func (r SettingGetResponseZonesMaxUploadValueArray) ImplementsSettingGetResponseZonesMaxUploadValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -9378,10 +11380,7 @@ type SettingGetResponseZonesMirage2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesMirage2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	//
-	// Deprecated: Mirage is being deprecated. More information at
-	// https://developers.cloudflare.com/speed/optimization/images/mirage/
-	Value SettingGetResponseZonesMirage2Value `json:"value" api:"required"`
+	Value SettingGetResponseZonesMirage2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesMirage2Editable `json:"editable"`
@@ -9427,19 +11426,43 @@ func (r SettingGetResponseZonesMirage2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesMirage2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesMirage2ValueArray].
+type SettingGetResponseZonesMirage2ValueUnion interface {
+	ImplementsSettingGetResponseZonesMirage2ValueUnion()
+}
 
-const (
-	SettingGetResponseZonesMirage2ValueOn  SettingGetResponseZonesMirage2Value = "on"
-	SettingGetResponseZonesMirage2ValueOff SettingGetResponseZonesMirage2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesMirage2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesMirage2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesMirage2Value) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesMirage2ValueOn, SettingGetResponseZonesMirage2ValueOff:
-		return true
-	}
-	return false
+type SettingGetResponseZonesMirage2ValueArray []string
+
+func (r SettingGetResponseZonesMirage2ValueArray) ImplementsSettingGetResponseZonesMirage2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -9464,7 +11487,7 @@ type SettingGetResponseZonesOpportunisticEncryption2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesOpportunisticEncryption2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesOpportunisticEncryption2Value `json:"value" api:"required"`
+	Value SettingGetResponseZonesOpportunisticEncryption2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesOpportunisticEncryption2Editable `json:"editable"`
@@ -9510,19 +11533,43 @@ func (r SettingGetResponseZonesOpportunisticEncryption2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesOpportunisticEncryption2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesOpportunisticEncryption2ValueArray].
+type SettingGetResponseZonesOpportunisticEncryption2ValueUnion interface {
+	ImplementsSettingGetResponseZonesOpportunisticEncryption2ValueUnion()
+}
 
-const (
-	SettingGetResponseZonesOpportunisticEncryption2ValueOn  SettingGetResponseZonesOpportunisticEncryption2Value = "on"
-	SettingGetResponseZonesOpportunisticEncryption2ValueOff SettingGetResponseZonesOpportunisticEncryption2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesOpportunisticEncryption2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesOpportunisticEncryption2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesOpportunisticEncryption2Value) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesOpportunisticEncryption2ValueOn, SettingGetResponseZonesOpportunisticEncryption2ValueOff:
-		return true
-	}
-	return false
+type SettingGetResponseZonesOpportunisticEncryption2ValueArray []string
+
+func (r SettingGetResponseZonesOpportunisticEncryption2ValueArray) ImplementsSettingGetResponseZonesOpportunisticEncryption2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -9549,7 +11596,7 @@ type SettingGetResponseZonesOriginErrorPagePassThru2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesOriginErrorPagePassThru2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesOriginErrorPagePassThru2Value `json:"value" api:"required"`
+	Value SettingGetResponseZonesOriginErrorPagePassThru2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesOriginErrorPagePassThru2Editable `json:"editable"`
@@ -9595,19 +11642,43 @@ func (r SettingGetResponseZonesOriginErrorPagePassThru2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesOriginErrorPagePassThru2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesOriginErrorPagePassThru2ValueArray].
+type SettingGetResponseZonesOriginErrorPagePassThru2ValueUnion interface {
+	ImplementsSettingGetResponseZonesOriginErrorPagePassThru2ValueUnion()
+}
 
-const (
-	SettingGetResponseZonesOriginErrorPagePassThru2ValueOn  SettingGetResponseZonesOriginErrorPagePassThru2Value = "on"
-	SettingGetResponseZonesOriginErrorPagePassThru2ValueOff SettingGetResponseZonesOriginErrorPagePassThru2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesOriginErrorPagePassThru2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesOriginErrorPagePassThru2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesOriginErrorPagePassThru2Value) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesOriginErrorPagePassThru2ValueOn, SettingGetResponseZonesOriginErrorPagePassThru2ValueOff:
-		return true
-	}
-	return false
+type SettingGetResponseZonesOriginErrorPagePassThru2ValueArray []string
+
+func (r SettingGetResponseZonesOriginErrorPagePassThru2ValueArray) ImplementsSettingGetResponseZonesOriginErrorPagePassThru2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -9755,7 +11826,7 @@ type SettingGetResponseZonesPolish2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesPolish2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesPolish2Value `json:"value" api:"required"`
+	Value SettingGetResponseZonesPolish2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesPolish2Editable `json:"editable"`
@@ -9801,20 +11872,43 @@ func (r SettingGetResponseZonesPolish2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesPolish2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesPolish2ValueArray].
+type SettingGetResponseZonesPolish2ValueUnion interface {
+	ImplementsSettingGetResponseZonesPolish2ValueUnion()
+}
 
-const (
-	SettingGetResponseZonesPolish2ValueOff      SettingGetResponseZonesPolish2Value = "off"
-	SettingGetResponseZonesPolish2ValueLossless SettingGetResponseZonesPolish2Value = "lossless"
-	SettingGetResponseZonesPolish2ValueLossy    SettingGetResponseZonesPolish2Value = "lossy"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesPolish2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesPolish2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesPolish2Value) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesPolish2ValueOff, SettingGetResponseZonesPolish2ValueLossless, SettingGetResponseZonesPolish2ValueLossy:
-		return true
-	}
-	return false
+type SettingGetResponseZonesPolish2ValueArray []string
+
+func (r SettingGetResponseZonesPolish2ValueArray) ImplementsSettingGetResponseZonesPolish2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -9840,7 +11934,7 @@ type SettingGetResponseZonesPreRender struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesPreRenderID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesPreRenderValue `json:"value" api:"required"`
+	Value SettingGetResponseZonesPreRenderValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesPreRenderEditable `json:"editable"`
@@ -9886,19 +11980,43 @@ func (r SettingGetResponseZonesPreRenderID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesPreRenderValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesPreRenderValueArray].
+type SettingGetResponseZonesPreRenderValueUnion interface {
+	ImplementsSettingGetResponseZonesPreRenderValueUnion()
+}
 
-const (
-	SettingGetResponseZonesPreRenderValueOff SettingGetResponseZonesPreRenderValue = "off"
-	SettingGetResponseZonesPreRenderValueOn  SettingGetResponseZonesPreRenderValue = "on"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesPreRenderValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesPreRenderValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesPreRenderValue) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesPreRenderValueOff, SettingGetResponseZonesPreRenderValueOn:
-		return true
-	}
-	return false
+type SettingGetResponseZonesPreRenderValueArray []string
+
+func (r SettingGetResponseZonesPreRenderValueArray) ImplementsSettingGetResponseZonesPreRenderValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -9931,12 +12049,7 @@ type SettingGetResponseZonesPrivacyPass struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesPrivacyPassID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	//
-	// Deprecated: Privacy Pass v1 was deprecated in 2023. (Announcement -
-	// https://blog.cloudflare.com/privacy-pass-standard/) and (API deprecation
-	// details -
-	// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#2024-03-31)
-	Value SettingGetResponseZonesPrivacyPassValue `json:"value" api:"required"`
+	Value SettingGetResponseZonesPrivacyPassValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesPrivacyPassEditable `json:"editable"`
@@ -9982,19 +12095,43 @@ func (r SettingGetResponseZonesPrivacyPassID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesPrivacyPassValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesPrivacyPassValueArray].
+type SettingGetResponseZonesPrivacyPassValueUnion interface {
+	ImplementsSettingGetResponseZonesPrivacyPassValueUnion()
+}
 
-const (
-	SettingGetResponseZonesPrivacyPassValueOn  SettingGetResponseZonesPrivacyPassValue = "on"
-	SettingGetResponseZonesPrivacyPassValueOff SettingGetResponseZonesPrivacyPassValue = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesPrivacyPassValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesPrivacyPassValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesPrivacyPassValue) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesPrivacyPassValueOn, SettingGetResponseZonesPrivacyPassValueOff:
-		return true
-	}
-	return false
+type SettingGetResponseZonesPrivacyPassValueArray []string
+
+func (r SettingGetResponseZonesPrivacyPassValueArray) ImplementsSettingGetResponseZonesPrivacyPassValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -10021,7 +12158,7 @@ type SettingGetResponseZonesRedirectsForAITraining struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesRedirectsForAITrainingID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesRedirectsForAITrainingValue `json:"value" api:"required"`
+	Value SettingGetResponseZonesRedirectsForAITrainingValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesRedirectsForAITrainingEditable `json:"editable"`
@@ -10067,19 +12204,43 @@ func (r SettingGetResponseZonesRedirectsForAITrainingID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesRedirectsForAITrainingValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesRedirectsForAITrainingValueArray].
+type SettingGetResponseZonesRedirectsForAITrainingValueUnion interface {
+	ImplementsSettingGetResponseZonesRedirectsForAITrainingValueUnion()
+}
 
-const (
-	SettingGetResponseZonesRedirectsForAITrainingValueOff SettingGetResponseZonesRedirectsForAITrainingValue = "off"
-	SettingGetResponseZonesRedirectsForAITrainingValueOn  SettingGetResponseZonesRedirectsForAITrainingValue = "on"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesRedirectsForAITrainingValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesRedirectsForAITrainingValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesRedirectsForAITrainingValue) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesRedirectsForAITrainingValueOff, SettingGetResponseZonesRedirectsForAITrainingValueOn:
-		return true
-	}
-	return false
+type SettingGetResponseZonesRedirectsForAITrainingValueArray []string
+
+func (r SettingGetResponseZonesRedirectsForAITrainingValueArray) ImplementsSettingGetResponseZonesRedirectsForAITrainingValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -10106,7 +12267,7 @@ type SettingGetResponseZonesReplaceInsecureJS struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesReplaceInsecureJSID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesReplaceInsecureJSValue `json:"value" api:"required"`
+	Value SettingGetResponseZonesReplaceInsecureJSValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesReplaceInsecureJSEditable `json:"editable"`
@@ -10152,19 +12313,43 @@ func (r SettingGetResponseZonesReplaceInsecureJSID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesReplaceInsecureJSValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesReplaceInsecureJSValueArray].
+type SettingGetResponseZonesReplaceInsecureJSValueUnion interface {
+	ImplementsSettingGetResponseZonesReplaceInsecureJSValueUnion()
+}
 
-const (
-	SettingGetResponseZonesReplaceInsecureJSValueOn  SettingGetResponseZonesReplaceInsecureJSValue = "on"
-	SettingGetResponseZonesReplaceInsecureJSValueOff SettingGetResponseZonesReplaceInsecureJSValue = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesReplaceInsecureJSValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesReplaceInsecureJSValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesReplaceInsecureJSValue) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesReplaceInsecureJSValueOn, SettingGetResponseZonesReplaceInsecureJSValueOff:
-		return true
-	}
-	return false
+type SettingGetResponseZonesReplaceInsecureJSValueArray []string
+
+func (r SettingGetResponseZonesReplaceInsecureJSValueArray) ImplementsSettingGetResponseZonesReplaceInsecureJSValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -10195,7 +12380,7 @@ type SettingGetResponseZonesResponseBuffering2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesResponseBuffering2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesResponseBuffering2Value `json:"value" api:"required"`
+	Value SettingGetResponseZonesResponseBuffering2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesResponseBuffering2Editable `json:"editable"`
@@ -10241,19 +12426,43 @@ func (r SettingGetResponseZonesResponseBuffering2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesResponseBuffering2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesResponseBuffering2ValueArray].
+type SettingGetResponseZonesResponseBuffering2ValueUnion interface {
+	ImplementsSettingGetResponseZonesResponseBuffering2ValueUnion()
+}
 
-const (
-	SettingGetResponseZonesResponseBuffering2ValueOn  SettingGetResponseZonesResponseBuffering2Value = "on"
-	SettingGetResponseZonesResponseBuffering2ValueOff SettingGetResponseZonesResponseBuffering2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesResponseBuffering2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesResponseBuffering2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesResponseBuffering2Value) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesResponseBuffering2ValueOn, SettingGetResponseZonesResponseBuffering2ValueOff:
-		return true
-	}
-	return false
+type SettingGetResponseZonesResponseBuffering2ValueArray []string
+
+func (r SettingGetResponseZonesResponseBuffering2ValueArray) ImplementsSettingGetResponseZonesResponseBuffering2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -10287,7 +12496,7 @@ type SettingGetResponseZonesRocketLoader2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesRocketLoader2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesRocketLoader2Value `json:"value" api:"required"`
+	Value SettingGetResponseZonesRocketLoader2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesRocketLoader2Editable `json:"editable"`
@@ -10333,19 +12542,43 @@ func (r SettingGetResponseZonesRocketLoader2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesRocketLoader2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesRocketLoader2ValueArray].
+type SettingGetResponseZonesRocketLoader2ValueUnion interface {
+	ImplementsSettingGetResponseZonesRocketLoader2ValueUnion()
+}
 
-const (
-	SettingGetResponseZonesRocketLoader2ValueOn  SettingGetResponseZonesRocketLoader2Value = "on"
-	SettingGetResponseZonesRocketLoader2ValueOff SettingGetResponseZonesRocketLoader2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesRocketLoader2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesRocketLoader2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesRocketLoader2Value) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesRocketLoader2ValueOn, SettingGetResponseZonesRocketLoader2ValueOff:
-		return true
-	}
-	return false
+type SettingGetResponseZonesRocketLoader2ValueArray []string
+
+func (r SettingGetResponseZonesRocketLoader2ValueArray) ImplementsSettingGetResponseZonesRocketLoader2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -10372,7 +12605,7 @@ type SettingGetResponseZonesSchemasAutomaticPlatformOptimization struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesSchemasAutomaticPlatformOptimizationID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value AutomaticPlatformOptimization `json:"value" api:"required"`
+	Value SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValue `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditable `json:"editable"`
@@ -10418,6 +12651,154 @@ func (r SettingGetResponseZonesSchemasAutomaticPlatformOptimizationID) IsKnown()
 	return false
 }
 
+// Current value of the zone setting.
+type SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValue struct {
+	// Indicates whether or not
+	// [cache by device type](https://developers.cloudflare.com/automatic-platform-optimization/reference/cache-device-type/)
+	// is enabled.
+	CacheByDeviceType bool `json:"cache_by_device_type"`
+	// Indicates whether or not Cloudflare proxy is enabled.
+	Cf bool `json:"cf"`
+	// Indicates whether or not Automatic Platform Optimization is enabled.
+	Enabled bool `json:"enabled"`
+	// This field can have the runtime type of [[]string].
+	Hostnames interface{} `json:"hostnames"`
+	// Indicates whether or not site is powered by WordPress.
+	Wordpress bool `json:"wordpress"`
+	// Indicates whether or not
+	// [Cloudflare for WordPress plugin](https://wordpress.org/plugins/cloudflare/) is
+	// installed.
+	WpPlugin bool                                                                 `json:"wp_plugin"`
+	JSON     settingGetResponseZonesSchemasAutomaticPlatformOptimizationValueJSON `json:"-"`
+	union    SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueUnion
+}
+
+// settingGetResponseZonesSchemasAutomaticPlatformOptimizationValueJSON contains
+// the JSON metadata for the struct
+// [SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValue]
+type settingGetResponseZonesSchemasAutomaticPlatformOptimizationValueJSON struct {
+	CacheByDeviceType apijson.Field
+	Cf                apijson.Field
+	Enabled           apijson.Field
+	Hostnames         apijson.Field
+	Wordpress         apijson.Field
+	WpPlugin          apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r settingGetResponseZonesSchemasAutomaticPlatformOptimizationValueJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValue) UnmarshalJSON(data []byte) (err error) {
+	*r = SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValue{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject],
+// [SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject],
+// [SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject],
+// [SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject],
+// [SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject].
+func (r SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValue) AsUnion() SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueUnion {
+	return r.union
+}
+
+// Current value of the zone setting.
+//
+// Union satisfied by
+// [SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject],
+// [SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject],
+// [SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject],
+// [SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject] or
+// [SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject].
+type SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueUnion interface {
+	implementsSettingGetResponseZonesSchemasAutomaticPlatformOptimizationValue()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject{}),
+		},
+	)
+}
+
+type SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject struct {
+	// Indicates whether or not
+	// [cache by device type](https://developers.cloudflare.com/automatic-platform-optimization/reference/cache-device-type/)
+	// is enabled.
+	CacheByDeviceType bool `json:"cache_by_device_type"`
+	// Indicates whether or not Cloudflare proxy is enabled.
+	Cf bool `json:"cf"`
+	// Indicates whether or not Automatic Platform Optimization is enabled.
+	Enabled bool `json:"enabled"`
+	// An array of hostnames where Automatic Platform Optimization for WordPress is
+	// activated.
+	Hostnames []string `json:"hostnames" format:"hostname"`
+	// Indicates whether or not site is powered by WordPress.
+	Wordpress bool `json:"wordpress"`
+	// Indicates whether or not
+	// [Cloudflare for WordPress plugin](https://wordpress.org/plugins/cloudflare/) is
+	// installed.
+	WpPlugin bool                                                                       `json:"wp_plugin"`
+	JSON     settingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObjectJSON `json:"-"`
+}
+
+// settingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObjectJSON
+// contains the JSON metadata for the struct
+// [SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject]
+type settingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObjectJSON struct {
+	CacheByDeviceType apijson.Field
+	Cf                apijson.Field
+	Enabled           apijson.Field
+	Hostnames         apijson.Field
+	Wordpress         apijson.Field
+	WpPlugin          apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueObject) implementsSettingGetResponseZonesSchemasAutomaticPlatformOptimizationValue() {
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type SettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditable bool
@@ -10443,7 +12824,7 @@ type SettingGetResponseZonesSearchForAgents struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesSearchForAgentsID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesSearchForAgentsValue `json:"value" api:"required"`
+	Value SettingGetResponseZonesSearchForAgentsValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesSearchForAgentsEditable `json:"editable"`
@@ -10489,19 +12870,43 @@ func (r SettingGetResponseZonesSearchForAgentsID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesSearchForAgentsValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesSearchForAgentsValueArray].
+type SettingGetResponseZonesSearchForAgentsValueUnion interface {
+	ImplementsSettingGetResponseZonesSearchForAgentsValueUnion()
+}
 
-const (
-	SettingGetResponseZonesSearchForAgentsValueOff SettingGetResponseZonesSearchForAgentsValue = "off"
-	SettingGetResponseZonesSearchForAgentsValueOn  SettingGetResponseZonesSearchForAgentsValue = "on"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesSearchForAgentsValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesSearchForAgentsValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesSearchForAgentsValue) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesSearchForAgentsValueOff, SettingGetResponseZonesSearchForAgentsValueOn:
-		return true
-	}
-	return false
+type SettingGetResponseZonesSearchForAgentsValueArray []string
+
+func (r SettingGetResponseZonesSearchForAgentsValueArray) ImplementsSettingGetResponseZonesSearchForAgentsValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -10529,7 +12934,7 @@ type SettingGetResponseZonesSecurityLevel2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesSecurityLevel2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesSecurityLevel2Value `json:"value" api:"required"`
+	Value SettingGetResponseZonesSecurityLevel2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesSecurityLevel2Editable `json:"editable"`
@@ -10575,23 +12980,43 @@ func (r SettingGetResponseZonesSecurityLevel2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesSecurityLevel2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesSecurityLevel2ValueArray].
+type SettingGetResponseZonesSecurityLevel2ValueUnion interface {
+	ImplementsSettingGetResponseZonesSecurityLevel2ValueUnion()
+}
 
-const (
-	SettingGetResponseZonesSecurityLevel2ValueOff            SettingGetResponseZonesSecurityLevel2Value = "off"
-	SettingGetResponseZonesSecurityLevel2ValueEssentiallyOff SettingGetResponseZonesSecurityLevel2Value = "essentially_off"
-	SettingGetResponseZonesSecurityLevel2ValueLow            SettingGetResponseZonesSecurityLevel2Value = "low"
-	SettingGetResponseZonesSecurityLevel2ValueMedium         SettingGetResponseZonesSecurityLevel2Value = "medium"
-	SettingGetResponseZonesSecurityLevel2ValueHigh           SettingGetResponseZonesSecurityLevel2Value = "high"
-	SettingGetResponseZonesSecurityLevel2ValueUnderAttack    SettingGetResponseZonesSecurityLevel2Value = "under_attack"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesSecurityLevel2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesSecurityLevel2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesSecurityLevel2Value) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesSecurityLevel2ValueOff, SettingGetResponseZonesSecurityLevel2ValueEssentiallyOff, SettingGetResponseZonesSecurityLevel2ValueLow, SettingGetResponseZonesSecurityLevel2ValueMedium, SettingGetResponseZonesSecurityLevel2ValueHigh, SettingGetResponseZonesSecurityLevel2ValueUnderAttack:
-		return true
-	}
-	return false
+type SettingGetResponseZonesSecurityLevel2ValueArray []string
+
+func (r SettingGetResponseZonesSecurityLevel2ValueArray) ImplementsSettingGetResponseZonesSecurityLevel2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -10616,7 +13041,7 @@ type SettingGetResponseZonesSha1Support struct {
 	// Zone setting identifier.
 	ID SettingGetResponseZonesSha1SupportID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesSha1SupportValue `json:"value" api:"required"`
+	Value SettingGetResponseZonesSha1SupportValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesSha1SupportEditable `json:"editable"`
@@ -10662,19 +13087,43 @@ func (r SettingGetResponseZonesSha1SupportID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesSha1SupportValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesSha1SupportValueArray].
+type SettingGetResponseZonesSha1SupportValueUnion interface {
+	ImplementsSettingGetResponseZonesSha1SupportValueUnion()
+}
 
-const (
-	SettingGetResponseZonesSha1SupportValueOff SettingGetResponseZonesSha1SupportValue = "off"
-	SettingGetResponseZonesSha1SupportValueOn  SettingGetResponseZonesSha1SupportValue = "on"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesSha1SupportValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesSha1SupportValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesSha1SupportValue) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesSha1SupportValueOff, SettingGetResponseZonesSha1SupportValueOn:
-		return true
-	}
-	return false
+type SettingGetResponseZonesSha1SupportValueArray []string
+
+func (r SettingGetResponseZonesSha1SupportValueArray) ImplementsSettingGetResponseZonesSha1SupportValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -10701,7 +13150,7 @@ type SettingGetResponseZonesSortQueryStringForCache2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesSortQueryStringForCache2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesSortQueryStringForCache2Value `json:"value" api:"required"`
+	Value SettingGetResponseZonesSortQueryStringForCache2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesSortQueryStringForCache2Editable `json:"editable"`
@@ -10747,19 +13196,43 @@ func (r SettingGetResponseZonesSortQueryStringForCache2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesSortQueryStringForCache2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesSortQueryStringForCache2ValueArray].
+type SettingGetResponseZonesSortQueryStringForCache2ValueUnion interface {
+	ImplementsSettingGetResponseZonesSortQueryStringForCache2ValueUnion()
+}
 
-const (
-	SettingGetResponseZonesSortQueryStringForCache2ValueOn  SettingGetResponseZonesSortQueryStringForCache2Value = "on"
-	SettingGetResponseZonesSortQueryStringForCache2ValueOff SettingGetResponseZonesSortQueryStringForCache2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesSortQueryStringForCache2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesSortQueryStringForCache2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesSortQueryStringForCache2Value) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesSortQueryStringForCache2ValueOn, SettingGetResponseZonesSortQueryStringForCache2ValueOff:
-		return true
-	}
-	return false
+type SettingGetResponseZonesSortQueryStringForCache2ValueArray []string
+
+func (r SettingGetResponseZonesSortQueryStringForCache2ValueArray) ImplementsSettingGetResponseZonesSortQueryStringForCache2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -10799,7 +13272,7 @@ type SettingGetResponseZonesSSL2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesSSL2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesSSL2Value `json:"value" api:"required"`
+	Value SettingGetResponseZonesSSL2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesSSL2Editable `json:"editable"`
@@ -10845,22 +13318,43 @@ func (r SettingGetResponseZonesSSL2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesSSL2Value string
-
-const (
-	SettingGetResponseZonesSSL2ValueOff      SettingGetResponseZonesSSL2Value = "off"
-	SettingGetResponseZonesSSL2ValueFlexible SettingGetResponseZonesSSL2Value = "flexible"
-	SettingGetResponseZonesSSL2ValueFull     SettingGetResponseZonesSSL2Value = "full"
-	SettingGetResponseZonesSSL2ValueStrict   SettingGetResponseZonesSSL2Value = "strict"
-)
-
-func (r SettingGetResponseZonesSSL2Value) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesSSL2ValueOff, SettingGetResponseZonesSSL2ValueFlexible, SettingGetResponseZonesSSL2ValueFull, SettingGetResponseZonesSSL2ValueStrict:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesSSL2ValueArray].
+type SettingGetResponseZonesSSL2ValueUnion interface {
+	ImplementsSettingGetResponseZonesSsl2ValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesSSL2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesSSL2ValueArray{}),
+		},
+	)
+}
+
+type SettingGetResponseZonesSSL2ValueArray []string
+
+func (r SettingGetResponseZonesSSL2ValueArray) ImplementsSettingGetResponseZonesSsl2ValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -10884,7 +13378,7 @@ type SettingGetResponseZonesTLS1_2Only struct {
 	// Zone setting identifier.
 	ID SettingGetResponseZonesTLS1_2OnlyID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesTLS1_2OnlyValue `json:"value" api:"required"`
+	Value SettingGetResponseZonesTLS1_2OnlyValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesTLS1_2OnlyEditable `json:"editable"`
@@ -10930,19 +13424,43 @@ func (r SettingGetResponseZonesTLS1_2OnlyID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesTLS1_2OnlyValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesTLS1_2OnlyValueArray].
+type SettingGetResponseZonesTLS1_2OnlyValueUnion interface {
+	ImplementsSettingGetResponseZonesTls1_2OnlyValueUnion()
+}
 
-const (
-	SettingGetResponseZonesTLS1_2OnlyValueOff SettingGetResponseZonesTLS1_2OnlyValue = "off"
-	SettingGetResponseZonesTLS1_2OnlyValueOn  SettingGetResponseZonesTLS1_2OnlyValue = "on"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesTLS1_2OnlyValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesTLS1_2OnlyValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesTLS1_2OnlyValue) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesTLS1_2OnlyValueOff, SettingGetResponseZonesTLS1_2OnlyValueOn:
-		return true
-	}
-	return false
+type SettingGetResponseZonesTLS1_2OnlyValueArray []string
+
+func (r SettingGetResponseZonesTLS1_2OnlyValueArray) ImplementsSettingGetResponseZonesTls1_2OnlyValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -10972,7 +13490,7 @@ type SettingGetResponseZonesTransformations struct {
 	// Transformations.
 	ID SettingGetResponseZonesTransformationsID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesTransformationsValue `json:"value" api:"required"`
+	Value SettingGetResponseZonesTransformationsValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesTransformationsEditable `json:"editable"`
@@ -11019,20 +13537,43 @@ func (r SettingGetResponseZonesTransformationsID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesTransformationsValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesTransformationsValueArray].
+type SettingGetResponseZonesTransformationsValueUnion interface {
+	ImplementsSettingGetResponseZonesTransformationsValueUnion()
+}
 
-const (
-	SettingGetResponseZonesTransformationsValueOn   SettingGetResponseZonesTransformationsValue = "on"
-	SettingGetResponseZonesTransformationsValueOff  SettingGetResponseZonesTransformationsValue = "off"
-	SettingGetResponseZonesTransformationsValueOpen SettingGetResponseZonesTransformationsValue = "open"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesTransformationsValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesTransformationsValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesTransformationsValue) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesTransformationsValueOn, SettingGetResponseZonesTransformationsValueOff, SettingGetResponseZonesTransformationsValueOpen:
-		return true
-	}
-	return false
+type SettingGetResponseZonesTransformationsValueArray []string
+
+func (r SettingGetResponseZonesTransformationsValueArray) ImplementsSettingGetResponseZonesTransformationsValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -11061,8 +13602,12 @@ type SettingGetResponseZonesTransformationsAllowedOrigins struct {
 	// ID of the zone setting. Shared between Image Transformations and Video
 	// Transformations.
 	ID SettingGetResponseZonesTransformationsAllowedOriginsID `json:"id" api:"required"`
-	// Current value of the zone setting.
-	Value string `json:"value" api:"required"`
+	// Comma-separated list of allowed origins. Refer to the
+	// [Image Transformations](https://developers.cloudflare.com/images/transform-images/sources/)
+	// and
+	// [Video Transformations](https://developers.cloudflare.com/stream/transform-videos/#getting-started)
+	// documentation for more information.
+	Value SettingGetResponseZonesTransformationsAllowedOriginsValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesTransformationsAllowedOriginsEditable `json:"editable"`
@@ -11108,6 +13653,50 @@ func (r SettingGetResponseZonesTransformationsAllowedOriginsID) IsKnown() bool {
 	return false
 }
 
+// Comma-separated list of allowed origins. Refer to the
+// [Image Transformations](https://developers.cloudflare.com/images/transform-images/sources/)
+// and
+// [Video Transformations](https://developers.cloudflare.com/stream/transform-videos/#getting-started)
+// documentation for more information.
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesTransformationsAllowedOriginsValueArray].
+type SettingGetResponseZonesTransformationsAllowedOriginsValueUnion interface {
+	ImplementsSettingGetResponseZonesTransformationsAllowedOriginsValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesTransformationsAllowedOriginsValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesTransformationsAllowedOriginsValueArray{}),
+		},
+	)
+}
+
+type SettingGetResponseZonesTransformationsAllowedOriginsValueArray []string
+
+func (r SettingGetResponseZonesTransformationsAllowedOriginsValueArray) ImplementsSettingGetResponseZonesTransformationsAllowedOriginsValueUnion() {
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type SettingGetResponseZonesTransformationsAllowedOriginsEditable bool
@@ -11131,7 +13720,7 @@ type SettingGetResponseZonesTrueClientIPHeader2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesTrueClientIPHeader2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesTrueClientIPHeader2Value `json:"value" api:"required"`
+	Value SettingGetResponseZonesTrueClientIPHeader2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesTrueClientIPHeader2Editable `json:"editable"`
@@ -11177,19 +13766,43 @@ func (r SettingGetResponseZonesTrueClientIPHeader2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesTrueClientIPHeader2Value string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesTrueClientIPHeader2ValueArray].
+type SettingGetResponseZonesTrueClientIPHeader2ValueUnion interface {
+	ImplementsSettingGetResponseZonesTrueClientIPHeader2ValueUnion()
+}
 
-const (
-	SettingGetResponseZonesTrueClientIPHeader2ValueOn  SettingGetResponseZonesTrueClientIPHeader2Value = "on"
-	SettingGetResponseZonesTrueClientIPHeader2ValueOff SettingGetResponseZonesTrueClientIPHeader2Value = "off"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesTrueClientIPHeader2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesTrueClientIPHeader2ValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesTrueClientIPHeader2Value) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesTrueClientIPHeader2ValueOn, SettingGetResponseZonesTrueClientIPHeader2ValueOff:
-		return true
-	}
-	return false
+type SettingGetResponseZonesTrueClientIPHeader2ValueArray []string
+
+func (r SettingGetResponseZonesTrueClientIPHeader2ValueArray) ImplementsSettingGetResponseZonesTrueClientIPHeader2ValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -11223,7 +13836,7 @@ type SettingGetResponseZonesWAF2 struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesWAF2ID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesWAF2Value `json:"value" api:"required"`
+	Value SettingGetResponseZonesWAF2ValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesWAF2Editable `json:"editable"`
@@ -11269,20 +13882,43 @@ func (r SettingGetResponseZonesWAF2ID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesWAF2Value string
-
-const (
-	SettingGetResponseZonesWAF2ValueOn  SettingGetResponseZonesWAF2Value = "on"
-	SettingGetResponseZonesWAF2ValueOff SettingGetResponseZonesWAF2Value = "off"
-)
-
-func (r SettingGetResponseZonesWAF2Value) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesWAF2ValueOn, SettingGetResponseZonesWAF2ValueOff:
-		return true
-	}
-	return false
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesWAF2ValueArray].
+type SettingGetResponseZonesWAF2ValueUnion interface {
+	ImplementsSettingGetResponseZonesWaf2ValueUnion()
 }
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesWAF2ValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesWAF2ValueArray{}),
+		},
+	)
+}
+
+type SettingGetResponseZonesWAF2ValueArray []string
+
+func (r SettingGetResponseZonesWAF2ValueArray) ImplementsSettingGetResponseZonesWaf2ValueUnion() {}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -11309,7 +13945,7 @@ type SettingGetResponseZonesWebmcpEnabled struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesWebmcpEnabledID `json:"id" api:"required"`
 	// Current value of the zone setting.
-	Value SettingGetResponseZonesWebmcpEnabledValue `json:"value" api:"required"`
+	Value SettingGetResponseZonesWebmcpEnabledValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesWebmcpEnabledEditable `json:"editable"`
@@ -11355,19 +13991,43 @@ func (r SettingGetResponseZonesWebmcpEnabledID) IsKnown() bool {
 }
 
 // Current value of the zone setting.
-type SettingGetResponseZonesWebmcpEnabledValue string
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesWebmcpEnabledValueArray].
+type SettingGetResponseZonesWebmcpEnabledValueUnion interface {
+	ImplementsSettingGetResponseZonesWebmcpEnabledValueUnion()
+}
 
-const (
-	SettingGetResponseZonesWebmcpEnabledValueOff SettingGetResponseZonesWebmcpEnabledValue = "off"
-	SettingGetResponseZonesWebmcpEnabledValueOn  SettingGetResponseZonesWebmcpEnabledValue = "on"
-)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesWebmcpEnabledValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesWebmcpEnabledValueArray{}),
+		},
+	)
+}
 
-func (r SettingGetResponseZonesWebmcpEnabledValue) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesWebmcpEnabledValueOff, SettingGetResponseZonesWebmcpEnabledValueOn:
-		return true
-	}
-	return false
+type SettingGetResponseZonesWebmcpEnabledValueArray []string
+
+func (r SettingGetResponseZonesWebmcpEnabledValueArray) ImplementsSettingGetResponseZonesWebmcpEnabledValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -11396,8 +14056,12 @@ func (r SettingGetResponseZonesWebmcpEnabledEditable) IsKnown() bool {
 type SettingGetResponseZonesWebmcpMcpURL struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesWebmcpMcpURLID `json:"id" api:"required"`
-	// Current value of the zone setting.
-	Value string `json:"value" api:"required"`
+	// Root-relative path (with optional query string) of this zone's MCP endpoint, for
+	// example "/api/mcp". Surfaced to the injected bridge as the data-mcp-url
+	// attribute. Absolute and protocol-relative URLs, fragments, and characters
+	// outside RFC 3986 paths and queries are rejected. An empty value clears the
+	// override so the bridge uses /mcp.
+	Value SettingGetResponseZonesWebmcpMcpURLValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesWebmcpMcpURLEditable `json:"editable"`
@@ -11442,6 +14106,50 @@ func (r SettingGetResponseZonesWebmcpMcpURLID) IsKnown() bool {
 	return false
 }
 
+// Root-relative path (with optional query string) of this zone's MCP endpoint, for
+// example "/api/mcp". Surfaced to the injected bridge as the data-mcp-url
+// attribute. Absolute and protocol-relative URLs, fragments, and characters
+// outside RFC 3986 paths and queries are rejected. An empty value clears the
+// override so the bridge uses /mcp.
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesWebmcpMcpURLValueArray].
+type SettingGetResponseZonesWebmcpMcpURLValueUnion interface {
+	ImplementsSettingGetResponseZonesWebmcpMcpURLValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesWebmcpMcpURLValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesWebmcpMcpURLValueArray{}),
+		},
+	)
+}
+
+type SettingGetResponseZonesWebmcpMcpURLValueArray []string
+
+func (r SettingGetResponseZonesWebmcpMcpURLValueArray) ImplementsSettingGetResponseZonesWebmcpMcpURLValueUnion() {
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type SettingGetResponseZonesWebmcpMcpURLEditable bool
@@ -11466,8 +14174,11 @@ func (r SettingGetResponseZonesWebmcpMcpURLEditable) IsKnown() bool {
 type SettingGetResponseZonesWebmcpPacks struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesWebmcpPacksID `json:"id" api:"required"`
-	// Current value of the zone setting.
-	Value string `json:"value" api:"required"`
+	// Comma-separated list of WebMCP tool-pack names to activate for this zone (for
+	// example, "c2pa,mcp-server-client"), surfaced to the injected bridge as the
+	// data-packs attribute. An empty value clears the override so the bridge uses its
+	// built-in default pack set.
+	Value SettingGetResponseZonesWebmcpPacksValueUnion `json:"value" api:"required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesWebmcpPacksEditable `json:"editable"`
@@ -11510,6 +14221,49 @@ func (r SettingGetResponseZonesWebmcpPacksID) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Comma-separated list of WebMCP tool-pack names to activate for this zone (for
+// example, "c2pa,mcp-server-client"), surfaced to the injected bridge as the
+// data-packs attribute. An empty value clears the override so the bridge uses its
+// built-in default pack set.
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesWebmcpPacksValueArray].
+type SettingGetResponseZonesWebmcpPacksValueUnion interface {
+	ImplementsSettingGetResponseZonesWebmcpPacksValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesWebmcpPacksValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesWebmcpPacksValueArray{}),
+		},
+	)
+}
+
+type SettingGetResponseZonesWebmcpPacksValueArray []string
+
+func (r SettingGetResponseZonesWebmcpPacksValueArray) ImplementsSettingGetResponseZonesWebmcpPacksValueUnion() {
 }
 
 // Whether or not this setting can be modified for this zone (based on your

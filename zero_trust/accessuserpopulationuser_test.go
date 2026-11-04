@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/cloudflare/cloudflare-go/v7/shared"
 	"github.com/cloudflare/cloudflare-go/v7/zero_trust"
 )
 
@@ -93,7 +94,7 @@ func TestAccessUserPopulationUserUpdateWithOptionalParams(t *testing.T) {
 			Operations: cloudflare.F([]zero_trust.AccessUserPopulationUserUpdateParamsOperation{{
 				Op:    cloudflare.F(zero_trust.AccessUserPopulationUserUpdateParamsOperationsOpAdd),
 				Path:  cloudflare.F("path"),
-				Value: cloudflare.F[any](map[string]interface{}{}),
+				Value: cloudflare.F[zero_trust.AccessUserPopulationUserUpdateParamsOperationsValueUnion](shared.UnionString("string")),
 			}}),
 			Schemas: cloudflare.F([]string{"string"}),
 		},

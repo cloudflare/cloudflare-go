@@ -403,7 +403,7 @@ type Location struct {
 	ClientDefault bool      `json:"client_default"`
 	CreatedAt     time.Time `json:"created_at" format:"date-time"`
 	// Indicate the identifier of the pair of IPv4 addresses assigned to this location.
-	DNSDestinationIPsID DNSDestinationIPs `json:"dns_destination_ips_id"`
+	DNSDestinationIPsID DNSDestinationIPsID `json:"dns_destination_ips_id"`
 	// Specify the UUID of the IPv6 block brought to the gateway so that this
 	// location's IPv6 address is allocated from the Bring Your Own IPv6 (BYOIPv6)
 	// block rather than the standard Cloudflare IPv6 block.

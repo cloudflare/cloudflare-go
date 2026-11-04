@@ -55,10 +55,11 @@ func (r *AccountOrganizationService) New(ctx context.Context, params AccountOrga
 }
 
 type AccountOrganizationNewResponse struct {
-	AccountID                 string                             `json:"account_id" api:"required"`
-	DestinationOrganizationID string                             `json:"destination_organization_id" api:"required"`
-	SourceOrganizationID      string                             `json:"source_organization_id" api:"required"`
-	JSON                      accountOrganizationNewResponseJSON `json:"-"`
+	AccountID                 string `json:"account_id" api:"required"`
+	DestinationOrganizationID string `json:"destination_organization_id" api:"required"`
+	// Empty string when the account did not belong to an organization before the move.
+	SourceOrganizationID string                             `json:"source_organization_id" api:"required"`
+	JSON                 accountOrganizationNewResponseJSON `json:"-"`
 }
 
 // accountOrganizationNewResponseJSON contains the JSON metadata for the struct

@@ -34,11 +34,7 @@ TEST_PATHS=(
 	organizations/member_test.go
 	organizations/logaudit_test.go
 	organizations/billingusage_test.go
-	tenants/tenant_test.go
-	tenants/accounttype_test.go
 	tenants/account_test.go
-	tenants/entitlement_test.go
-	tenants/membership_test.go
 	origin_ca_certificates/origincacertificate_test.go
 	ips/ip_test.go
 	memberships/membership_test.go
@@ -303,6 +299,9 @@ TEST_PATHS=(
 	dls/regionalserviceprefixbinding_test.go
 	audit_logs/auditlog_test.go
 	billing/billing_test.go
+	billing/spendpolicy_test.go
+	billing/spendpolicyaudit_test.go
+	billing/spendpolicyactivity_test.go
 	billing/profile_test.go
 	billing/profilepaymentmethod_test.go
 	billing/usage_test.go

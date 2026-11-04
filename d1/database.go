@@ -1336,6 +1336,11 @@ func (r DatabaseExportParamsOutputFormat) IsKnown() bool {
 }
 
 type DatabaseExportParamsDumpOptions struct {
+	// Dump format. `d1` (the default) gives a dump that D1 can import.
+	// `sqlite3_cli_only` matches the output of the `sqlite3 .dump` command, including
+	// virtual tables such as FTS5 or R\*Tree tables, but cannot be imported back into
+	// D1.
+	Compatibility param.Field[DatabaseExportParamsDumpOptionsCompatibility] `json:"compatibility"`
 	// Export only the table definitions, not their contents
 	NoData param.Field[bool] `json:"no_data"`
 	// Export only each table's contents, not its definition
@@ -1347,6 +1352,25 @@ type DatabaseExportParamsDumpOptions struct {
 
 func (r DatabaseExportParamsDumpOptions) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Dump format. `d1` (the default) gives a dump that D1 can import.
+// `sqlite3_cli_only` matches the output of the `sqlite3 .dump` command, including
+// virtual tables such as FTS5 or R\*Tree tables, but cannot be imported back into
+// D1.
+type DatabaseExportParamsDumpOptionsCompatibility string
+
+const (
+	DatabaseExportParamsDumpOptionsCompatibilityD1             DatabaseExportParamsDumpOptionsCompatibility = "d1"
+	DatabaseExportParamsDumpOptionsCompatibilitySqlite3CliOnly DatabaseExportParamsDumpOptionsCompatibility = "sqlite3_cli_only"
+)
+
+func (r DatabaseExportParamsDumpOptionsCompatibility) IsKnown() bool {
+	switch r {
+	case DatabaseExportParamsDumpOptionsCompatibilityD1, DatabaseExportParamsDumpOptionsCompatibilitySqlite3CliOnly:
+		return true
+	}
+	return false
 }
 
 type DatabaseExportResponseEnvelope struct {

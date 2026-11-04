@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"slices"
 	"time"
 
@@ -18,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
-	"github.com/tidwall/gjson"
 )
 
 // StreamService contains methods and other services that help with interacting
@@ -253,9 +251,8 @@ func (r streamNewResponseHttpcorsJSON) RawJSON() string {
 
 type StreamNewResponseWorkerBinding struct {
 	// Indicates whether Workers bindings can produce records to the stream.
-	Enabled StreamNewResponseWorkerBindingEnabled `json:"enabled" api:"required"`
-	JSON    streamNewResponseWorkerBindingJSON    `json:"-"`
-	union   StreamNewResponseWorkerBindingUnion
+	Enabled bool                               `json:"enabled" api:"required"`
+	JSON    streamNewResponseWorkerBindingJSON `json:"-"`
 }
 
 // streamNewResponseWorkerBindingJSON contains the JSON metadata for the struct
@@ -266,86 +263,12 @@ type streamNewResponseWorkerBindingJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r streamNewResponseWorkerBindingJSON) RawJSON() string {
-	return r.raw
-}
-
 func (r *StreamNewResponseWorkerBinding) UnmarshalJSON(data []byte) (err error) {
-	*r = StreamNewResponseWorkerBinding{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [StreamNewResponseWorkerBindingUnion] interface which you can
-// cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [StreamNewResponseWorkerBindingEnabled],
-// [StreamNewResponseWorkerBindingEnabled].
-func (r StreamNewResponseWorkerBinding) AsUnion() StreamNewResponseWorkerBindingUnion {
-	return r.union
-}
-
-// Union satisfied by [StreamNewResponseWorkerBindingEnabled] or
-// [StreamNewResponseWorkerBindingEnabled].
-type StreamNewResponseWorkerBindingUnion interface {
-	implementsStreamNewResponseWorkerBinding()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*StreamNewResponseWorkerBindingUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(StreamNewResponseWorkerBindingEnabled{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(StreamNewResponseWorkerBindingEnabled{}),
-		},
-	)
-}
-
-type StreamNewResponseWorkerBindingEnabled struct {
-	// Indicates whether Workers bindings can produce records to the stream.
-	Enabled StreamNewResponseWorkerBindingEnabledEnabled `json:"enabled" api:"required"`
-	JSON    streamNewResponseWorkerBindingEnabledJSON    `json:"-"`
-}
-
-// streamNewResponseWorkerBindingEnabledJSON contains the JSON metadata for the
-// struct [StreamNewResponseWorkerBindingEnabled]
-type streamNewResponseWorkerBindingEnabledJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamNewResponseWorkerBindingEnabled) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamNewResponseWorkerBindingEnabledJSON) RawJSON() string {
+func (r streamNewResponseWorkerBindingJSON) RawJSON() string {
 	return r.raw
-}
-
-func (r StreamNewResponseWorkerBindingEnabled) implementsStreamNewResponseWorkerBinding() {}
-
-// Indicates whether Workers bindings can produce records to the stream.
-type StreamNewResponseWorkerBindingEnabledEnabled bool
-
-const (
-	StreamNewResponseWorkerBindingEnabledEnabledFalse StreamNewResponseWorkerBindingEnabledEnabled = false
-)
-
-func (r StreamNewResponseWorkerBindingEnabledEnabled) IsKnown() bool {
-	switch r {
-	case StreamNewResponseWorkerBindingEnabledEnabledFalse:
-		return true
-	}
-	return false
 }
 
 type StreamUpdateResponse struct {
@@ -447,9 +370,8 @@ func (r streamUpdateResponseHttpcorsJSON) RawJSON() string {
 
 type StreamUpdateResponseWorkerBinding struct {
 	// Indicates whether Workers bindings can produce records to the stream.
-	Enabled StreamUpdateResponseWorkerBindingEnabled `json:"enabled" api:"required"`
-	JSON    streamUpdateResponseWorkerBindingJSON    `json:"-"`
-	union   StreamUpdateResponseWorkerBindingUnion
+	Enabled bool                                  `json:"enabled" api:"required"`
+	JSON    streamUpdateResponseWorkerBindingJSON `json:"-"`
 }
 
 // streamUpdateResponseWorkerBindingJSON contains the JSON metadata for the struct
@@ -460,87 +382,12 @@ type streamUpdateResponseWorkerBindingJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r streamUpdateResponseWorkerBindingJSON) RawJSON() string {
-	return r.raw
-}
-
 func (r *StreamUpdateResponseWorkerBinding) UnmarshalJSON(data []byte) (err error) {
-	*r = StreamUpdateResponseWorkerBinding{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [StreamUpdateResponseWorkerBindingUnion] interface which you
-// can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [StreamUpdateResponseWorkerBindingEnabled],
-// [StreamUpdateResponseWorkerBindingEnabled].
-func (r StreamUpdateResponseWorkerBinding) AsUnion() StreamUpdateResponseWorkerBindingUnion {
-	return r.union
-}
-
-// Union satisfied by [StreamUpdateResponseWorkerBindingEnabled] or
-// [StreamUpdateResponseWorkerBindingEnabled].
-type StreamUpdateResponseWorkerBindingUnion interface {
-	implementsStreamUpdateResponseWorkerBinding()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*StreamUpdateResponseWorkerBindingUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(StreamUpdateResponseWorkerBindingEnabled{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(StreamUpdateResponseWorkerBindingEnabled{}),
-		},
-	)
-}
-
-type StreamUpdateResponseWorkerBindingEnabled struct {
-	// Indicates whether Workers bindings can produce records to the stream.
-	Enabled StreamUpdateResponseWorkerBindingEnabledEnabled `json:"enabled" api:"required"`
-	JSON    streamUpdateResponseWorkerBindingEnabledJSON    `json:"-"`
-}
-
-// streamUpdateResponseWorkerBindingEnabledJSON contains the JSON metadata for the
-// struct [StreamUpdateResponseWorkerBindingEnabled]
-type streamUpdateResponseWorkerBindingEnabledJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamUpdateResponseWorkerBindingEnabled) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamUpdateResponseWorkerBindingEnabledJSON) RawJSON() string {
+func (r streamUpdateResponseWorkerBindingJSON) RawJSON() string {
 	return r.raw
-}
-
-func (r StreamUpdateResponseWorkerBindingEnabled) implementsStreamUpdateResponseWorkerBinding() {}
-
-// Indicates whether Workers bindings can produce records to the stream.
-type StreamUpdateResponseWorkerBindingEnabledEnabled bool
-
-const (
-	StreamUpdateResponseWorkerBindingEnabledEnabledFalse StreamUpdateResponseWorkerBindingEnabledEnabled = false
-)
-
-func (r StreamUpdateResponseWorkerBindingEnabledEnabled) IsKnown() bool {
-	switch r {
-	case StreamUpdateResponseWorkerBindingEnabledEnabledFalse:
-		return true
-	}
-	return false
 }
 
 type StreamListResponse struct {
@@ -642,9 +489,8 @@ func (r streamListResponseHttpcorsJSON) RawJSON() string {
 
 type StreamListResponseWorkerBinding struct {
 	// Indicates whether Workers bindings can produce records to the stream.
-	Enabled StreamListResponseWorkerBindingEnabled `json:"enabled" api:"required"`
-	JSON    streamListResponseWorkerBindingJSON    `json:"-"`
-	union   StreamListResponseWorkerBindingUnion
+	Enabled bool                                `json:"enabled" api:"required"`
+	JSON    streamListResponseWorkerBindingJSON `json:"-"`
 }
 
 // streamListResponseWorkerBindingJSON contains the JSON metadata for the struct
@@ -655,87 +501,12 @@ type streamListResponseWorkerBindingJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r streamListResponseWorkerBindingJSON) RawJSON() string {
-	return r.raw
-}
-
 func (r *StreamListResponseWorkerBinding) UnmarshalJSON(data []byte) (err error) {
-	*r = StreamListResponseWorkerBinding{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [StreamListResponseWorkerBindingUnion] interface which you can
-// cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [StreamListResponseWorkerBindingEnabled],
-// [StreamListResponseWorkerBindingEnabled].
-func (r StreamListResponseWorkerBinding) AsUnion() StreamListResponseWorkerBindingUnion {
-	return r.union
-}
-
-// Union satisfied by [StreamListResponseWorkerBindingEnabled] or
-// [StreamListResponseWorkerBindingEnabled].
-type StreamListResponseWorkerBindingUnion interface {
-	implementsStreamListResponseWorkerBinding()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*StreamListResponseWorkerBindingUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(StreamListResponseWorkerBindingEnabled{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(StreamListResponseWorkerBindingEnabled{}),
-		},
-	)
-}
-
-type StreamListResponseWorkerBindingEnabled struct {
-	// Indicates whether Workers bindings can produce records to the stream.
-	Enabled StreamListResponseWorkerBindingEnabledEnabled `json:"enabled" api:"required"`
-	JSON    streamListResponseWorkerBindingEnabledJSON    `json:"-"`
-}
-
-// streamListResponseWorkerBindingEnabledJSON contains the JSON metadata for the
-// struct [StreamListResponseWorkerBindingEnabled]
-type streamListResponseWorkerBindingEnabledJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamListResponseWorkerBindingEnabled) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamListResponseWorkerBindingEnabledJSON) RawJSON() string {
+func (r streamListResponseWorkerBindingJSON) RawJSON() string {
 	return r.raw
-}
-
-func (r StreamListResponseWorkerBindingEnabled) implementsStreamListResponseWorkerBinding() {}
-
-// Indicates whether Workers bindings can produce records to the stream.
-type StreamListResponseWorkerBindingEnabledEnabled bool
-
-const (
-	StreamListResponseWorkerBindingEnabledEnabledFalse StreamListResponseWorkerBindingEnabledEnabled = false
-)
-
-func (r StreamListResponseWorkerBindingEnabledEnabled) IsKnown() bool {
-	switch r {
-	case StreamListResponseWorkerBindingEnabledEnabledFalse:
-		return true
-	}
-	return false
 }
 
 type StreamDeleteResponse = interface{}
@@ -839,9 +610,8 @@ func (r streamGetResponseHttpcorsJSON) RawJSON() string {
 
 type StreamGetResponseWorkerBinding struct {
 	// Indicates whether Workers bindings can produce records to the stream.
-	Enabled StreamGetResponseWorkerBindingEnabled `json:"enabled" api:"required"`
-	JSON    streamGetResponseWorkerBindingJSON    `json:"-"`
-	union   StreamGetResponseWorkerBindingUnion
+	Enabled bool                               `json:"enabled" api:"required"`
+	JSON    streamGetResponseWorkerBindingJSON `json:"-"`
 }
 
 // streamGetResponseWorkerBindingJSON contains the JSON metadata for the struct
@@ -852,86 +622,12 @@ type streamGetResponseWorkerBindingJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r streamGetResponseWorkerBindingJSON) RawJSON() string {
-	return r.raw
-}
-
 func (r *StreamGetResponseWorkerBinding) UnmarshalJSON(data []byte) (err error) {
-	*r = StreamGetResponseWorkerBinding{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [StreamGetResponseWorkerBindingUnion] interface which you can
-// cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are [StreamGetResponseWorkerBindingEnabled],
-// [StreamGetResponseWorkerBindingEnabled].
-func (r StreamGetResponseWorkerBinding) AsUnion() StreamGetResponseWorkerBindingUnion {
-	return r.union
-}
-
-// Union satisfied by [StreamGetResponseWorkerBindingEnabled] or
-// [StreamGetResponseWorkerBindingEnabled].
-type StreamGetResponseWorkerBindingUnion interface {
-	implementsStreamGetResponseWorkerBinding()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*StreamGetResponseWorkerBindingUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(StreamGetResponseWorkerBindingEnabled{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(StreamGetResponseWorkerBindingEnabled{}),
-		},
-	)
-}
-
-type StreamGetResponseWorkerBindingEnabled struct {
-	// Indicates whether Workers bindings can produce records to the stream.
-	Enabled StreamGetResponseWorkerBindingEnabledEnabled `json:"enabled" api:"required"`
-	JSON    streamGetResponseWorkerBindingEnabledJSON    `json:"-"`
-}
-
-// streamGetResponseWorkerBindingEnabledJSON contains the JSON metadata for the
-// struct [StreamGetResponseWorkerBindingEnabled]
-type streamGetResponseWorkerBindingEnabledJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamGetResponseWorkerBindingEnabled) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamGetResponseWorkerBindingEnabledJSON) RawJSON() string {
+func (r streamGetResponseWorkerBindingJSON) RawJSON() string {
 	return r.raw
-}
-
-func (r StreamGetResponseWorkerBindingEnabled) implementsStreamGetResponseWorkerBinding() {}
-
-// Indicates whether Workers bindings can produce records to the stream.
-type StreamGetResponseWorkerBindingEnabledEnabled bool
-
-const (
-	StreamGetResponseWorkerBindingEnabledEnabledFalse StreamGetResponseWorkerBindingEnabledEnabled = false
-)
-
-func (r StreamGetResponseWorkerBindingEnabledEnabled) IsKnown() bool {
-	switch r {
-	case StreamGetResponseWorkerBindingEnabledEnabledFalse:
-		return true
-	}
-	return false
 }
 
 type StreamNewParams struct {
@@ -944,8 +640,8 @@ type StreamNewParams struct {
 	HTTP param.Field[StreamNewParamsHTTP] `json:"http"`
 	// Sets the record retention period from 1 hour (3600 seconds) to 30 days (2592000
 	// seconds), inclusive.
-	RetentionSeconds param.Field[int64]                             `json:"retention_seconds"`
-	WorkerBinding    param.Field[StreamNewParamsWorkerBindingUnion] `json:"worker_binding"`
+	RetentionSeconds param.Field[int64]                        `json:"retention_seconds"`
+	WorkerBinding    param.Field[StreamNewParamsWorkerBinding] `json:"worker_binding"`
 }
 
 func (r StreamNewParams) MarshalJSON() (data []byte, err error) {
@@ -981,45 +677,11 @@ func (r StreamNewParamsHTTPCORS) MarshalJSON() (data []byte, err error) {
 
 type StreamNewParamsWorkerBinding struct {
 	// Indicates whether Workers bindings can produce records to the stream.
-	Enabled param.Field[StreamNewParamsWorkerBindingEnabled] `json:"enabled" api:"required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 }
 
 func (r StreamNewParamsWorkerBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r StreamNewParamsWorkerBinding) implementsStreamNewParamsWorkerBindingUnion() {}
-
-// Satisfied by [k2.StreamNewParamsWorkerBindingEnabled],
-// [k2.StreamNewParamsWorkerBindingEnabled], [StreamNewParamsWorkerBinding].
-type StreamNewParamsWorkerBindingUnion interface {
-	implementsStreamNewParamsWorkerBindingUnion()
-}
-
-type StreamNewParamsWorkerBindingEnabled struct {
-	// Indicates whether Workers bindings can produce records to the stream.
-	Enabled param.Field[StreamNewParamsWorkerBindingEnabledEnabled] `json:"enabled" api:"required"`
-}
-
-func (r StreamNewParamsWorkerBindingEnabled) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r StreamNewParamsWorkerBindingEnabled) implementsStreamNewParamsWorkerBindingUnion() {}
-
-// Indicates whether Workers bindings can produce records to the stream.
-type StreamNewParamsWorkerBindingEnabledEnabled bool
-
-const (
-	StreamNewParamsWorkerBindingEnabledEnabledFalse StreamNewParamsWorkerBindingEnabledEnabled = false
-)
-
-func (r StreamNewParamsWorkerBindingEnabledEnabled) IsKnown() bool {
-	switch r {
-	case StreamNewParamsWorkerBindingEnabledEnabledFalse:
-		return true
-	}
-	return false
 }
 
 type StreamNewResponseEnvelope struct {
@@ -1104,8 +766,8 @@ type StreamUpdateParams struct {
 	HTTP param.Field[StreamUpdateParamsHTTP] `json:"http"`
 	// Sets the record retention period from 1 hour (3600 seconds) to 30 days (2592000
 	// seconds), inclusive.
-	RetentionSeconds param.Field[int64]                                `json:"retention_seconds"`
-	WorkerBinding    param.Field[StreamUpdateParamsWorkerBindingUnion] `json:"worker_binding"`
+	RetentionSeconds param.Field[int64]                           `json:"retention_seconds"`
+	WorkerBinding    param.Field[StreamUpdateParamsWorkerBinding] `json:"worker_binding"`
 }
 
 func (r StreamUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1141,45 +803,11 @@ func (r StreamUpdateParamsHTTPCORS) MarshalJSON() (data []byte, err error) {
 
 type StreamUpdateParamsWorkerBinding struct {
 	// Indicates whether Workers bindings can produce records to the stream.
-	Enabled param.Field[StreamUpdateParamsWorkerBindingEnabled] `json:"enabled" api:"required"`
+	Enabled param.Field[bool] `json:"enabled" api:"required"`
 }
 
 func (r StreamUpdateParamsWorkerBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r StreamUpdateParamsWorkerBinding) implementsStreamUpdateParamsWorkerBindingUnion() {}
-
-// Satisfied by [k2.StreamUpdateParamsWorkerBindingEnabled],
-// [k2.StreamUpdateParamsWorkerBindingEnabled], [StreamUpdateParamsWorkerBinding].
-type StreamUpdateParamsWorkerBindingUnion interface {
-	implementsStreamUpdateParamsWorkerBindingUnion()
-}
-
-type StreamUpdateParamsWorkerBindingEnabled struct {
-	// Indicates whether Workers bindings can produce records to the stream.
-	Enabled param.Field[StreamUpdateParamsWorkerBindingEnabledEnabled] `json:"enabled" api:"required"`
-}
-
-func (r StreamUpdateParamsWorkerBindingEnabled) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r StreamUpdateParamsWorkerBindingEnabled) implementsStreamUpdateParamsWorkerBindingUnion() {}
-
-// Indicates whether Workers bindings can produce records to the stream.
-type StreamUpdateParamsWorkerBindingEnabledEnabled bool
-
-const (
-	StreamUpdateParamsWorkerBindingEnabledEnabledFalse StreamUpdateParamsWorkerBindingEnabledEnabled = false
-)
-
-func (r StreamUpdateParamsWorkerBindingEnabledEnabled) IsKnown() bool {
-	switch r {
-	case StreamUpdateParamsWorkerBindingEnabledEnabledFalse:
-		return true
-	}
-	return false
 }
 
 type StreamUpdateResponseEnvelope struct {

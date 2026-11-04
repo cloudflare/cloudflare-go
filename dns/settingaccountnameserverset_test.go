@@ -34,9 +34,6 @@ func TestSettingAccountNameserverSetNewWithOptionalParams(t *testing.T) {
 		Nameservers: cloudflare.F([]dns.SettingAccountNameserverSetNewParamsNameserver{{
 			Name:    cloudflare.F("ns1.example.com"),
 			IPCount: cloudflare.F(int64(1)),
-		}, {
-			Name:    cloudflare.F("ns1.example.com"),
-			IPCount: cloudflare.F(int64(1)),
 		}}),
 		Advanced: cloudflare.F(false),
 		IPSet:    cloudflare.F(int64(1)),

@@ -36,7 +36,12 @@ func NewOrganizationProfileService(opts ...option.RequestOption) (r *Organizatio
 	return
 }
 
-// Modify organization profile.
+// Partially updates the business profile (name, email, phone, address, and
+// external metadata) associated with this organization's customer record, creating
+// the profile if it does not exist. Changes apply to every account and
+// organization sharing that profile. Omitted, empty, or null fields are left
+// unchanged. Each profile field is limited to 1,000 UTF-8 bytes. Only available to
+// members of the organization.
 func (r *OrganizationProfileService) Update(ctx context.Context, organizationID string, body OrganizationProfileUpdateParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -49,7 +54,10 @@ func (r *OrganizationProfileService) Update(ctx context.Context, organizationID 
 	return err
 }
 
-// Get an organizations profile if it exists.
+// Retrieves the business profile (name, email, phone, address, and external
+// metadata) associated with this organization's customer record. Profiles can be
+// shared across accounts and organizations. Only available to members of the
+// organization.
 func (r *OrganizationProfileService) Get(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *accounts.AccountProfile, err error) {
 	var env OrganizationProfileGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -67,11 +75,11 @@ func (r *OrganizationProfileService) Get(ctx context.Context, organizationID str
 }
 
 type OrganizationProfileUpdateParams struct {
-	BusinessAddress  param.Field[string] `json:"business_address" api:"required"`
-	BusinessEmail    param.Field[string] `json:"business_email" api:"required"`
-	BusinessName     param.Field[string] `json:"business_name" api:"required"`
-	BusinessPhone    param.Field[string] `json:"business_phone" api:"required"`
-	ExternalMetadata param.Field[string] `json:"external_metadata" api:"required"`
+	BusinessAddress  param.Field[string] `json:"business_address"`
+	BusinessEmail    param.Field[string] `json:"business_email"`
+	BusinessName     param.Field[string] `json:"business_name"`
+	BusinessPhone    param.Field[string] `json:"business_phone"`
+	ExternalMetadata param.Field[string] `json:"external_metadata"`
 }
 
 func (r OrganizationProfileUpdateParams) MarshalJSON() (data []byte, err error) {

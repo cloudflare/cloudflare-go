@@ -60,8 +60,8 @@ func (r *ResourceService) New(ctx context.Context, shareID string, params Resour
 	return res, nil
 }
 
-// Update is not immediate, an updated share resource object with a new status will
-// be returned.
+// Updates the resource's `meta`. Only resources with `status=active` can be
+// updated.
 func (r *ResourceService) Update(ctx context.Context, shareID string, shareResourceID string, params ResourceUpdateParams, opts ...option.RequestOption) (res *ResourceUpdateResponse, err error) {
 	var env ResourceUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -171,15 +171,15 @@ func (r *ResourceService) Get(ctx context.Context, shareID string, shareResource
 type ResourceNewResponse struct {
 	// Share Resource identifier.
 	ID string `json:"id" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// Resource Metadata.
 	Meta interface{} `json:"meta" api:"required"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// Account identifier.
 	ResourceAccountID string `json:"resource_account_id" api:"required"`
-	// Share Resource identifier.
+	// Identifier assigned by the service that owns the shared resource.
 	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Type.
 	ResourceType ResourceNewResponseResourceType `json:"resource_type" api:"required"`
@@ -255,15 +255,15 @@ func (r ResourceNewResponseStatus) IsKnown() bool {
 type ResourceUpdateResponse struct {
 	// Share Resource identifier.
 	ID string `json:"id" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// Resource Metadata.
 	Meta interface{} `json:"meta" api:"required"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// Account identifier.
 	ResourceAccountID string `json:"resource_account_id" api:"required"`
-	// Share Resource identifier.
+	// Identifier assigned by the service that owns the shared resource.
 	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Type.
 	ResourceType ResourceUpdateResponseResourceType `json:"resource_type" api:"required"`
@@ -339,15 +339,15 @@ func (r ResourceUpdateResponseStatus) IsKnown() bool {
 type ResourceListResponse struct {
 	// Share Resource identifier.
 	ID string `json:"id" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// Resource Metadata.
 	Meta interface{} `json:"meta" api:"required"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// Account identifier.
 	ResourceAccountID string `json:"resource_account_id" api:"required"`
-	// Share Resource identifier.
+	// Identifier assigned by the service that owns the shared resource.
 	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Type.
 	ResourceType ResourceListResponseResourceType `json:"resource_type" api:"required"`
@@ -423,15 +423,15 @@ func (r ResourceListResponseStatus) IsKnown() bool {
 type ResourceDeleteResponse struct {
 	// Share Resource identifier.
 	ID string `json:"id" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// Resource Metadata.
 	Meta interface{} `json:"meta" api:"required"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// Account identifier.
 	ResourceAccountID string `json:"resource_account_id" api:"required"`
-	// Share Resource identifier.
+	// Identifier assigned by the service that owns the shared resource.
 	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Type.
 	ResourceType ResourceDeleteResponseResourceType `json:"resource_type" api:"required"`
@@ -507,15 +507,15 @@ func (r ResourceDeleteResponseStatus) IsKnown() bool {
 type ResourceGetResponse struct {
 	// Share Resource identifier.
 	ID string `json:"id" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// Resource Metadata.
 	Meta interface{} `json:"meta" api:"required"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// Account identifier.
 	ResourceAccountID string `json:"resource_account_id" api:"required"`
-	// Share Resource identifier.
+	// Identifier assigned by the service that owns the shared resource.
 	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Type.
 	ResourceType ResourceGetResponseResourceType `json:"resource_type" api:"required"`
@@ -593,9 +593,9 @@ type ResourceNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Resource Metadata.
 	Meta param.Field[interface{}] `json:"meta" api:"required"`
-	// Account identifier.
+	// The account that owns the resource. Must match the `account_id` in the path.
 	ResourceAccountID param.Field[string] `json:"resource_account_id" api:"required"`
-	// Share Resource identifier.
+	// Identifier assigned by the service that owns the shared resource.
 	ResourceID param.Field[string] `json:"resource_id" api:"required"`
 	// Resource Type.
 	ResourceType param.Field[ResourceNewParamsResourceType] `json:"resource_type" api:"required"`
@@ -692,12 +692,9 @@ func (r resourceUpdateResponseEnvelopeJSON) RawJSON() string {
 type ResourceListParams struct {
 	// Account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Page number. Defaults to `1` when `per_page` is supplied without `page`. May be
-	// omitted entirely along with `per_page` to receive a non-paginated response.
+	// Page number. Defaults to `1` when omitted.
 	Page param.Field[int64] `query:"page"`
-	// Number of objects to return per page. Defaults to `20` when `page` is supplied
-	// without `per_page`. May be omitted entirely along with `page` to receive a
-	// non-paginated response.
+	// Number of objects to return per page. Defaults to `20` when omitted.
 	PerPage param.Field[int64] `query:"per_page"`
 	// Filter share resources by resource_type.
 	ResourceType param.Field[ResourceListParamsResourceType] `query:"resource_type"`

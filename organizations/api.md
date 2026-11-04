@@ -1,9 +1,5 @@
 # Organizations
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#OrganizationParam">OrganizationParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#Organization">Organization</a>
@@ -19,9 +15,13 @@ Methods:
 
 ## OrganizationAccounts
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#OrganizationAccountGetResponse">OrganizationAccountGetResponse</a>
+
 Methods:
 
-- <code title="get /organizations/{organization_id}/accounts">client.Organizations.OrganizationAccounts.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#OrganizationAccountService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, organizationID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#OrganizationAccountGetParams">OrganizationAccountGetParams</a>) (\*[]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/tenants">tenants</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/tenants#TenantAccount">TenantAccount</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /organizations/{organization_id}/accounts">client.Organizations.OrganizationAccounts.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#OrganizationAccountService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, organizationID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#OrganizationAccountGetParams">OrganizationAccountGetParams</a>) (\*[]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#OrganizationAccountGetResponse">OrganizationAccountGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## OrganizationProfile
 
@@ -35,12 +35,13 @@ Methods:
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#OrganizationMember">OrganizationMember</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#MemberDeleteResponse">MemberDeleteResponse</a>
 
 Methods:
 
 - <code title="post /organizations/{organization_id}/members">client.Organizations.Members.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#MemberService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, organizationID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#MemberNewParams">MemberNewParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#OrganizationMember">OrganizationMember</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /organizations/{organization_id}/members">client.Organizations.Members.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#MemberService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, organizationID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#MemberListParams">MemberListParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#OrganizationMember">OrganizationMember</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="delete /organizations/{organization_id}/members/{member_id}">client.Organizations.Members.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#MemberService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, organizationID <a href="https://pkg.go.dev/builtin#string">string</a>, memberID <a href="https://pkg.go.dev/builtin#string">string</a>) <a href="https://pkg.go.dev/builtin#error">error</a></code>
+- <code title="delete /organizations/{organization_id}/members/{member_id}">client.Organizations.Members.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#MemberService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, organizationID <a href="https://pkg.go.dev/builtin#string">string</a>, memberID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#MemberDeleteResponse">MemberDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /organizations/{organization_id}/members/{member_id}">client.Organizations.Members.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#MemberService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, organizationID <a href="https://pkg.go.dev/builtin#string">string</a>, memberID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#OrganizationMember">OrganizationMember</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Logs

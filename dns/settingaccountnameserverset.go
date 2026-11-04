@@ -42,7 +42,8 @@ func NewSettingAccountNameserverSetService(opts ...option.RequestOption) (r *Set
 
 // Creates a named Custom Nameserver Set. Only the customer-defined name can be
 // changed later. To change nameservers or addresses, create a new set, move any
-// zone assignments, and delete the old set.
+// zone assignments, and delete the old set. For details, refer to
+// [Nameserver sets](https://developers.cloudflare.com/dns/nameservers/custom-nameservers/nameserver-sets/).
 func (r *SettingAccountNameserverSetService) New(ctx context.Context, params SettingAccountNameserverSetNewParams, opts ...option.RequestOption) (res *SettingAccountNameserverSetNewResponse, err error) {
 	var env SettingAccountNameserverSetNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -59,7 +60,8 @@ func (r *SettingAccountNameserverSetService) New(ctx context.Context, params Set
 	return res, nil
 }
 
-// Lists an account's Custom Nameserver Sets.
+// Lists an account's Custom Nameserver Sets. For details, refer to
+// [Nameserver sets](https://developers.cloudflare.com/dns/nameservers/custom-nameservers/nameserver-sets/).
 func (r *SettingAccountNameserverSetService) List(ctx context.Context, params SettingAccountNameserverSetListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SettingAccountNameserverSetListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -81,12 +83,14 @@ func (r *SettingAccountNameserverSetService) List(ctx context.Context, params Se
 	return res, nil
 }
 
-// Lists an account's Custom Nameserver Sets.
+// Lists an account's Custom Nameserver Sets. For details, refer to
+// [Nameserver sets](https://developers.cloudflare.com/dns/nameservers/custom-nameservers/nameserver-sets/).
 func (r *SettingAccountNameserverSetService) ListAutoPaging(ctx context.Context, params SettingAccountNameserverSetListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[SettingAccountNameserverSetListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Deletes an unassigned Custom Nameserver Set.
+// Deletes an unassigned Custom Nameserver Set. For details, refer to
+// [Nameserver sets](https://developers.cloudflare.com/dns/nameservers/custom-nameservers/nameserver-sets/).
 func (r *SettingAccountNameserverSetService) Delete(ctx context.Context, nameserverSetID string, body SettingAccountNameserverSetDeleteParams, opts ...option.RequestOption) (res *SettingAccountNameserverSetDeleteResponse, err error) {
 	var env SettingAccountNameserverSetDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -107,7 +111,8 @@ func (r *SettingAccountNameserverSetService) Delete(ctx context.Context, nameser
 	return res, nil
 }
 
-// Gets a Custom Nameserver Set owned by an account.
+// Gets a Custom Nameserver Set owned by an account. For details, refer to
+// [Nameserver sets](https://developers.cloudflare.com/dns/nameservers/custom-nameservers/nameserver-sets/).
 func (r *SettingAccountNameserverSetService) Get(ctx context.Context, nameserverSetID string, query SettingAccountNameserverSetGetParams, opts ...option.RequestOption) (res *SettingAccountNameserverSetGetResponse, err error) {
 	var env SettingAccountNameserverSetGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

@@ -105,7 +105,10 @@ type OrganizationDOHUpdateResponse struct {
 	// been reported as leaked.
 	LeakReporter string `json:"leak_reporter"`
 	// The name of the service token.
-	Name string                            `json:"name"`
+	Name string `json:"name"`
+	// Tags associated with the service token, as key-value pairs. On update, replaces
+	// all existing tags.
+	Tags map[string]string                 `json:"tags" api:"nullable"`
 	JSON organizationDOHUpdateResponseJSON `json:"-"`
 }
 
@@ -122,6 +125,7 @@ type organizationDOHUpdateResponseJSON struct {
 	LeakReportedAt apijson.Field
 	LeakReporter   apijson.Field
 	Name           apijson.Field
+	Tags           apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -169,7 +173,10 @@ type OrganizationDOHGetResponse struct {
 	// been reported as leaked.
 	LeakReporter string `json:"leak_reporter"`
 	// The name of the service token.
-	Name string                         `json:"name"`
+	Name string `json:"name"`
+	// Tags associated with the service token, as key-value pairs. On update, replaces
+	// all existing tags.
+	Tags map[string]string              `json:"tags" api:"nullable"`
 	JSON organizationDOHGetResponseJSON `json:"-"`
 }
 
@@ -186,6 +193,7 @@ type organizationDOHGetResponseJSON struct {
 	LeakReportedAt apijson.Field
 	LeakReporter   apijson.Field
 	Name           apijson.Field
+	Tags           apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }

@@ -184,6 +184,12 @@ type AppNewResponse struct {
 	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
 	// argo_smart_routing. tls may only be "off" or "flexible".
 	OriginWorkerID string `json:"origin_worker_id"`
+	// Name of the Worker origin. Omitted when the Worker is not found or its name
+	// cannot be resolved.
+	OriginWorkerName string `json:"origin_worker_name"`
+	// Lookup status of the Worker origin. Unknown indicates that its name could not be
+	// resolved. Only returned for Worker origins.
+	OriginWorkerStatus AppNewResponseOriginWorkerStatus `json:"origin_worker_status"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -207,24 +213,26 @@ type AppNewResponse struct {
 
 // appNewResponseJSON contains the JSON metadata for the struct [AppNewResponse]
 type appNewResponseJSON struct {
-	ID               apijson.Field
-	CreatedOn        apijson.Field
-	DNS              apijson.Field
-	ModifiedOn       apijson.Field
-	Protocol         apijson.Field
-	ArgoSmartRouting apijson.Field
-	EdgeIPs          apijson.Field
-	IPFirewall       apijson.Field
-	OriginDirect     apijson.Field
-	OriginDNS        apijson.Field
-	OriginPort       apijson.Field
-	OriginWorkerID   apijson.Field
-	ProxyProtocol    apijson.Field
-	TLS              apijson.Field
-	TrafficType      apijson.Field
-	VirtualNetworkID apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	ID                 apijson.Field
+	CreatedOn          apijson.Field
+	DNS                apijson.Field
+	ModifiedOn         apijson.Field
+	Protocol           apijson.Field
+	ArgoSmartRouting   apijson.Field
+	EdgeIPs            apijson.Field
+	IPFirewall         apijson.Field
+	OriginDirect       apijson.Field
+	OriginDNS          apijson.Field
+	OriginPort         apijson.Field
+	OriginWorkerID     apijson.Field
+	OriginWorkerName   apijson.Field
+	OriginWorkerStatus apijson.Field
+	ProxyProtocol      apijson.Field
+	TLS                apijson.Field
+	TrafficType        apijson.Field
+	VirtualNetworkID   apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r appNewResponseJSON) RawJSON() string {
@@ -313,6 +321,12 @@ type AppNewResponseSpectrumConfigAppConfig struct {
 	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
 	// argo_smart_routing. tls may only be "off" or "flexible".
 	OriginWorkerID string `json:"origin_worker_id"`
+	// Name of the Worker origin. Omitted when the Worker is not found or its name
+	// cannot be resolved.
+	OriginWorkerName string `json:"origin_worker_name"`
+	// Lookup status of the Worker origin. Unknown indicates that its name could not be
+	// resolved. Only returned for Worker origins.
+	OriginWorkerStatus AppNewResponseSpectrumConfigAppConfigOriginWorkerStatus `json:"origin_worker_status"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -329,24 +343,26 @@ type AppNewResponseSpectrumConfigAppConfig struct {
 // appNewResponseSpectrumConfigAppConfigJSON contains the JSON metadata for the
 // struct [AppNewResponseSpectrumConfigAppConfig]
 type appNewResponseSpectrumConfigAppConfigJSON struct {
-	ID               apijson.Field
-	CreatedOn        apijson.Field
-	DNS              apijson.Field
-	ModifiedOn       apijson.Field
-	Protocol         apijson.Field
-	TrafficType      apijson.Field
-	ArgoSmartRouting apijson.Field
-	EdgeIPs          apijson.Field
-	IPFirewall       apijson.Field
-	OriginDirect     apijson.Field
-	OriginDNS        apijson.Field
-	OriginPort       apijson.Field
-	OriginWorkerID   apijson.Field
-	ProxyProtocol    apijson.Field
-	TLS              apijson.Field
-	VirtualNetworkID apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	ID                 apijson.Field
+	CreatedOn          apijson.Field
+	DNS                apijson.Field
+	ModifiedOn         apijson.Field
+	Protocol           apijson.Field
+	TrafficType        apijson.Field
+	ArgoSmartRouting   apijson.Field
+	EdgeIPs            apijson.Field
+	IPFirewall         apijson.Field
+	OriginDirect       apijson.Field
+	OriginDNS          apijson.Field
+	OriginPort         apijson.Field
+	OriginWorkerID     apijson.Field
+	OriginWorkerName   apijson.Field
+	OriginWorkerStatus apijson.Field
+	ProxyProtocol      apijson.Field
+	TLS                apijson.Field
+	VirtualNetworkID   apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *AppNewResponseSpectrumConfigAppConfig) UnmarshalJSON(data []byte) (err error) {
@@ -377,6 +393,24 @@ const (
 func (r AppNewResponseSpectrumConfigAppConfigTrafficType) IsKnown() bool {
 	switch r {
 	case AppNewResponseSpectrumConfigAppConfigTrafficTypeDirect, AppNewResponseSpectrumConfigAppConfigTrafficTypeHTTP, AppNewResponseSpectrumConfigAppConfigTrafficTypeHTTPS, AppNewResponseSpectrumConfigAppConfigTrafficTypeWorker:
+		return true
+	}
+	return false
+}
+
+// Lookup status of the Worker origin. Unknown indicates that its name could not be
+// resolved. Only returned for Worker origins.
+type AppNewResponseSpectrumConfigAppConfigOriginWorkerStatus string
+
+const (
+	AppNewResponseSpectrumConfigAppConfigOriginWorkerStatusAvailable AppNewResponseSpectrumConfigAppConfigOriginWorkerStatus = "available"
+	AppNewResponseSpectrumConfigAppConfigOriginWorkerStatusNotFound  AppNewResponseSpectrumConfigAppConfigOriginWorkerStatus = "not_found"
+	AppNewResponseSpectrumConfigAppConfigOriginWorkerStatusUnknown   AppNewResponseSpectrumConfigAppConfigOriginWorkerStatus = "unknown"
+)
+
+func (r AppNewResponseSpectrumConfigAppConfigOriginWorkerStatus) IsKnown() bool {
+	switch r {
+	case AppNewResponseSpectrumConfigAppConfigOriginWorkerStatusAvailable, AppNewResponseSpectrumConfigAppConfigOriginWorkerStatusNotFound, AppNewResponseSpectrumConfigAppConfigOriginWorkerStatusUnknown:
 		return true
 	}
 	return false
@@ -461,6 +495,24 @@ func (r appNewResponseSpectrumConfigPaygoAppConfigJSON) RawJSON() string {
 }
 
 func (r AppNewResponseSpectrumConfigPaygoAppConfig) implementsAppNewResponse() {}
+
+// Lookup status of the Worker origin. Unknown indicates that its name could not be
+// resolved. Only returned for Worker origins.
+type AppNewResponseOriginWorkerStatus string
+
+const (
+	AppNewResponseOriginWorkerStatusAvailable AppNewResponseOriginWorkerStatus = "available"
+	AppNewResponseOriginWorkerStatusNotFound  AppNewResponseOriginWorkerStatus = "not_found"
+	AppNewResponseOriginWorkerStatusUnknown   AppNewResponseOriginWorkerStatus = "unknown"
+)
+
+func (r AppNewResponseOriginWorkerStatus) IsKnown() bool {
+	switch r {
+	case AppNewResponseOriginWorkerStatusAvailable, AppNewResponseOriginWorkerStatusNotFound, AppNewResponseOriginWorkerStatusUnknown:
+		return true
+	}
+	return false
+}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -559,6 +611,12 @@ type AppUpdateResponse struct {
 	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
 	// argo_smart_routing. tls may only be "off" or "flexible".
 	OriginWorkerID string `json:"origin_worker_id"`
+	// Name of the Worker origin. Omitted when the Worker is not found or its name
+	// cannot be resolved.
+	OriginWorkerName string `json:"origin_worker_name"`
+	// Lookup status of the Worker origin. Unknown indicates that its name could not be
+	// resolved. Only returned for Worker origins.
+	OriginWorkerStatus AppUpdateResponseOriginWorkerStatus `json:"origin_worker_status"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -583,24 +641,26 @@ type AppUpdateResponse struct {
 // appUpdateResponseJSON contains the JSON metadata for the struct
 // [AppUpdateResponse]
 type appUpdateResponseJSON struct {
-	ID               apijson.Field
-	CreatedOn        apijson.Field
-	DNS              apijson.Field
-	ModifiedOn       apijson.Field
-	Protocol         apijson.Field
-	ArgoSmartRouting apijson.Field
-	EdgeIPs          apijson.Field
-	IPFirewall       apijson.Field
-	OriginDirect     apijson.Field
-	OriginDNS        apijson.Field
-	OriginPort       apijson.Field
-	OriginWorkerID   apijson.Field
-	ProxyProtocol    apijson.Field
-	TLS              apijson.Field
-	TrafficType      apijson.Field
-	VirtualNetworkID apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	ID                 apijson.Field
+	CreatedOn          apijson.Field
+	DNS                apijson.Field
+	ModifiedOn         apijson.Field
+	Protocol           apijson.Field
+	ArgoSmartRouting   apijson.Field
+	EdgeIPs            apijson.Field
+	IPFirewall         apijson.Field
+	OriginDirect       apijson.Field
+	OriginDNS          apijson.Field
+	OriginPort         apijson.Field
+	OriginWorkerID     apijson.Field
+	OriginWorkerName   apijson.Field
+	OriginWorkerStatus apijson.Field
+	ProxyProtocol      apijson.Field
+	TLS                apijson.Field
+	TrafficType        apijson.Field
+	VirtualNetworkID   apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r appUpdateResponseJSON) RawJSON() string {
@@ -690,6 +750,12 @@ type AppUpdateResponseSpectrumConfigAppConfig struct {
 	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
 	// argo_smart_routing. tls may only be "off" or "flexible".
 	OriginWorkerID string `json:"origin_worker_id"`
+	// Name of the Worker origin. Omitted when the Worker is not found or its name
+	// cannot be resolved.
+	OriginWorkerName string `json:"origin_worker_name"`
+	// Lookup status of the Worker origin. Unknown indicates that its name could not be
+	// resolved. Only returned for Worker origins.
+	OriginWorkerStatus AppUpdateResponseSpectrumConfigAppConfigOriginWorkerStatus `json:"origin_worker_status"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -706,24 +772,26 @@ type AppUpdateResponseSpectrumConfigAppConfig struct {
 // appUpdateResponseSpectrumConfigAppConfigJSON contains the JSON metadata for the
 // struct [AppUpdateResponseSpectrumConfigAppConfig]
 type appUpdateResponseSpectrumConfigAppConfigJSON struct {
-	ID               apijson.Field
-	CreatedOn        apijson.Field
-	DNS              apijson.Field
-	ModifiedOn       apijson.Field
-	Protocol         apijson.Field
-	TrafficType      apijson.Field
-	ArgoSmartRouting apijson.Field
-	EdgeIPs          apijson.Field
-	IPFirewall       apijson.Field
-	OriginDirect     apijson.Field
-	OriginDNS        apijson.Field
-	OriginPort       apijson.Field
-	OriginWorkerID   apijson.Field
-	ProxyProtocol    apijson.Field
-	TLS              apijson.Field
-	VirtualNetworkID apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	ID                 apijson.Field
+	CreatedOn          apijson.Field
+	DNS                apijson.Field
+	ModifiedOn         apijson.Field
+	Protocol           apijson.Field
+	TrafficType        apijson.Field
+	ArgoSmartRouting   apijson.Field
+	EdgeIPs            apijson.Field
+	IPFirewall         apijson.Field
+	OriginDirect       apijson.Field
+	OriginDNS          apijson.Field
+	OriginPort         apijson.Field
+	OriginWorkerID     apijson.Field
+	OriginWorkerName   apijson.Field
+	OriginWorkerStatus apijson.Field
+	ProxyProtocol      apijson.Field
+	TLS                apijson.Field
+	VirtualNetworkID   apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *AppUpdateResponseSpectrumConfigAppConfig) UnmarshalJSON(data []byte) (err error) {
@@ -754,6 +822,24 @@ const (
 func (r AppUpdateResponseSpectrumConfigAppConfigTrafficType) IsKnown() bool {
 	switch r {
 	case AppUpdateResponseSpectrumConfigAppConfigTrafficTypeDirect, AppUpdateResponseSpectrumConfigAppConfigTrafficTypeHTTP, AppUpdateResponseSpectrumConfigAppConfigTrafficTypeHTTPS, AppUpdateResponseSpectrumConfigAppConfigTrafficTypeWorker:
+		return true
+	}
+	return false
+}
+
+// Lookup status of the Worker origin. Unknown indicates that its name could not be
+// resolved. Only returned for Worker origins.
+type AppUpdateResponseSpectrumConfigAppConfigOriginWorkerStatus string
+
+const (
+	AppUpdateResponseSpectrumConfigAppConfigOriginWorkerStatusAvailable AppUpdateResponseSpectrumConfigAppConfigOriginWorkerStatus = "available"
+	AppUpdateResponseSpectrumConfigAppConfigOriginWorkerStatusNotFound  AppUpdateResponseSpectrumConfigAppConfigOriginWorkerStatus = "not_found"
+	AppUpdateResponseSpectrumConfigAppConfigOriginWorkerStatusUnknown   AppUpdateResponseSpectrumConfigAppConfigOriginWorkerStatus = "unknown"
+)
+
+func (r AppUpdateResponseSpectrumConfigAppConfigOriginWorkerStatus) IsKnown() bool {
+	switch r {
+	case AppUpdateResponseSpectrumConfigAppConfigOriginWorkerStatusAvailable, AppUpdateResponseSpectrumConfigAppConfigOriginWorkerStatusNotFound, AppUpdateResponseSpectrumConfigAppConfigOriginWorkerStatusUnknown:
 		return true
 	}
 	return false
@@ -838,6 +924,24 @@ func (r appUpdateResponseSpectrumConfigPaygoAppConfigJSON) RawJSON() string {
 }
 
 func (r AppUpdateResponseSpectrumConfigPaygoAppConfig) implementsAppUpdateResponse() {}
+
+// Lookup status of the Worker origin. Unknown indicates that its name could not be
+// resolved. Only returned for Worker origins.
+type AppUpdateResponseOriginWorkerStatus string
+
+const (
+	AppUpdateResponseOriginWorkerStatusAvailable AppUpdateResponseOriginWorkerStatus = "available"
+	AppUpdateResponseOriginWorkerStatusNotFound  AppUpdateResponseOriginWorkerStatus = "not_found"
+	AppUpdateResponseOriginWorkerStatusUnknown   AppUpdateResponseOriginWorkerStatus = "unknown"
+)
+
+func (r AppUpdateResponseOriginWorkerStatus) IsKnown() bool {
+	switch r {
+	case AppUpdateResponseOriginWorkerStatusAvailable, AppUpdateResponseOriginWorkerStatusNotFound, AppUpdateResponseOriginWorkerStatusUnknown:
+		return true
+	}
+	return false
+}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -936,6 +1040,12 @@ type AppListResponse struct {
 	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
 	// argo_smart_routing. tls may only be "off" or "flexible".
 	OriginWorkerID string `json:"origin_worker_id"`
+	// Name of the Worker origin. Omitted when the Worker is not found or its name
+	// cannot be resolved.
+	OriginWorkerName string `json:"origin_worker_name"`
+	// Lookup status of the Worker origin. Unknown indicates that its name could not be
+	// resolved. Only returned for Worker origins.
+	OriginWorkerStatus AppListResponseOriginWorkerStatus `json:"origin_worker_status"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -959,24 +1069,26 @@ type AppListResponse struct {
 
 // appListResponseJSON contains the JSON metadata for the struct [AppListResponse]
 type appListResponseJSON struct {
-	ID               apijson.Field
-	CreatedOn        apijson.Field
-	DNS              apijson.Field
-	ModifiedOn       apijson.Field
-	Protocol         apijson.Field
-	ArgoSmartRouting apijson.Field
-	EdgeIPs          apijson.Field
-	IPFirewall       apijson.Field
-	OriginDirect     apijson.Field
-	OriginDNS        apijson.Field
-	OriginPort       apijson.Field
-	OriginWorkerID   apijson.Field
-	ProxyProtocol    apijson.Field
-	TLS              apijson.Field
-	TrafficType      apijson.Field
-	VirtualNetworkID apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	ID                 apijson.Field
+	CreatedOn          apijson.Field
+	DNS                apijson.Field
+	ModifiedOn         apijson.Field
+	Protocol           apijson.Field
+	ArgoSmartRouting   apijson.Field
+	EdgeIPs            apijson.Field
+	IPFirewall         apijson.Field
+	OriginDirect       apijson.Field
+	OriginDNS          apijson.Field
+	OriginPort         apijson.Field
+	OriginWorkerID     apijson.Field
+	OriginWorkerName   apijson.Field
+	OriginWorkerStatus apijson.Field
+	ProxyProtocol      apijson.Field
+	TLS                apijson.Field
+	TrafficType        apijson.Field
+	VirtualNetworkID   apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r appListResponseJSON) RawJSON() string {
@@ -1066,6 +1178,12 @@ type AppListResponseSpectrumConfigAppConfig struct {
 	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
 	// argo_smart_routing. tls may only be "off" or "flexible".
 	OriginWorkerID string `json:"origin_worker_id"`
+	// Name of the Worker origin. Omitted when the Worker is not found or its name
+	// cannot be resolved.
+	OriginWorkerName string `json:"origin_worker_name"`
+	// Lookup status of the Worker origin. Unknown indicates that its name could not be
+	// resolved. Only returned for Worker origins.
+	OriginWorkerStatus AppListResponseSpectrumConfigAppConfigOriginWorkerStatus `json:"origin_worker_status"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -1082,24 +1200,26 @@ type AppListResponseSpectrumConfigAppConfig struct {
 // appListResponseSpectrumConfigAppConfigJSON contains the JSON metadata for the
 // struct [AppListResponseSpectrumConfigAppConfig]
 type appListResponseSpectrumConfigAppConfigJSON struct {
-	ID               apijson.Field
-	CreatedOn        apijson.Field
-	DNS              apijson.Field
-	ModifiedOn       apijson.Field
-	Protocol         apijson.Field
-	TrafficType      apijson.Field
-	ArgoSmartRouting apijson.Field
-	EdgeIPs          apijson.Field
-	IPFirewall       apijson.Field
-	OriginDirect     apijson.Field
-	OriginDNS        apijson.Field
-	OriginPort       apijson.Field
-	OriginWorkerID   apijson.Field
-	ProxyProtocol    apijson.Field
-	TLS              apijson.Field
-	VirtualNetworkID apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	ID                 apijson.Field
+	CreatedOn          apijson.Field
+	DNS                apijson.Field
+	ModifiedOn         apijson.Field
+	Protocol           apijson.Field
+	TrafficType        apijson.Field
+	ArgoSmartRouting   apijson.Field
+	EdgeIPs            apijson.Field
+	IPFirewall         apijson.Field
+	OriginDirect       apijson.Field
+	OriginDNS          apijson.Field
+	OriginPort         apijson.Field
+	OriginWorkerID     apijson.Field
+	OriginWorkerName   apijson.Field
+	OriginWorkerStatus apijson.Field
+	ProxyProtocol      apijson.Field
+	TLS                apijson.Field
+	VirtualNetworkID   apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *AppListResponseSpectrumConfigAppConfig) UnmarshalJSON(data []byte) (err error) {
@@ -1130,6 +1250,24 @@ const (
 func (r AppListResponseSpectrumConfigAppConfigTrafficType) IsKnown() bool {
 	switch r {
 	case AppListResponseSpectrumConfigAppConfigTrafficTypeDirect, AppListResponseSpectrumConfigAppConfigTrafficTypeHTTP, AppListResponseSpectrumConfigAppConfigTrafficTypeHTTPS, AppListResponseSpectrumConfigAppConfigTrafficTypeWorker:
+		return true
+	}
+	return false
+}
+
+// Lookup status of the Worker origin. Unknown indicates that its name could not be
+// resolved. Only returned for Worker origins.
+type AppListResponseSpectrumConfigAppConfigOriginWorkerStatus string
+
+const (
+	AppListResponseSpectrumConfigAppConfigOriginWorkerStatusAvailable AppListResponseSpectrumConfigAppConfigOriginWorkerStatus = "available"
+	AppListResponseSpectrumConfigAppConfigOriginWorkerStatusNotFound  AppListResponseSpectrumConfigAppConfigOriginWorkerStatus = "not_found"
+	AppListResponseSpectrumConfigAppConfigOriginWorkerStatusUnknown   AppListResponseSpectrumConfigAppConfigOriginWorkerStatus = "unknown"
+)
+
+func (r AppListResponseSpectrumConfigAppConfigOriginWorkerStatus) IsKnown() bool {
+	switch r {
+	case AppListResponseSpectrumConfigAppConfigOriginWorkerStatusAvailable, AppListResponseSpectrumConfigAppConfigOriginWorkerStatusNotFound, AppListResponseSpectrumConfigAppConfigOriginWorkerStatusUnknown:
 		return true
 	}
 	return false
@@ -1214,6 +1352,24 @@ func (r appListResponseSpectrumConfigPaygoAppConfigJSON) RawJSON() string {
 }
 
 func (r AppListResponseSpectrumConfigPaygoAppConfig) implementsAppListResponse() {}
+
+// Lookup status of the Worker origin. Unknown indicates that its name could not be
+// resolved. Only returned for Worker origins.
+type AppListResponseOriginWorkerStatus string
+
+const (
+	AppListResponseOriginWorkerStatusAvailable AppListResponseOriginWorkerStatus = "available"
+	AppListResponseOriginWorkerStatusNotFound  AppListResponseOriginWorkerStatus = "not_found"
+	AppListResponseOriginWorkerStatusUnknown   AppListResponseOriginWorkerStatus = "unknown"
+)
+
+func (r AppListResponseOriginWorkerStatus) IsKnown() bool {
+	switch r {
+	case AppListResponseOriginWorkerStatusAvailable, AppListResponseOriginWorkerStatusNotFound, AppListResponseOriginWorkerStatusUnknown:
+		return true
+	}
+	return false
+}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -1334,6 +1490,12 @@ type AppGetResponse struct {
 	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
 	// argo_smart_routing. tls may only be "off" or "flexible".
 	OriginWorkerID string `json:"origin_worker_id"`
+	// Name of the Worker origin. Omitted when the Worker is not found or its name
+	// cannot be resolved.
+	OriginWorkerName string `json:"origin_worker_name"`
+	// Lookup status of the Worker origin. Unknown indicates that its name could not be
+	// resolved. Only returned for Worker origins.
+	OriginWorkerStatus AppGetResponseOriginWorkerStatus `json:"origin_worker_status"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -1357,24 +1519,26 @@ type AppGetResponse struct {
 
 // appGetResponseJSON contains the JSON metadata for the struct [AppGetResponse]
 type appGetResponseJSON struct {
-	ID               apijson.Field
-	CreatedOn        apijson.Field
-	DNS              apijson.Field
-	ModifiedOn       apijson.Field
-	Protocol         apijson.Field
-	ArgoSmartRouting apijson.Field
-	EdgeIPs          apijson.Field
-	IPFirewall       apijson.Field
-	OriginDirect     apijson.Field
-	OriginDNS        apijson.Field
-	OriginPort       apijson.Field
-	OriginWorkerID   apijson.Field
-	ProxyProtocol    apijson.Field
-	TLS              apijson.Field
-	TrafficType      apijson.Field
-	VirtualNetworkID apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	ID                 apijson.Field
+	CreatedOn          apijson.Field
+	DNS                apijson.Field
+	ModifiedOn         apijson.Field
+	Protocol           apijson.Field
+	ArgoSmartRouting   apijson.Field
+	EdgeIPs            apijson.Field
+	IPFirewall         apijson.Field
+	OriginDirect       apijson.Field
+	OriginDNS          apijson.Field
+	OriginPort         apijson.Field
+	OriginWorkerID     apijson.Field
+	OriginWorkerName   apijson.Field
+	OriginWorkerStatus apijson.Field
+	ProxyProtocol      apijson.Field
+	TLS                apijson.Field
+	TrafficType        apijson.Field
+	VirtualNetworkID   apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r appGetResponseJSON) RawJSON() string {
@@ -1463,6 +1627,12 @@ type AppGetResponseSpectrumConfigAppConfig struct {
 	// with origin_direct, origin_dns, origin_port, proxy_protocol, and
 	// argo_smart_routing. tls may only be "off" or "flexible".
 	OriginWorkerID string `json:"origin_worker_id"`
+	// Name of the Worker origin. Omitted when the Worker is not found or its name
+	// cannot be resolved.
+	OriginWorkerName string `json:"origin_worker_name"`
+	// Lookup status of the Worker origin. Unknown indicates that its name could not be
+	// resolved. Only returned for Worker origins.
+	OriginWorkerStatus AppGetResponseSpectrumConfigAppConfigOriginWorkerStatus `json:"origin_worker_status"`
 	// Enables Proxy Protocol to the origin. Refer to
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -1479,24 +1649,26 @@ type AppGetResponseSpectrumConfigAppConfig struct {
 // appGetResponseSpectrumConfigAppConfigJSON contains the JSON metadata for the
 // struct [AppGetResponseSpectrumConfigAppConfig]
 type appGetResponseSpectrumConfigAppConfigJSON struct {
-	ID               apijson.Field
-	CreatedOn        apijson.Field
-	DNS              apijson.Field
-	ModifiedOn       apijson.Field
-	Protocol         apijson.Field
-	TrafficType      apijson.Field
-	ArgoSmartRouting apijson.Field
-	EdgeIPs          apijson.Field
-	IPFirewall       apijson.Field
-	OriginDirect     apijson.Field
-	OriginDNS        apijson.Field
-	OriginPort       apijson.Field
-	OriginWorkerID   apijson.Field
-	ProxyProtocol    apijson.Field
-	TLS              apijson.Field
-	VirtualNetworkID apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	ID                 apijson.Field
+	CreatedOn          apijson.Field
+	DNS                apijson.Field
+	ModifiedOn         apijson.Field
+	Protocol           apijson.Field
+	TrafficType        apijson.Field
+	ArgoSmartRouting   apijson.Field
+	EdgeIPs            apijson.Field
+	IPFirewall         apijson.Field
+	OriginDirect       apijson.Field
+	OriginDNS          apijson.Field
+	OriginPort         apijson.Field
+	OriginWorkerID     apijson.Field
+	OriginWorkerName   apijson.Field
+	OriginWorkerStatus apijson.Field
+	ProxyProtocol      apijson.Field
+	TLS                apijson.Field
+	VirtualNetworkID   apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *AppGetResponseSpectrumConfigAppConfig) UnmarshalJSON(data []byte) (err error) {
@@ -1527,6 +1699,24 @@ const (
 func (r AppGetResponseSpectrumConfigAppConfigTrafficType) IsKnown() bool {
 	switch r {
 	case AppGetResponseSpectrumConfigAppConfigTrafficTypeDirect, AppGetResponseSpectrumConfigAppConfigTrafficTypeHTTP, AppGetResponseSpectrumConfigAppConfigTrafficTypeHTTPS, AppGetResponseSpectrumConfigAppConfigTrafficTypeWorker:
+		return true
+	}
+	return false
+}
+
+// Lookup status of the Worker origin. Unknown indicates that its name could not be
+// resolved. Only returned for Worker origins.
+type AppGetResponseSpectrumConfigAppConfigOriginWorkerStatus string
+
+const (
+	AppGetResponseSpectrumConfigAppConfigOriginWorkerStatusAvailable AppGetResponseSpectrumConfigAppConfigOriginWorkerStatus = "available"
+	AppGetResponseSpectrumConfigAppConfigOriginWorkerStatusNotFound  AppGetResponseSpectrumConfigAppConfigOriginWorkerStatus = "not_found"
+	AppGetResponseSpectrumConfigAppConfigOriginWorkerStatusUnknown   AppGetResponseSpectrumConfigAppConfigOriginWorkerStatus = "unknown"
+)
+
+func (r AppGetResponseSpectrumConfigAppConfigOriginWorkerStatus) IsKnown() bool {
+	switch r {
+	case AppGetResponseSpectrumConfigAppConfigOriginWorkerStatusAvailable, AppGetResponseSpectrumConfigAppConfigOriginWorkerStatusNotFound, AppGetResponseSpectrumConfigAppConfigOriginWorkerStatusUnknown:
 		return true
 	}
 	return false
@@ -1611,6 +1801,24 @@ func (r appGetResponseSpectrumConfigPaygoAppConfigJSON) RawJSON() string {
 }
 
 func (r AppGetResponseSpectrumConfigPaygoAppConfig) implementsAppGetResponse() {}
+
+// Lookup status of the Worker origin. Unknown indicates that its name could not be
+// resolved. Only returned for Worker origins.
+type AppGetResponseOriginWorkerStatus string
+
+const (
+	AppGetResponseOriginWorkerStatusAvailable AppGetResponseOriginWorkerStatus = "available"
+	AppGetResponseOriginWorkerStatusNotFound  AppGetResponseOriginWorkerStatus = "not_found"
+	AppGetResponseOriginWorkerStatusUnknown   AppGetResponseOriginWorkerStatus = "unknown"
+)
+
+func (r AppGetResponseOriginWorkerStatus) IsKnown() bool {
+	switch r {
+	case AppGetResponseOriginWorkerStatusAvailable, AppGetResponseOriginWorkerStatusNotFound, AppGetResponseOriginWorkerStatusUnknown:
+		return true
+	}
+	return false
+}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -1821,6 +2029,24 @@ func (r AppNewParamsBodySpectrumConfigAppConfigTrafficType) IsKnown() bool {
 	return false
 }
 
+// Lookup status of the Worker origin. Unknown indicates that its name could not be
+// resolved. Only returned for Worker origins.
+type AppNewParamsBodySpectrumConfigAppConfigOriginWorkerStatus string
+
+const (
+	AppNewParamsBodySpectrumConfigAppConfigOriginWorkerStatusAvailable AppNewParamsBodySpectrumConfigAppConfigOriginWorkerStatus = "available"
+	AppNewParamsBodySpectrumConfigAppConfigOriginWorkerStatusNotFound  AppNewParamsBodySpectrumConfigAppConfigOriginWorkerStatus = "not_found"
+	AppNewParamsBodySpectrumConfigAppConfigOriginWorkerStatusUnknown   AppNewParamsBodySpectrumConfigAppConfigOriginWorkerStatus = "unknown"
+)
+
+func (r AppNewParamsBodySpectrumConfigAppConfigOriginWorkerStatus) IsKnown() bool {
+	switch r {
+	case AppNewParamsBodySpectrumConfigAppConfigOriginWorkerStatusAvailable, AppNewParamsBodySpectrumConfigAppConfigOriginWorkerStatusNotFound, AppNewParamsBodySpectrumConfigAppConfigOriginWorkerStatusUnknown:
+		return true
+	}
+	return false
+}
+
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 // for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -1876,6 +2102,24 @@ func (r AppNewParamsBodySpectrumConfigPaygoAppConfig) MarshalJSON() (data []byte
 }
 
 func (r AppNewParamsBodySpectrumConfigPaygoAppConfig) implementsAppNewParamsBodyUnion() {}
+
+// Lookup status of the Worker origin. Unknown indicates that its name could not be
+// resolved. Only returned for Worker origins.
+type AppNewParamsBodyOriginWorkerStatus string
+
+const (
+	AppNewParamsBodyOriginWorkerStatusAvailable AppNewParamsBodyOriginWorkerStatus = "available"
+	AppNewParamsBodyOriginWorkerStatusNotFound  AppNewParamsBodyOriginWorkerStatus = "not_found"
+	AppNewParamsBodyOriginWorkerStatusUnknown   AppNewParamsBodyOriginWorkerStatus = "unknown"
+)
+
+func (r AppNewParamsBodyOriginWorkerStatus) IsKnown() bool {
+	switch r {
+	case AppNewParamsBodyOriginWorkerStatusAvailable, AppNewParamsBodyOriginWorkerStatusNotFound, AppNewParamsBodyOriginWorkerStatusUnknown:
+		return true
+	}
+	return false
+}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
@@ -2226,6 +2470,24 @@ func (r AppUpdateParamsBodySpectrumConfigAppConfigTrafficType) IsKnown() bool {
 	return false
 }
 
+// Lookup status of the Worker origin. Unknown indicates that its name could not be
+// resolved. Only returned for Worker origins.
+type AppUpdateParamsBodySpectrumConfigAppConfigOriginWorkerStatus string
+
+const (
+	AppUpdateParamsBodySpectrumConfigAppConfigOriginWorkerStatusAvailable AppUpdateParamsBodySpectrumConfigAppConfigOriginWorkerStatus = "available"
+	AppUpdateParamsBodySpectrumConfigAppConfigOriginWorkerStatusNotFound  AppUpdateParamsBodySpectrumConfigAppConfigOriginWorkerStatus = "not_found"
+	AppUpdateParamsBodySpectrumConfigAppConfigOriginWorkerStatusUnknown   AppUpdateParamsBodySpectrumConfigAppConfigOriginWorkerStatus = "unknown"
+)
+
+func (r AppUpdateParamsBodySpectrumConfigAppConfigOriginWorkerStatus) IsKnown() bool {
+	switch r {
+	case AppUpdateParamsBodySpectrumConfigAppConfigOriginWorkerStatusAvailable, AppUpdateParamsBodySpectrumConfigAppConfigOriginWorkerStatusNotFound, AppUpdateParamsBodySpectrumConfigAppConfigOriginWorkerStatusUnknown:
+		return true
+	}
+	return false
+}
+
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 // for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -2281,6 +2543,24 @@ func (r AppUpdateParamsBodySpectrumConfigPaygoAppConfig) MarshalJSON() (data []b
 }
 
 func (r AppUpdateParamsBodySpectrumConfigPaygoAppConfig) implementsAppUpdateParamsBodyUnion() {}
+
+// Lookup status of the Worker origin. Unknown indicates that its name could not be
+// resolved. Only returned for Worker origins.
+type AppUpdateParamsBodyOriginWorkerStatus string
+
+const (
+	AppUpdateParamsBodyOriginWorkerStatusAvailable AppUpdateParamsBodyOriginWorkerStatus = "available"
+	AppUpdateParamsBodyOriginWorkerStatusNotFound  AppUpdateParamsBodyOriginWorkerStatus = "not_found"
+	AppUpdateParamsBodyOriginWorkerStatusUnknown   AppUpdateParamsBodyOriginWorkerStatus = "unknown"
+)
+
+func (r AppUpdateParamsBodyOriginWorkerStatus) IsKnown() bool {
+	switch r {
+	case AppUpdateParamsBodyOriginWorkerStatusAvailable, AppUpdateParamsBodyOriginWorkerStatusNotFound, AppUpdateParamsBodyOriginWorkerStatusUnknown:
+		return true
+	}
+	return false
+}
 
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)

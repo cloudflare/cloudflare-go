@@ -9,7 +9,6 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v7"
-	"github.com/cloudflare/cloudflare-go/v7/accounts"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/organizations"
@@ -30,19 +29,17 @@ func TestOrganizationNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Organizations.New(context.TODO(), organizations.OrganizationNewParams{
-		Organization: organizations.OrganizationParam{
-			Name: cloudflare.F("name"),
-			Parent: cloudflare.F(organizations.OrganizationParentParam{
-				ID: cloudflare.F("a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8"),
-			}),
-			Profile: cloudflare.F(accounts.AccountProfileParam{
-				BusinessAddress:  cloudflare.F("business_address"),
-				BusinessEmail:    cloudflare.F("business_email"),
-				BusinessName:     cloudflare.F("business_name"),
-				BusinessPhone:    cloudflare.F("business_phone"),
-				ExternalMetadata: cloudflare.F("external_metadata"),
-			}),
-		},
+		Name: cloudflare.F("x"),
+		Parent: cloudflare.F(organizations.OrganizationNewParamsParent{
+			ID: cloudflare.F("a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8"),
+		}),
+		Profile: cloudflare.F(organizations.OrganizationNewParamsProfile{
+			BusinessAddress:  cloudflare.F("business_address"),
+			BusinessEmail:    cloudflare.F("business_email"),
+			BusinessName:     cloudflare.F("business_name"),
+			BusinessPhone:    cloudflare.F("business_phone"),
+			ExternalMetadata: cloudflare.F("external_metadata"),
+		}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -70,19 +67,8 @@ func TestOrganizationUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8",
 		organizations.OrganizationUpdateParams{
-			Organization: organizations.OrganizationParam{
-				Name: cloudflare.F("name"),
-				Parent: cloudflare.F(organizations.OrganizationParentParam{
-					ID: cloudflare.F("a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8"),
-				}),
-				Profile: cloudflare.F(accounts.AccountProfileParam{
-					BusinessAddress:  cloudflare.F("business_address"),
-					BusinessEmail:    cloudflare.F("business_email"),
-					BusinessName:     cloudflare.F("business_name"),
-					BusinessPhone:    cloudflare.F("business_phone"),
-					ExternalMetadata: cloudflare.F("external_metadata"),
-				}),
-			},
+			Name:     cloudflare.F("name"),
+			ParentID: cloudflare.F("a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8"),
 		},
 	)
 	if err != nil {
@@ -115,11 +101,16 @@ func TestOrganizationListWithOptionalParams(t *testing.T) {
 			Organization: cloudflare.F("organization"),
 			User:         cloudflare.F("user"),
 		}),
+		Direction: cloudflare.F(organizations.OrganizationListParamsDirectionAsc),
+		Member: cloudflare.F(organizations.OrganizationListParamsMember{
+			Email: cloudflare.F("email"),
+		}),
 		Name: cloudflare.F(organizations.OrganizationListParamsName{
 			Contains:   cloudflare.F("contains"),
 			EndsWith:   cloudflare.F("endsWith"),
 			StartsWith: cloudflare.F("startsWith"),
 		}),
+		OrderBy:   cloudflare.F(organizations.OrganizationListParamsOrderByName),
 		PageSize:  cloudflare.F(int64(0)),
 		PageToken: cloudflare.F("page_token"),
 		Parent: cloudflare.F(organizations.OrganizationListParamsParent{

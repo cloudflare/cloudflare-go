@@ -33,7 +33,7 @@ func TestRiskScoringBehaviourUpdate(t *testing.T) {
 		Behaviors: cloudflare.F(map[string]zero_trust.RiskScoringBehaviourUpdateParamsBehaviors{
 			"foo": {
 				Enabled:   cloudflare.F(true),
-				RiskLevel: cloudflare.F(zero_trust.RiskScoringBehaviourUpdateParamsBehaviorsRiskLevelLow),
+				RiskLevel: cloudflare.F(zero_trust.RiskScoringBehaviourUpdateParamsBehaviorsRiskLevelInfo),
 			},
 		}),
 	})

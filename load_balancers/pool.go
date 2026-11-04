@@ -357,12 +357,24 @@ type PoolNewParams struct {
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
 	Origins param.Field[[]OriginParam] `json:"origins" api:"required"`
+	// A list of regions from which to run health checks. Null means every Cloudflare
+	// data center.
+	CheckRegions param.Field[[]CheckRegion] `json:"check_regions"`
 	// A human-readable description of the pool.
 	Description param.Field[string] `json:"description"`
 	// Whether to enable (the default) or disable this pool. Disabled pools will not
 	// receive traffic and are excluded from health checks. Disabling a pool will cause
 	// any load balancers using it to failover to the next pool (if any).
 	Enabled param.Field[bool] `json:"enabled"`
+	// A list of health sources, ordered from highest to lowest priority, used to
+	// evaluate individual origin health and overall pool health. The load balancer
+	// uses the first source that has data and falls back to the next. Currently
+	// accepted values are null or the exact array ["regional", "global"]; any other
+	// combination is rejected. Null (the default) behaves like ["local", "global"].
+	// ["regional", "global"] makes each region steer on its own health, falling back
+	// to the global decision when a region has no fresh data. Setting regional
+	// requires at least one region in check_regions.
+	HealthSources param.Field[[]PoolNewParamsHealthSource] `json:"health_sources"`
 	// The latitude of the data center containing the origins used in this pool in
 	// decimal degrees. If this is set, longitude must also be set.
 	Latitude param.Field[float64] `json:"latitude"`
@@ -381,6 +393,8 @@ type PoolNewParams struct {
 	// The ID of the Monitor Group to use for checking the health of origins within
 	// this pool.
 	MonitorGroup param.Field[string] `json:"monitor_group"`
+	// List of networks where Load Balancer or Pool is enabled.
+	Networks param.Field[[]string] `json:"networks"`
 	// This field is now deprecated. It has been moved to Cloudflare's Centralized
 	// Notification service
 	// https://developers.cloudflare.com/fundamentals/notifications/. The email address
@@ -397,6 +411,29 @@ type PoolNewParams struct {
 
 func (r PoolNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// The scope a health decision is aggregated over. local: the result from the
+// single data center running the health check; only available when health checks
+// run from every data center (check_regions is ALL_DATACENTERS). regional: a
+// separate decision per region, each aggregated from the data centers within that
+// region, so regions steer independently; requires at least one region configured
+// in check_regions. global: one worldwide decision aggregated across all
+// configured regions, used as the fallback.
+type PoolNewParamsHealthSource string
+
+const (
+	PoolNewParamsHealthSourceLocal    PoolNewParamsHealthSource = "local"
+	PoolNewParamsHealthSourceRegional PoolNewParamsHealthSource = "regional"
+	PoolNewParamsHealthSourceGlobal   PoolNewParamsHealthSource = "global"
+)
+
+func (r PoolNewParamsHealthSource) IsKnown() bool {
+	switch r {
+	case PoolNewParamsHealthSourceLocal, PoolNewParamsHealthSourceRegional, PoolNewParamsHealthSourceGlobal:
+		return true
+	}
+	return false
 }
 
 type PoolNewResponseEnvelope struct {
@@ -487,6 +524,8 @@ type PoolUpdateParams struct {
 	// The ID of the Monitor Group to use for checking the health of origins within
 	// this pool.
 	MonitorGroup param.Field[string] `json:"monitor_group"`
+	// List of networks where Load Balancer or Pool is enabled.
+	Networks param.Field[[]string] `json:"networks"`
 	// This field is now deprecated. It has been moved to Cloudflare's Centralized
 	// Notification service
 	// https://developers.cloudflare.com/fundamentals/notifications/. The email address
@@ -707,6 +746,8 @@ type PoolEditParams struct {
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
 	Name param.Field[string] `json:"name"`
+	// List of networks where Load Balancer or Pool is enabled.
+	Networks param.Field[[]string] `json:"networks"`
 	// This field is now deprecated. It has been moved to Cloudflare's Centralized
 	// Notification service
 	// https://developers.cloudflare.com/fundamentals/notifications/. The email address

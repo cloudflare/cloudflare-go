@@ -193,9 +193,10 @@ func TestDatabaseExportWithOptionalParams(t *testing.T) {
 			OutputFormat:    cloudflare.F(d1.DatabaseExportParamsOutputFormatPolling),
 			CurrentBookmark: cloudflare.F("current_bookmark"),
 			DumpOptions: cloudflare.F(d1.DatabaseExportParamsDumpOptions{
-				NoData:   cloudflare.F(true),
-				NoSchema: cloudflare.F(true),
-				Tables:   cloudflare.F([]string{"string"}),
+				Compatibility: cloudflare.F(d1.DatabaseExportParamsDumpOptionsCompatibilityD1),
+				NoData:        cloudflare.F(true),
+				NoSchema:      cloudflare.F(true),
+				Tables:        cloudflare.F([]string{"string"}),
 			}),
 		},
 	)

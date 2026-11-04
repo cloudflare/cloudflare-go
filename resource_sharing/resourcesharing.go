@@ -43,8 +43,8 @@ func NewResourceSharingService(opts ...option.RequestOption) (r *ResourceSharing
 	return
 }
 
-// Creates a new resource share for sharing Cloudflare resources with other
-// accounts or organizations.
+// Creates a share that makes a resource available to specific accounts in the
+// caller's organization, or to the whole organization.
 func (r *ResourceSharingService) New(ctx context.Context, params ResourceSharingNewParams, opts ...option.RequestOption) (res *ResourceSharingNewResponse, err error) {
 	var env ResourceSharingNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -61,19 +61,9 @@ func (r *ResourceSharingService) New(ctx context.Context, params ResourceSharing
 	return res, nil
 }
 
-// Updates the share's display name and tags. This endpoint does **not** modify
-// recipients or resources — those are managed via dedicated subresource endpoints:
-//
-//   - **Recipients**: Use `POST /accounts/{account_id}/shares/{share_id}/recipients`
-//     to add a single recipient,
-//     `PUT /accounts/{account_id}/shares/{share_id}/recipients` to replace the full
-//     recipient list, or
-//     `DELETE /accounts/{account_id}/shares/{share_id}/recipients/{recipient_id}` to
-//     remove a recipient.
-//   - **Resources**: Use the share's resource subresource endpoints.
-//
-// Updating is not immediate; an updated share object with a new status will be
-// returned.
+// Updates the share's display name and tags. Omitting `tags` leaves the existing
+// tags unchanged. Recipients and resources are managed via their subresource
+// endpoints.
 func (r *ResourceSharingService) Update(ctx context.Context, shareID string, params ResourceSharingUpdateParams, opts ...option.RequestOption) (res *ResourceSharingUpdateResponse, err error) {
 	var env ResourceSharingUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -171,9 +161,9 @@ type ResourceSharingNewResponse struct {
 	AccountID string `json:"account_id" api:"required"`
 	// The display name of an account.
 	AccountName string `json:"account_name" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the share.
 	Name string `json:"name" api:"required"`
@@ -197,7 +187,11 @@ type ResourceSharingNewResponse struct {
 	// A list of resources that are part of the share. This field is only included when
 	// requested via the 'include_resources' parameter.
 	Resources []ResourceSharingNewResponseResource `json:"resources"`
-	JSON      resourceSharingNewResponseJSON       `json:"-"`
+	// Tags associated with the share. Included in create and update responses when
+	// tags are supplied, and in read responses when the `include_tags_from` parameter
+	// is set.
+	Tags map[string]string              `json:"tags"`
+	JSON resourceSharingNewResponseJSON `json:"-"`
 }
 
 // resourceSharingNewResponseJSON contains the JSON metadata for the struct
@@ -218,6 +212,7 @@ type resourceSharingNewResponseJSON struct {
 	DisassociatingRecipientCount apijson.Field
 	Kind                         apijson.Field
 	Resources                    apijson.Field
+	Tags                         apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -279,15 +274,15 @@ func (r ResourceSharingNewResponseKind) IsKnown() bool {
 type ResourceSharingNewResponseResource struct {
 	// Share Resource identifier.
 	ID string `json:"id" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// Resource Metadata.
 	Meta interface{} `json:"meta" api:"required"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// Account identifier.
 	ResourceAccountID string `json:"resource_account_id" api:"required"`
-	// Share Resource identifier.
+	// Identifier assigned by the service that owns the shared resource.
 	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Type.
 	ResourceType ResourceSharingNewResponseResourcesResourceType `json:"resource_type" api:"required"`
@@ -367,9 +362,9 @@ type ResourceSharingUpdateResponse struct {
 	AccountID string `json:"account_id" api:"required"`
 	// The display name of an account.
 	AccountName string `json:"account_name" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the share.
 	Name string `json:"name" api:"required"`
@@ -393,7 +388,11 @@ type ResourceSharingUpdateResponse struct {
 	// A list of resources that are part of the share. This field is only included when
 	// requested via the 'include_resources' parameter.
 	Resources []ResourceSharingUpdateResponseResource `json:"resources"`
-	JSON      resourceSharingUpdateResponseJSON       `json:"-"`
+	// Tags associated with the share. Included in create and update responses when
+	// tags are supplied, and in read responses when the `include_tags_from` parameter
+	// is set.
+	Tags map[string]string                 `json:"tags"`
+	JSON resourceSharingUpdateResponseJSON `json:"-"`
 }
 
 // resourceSharingUpdateResponseJSON contains the JSON metadata for the struct
@@ -414,6 +413,7 @@ type resourceSharingUpdateResponseJSON struct {
 	DisassociatingRecipientCount apijson.Field
 	Kind                         apijson.Field
 	Resources                    apijson.Field
+	Tags                         apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -475,15 +475,15 @@ func (r ResourceSharingUpdateResponseKind) IsKnown() bool {
 type ResourceSharingUpdateResponseResource struct {
 	// Share Resource identifier.
 	ID string `json:"id" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// Resource Metadata.
 	Meta interface{} `json:"meta" api:"required"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// Account identifier.
 	ResourceAccountID string `json:"resource_account_id" api:"required"`
-	// Share Resource identifier.
+	// Identifier assigned by the service that owns the shared resource.
 	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Type.
 	ResourceType ResourceSharingUpdateResponseResourcesResourceType `json:"resource_type" api:"required"`
@@ -563,9 +563,9 @@ type ResourceSharingListResponse struct {
 	AccountID string `json:"account_id" api:"required"`
 	// The display name of an account.
 	AccountName string `json:"account_name" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the share.
 	Name string `json:"name" api:"required"`
@@ -589,7 +589,11 @@ type ResourceSharingListResponse struct {
 	// A list of resources that are part of the share. This field is only included when
 	// requested via the 'include_resources' parameter.
 	Resources []ResourceSharingListResponseResource `json:"resources"`
-	JSON      resourceSharingListResponseJSON       `json:"-"`
+	// Tags associated with the share. Included in create and update responses when
+	// tags are supplied, and in read responses when the `include_tags_from` parameter
+	// is set.
+	Tags map[string]string               `json:"tags"`
+	JSON resourceSharingListResponseJSON `json:"-"`
 }
 
 // resourceSharingListResponseJSON contains the JSON metadata for the struct
@@ -610,6 +614,7 @@ type resourceSharingListResponseJSON struct {
 	DisassociatingRecipientCount apijson.Field
 	Kind                         apijson.Field
 	Resources                    apijson.Field
+	Tags                         apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -671,15 +676,15 @@ func (r ResourceSharingListResponseKind) IsKnown() bool {
 type ResourceSharingListResponseResource struct {
 	// Share Resource identifier.
 	ID string `json:"id" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// Resource Metadata.
 	Meta interface{} `json:"meta" api:"required"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// Account identifier.
 	ResourceAccountID string `json:"resource_account_id" api:"required"`
-	// Share Resource identifier.
+	// Identifier assigned by the service that owns the shared resource.
 	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Type.
 	ResourceType ResourceSharingListResponseResourcesResourceType `json:"resource_type" api:"required"`
@@ -759,9 +764,9 @@ type ResourceSharingDeleteResponse struct {
 	AccountID string `json:"account_id" api:"required"`
 	// The display name of an account.
 	AccountName string `json:"account_name" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the share.
 	Name string `json:"name" api:"required"`
@@ -785,7 +790,11 @@ type ResourceSharingDeleteResponse struct {
 	// A list of resources that are part of the share. This field is only included when
 	// requested via the 'include_resources' parameter.
 	Resources []ResourceSharingDeleteResponseResource `json:"resources"`
-	JSON      resourceSharingDeleteResponseJSON       `json:"-"`
+	// Tags associated with the share. Included in create and update responses when
+	// tags are supplied, and in read responses when the `include_tags_from` parameter
+	// is set.
+	Tags map[string]string                 `json:"tags"`
+	JSON resourceSharingDeleteResponseJSON `json:"-"`
 }
 
 // resourceSharingDeleteResponseJSON contains the JSON metadata for the struct
@@ -806,6 +815,7 @@ type resourceSharingDeleteResponseJSON struct {
 	DisassociatingRecipientCount apijson.Field
 	Kind                         apijson.Field
 	Resources                    apijson.Field
+	Tags                         apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -867,15 +877,15 @@ func (r ResourceSharingDeleteResponseKind) IsKnown() bool {
 type ResourceSharingDeleteResponseResource struct {
 	// Share Resource identifier.
 	ID string `json:"id" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// Resource Metadata.
 	Meta interface{} `json:"meta" api:"required"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// Account identifier.
 	ResourceAccountID string `json:"resource_account_id" api:"required"`
-	// Share Resource identifier.
+	// Identifier assigned by the service that owns the shared resource.
 	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Type.
 	ResourceType ResourceSharingDeleteResponseResourcesResourceType `json:"resource_type" api:"required"`
@@ -955,9 +965,9 @@ type ResourceSharingGetResponse struct {
 	AccountID string `json:"account_id" api:"required"`
 	// The display name of an account.
 	AccountName string `json:"account_name" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// The name of the share.
 	Name string `json:"name" api:"required"`
@@ -981,7 +991,11 @@ type ResourceSharingGetResponse struct {
 	// A list of resources that are part of the share. This field is only included when
 	// requested via the 'include_resources' parameter.
 	Resources []ResourceSharingGetResponseResource `json:"resources"`
-	JSON      resourceSharingGetResponseJSON       `json:"-"`
+	// Tags associated with the share. Included in create and update responses when
+	// tags are supplied, and in read responses when the `include_tags_from` parameter
+	// is set.
+	Tags map[string]string              `json:"tags"`
+	JSON resourceSharingGetResponseJSON `json:"-"`
 }
 
 // resourceSharingGetResponseJSON contains the JSON metadata for the struct
@@ -1002,6 +1016,7 @@ type resourceSharingGetResponseJSON struct {
 	DisassociatingRecipientCount apijson.Field
 	Kind                         apijson.Field
 	Resources                    apijson.Field
+	Tags                         apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
 }
@@ -1063,15 +1078,15 @@ func (r ResourceSharingGetResponseKind) IsKnown() bool {
 type ResourceSharingGetResponseResource struct {
 	// Share Resource identifier.
 	ID string `json:"id" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// Resource Metadata.
 	Meta interface{} `json:"meta" api:"required"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified time.Time `json:"modified" api:"required" format:"date-time"`
 	// Account identifier.
 	ResourceAccountID string `json:"resource_account_id" api:"required"`
-	// Share Resource identifier.
+	// Identifier assigned by the service that owns the shared resource.
 	ResourceID string `json:"resource_id" api:"required"`
 	// Resource Type.
 	ResourceType ResourceSharingGetResponseResourcesResourceType `json:"resource_type" api:"required"`
@@ -1148,12 +1163,27 @@ type ResourceSharingNewParams struct {
 	// Account identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the share.
-	Name       param.Field[string]                              `json:"name" api:"required"`
-	Recipients param.Field[[]ResourceSharingNewParamsRecipient] `json:"recipients" api:"required"`
-	Resources  param.Field[[]ResourceSharingNewParamsResource]  `json:"resources" api:"required"`
+	Name param.Field[string] `json:"name" api:"required"`
+	// Accounts to exclude from an organization-targeted share. Only allowed when
+	// `recipients` contains no account entries. The share owner cannot be excluded.
+	// Duplicate entries are ignored.
+	ExcludedRecipients param.Field[[]ResourceSharingNewParamsExcludedRecipient] `json:"excluded_recipients"`
+	Recipients         param.Field[[]ResourceSharingNewParamsRecipient]         `json:"recipients"`
+	Resources          param.Field[[]ResourceSharingNewParamsResource]          `json:"resources"`
+	// Tags associated with the share.
+	Tags param.Field[map[string]string] `json:"tags"`
 }
 
 func (r ResourceSharingNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ResourceSharingNewParamsExcludedRecipient struct {
+	// The account to exclude from the organization-targeted share.
+	AccountID param.Field[string] `json:"account_id" api:"required"`
+}
+
+func (r ResourceSharingNewParamsExcludedRecipient) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1185,9 +1215,9 @@ func (r ResourceSharingNewParamsRecipient) MarshalJSON() (data []byte, err error
 type ResourceSharingNewParamsResource struct {
 	// Resource Metadata.
 	Meta param.Field[interface{}] `json:"meta" api:"required"`
-	// Account identifier.
+	// The account that owns the resource. Must match the `account_id` in the path.
 	ResourceAccountID param.Field[string] `json:"resource_account_id" api:"required"`
-	// Share Resource identifier.
+	// Identifier assigned by the service that owns the shared resource.
 	ResourceID param.Field[string] `json:"resource_id" api:"required"`
 	// Resource Type.
 	ResourceType param.Field[ResourceSharingNewParamsResourcesResourceType] `json:"resource_type" api:"required"`
@@ -1249,6 +1279,8 @@ type ResourceSharingUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the share.
 	Name param.Field[string] `json:"name" api:"required"`
+	// Tags associated with the share.
+	Tags param.Field[map[string]string] `json:"tags"`
 }
 
 func (r ResourceSharingUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1290,16 +1322,17 @@ type ResourceSharingListParams struct {
 	IncludeRecipientCounts param.Field[bool] `query:"include_recipient_counts"`
 	// Include resources in the response.
 	IncludeResources param.Field[bool] `query:"include_resources"`
+	// Include share tags in the response. `api` reads tags from the tag service;
+	// `mirror` reads a local, eventually consistent replica. If the tag lookup fails,
+	// the response omits `tags`.
+	IncludeTagsFrom param.Field[ResourceSharingListParamsIncludeTagsFrom] `query:"include_tags_from"`
 	// Filter shares by kind.
 	Kind param.Field[ResourceSharingListParamsKind] `query:"kind"`
 	// Order shares by values in the given field.
 	Order param.Field[ResourceSharingListParamsOrder] `query:"order"`
-	// Page number. Defaults to `1` when `per_page` is supplied without `page`. May be
-	// omitted entirely along with `per_page` to receive a non-paginated response.
+	// Page number. Defaults to `1` when omitted.
 	Page param.Field[int64] `query:"page"`
-	// Number of objects to return per page. Defaults to `20` when `page` is supplied
-	// without `per_page`. May be omitted entirely along with `page` to receive a
-	// non-paginated response.
+	// Number of objects to return per page. Defaults to `20` when omitted.
 	PerPage param.Field[int64] `query:"per_page"`
 	// Filter share resources by resource_types.
 	ResourceTypes param.Field[[]ResourceSharingListParamsResourceType] `query:"resource_types"`
@@ -1334,6 +1367,24 @@ const (
 func (r ResourceSharingListParamsDirection) IsKnown() bool {
 	switch r {
 	case ResourceSharingListParamsDirectionAsc, ResourceSharingListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
+// Include share tags in the response. `api` reads tags from the tag service;
+// `mirror` reads a local, eventually consistent replica. If the tag lookup fails,
+// the response omits `tags`.
+type ResourceSharingListParamsIncludeTagsFrom string
+
+const (
+	ResourceSharingListParamsIncludeTagsFromAPI    ResourceSharingListParamsIncludeTagsFrom = "api"
+	ResourceSharingListParamsIncludeTagsFromMirror ResourceSharingListParamsIncludeTagsFrom = "mirror"
+)
+
+func (r ResourceSharingListParamsIncludeTagsFrom) IsKnown() bool {
+	switch r {
+	case ResourceSharingListParamsIncludeTagsFromAPI, ResourceSharingListParamsIncludeTagsFromMirror:
 		return true
 	}
 	return false
@@ -1463,6 +1514,10 @@ type ResourceSharingGetParams struct {
 	IncludeRecipientCounts param.Field[bool] `query:"include_recipient_counts"`
 	// Include resources in the response.
 	IncludeResources param.Field[bool] `query:"include_resources"`
+	// Include share tags in the response. `api` reads tags from the tag service;
+	// `mirror` reads a local, eventually consistent replica. If the tag lookup fails,
+	// the response omits `tags`.
+	IncludeTagsFrom param.Field[ResourceSharingGetParamsIncludeTagsFrom] `query:"include_tags_from"`
 }
 
 // URLQuery serializes [ResourceSharingGetParams]'s query parameters as
@@ -1472,6 +1527,24 @@ func (r ResourceSharingGetParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Include share tags in the response. `api` reads tags from the tag service;
+// `mirror` reads a local, eventually consistent replica. If the tag lookup fails,
+// the response omits `tags`.
+type ResourceSharingGetParamsIncludeTagsFrom string
+
+const (
+	ResourceSharingGetParamsIncludeTagsFromAPI    ResourceSharingGetParamsIncludeTagsFrom = "api"
+	ResourceSharingGetParamsIncludeTagsFromMirror ResourceSharingGetParamsIncludeTagsFrom = "mirror"
+)
+
+func (r ResourceSharingGetParamsIncludeTagsFrom) IsKnown() bool {
+	switch r {
+	case ResourceSharingGetParamsIncludeTagsFromAPI, ResourceSharingGetParamsIncludeTagsFromMirror:
+		return true
+	}
+	return false
 }
 
 type ResourceSharingGetResponseEnvelope struct {

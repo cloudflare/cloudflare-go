@@ -144,17 +144,20 @@ func (r *ScriptDeploymentService) Get(ctx context.Context, scriptName string, de
 }
 
 type Deployment struct {
-	ID        string             `json:"id" api:"required" format:"uuid"`
-	CreatedOn time.Time          `json:"created_on" api:"required" format:"date-time"`
-	Source    string             `json:"source" api:"required"`
-	Strategy  DeploymentStrategy `json:"strategy" api:"required"`
+	ID        string    `json:"id" api:"required" format:"uuid"`
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
+	Source    string    `json:"source" api:"required"`
+	// Strategy for routing traffic across the listed versions. `percentage` splits
+	// traffic according to each version's `percentage`.
+	Strategy DeploymentStrategy `json:"strategy" api:"required"`
 	// Worker versions included in this deployment. Each object must contain a
 	// `version_id` UUID and a `percentage`; percentages across all objects must
 	// total 100. In the `cf` CLI, pass the entire array as one JSON value to
 	// `--versions`, either inline, for example
 	// `--versions '[{"version_id":"023e105f-2a42-4f8b-a1c1-73f6a2a30c0f","percentage":100}]'`,
 	// or from a JSON file with `--versions @versions.json`.
-	Versions    []DeploymentVersion   `json:"versions" api:"required"`
+	Versions []DeploymentVersion `json:"versions" api:"required"`
+	// Metadata attached to the deployment.
 	Annotations DeploymentAnnotations `json:"annotations"`
 	AuthorEmail string                `json:"author_email" format:"email"`
 	JSON        deploymentJSON        `json:"-"`
@@ -181,6 +184,8 @@ func (r deploymentJSON) RawJSON() string {
 	return r.raw
 }
 
+// Strategy for routing traffic across the listed versions. `percentage` splits
+// traffic according to each version's `percentage`.
 type DeploymentStrategy string
 
 const (
@@ -220,6 +225,7 @@ func (r deploymentVersionJSON) RawJSON() string {
 	return r.raw
 }
 
+// Metadata attached to the deployment.
 type DeploymentAnnotations struct {
 	// Human-readable message about the deployment. Truncated to 1000 bytes if longer.
 	WorkersMessage string `json:"workers/message"`
@@ -395,6 +401,8 @@ func (r DeploymentCodeUpdateStrategyObjectMode) IsKnown() bool {
 }
 
 type DeploymentParam struct {
+	// Strategy for routing traffic across the listed versions. `percentage` splits
+	// traffic according to each version's `percentage`.
 	Strategy param.Field[DeploymentStrategy] `json:"strategy" api:"required"`
 	// Worker versions included in this deployment. Each object must contain a
 	// `version_id` UUID and a `percentage`; percentages across all objects must
@@ -402,7 +410,8 @@ type DeploymentParam struct {
 	// `--versions`, either inline, for example
 	// `--versions '[{"version_id":"023e105f-2a42-4f8b-a1c1-73f6a2a30c0f","percentage":100}]'`,
 	// or from a JSON file with `--versions @versions.json`.
-	Versions    param.Field[[]DeploymentVersionParam]   `json:"versions" api:"required"`
+	Versions param.Field[[]DeploymentVersionParam] `json:"versions" api:"required"`
+	// Metadata attached to the deployment.
 	Annotations param.Field[DeploymentAnnotationsParam] `json:"annotations"`
 	// Choose whether to apply Durable Object code updates immediately or defer them.
 	// When omitted, the default strategy applies.
@@ -424,6 +433,7 @@ func (r DeploymentVersionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Metadata attached to the deployment.
 type DeploymentAnnotationsParam struct {
 	// Human-readable message about the deployment. Truncated to 1000 bytes if longer.
 	WorkersMessage param.Field[string] `json:"workers/message"`

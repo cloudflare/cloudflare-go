@@ -1319,9 +1319,9 @@ type Rules struct {
 	// `match`) is true. All fields are optional.
 	Overrides RulesOverrides `json:"overrides"`
 	// The order in which rules should be executed in relation to each other. Lower
-	// values are executed first. Values do not need to be sequential. If no value is
-	// provided for any rule the array order of the rules field will be used to assign
-	// a priority.
+	// values are executed first. Values do not need to be sequential. If all
+	// priorities are omitted or zero, the API assigns priorities based on the array
+	// order of the rules field.
 	Priority int64 `json:"priority"`
 	// If this rule's condition is true, this causes rule evaluation to stop after
 	// processing this rule.
@@ -1423,7 +1423,8 @@ type RulesOverrides struct {
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
 	POPPools map[string][]string `json:"pop_pools"`
-	// Configures pool weights.
+	// Configures pool weights for a rule override. An omitted default_weight inherits
+	// the load balancer's default weight.
 	//
 	// - `steering_policy="random"`: A random pool is selected with probability
 	//   proportional to pool weights.
@@ -1431,7 +1432,7 @@ type RulesOverrides struct {
 	//   pool's outstanding requests.
 	// - `steering_policy="least_connections"`: Use pool weights to scale each pool's
 	//   open connections.
-	RandomSteering RandomSteering `json:"random_steering"`
+	RandomSteering RulesOverridesRandomSteering `json:"random_steering"`
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
@@ -1528,6 +1529,42 @@ func (r rulesOverridesJSON) RawJSON() string {
 	return r.raw
 }
 
+// Configures pool weights for a rule override. An omitted default_weight inherits
+// the load balancer's default weight.
+//
+//   - `steering_policy="random"`: A random pool is selected with probability
+//     proportional to pool weights.
+//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
+//     pool's outstanding requests.
+//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
+//     open connections.
+type RulesOverridesRandomSteering struct {
+	// The default weight for pools in the load balancer that are not specified in the
+	// pool_weights map. An omitted value inherits the load balancer's default weight.
+	DefaultWeight float64 `json:"default_weight"`
+	// A mapping of pool IDs to custom weights. The weight is relative to other pools
+	// in the load balancer.
+	PoolWeights map[string]float64               `json:"pool_weights"`
+	JSON        rulesOverridesRandomSteeringJSON `json:"-"`
+}
+
+// rulesOverridesRandomSteeringJSON contains the JSON metadata for the struct
+// [RulesOverridesRandomSteering]
+type rulesOverridesRandomSteeringJSON struct {
+	DefaultWeight apijson.Field
+	PoolWeights   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *RulesOverridesRandomSteering) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesOverridesRandomSteeringJSON) RawJSON() string {
+	return r.raw
+}
+
 // A rule object containing conditions and overrides for this load balancer to
 // evaluate.
 type RulesParam struct {
@@ -1548,9 +1585,9 @@ type RulesParam struct {
 	// `match`) is true. All fields are optional.
 	Overrides param.Field[RulesOverridesParam] `json:"overrides"`
 	// The order in which rules should be executed in relation to each other. Lower
-	// values are executed first. Values do not need to be sequential. If no value is
-	// provided for any rule the array order of the rules field will be used to assign
-	// a priority.
+	// values are executed first. Values do not need to be sequential. If all
+	// priorities are omitted or zero, the API assigns priorities based on the array
+	// order of the rules field.
 	Priority param.Field[int64] `json:"priority"`
 	// If this rule's condition is true, this causes rule evaluation to stop after
 	// processing this rule.
@@ -1618,7 +1655,8 @@ type RulesOverridesParam struct {
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
 	POPPools param.Field[map[string][]string] `json:"pop_pools"`
-	// Configures pool weights.
+	// Configures pool weights for a rule override. An omitted default_weight inherits
+	// the load balancer's default weight.
 	//
 	// - `steering_policy="random"`: A random pool is selected with probability
 	//   proportional to pool weights.
@@ -1626,7 +1664,7 @@ type RulesOverridesParam struct {
 	//   pool's outstanding requests.
 	// - `steering_policy="least_connections"`: Use pool weights to scale each pool's
 	//   open connections.
-	RandomSteering param.Field[RandomSteeringParam] `json:"random_steering"`
+	RandomSteering param.Field[RulesOverridesRandomSteeringParam] `json:"random_steering"`
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
@@ -1693,6 +1731,28 @@ type RulesOverridesParam struct {
 }
 
 func (r RulesOverridesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Configures pool weights for a rule override. An omitted default_weight inherits
+// the load balancer's default weight.
+//
+//   - `steering_policy="random"`: A random pool is selected with probability
+//     proportional to pool weights.
+//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
+//     pool's outstanding requests.
+//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
+//     open connections.
+type RulesOverridesRandomSteeringParam struct {
+	// The default weight for pools in the load balancer that are not specified in the
+	// pool_weights map. An omitted value inherits the load balancer's default weight.
+	DefaultWeight param.Field[float64] `json:"default_weight"`
+	// A mapping of pool IDs to custom weights. The weight is relative to other pools
+	// in the load balancer.
+	PoolWeights param.Field[map[string]float64] `json:"pool_weights"`
+}
+
+func (r RulesOverridesRandomSteeringParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2009,6 +2069,13 @@ type LoadBalancerNewParams struct {
 	LocationStrategy param.Field[LocationStrategyParam] `json:"location_strategy"`
 	// List of networks where Load Balancer or Pool is enabled.
 	Networks param.Field[[]string] `json:"networks"`
+	// An optional list of pool sets, evaluated in array order with first match wins.
+	// Pool sets are independent from the standard steering fields (`region_pools` /
+	// `country_pools` / `pop_pools` / `default_pools` / `steering_policy` /
+	// `random_steering` / `fallback_pool` / `rules`). On a PATCH, an empty array
+	// (`pool_sets: []`) clears all pool sets, while omitting the field leaves existing
+	// pool sets unchanged.
+	PoolSets param.Field[[]LoadBalancerNewParamsPoolSet] `json:"pool_sets"`
 	// Enterprise only: A mapping of Cloudflare PoP identifiers to a list of pool IDs
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
@@ -2097,6 +2164,133 @@ func (r LoadBalancerNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// One entry in a load balancer's `pool_sets`. Pool sets are evaluated in array
+// order; the first whose `match` succeeds applies its `overrides` (or
+// `fixed_response`), and evaluation stops there.
+type LoadBalancerNewParamsPoolSet struct {
+	// Disable this specific pool set. It will no longer be evaluated.
+	Disabled param.Field[bool] `json:"disabled"`
+	// A collection of fields used to directly respond to the client instead of routing
+	// to a pool. When supplied on a rule, that rule stops further rule evaluation.
+	FixedResponse param.Field[LoadBalancerNewParamsPoolSetsFixedResponse] `json:"fixed_response"`
+	// Determines which requests a pool set applies to. Set `topology` to match by
+	// location or `default: true` to match all requests; the two are mutually
+	// exclusive. A pool set with no `match` matches all requests.
+	Match param.Field[LoadBalancerNewParamsPoolSetsMatch] `json:"match"`
+	// A human-readable name for this pool set.
+	Name param.Field[string] `json:"name"`
+	// The behavior a pool set applies when its `match` succeeds. A strict subset of a
+	// rule's `overrides`: a pool set replaces the topology wholesale with a flat pool
+	// list (`pools`), so only the declarative pool-routing fields plus `fallback_pool`
+	// and `steering_policy` are settable. All fields are optional.
+	Overrides param.Field[LoadBalancerNewParamsPoolSetsOverrides] `json:"overrides"`
+}
+
+func (r LoadBalancerNewParamsPoolSet) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A collection of fields used to directly respond to the client instead of routing
+// to a pool. When supplied on a rule, that rule stops further rule evaluation.
+type LoadBalancerNewParamsPoolSetsFixedResponse struct {
+	// The http 'Content-Type' header to include in the response.
+	ContentType param.Field[string] `json:"content_type"`
+	// The http 'Location' header to include in the response.
+	Location param.Field[string] `json:"location"`
+	// Text to include as the http body.
+	MessageBody param.Field[string] `json:"message_body"`
+	// The http status code to respond with.
+	StatusCode param.Field[int64] `json:"status_code"`
+}
+
+func (r LoadBalancerNewParamsPoolSetsFixedResponse) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Determines which requests a pool set applies to. Set `topology` to match by
+// location or `default: true` to match all requests; the two are mutually
+// exclusive. A pool set with no `match` matches all requests.
+type LoadBalancerNewParamsPoolSetsMatch struct {
+	// When true, matches every request. Cannot be combined with `topology`.
+	Default param.Field[bool] `json:"default"`
+	// Matches requests by location. Set any combination of `pops`, `countries`, and
+	// `regions` (at least one is required); a request matches when its value appears
+	// in any populated list (e.g. `regions: ["WNAM"]` with `countries: ["US"]` matches
+	// a request in either WNAM or the US).
+	Topology param.Field[LoadBalancerNewParamsPoolSetsMatchTopology] `json:"topology"`
+}
+
+func (r LoadBalancerNewParamsPoolSetsMatch) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches requests by location. Set any combination of `pops`, `countries`, and
+// `regions` (at least one is required); a request matches when its value appears
+// in any populated list (e.g. `regions: ["WNAM"]` with `countries: ["US"]` matches
+// a request in either WNAM or the US).
+type LoadBalancerNewParamsPoolSetsMatchTopology struct {
+	// A list of ISO 3166-1 alpha-2 country codes. Matches when the request's country
+	// is in this list.
+	Countries param.Field[[]string] `json:"countries"`
+	// A list of Cloudflare PoP codes. Matches when the request's PoP is in this list.
+	POPs param.Field[[]string] `json:"pops"`
+	// A list of Cloudflare region codes (e.g. `WNAM`, `ENAM`, `WEU`). Matches when the
+	// request's region is in this list.
+	Regions param.Field[[]string] `json:"regions"`
+}
+
+func (r LoadBalancerNewParamsPoolSetsMatchTopology) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior a pool set applies when its `match` succeeds. A strict subset of a
+// rule's `overrides`: a pool set replaces the topology wholesale with a flat pool
+// list (`pools`), so only the declarative pool-routing fields plus `fallback_pool`
+// and `steering_policy` are settable. All fields are optional.
+type LoadBalancerNewParamsPoolSetsOverrides struct {
+	// The pool ID to use when all other pools are detected as unhealthy.
+	FallbackPool param.Field[string] `json:"fallback_pool"`
+	// The default weight for pools not listed in `pool_weights`. The declarative
+	// alternative to `random_steering.default_weight`; mutually exclusive with
+	// `random_steering`.
+	PoolDefaultWeight param.Field[float64] `json:"pool_default_weight"`
+	// A mapping of pool IDs to custom weights, relative to the other pools. The
+	// declarative alternative to `random_steering.pool_weights`; mutually exclusive
+	// with `random_steering`.
+	PoolWeights param.Field[map[string]float64] `json:"pool_weights"`
+	// A flat, ordered list of pool IDs to route the matched audience to. Replaces the
+	// resolved topology with exactly these pools. Mutually exclusive with
+	// `fixed_response`.
+	Pools param.Field[[]string] `json:"pools"`
+	// Steering Policy for this load balancer.
+	//
+	// - `"off"`: Use `default_pools`.
+	// - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
+	//   requests, the country for `country_pools` is determined by
+	//   `location_strategy`.
+	// - `"random"`: Select a pool randomly.
+	// - `"dynamic_latency"`: Use round trip time to select the closest pool in
+	//   default_pools (requires pool health checks).
+	// - `"proximity"`: Use the pools' latitude and longitude to select the closest
+	//   pool using the Cloudflare PoP location for proxied requests or the location
+	//   determined by `location_strategy` for non-proxied requests.
+	// - `"least_outstanding_requests"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of outstanding
+	//   requests. Pools with more pending requests are weighted proportionately less
+	//   relative to others.
+	// - `"least_connections"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of open connections.
+	//   Pools with more open connections are weighted proportionately less relative to
+	//   others. Supported for HTTP/1 and HTTP/2 connections.
+	// - `""`: Will map to `"geo"` if you use
+	//   `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
+	SteeringPolicy param.Field[SteeringPolicy] `json:"steering_policy"`
+}
+
+func (r LoadBalancerNewParamsPoolSetsOverrides) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type LoadBalancerNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
 	Messages []shared.ResponseInfo `json:"messages" api:"required"`
@@ -2175,6 +2369,13 @@ type LoadBalancerUpdateParams struct {
 	LocationStrategy param.Field[LocationStrategyParam] `json:"location_strategy"`
 	// List of networks where Load Balancer or Pool is enabled.
 	Networks param.Field[[]string] `json:"networks"`
+	// An optional list of pool sets, evaluated in array order with first match wins.
+	// Pool sets are independent from the standard steering fields (`region_pools` /
+	// `country_pools` / `pop_pools` / `default_pools` / `steering_policy` /
+	// `random_steering` / `fallback_pool` / `rules`). On a PATCH, an empty array
+	// (`pool_sets: []`) clears all pool sets, while omitting the field leaves existing
+	// pool sets unchanged.
+	PoolSets param.Field[[]LoadBalancerUpdateParamsPoolSet] `json:"pool_sets"`
 	// Enterprise only: A mapping of Cloudflare PoP identifiers to a list of pool IDs
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
@@ -2260,6 +2461,133 @@ type LoadBalancerUpdateParams struct {
 }
 
 func (r LoadBalancerUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// One entry in a load balancer's `pool_sets`. Pool sets are evaluated in array
+// order; the first whose `match` succeeds applies its `overrides` (or
+// `fixed_response`), and evaluation stops there.
+type LoadBalancerUpdateParamsPoolSet struct {
+	// Disable this specific pool set. It will no longer be evaluated.
+	Disabled param.Field[bool] `json:"disabled"`
+	// A collection of fields used to directly respond to the client instead of routing
+	// to a pool. When supplied on a rule, that rule stops further rule evaluation.
+	FixedResponse param.Field[LoadBalancerUpdateParamsPoolSetsFixedResponse] `json:"fixed_response"`
+	// Determines which requests a pool set applies to. Set `topology` to match by
+	// location or `default: true` to match all requests; the two are mutually
+	// exclusive. A pool set with no `match` matches all requests.
+	Match param.Field[LoadBalancerUpdateParamsPoolSetsMatch] `json:"match"`
+	// A human-readable name for this pool set.
+	Name param.Field[string] `json:"name"`
+	// The behavior a pool set applies when its `match` succeeds. A strict subset of a
+	// rule's `overrides`: a pool set replaces the topology wholesale with a flat pool
+	// list (`pools`), so only the declarative pool-routing fields plus `fallback_pool`
+	// and `steering_policy` are settable. All fields are optional.
+	Overrides param.Field[LoadBalancerUpdateParamsPoolSetsOverrides] `json:"overrides"`
+}
+
+func (r LoadBalancerUpdateParamsPoolSet) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A collection of fields used to directly respond to the client instead of routing
+// to a pool. When supplied on a rule, that rule stops further rule evaluation.
+type LoadBalancerUpdateParamsPoolSetsFixedResponse struct {
+	// The http 'Content-Type' header to include in the response.
+	ContentType param.Field[string] `json:"content_type"`
+	// The http 'Location' header to include in the response.
+	Location param.Field[string] `json:"location"`
+	// Text to include as the http body.
+	MessageBody param.Field[string] `json:"message_body"`
+	// The http status code to respond with.
+	StatusCode param.Field[int64] `json:"status_code"`
+}
+
+func (r LoadBalancerUpdateParamsPoolSetsFixedResponse) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Determines which requests a pool set applies to. Set `topology` to match by
+// location or `default: true` to match all requests; the two are mutually
+// exclusive. A pool set with no `match` matches all requests.
+type LoadBalancerUpdateParamsPoolSetsMatch struct {
+	// When true, matches every request. Cannot be combined with `topology`.
+	Default param.Field[bool] `json:"default"`
+	// Matches requests by location. Set any combination of `pops`, `countries`, and
+	// `regions` (at least one is required); a request matches when its value appears
+	// in any populated list (e.g. `regions: ["WNAM"]` with `countries: ["US"]` matches
+	// a request in either WNAM or the US).
+	Topology param.Field[LoadBalancerUpdateParamsPoolSetsMatchTopology] `json:"topology"`
+}
+
+func (r LoadBalancerUpdateParamsPoolSetsMatch) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches requests by location. Set any combination of `pops`, `countries`, and
+// `regions` (at least one is required); a request matches when its value appears
+// in any populated list (e.g. `regions: ["WNAM"]` with `countries: ["US"]` matches
+// a request in either WNAM or the US).
+type LoadBalancerUpdateParamsPoolSetsMatchTopology struct {
+	// A list of ISO 3166-1 alpha-2 country codes. Matches when the request's country
+	// is in this list.
+	Countries param.Field[[]string] `json:"countries"`
+	// A list of Cloudflare PoP codes. Matches when the request's PoP is in this list.
+	POPs param.Field[[]string] `json:"pops"`
+	// A list of Cloudflare region codes (e.g. `WNAM`, `ENAM`, `WEU`). Matches when the
+	// request's region is in this list.
+	Regions param.Field[[]string] `json:"regions"`
+}
+
+func (r LoadBalancerUpdateParamsPoolSetsMatchTopology) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior a pool set applies when its `match` succeeds. A strict subset of a
+// rule's `overrides`: a pool set replaces the topology wholesale with a flat pool
+// list (`pools`), so only the declarative pool-routing fields plus `fallback_pool`
+// and `steering_policy` are settable. All fields are optional.
+type LoadBalancerUpdateParamsPoolSetsOverrides struct {
+	// The pool ID to use when all other pools are detected as unhealthy.
+	FallbackPool param.Field[string] `json:"fallback_pool"`
+	// The default weight for pools not listed in `pool_weights`. The declarative
+	// alternative to `random_steering.default_weight`; mutually exclusive with
+	// `random_steering`.
+	PoolDefaultWeight param.Field[float64] `json:"pool_default_weight"`
+	// A mapping of pool IDs to custom weights, relative to the other pools. The
+	// declarative alternative to `random_steering.pool_weights`; mutually exclusive
+	// with `random_steering`.
+	PoolWeights param.Field[map[string]float64] `json:"pool_weights"`
+	// A flat, ordered list of pool IDs to route the matched audience to. Replaces the
+	// resolved topology with exactly these pools. Mutually exclusive with
+	// `fixed_response`.
+	Pools param.Field[[]string] `json:"pools"`
+	// Steering Policy for this load balancer.
+	//
+	// - `"off"`: Use `default_pools`.
+	// - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
+	//   requests, the country for `country_pools` is determined by
+	//   `location_strategy`.
+	// - `"random"`: Select a pool randomly.
+	// - `"dynamic_latency"`: Use round trip time to select the closest pool in
+	//   default_pools (requires pool health checks).
+	// - `"proximity"`: Use the pools' latitude and longitude to select the closest
+	//   pool using the Cloudflare PoP location for proxied requests or the location
+	//   determined by `location_strategy` for non-proxied requests.
+	// - `"least_outstanding_requests"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of outstanding
+	//   requests. Pools with more pending requests are weighted proportionately less
+	//   relative to others.
+	// - `"least_connections"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of open connections.
+	//   Pools with more open connections are weighted proportionately less relative to
+	//   others. Supported for HTTP/1 and HTTP/2 connections.
+	// - `""`: Will map to `"geo"` if you use
+	//   `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
+	SteeringPolicy param.Field[SteeringPolicy] `json:"steering_policy"`
+}
+
+func (r LoadBalancerUpdateParamsPoolSetsOverrides) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2398,6 +2726,13 @@ type LoadBalancerEditParams struct {
 	Name param.Field[string] `json:"name"`
 	// List of networks where Load Balancer or Pool is enabled.
 	Networks param.Field[[]string] `json:"networks"`
+	// An optional list of pool sets, evaluated in array order with first match wins.
+	// Pool sets are independent from the standard steering fields (`region_pools` /
+	// `country_pools` / `pop_pools` / `default_pools` / `steering_policy` /
+	// `random_steering` / `fallback_pool` / `rules`). On a PATCH, an empty array
+	// (`pool_sets: []`) clears all pool sets, while omitting the field leaves existing
+	// pool sets unchanged.
+	PoolSets param.Field[[]LoadBalancerEditParamsPoolSet] `json:"pool_sets"`
 	// Enterprise only: A mapping of Cloudflare PoP identifiers to a list of pool IDs
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
@@ -2483,6 +2818,133 @@ type LoadBalancerEditParams struct {
 }
 
 func (r LoadBalancerEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// One entry in a load balancer's `pool_sets`. Pool sets are evaluated in array
+// order; the first whose `match` succeeds applies its `overrides` (or
+// `fixed_response`), and evaluation stops there.
+type LoadBalancerEditParamsPoolSet struct {
+	// Disable this specific pool set. It will no longer be evaluated.
+	Disabled param.Field[bool] `json:"disabled"`
+	// A collection of fields used to directly respond to the client instead of routing
+	// to a pool. When supplied on a rule, that rule stops further rule evaluation.
+	FixedResponse param.Field[LoadBalancerEditParamsPoolSetsFixedResponse] `json:"fixed_response"`
+	// Determines which requests a pool set applies to. Set `topology` to match by
+	// location or `default: true` to match all requests; the two are mutually
+	// exclusive. A pool set with no `match` matches all requests.
+	Match param.Field[LoadBalancerEditParamsPoolSetsMatch] `json:"match"`
+	// A human-readable name for this pool set.
+	Name param.Field[string] `json:"name"`
+	// The behavior a pool set applies when its `match` succeeds. A strict subset of a
+	// rule's `overrides`: a pool set replaces the topology wholesale with a flat pool
+	// list (`pools`), so only the declarative pool-routing fields plus `fallback_pool`
+	// and `steering_policy` are settable. All fields are optional.
+	Overrides param.Field[LoadBalancerEditParamsPoolSetsOverrides] `json:"overrides"`
+}
+
+func (r LoadBalancerEditParamsPoolSet) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A collection of fields used to directly respond to the client instead of routing
+// to a pool. When supplied on a rule, that rule stops further rule evaluation.
+type LoadBalancerEditParamsPoolSetsFixedResponse struct {
+	// The http 'Content-Type' header to include in the response.
+	ContentType param.Field[string] `json:"content_type"`
+	// The http 'Location' header to include in the response.
+	Location param.Field[string] `json:"location"`
+	// Text to include as the http body.
+	MessageBody param.Field[string] `json:"message_body"`
+	// The http status code to respond with.
+	StatusCode param.Field[int64] `json:"status_code"`
+}
+
+func (r LoadBalancerEditParamsPoolSetsFixedResponse) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Determines which requests a pool set applies to. Set `topology` to match by
+// location or `default: true` to match all requests; the two are mutually
+// exclusive. A pool set with no `match` matches all requests.
+type LoadBalancerEditParamsPoolSetsMatch struct {
+	// When true, matches every request. Cannot be combined with `topology`.
+	Default param.Field[bool] `json:"default"`
+	// Matches requests by location. Set any combination of `pops`, `countries`, and
+	// `regions` (at least one is required); a request matches when its value appears
+	// in any populated list (e.g. `regions: ["WNAM"]` with `countries: ["US"]` matches
+	// a request in either WNAM or the US).
+	Topology param.Field[LoadBalancerEditParamsPoolSetsMatchTopology] `json:"topology"`
+}
+
+func (r LoadBalancerEditParamsPoolSetsMatch) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches requests by location. Set any combination of `pops`, `countries`, and
+// `regions` (at least one is required); a request matches when its value appears
+// in any populated list (e.g. `regions: ["WNAM"]` with `countries: ["US"]` matches
+// a request in either WNAM or the US).
+type LoadBalancerEditParamsPoolSetsMatchTopology struct {
+	// A list of ISO 3166-1 alpha-2 country codes. Matches when the request's country
+	// is in this list.
+	Countries param.Field[[]string] `json:"countries"`
+	// A list of Cloudflare PoP codes. Matches when the request's PoP is in this list.
+	POPs param.Field[[]string] `json:"pops"`
+	// A list of Cloudflare region codes (e.g. `WNAM`, `ENAM`, `WEU`). Matches when the
+	// request's region is in this list.
+	Regions param.Field[[]string] `json:"regions"`
+}
+
+func (r LoadBalancerEditParamsPoolSetsMatchTopology) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The behavior a pool set applies when its `match` succeeds. A strict subset of a
+// rule's `overrides`: a pool set replaces the topology wholesale with a flat pool
+// list (`pools`), so only the declarative pool-routing fields plus `fallback_pool`
+// and `steering_policy` are settable. All fields are optional.
+type LoadBalancerEditParamsPoolSetsOverrides struct {
+	// The pool ID to use when all other pools are detected as unhealthy.
+	FallbackPool param.Field[string] `json:"fallback_pool"`
+	// The default weight for pools not listed in `pool_weights`. The declarative
+	// alternative to `random_steering.default_weight`; mutually exclusive with
+	// `random_steering`.
+	PoolDefaultWeight param.Field[float64] `json:"pool_default_weight"`
+	// A mapping of pool IDs to custom weights, relative to the other pools. The
+	// declarative alternative to `random_steering.pool_weights`; mutually exclusive
+	// with `random_steering`.
+	PoolWeights param.Field[map[string]float64] `json:"pool_weights"`
+	// A flat, ordered list of pool IDs to route the matched audience to. Replaces the
+	// resolved topology with exactly these pools. Mutually exclusive with
+	// `fixed_response`.
+	Pools param.Field[[]string] `json:"pools"`
+	// Steering Policy for this load balancer.
+	//
+	// - `"off"`: Use `default_pools`.
+	// - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
+	//   requests, the country for `country_pools` is determined by
+	//   `location_strategy`.
+	// - `"random"`: Select a pool randomly.
+	// - `"dynamic_latency"`: Use round trip time to select the closest pool in
+	//   default_pools (requires pool health checks).
+	// - `"proximity"`: Use the pools' latitude and longitude to select the closest
+	//   pool using the Cloudflare PoP location for proxied requests or the location
+	//   determined by `location_strategy` for non-proxied requests.
+	// - `"least_outstanding_requests"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of outstanding
+	//   requests. Pools with more pending requests are weighted proportionately less
+	//   relative to others.
+	// - `"least_connections"`: Select a pool by taking into consideration
+	//   `random_steering` weights, as well as each pool's number of open connections.
+	//   Pools with more open connections are weighted proportionately less relative to
+	//   others. Supported for HTTP/1 and HTTP/2 connections.
+	// - `""`: Will map to `"geo"` if you use
+	//   `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
+	SteeringPolicy param.Field[SteeringPolicy] `json:"steering_policy"`
+}
+
+func (r LoadBalancerEditParamsPoolSetsOverrides) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

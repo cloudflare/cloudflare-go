@@ -37,6 +37,9 @@ func TestAccessServiceTokenNewWithOptionalParams(t *testing.T) {
 		Duration:                      cloudflare.F("60m"),
 		Enabled:                       cloudflare.F(true),
 		PreviousClientSecretExpiresAt: cloudflare.F(time.Now()),
+		Tags: cloudflare.F(map[string]string{
+			"environment": "production",
+		}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -72,6 +75,9 @@ func TestAccessServiceTokenUpdateWithOptionalParams(t *testing.T) {
 			Enabled:                       cloudflare.F(true),
 			Name:                          cloudflare.F("CI/CD token"),
 			PreviousClientSecretExpiresAt: cloudflare.F(time.Now()),
+			Tags: cloudflare.F(map[string]string{
+				"environment": "production",
+			}),
 		},
 	)
 	if err != nil {

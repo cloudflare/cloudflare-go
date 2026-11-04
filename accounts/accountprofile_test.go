@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/option"
 )
 
-func TestAccountProfileUpdate(t *testing.T) {
+func TestAccountProfileUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,14 +29,12 @@ func TestAccountProfileUpdate(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	err := client.Accounts.AccountProfile.Update(context.TODO(), accounts.AccountProfileUpdateParams{
-		AccountID: cloudflare.F("account_id"),
-		AccountProfile: accounts.AccountProfileParam{
-			BusinessAddress:  cloudflare.F("business_address"),
-			BusinessEmail:    cloudflare.F("business_email"),
-			BusinessName:     cloudflare.F("business_name"),
-			BusinessPhone:    cloudflare.F("business_phone"),
-			ExternalMetadata: cloudflare.F("external_metadata"),
-		},
+		AccountID:        cloudflare.F("account_id"),
+		BusinessAddress:  cloudflare.F("business_address"),
+		BusinessEmail:    cloudflare.F("business_email"),
+		BusinessName:     cloudflare.F("business_name"),
+		BusinessPhone:    cloudflare.F("business_phone"),
+		ExternalMetadata: cloudflare.F("external_metadata"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

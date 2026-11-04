@@ -98,6 +98,9 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 			ForensicCopy: cloudflare.F(zero_trust.RuleSettingForensicCopyParam{
 				Enabled: cloudflare.F(true),
 			}),
+			Forward: cloudflare.F(zero_trust.RuleSettingForwardParam{
+				WorkerID: cloudflare.F("0123456789abcdef0123456789abcdef"),
+			}),
 			IgnoreCNAMECategoryMatches:      cloudflare.F(true),
 			InsecureDisableDNSSECValidation: cloudflare.F(false),
 			IPCategories:                    cloudflare.F(true),
@@ -243,6 +246,9 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 				}),
 				ForensicCopy: cloudflare.F(zero_trust.RuleSettingForensicCopyParam{
 					Enabled: cloudflare.F(true),
+				}),
+				Forward: cloudflare.F(zero_trust.RuleSettingForwardParam{
+					WorkerID: cloudflare.F("0123456789abcdef0123456789abcdef"),
 				}),
 				IgnoreCNAMECategoryMatches:      cloudflare.F(true),
 				InsecureDisableDNSSECValidation: cloudflare.F(false),

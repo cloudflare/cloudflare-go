@@ -290,8 +290,11 @@ type ServiceToken struct {
 	// been reported as leaked.
 	LeakReporter string `json:"leak_reporter"`
 	// The name of the service token.
-	Name string           `json:"name"`
-	JSON serviceTokenJSON `json:"-"`
+	Name string `json:"name"`
+	// Tags associated with the service token, as key-value pairs. On update, replaces
+	// all existing tags.
+	Tags map[string]string `json:"tags" api:"nullable"`
+	JSON serviceTokenJSON  `json:"-"`
 }
 
 // serviceTokenJSON contains the JSON metadata for the struct [ServiceToken]
@@ -305,6 +308,7 @@ type serviceTokenJSON struct {
 	LeakReportedAt apijson.Field
 	LeakReporter   apijson.Field
 	Name           apijson.Field
+	Tags           apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -339,7 +343,10 @@ type AccessServiceTokenNewResponse struct {
 	// omitted on create.
 	Enabled bool `json:"enabled"`
 	// The name of the service token.
-	Name string                            `json:"name"`
+	Name string `json:"name"`
+	// Tags associated with the service token, as key-value pairs. On update, replaces
+	// all existing tags.
+	Tags map[string]string                 `json:"tags" api:"nullable"`
 	JSON accessServiceTokenNewResponseJSON `json:"-"`
 }
 
@@ -352,6 +359,7 @@ type accessServiceTokenNewResponseJSON struct {
 	Duration     apijson.Field
 	Enabled      apijson.Field
 	Name         apijson.Field
+	Tags         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -386,7 +394,10 @@ type AccessServiceTokenRotateResponse struct {
 	// omitted on create.
 	Enabled bool `json:"enabled"`
 	// The name of the service token.
-	Name string                               `json:"name"`
+	Name string `json:"name"`
+	// Tags associated with the service token, as key-value pairs. On update, replaces
+	// all existing tags.
+	Tags map[string]string                    `json:"tags" api:"nullable"`
 	JSON accessServiceTokenRotateResponseJSON `json:"-"`
 }
 
@@ -399,6 +410,7 @@ type accessServiceTokenRotateResponseJSON struct {
 	Duration     apijson.Field
 	Enabled      apijson.Field
 	Name         apijson.Field
+	Tags         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -444,6 +456,9 @@ type AccessServiceTokenNewParams struct {
 	// Rotating a service token that was reported as leaked discards the previous
 	// secret entirely, so no grace period can be set.
 	PreviousClientSecretExpiresAt param.Field[time.Time] `json:"previous_client_secret_expires_at" format:"date-time"`
+	// Tags associated with the service token, as key-value pairs. On update, replaces
+	// all existing tags.
+	Tags param.Field[map[string]string] `json:"tags"`
 }
 
 func (r AccessServiceTokenNewParams) MarshalJSON() (data []byte, err error) {
@@ -622,6 +637,9 @@ type AccessServiceTokenUpdateParams struct {
 	// Rotating a service token that was reported as leaked discards the previous
 	// secret entirely, so no grace period can be set.
 	PreviousClientSecretExpiresAt param.Field[time.Time] `json:"previous_client_secret_expires_at" format:"date-time"`
+	// Tags associated with the service token, as key-value pairs. On update, replaces
+	// all existing tags.
+	Tags param.Field[map[string]string] `json:"tags"`
 }
 
 func (r AccessServiceTokenUpdateParams) MarshalJSON() (data []byte, err error) {

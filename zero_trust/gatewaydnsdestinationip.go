@@ -62,7 +62,7 @@ func (r *GatewayDNSDestinationIPService) ListAutoPaging(ctx context.Context, que
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-type DNSDestinationIPs = string
+type DNSDestinationIPsID = string
 
 type GatewayDNSDestinationIPListResponse struct {
 	ID       string `json:"id" api:"required"`

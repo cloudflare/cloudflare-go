@@ -1036,9 +1036,9 @@ func (r AccessUserPopulationUserUpdateParams) MarshalJSON() (data []byte, err er
 }
 
 type AccessUserPopulationUserUpdateParamsOperation struct {
-	Op    param.Field[AccessUserPopulationUserUpdateParamsOperationsOp] `json:"op" api:"required"`
-	Path  param.Field[string]                                           `json:"path"`
-	Value param.Field[interface{}]                                      `json:"value"`
+	Op    param.Field[AccessUserPopulationUserUpdateParamsOperationsOp]         `json:"op" api:"required"`
+	Path  param.Field[string]                                                   `json:"path"`
+	Value param.Field[AccessUserPopulationUserUpdateParamsOperationsValueUnion] `json:"value"`
 }
 
 func (r AccessUserPopulationUserUpdateParamsOperation) MarshalJSON() (data []byte, err error) {
@@ -1059,6 +1059,23 @@ func (r AccessUserPopulationUserUpdateParamsOperationsOp) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool],
+// [zero_trust.AccessUserPopulationUserUpdateParamsOperationsValueArray],
+// [zero_trust.AccessUserPopulationUserUpdateParamsOperationsValueMap].
+type AccessUserPopulationUserUpdateParamsOperationsValueUnion interface {
+	ImplementsAccessUserPopulationUserUpdateParamsOperationsValueUnion()
+}
+
+type AccessUserPopulationUserUpdateParamsOperationsValueArray []interface{}
+
+func (r AccessUserPopulationUserUpdateParamsOperationsValueArray) ImplementsAccessUserPopulationUserUpdateParamsOperationsValueUnion() {
+}
+
+type AccessUserPopulationUserUpdateParamsOperationsValueMap map[string]interface{}
+
+func (r AccessUserPopulationUserUpdateParamsOperationsValueMap) ImplementsAccessUserPopulationUserUpdateParamsOperationsValueUnion() {
 }
 
 type AccessUserPopulationUserUpdateResponseEnvelope struct {

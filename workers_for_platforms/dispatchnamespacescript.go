@@ -56,9 +56,19 @@ func NewDispatchNamespaceScriptService(opts ...option.RequestOption) (r *Dispatc
 	return
 }
 
-// Upload a Workers for Platforms script module to a dispatch namespace. You can
-// find more about the multipart metadata on our docs:
-// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/.
+// Upload Worker code and configuration to a Workers for Platforms dispatch
+// namespace. For ES module and other module-based Workers, use
+// `multipart/form-data` with a JSON `metadata` part whose `main_module` field
+// names the entrypoint file. Upload each module as a separate file part;
+// JavaScript ES module parts use the `application/javascript+module` content type.
+//
+// Raw `application/javascript` and `text/javascript` request bodies accept only
+// legacy service-worker syntax using `addEventListener`. They do not accept ES
+// module syntax such as `export default`. To upload a module Worker, use the
+// multipart request format instead.
+//
+// Learn more about multipart metadata in the
+// [documentation](https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/).
 func (r *DispatchNamespaceScriptService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptUpdateParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptUpdateResponse, err error) {
 	var env DispatchNamespaceScriptUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

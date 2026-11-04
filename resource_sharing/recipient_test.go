@@ -33,7 +33,6 @@ func TestRecipientNewWithOptionalParams(t *testing.T) {
 		resource_sharing.RecipientNewParams{
 			PathAccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			BodyAccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			OrganizationID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			RecipientAccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)

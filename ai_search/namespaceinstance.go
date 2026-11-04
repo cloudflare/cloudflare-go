@@ -330,8 +330,7 @@ type NamespaceInstanceNewResponse struct {
 	Status         string                                   `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
-	// Defaults to 21600 (6h); instances crawling a domain outside the account may be
-	// set to 86400.
+	// Defaults to 86400 (24h).
 	SyncInterval NamespaceInstanceNewResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                                   `json:"token_id" format:"uuid"`
 	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
@@ -1108,8 +1107,7 @@ func (r NamespaceInstanceNewResponseSourceParamsWebCrawlerParseType) IsKnown() b
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 // (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
-// Defaults to 21600 (6h); instances crawling a domain outside the account may be
-// set to 86400.
+// Defaults to 86400 (24h).
 type NamespaceInstanceNewResponseSyncInterval float64
 
 const (
@@ -1203,8 +1201,7 @@ type NamespaceInstanceUpdateResponse struct {
 	Status         string                                      `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
-	// Defaults to 21600 (6h); instances crawling a domain outside the account may be
-	// set to 86400.
+	// Defaults to 86400 (24h).
 	SyncInterval NamespaceInstanceUpdateResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                                      `json:"token_id" format:"uuid"`
 	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
@@ -1981,8 +1978,7 @@ func (r NamespaceInstanceUpdateResponseSourceParamsWebCrawlerParseType) IsKnown(
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 // (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
-// Defaults to 21600 (6h); instances crawling a domain outside the account may be
-// set to 86400.
+// Defaults to 86400 (24h).
 type NamespaceInstanceUpdateResponseSyncInterval float64
 
 const (
@@ -2871,8 +2867,7 @@ type NamespaceInstanceDeleteResponse struct {
 	Status         string                                      `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
-	// Defaults to 21600 (6h); instances crawling a domain outside the account may be
-	// set to 86400.
+	// Defaults to 86400 (24h).
 	SyncInterval NamespaceInstanceDeleteResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                                      `json:"token_id" format:"uuid"`
 	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
@@ -3649,8 +3644,7 @@ func (r NamespaceInstanceDeleteResponseSourceParamsWebCrawlerParseType) IsKnown(
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 // (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
-// Defaults to 21600 (6h); instances crawling a domain outside the account may be
-// set to 86400.
+// Defaults to 86400 (24h).
 type NamespaceInstanceDeleteResponseSyncInterval float64
 
 const (
@@ -4142,8 +4136,7 @@ type NamespaceInstanceReadResponse struct {
 	Status         string                                    `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
-	// Defaults to 21600 (6h); instances crawling a domain outside the account may be
-	// set to 86400.
+	// Defaults to 86400 (24h).
 	SyncInterval NamespaceInstanceReadResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                                    `json:"token_id" format:"uuid"`
 	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
@@ -4920,8 +4913,7 @@ func (r NamespaceInstanceReadResponseSourceParamsWebCrawlerParseType) IsKnown() 
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 // (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
-// Defaults to 21600 (6h); instances crawling a domain outside the account may be
-// set to 86400.
+// Defaults to 86400 (24h).
 type NamespaceInstanceReadResponseSyncInterval float64
 
 const (
@@ -5300,8 +5292,7 @@ type NamespaceInstanceNewParams struct {
 	SourceParams   param.Field[NamespaceInstanceNewParamsSourceParams] `json:"source_params"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
-	// Defaults to 21600 (6h); instances crawling a domain outside the account may be
-	// set to 86400.
+	// Defaults to 86400 (24h).
 	SyncInterval param.Field[NamespaceInstanceNewParamsSyncInterval] `json:"sync_interval"`
 	TokenID      param.Field[string]                                 `json:"token_id" format:"uuid"`
 	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
@@ -5765,8 +5756,7 @@ func (r NamespaceInstanceNewParamsSourceParamsWebCrawlerParseType) IsKnown() boo
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 // (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
-// Defaults to 21600 (6h); instances crawling a domain outside the account may be
-// set to 86400.
+// Defaults to 86400 (24h).
 type NamespaceInstanceNewParamsSyncInterval float64
 
 const (
@@ -5870,8 +5860,7 @@ type NamespaceInstanceUpdateParams struct {
 	SummarizationModel param.Field[string]                                    `json:"summarization_model"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
-	// Defaults to 21600 (6h); instances crawling a domain outside the account may be
-	// set to 86400.
+	// Defaults to 86400 (24h).
 	SyncInterval                   param.Field[NamespaceInstanceUpdateParamsSyncInterval] `json:"sync_interval"`
 	SystemPromptAISearch           param.Field[string]                                    `json:"system_prompt_ai_search"`
 	SystemPromptIndexSummarization param.Field[string]                                    `json:"system_prompt_index_summarization"`
@@ -6334,8 +6323,7 @@ func (r NamespaceInstanceUpdateParamsSourceParamsWebCrawlerParseType) IsKnown() 
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 // (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
-// Defaults to 21600 (6h); instances crawling a domain outside the account may be
-// set to 86400.
+// Defaults to 86400 (24h).
 type NamespaceInstanceUpdateParamsSyncInterval float64
 
 const (

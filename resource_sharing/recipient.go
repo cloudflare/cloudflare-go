@@ -184,9 +184,9 @@ type RecipientNewResponse struct {
 	// - `disassociated` — Shared resources have been removed from the recipient
 	//   account. The recipient record remains in the database.
 	AssociationStatus RecipientNewResponseAssociationStatus `json:"association_status" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified  time.Time                      `json:"modified" api:"required" format:"date-time"`
 	Resources []RecipientNewResponseResource `json:"resources"`
 	JSON      recipientNewResponseJSON       `json:"-"`
@@ -244,14 +244,15 @@ func (r RecipientNewResponseAssociationStatus) IsKnown() bool {
 }
 
 type RecipientNewResponseResource struct {
-	// Share Recipient error message.
+	// Error from the most recent attempt to apply the resource to the recipient. Empty
+	// string when no error has been recorded.
 	Error string `json:"error" api:"required"`
-	// Share Resource identifier.
+	// Identifier assigned by the service that owns the shared resource.
 	ResourceID string `json:"resource_id" api:"required"`
-	// Resource Version.
-	ResourceVersion int64 `json:"resource_version" api:"required"`
+	// Resource version applied to the recipient, if reconciliation has occurred.
+	ResourceVersion int64 `json:"resource_version" api:"required,nullable"`
 	// Whether the error is terminal or will be continually retried.
-	Terminal bool                             `json:"terminal" api:"required"`
+	Terminal bool                             `json:"terminal" api:"required,nullable"`
 	JSON     recipientNewResponseResourceJSON `json:"-"`
 }
 
@@ -297,9 +298,9 @@ type RecipientListResponse struct {
 	// - `disassociated` — Shared resources have been removed from the recipient
 	//   account. The recipient record remains in the database.
 	AssociationStatus RecipientListResponseAssociationStatus `json:"association_status" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified  time.Time                       `json:"modified" api:"required" format:"date-time"`
 	Resources []RecipientListResponseResource `json:"resources"`
 	JSON      recipientListResponseJSON       `json:"-"`
@@ -357,14 +358,15 @@ func (r RecipientListResponseAssociationStatus) IsKnown() bool {
 }
 
 type RecipientListResponseResource struct {
-	// Share Recipient error message.
+	// Error from the most recent attempt to apply the resource to the recipient. Empty
+	// string when no error has been recorded.
 	Error string `json:"error" api:"required"`
-	// Share Resource identifier.
+	// Identifier assigned by the service that owns the shared resource.
 	ResourceID string `json:"resource_id" api:"required"`
-	// Resource Version.
-	ResourceVersion int64 `json:"resource_version" api:"required"`
+	// Resource version applied to the recipient, if reconciliation has occurred.
+	ResourceVersion int64 `json:"resource_version" api:"required,nullable"`
 	// Whether the error is terminal or will be continually retried.
-	Terminal bool                              `json:"terminal" api:"required"`
+	Terminal bool                              `json:"terminal" api:"required,nullable"`
 	JSON     recipientListResponseResourceJSON `json:"-"`
 }
 
@@ -410,9 +412,9 @@ type RecipientDeleteResponse struct {
 	// - `disassociated` — Shared resources have been removed from the recipient
 	//   account. The recipient record remains in the database.
 	AssociationStatus RecipientDeleteResponseAssociationStatus `json:"association_status" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified  time.Time                         `json:"modified" api:"required" format:"date-time"`
 	Resources []RecipientDeleteResponseResource `json:"resources"`
 	JSON      recipientDeleteResponseJSON       `json:"-"`
@@ -470,14 +472,15 @@ func (r RecipientDeleteResponseAssociationStatus) IsKnown() bool {
 }
 
 type RecipientDeleteResponseResource struct {
-	// Share Recipient error message.
+	// Error from the most recent attempt to apply the resource to the recipient. Empty
+	// string when no error has been recorded.
 	Error string `json:"error" api:"required"`
-	// Share Resource identifier.
+	// Identifier assigned by the service that owns the shared resource.
 	ResourceID string `json:"resource_id" api:"required"`
-	// Resource Version.
-	ResourceVersion int64 `json:"resource_version" api:"required"`
+	// Resource version applied to the recipient, if reconciliation has occurred.
+	ResourceVersion int64 `json:"resource_version" api:"required,nullable"`
 	// Whether the error is terminal or will be continually retried.
-	Terminal bool                                `json:"terminal" api:"required"`
+	Terminal bool                                `json:"terminal" api:"required,nullable"`
 	JSON     recipientDeleteResponseResourceJSON `json:"-"`
 }
 
@@ -523,9 +526,9 @@ type RecipientGetResponse struct {
 	// - `disassociated` — Shared resources have been removed from the recipient
 	//   account. The recipient record remains in the database.
 	AssociationStatus RecipientGetResponseAssociationStatus `json:"association_status" api:"required"`
-	// When the share was created.
+	// When the object was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
-	// When the share was modified.
+	// When the object was last modified.
 	Modified  time.Time                      `json:"modified" api:"required" format:"date-time"`
 	Resources []RecipientGetResponseResource `json:"resources"`
 	JSON      recipientGetResponseJSON       `json:"-"`
@@ -583,14 +586,15 @@ func (r RecipientGetResponseAssociationStatus) IsKnown() bool {
 }
 
 type RecipientGetResponseResource struct {
-	// Share Recipient error message.
+	// Error from the most recent attempt to apply the resource to the recipient. Empty
+	// string when no error has been recorded.
 	Error string `json:"error" api:"required"`
-	// Share Resource identifier.
+	// Identifier assigned by the service that owns the shared resource.
 	ResourceID string `json:"resource_id" api:"required"`
-	// Resource Version.
-	ResourceVersion int64 `json:"resource_version" api:"required"`
+	// Resource version applied to the recipient, if reconciliation has occurred.
+	ResourceVersion int64 `json:"resource_version" api:"required,nullable"`
 	// Whether the error is terminal or will be continually retried.
-	Terminal bool                             `json:"terminal" api:"required"`
+	Terminal bool                             `json:"terminal" api:"required,nullable"`
 	JSON     recipientGetResponseResourceJSON `json:"-"`
 }
 
@@ -622,8 +626,6 @@ type RecipientNewParams struct {
 	// from the recipient account (in the body). Both names will continue to be
 	// accepted until 2027-05-26 (see `x-sunset`).
 	BodyAccountID param.Field[string] `json:"account_id"`
-	// Organization identifier.
-	OrganizationID param.Field[string] `json:"organization_id"`
 	// The account that will receive the share.
 	RecipientAccountID param.Field[string] `json:"recipient_account_id"`
 }
@@ -667,12 +669,9 @@ type RecipientListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Include resources in the response.
 	IncludeResources param.Field[bool] `query:"include_resources"`
-	// Page number. Defaults to `1` when `per_page` is supplied without `page`. May be
-	// omitted entirely along with `per_page` to receive a non-paginated response.
+	// Page number. Defaults to `1` when omitted.
 	Page param.Field[int64] `query:"page"`
-	// Number of objects to return per page. Defaults to `20` when `page` is supplied
-	// without `per_page`. May be omitted entirely along with `page` to receive a
-	// non-paginated response.
+	// Number of objects to return per page. Defaults to `20` when omitted.
 	PerPage param.Field[int64] `query:"per_page"`
 }
 

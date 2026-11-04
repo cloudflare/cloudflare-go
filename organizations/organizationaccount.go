@@ -8,7 +8,9 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"slices"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v7/internal/apiquery"
@@ -17,6 +19,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/shared"
 	"github.com/cloudflare/cloudflare-go/v7/tenants"
+	"github.com/tidwall/gjson"
 )
 
 // OrganizationAccountService contains methods and other services that help with
@@ -39,21 +42,210 @@ func NewOrganizationAccountService(opts ...option.RequestOption) (r *Organizatio
 }
 
 // Retrieve the accounts immediately attached to a specific organization. Accounts
-// attached to sub-organizations are not included.
-func (r *OrganizationAccountService) Get(ctx context.Context, organizationID string, query OrganizationAccountGetParams, opts ...option.RequestOption) (res *[]tenants.TenantAccount, err error) {
+// attached to sub-organizations are not included. Use `page_token` and `page_size`
+// for cursor pagination, or provide `page` and `per_page` together for legacy
+// offset pagination. Cursor pagination takes precedence when requested. The
+// default response uses Account fields; `Accept: application/json; legacy=true`
+// requests the LegacyAccount representation.
+func (r *OrganizationAccountService) Get(ctx context.Context, organizationID string, params OrganizationAccountGetParams, opts ...option.RequestOption) (res *[]OrganizationAccountGetResponse, err error) {
 	var env OrganizationAccountGetResponseEnvelope
+	if params.Accept.Present {
+		opts = append(opts, option.WithHeader("Accept", fmt.Sprintf("%v", params.Accept)))
+	}
 	opts = slices.Concat(r.Options, opts)
 	if organizationID == "" {
 		err = errors.New("missing required organization_id parameter")
 		return nil, err
 	}
 	path := fmt.Sprintf("organizations/%s/accounts", organizationID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
 	res = &env.Result
 	return res, nil
+}
+
+type OrganizationAccountGetResponse struct {
+	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
+	// This field can have the runtime type of [tenants.TenantAccountSettings],
+	// [OrganizationAccountGetResponseOrganizationsAPILegacyAccountSettings].
+	Settings       interface{}                               `json:"settings" api:"required"`
+	ID             string                                    `json:"id"`
+	AccountPubname string                                    `json:"account_pubname" api:"nullable"`
+	AccountTag     string                                    `json:"account_tag"`
+	AccountType    OrganizationAccountGetResponseAccountType `json:"account_type"`
+	Name           string                                    `json:"name" api:"nullable"`
+	// This field can have the runtime type of [map[string]string].
+	Tags  interface{}                        `json:"tags"`
+	Type  OrganizationAccountGetResponseType `json:"type"`
+	JSON  organizationAccountGetResponseJSON `json:"-"`
+	union OrganizationAccountGetResponseUnion
+}
+
+// organizationAccountGetResponseJSON contains the JSON metadata for the struct
+// [OrganizationAccountGetResponse]
+type organizationAccountGetResponseJSON struct {
+	CreatedOn      apijson.Field
+	Settings       apijson.Field
+	ID             apijson.Field
+	AccountPubname apijson.Field
+	AccountTag     apijson.Field
+	AccountType    apijson.Field
+	Name           apijson.Field
+	Tags           apijson.Field
+	Type           apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r organizationAccountGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *OrganizationAccountGetResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = OrganizationAccountGetResponse{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [OrganizationAccountGetResponseUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [tenants.TenantAccount],
+// [OrganizationAccountGetResponseOrganizationsAPILegacyAccount].
+func (r OrganizationAccountGetResponse) AsUnion() OrganizationAccountGetResponseUnion {
+	return r.union
+}
+
+// Union satisfied by [tenants.TenantAccount] or
+// [OrganizationAccountGetResponseOrganizationsAPILegacyAccount].
+type OrganizationAccountGetResponseUnion interface {
+	ImplementsOrganizationAccountGetResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*OrganizationAccountGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(tenants.TenantAccount{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(OrganizationAccountGetResponseOrganizationsAPILegacyAccount{}),
+		},
+	)
+}
+
+type OrganizationAccountGetResponseOrganizationsAPILegacyAccount struct {
+	AccountPubname string                                                                 `json:"account_pubname" api:"required,nullable"`
+	AccountTag     string                                                                 `json:"account_tag" api:"required"`
+	AccountType    OrganizationAccountGetResponseOrganizationsAPILegacyAccountAccountType `json:"account_type" api:"required"`
+	CreatedOn      time.Time                                                              `json:"created_on" api:"required" format:"date-time"`
+	Settings       OrganizationAccountGetResponseOrganizationsAPILegacyAccountSettings    `json:"settings" api:"required"`
+	JSON           organizationAccountGetResponseOrganizationsAPILegacyAccountJSON        `json:"-"`
+}
+
+// organizationAccountGetResponseOrganizationsAPILegacyAccountJSON contains the
+// JSON metadata for the struct
+// [OrganizationAccountGetResponseOrganizationsAPILegacyAccount]
+type organizationAccountGetResponseOrganizationsAPILegacyAccountJSON struct {
+	AccountPubname apijson.Field
+	AccountTag     apijson.Field
+	AccountType    apijson.Field
+	CreatedOn      apijson.Field
+	Settings       apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *OrganizationAccountGetResponseOrganizationsAPILegacyAccount) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r organizationAccountGetResponseOrganizationsAPILegacyAccountJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r OrganizationAccountGetResponseOrganizationsAPILegacyAccount) ImplementsOrganizationAccountGetResponse() {
+}
+
+type OrganizationAccountGetResponseOrganizationsAPILegacyAccountAccountType string
+
+const (
+	OrganizationAccountGetResponseOrganizationsAPILegacyAccountAccountTypeStandard   OrganizationAccountGetResponseOrganizationsAPILegacyAccountAccountType = "standard"
+	OrganizationAccountGetResponseOrganizationsAPILegacyAccountAccountTypeEnterprise OrganizationAccountGetResponseOrganizationsAPILegacyAccountAccountType = "enterprise"
+)
+
+func (r OrganizationAccountGetResponseOrganizationsAPILegacyAccountAccountType) IsKnown() bool {
+	switch r {
+	case OrganizationAccountGetResponseOrganizationsAPILegacyAccountAccountTypeStandard, OrganizationAccountGetResponseOrganizationsAPILegacyAccountAccountTypeEnterprise:
+		return true
+	}
+	return false
+}
+
+type OrganizationAccountGetResponseOrganizationsAPILegacyAccountSettings struct {
+	AccessApprovalExpiry        time.Time                                                               `json:"access_approval_expiry" api:"required,nullable" format:"date-time"`
+	APIAccessEnabled            bool                                                                    `json:"api_access_enabled" api:"required"`
+	EnforceTwoFactor            bool                                                                    `json:"enforce_two_factor" api:"required"`
+	UseAccountCustomNSByDefault bool                                                                    `json:"use_account_custom_ns_by_default" api:"required"`
+	JSON                        organizationAccountGetResponseOrganizationsAPILegacyAccountSettingsJSON `json:"-"`
+}
+
+// organizationAccountGetResponseOrganizationsAPILegacyAccountSettingsJSON contains
+// the JSON metadata for the struct
+// [OrganizationAccountGetResponseOrganizationsAPILegacyAccountSettings]
+type organizationAccountGetResponseOrganizationsAPILegacyAccountSettingsJSON struct {
+	AccessApprovalExpiry        apijson.Field
+	APIAccessEnabled            apijson.Field
+	EnforceTwoFactor            apijson.Field
+	UseAccountCustomNSByDefault apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
+}
+
+func (r *OrganizationAccountGetResponseOrganizationsAPILegacyAccountSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r organizationAccountGetResponseOrganizationsAPILegacyAccountSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
+type OrganizationAccountGetResponseAccountType string
+
+const (
+	OrganizationAccountGetResponseAccountTypeStandard   OrganizationAccountGetResponseAccountType = "standard"
+	OrganizationAccountGetResponseAccountTypeEnterprise OrganizationAccountGetResponseAccountType = "enterprise"
+)
+
+func (r OrganizationAccountGetResponseAccountType) IsKnown() bool {
+	switch r {
+	case OrganizationAccountGetResponseAccountTypeStandard, OrganizationAccountGetResponseAccountTypeEnterprise:
+		return true
+	}
+	return false
+}
+
+type OrganizationAccountGetResponseType string
+
+const (
+	OrganizationAccountGetResponseTypeStandard   OrganizationAccountGetResponseType = "standard"
+	OrganizationAccountGetResponseTypeEnterprise OrganizationAccountGetResponseType = "enterprise"
+)
+
+func (r OrganizationAccountGetResponseType) IsKnown() bool {
+	switch r {
+	case OrganizationAccountGetResponseTypeStandard, OrganizationAccountGetResponseTypeEnterprise:
+		return true
+	}
+	return false
 }
 
 type OrganizationAccountGetParams struct {
@@ -71,9 +263,13 @@ type OrganizationAccountGetParams struct {
 	// calculate total_count.
 	IncludeTotal param.Field[bool]                             `query:"include_total"`
 	Name         param.Field[OrganizationAccountGetParamsName] `query:"name"`
-	// Field to order results by. Currently supported values: `account_name`. When not
-	// specified, results are ordered by internal account ID.
+	// Field to order results by. Currently supported values: `account_name`.
 	OrderBy param.Field[OrganizationAccountGetParamsOrderBy] `query:"order_by"`
+	// Legacy offset page number. Must be provided with `per_page`. Values below 1 are
+	// treated as
+	//
+	// 1. Cursor pagination takes precedence when requested.
+	Page param.Field[int64] `query:"page"`
 	// The amount of items to return. Defaults to 10.
 	PageSize param.Field[int64] `query:"page_size"`
 	// An opaque token returned from the last list response that when provided will
@@ -82,6 +278,12 @@ type OrganizationAccountGetParams struct {
 	// Parameters used to filter the retrieved list must remain in subsequent requests
 	// with a page token.
 	PageToken param.Field[string] `query:"page_token"`
+	// Legacy offset page size. Must be provided with `page`. Values are clamped to the
+	// range 1-100. Cursor pagination takes precedence when requested.
+	PerPage param.Field[int64] `query:"per_page"`
+	// Filter accounts by lifecycle status. Defaults to `active`.
+	Status param.Field[OrganizationAccountGetParamsStatus] `query:"status"`
+	Accept param.Field[string]                             `header:"Accept"`
 }
 
 // URLQuery serializes [OrganizationAccountGetParams]'s query parameters as
@@ -152,8 +354,7 @@ func (r OrganizationAccountGetParamsName) URLQuery() (v url.Values) {
 	})
 }
 
-// Field to order results by. Currently supported values: `account_name`. When not
-// specified, results are ordered by internal account ID.
+// Field to order results by. Currently supported values: `account_name`.
 type OrganizationAccountGetParamsOrderBy string
 
 const (
@@ -168,10 +369,26 @@ func (r OrganizationAccountGetParamsOrderBy) IsKnown() bool {
 	return false
 }
 
+// Filter accounts by lifecycle status. Defaults to `active`.
+type OrganizationAccountGetParamsStatus string
+
+const (
+	OrganizationAccountGetParamsStatusActive  OrganizationAccountGetParamsStatus = "active"
+	OrganizationAccountGetParamsStatusDeleted OrganizationAccountGetParamsStatus = "deleted"
+)
+
+func (r OrganizationAccountGetParamsStatus) IsKnown() bool {
+	switch r {
+	case OrganizationAccountGetParamsStatusActive, OrganizationAccountGetParamsStatusDeleted:
+		return true
+	}
+	return false
+}
+
 type OrganizationAccountGetResponseEnvelope struct {
 	Errors     []interface{}                                    `json:"errors" api:"required"`
 	Messages   []shared.ResponseInfo                            `json:"messages" api:"required"`
-	Result     []tenants.TenantAccount                          `json:"result" api:"required"`
+	Result     []OrganizationAccountGetResponse                 `json:"result" api:"required"`
 	ResultInfo OrganizationAccountGetResponseEnvelopeResultInfo `json:"result_info" api:"required"`
 	Success    OrganizationAccountGetResponseEnvelopeSuccess    `json:"success" api:"required"`
 	JSON       organizationAccountGetResponseEnvelopeJSON       `json:"-"`
@@ -198,6 +415,82 @@ func (r organizationAccountGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type OrganizationAccountGetResponseEnvelopeResultInfo struct {
+	Count int64 `json:"count"`
+	// Use this opaque token in the next request to retrieve the next page.
+	//
+	// Parameters used to filter the retrieved list must remain in subsequent requests
+	// with a page token.
+	NextPageToken string `json:"next_page_token"`
+	Page          int64  `json:"page"`
+	PerPage       int64  `json:"per_page"`
+	TotalCount    int64  `json:"total_count"`
+	// Counts the total amount of items in a list with the applied filters. The API
+	// omits next_page_token to indicate no more items in a particular list.
+	TotalSize int64                                                `json:"total_size"`
+	JSON      organizationAccountGetResponseEnvelopeResultInfoJSON `json:"-"`
+	union     OrganizationAccountGetResponseEnvelopeResultInfo
+}
+
+// organizationAccountGetResponseEnvelopeResultInfoJSON contains the JSON metadata
+// for the struct [OrganizationAccountGetResponseEnvelopeResultInfo]
+type organizationAccountGetResponseEnvelopeResultInfoJSON struct {
+	Count         apijson.Field
+	NextPageToken apijson.Field
+	Page          apijson.Field
+	PerPage       apijson.Field
+	TotalCount    apijson.Field
+	TotalSize     apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r organizationAccountGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *OrganizationAccountGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	*r = OrganizationAccountGetResponseEnvelopeResultInfo{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [OrganizationAccountGetResponseEnvelopeResultInfo] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfo],
+// [OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfo].
+func (r OrganizationAccountGetResponseEnvelopeResultInfo) AsUnion() OrganizationAccountGetResponseEnvelopeResultInfo {
+	return r.union
+}
+
+// Union satisfied by
+// [OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfo]
+// or
+// [OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfo].
+type OrganizationAccountGetResponseEnvelopeResultInfo interface {
+	implementsOrganizationAccountGetResponseEnvelopeResultInfo()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*OrganizationAccountGetResponseEnvelopeResultInfo)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfo{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfo{}),
+		},
+	)
+}
+
+type OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfo struct {
 	// Use this opaque token in the next request to retrieve the next page.
 	//
 	// Parameters used to filter the retrieved list must remain in subsequent requests
@@ -205,25 +498,60 @@ type OrganizationAccountGetResponseEnvelopeResultInfo struct {
 	NextPageToken string `json:"next_page_token"`
 	// Counts the total amount of items in a list with the applied filters. The API
 	// omits next_page_token to indicate no more items in a particular list.
-	TotalSize int64                                                `json:"total_size"`
-	JSON      organizationAccountGetResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalSize int64                                                                                   `json:"total_size"`
+	JSON      organizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfoJSON `json:"-"`
 }
 
-// organizationAccountGetResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [OrganizationAccountGetResponseEnvelopeResultInfo]
-type organizationAccountGetResponseEnvelopeResultInfoJSON struct {
+// organizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfoJSON
+// contains the JSON metadata for the struct
+// [OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfo]
+type organizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfoJSON struct {
 	NextPageToken apijson.Field
 	TotalSize     apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *OrganizationAccountGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r organizationAccountGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+func (r organizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfoJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfo) implementsOrganizationAccountGetResponseEnvelopeResultInfo() {
+}
+
+type OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfo struct {
+	Count      int64                                                                                          `json:"count" api:"required"`
+	Page       int64                                                                                          `json:"page" api:"required"`
+	PerPage    int64                                                                                          `json:"per_page" api:"required"`
+	TotalCount int64                                                                                          `json:"total_count" api:"required"`
+	JSON       organizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfoJSON `json:"-"`
+}
+
+// organizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfoJSON
+// contains the JSON metadata for the struct
+// [OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfo]
+type organizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r organizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfo) implementsOrganizationAccountGetResponseEnvelopeResultInfo() {
 }
 
 type OrganizationAccountGetResponseEnvelopeSuccess bool

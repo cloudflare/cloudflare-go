@@ -92,9 +92,13 @@ Methods:
 
 ## Tenants
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user#TenantListResponse">TenantListResponse</a>
+
 Methods:
 
-- <code title="get /user/tenants">client.User.Tenants.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user#TenantService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations">organizations</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/organizations#Organization">Organization</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /user/tenants">client.User.Tenants.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user#TenantService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/packages/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/user#TenantListResponse">TenantListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Tokens
 

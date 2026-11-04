@@ -169,6 +169,9 @@ type AbuseReportListResponseReport struct {
 	Status AbuseReportListResponseReportsStatus `json:"status" api:"required"`
 	// The abuse report type
 	Type AbuseReportListResponseReportsType `json:"type" api:"required"`
+	// Whether the report is in an open Notice and Takedown notice period: no
+	// mitigation is placed yet, but one will take effect when the period ends.
+	HasPendingNotice bool `json:"has_pending_notice"`
 	// Justification for the report.
 	Justification string `json:"justification"`
 	// Original work / Targeted brand in the alleged abuse.
@@ -188,6 +191,7 @@ type abuseReportListResponseReportJSON struct {
 	MitigationSummary apijson.Field
 	Status            apijson.Field
 	Type              apijson.Field
+	HasPendingNotice  apijson.Field
 	Justification     apijson.Field
 	OriginalWork      apijson.Field
 	Submitter         apijson.Field
@@ -320,6 +324,9 @@ type AbuseReportGetResponse struct {
 	Status AbuseReportGetResponseStatus `json:"status" api:"required"`
 	// The abuse report type
 	Type AbuseReportGetResponseType `json:"type" api:"required"`
+	// Whether the report is in an open Notice and Takedown notice period: no
+	// mitigation is placed yet, but one will take effect when the period ends.
+	HasPendingNotice bool `json:"has_pending_notice"`
 	// Justification for the report.
 	Justification string `json:"justification"`
 	// Original work / Targeted brand in the alleged abuse.
@@ -339,6 +346,7 @@ type abuseReportGetResponseJSON struct {
 	MitigationSummary apijson.Field
 	Status            apijson.Field
 	Type              apijson.Field
+	HasPendingNotice  apijson.Field
 	Justification     apijson.Field
 	OriginalWork      apijson.Field
 	Submitter         apijson.Field
@@ -1748,6 +1756,9 @@ type AbuseReportListParams struct {
 	MitigationStatus param.Field[AbuseReportListParamsMitigationStatus] `query:"mitigation_status"`
 	// Where in pagination to start listing abuse reports
 	Page param.Field[int64] `query:"page"`
+	// Also include reports in an open Notice and Takedown notice period. Combined with
+	// mitigation_status using OR, e.g. ?mitigation_status=active&pending_notice=true.
+	PendingNotice param.Field[bool] `query:"pending_notice"`
 	// How many abuse reports per page to list
 	PerPage param.Field[int64] `query:"per_page"`
 	// Free-text search. Returns reports whose report ID starts with the term or whose

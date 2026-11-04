@@ -39,8 +39,8 @@ func TestStreamNewWithOptionalParams(t *testing.T) {
 			}),
 		}),
 		RetentionSeconds: cloudflare.F(int64(3600)),
-		WorkerBinding: cloudflare.F[k2.StreamNewParamsWorkerBindingUnion](k2.StreamNewParamsWorkerBindingEnabled{
-			Enabled: cloudflare.F(k2.StreamNewParamsWorkerBindingEnabledEnabledFalse),
+		WorkerBinding: cloudflare.F(k2.StreamNewParamsWorkerBinding{
+			Enabled: cloudflare.F(true),
 		}),
 	})
 	if err != nil {
@@ -79,8 +79,8 @@ func TestStreamUpdateWithOptionalParams(t *testing.T) {
 				}),
 			}),
 			RetentionSeconds: cloudflare.F(int64(3600)),
-			WorkerBinding: cloudflare.F[k2.StreamUpdateParamsWorkerBindingUnion](k2.StreamUpdateParamsWorkerBindingEnabled{
-				Enabled: cloudflare.F(k2.StreamUpdateParamsWorkerBindingEnabledEnabledFalse),
+			WorkerBinding: cloudflare.F(k2.StreamUpdateParamsWorkerBinding{
+				Enabled: cloudflare.F(true),
 			}),
 		},
 	)

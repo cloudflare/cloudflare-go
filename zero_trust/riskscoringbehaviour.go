@@ -117,6 +117,7 @@ func (r riskScoringBehaviourUpdateResponseBehaviorJSON) RawJSON() string {
 type RiskScoringBehaviourUpdateResponseBehaviorsRiskLevel string
 
 const (
+	RiskScoringBehaviourUpdateResponseBehaviorsRiskLevelInfo   RiskScoringBehaviourUpdateResponseBehaviorsRiskLevel = "info"
 	RiskScoringBehaviourUpdateResponseBehaviorsRiskLevelLow    RiskScoringBehaviourUpdateResponseBehaviorsRiskLevel = "low"
 	RiskScoringBehaviourUpdateResponseBehaviorsRiskLevelMedium RiskScoringBehaviourUpdateResponseBehaviorsRiskLevel = "medium"
 	RiskScoringBehaviourUpdateResponseBehaviorsRiskLevelHigh   RiskScoringBehaviourUpdateResponseBehaviorsRiskLevel = "high"
@@ -124,7 +125,7 @@ const (
 
 func (r RiskScoringBehaviourUpdateResponseBehaviorsRiskLevel) IsKnown() bool {
 	switch r {
-	case RiskScoringBehaviourUpdateResponseBehaviorsRiskLevelLow, RiskScoringBehaviourUpdateResponseBehaviorsRiskLevelMedium, RiskScoringBehaviourUpdateResponseBehaviorsRiskLevelHigh:
+	case RiskScoringBehaviourUpdateResponseBehaviorsRiskLevelInfo, RiskScoringBehaviourUpdateResponseBehaviorsRiskLevelLow, RiskScoringBehaviourUpdateResponseBehaviorsRiskLevelMedium, RiskScoringBehaviourUpdateResponseBehaviorsRiskLevelHigh:
 		return true
 	}
 	return false
@@ -181,6 +182,7 @@ func (r riskScoringBehaviourGetResponseBehaviorJSON) RawJSON() string {
 type RiskScoringBehaviourGetResponseBehaviorsRiskLevel string
 
 const (
+	RiskScoringBehaviourGetResponseBehaviorsRiskLevelInfo   RiskScoringBehaviourGetResponseBehaviorsRiskLevel = "info"
 	RiskScoringBehaviourGetResponseBehaviorsRiskLevelLow    RiskScoringBehaviourGetResponseBehaviorsRiskLevel = "low"
 	RiskScoringBehaviourGetResponseBehaviorsRiskLevelMedium RiskScoringBehaviourGetResponseBehaviorsRiskLevel = "medium"
 	RiskScoringBehaviourGetResponseBehaviorsRiskLevelHigh   RiskScoringBehaviourGetResponseBehaviorsRiskLevel = "high"
@@ -188,7 +190,7 @@ const (
 
 func (r RiskScoringBehaviourGetResponseBehaviorsRiskLevel) IsKnown() bool {
 	switch r {
-	case RiskScoringBehaviourGetResponseBehaviorsRiskLevelLow, RiskScoringBehaviourGetResponseBehaviorsRiskLevelMedium, RiskScoringBehaviourGetResponseBehaviorsRiskLevelHigh:
+	case RiskScoringBehaviourGetResponseBehaviorsRiskLevelInfo, RiskScoringBehaviourGetResponseBehaviorsRiskLevelLow, RiskScoringBehaviourGetResponseBehaviorsRiskLevelMedium, RiskScoringBehaviourGetResponseBehaviorsRiskLevelHigh:
 		return true
 	}
 	return false
@@ -215,6 +217,7 @@ func (r RiskScoringBehaviourUpdateParamsBehaviors) MarshalJSON() (data []byte, e
 type RiskScoringBehaviourUpdateParamsBehaviorsRiskLevel string
 
 const (
+	RiskScoringBehaviourUpdateParamsBehaviorsRiskLevelInfo   RiskScoringBehaviourUpdateParamsBehaviorsRiskLevel = "info"
 	RiskScoringBehaviourUpdateParamsBehaviorsRiskLevelLow    RiskScoringBehaviourUpdateParamsBehaviorsRiskLevel = "low"
 	RiskScoringBehaviourUpdateParamsBehaviorsRiskLevelMedium RiskScoringBehaviourUpdateParamsBehaviorsRiskLevel = "medium"
 	RiskScoringBehaviourUpdateParamsBehaviorsRiskLevelHigh   RiskScoringBehaviourUpdateParamsBehaviorsRiskLevel = "high"
@@ -222,7 +225,7 @@ const (
 
 func (r RiskScoringBehaviourUpdateParamsBehaviorsRiskLevel) IsKnown() bool {
 	switch r {
-	case RiskScoringBehaviourUpdateParamsBehaviorsRiskLevelLow, RiskScoringBehaviourUpdateParamsBehaviorsRiskLevelMedium, RiskScoringBehaviourUpdateParamsBehaviorsRiskLevelHigh:
+	case RiskScoringBehaviourUpdateParamsBehaviorsRiskLevelInfo, RiskScoringBehaviourUpdateParamsBehaviorsRiskLevelLow, RiskScoringBehaviourUpdateParamsBehaviorsRiskLevelMedium, RiskScoringBehaviourUpdateParamsBehaviorsRiskLevelHigh:
 		return true
 	}
 	return false

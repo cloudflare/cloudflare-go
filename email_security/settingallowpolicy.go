@@ -217,7 +217,8 @@ type SettingAllowPolicyNewResponse struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
@@ -339,7 +340,8 @@ type SettingAllowPolicyListResponse struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
@@ -532,7 +534,8 @@ type SettingAllowPolicyBatchResponsePatch struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
@@ -654,7 +657,8 @@ type SettingAllowPolicyBatchResponsePost struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
@@ -776,7 +780,8 @@ type SettingAllowPolicyBatchResponsePut struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
@@ -898,7 +903,8 @@ type SettingAllowPolicyEditResponse struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
@@ -1020,7 +1026,8 @@ type SettingAllowPolicyGetResponse struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
@@ -1115,7 +1122,8 @@ type SettingAllowPolicyNewParams struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern param.Field[string] `json:"pattern" api:"required"`
 	// Type of pattern matching.
 	//
@@ -1619,7 +1627,8 @@ type SettingAllowPolicyBatchParamsPatch struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern param.Field[string] `json:"pattern"`
 	// Type of pattern matching.
 	//
@@ -1685,7 +1694,8 @@ type SettingAllowPolicyBatchParamsPost struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern param.Field[string] `json:"pattern" api:"required"`
 	// Type of pattern matching.
 	//
@@ -1791,7 +1801,8 @@ type SettingAllowPolicyBatchParamsPut struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern param.Field[string] `json:"pattern"`
 	// Type of pattern matching.
 	//
@@ -2011,7 +2022,8 @@ type SettingAllowPolicyEditParams struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern param.Field[string] `json:"pattern"`
 	// Type of pattern matching.
 	//

@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/resource_sharing"
 )
 
-func TestResourceSharingNew(t *testing.T) {
+func TestResourceSharingNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -30,6 +30,9 @@ func TestResourceSharingNew(t *testing.T) {
 	_, err := client.ResourceSharing.New(context.TODO(), resource_sharing.ResourceSharingNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:      cloudflare.F("My Shared WAF Managed Rule"),
+		ExcludedRecipients: cloudflare.F([]resource_sharing.ResourceSharingNewParamsExcludedRecipient{{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}}),
 		Recipients: cloudflare.F([]resource_sharing.ResourceSharingNewParamsRecipient{{
 			AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			OrganizationID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -38,9 +41,12 @@ func TestResourceSharingNew(t *testing.T) {
 		Resources: cloudflare.F([]resource_sharing.ResourceSharingNewParamsResource{{
 			Meta:              cloudflare.F[any](map[string]interface{}{}),
 			ResourceAccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			ResourceID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ResourceID:        cloudflare.F("0a679032-bbb2-4b7e-9acc-dd5c5cb27a17"),
 			ResourceType:      cloudflare.F(resource_sharing.ResourceSharingNewParamsResourcesResourceTypeCustomRuleset),
 		}}),
+		Tags: cloudflare.F(map[string]string{
+			"foo": "string",
+		}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -51,7 +57,7 @@ func TestResourceSharingNew(t *testing.T) {
 	}
 }
 
-func TestResourceSharingUpdate(t *testing.T) {
+func TestResourceSharingUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -70,6 +76,9 @@ func TestResourceSharingUpdate(t *testing.T) {
 		resource_sharing.ResourceSharingUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Name:      cloudflare.F("My Shared WAF Managed Rule"),
+			Tags: cloudflare.F(map[string]string{
+				"foo": "string",
+			}),
 		},
 	)
 	if err != nil {
@@ -100,6 +109,7 @@ func TestResourceSharingListWithOptionalParams(t *testing.T) {
 		Direction:              cloudflare.F(resource_sharing.ResourceSharingListParamsDirectionAsc),
 		IncludeRecipientCounts: cloudflare.F(true),
 		IncludeResources:       cloudflare.F(true),
+		IncludeTagsFrom:        cloudflare.F(resource_sharing.ResourceSharingListParamsIncludeTagsFromAPI),
 		Kind:                   cloudflare.F(resource_sharing.ResourceSharingListParamsKindSent),
 		Order:                  cloudflare.F(resource_sharing.ResourceSharingListParamsOrderName),
 		Page:                   cloudflare.F(int64(2)),
@@ -168,6 +178,7 @@ func TestResourceSharingGetWithOptionalParams(t *testing.T) {
 			AccountID:              cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			IncludeRecipientCounts: cloudflare.F(true),
 			IncludeResources:       cloudflare.F(true),
+			IncludeTagsFrom:        cloudflare.F(resource_sharing.ResourceSharingGetParamsIncludeTagsFromAPI),
 		},
 	)
 	if err != nil {
