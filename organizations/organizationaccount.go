@@ -415,143 +415,32 @@ func (r organizationAccountGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 type OrganizationAccountGetResponseEnvelopeResultInfo struct {
-	Count int64 `json:"count"`
 	// Use this opaque token in the next request to retrieve the next page.
 	//
 	// Parameters used to filter the retrieved list must remain in subsequent requests
 	// with a page token.
 	NextPageToken string `json:"next_page_token"`
-	Page          int64  `json:"page"`
-	PerPage       int64  `json:"per_page"`
-	TotalCount    int64  `json:"total_count"`
 	// Counts the total amount of items in a list with the applied filters. The API
 	// omits next_page_token to indicate no more items in a particular list.
 	TotalSize int64                                                `json:"total_size"`
 	JSON      organizationAccountGetResponseEnvelopeResultInfoJSON `json:"-"`
-	union     OrganizationAccountGetResponseEnvelopeResultInfo
 }
 
 // organizationAccountGetResponseEnvelopeResultInfoJSON contains the JSON metadata
 // for the struct [OrganizationAccountGetResponseEnvelopeResultInfo]
 type organizationAccountGetResponseEnvelopeResultInfoJSON struct {
-	Count         apijson.Field
 	NextPageToken apijson.Field
-	Page          apijson.Field
-	PerPage       apijson.Field
-	TotalCount    apijson.Field
 	TotalSize     apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
+}
+
+func (r *OrganizationAccountGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 func (r organizationAccountGetResponseEnvelopeResultInfoJSON) RawJSON() string {
 	return r.raw
-}
-
-func (r *OrganizationAccountGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	*r = OrganizationAccountGetResponseEnvelopeResultInfo{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [OrganizationAccountGetResponseEnvelopeResultInfo] interface
-// which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfo],
-// [OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfo].
-func (r OrganizationAccountGetResponseEnvelopeResultInfo) AsUnion() OrganizationAccountGetResponseEnvelopeResultInfo {
-	return r.union
-}
-
-// Union satisfied by
-// [OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfo]
-// or
-// [OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfo].
-type OrganizationAccountGetResponseEnvelopeResultInfo interface {
-	implementsOrganizationAccountGetResponseEnvelopeResultInfo()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*OrganizationAccountGetResponseEnvelopeResultInfo)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfo{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfo{}),
-		},
-	)
-}
-
-type OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfo struct {
-	// Use this opaque token in the next request to retrieve the next page.
-	//
-	// Parameters used to filter the retrieved list must remain in subsequent requests
-	// with a page token.
-	NextPageToken string `json:"next_page_token"`
-	// Counts the total amount of items in a list with the applied filters. The API
-	// omits next_page_token to indicate no more items in a particular list.
-	TotalSize int64                                                                                   `json:"total_size"`
-	JSON      organizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfoJSON `json:"-"`
-}
-
-// organizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfoJSON
-// contains the JSON metadata for the struct
-// [OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfo]
-type organizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfoJSON struct {
-	NextPageToken apijson.Field
-	TotalSize     apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPIPageTokenResultInfo) implementsOrganizationAccountGetResponseEnvelopeResultInfo() {
-}
-
-type OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfo struct {
-	Count      int64                                                                                          `json:"count" api:"required"`
-	Page       int64                                                                                          `json:"page" api:"required"`
-	PerPage    int64                                                                                          `json:"per_page" api:"required"`
-	TotalCount int64                                                                                          `json:"total_count" api:"required"`
-	JSON       organizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfoJSON `json:"-"`
-}
-
-// organizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfoJSON
-// contains the JSON metadata for the struct
-// [OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfo]
-type organizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r OrganizationAccountGetResponseEnvelopeResultInfoOrganizationsAPILegacyPaginationResultInfo) implementsOrganizationAccountGetResponseEnvelopeResultInfo() {
 }
 
 type OrganizationAccountGetResponseEnvelopeSuccess bool
