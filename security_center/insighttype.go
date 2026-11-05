@@ -118,6 +118,8 @@ func (r InsightTypeGetParams) URLQuery() (v url.Values) {
 	})
 }
 
+// Who generated the insight. `cloudflare` for Cloudflare-generated insights,
+// otherwise the partner.
 type InsightTypeGetParamsSource string
 
 const (

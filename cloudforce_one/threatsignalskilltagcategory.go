@@ -34,7 +34,8 @@ func NewThreatSignalSkillTagCategoryService(opts ...option.RequestOption) (r *Th
 	return
 }
 
-// Replaces the tag categories the default tagging skill may choose tags from.
+// Replaces the Tag Categories the managed default tagging skill may select tags
+// from. This configures the managed default tagging skill, not Custom Skills.
 func (r *ThreatSignalSkillTagCategoryService) Update(ctx context.Context, skillID ThreatSignalSkillTagCategoryUpdateParamsSkillID, params ThreatSignalSkillTagCategoryUpdateParams, opts ...option.RequestOption) (res *ThreatSignalSkillTagCategoryUpdateResponse, err error) {
 	var env ThreatSignalSkillTagCategoryUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -51,7 +52,8 @@ func (r *ThreatSignalSkillTagCategoryService) Update(ctx context.Context, skillI
 	return res, nil
 }
 
-// Retrieves the tag categories the default tagging skill may choose tags from.
+// Retrieves the Tag Categories the managed default tagging skill may select tags
+// from. This configures the managed default tagging skill, not Custom Skills.
 func (r *ThreatSignalSkillTagCategoryService) Get(ctx context.Context, skillID ThreatSignalSkillTagCategoryGetParamsSkillID, query ThreatSignalSkillTagCategoryGetParams, opts ...option.RequestOption) (res *ThreatSignalSkillTagCategoryGetResponse, err error) {
 	var env ThreatSignalSkillTagCategoryGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -143,7 +145,9 @@ func (r ThreatSignalSkillTagCategoryGetResponseSkillID) IsKnown() bool {
 }
 
 type ThreatSignalSkillTagCategoryUpdateParams struct {
-	AccountID     param.Field[string]   `path:"account_id" api:"required"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Up to 100 unique tag category UUIDs that the managed default tagging skill may
+	// select tags from.
 	CategoryUUIDs param.Field[[]string] `json:"category_uuids" api:"required" format:"uuid"`
 }
 
@@ -151,6 +155,7 @@ func (r ThreatSignalSkillTagCategoryUpdateParams) MarshalJSON() (data []byte, er
 	return apijson.MarshalRoot(r)
 }
 
+// Must be default-tagging-skill; configures the managed default tagging skill
 type ThreatSignalSkillTagCategoryUpdateParamsSkillID string
 
 const (
@@ -230,6 +235,7 @@ type ThreatSignalSkillTagCategoryGetParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
+// Must be default-tagging-skill; configures the managed default tagging skill
 type ThreatSignalSkillTagCategoryGetParamsSkillID string
 
 const (

@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // TunnelCloudflaredManagementService contains methods and other services that help
@@ -83,8 +82,8 @@ func (r TunnelCloudflaredManagementNewParamsResource) IsKnown() bool {
 }
 
 type TunnelCloudflaredManagementNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	Errors   []TunnelCloudflaredManagementNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []TunnelCloudflaredManagementNewResponseEnvelopeMessages `json:"messages" api:"required"`
 	// The Tunnel Token is used as a mechanism to authenticate the operation of a
 	// tunnel.
 	Result string `json:"result" api:"required"`
@@ -109,6 +108,58 @@ func (r *TunnelCloudflaredManagementNewResponseEnvelope) UnmarshalJSON(data []by
 }
 
 func (r tunnelCloudflaredManagementNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredManagementNewResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                                   `json:"context"`
+	JSON    tunnelCloudflaredManagementNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// tunnelCloudflaredManagementNewResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [TunnelCloudflaredManagementNewResponseEnvelopeErrors]
+type tunnelCloudflaredManagementNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredManagementNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredManagementNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type TunnelCloudflaredManagementNewResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                                     `json:"context"`
+	JSON    tunnelCloudflaredManagementNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// tunnelCloudflaredManagementNewResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [TunnelCloudflaredManagementNewResponseEnvelopeMessages]
+type tunnelCloudflaredManagementNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelCloudflaredManagementNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelCloudflaredManagementNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

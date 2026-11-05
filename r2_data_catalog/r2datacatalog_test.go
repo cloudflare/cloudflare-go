@@ -101,7 +101,7 @@ func TestR2DataCatalogDisable(t *testing.T) {
 	}
 }
 
-func TestR2DataCatalogEnable(t *testing.T) {
+func TestR2DataCatalogEnableWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -120,6 +120,9 @@ func TestR2DataCatalogEnable(t *testing.T) {
 		"my-data-bucket",
 		r2_data_catalog.R2DataCatalogEnableParams{
 			AccountID: cloudflare.F("0123456789abcdef0123456789abcdef"),
+			Credential: cloudflare.F(r2_data_catalog.R2DataCatalogEnableParamsCredential{
+				Token: cloudflare.F("your-cloudflare-api-token-here"),
+			}),
 		},
 	)
 	if err != nil {

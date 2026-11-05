@@ -15,6 +15,7 @@ import (
 type AccessLogService struct {
 	Options        []option.RequestOption
 	AccessRequests *AccessLogAccessRequestService
+	JitRequests    *AccessLogJitRequestService
 	SCIM           *AccessLogSCIMService
 }
 
@@ -25,6 +26,7 @@ func NewAccessLogService(opts ...option.RequestOption) (r *AccessLogService) {
 	r = &AccessLogService{}
 	r.Options = opts
 	r.AccessRequests = NewAccessLogAccessRequestService(opts...)
+	r.JitRequests = NewAccessLogJitRequestService(opts...)
 	r.SCIM = NewAccessLogSCIMService(opts...)
 	return
 }

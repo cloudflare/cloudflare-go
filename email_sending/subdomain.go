@@ -488,7 +488,9 @@ type SubdomainNewParams struct {
 	ZoneID param.Field[string] `path:"zone_id" api:"required"`
 	// The domain name within the zone. A wildcard is allowed only as the complete
 	// leftmost label (`*.example.com`) and requires the account wildcard Email Sending
-	// entitlement.
+	// entitlement. The derived Return-Path hostname, including its bounce prefix, must
+	// be at most 201 characters after ASCII conversion; wildcards use the base
+	// hostname.
 	Name param.Field[string] `json:"name" api:"required"`
 }
 

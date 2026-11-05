@@ -99,11 +99,16 @@ type ProviderConfigNewResponse struct {
 	Alias         string `json:"alias" api:"required"`
 	DefaultConfig bool   `json:"default_config" api:"required"`
 	// Unique identifier of the AI Gateway within the account.
-	GatewayID       string                        `json:"gateway_id" api:"required"`
-	ModifiedAt      time.Time                     `json:"modified_at" api:"required" format:"date-time"`
-	ProviderSlug    string                        `json:"provider_slug" api:"required"`
-	SecretID        string                        `json:"secret_id" api:"required"`
-	SecretPreview   string                        `json:"secret_preview" api:"required"`
+	GatewayID     string    `json:"gateway_id" api:"required"`
+	ModifiedAt    time.Time `json:"modified_at" api:"required" format:"date-time"`
+	ProviderSlug  string    `json:"provider_slug" api:"required"`
+	SecretID      string    `json:"secret_id" api:"required"`
+	SecretPreview string    `json:"secret_preview" api:"required"`
+	// UTC date (YYYY-MM-DD) the gateway last selected this key to authenticate a
+	// request to the provider, whether or not the request succeeded. Updated at most
+	// once a day. Null if the gateway has not used the key since this field was
+	// introduced.
+	LastUsedAt      time.Time                     `json:"last_used_at" api:"nullable" format:"date"`
 	RateLimit       float64                       `json:"rate_limit"`
 	RateLimitPeriod float64                       `json:"rate_limit_period"`
 	JSON            providerConfigNewResponseJSON `json:"-"`
@@ -120,6 +125,7 @@ type providerConfigNewResponseJSON struct {
 	ProviderSlug    apijson.Field
 	SecretID        apijson.Field
 	SecretPreview   apijson.Field
+	LastUsedAt      apijson.Field
 	RateLimit       apijson.Field
 	RateLimitPeriod apijson.Field
 	raw             string
@@ -139,11 +145,16 @@ type ProviderConfigListResponse struct {
 	Alias         string `json:"alias" api:"required"`
 	DefaultConfig bool   `json:"default_config" api:"required"`
 	// Unique identifier of the AI Gateway within the account.
-	GatewayID       string                         `json:"gateway_id" api:"required"`
-	ModifiedAt      time.Time                      `json:"modified_at" api:"required" format:"date-time"`
-	ProviderSlug    string                         `json:"provider_slug" api:"required"`
-	SecretID        string                         `json:"secret_id" api:"required"`
-	SecretPreview   string                         `json:"secret_preview" api:"required"`
+	GatewayID     string    `json:"gateway_id" api:"required"`
+	ModifiedAt    time.Time `json:"modified_at" api:"required" format:"date-time"`
+	ProviderSlug  string    `json:"provider_slug" api:"required"`
+	SecretID      string    `json:"secret_id" api:"required"`
+	SecretPreview string    `json:"secret_preview" api:"required"`
+	// UTC date (YYYY-MM-DD) the gateway last selected this key to authenticate a
+	// request to the provider, whether or not the request succeeded. Updated at most
+	// once a day. Null if the gateway has not used the key since this field was
+	// introduced.
+	LastUsedAt      time.Time                      `json:"last_used_at" api:"nullable" format:"date"`
 	RateLimit       float64                        `json:"rate_limit"`
 	RateLimitPeriod float64                        `json:"rate_limit_period"`
 	JSON            providerConfigListResponseJSON `json:"-"`
@@ -160,6 +171,7 @@ type providerConfigListResponseJSON struct {
 	ProviderSlug    apijson.Field
 	SecretID        apijson.Field
 	SecretPreview   apijson.Field
+	LastUsedAt      apijson.Field
 	RateLimit       apijson.Field
 	RateLimitPeriod apijson.Field
 	raw             string

@@ -114,7 +114,8 @@ type DispatchNamespaceScriptBindingGetResponse struct {
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format DispatchNamespaceScriptBindingGetResponseFormat `json:"format"`
 	// Enables Gateway identity for the binding. Requires network_id to be
-	// "cf1:network" and cannot be combined with tunnel_id.
+	// "cf1:network" and cannot be combined with tunnel_id or an explicit
+	// "cf1:vnet:<UUID>" network_id.
 	Identity DispatchNamespaceScriptBindingGetResponseIdentity `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
@@ -134,8 +135,9 @@ type DispatchNamespaceScriptBindingGetResponse struct {
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
-	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
-	// Mutually exclusive with tunnel_id.
+	// Identifier of the network to bind to. Use "cf1:network" to select the account's
+	// default virtual network at runtime, or "cf1:vnet:<UUID>" to select an explicit
+	// virtual network in the Worker's account. Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
@@ -151,9 +153,6 @@ type DispatchNamespaceScriptBindingGetResponse struct {
 	Pipeline string `json:"pipeline"`
 	// Name of the Queue to bind to.
 	QueueName string `json:"queue_name"`
-	// This field can have the runtime type of
-	// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceRetry].
-	Retry interface{} `json:"retry"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName string `json:"script_name"`
@@ -177,9 +176,13 @@ type DispatchNamespaceScriptBindingGetResponse struct {
 	// This field can have the runtime type of
 	// [[]DispatchNamespaceScriptBindingGetResponseWorkersBindingKindSecretKeyUsage].
 	Usages interface{} `json:"usages"`
-	// Identifier for the version to inherit the binding from, which can be the version
-	// ID or the literal "latest" to inherit from the latest version. Defaults to
-	// inheriting the binding from the latest version.
+	// Identifier for the version to inherit the binding from. This can be a version
+	// ID, or the literal "latest" to inherit from the most recently uploaded version,
+	// which may not be the deployed version. Defaults to "latest". Only the Workers
+	// API version endpoints under
+	// `/accounts/{account_id}/workers/workers/{worker_id}/versions` accept a version
+	// ID. Other endpoints, including script upload and script version upload, accept
+	// only "latest" and reject a version ID with error 10057.
 	VersionID string `json:"version_id"`
 	// Name of the Workflow to bind to.
 	WorkflowName string                                        `json:"workflow_name"`
@@ -221,7 +224,6 @@ type dispatchNamespaceScriptBindingGetResponseJSON struct {
 	Part                        apijson.Field
 	Pipeline                    apijson.Field
 	QueueName                   apijson.Field
-	Retry                       apijson.Field
 	ScriptName                  apijson.Field
 	SecretName                  apijson.Field
 	Service                     apijson.Field
@@ -1163,10 +1165,6 @@ type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNam
 	Environment string `json:"environment"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
-	// Retry policy for calls made to the Durable Object through this binding. Omitted
-	// or null properties use the runtime defaults. These limits are upper bounds and
-	// do not enable retries for otherwise ineligible calls.
-	Retry DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceRetry `json:"retry" api:"nullable"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName string                                                                                `json:"script_name"`
@@ -1183,7 +1181,6 @@ type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNam
 	DispatchNamespace apijson.Field
 	Environment       apijson.Field
 	NamespaceID       apijson.Field
-	Retry             apijson.Field
 	ScriptName        apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
@@ -1213,39 +1210,6 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObject
 		return true
 	}
 	return false
-}
-
-// Retry policy for calls made to the Durable Object through this binding. Omitted
-// or null properties use the runtime defaults. These limits are upper bounds and
-// do not enable retries for otherwise ineligible calls.
-type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceRetry struct {
-	// Maximum number of retries after the initial request, not the total number of
-	// attempts. Defaults to 4. Zero disables retries.
-	MaxAttempts int64 `json:"max_attempts" api:"nullable"`
-	// Retry timeout in milliseconds, measured from the start of the call. No retry
-	// starts after it expires, and a retry still running when it expires is cancelled.
-	// This is not a request timeout; it does not limit the initial request, which is
-	// still subject to any timeouts set by your Worker. Defaults to 10000.
-	TimeoutMs int64                                                                                      `json:"timeout_ms" api:"nullable"`
-	JSON      dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceRetryJSON `json:"-"`
-}
-
-// dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceRetryJSON
-// contains the JSON metadata for the struct
-// [DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceRetry]
-type dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceRetryJSON struct {
-	MaxAttempts apijson.Field
-	TimeoutMs   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceRetry) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceScriptBindingGetResponseWorkersBindingKindDurableObjectNamespaceRetryJSON) RawJSON() string {
-	return r.raw
 }
 
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindHyperdrive struct {
@@ -1304,9 +1268,13 @@ type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindInherit struct {
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
 	// same name between versions.
 	OldName string `json:"old_name"`
-	// Identifier for the version to inherit the binding from, which can be the version
-	// ID or the literal "latest" to inherit from the latest version. Defaults to
-	// inheriting the binding from the latest version.
+	// Identifier for the version to inherit the binding from. This can be a version
+	// ID, or the literal "latest" to inherit from the most recently uploaded version,
+	// which may not be the deployed version. Defaults to "latest". Only the Workers
+	// API version endpoints under
+	// `/accounts/{account_id}/workers/workers/{worker_id}/versions` accept a version
+	// ID. Other endpoints, including script upload and script version upload, accept
+	// only "latest" and reject a version ID with error 10057.
 	VersionID string                                                                 `json:"version_id"`
 	JSON      dispatchNamespaceScriptBindingGetResponseWorkersBindingKindInheritJSON `json:"-"`
 }
@@ -2563,10 +2531,12 @@ type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetwork struc
 	// The kind of resource that the binding provides.
 	Type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetworkType `json:"type" api:"required"`
 	// Enables Gateway identity for the binding. Requires network_id to be
-	// "cf1:network" and cannot be combined with tunnel_id.
+	// "cf1:network" and cannot be combined with tunnel_id or an explicit
+	// "cf1:vnet:<UUID>" network_id.
 	Identity DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetworkIdentity `json:"identity"`
-	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
-	// Mutually exclusive with tunnel_id.
+	// Identifier of the network to bind to. Use "cf1:network" to select the account's
+	// default virtual network at runtime, or "cf1:vnet:<UUID>" to select an explicit
+	// virtual network in the Worker's account. Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
 	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
 	TunnelID string                                                                    `json:"tunnel_id"`
@@ -2613,7 +2583,8 @@ func (r DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetworkTyp
 }
 
 // Enables Gateway identity for the binding. Requires network_id to be
-// "cf1:network" and cannot be combined with tunnel_id.
+// "cf1:network" and cannot be combined with tunnel_id or an explicit
+// "cf1:vnet:<UUID>" network_id.
 type DispatchNamespaceScriptBindingGetResponseWorkersBindingKindVPCNetworkIdentity string
 
 const (
@@ -2700,7 +2671,8 @@ func (r DispatchNamespaceScriptBindingGetResponseFormat) IsKnown() bool {
 }
 
 // Enables Gateway identity for the binding. Requires network_id to be
-// "cf1:network" and cannot be combined with tunnel_id.
+// "cf1:network" and cannot be combined with tunnel_id or an explicit
+// "cf1:vnet:<UUID>" network_id.
 type DispatchNamespaceScriptBindingGetResponseIdentity string
 
 const (

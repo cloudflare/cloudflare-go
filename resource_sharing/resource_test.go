@@ -34,7 +34,7 @@ func TestResourceNew(t *testing.T) {
 			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Meta:              cloudflare.F[any](map[string]interface{}{}),
 			ResourceAccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			ResourceID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ResourceID:        cloudflare.F("0a679032-bbb2-4b7e-9acc-dd5c5cb27a17"),
 			ResourceType:      cloudflare.F(resource_sharing.ResourceNewParamsResourceTypeCustomRuleset),
 		},
 	)

@@ -36,7 +36,7 @@ func NewLogoMatchService(opts ...option.RequestOption) (r *LogoMatchService) {
 	return
 }
 
-// Return matches as CSV for logo queries based on ID
+// Return matches as CSV for logo queries based on ID.
 func (r *LogoMatchService) Download(ctx context.Context, params LogoMatchDownloadParams, opts ...option.RequestOption) (res *LogoMatchDownloadResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -48,7 +48,7 @@ func (r *LogoMatchService) Download(ctx context.Context, params LogoMatchDownloa
 	return res, err
 }
 
-// Return matches for logo queries based on ID
+// Return matches for logo queries based on ID.
 func (r *LogoMatchService) Get(ctx context.Context, params LogoMatchGetParams, opts ...option.RequestOption) (res *LogoMatchGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {

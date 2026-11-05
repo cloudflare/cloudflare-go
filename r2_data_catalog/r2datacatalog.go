@@ -112,10 +112,10 @@ func (r *R2DataCatalogService) Disable(ctx context.Context, bucketName string, b
 //
 // Deprecated: Use `POST /accounts/{account_id}/basin-catalog/{bucket_name}/enable`
 // instead.
-func (r *R2DataCatalogService) Enable(ctx context.Context, bucketName string, body R2DataCatalogEnableParams, opts ...option.RequestOption) (res *R2DataCatalogEnableResponse, err error) {
+func (r *R2DataCatalogService) Enable(ctx context.Context, bucketName string, params R2DataCatalogEnableParams, opts ...option.RequestOption) (res *R2DataCatalogEnableResponse, err error) {
 	var env R2DataCatalogEnableResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if body.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -123,8 +123,8 @@ func (r *R2DataCatalogService) Enable(ctx context.Context, bucketName string, bo
 		err = errors.New("missing required bucket_name parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/r2-catalog/%s/enable", body.AccountID, bucketName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/r2-catalog/%s/enable", params.AccountID, bucketName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -192,6 +192,9 @@ type R2DataCatalogListResponseWarehouse struct {
 	Status R2DataCatalogListResponseWarehousesStatus `json:"status" api:"required"`
 	// Shows the credential configuration status.
 	CredentialStatus R2DataCatalogListResponseWarehousesCredentialStatus `json:"credential_status" api:"nullable"`
+	// Specifies the data-locality jurisdiction of the catalog. The first enable sets
+	// it, and it cannot change. Currently always `default`.
+	Jurisdiction string `json:"jurisdiction"`
 	// Configures maintenance for the catalog.
 	MaintenanceConfig R2DataCatalogListResponseWarehousesMaintenanceConfig `json:"maintenance_config" api:"nullable"`
 	JSON              r2DataCatalogListResponseWarehouseJSON               `json:"-"`
@@ -205,6 +208,7 @@ type r2DataCatalogListResponseWarehouseJSON struct {
 	Name              apijson.Field
 	Status            apijson.Field
 	CredentialStatus  apijson.Field
+	Jurisdiction      apijson.Field
 	MaintenanceConfig apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
@@ -427,6 +431,9 @@ type R2DataCatalogGetResponse struct {
 	Status R2DataCatalogGetResponseStatus `json:"status" api:"required"`
 	// Shows the credential configuration status.
 	CredentialStatus R2DataCatalogGetResponseCredentialStatus `json:"credential_status" api:"nullable"`
+	// Specifies the data-locality jurisdiction of the catalog. The first enable sets
+	// it, and it cannot change. Currently always `default`.
+	Jurisdiction string `json:"jurisdiction"`
 	// Configures maintenance for the catalog.
 	MaintenanceConfig R2DataCatalogGetResponseMaintenanceConfig `json:"maintenance_config" api:"nullable"`
 	JSON              r2DataCatalogGetResponseJSON              `json:"-"`
@@ -440,6 +447,7 @@ type r2DataCatalogGetResponseJSON struct {
 	Name              apijson.Field
 	Status            apijson.Field
 	CredentialStatus  apijson.Field
+	Jurisdiction      apijson.Field
 	MaintenanceConfig apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
@@ -733,6 +741,22 @@ type R2DataCatalogDisableParams struct {
 type R2DataCatalogEnableParams struct {
 	// Use this to identify the account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Contains request to store catalog credentials.
+	Credential param.Field[R2DataCatalogEnableParamsCredential] `json:"credential"`
+}
+
+func (r R2DataCatalogEnableParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Contains request to store catalog credentials.
+type R2DataCatalogEnableParamsCredential struct {
+	// Provides the Cloudflare API token for accessing R2.
+	Token param.Field[string] `json:"token" api:"required"`
+}
+
+func (r R2DataCatalogEnableParamsCredential) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type R2DataCatalogEnableResponseEnvelope struct {

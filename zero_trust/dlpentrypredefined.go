@@ -610,6 +610,8 @@ type DLPEntryPredefinedListResponse struct {
 	Secret       bool                                       `json:"secret"`
 	UpdatedAt    time.Time                                  `json:"updated_at" format:"date-time"`
 	UploadStatus DLPEntryPredefinedListResponseUploadStatus `json:"upload_status"`
+	// This field can have the runtime type of [[]string].
+	ValidatorIDs interface{} `json:"validator_ids"`
 	// This field can have the runtime type of
 	// [DLPEntryPredefinedListResponseObjectVariant].
 	Variant interface{} `json:"variant"`
@@ -636,6 +638,7 @@ type dlpEntryPredefinedListResponseJSON struct {
 	Secret        apijson.Field
 	UpdatedAt     apijson.Field
 	UploadStatus  apijson.Field
+	ValidatorIDs  apijson.Field
 	Variant       apijson.Field
 	WordList      apijson.Field
 	raw           string
@@ -723,7 +726,13 @@ type DLPEntryPredefinedListResponseObject struct {
 	// Deprecated: deprecated
 	ProfileID    string                                           `json:"profile_id" api:"nullable" format:"uuid"`
 	UploadStatus DLPEntryPredefinedListResponseObjectUploadStatus `json:"upload_status"`
-	JSON         dlpEntryPredefinedListResponseObjectJSON         `json:"-"`
+	// Validators this entry references, by id, at most 10. An empty list means the
+	// entry references none.
+	//
+	// Returned by the entry endpoints. Not returned on entries embedded in other
+	// responses, such as profiles.
+	ValidatorIDs []string                                 `json:"validator_ids" format:"uuid"`
+	JSON         dlpEntryPredefinedListResponseObjectJSON `json:"-"`
 }
 
 // dlpEntryPredefinedListResponseObjectJSON contains the JSON metadata for the
@@ -739,6 +748,7 @@ type dlpEntryPredefinedListResponseObjectJSON struct {
 	Description  apijson.Field
 	ProfileID    apijson.Field
 	UploadStatus apijson.Field
+	ValidatorIDs apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -853,6 +863,8 @@ type DLPEntryPredefinedGetResponse struct {
 	Secret       bool                                      `json:"secret"`
 	UpdatedAt    time.Time                                 `json:"updated_at" format:"date-time"`
 	UploadStatus DLPEntryPredefinedGetResponseUploadStatus `json:"upload_status"`
+	// This field can have the runtime type of [[]string].
+	ValidatorIDs interface{} `json:"validator_ids"`
 	// This field can have the runtime type of
 	// [DLPEntryPredefinedGetResponseObjectVariant].
 	Variant interface{} `json:"variant"`
@@ -880,6 +892,7 @@ type dlpEntryPredefinedGetResponseJSON struct {
 	Secret        apijson.Field
 	UpdatedAt     apijson.Field
 	UploadStatus  apijson.Field
+	ValidatorIDs  apijson.Field
 	Variant       apijson.Field
 	WordList      apijson.Field
 	raw           string
@@ -967,7 +980,13 @@ type DLPEntryPredefinedGetResponseObject struct {
 	ProfileID    string                                          `json:"profile_id" api:"nullable" format:"uuid"`
 	Profiles     []DLPEntryPredefinedGetResponseObjectProfile    `json:"profiles"`
 	UploadStatus DLPEntryPredefinedGetResponseObjectUploadStatus `json:"upload_status"`
-	JSON         dlpEntryPredefinedGetResponseObjectJSON         `json:"-"`
+	// Validators this entry references, by id, at most 10. An empty list means the
+	// entry references none.
+	//
+	// Returned by the entry endpoints. Not returned on entries embedded in other
+	// responses, such as profiles.
+	ValidatorIDs []string                                `json:"validator_ids" format:"uuid"`
+	JSON         dlpEntryPredefinedGetResponseObjectJSON `json:"-"`
 }
 
 // dlpEntryPredefinedGetResponseObjectJSON contains the JSON metadata for the
@@ -984,6 +1003,7 @@ type dlpEntryPredefinedGetResponseObjectJSON struct {
 	ProfileID    apijson.Field
 	Profiles     apijson.Field
 	UploadStatus apijson.Field
+	ValidatorIDs apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }

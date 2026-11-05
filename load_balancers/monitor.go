@@ -147,7 +147,7 @@ func (r *MonitorService) Edit(ctx context.Context, monitorID string, params Moni
 	return res, nil
 }
 
-// List a single configured monitor for an account.
+// Fetch a single configured monitor for an account.
 func (r *MonitorService) Get(ctx context.Context, monitorID string, query MonitorGetParams, opts ...option.RequestOption) (res *Monitor, err error) {
 	var env MonitorGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

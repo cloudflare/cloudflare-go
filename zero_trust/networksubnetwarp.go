@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // NetworkSubnetWARPService contains methods and other services that help with
@@ -332,9 +331,9 @@ func (r NetworkSubnetWARPNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkSubnetWARPNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	Result   Subnet                `json:"result" api:"required"`
+	Errors   []NetworkSubnetWARPNewResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []NetworkSubnetWARPNewResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Subnet                                         `json:"result" api:"required"`
 	// Whether the API call was successful
 	Success NetworkSubnetWARPNewResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkSubnetWARPNewResponseEnvelopeJSON    `json:"-"`
@@ -359,6 +358,58 @@ func (r networkSubnetWARPNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type NetworkSubnetWARPNewResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                         `json:"context"`
+	JSON    networkSubnetWARPNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// networkSubnetWARPNewResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [NetworkSubnetWARPNewResponseEnvelopeErrors]
+type networkSubnetWARPNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkSubnetWARPNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkSubnetWARPNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkSubnetWARPNewResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                           `json:"context"`
+	JSON    networkSubnetWARPNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// networkSubnetWARPNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [NetworkSubnetWARPNewResponseEnvelopeMessages]
+type networkSubnetWARPNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkSubnetWARPNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkSubnetWARPNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type NetworkSubnetWARPNewResponseEnvelopeSuccess bool
 
@@ -380,9 +431,9 @@ type NetworkSubnetWARPDeleteParams struct {
 }
 
 type NetworkSubnetWARPDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo           `json:"messages" api:"required"`
-	Result   NetworkSubnetWARPDeleteResponse `json:"result" api:"required,nullable"`
+	Errors   []NetworkSubnetWARPDeleteResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []NetworkSubnetWARPDeleteResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   NetworkSubnetWARPDeleteResponse                   `json:"result" api:"required,nullable"`
 	// Whether the API call was successful
 	Success NetworkSubnetWARPDeleteResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkSubnetWARPDeleteResponseEnvelopeJSON    `json:"-"`
@@ -404,6 +455,58 @@ func (r *NetworkSubnetWARPDeleteResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r networkSubnetWARPDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkSubnetWARPDeleteResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                            `json:"context"`
+	JSON    networkSubnetWARPDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// networkSubnetWARPDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [NetworkSubnetWARPDeleteResponseEnvelopeErrors]
+type networkSubnetWARPDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkSubnetWARPDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkSubnetWARPDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkSubnetWARPDeleteResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                              `json:"context"`
+	JSON    networkSubnetWARPDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// networkSubnetWARPDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [NetworkSubnetWARPDeleteResponseEnvelopeMessages]
+type networkSubnetWARPDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkSubnetWARPDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkSubnetWARPDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -441,9 +544,9 @@ func (r NetworkSubnetWARPEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkSubnetWARPEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	Result   Subnet                `json:"result" api:"required"`
+	Errors   []NetworkSubnetWARPEditResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []NetworkSubnetWARPEditResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Subnet                                          `json:"result" api:"required"`
 	// Whether the API call was successful
 	Success NetworkSubnetWARPEditResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkSubnetWARPEditResponseEnvelopeJSON    `json:"-"`
@@ -468,6 +571,58 @@ func (r networkSubnetWARPEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type NetworkSubnetWARPEditResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                          `json:"context"`
+	JSON    networkSubnetWARPEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// networkSubnetWARPEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [NetworkSubnetWARPEditResponseEnvelopeErrors]
+type networkSubnetWARPEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkSubnetWARPEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkSubnetWARPEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkSubnetWARPEditResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                            `json:"context"`
+	JSON    networkSubnetWARPEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// networkSubnetWARPEditResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [NetworkSubnetWARPEditResponseEnvelopeMessages]
+type networkSubnetWARPEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkSubnetWARPEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkSubnetWARPEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the API call was successful
 type NetworkSubnetWARPEditResponseEnvelopeSuccess bool
 
@@ -489,9 +644,9 @@ type NetworkSubnetWARPGetParams struct {
 }
 
 type NetworkSubnetWARPGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	Result   Subnet                `json:"result" api:"required"`
+	Errors   []NetworkSubnetWARPGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []NetworkSubnetWARPGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Subnet                                         `json:"result" api:"required"`
 	// Whether the API call was successful
 	Success NetworkSubnetWARPGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkSubnetWARPGetResponseEnvelopeJSON    `json:"-"`
@@ -513,6 +668,58 @@ func (r *NetworkSubnetWARPGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r networkSubnetWARPGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkSubnetWARPGetResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                         `json:"context"`
+	JSON    networkSubnetWARPGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// networkSubnetWARPGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [NetworkSubnetWARPGetResponseEnvelopeErrors]
+type networkSubnetWARPGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkSubnetWARPGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkSubnetWARPGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkSubnetWARPGetResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                           `json:"context"`
+	JSON    networkSubnetWARPGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// networkSubnetWARPGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [NetworkSubnetWARPGetResponseEnvelopeMessages]
+type networkSubnetWARPGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkSubnetWARPGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkSubnetWARPGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

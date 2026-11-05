@@ -1,9 +1,5 @@
 # Accounts
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#AccountParam">AccountParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#Account">Account</a>
@@ -28,10 +24,6 @@ Methods:
 - <code title="post /accounts/{account_id}/move">client.Accounts.AccountOrganizations.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#AccountOrganizationService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#AccountOrganizationNewParams">AccountOrganizationNewParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#AccountOrganizationNewResponse">AccountOrganizationNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## AccountProfile
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#AccountProfileParam">AccountProfileParam</a>
 
 Response Types:
 
@@ -105,7 +97,7 @@ Response Types:
 
 Methods:
 
-- <code title="post /accounts/{account_id}/bulk/subscriptions">client.Accounts.Subscriptions.Bulk.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#SubscriptionBulkService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#SubscriptionBulkNewParams">SubscriptionBulkNewParams</a>) (\*[]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#SubscriptionBulkNewResponse">SubscriptionBulkNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /accounts/{account_id}/bulk/subscriptions">client.Accounts.Subscriptions.Bulk.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#SubscriptionBulkService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#SubscriptionBulkNewParams">SubscriptionBulkNewParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#SubscriptionBulkNewResponse">SubscriptionBulkNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Tokens
 
@@ -209,14 +201,6 @@ Methods:
 - <code title="post /accounts/{account_id}/pay-invoice">client.Accounts.PayInvoice.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#PayInvoiceService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#PayInvoiceNewParams">PayInvoiceNewParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#PayInvoiceNewResponse">PayInvoiceNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## PayBadDebt
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#PayBadDebtNewResponse">PayBadDebtNewResponse</a>
-
-Methods:
-
-- <code title="post /accounts/{account_id}/pay-bad-debt">client.Accounts.PayBadDebt.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#PayBadDebtService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#PayBadDebtNewParams">PayBadDebtNewParams</a>) (\*<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/accounts#PayBadDebtNewResponse">PayBadDebtNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Receipts
 

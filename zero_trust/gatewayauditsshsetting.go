@@ -36,8 +36,7 @@ func NewGatewayAuditSSHSettingService(opts ...option.RequestOption) (r *GatewayA
 	return
 }
 
-// Update Zero Trust Audit SSH and SSH with Access for Infrastructure settings for
-// an account.
+// Update SSH with Access for Infrastructure settings for an account.
 func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, params GatewayAuditSSHSettingUpdateParams, opts ...option.RequestOption) (res *GatewaySettings, err error) {
 	var env GatewayAuditSSHSettingUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -54,8 +53,7 @@ func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, params Gatew
 	return res, nil
 }
 
-// Retrieve all Zero Trust Audit SSH and SSH with Access for Infrastructure
-// settings for an account.
+// Retrieve SSH with Access for Infrastructure settings for an account.
 func (r *GatewayAuditSSHSettingService) Get(ctx context.Context, query GatewayAuditSSHSettingGetParams, opts ...option.RequestOption) (res *GatewaySettings, err error) {
 	var env GatewayAuditSSHSettingGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

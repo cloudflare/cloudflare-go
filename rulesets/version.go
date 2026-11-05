@@ -17,7 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v7/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -41,10 +41,9 @@ func NewVersionService(opts ...option.RequestOption) (r *VersionService) {
 }
 
 // Fetches the versions of an account or zone ruleset.
-func (r *VersionService) List(ctx context.Context, rulesetID string, query VersionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[VersionListResponse], err error) {
-	var raw *http.Response
+func (r *VersionService) List(ctx context.Context, rulesetID string, query VersionListParams, opts ...option.RequestOption) (res *VersionListResponseUnion, err error) {
+	var env VersionListResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -68,21 +67,12 @@ func (r *VersionService) List(ctx context.Context, rulesetID string, query Versi
 		return nil, err
 	}
 	path := fmt.Sprintf("%s/%s/rulesets/%s/versions", accountOrZone, accountOrZoneID, rulesetID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
+	res = &env.Result
 	return res, nil
-}
-
-// Fetches the versions of an account or zone ruleset.
-func (r *VersionService) ListAutoPaging(ctx context.Context, rulesetID string, query VersionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[VersionListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, rulesetID, query, opts...))
 }
 
 // Deletes an existing version of an account or zone ruleset.
@@ -159,92 +149,187 @@ func (r *VersionService) Get(ctx context.Context, rulesetID string, rulesetVersi
 	return res, nil
 }
 
-// A ruleset object.
-type VersionListResponse struct {
-	// The unique ID of the ruleset.
-	ID string `json:"id" api:"required"`
-	// The kind of the ruleset.
-	Kind Kind `json:"kind" api:"required"`
-	// The timestamp of when the ruleset was last modified.
-	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
-	// The human-readable name of the ruleset.
-	Name string `json:"name" api:"required"`
-	// The phase of the ruleset.
-	Phase Phase `json:"phase" api:"required"`
-	// The version of the ruleset.
-	Version string `json:"version" api:"required"`
-	// An informative description of the ruleset.
-	Description string                  `json:"description"`
-	JSON        versionListResponseJSON `json:"-"`
+// A result.
+//
+// Union satisfied by [VersionListResponseArray], [shared.UnionString],
+// [shared.UnionFloat] or [shared.UnionBool].
+type VersionListResponseUnion interface {
+	ImplementsVersionListResponseUnion()
 }
 
-// versionListResponseJSON contains the JSON metadata for the struct
-// [VersionListResponse]
-type versionListResponseJSON struct {
-	ID          apijson.Field
-	Kind        apijson.Field
-	LastUpdated apijson.Field
-	Name        apijson.Field
-	Phase       apijson.Field
-	Version     apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionListResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionListResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+	)
 }
 
-func (r *VersionListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
+type VersionListResponseArray []interface{}
 
-func (r versionListResponseJSON) RawJSON() string {
-	return r.raw
-}
+func (r VersionListResponseArray) ImplementsVersionListResponseUnion() {}
 
-// A ruleset object.
+// A result.
 type VersionGetResponse struct {
 	// The unique ID of the ruleset.
-	ID string `json:"id" api:"required"`
-	// The kind of the ruleset.
-	Kind Kind `json:"kind" api:"required"`
-	// The timestamp of when the ruleset was last modified.
-	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
-	// The human-readable name of the ruleset.
-	Name string `json:"name" api:"required"`
-	// The phase of the ruleset.
-	Phase Phase `json:"phase" api:"required"`
-	// The list of rules in the ruleset.
-	Rules []VersionGetResponseRule `json:"rules" api:"required"`
-	// The version of the ruleset.
-	Version string `json:"version" api:"required"`
+	ID string `json:"id"`
 	// An informative description of the ruleset.
-	Description string                 `json:"description"`
-	JSON        versionGetResponseJSON `json:"-"`
+	Description string `json:"description"`
+	// The kind of the ruleset.
+	Kind Kind `json:"kind"`
+	// The timestamp of when the ruleset was last modified.
+	LastUpdated time.Time `json:"last_updated" format:"date-time"`
+	// The human-readable name of the ruleset.
+	Name string `json:"name"`
+	// The phase of the ruleset.
+	Phase Phase `json:"phase"`
+	// This field can have the runtime type of [[]VersionGetResponseObjectRule].
+	Rules interface{} `json:"rules"`
+	// The version of the ruleset.
+	Version string                 `json:"version"`
+	JSON    versionGetResponseJSON `json:"-"`
+	union   VersionGetResponseUnion
 }
 
 // versionGetResponseJSON contains the JSON metadata for the struct
 // [VersionGetResponse]
 type versionGetResponseJSON struct {
 	ID          apijson.Field
+	Description apijson.Field
 	Kind        apijson.Field
 	LastUpdated apijson.Field
 	Name        apijson.Field
 	Phase       apijson.Field
 	Rules       apijson.Field
 	Version     apijson.Field
-	Description apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 func (r versionGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type VersionGetResponseRule struct {
+func (r *VersionGetResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionGetResponse{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [VersionGetResponseUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are [VersionGetResponseObject],
+// [VersionGetResponseObject], [VersionGetResponseObject],
+// [VersionGetResponseObject], [VersionGetResponseObject].
+func (r VersionGetResponse) AsUnion() VersionGetResponseUnion {
+	return r.union
+}
+
+// A result.
+//
+// Union satisfied by [VersionGetResponseObject], [VersionGetResponseObject],
+// [VersionGetResponseObject], [VersionGetResponseObject] or
+// [VersionGetResponseObject].
+type VersionGetResponseUnion interface {
+	implementsVersionGetResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObject{}),
+		},
+	)
+}
+
+type VersionGetResponseObject struct {
+	// The unique ID of the ruleset.
+	ID string `json:"id"`
+	// An informative description of the ruleset.
+	Description string `json:"description"`
+	// The kind of the ruleset.
+	Kind Kind `json:"kind"`
+	// The timestamp of when the ruleset was last modified.
+	LastUpdated time.Time `json:"last_updated" format:"date-time"`
+	// The human-readable name of the ruleset.
+	Name string `json:"name"`
+	// The phase of the ruleset.
+	Phase Phase `json:"phase"`
+	// The list of rules in the ruleset.
+	Rules []VersionGetResponseObjectRule `json:"rules"`
+	// The version of the ruleset.
+	Version string                       `json:"version"`
+	JSON    versionGetResponseObjectJSON `json:"-"`
+}
+
+// versionGetResponseObjectJSON contains the JSON metadata for the struct
+// [VersionGetResponseObject]
+type versionGetResponseObjectJSON struct {
+	ID          apijson.Field
+	Description apijson.Field
+	Kind        apijson.Field
+	LastUpdated apijson.Field
+	Name        apijson.Field
+	Phase       apijson.Field
+	Rules       apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObject) implementsVersionGetResponse() {}
+
+type VersionGetResponseObjectRule struct {
 	// The unique ID of the rule.
 	ID string `json:"id"`
 	// The action to perform when the rule matches.
@@ -255,11 +340,11 @@ type VersionGetResponseRule struct {
 	// [RedirectRuleActionParameters], [RewriteRuleActionParameters],
 	// [RouteRuleActionParameters], [ScoreRuleActionParameters],
 	// [ServeErrorRuleActionParameters],
-	// [VersionGetResponseRulesSetCacheControlRuleActionParameters],
+	// [VersionGetResponseObjectRulesSetCacheControlRuleActionParameters],
 	// [SetCacheSettingsRuleActionParameters],
-	// [VersionGetResponseRulesSetCacheTagsRuleActionParameters],
+	// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParameters],
 	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
-	// [VersionGetResponseRulesTransformResponseHTMLRuleActionParameters].
+	// [VersionGetResponseObjectRulesTransformResponseHTMLRuleActionParameters].
 	ActionParameters interface{} `json:"action_parameters"`
 	// This field can have the runtime type of [[]string].
 	Categories interface{} `json:"categories"`
@@ -268,21 +353,21 @@ type VersionGetResponseRule struct {
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
 	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
-	// [VersionGetResponseRulesChallengeRuleExposedCredentialCheck],
+	// [VersionGetResponseObjectRulesChallengeRuleExposedCredentialCheck],
 	// [CompressResponseRuleExposedCredentialCheck],
 	// [DDoSDynamicRuleExposedCredentialCheck], [ExecuteRuleExposedCredentialCheck],
 	// [ForceConnectionCloseRuleExposedCredentialCheck],
-	// [VersionGetResponseRulesJavaScriptChallengeRuleExposedCredentialCheck],
+	// [VersionGetResponseObjectRulesJavaScriptChallengeRuleExposedCredentialCheck],
 	// [LogRuleExposedCredentialCheck], [LogCustomFieldRuleExposedCredentialCheck],
 	// [ManagedChallengeRuleExposedCredentialCheck],
 	// [RedirectRuleExposedCredentialCheck], [RewriteRuleExposedCredentialCheck],
 	// [RouteRuleExposedCredentialCheck], [ScoreRuleExposedCredentialCheck],
 	// [ServeErrorRuleExposedCredentialCheck],
-	// [VersionGetResponseRulesSetCacheControlRuleExposedCredentialCheck],
+	// [VersionGetResponseObjectRulesSetCacheControlRuleExposedCredentialCheck],
 	// [SetCacheSettingsRuleExposedCredentialCheck],
-	// [VersionGetResponseRulesSetCacheTagsRuleExposedCredentialCheck],
+	// [VersionGetResponseObjectRulesSetCacheTagsRuleExposedCredentialCheck],
 	// [SetConfigRuleExposedCredentialCheck], [SkipRuleExposedCredentialCheck],
-	// [VersionGetResponseRulesTransformResponseHTMLRuleExposedCredentialCheck].
+	// [VersionGetResponseObjectRulesTransformResponseHTMLRuleExposedCredentialCheck].
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
@@ -291,30 +376,31 @@ type VersionGetResponseRule struct {
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
 	// This field can have the runtime type of [BlockRuleRatelimit],
-	// [VersionGetResponseRulesChallengeRuleRatelimit],
+	// [VersionGetResponseObjectRulesChallengeRuleRatelimit],
 	// [CompressResponseRuleRatelimit], [DDoSDynamicRuleRatelimit],
 	// [ExecuteRuleRatelimit], [ForceConnectionCloseRuleRatelimit],
-	// [VersionGetResponseRulesJavaScriptChallengeRuleRatelimit], [LogRuleRatelimit],
-	// [LogCustomFieldRuleRatelimit], [ManagedChallengeRuleRatelimit],
-	// [RedirectRuleRatelimit], [RewriteRuleRatelimit], [RouteRuleRatelimit],
-	// [ScoreRuleRatelimit], [ServeErrorRuleRatelimit],
-	// [VersionGetResponseRulesSetCacheControlRuleRatelimit],
+	// [VersionGetResponseObjectRulesJavaScriptChallengeRuleRatelimit],
+	// [LogRuleRatelimit], [LogCustomFieldRuleRatelimit],
+	// [ManagedChallengeRuleRatelimit], [RedirectRuleRatelimit],
+	// [RewriteRuleRatelimit], [RouteRuleRatelimit], [ScoreRuleRatelimit],
+	// [ServeErrorRuleRatelimit],
+	// [VersionGetResponseObjectRulesSetCacheControlRuleRatelimit],
 	// [SetCacheSettingsRuleRatelimit],
-	// [VersionGetResponseRulesSetCacheTagsRuleRatelimit], [SetConfigRuleRatelimit],
-	// [SkipRuleRatelimit],
-	// [VersionGetResponseRulesTransformResponseHTMLRuleRatelimit].
+	// [VersionGetResponseObjectRulesSetCacheTagsRuleRatelimit],
+	// [SetConfigRuleRatelimit], [SkipRuleRatelimit],
+	// [VersionGetResponseObjectRulesTransformResponseHTMLRuleRatelimit].
 	Ratelimit interface{} `json:"ratelimit"`
 	// The reference of the rule (the rule's ID by default).
 	Ref string `json:"ref"`
 	// The version of the rule.
-	Version string                     `json:"version"`
-	JSON    versionGetResponseRuleJSON `json:"-"`
-	union   VersionGetResponseRulesUnion
+	Version string                           `json:"version"`
+	JSON    versionGetResponseObjectRuleJSON `json:"-"`
+	union   VersionGetResponseObjectRulesUnion
 }
 
-// versionGetResponseRuleJSON contains the JSON metadata for the struct
-// [VersionGetResponseRule]
-type versionGetResponseRuleJSON struct {
+// versionGetResponseObjectRuleJSON contains the JSON metadata for the struct
+// [VersionGetResponseObjectRule]
+type versionGetResponseObjectRuleJSON struct {
 	ID                     apijson.Field
 	Action                 apijson.Field
 	ActionParameters       apijson.Field
@@ -332,12 +418,12 @@ type versionGetResponseRuleJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r versionGetResponseRuleJSON) RawJSON() string {
+func (r versionGetResponseObjectRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r *VersionGetResponseRule) UnmarshalJSON(data []byte) (err error) {
-	*r = VersionGetResponseRule{}
+func (r *VersionGetResponseObjectRule) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionGetResponseObjectRule{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -345,391 +431,185 @@ func (r *VersionGetResponseRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
-// AsUnion returns a [VersionGetResponseRulesUnion] interface which you can cast to
-// the specific types for more type safety.
+// AsUnion returns a [VersionGetResponseObjectRulesUnion] interface which you can
+// cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are [VersionGetResponseRulesBlockRule],
-// [VersionGetResponseRulesChallengeRule],
-// [VersionGetResponseRulesResponseCompressionRule],
-// [VersionGetResponseRulesDDoSDynamicRule], [VersionGetResponseRulesExecuteRule],
-// [VersionGetResponseRulesForceConnectionCloseRule],
-// [VersionGetResponseRulesJavaScriptChallengeRule],
-// [VersionGetResponseRulesLogRule], [VersionGetResponseRulesLogCustomFieldRule],
-// [VersionGetResponseRulesManagedChallengeRule],
-// [VersionGetResponseRulesRedirectRule], [VersionGetResponseRulesRewriteRule],
-// [VersionGetResponseRulesRouteRule], [VersionGetResponseRulesScoreRule],
-// [VersionGetResponseRulesServeErrorRule],
-// [VersionGetResponseRulesSetCacheControlRule],
-// [VersionGetResponseRulesSetCacheSettingsRule],
-// [VersionGetResponseRulesSetCacheTagsRule],
-// [VersionGetResponseRulesSetConfigurationRule],
-// [VersionGetResponseRulesSkipRule],
-// [VersionGetResponseRulesTransformResponseHTMLRule].
-func (r VersionGetResponseRule) AsUnion() VersionGetResponseRulesUnion {
+// Possible runtime types of the union are
+// [VersionGetResponseObjectRulesBlockRule],
+// [VersionGetResponseObjectRulesChallengeRule],
+// [VersionGetResponseObjectRulesResponseCompressionRule],
+// [VersionGetResponseObjectRulesDDoSDynamicRule],
+// [VersionGetResponseObjectRulesExecuteRule],
+// [VersionGetResponseObjectRulesForceConnectionCloseRule],
+// [VersionGetResponseObjectRulesJavaScriptChallengeRule],
+// [VersionGetResponseObjectRulesLogRule],
+// [VersionGetResponseObjectRulesLogCustomFieldRule],
+// [VersionGetResponseObjectRulesManagedChallengeRule],
+// [VersionGetResponseObjectRulesRedirectRule],
+// [VersionGetResponseObjectRulesRewriteRule],
+// [VersionGetResponseObjectRulesRouteRule],
+// [VersionGetResponseObjectRulesScoreRule],
+// [VersionGetResponseObjectRulesServeErrorRule],
+// [VersionGetResponseObjectRulesSetCacheControlRule],
+// [VersionGetResponseObjectRulesSetCacheSettingsRule],
+// [VersionGetResponseObjectRulesSetCacheTagsRule],
+// [VersionGetResponseObjectRulesSetConfigurationRule],
+// [VersionGetResponseObjectRulesSkipRule],
+// [VersionGetResponseObjectRulesTransformResponseHTMLRule].
+func (r VersionGetResponseObjectRule) AsUnion() VersionGetResponseObjectRulesUnion {
 	return r.union
 }
 
-// Union satisfied by [VersionGetResponseRulesBlockRule],
-// [VersionGetResponseRulesChallengeRule],
-// [VersionGetResponseRulesResponseCompressionRule],
-// [VersionGetResponseRulesDDoSDynamicRule], [VersionGetResponseRulesExecuteRule],
-// [VersionGetResponseRulesForceConnectionCloseRule],
-// [VersionGetResponseRulesJavaScriptChallengeRule],
-// [VersionGetResponseRulesLogRule], [VersionGetResponseRulesLogCustomFieldRule],
-// [VersionGetResponseRulesManagedChallengeRule],
-// [VersionGetResponseRulesRedirectRule], [VersionGetResponseRulesRewriteRule],
-// [VersionGetResponseRulesRouteRule], [VersionGetResponseRulesScoreRule],
-// [VersionGetResponseRulesServeErrorRule],
-// [VersionGetResponseRulesSetCacheControlRule],
-// [VersionGetResponseRulesSetCacheSettingsRule],
-// [VersionGetResponseRulesSetCacheTagsRule],
-// [VersionGetResponseRulesSetConfigurationRule], [VersionGetResponseRulesSkipRule]
-// or [VersionGetResponseRulesTransformResponseHTMLRule].
-type VersionGetResponseRulesUnion interface {
-	implementsVersionGetResponseRule()
+// Union satisfied by [VersionGetResponseObjectRulesBlockRule],
+// [VersionGetResponseObjectRulesChallengeRule],
+// [VersionGetResponseObjectRulesResponseCompressionRule],
+// [VersionGetResponseObjectRulesDDoSDynamicRule],
+// [VersionGetResponseObjectRulesExecuteRule],
+// [VersionGetResponseObjectRulesForceConnectionCloseRule],
+// [VersionGetResponseObjectRulesJavaScriptChallengeRule],
+// [VersionGetResponseObjectRulesLogRule],
+// [VersionGetResponseObjectRulesLogCustomFieldRule],
+// [VersionGetResponseObjectRulesManagedChallengeRule],
+// [VersionGetResponseObjectRulesRedirectRule],
+// [VersionGetResponseObjectRulesRewriteRule],
+// [VersionGetResponseObjectRulesRouteRule],
+// [VersionGetResponseObjectRulesScoreRule],
+// [VersionGetResponseObjectRulesServeErrorRule],
+// [VersionGetResponseObjectRulesSetCacheControlRule],
+// [VersionGetResponseObjectRulesSetCacheSettingsRule],
+// [VersionGetResponseObjectRulesSetCacheTagsRule],
+// [VersionGetResponseObjectRulesSetConfigurationRule],
+// [VersionGetResponseObjectRulesSkipRule] or
+// [VersionGetResponseObjectRulesTransformResponseHTMLRule].
+type VersionGetResponseObjectRulesUnion interface {
+	implementsVersionGetResponseObjectRule()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*VersionGetResponseRulesUnion)(nil)).Elem(),
+		reflect.TypeOf((*VersionGetResponseObjectRulesUnion)(nil)).Elem(),
 		"action",
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesBlockRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesBlockRule{}),
 			DiscriminatorValue: "block",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesChallengeRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesChallengeRule{}),
 			DiscriminatorValue: "challenge",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesResponseCompressionRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesResponseCompressionRule{}),
 			DiscriminatorValue: "compress_response",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesDDoSDynamicRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesDDoSDynamicRule{}),
 			DiscriminatorValue: "ddos_dynamic",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesExecuteRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesExecuteRule{}),
 			DiscriminatorValue: "execute",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesForceConnectionCloseRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesForceConnectionCloseRule{}),
 			DiscriminatorValue: "force_connection_close",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesJavaScriptChallengeRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesJavaScriptChallengeRule{}),
 			DiscriminatorValue: "js_challenge",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesLogRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesLogRule{}),
 			DiscriminatorValue: "log",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesLogCustomFieldRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesLogCustomFieldRule{}),
 			DiscriminatorValue: "log_custom_field",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesManagedChallengeRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesManagedChallengeRule{}),
 			DiscriminatorValue: "managed_challenge",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesRedirectRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesRedirectRule{}),
 			DiscriminatorValue: "redirect",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesRewriteRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesRewriteRule{}),
 			DiscriminatorValue: "rewrite",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesRouteRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesRouteRule{}),
 			DiscriminatorValue: "route",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesScoreRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesScoreRule{}),
 			DiscriminatorValue: "score",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesServeErrorRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesServeErrorRule{}),
 			DiscriminatorValue: "serve_error",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesSetCacheControlRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRule{}),
 			DiscriminatorValue: "set_cache_control",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesSetCacheSettingsRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesSetCacheSettingsRule{}),
 			DiscriminatorValue: "set_cache_settings",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesSetCacheTagsRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesSetCacheTagsRule{}),
 			DiscriminatorValue: "set_cache_tags",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesSetConfigurationRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesSetConfigurationRule{}),
 			DiscriminatorValue: "set_config",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesSkipRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesSkipRule{}),
 			DiscriminatorValue: "skip",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(VersionGetResponseRulesTransformResponseHTMLRule{}),
+			Type:               reflect.TypeOf(VersionGetResponseObjectRulesTransformResponseHTMLRule{}),
 			DiscriminatorValue: "transform_response_html",
 		},
 	)
 }
 
-type VersionGetResponseRulesBlockRule struct {
-	ID         string                               `json:"id" api:"required"`
-	Action     string                               `json:"action" api:"required"`
-	Enabled    bool                                 `json:"enabled" api:"required"`
-	Expression string                               `json:"expression" api:"required"`
-	Ref        string                               `json:"ref" api:"required"`
-	JSON       versionGetResponseRulesBlockRuleJSON `json:"-"`
-	BlockRule
-}
-
-// versionGetResponseRulesBlockRuleJSON contains the JSON metadata for the struct
-// [VersionGetResponseRulesBlockRule]
-type versionGetResponseRulesBlockRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesBlockRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesBlockRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesBlockRule) implementsVersionGetResponseRule() {}
-
-type VersionGetResponseRulesChallengeRule struct {
-	// The unique ID of the rule.
-	ID string `json:"id" api:"required"`
-	// The action to perform when the rule matches.
-	Action VersionGetResponseRulesChallengeRuleAction `json:"action" api:"required"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled" api:"required"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression" api:"required"`
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
-	// The reference of the rule (the rule's ID by default).
-	Ref string `json:"ref" api:"required"`
-	// The version of the rule.
-	Version string `json:"version" api:"required"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Configuration for exposed credential checking.
-	ExposedCredentialCheck VersionGetResponseRulesChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// An object configuring the rule's rate limit behavior.
-	Ratelimit VersionGetResponseRulesChallengeRuleRatelimit `json:"ratelimit"`
-	JSON      versionGetResponseRulesChallengeRuleJSON      `json:"-"`
-}
-
-// versionGetResponseRulesChallengeRuleJSON contains the JSON metadata for the
-// struct [VersionGetResponseRulesChallengeRule]
-type versionGetResponseRulesChallengeRuleJSON struct {
-	ID                     apijson.Field
-	Action                 apijson.Field
-	Enabled                apijson.Field
-	Expression             apijson.Field
-	LastUpdated            apijson.Field
-	Ref                    apijson.Field
-	Version                apijson.Field
-	ActionParameters       apijson.Field
-	Categories             apijson.Field
-	Description            apijson.Field
-	ExposedCredentialCheck apijson.Field
-	Logging                apijson.Field
-	Ratelimit              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesChallengeRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesChallengeRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesChallengeRule) implementsVersionGetResponseRule() {}
-
-// The action to perform when the rule matches.
-type VersionGetResponseRulesChallengeRuleAction string
-
-const (
-	VersionGetResponseRulesChallengeRuleActionChallenge VersionGetResponseRulesChallengeRuleAction = "challenge"
-)
-
-func (r VersionGetResponseRulesChallengeRuleAction) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesChallengeRuleActionChallenge:
-		return true
-	}
-	return false
-}
-
-// Configuration for exposed credential checking.
-type VersionGetResponseRulesChallengeRuleExposedCredentialCheck struct {
-	// An expression that selects the password used in the credentials check.
-	PasswordExpression string `json:"password_expression" api:"required"`
-	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                         `json:"username_expression" api:"required"`
-	JSON               versionGetResponseRulesChallengeRuleExposedCredentialCheckJSON `json:"-"`
-}
-
-// versionGetResponseRulesChallengeRuleExposedCredentialCheckJSON contains the JSON
-// metadata for the struct
-// [VersionGetResponseRulesChallengeRuleExposedCredentialCheck]
-type versionGetResponseRulesChallengeRuleExposedCredentialCheckJSON struct {
-	PasswordExpression apijson.Field
-	UsernameExpression apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesChallengeRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesChallengeRuleExposedCredentialCheckJSON) RawJSON() string {
-	return r.raw
-}
-
-// An object configuring the rule's rate limit behavior.
-type VersionGetResponseRulesChallengeRuleRatelimit struct {
-	// Characteristics of the request on which the rate limit counter will be
-	// incremented.
-	Characteristics []string `json:"characteristics" api:"required"`
-	// Period in seconds over which the counter is being incremented.
-	Period int64 `json:"period" api:"required"`
-	// An expression that defines when the rate limit counter should be incremented. It
-	// defaults to the same as the rule's expression.
-	CountingExpression string `json:"counting_expression"`
-	// Period of time in seconds after which the action will be disabled following its
-	// first execution.
-	MitigationTimeout int64 `json:"mitigation_timeout"`
-	// The threshold of requests per period after which the action will be executed for
-	// the first time.
-	RequestsPerPeriod int64 `json:"requests_per_period"`
-	// Whether counting is only performed when an origin is reached.
-	RequestsToOrigin bool `json:"requests_to_origin"`
-	// The score threshold per period for which the action will be executed the first
-	// time.
-	ScorePerPeriod int64 `json:"score_per_period"`
-	// A response header name provided by the origin, which contains the score to
-	// increment rate limit counter with.
-	ScoreResponseHeaderName string                                            `json:"score_response_header_name"`
-	JSON                    versionGetResponseRulesChallengeRuleRatelimitJSON `json:"-"`
-}
-
-// versionGetResponseRulesChallengeRuleRatelimitJSON contains the JSON metadata for
-// the struct [VersionGetResponseRulesChallengeRuleRatelimit]
-type versionGetResponseRulesChallengeRuleRatelimitJSON struct {
-	Characteristics         apijson.Field
-	Period                  apijson.Field
-	CountingExpression      apijson.Field
-	MitigationTimeout       apijson.Field
-	RequestsPerPeriod       apijson.Field
-	RequestsToOrigin        apijson.Field
-	ScorePerPeriod          apijson.Field
-	ScoreResponseHeaderName apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesChallengeRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesChallengeRuleRatelimitJSON) RawJSON() string {
-	return r.raw
-}
-
-type VersionGetResponseRulesResponseCompressionRule struct {
-	ID         string                                             `json:"id" api:"required"`
-	Action     string                                             `json:"action" api:"required"`
-	Enabled    bool                                               `json:"enabled" api:"required"`
-	Expression string                                             `json:"expression" api:"required"`
-	Ref        string                                             `json:"ref" api:"required"`
-	JSON       versionGetResponseRulesResponseCompressionRuleJSON `json:"-"`
-	CompressResponseRule
-}
-
-// versionGetResponseRulesResponseCompressionRuleJSON contains the JSON metadata
-// for the struct [VersionGetResponseRulesResponseCompressionRule]
-type versionGetResponseRulesResponseCompressionRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesResponseCompressionRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesResponseCompressionRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesResponseCompressionRule) implementsVersionGetResponseRule() {}
-
-type VersionGetResponseRulesDDoSDynamicRule struct {
+type VersionGetResponseObjectRulesBlockRule struct {
 	ID         string                                     `json:"id" api:"required"`
 	Action     string                                     `json:"action" api:"required"`
 	Enabled    bool                                       `json:"enabled" api:"required"`
 	Expression string                                     `json:"expression" api:"required"`
 	Ref        string                                     `json:"ref" api:"required"`
-	JSON       versionGetResponseRulesDDoSDynamicRuleJSON `json:"-"`
-	DDoSDynamicRule
+	JSON       versionGetResponseObjectRulesBlockRuleJSON `json:"-"`
+	BlockRule
 }
 
-// versionGetResponseRulesDDoSDynamicRuleJSON contains the JSON metadata for the
-// struct [VersionGetResponseRulesDDoSDynamicRule]
-type versionGetResponseRulesDDoSDynamicRuleJSON struct {
+// versionGetResponseObjectRulesBlockRuleJSON contains the JSON metadata for the
+// struct [VersionGetResponseObjectRulesBlockRule]
+type versionGetResponseObjectRulesBlockRuleJSON struct {
 	ID          apijson.Field
 	Action      apijson.Field
 	Enabled     apijson.Field
@@ -739,85 +619,21 @@ type versionGetResponseRulesDDoSDynamicRuleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *VersionGetResponseRulesDDoSDynamicRule) UnmarshalJSON(data []byte) (err error) {
+func (r *VersionGetResponseObjectRulesBlockRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r versionGetResponseRulesDDoSDynamicRuleJSON) RawJSON() string {
+func (r versionGetResponseObjectRulesBlockRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r VersionGetResponseRulesDDoSDynamicRule) implementsVersionGetResponseRule() {}
+func (r VersionGetResponseObjectRulesBlockRule) implementsVersionGetResponseObjectRule() {}
 
-type VersionGetResponseRulesExecuteRule struct {
-	ID         string                                 `json:"id" api:"required"`
-	Action     string                                 `json:"action" api:"required"`
-	Enabled    bool                                   `json:"enabled" api:"required"`
-	Expression string                                 `json:"expression" api:"required"`
-	Ref        string                                 `json:"ref" api:"required"`
-	JSON       versionGetResponseRulesExecuteRuleJSON `json:"-"`
-	ExecuteRule
-}
-
-// versionGetResponseRulesExecuteRuleJSON contains the JSON metadata for the struct
-// [VersionGetResponseRulesExecuteRule]
-type versionGetResponseRulesExecuteRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesExecuteRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesExecuteRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesExecuteRule) implementsVersionGetResponseRule() {}
-
-type VersionGetResponseRulesForceConnectionCloseRule struct {
-	ID         string                                              `json:"id" api:"required"`
-	Action     string                                              `json:"action" api:"required"`
-	Enabled    bool                                                `json:"enabled" api:"required"`
-	Expression string                                              `json:"expression" api:"required"`
-	Ref        string                                              `json:"ref" api:"required"`
-	JSON       versionGetResponseRulesForceConnectionCloseRuleJSON `json:"-"`
-	ForceConnectionCloseRule
-}
-
-// versionGetResponseRulesForceConnectionCloseRuleJSON contains the JSON metadata
-// for the struct [VersionGetResponseRulesForceConnectionCloseRule]
-type versionGetResponseRulesForceConnectionCloseRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesForceConnectionCloseRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesForceConnectionCloseRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesForceConnectionCloseRule) implementsVersionGetResponseRule() {}
-
-type VersionGetResponseRulesJavaScriptChallengeRule struct {
+type VersionGetResponseObjectRulesChallengeRule struct {
 	// The unique ID of the rule.
 	ID string `json:"id" api:"required"`
 	// The action to perform when the rule matches.
-	Action VersionGetResponseRulesJavaScriptChallengeRuleAction `json:"action" api:"required"`
+	Action VersionGetResponseObjectRulesChallengeRuleAction `json:"action" api:"required"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled" api:"required"`
 	// The expression defining which traffic will match the rule.
@@ -835,17 +651,17 @@ type VersionGetResponseRulesJavaScriptChallengeRule struct {
 	// An informative description of the rule.
 	Description string `json:"description"`
 	// Configuration for exposed credential checking.
-	ExposedCredentialCheck VersionGetResponseRulesJavaScriptChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
+	ExposedCredentialCheck VersionGetResponseObjectRulesChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
 	// An object configuring the rule's rate limit behavior.
-	Ratelimit VersionGetResponseRulesJavaScriptChallengeRuleRatelimit `json:"ratelimit"`
-	JSON      versionGetResponseRulesJavaScriptChallengeRuleJSON      `json:"-"`
+	Ratelimit VersionGetResponseObjectRulesChallengeRuleRatelimit `json:"ratelimit"`
+	JSON      versionGetResponseObjectRulesChallengeRuleJSON      `json:"-"`
 }
 
-// versionGetResponseRulesJavaScriptChallengeRuleJSON contains the JSON metadata
-// for the struct [VersionGetResponseRulesJavaScriptChallengeRule]
-type versionGetResponseRulesJavaScriptChallengeRuleJSON struct {
+// versionGetResponseObjectRulesChallengeRuleJSON contains the JSON metadata for
+// the struct [VersionGetResponseObjectRulesChallengeRule]
+type versionGetResponseObjectRulesChallengeRuleJSON struct {
 	ID                     apijson.Field
 	Action                 apijson.Field
 	Enabled                apijson.Field
@@ -863,2885 +679,60 @@ type versionGetResponseRulesJavaScriptChallengeRuleJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *VersionGetResponseRulesJavaScriptChallengeRule) UnmarshalJSON(data []byte) (err error) {
+func (r *VersionGetResponseObjectRulesChallengeRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r versionGetResponseRulesJavaScriptChallengeRuleJSON) RawJSON() string {
+func (r versionGetResponseObjectRulesChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r VersionGetResponseRulesJavaScriptChallengeRule) implementsVersionGetResponseRule() {}
+func (r VersionGetResponseObjectRulesChallengeRule) implementsVersionGetResponseObjectRule() {}
 
 // The action to perform when the rule matches.
-type VersionGetResponseRulesJavaScriptChallengeRuleAction string
+type VersionGetResponseObjectRulesChallengeRuleAction string
 
 const (
-	VersionGetResponseRulesJavaScriptChallengeRuleActionJSChallenge VersionGetResponseRulesJavaScriptChallengeRuleAction = "js_challenge"
+	VersionGetResponseObjectRulesChallengeRuleActionChallenge VersionGetResponseObjectRulesChallengeRuleAction = "challenge"
 )
 
-func (r VersionGetResponseRulesJavaScriptChallengeRuleAction) IsKnown() bool {
+func (r VersionGetResponseObjectRulesChallengeRuleAction) IsKnown() bool {
 	switch r {
-	case VersionGetResponseRulesJavaScriptChallengeRuleActionJSChallenge:
+	case VersionGetResponseObjectRulesChallengeRuleActionChallenge:
 		return true
 	}
 	return false
 }
 
 // Configuration for exposed credential checking.
-type VersionGetResponseRulesJavaScriptChallengeRuleExposedCredentialCheck struct {
-	// An expression that selects the password used in the credentials check.
-	PasswordExpression string `json:"password_expression" api:"required"`
-	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                                   `json:"username_expression" api:"required"`
-	JSON               versionGetResponseRulesJavaScriptChallengeRuleExposedCredentialCheckJSON `json:"-"`
-}
-
-// versionGetResponseRulesJavaScriptChallengeRuleExposedCredentialCheckJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesJavaScriptChallengeRuleExposedCredentialCheck]
-type versionGetResponseRulesJavaScriptChallengeRuleExposedCredentialCheckJSON struct {
-	PasswordExpression apijson.Field
-	UsernameExpression apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesJavaScriptChallengeRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesJavaScriptChallengeRuleExposedCredentialCheckJSON) RawJSON() string {
-	return r.raw
-}
-
-// An object configuring the rule's rate limit behavior.
-type VersionGetResponseRulesJavaScriptChallengeRuleRatelimit struct {
-	// Characteristics of the request on which the rate limit counter will be
-	// incremented.
-	Characteristics []string `json:"characteristics" api:"required"`
-	// Period in seconds over which the counter is being incremented.
-	Period int64 `json:"period" api:"required"`
-	// An expression that defines when the rate limit counter should be incremented. It
-	// defaults to the same as the rule's expression.
-	CountingExpression string `json:"counting_expression"`
-	// Period of time in seconds after which the action will be disabled following its
-	// first execution.
-	MitigationTimeout int64 `json:"mitigation_timeout"`
-	// The threshold of requests per period after which the action will be executed for
-	// the first time.
-	RequestsPerPeriod int64 `json:"requests_per_period"`
-	// Whether counting is only performed when an origin is reached.
-	RequestsToOrigin bool `json:"requests_to_origin"`
-	// The score threshold per period for which the action will be executed the first
-	// time.
-	ScorePerPeriod int64 `json:"score_per_period"`
-	// A response header name provided by the origin, which contains the score to
-	// increment rate limit counter with.
-	ScoreResponseHeaderName string                                                      `json:"score_response_header_name"`
-	JSON                    versionGetResponseRulesJavaScriptChallengeRuleRatelimitJSON `json:"-"`
-}
-
-// versionGetResponseRulesJavaScriptChallengeRuleRatelimitJSON contains the JSON
-// metadata for the struct
-// [VersionGetResponseRulesJavaScriptChallengeRuleRatelimit]
-type versionGetResponseRulesJavaScriptChallengeRuleRatelimitJSON struct {
-	Characteristics         apijson.Field
-	Period                  apijson.Field
-	CountingExpression      apijson.Field
-	MitigationTimeout       apijson.Field
-	RequestsPerPeriod       apijson.Field
-	RequestsToOrigin        apijson.Field
-	ScorePerPeriod          apijson.Field
-	ScoreResponseHeaderName apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesJavaScriptChallengeRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesJavaScriptChallengeRuleRatelimitJSON) RawJSON() string {
-	return r.raw
-}
-
-type VersionGetResponseRulesLogRule struct {
-	ID         string                             `json:"id" api:"required"`
-	Action     string                             `json:"action" api:"required"`
-	Enabled    bool                               `json:"enabled" api:"required"`
-	Expression string                             `json:"expression" api:"required"`
-	Ref        string                             `json:"ref" api:"required"`
-	JSON       versionGetResponseRulesLogRuleJSON `json:"-"`
-	LogRule
-}
-
-// versionGetResponseRulesLogRuleJSON contains the JSON metadata for the struct
-// [VersionGetResponseRulesLogRule]
-type versionGetResponseRulesLogRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesLogRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesLogRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesLogRule) implementsVersionGetResponseRule() {}
-
-type VersionGetResponseRulesLogCustomFieldRule struct {
-	ID         string                                        `json:"id" api:"required"`
-	Action     string                                        `json:"action" api:"required"`
-	Enabled    bool                                          `json:"enabled" api:"required"`
-	Expression string                                        `json:"expression" api:"required"`
-	Ref        string                                        `json:"ref" api:"required"`
-	JSON       versionGetResponseRulesLogCustomFieldRuleJSON `json:"-"`
-	LogCustomFieldRule
-}
-
-// versionGetResponseRulesLogCustomFieldRuleJSON contains the JSON metadata for the
-// struct [VersionGetResponseRulesLogCustomFieldRule]
-type versionGetResponseRulesLogCustomFieldRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesLogCustomFieldRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesLogCustomFieldRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesLogCustomFieldRule) implementsVersionGetResponseRule() {}
-
-type VersionGetResponseRulesManagedChallengeRule struct {
-	ID         string                                          `json:"id" api:"required"`
-	Action     string                                          `json:"action" api:"required"`
-	Enabled    bool                                            `json:"enabled" api:"required"`
-	Expression string                                          `json:"expression" api:"required"`
-	Ref        string                                          `json:"ref" api:"required"`
-	JSON       versionGetResponseRulesManagedChallengeRuleJSON `json:"-"`
-	ManagedChallengeRule
-}
-
-// versionGetResponseRulesManagedChallengeRuleJSON contains the JSON metadata for
-// the struct [VersionGetResponseRulesManagedChallengeRule]
-type versionGetResponseRulesManagedChallengeRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesManagedChallengeRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesManagedChallengeRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesManagedChallengeRule) implementsVersionGetResponseRule() {}
-
-type VersionGetResponseRulesRedirectRule struct {
-	ID         string                                  `json:"id" api:"required"`
-	Action     string                                  `json:"action" api:"required"`
-	Enabled    bool                                    `json:"enabled" api:"required"`
-	Expression string                                  `json:"expression" api:"required"`
-	Ref        string                                  `json:"ref" api:"required"`
-	JSON       versionGetResponseRulesRedirectRuleJSON `json:"-"`
-	RedirectRule
-}
-
-// versionGetResponseRulesRedirectRuleJSON contains the JSON metadata for the
-// struct [VersionGetResponseRulesRedirectRule]
-type versionGetResponseRulesRedirectRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesRedirectRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesRedirectRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesRedirectRule) implementsVersionGetResponseRule() {}
-
-type VersionGetResponseRulesRewriteRule struct {
-	ID         string                                 `json:"id" api:"required"`
-	Action     string                                 `json:"action" api:"required"`
-	Enabled    bool                                   `json:"enabled" api:"required"`
-	Expression string                                 `json:"expression" api:"required"`
-	Ref        string                                 `json:"ref" api:"required"`
-	JSON       versionGetResponseRulesRewriteRuleJSON `json:"-"`
-	RewriteRule
-}
-
-// versionGetResponseRulesRewriteRuleJSON contains the JSON metadata for the struct
-// [VersionGetResponseRulesRewriteRule]
-type versionGetResponseRulesRewriteRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesRewriteRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesRewriteRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesRewriteRule) implementsVersionGetResponseRule() {}
-
-type VersionGetResponseRulesRouteRule struct {
-	ID         string                               `json:"id" api:"required"`
-	Action     string                               `json:"action" api:"required"`
-	Enabled    bool                                 `json:"enabled" api:"required"`
-	Expression string                               `json:"expression" api:"required"`
-	Ref        string                               `json:"ref" api:"required"`
-	JSON       versionGetResponseRulesRouteRuleJSON `json:"-"`
-	RouteRule
-}
-
-// versionGetResponseRulesRouteRuleJSON contains the JSON metadata for the struct
-// [VersionGetResponseRulesRouteRule]
-type versionGetResponseRulesRouteRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesRouteRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesRouteRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesRouteRule) implementsVersionGetResponseRule() {}
-
-type VersionGetResponseRulesScoreRule struct {
-	ID         string                               `json:"id" api:"required"`
-	Action     string                               `json:"action" api:"required"`
-	Enabled    bool                                 `json:"enabled" api:"required"`
-	Expression string                               `json:"expression" api:"required"`
-	Ref        string                               `json:"ref" api:"required"`
-	JSON       versionGetResponseRulesScoreRuleJSON `json:"-"`
-	ScoreRule
-}
-
-// versionGetResponseRulesScoreRuleJSON contains the JSON metadata for the struct
-// [VersionGetResponseRulesScoreRule]
-type versionGetResponseRulesScoreRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesScoreRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesScoreRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesScoreRule) implementsVersionGetResponseRule() {}
-
-type VersionGetResponseRulesServeErrorRule struct {
-	ID         string                                    `json:"id" api:"required"`
-	Action     string                                    `json:"action" api:"required"`
-	Enabled    bool                                      `json:"enabled" api:"required"`
-	Expression string                                    `json:"expression" api:"required"`
-	Ref        string                                    `json:"ref" api:"required"`
-	JSON       versionGetResponseRulesServeErrorRuleJSON `json:"-"`
-	ServeErrorRule
-}
-
-// versionGetResponseRulesServeErrorRuleJSON contains the JSON metadata for the
-// struct [VersionGetResponseRulesServeErrorRule]
-type versionGetResponseRulesServeErrorRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesServeErrorRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesServeErrorRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesServeErrorRule) implementsVersionGetResponseRule() {}
-
-type VersionGetResponseRulesSetCacheControlRule struct {
-	// The unique ID of the rule.
-	ID string `json:"id" api:"required"`
-	// The action to perform when the rule matches.
-	Action  VersionGetResponseRulesSetCacheControlRuleAction `json:"action" api:"required"`
-	Enabled bool                                             `json:"enabled" api:"required"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression" api:"required"`
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
-	// The reference of the rule (the rule's ID by default).
-	Ref string `json:"ref" api:"required"`
-	// The version of the rule.
-	Version string `json:"version" api:"required"`
-	// The parameters configuring the rule's action.
-	ActionParameters VersionGetResponseRulesSetCacheControlRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Configuration for exposed credential checking.
-	ExposedCredentialCheck VersionGetResponseRulesSetCacheControlRuleExposedCredentialCheck `json:"exposed_credential_check"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// An object configuring the rule's rate limit behavior.
-	Ratelimit VersionGetResponseRulesSetCacheControlRuleRatelimit `json:"ratelimit"`
-	JSON      versionGetResponseRulesSetCacheControlRuleJSON      `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleJSON contains the JSON metadata for
-// the struct [VersionGetResponseRulesSetCacheControlRule]
-type versionGetResponseRulesSetCacheControlRuleJSON struct {
-	ID                     apijson.Field
-	Action                 apijson.Field
-	Enabled                apijson.Field
-	Expression             apijson.Field
-	LastUpdated            apijson.Field
-	Ref                    apijson.Field
-	Version                apijson.Field
-	ActionParameters       apijson.Field
-	Categories             apijson.Field
-	Description            apijson.Field
-	ExposedCredentialCheck apijson.Field
-	Logging                apijson.Field
-	Ratelimit              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRule) implementsVersionGetResponseRule() {}
-
-// The action to perform when the rule matches.
-type VersionGetResponseRulesSetCacheControlRuleAction string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionSetCacheControl VersionGetResponseRulesSetCacheControlRuleAction = "set_cache_control"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleAction) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionSetCacheControl:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type VersionGetResponseRulesSetCacheControlRuleActionParameters struct {
-	// A cache-control directive configuration.
-	Immutable VersionGetResponseRulesSetCacheControlRuleActionParametersImmutable `json:"immutable"`
-	// A cache-control directive configuration that accepts a duration value in
-	// seconds.
-	MaxAge VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAge `json:"max-age"`
-	// A cache-control directive configuration.
-	MustRevalidate VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidate `json:"must-revalidate"`
-	// A cache-control directive configuration.
-	MustUnderstand VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstand `json:"must-understand"`
-	// A cache-control directive configuration that accepts optional qualifiers (header
-	// names).
-	NoCache VersionGetResponseRulesSetCacheControlRuleActionParametersNoCache `json:"no-cache"`
-	// A cache-control directive configuration.
-	NoStore VersionGetResponseRulesSetCacheControlRuleActionParametersNoStore `json:"no-store"`
-	// A cache-control directive configuration.
-	NoTransform VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransform `json:"no-transform"`
-	// A cache-control directive configuration that accepts optional qualifiers (header
-	// names).
-	Private VersionGetResponseRulesSetCacheControlRuleActionParametersPrivate `json:"private"`
-	// A cache-control directive configuration.
-	ProxyRevalidate VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidate `json:"proxy-revalidate"`
-	// A cache-control directive configuration.
-	Public VersionGetResponseRulesSetCacheControlRuleActionParametersPublic `json:"public"`
-	// A cache-control directive configuration that accepts a duration value in
-	// seconds.
-	SMaxage VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxage `json:"s-maxage"`
-	// A cache-control directive configuration that accepts a duration value in
-	// seconds.
-	StaleIfError VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfError `json:"stale-if-error"`
-	// A cache-control directive configuration that accepts a duration value in
-	// seconds.
-	StaleWhileRevalidate VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidate `json:"stale-while-revalidate"`
-	JSON                 versionGetResponseRulesSetCacheControlRuleActionParametersJSON                 `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersJSON contains the JSON
-// metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParameters]
-type versionGetResponseRulesSetCacheControlRuleActionParametersJSON struct {
-	Immutable            apijson.Field
-	MaxAge               apijson.Field
-	MustRevalidate       apijson.Field
-	MustUnderstand       apijson.Field
-	NoCache              apijson.Field
-	NoStore              apijson.Field
-	NoTransform          apijson.Field
-	Private              apijson.Field
-	ProxyRevalidate      apijson.Field
-	Public               apijson.Field
-	SMaxage              apijson.Field
-	StaleIfError         apijson.Field
-	StaleWhileRevalidate apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersJSON) RawJSON() string {
-	return r.raw
-}
-
-// A cache-control directive configuration.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersImmutable struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                    `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersImmutableJSON `json:"-"`
-	union          VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableUnion
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersImmutableJSON contains
-// the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersImmutable]
-type versionGetResponseRulesSetCacheControlRuleActionParametersImmutableJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersImmutableJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersImmutable) UnmarshalJSON(data []byte) (err error) {
-	*r = VersionGetResponseRulesSetCacheControlRuleActionParametersImmutable{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableUnion]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirective],
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirective].
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersImmutable) AsUnion() VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableUnion {
-	return r.union
-}
-
-// A cache-control directive configuration.
-//
-// Union satisfied by
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirective]
-// or
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirective].
-type VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableUnion interface {
-	implementsVersionGetResponseRulesSetCacheControlRuleActionParametersImmutable()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirective{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirective{}),
-		},
-	)
-}
-
-// Set the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersImmutable() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableSetDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// Remove the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                   `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersImmutable() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersImmutableOperationRemove:
-		return true
-	}
-	return false
-}
-
-// A cache-control directive configuration that accepts a duration value in
-// seconds.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAge struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool `json:"cloudflare_only"`
-	// The duration value in seconds for the directive.
-	Value int64                                                                `json:"value"`
-	JSON  versionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeJSON `json:"-"`
-	union VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeUnion
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeJSON contains
-// the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAge]
-type versionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	Value          apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAge) UnmarshalJSON(data []byte) (err error) {
-	*r = VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAge{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeUnion]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirective],
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirective].
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAge) AsUnion() VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeUnion {
-	return r.union
-}
-
-// A cache-control directive configuration that accepts a duration value in
-// seconds.
-//
-// Union satisfied by
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirective]
-// or
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirective].
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeUnion interface {
-	implementsVersionGetResponseRulesSetCacheControlRuleActionParametersMaxAge()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirective{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirective{}),
-		},
-	)
-}
-
-// Set the directive with a duration value in seconds.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation `json:"operation" api:"required"`
-	// The duration value in seconds for the directive.
-	Value int64 `json:"value" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                             `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON struct {
-	Operation      apijson.Field
-	Value          apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersMaxAge() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// Remove the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersMaxAge() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersMaxAgeOperationRemove:
-		return true
-	}
-	return false
-}
-
-// A cache-control directive configuration.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidate struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                         `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateJSON `json:"-"`
-	union          VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateUnion
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidate]
-type versionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidate) UnmarshalJSON(data []byte) (err error) {
-	*r = VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidate{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateUnion]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirective],
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirective].
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidate) AsUnion() VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateUnion {
-	return r.union
-}
-
-// A cache-control directive configuration.
-//
-// Union satisfied by
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirective]
-// or
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirective].
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateUnion interface {
-	implementsVersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidate()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirective{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirective{}),
-		},
-	)
-}
-
-// Set the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                     `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidate() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// Remove the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                        `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidate() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersMustRevalidateOperationRemove:
-		return true
-	}
-	return false
-}
-
-// A cache-control directive configuration.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstand struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                         `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandJSON `json:"-"`
-	union          VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandUnion
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstand]
-type versionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstand) UnmarshalJSON(data []byte) (err error) {
-	*r = VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstand{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandUnion]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirective],
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirective].
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstand) AsUnion() VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandUnion {
-	return r.union
-}
-
-// A cache-control directive configuration.
-//
-// Union satisfied by
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirective]
-// or
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirective].
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandUnion interface {
-	implementsVersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstand()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirective{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirective{}),
-		},
-	)
-}
-
-// Set the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                     `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstand() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// Remove the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                        `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstand() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersMustUnderstandOperationRemove:
-		return true
-	}
-	return false
-}
-
-// A cache-control directive configuration that accepts optional qualifiers (header
-// names).
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoCache struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool `json:"cloudflare_only"`
-	// This field can have the runtime type of [[]string].
-	Qualifiers interface{}                                                           `json:"qualifiers"`
-	JSON       versionGetResponseRulesSetCacheControlRuleActionParametersNoCacheJSON `json:"-"`
-	union      VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheUnion
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersNoCacheJSON contains
-// the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoCache]
-type versionGetResponseRulesSetCacheControlRuleActionParametersNoCacheJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	Qualifiers     apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersNoCacheJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersNoCache) UnmarshalJSON(data []byte) (err error) {
-	*r = VersionGetResponseRulesSetCacheControlRuleActionParametersNoCache{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheUnion]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirective],
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirective].
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersNoCache) AsUnion() VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheUnion {
-	return r.union
-}
-
-// A cache-control directive configuration that accepts optional qualifiers (header
-// names).
-//
-// Union satisfied by
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirective]
-// or
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirective].
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheUnion interface {
-	implementsVersionGetResponseRulesSetCacheControlRuleActionParametersNoCache()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirective{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirective{}),
-		},
-	)
-}
-
-// Set the directive with optional qualifiers.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool `json:"cloudflare_only"`
-	// Optional list of header names to qualify the directive (e.g., for "private" or
-	// "no-cache" directives).
-	Qualifiers []string                                                                          `json:"qualifiers"`
-	JSON       versionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	Qualifiers     apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersNoCache() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// Remove the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                 `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersNoCache() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersNoCacheOperationRemove:
-		return true
-	}
-	return false
-}
-
-// A cache-control directive configuration.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoStore struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                  `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersNoStoreJSON `json:"-"`
-	union          VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreUnion
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersNoStoreJSON contains
-// the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoStore]
-type versionGetResponseRulesSetCacheControlRuleActionParametersNoStoreJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersNoStoreJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersNoStore) UnmarshalJSON(data []byte) (err error) {
-	*r = VersionGetResponseRulesSetCacheControlRuleActionParametersNoStore{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreUnion]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirective],
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirective].
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersNoStore) AsUnion() VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreUnion {
-	return r.union
-}
-
-// A cache-control directive configuration.
-//
-// Union satisfied by
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirective]
-// or
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirective].
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreUnion interface {
-	implementsVersionGetResponseRulesSetCacheControlRuleActionParametersNoStore()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirective{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirective{}),
-		},
-	)
-}
-
-// Set the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                              `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersNoStore() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// Remove the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                 `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersNoStore() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersNoStoreOperationRemove:
-		return true
-	}
-	return false
-}
-
-// A cache-control directive configuration.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransform struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                      `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersNoTransformJSON `json:"-"`
-	union          VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformUnion
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersNoTransformJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransform]
-type versionGetResponseRulesSetCacheControlRuleActionParametersNoTransformJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersNoTransformJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransform) UnmarshalJSON(data []byte) (err error) {
-	*r = VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransform{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformUnion]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirective],
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirective].
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransform) AsUnion() VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformUnion {
-	return r.union
-}
-
-// A cache-control directive configuration.
-//
-// Union satisfied by
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirective]
-// or
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirective].
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformUnion interface {
-	implementsVersionGetResponseRulesSetCacheControlRuleActionParametersNoTransform()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirective{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirective{}),
-		},
-	)
-}
-
-// Set the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                  `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersNoTransform() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// Remove the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                     `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersNoTransform() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersNoTransformOperationRemove:
-		return true
-	}
-	return false
-}
-
-// A cache-control directive configuration that accepts optional qualifiers (header
-// names).
-type VersionGetResponseRulesSetCacheControlRuleActionParametersPrivate struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool `json:"cloudflare_only"`
-	// This field can have the runtime type of [[]string].
-	Qualifiers interface{}                                                           `json:"qualifiers"`
-	JSON       versionGetResponseRulesSetCacheControlRuleActionParametersPrivateJSON `json:"-"`
-	union      VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateUnion
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersPrivateJSON contains
-// the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersPrivate]
-type versionGetResponseRulesSetCacheControlRuleActionParametersPrivateJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	Qualifiers     apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersPrivateJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersPrivate) UnmarshalJSON(data []byte) (err error) {
-	*r = VersionGetResponseRulesSetCacheControlRuleActionParametersPrivate{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateUnion]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirective],
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirective].
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersPrivate) AsUnion() VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateUnion {
-	return r.union
-}
-
-// A cache-control directive configuration that accepts optional qualifiers (header
-// names).
-//
-// Union satisfied by
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirective]
-// or
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirective].
-type VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateUnion interface {
-	implementsVersionGetResponseRulesSetCacheControlRuleActionParametersPrivate()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirective{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirective{}),
-		},
-	)
-}
-
-// Set the directive with optional qualifiers.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool `json:"cloudflare_only"`
-	// Optional list of header names to qualify the directive (e.g., for "private" or
-	// "no-cache" directives).
-	Qualifiers []string                                                                          `json:"qualifiers"`
-	JSON       versionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	Qualifiers     apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersPrivate() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateSetDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// Remove the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                 `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersPrivate() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersPrivateOperationRemove:
-		return true
-	}
-	return false
-}
-
-// A cache-control directive configuration.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidate struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                          `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateJSON `json:"-"`
-	union          VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateUnion
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidate]
-type versionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidate) UnmarshalJSON(data []byte) (err error) {
-	*r = VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidate{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateUnion]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirective],
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective].
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidate) AsUnion() VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateUnion {
-	return r.union
-}
-
-// A cache-control directive configuration.
-//
-// Union satisfied by
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirective]
-// or
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective].
-type VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateUnion interface {
-	implementsVersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidate()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirective{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective{}),
-		},
-	)
-}
-
-// Set the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidate() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// Remove the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                         `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidate() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersProxyRevalidateOperationRemove:
-		return true
-	}
-	return false
-}
-
-// A cache-control directive configuration.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersPublic struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersPublicOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                 `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersPublicJSON `json:"-"`
-	union          VersionGetResponseRulesSetCacheControlRuleActionParametersPublicUnion
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersPublicJSON contains
-// the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersPublic]
-type versionGetResponseRulesSetCacheControlRuleActionParametersPublicJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersPublicJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersPublic) UnmarshalJSON(data []byte) (err error) {
-	*r = VersionGetResponseRulesSetCacheControlRuleActionParametersPublic{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersPublicUnion]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirective],
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirective].
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersPublic) AsUnion() VersionGetResponseRulesSetCacheControlRuleActionParametersPublicUnion {
-	return r.union
-}
-
-// A cache-control directive configuration.
-//
-// Union satisfied by
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirective]
-// or
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirective].
-type VersionGetResponseRulesSetCacheControlRuleActionParametersPublicUnion interface {
-	implementsVersionGetResponseRulesSetCacheControlRuleActionParametersPublic()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*VersionGetResponseRulesSetCacheControlRuleActionParametersPublicUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirective{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirective{}),
-		},
-	)
-}
-
-// Set the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                             `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersPublic() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersPublicSetDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// Remove the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersPublic() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersPublicOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersPublicOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersPublicOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersPublicOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersPublicOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersPublicOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersPublicOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersPublicOperationRemove:
-		return true
-	}
-	return false
-}
-
-// A cache-control directive configuration that accepts a duration value in
-// seconds.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxage struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool `json:"cloudflare_only"`
-	// The duration value in seconds for the directive.
-	Value int64                                                                 `json:"value"`
-	JSON  versionGetResponseRulesSetCacheControlRuleActionParametersSMaxageJSON `json:"-"`
-	union VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageUnion
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersSMaxageJSON contains
-// the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxage]
-type versionGetResponseRulesSetCacheControlRuleActionParametersSMaxageJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	Value          apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersSMaxageJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxage) UnmarshalJSON(data []byte) (err error) {
-	*r = VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxage{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageUnion]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirective],
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirective].
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxage) AsUnion() VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageUnion {
-	return r.union
-}
-
-// A cache-control directive configuration that accepts a duration value in
-// seconds.
-//
-// Union satisfied by
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirective]
-// or
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirective].
-type VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageUnion interface {
-	implementsVersionGetResponseRulesSetCacheControlRuleActionParametersSMaxage()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirective{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirective{}),
-		},
-	)
-}
-
-// Set the directive with a duration value in seconds.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation `json:"operation" api:"required"`
-	// The duration value in seconds for the directive.
-	Value int64 `json:"value" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                              `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON struct {
-	Operation      apijson.Field
-	Value          apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersSMaxage() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// Remove the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                 `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersSMaxage() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersSMaxageOperationRemove:
-		return true
-	}
-	return false
-}
-
-// A cache-control directive configuration that accepts a duration value in
-// seconds.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfError struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool `json:"cloudflare_only"`
-	// The duration value in seconds for the directive.
-	Value int64                                                                      `json:"value"`
-	JSON  versionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorJSON `json:"-"`
-	union VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorUnion
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfError]
-type versionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	Value          apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfError) UnmarshalJSON(data []byte) (err error) {
-	*r = VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfError{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorUnion]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirective],
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective].
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfError) AsUnion() VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorUnion {
-	return r.union
-}
-
-// A cache-control directive configuration that accepts a duration value in
-// seconds.
-//
-// Union satisfied by
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirective]
-// or
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective].
-type VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorUnion interface {
-	implementsVersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfError()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirective{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective{}),
-		},
-	)
-}
-
-// Set the directive with a duration value in seconds.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation `json:"operation" api:"required"`
-	// The duration value in seconds for the directive.
-	Value int64 `json:"value" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                   `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON struct {
-	Operation      apijson.Field
-	Value          apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfError() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// Remove the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfError() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersStaleIfErrorOperationRemove:
-		return true
-	}
-	return false
-}
-
-// A cache-control directive configuration that accepts a duration value in
-// seconds.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidate struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool `json:"cloudflare_only"`
-	// The duration value in seconds for the directive.
-	Value int64                                                                              `json:"value"`
-	JSON  versionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateJSON `json:"-"`
-	union VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateUnion
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidate]
-type versionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	Value          apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidate) UnmarshalJSON(data []byte) (err error) {
-	*r = VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidate{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateUnion]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective],
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective].
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidate) AsUnion() VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateUnion {
-	return r.union
-}
-
-// A cache-control directive configuration that accepts a duration value in
-// seconds.
-//
-// Union satisfied by
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective]
-// or
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective].
-type VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateUnion interface {
-	implementsVersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidate()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective{}),
-		},
-	)
-}
-
-// Set the directive with a duration value in seconds.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation `json:"operation" api:"required"`
-	// The duration value in seconds for the directive.
-	Value int64 `json:"value" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                           `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON struct {
-	Operation      apijson.Field
-	Value          apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidate() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// Remove the directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective struct {
-	// The operation to perform on the cache-control directive.
-	Operation VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation `json:"operation" api:"required"`
-	// Whether the directive should only be applied to the Cloudflare CDN cache.
-	CloudflareOnly bool                                                                                              `json:"cloudflare_only"`
-	JSON           versionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective]
-type versionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON struct {
-	Operation      apijson.Field
-	CloudflareOnly apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective) implementsVersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidate() {
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationRemove:
-		return true
-	}
-	return false
-}
-
-// The operation to perform on the cache-control directive.
-type VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateOperation string
-
-const (
-	VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateOperationSet    VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateOperation = "set"
-	VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateOperationRemove VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateOperation = "remove"
-)
-
-func (r VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateOperationSet, VersionGetResponseRulesSetCacheControlRuleActionParametersStaleWhileRevalidateOperationRemove:
-		return true
-	}
-	return false
-}
-
-// Configuration for exposed credential checking.
-type VersionGetResponseRulesSetCacheControlRuleExposedCredentialCheck struct {
+type VersionGetResponseObjectRulesChallengeRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
 	PasswordExpression string `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
 	UsernameExpression string                                                               `json:"username_expression" api:"required"`
-	JSON               versionGetResponseRulesSetCacheControlRuleExposedCredentialCheckJSON `json:"-"`
+	JSON               versionGetResponseObjectRulesChallengeRuleExposedCredentialCheckJSON `json:"-"`
 }
 
-// versionGetResponseRulesSetCacheControlRuleExposedCredentialCheckJSON contains
+// versionGetResponseObjectRulesChallengeRuleExposedCredentialCheckJSON contains
 // the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheControlRuleExposedCredentialCheck]
-type versionGetResponseRulesSetCacheControlRuleExposedCredentialCheckJSON struct {
+// [VersionGetResponseObjectRulesChallengeRuleExposedCredentialCheck]
+type versionGetResponseObjectRulesChallengeRuleExposedCredentialCheckJSON struct {
 	PasswordExpression apijson.Field
 	UsernameExpression apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *VersionGetResponseRulesSetCacheControlRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
+func (r *VersionGetResponseObjectRulesChallengeRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r versionGetResponseRulesSetCacheControlRuleExposedCredentialCheckJSON) RawJSON() string {
+func (r versionGetResponseObjectRulesChallengeRuleExposedCredentialCheckJSON) RawJSON() string {
 	return r.raw
 }
 
 // An object configuring the rule's rate limit behavior.
-type VersionGetResponseRulesSetCacheControlRuleRatelimit struct {
+type VersionGetResponseObjectRulesChallengeRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics []string `json:"characteristics" api:"required"`
@@ -3764,12 +755,12 @@ type VersionGetResponseRulesSetCacheControlRuleRatelimit struct {
 	// A response header name provided by the origin, which contains the score to
 	// increment rate limit counter with.
 	ScoreResponseHeaderName string                                                  `json:"score_response_header_name"`
-	JSON                    versionGetResponseRulesSetCacheControlRuleRatelimitJSON `json:"-"`
+	JSON                    versionGetResponseObjectRulesChallengeRuleRatelimitJSON `json:"-"`
 }
 
-// versionGetResponseRulesSetCacheControlRuleRatelimitJSON contains the JSON
-// metadata for the struct [VersionGetResponseRulesSetCacheControlRuleRatelimit]
-type versionGetResponseRulesSetCacheControlRuleRatelimitJSON struct {
+// versionGetResponseObjectRulesChallengeRuleRatelimitJSON contains the JSON
+// metadata for the struct [VersionGetResponseObjectRulesChallengeRuleRatelimit]
+type versionGetResponseObjectRulesChallengeRuleRatelimitJSON struct {
 	Characteristics         apijson.Field
 	Period                  apijson.Field
 	CountingExpression      apijson.Field
@@ -3782,27 +773,27 @@ type versionGetResponseRulesSetCacheControlRuleRatelimitJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *VersionGetResponseRulesSetCacheControlRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
+func (r *VersionGetResponseObjectRulesChallengeRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r versionGetResponseRulesSetCacheControlRuleRatelimitJSON) RawJSON() string {
+func (r versionGetResponseObjectRulesChallengeRuleRatelimitJSON) RawJSON() string {
 	return r.raw
 }
 
-type VersionGetResponseRulesSetCacheSettingsRule struct {
-	ID         string                                          `json:"id" api:"required"`
-	Action     string                                          `json:"action" api:"required"`
-	Enabled    bool                                            `json:"enabled" api:"required"`
-	Expression string                                          `json:"expression" api:"required"`
-	Ref        string                                          `json:"ref" api:"required"`
-	JSON       versionGetResponseRulesSetCacheSettingsRuleJSON `json:"-"`
-	SetCacheSettingsRule
+type VersionGetResponseObjectRulesResponseCompressionRule struct {
+	ID         string                                                   `json:"id" api:"required"`
+	Action     string                                                   `json:"action" api:"required"`
+	Enabled    bool                                                     `json:"enabled" api:"required"`
+	Expression string                                                   `json:"expression" api:"required"`
+	Ref        string                                                   `json:"ref" api:"required"`
+	JSON       versionGetResponseObjectRulesResponseCompressionRuleJSON `json:"-"`
+	CompressResponseRule
 }
 
-// versionGetResponseRulesSetCacheSettingsRuleJSON contains the JSON metadata for
-// the struct [VersionGetResponseRulesSetCacheSettingsRule]
-type versionGetResponseRulesSetCacheSettingsRuleJSON struct {
+// versionGetResponseObjectRulesResponseCompressionRuleJSON contains the JSON
+// metadata for the struct [VersionGetResponseObjectRulesResponseCompressionRule]
+type versionGetResponseObjectRulesResponseCompressionRuleJSON struct {
 	ID          apijson.Field
 	Action      apijson.Field
 	Enabled     apijson.Field
@@ -3812,22 +803,121 @@ type versionGetResponseRulesSetCacheSettingsRuleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *VersionGetResponseRulesSetCacheSettingsRule) UnmarshalJSON(data []byte) (err error) {
+func (r *VersionGetResponseObjectRulesResponseCompressionRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r versionGetResponseRulesSetCacheSettingsRuleJSON) RawJSON() string {
+func (r versionGetResponseObjectRulesResponseCompressionRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r VersionGetResponseRulesSetCacheSettingsRule) implementsVersionGetResponseRule() {}
+func (r VersionGetResponseObjectRulesResponseCompressionRule) implementsVersionGetResponseObjectRule() {
+}
 
-type VersionGetResponseRulesSetCacheTagsRule struct {
+type VersionGetResponseObjectRulesDDoSDynamicRule struct {
+	ID         string                                           `json:"id" api:"required"`
+	Action     string                                           `json:"action" api:"required"`
+	Enabled    bool                                             `json:"enabled" api:"required"`
+	Expression string                                           `json:"expression" api:"required"`
+	Ref        string                                           `json:"ref" api:"required"`
+	JSON       versionGetResponseObjectRulesDDoSDynamicRuleJSON `json:"-"`
+	DDoSDynamicRule
+}
+
+// versionGetResponseObjectRulesDDoSDynamicRuleJSON contains the JSON metadata for
+// the struct [VersionGetResponseObjectRulesDDoSDynamicRule]
+type versionGetResponseObjectRulesDDoSDynamicRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesDDoSDynamicRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesDDoSDynamicRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesDDoSDynamicRule) implementsVersionGetResponseObjectRule() {}
+
+type VersionGetResponseObjectRulesExecuteRule struct {
+	ID         string                                       `json:"id" api:"required"`
+	Action     string                                       `json:"action" api:"required"`
+	Enabled    bool                                         `json:"enabled" api:"required"`
+	Expression string                                       `json:"expression" api:"required"`
+	Ref        string                                       `json:"ref" api:"required"`
+	JSON       versionGetResponseObjectRulesExecuteRuleJSON `json:"-"`
+	ExecuteRule
+}
+
+// versionGetResponseObjectRulesExecuteRuleJSON contains the JSON metadata for the
+// struct [VersionGetResponseObjectRulesExecuteRule]
+type versionGetResponseObjectRulesExecuteRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesExecuteRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesExecuteRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesExecuteRule) implementsVersionGetResponseObjectRule() {}
+
+type VersionGetResponseObjectRulesForceConnectionCloseRule struct {
+	ID         string                                                    `json:"id" api:"required"`
+	Action     string                                                    `json:"action" api:"required"`
+	Enabled    bool                                                      `json:"enabled" api:"required"`
+	Expression string                                                    `json:"expression" api:"required"`
+	Ref        string                                                    `json:"ref" api:"required"`
+	JSON       versionGetResponseObjectRulesForceConnectionCloseRuleJSON `json:"-"`
+	ForceConnectionCloseRule
+}
+
+// versionGetResponseObjectRulesForceConnectionCloseRuleJSON contains the JSON
+// metadata for the struct [VersionGetResponseObjectRulesForceConnectionCloseRule]
+type versionGetResponseObjectRulesForceConnectionCloseRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesForceConnectionCloseRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesForceConnectionCloseRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesForceConnectionCloseRule) implementsVersionGetResponseObjectRule() {
+}
+
+type VersionGetResponseObjectRulesJavaScriptChallengeRule struct {
 	// The unique ID of the rule.
 	ID string `json:"id" api:"required"`
 	// The action to perform when the rule matches.
-	Action  VersionGetResponseRulesSetCacheTagsRuleAction `json:"action" api:"required"`
-	Enabled bool                                          `json:"enabled" api:"required"`
+	Action VersionGetResponseObjectRulesJavaScriptChallengeRuleAction `json:"action" api:"required"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled" api:"required"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression" api:"required"`
 	// The timestamp of when the rule was last modified.
@@ -3837,23 +927,23 @@ type VersionGetResponseRulesSetCacheTagsRule struct {
 	// The version of the rule.
 	Version string `json:"version" api:"required"`
 	// The parameters configuring the rule's action.
-	ActionParameters VersionGetResponseRulesSetCacheTagsRuleActionParameters `json:"action_parameters"`
+	ActionParameters interface{} `json:"action_parameters"`
 	// The categories of the rule.
 	Categories []string `json:"categories"`
 	// An informative description of the rule.
 	Description string `json:"description"`
 	// Configuration for exposed credential checking.
-	ExposedCredentialCheck VersionGetResponseRulesSetCacheTagsRuleExposedCredentialCheck `json:"exposed_credential_check"`
+	ExposedCredentialCheck VersionGetResponseObjectRulesJavaScriptChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
 	// An object configuring the rule's rate limit behavior.
-	Ratelimit VersionGetResponseRulesSetCacheTagsRuleRatelimit `json:"ratelimit"`
-	JSON      versionGetResponseRulesSetCacheTagsRuleJSON      `json:"-"`
+	Ratelimit VersionGetResponseObjectRulesJavaScriptChallengeRuleRatelimit `json:"ratelimit"`
+	JSON      versionGetResponseObjectRulesJavaScriptChallengeRuleJSON      `json:"-"`
 }
 
-// versionGetResponseRulesSetCacheTagsRuleJSON contains the JSON metadata for the
-// struct [VersionGetResponseRulesSetCacheTagsRule]
-type versionGetResponseRulesSetCacheTagsRuleJSON struct {
+// versionGetResponseObjectRulesJavaScriptChallengeRuleJSON contains the JSON
+// metadata for the struct [VersionGetResponseObjectRulesJavaScriptChallengeRule]
+type versionGetResponseObjectRulesJavaScriptChallengeRuleJSON struct {
 	ID                     apijson.Field
 	Action                 apijson.Field
 	Enabled                apijson.Field
@@ -3871,453 +961,61 @@ type versionGetResponseRulesSetCacheTagsRuleJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *VersionGetResponseRulesSetCacheTagsRule) UnmarshalJSON(data []byte) (err error) {
+func (r *VersionGetResponseObjectRulesJavaScriptChallengeRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r versionGetResponseRulesSetCacheTagsRuleJSON) RawJSON() string {
+func (r versionGetResponseObjectRulesJavaScriptChallengeRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r VersionGetResponseRulesSetCacheTagsRule) implementsVersionGetResponseRule() {}
+func (r VersionGetResponseObjectRulesJavaScriptChallengeRule) implementsVersionGetResponseObjectRule() {
+}
 
 // The action to perform when the rule matches.
-type VersionGetResponseRulesSetCacheTagsRuleAction string
+type VersionGetResponseObjectRulesJavaScriptChallengeRuleAction string
 
 const (
-	VersionGetResponseRulesSetCacheTagsRuleActionSetCacheTags VersionGetResponseRulesSetCacheTagsRuleAction = "set_cache_tags"
+	VersionGetResponseObjectRulesJavaScriptChallengeRuleActionJSChallenge VersionGetResponseObjectRulesJavaScriptChallengeRuleAction = "js_challenge"
 )
 
-func (r VersionGetResponseRulesSetCacheTagsRuleAction) IsKnown() bool {
+func (r VersionGetResponseObjectRulesJavaScriptChallengeRuleAction) IsKnown() bool {
 	switch r {
-	case VersionGetResponseRulesSetCacheTagsRuleActionSetCacheTags:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type VersionGetResponseRulesSetCacheTagsRuleActionParameters struct {
-	// The operation to perform on the cache tags.
-	Operation VersionGetResponseRulesSetCacheTagsRuleActionParametersOperation `json:"operation" api:"required"`
-	// An expression that evaluates to an array of cache tag values.
-	Expression string `json:"expression"`
-	// This field can have the runtime type of [[]string].
-	Values interface{}                                                 `json:"values"`
-	JSON   versionGetResponseRulesSetCacheTagsRuleActionParametersJSON `json:"-"`
-	union  VersionGetResponseRulesSetCacheTagsRuleActionParametersUnion
-}
-
-// versionGetResponseRulesSetCacheTagsRuleActionParametersJSON contains the JSON
-// metadata for the struct
-// [VersionGetResponseRulesSetCacheTagsRuleActionParameters]
-type versionGetResponseRulesSetCacheTagsRuleActionParametersJSON struct {
-	Operation   apijson.Field
-	Expression  apijson.Field
-	Values      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r versionGetResponseRulesSetCacheTagsRuleActionParametersJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *VersionGetResponseRulesSetCacheTagsRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	*r = VersionGetResponseRulesSetCacheTagsRuleActionParameters{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [VersionGetResponseRulesSetCacheTagsRuleActionParametersUnion]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValues],
-// [VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpression],
-// [VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValues],
-// [VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpression],
-// [VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValues],
-// [VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpression].
-func (r VersionGetResponseRulesSetCacheTagsRuleActionParameters) AsUnion() VersionGetResponseRulesSetCacheTagsRuleActionParametersUnion {
-	return r.union
-}
-
-// The parameters configuring the rule's action.
-//
-// Union satisfied by
-// [VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValues],
-// [VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpression],
-// [VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValues],
-// [VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpression],
-// [VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValues] or
-// [VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpression].
-type VersionGetResponseRulesSetCacheTagsRuleActionParametersUnion interface {
-	implementsVersionGetResponseRulesSetCacheTagsRuleActionParameters()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*VersionGetResponseRulesSetCacheTagsRuleActionParametersUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValues{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpression{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValues{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpression{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValues{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpression{}),
-		},
-	)
-}
-
-// Add cache tags using a list of values.
-type VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValues struct {
-	// The operation to perform on the cache tags.
-	Operation VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation `json:"operation" api:"required"`
-	// A list of cache tag values.
-	Values []string                                                                      `json:"values" api:"required"`
-	JSON   versionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValues]
-type versionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON struct {
-	Operation   apijson.Field
-	Values      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValues) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValues) implementsVersionGetResponseRulesSetCacheTagsRuleActionParameters() {
-}
-
-// The operation to perform on the cache tags.
-type VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation string
-
-const (
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationAdd    VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "add"
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationRemove VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "remove"
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationSet    VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "set"
-)
-
-func (r VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationAdd, VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationRemove, VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationSet:
-		return true
-	}
-	return false
-}
-
-// Add cache tags using an expression.
-type VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpression struct {
-	// An expression that evaluates to an array of cache tag values.
-	Expression string `json:"expression" api:"required"`
-	// The operation to perform on the cache tags.
-	Operation VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation `json:"operation" api:"required"`
-	JSON      versionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON      `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpression]
-type versionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON struct {
-	Expression  apijson.Field
-	Operation   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpression) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpression) implementsVersionGetResponseRulesSetCacheTagsRuleActionParameters() {
-}
-
-// The operation to perform on the cache tags.
-type VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation string
-
-const (
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationAdd    VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "add"
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationRemove VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "remove"
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationSet    VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "set"
-)
-
-func (r VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationAdd, VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationRemove, VersionGetResponseRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationSet:
-		return true
-	}
-	return false
-}
-
-// Remove cache tags using a list of values.
-type VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValues struct {
-	// The operation to perform on the cache tags.
-	Operation VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation `json:"operation" api:"required"`
-	// A list of cache tag values.
-	Values []string                                                                         `json:"values" api:"required"`
-	JSON   versionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValues]
-type versionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON struct {
-	Operation   apijson.Field
-	Values      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValues) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValues) implementsVersionGetResponseRulesSetCacheTagsRuleActionParameters() {
-}
-
-// The operation to perform on the cache tags.
-type VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation string
-
-const (
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationAdd    VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "add"
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationRemove VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "remove"
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationSet    VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "set"
-)
-
-func (r VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationAdd, VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationRemove, VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationSet:
-		return true
-	}
-	return false
-}
-
-// Remove cache tags using an expression.
-type VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpression struct {
-	// An expression that evaluates to an array of cache tag values.
-	Expression string `json:"expression" api:"required"`
-	// The operation to perform on the cache tags.
-	Operation VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation `json:"operation" api:"required"`
-	JSON      versionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON      `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpression]
-type versionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON struct {
-	Expression  apijson.Field
-	Operation   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpression) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpression) implementsVersionGetResponseRulesSetCacheTagsRuleActionParameters() {
-}
-
-// The operation to perform on the cache tags.
-type VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation string
-
-const (
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationAdd    VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "add"
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationRemove VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "remove"
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationSet    VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "set"
-)
-
-func (r VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationAdd, VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationRemove, VersionGetResponseRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationSet:
-		return true
-	}
-	return false
-}
-
-// Set cache tags using a list of values.
-type VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValues struct {
-	// The operation to perform on the cache tags.
-	Operation VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation `json:"operation" api:"required"`
-	// A list of cache tag values.
-	Values []string                                                                      `json:"values" api:"required"`
-	JSON   versionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValues]
-type versionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON struct {
-	Operation   apijson.Field
-	Values      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValues) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValues) implementsVersionGetResponseRulesSetCacheTagsRuleActionParameters() {
-}
-
-// The operation to perform on the cache tags.
-type VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation string
-
-const (
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationAdd    VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "add"
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationRemove VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "remove"
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationSet    VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "set"
-)
-
-func (r VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationAdd, VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationRemove, VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationSet:
-		return true
-	}
-	return false
-}
-
-// Set cache tags using an expression.
-type VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpression struct {
-	// An expression that evaluates to an array of cache tag values.
-	Expression string `json:"expression" api:"required"`
-	// The operation to perform on the cache tags.
-	Operation VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation `json:"operation" api:"required"`
-	JSON      versionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON      `json:"-"`
-}
-
-// versionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON
-// contains the JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpression]
-type versionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON struct {
-	Expression  apijson.Field
-	Operation   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpression) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpression) implementsVersionGetResponseRulesSetCacheTagsRuleActionParameters() {
-}
-
-// The operation to perform on the cache tags.
-type VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation string
-
-const (
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationAdd    VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "add"
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationRemove VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "remove"
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationSet    VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "set"
-)
-
-func (r VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationAdd, VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationRemove, VersionGetResponseRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationSet:
-		return true
-	}
-	return false
-}
-
-// The operation to perform on the cache tags.
-type VersionGetResponseRulesSetCacheTagsRuleActionParametersOperation string
-
-const (
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersOperationAdd    VersionGetResponseRulesSetCacheTagsRuleActionParametersOperation = "add"
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersOperationRemove VersionGetResponseRulesSetCacheTagsRuleActionParametersOperation = "remove"
-	VersionGetResponseRulesSetCacheTagsRuleActionParametersOperationSet    VersionGetResponseRulesSetCacheTagsRuleActionParametersOperation = "set"
-)
-
-func (r VersionGetResponseRulesSetCacheTagsRuleActionParametersOperation) IsKnown() bool {
-	switch r {
-	case VersionGetResponseRulesSetCacheTagsRuleActionParametersOperationAdd, VersionGetResponseRulesSetCacheTagsRuleActionParametersOperationRemove, VersionGetResponseRulesSetCacheTagsRuleActionParametersOperationSet:
+	case VersionGetResponseObjectRulesJavaScriptChallengeRuleActionJSChallenge:
 		return true
 	}
 	return false
 }
 
 // Configuration for exposed credential checking.
-type VersionGetResponseRulesSetCacheTagsRuleExposedCredentialCheck struct {
+type VersionGetResponseObjectRulesJavaScriptChallengeRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
 	PasswordExpression string `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
-	UsernameExpression string                                                            `json:"username_expression" api:"required"`
-	JSON               versionGetResponseRulesSetCacheTagsRuleExposedCredentialCheckJSON `json:"-"`
+	UsernameExpression string                                                                         `json:"username_expression" api:"required"`
+	JSON               versionGetResponseObjectRulesJavaScriptChallengeRuleExposedCredentialCheckJSON `json:"-"`
 }
 
-// versionGetResponseRulesSetCacheTagsRuleExposedCredentialCheckJSON contains the
-// JSON metadata for the struct
-// [VersionGetResponseRulesSetCacheTagsRuleExposedCredentialCheck]
-type versionGetResponseRulesSetCacheTagsRuleExposedCredentialCheckJSON struct {
+// versionGetResponseObjectRulesJavaScriptChallengeRuleExposedCredentialCheckJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesJavaScriptChallengeRuleExposedCredentialCheck]
+type versionGetResponseObjectRulesJavaScriptChallengeRuleExposedCredentialCheckJSON struct {
 	PasswordExpression apijson.Field
 	UsernameExpression apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *VersionGetResponseRulesSetCacheTagsRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
+func (r *VersionGetResponseObjectRulesJavaScriptChallengeRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r versionGetResponseRulesSetCacheTagsRuleExposedCredentialCheckJSON) RawJSON() string {
+func (r versionGetResponseObjectRulesJavaScriptChallengeRuleExposedCredentialCheckJSON) RawJSON() string {
 	return r.raw
 }
 
 // An object configuring the rule's rate limit behavior.
-type VersionGetResponseRulesSetCacheTagsRuleRatelimit struct {
+type VersionGetResponseObjectRulesJavaScriptChallengeRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics []string `json:"characteristics" api:"required"`
@@ -4339,13 +1037,14 @@ type VersionGetResponseRulesSetCacheTagsRuleRatelimit struct {
 	ScorePerPeriod int64 `json:"score_per_period"`
 	// A response header name provided by the origin, which contains the score to
 	// increment rate limit counter with.
-	ScoreResponseHeaderName string                                               `json:"score_response_header_name"`
-	JSON                    versionGetResponseRulesSetCacheTagsRuleRatelimitJSON `json:"-"`
+	ScoreResponseHeaderName string                                                            `json:"score_response_header_name"`
+	JSON                    versionGetResponseObjectRulesJavaScriptChallengeRuleRatelimitJSON `json:"-"`
 }
 
-// versionGetResponseRulesSetCacheTagsRuleRatelimitJSON contains the JSON metadata
-// for the struct [VersionGetResponseRulesSetCacheTagsRuleRatelimit]
-type versionGetResponseRulesSetCacheTagsRuleRatelimitJSON struct {
+// versionGetResponseObjectRulesJavaScriptChallengeRuleRatelimitJSON contains the
+// JSON metadata for the struct
+// [VersionGetResponseObjectRulesJavaScriptChallengeRuleRatelimit]
+type versionGetResponseObjectRulesJavaScriptChallengeRuleRatelimitJSON struct {
 	Characteristics         apijson.Field
 	Period                  apijson.Field
 	CountingExpression      apijson.Field
@@ -4358,27 +1057,251 @@ type versionGetResponseRulesSetCacheTagsRuleRatelimitJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *VersionGetResponseRulesSetCacheTagsRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
+func (r *VersionGetResponseObjectRulesJavaScriptChallengeRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r versionGetResponseRulesSetCacheTagsRuleRatelimitJSON) RawJSON() string {
+func (r versionGetResponseObjectRulesJavaScriptChallengeRuleRatelimitJSON) RawJSON() string {
 	return r.raw
 }
 
-type VersionGetResponseRulesSetConfigurationRule struct {
+type VersionGetResponseObjectRulesLogRule struct {
+	ID         string                                   `json:"id" api:"required"`
+	Action     string                                   `json:"action" api:"required"`
+	Enabled    bool                                     `json:"enabled" api:"required"`
+	Expression string                                   `json:"expression" api:"required"`
+	Ref        string                                   `json:"ref" api:"required"`
+	JSON       versionGetResponseObjectRulesLogRuleJSON `json:"-"`
+	LogRule
+}
+
+// versionGetResponseObjectRulesLogRuleJSON contains the JSON metadata for the
+// struct [VersionGetResponseObjectRulesLogRule]
+type versionGetResponseObjectRulesLogRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesLogRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesLogRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesLogRule) implementsVersionGetResponseObjectRule() {}
+
+type VersionGetResponseObjectRulesLogCustomFieldRule struct {
+	ID         string                                              `json:"id" api:"required"`
+	Action     string                                              `json:"action" api:"required"`
+	Enabled    bool                                                `json:"enabled" api:"required"`
+	Expression string                                              `json:"expression" api:"required"`
+	Ref        string                                              `json:"ref" api:"required"`
+	JSON       versionGetResponseObjectRulesLogCustomFieldRuleJSON `json:"-"`
+	LogCustomFieldRule
+}
+
+// versionGetResponseObjectRulesLogCustomFieldRuleJSON contains the JSON metadata
+// for the struct [VersionGetResponseObjectRulesLogCustomFieldRule]
+type versionGetResponseObjectRulesLogCustomFieldRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesLogCustomFieldRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesLogCustomFieldRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesLogCustomFieldRule) implementsVersionGetResponseObjectRule() {}
+
+type VersionGetResponseObjectRulesManagedChallengeRule struct {
+	ID         string                                                `json:"id" api:"required"`
+	Action     string                                                `json:"action" api:"required"`
+	Enabled    bool                                                  `json:"enabled" api:"required"`
+	Expression string                                                `json:"expression" api:"required"`
+	Ref        string                                                `json:"ref" api:"required"`
+	JSON       versionGetResponseObjectRulesManagedChallengeRuleJSON `json:"-"`
+	ManagedChallengeRule
+}
+
+// versionGetResponseObjectRulesManagedChallengeRuleJSON contains the JSON metadata
+// for the struct [VersionGetResponseObjectRulesManagedChallengeRule]
+type versionGetResponseObjectRulesManagedChallengeRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesManagedChallengeRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesManagedChallengeRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesManagedChallengeRule) implementsVersionGetResponseObjectRule() {}
+
+type VersionGetResponseObjectRulesRedirectRule struct {
+	ID         string                                        `json:"id" api:"required"`
+	Action     string                                        `json:"action" api:"required"`
+	Enabled    bool                                          `json:"enabled" api:"required"`
+	Expression string                                        `json:"expression" api:"required"`
+	Ref        string                                        `json:"ref" api:"required"`
+	JSON       versionGetResponseObjectRulesRedirectRuleJSON `json:"-"`
+	RedirectRule
+}
+
+// versionGetResponseObjectRulesRedirectRuleJSON contains the JSON metadata for the
+// struct [VersionGetResponseObjectRulesRedirectRule]
+type versionGetResponseObjectRulesRedirectRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesRedirectRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesRedirectRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesRedirectRule) implementsVersionGetResponseObjectRule() {}
+
+type VersionGetResponseObjectRulesRewriteRule struct {
+	ID         string                                       `json:"id" api:"required"`
+	Action     string                                       `json:"action" api:"required"`
+	Enabled    bool                                         `json:"enabled" api:"required"`
+	Expression string                                       `json:"expression" api:"required"`
+	Ref        string                                       `json:"ref" api:"required"`
+	JSON       versionGetResponseObjectRulesRewriteRuleJSON `json:"-"`
+	RewriteRule
+}
+
+// versionGetResponseObjectRulesRewriteRuleJSON contains the JSON metadata for the
+// struct [VersionGetResponseObjectRulesRewriteRule]
+type versionGetResponseObjectRulesRewriteRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesRewriteRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesRewriteRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesRewriteRule) implementsVersionGetResponseObjectRule() {}
+
+type VersionGetResponseObjectRulesRouteRule struct {
+	ID         string                                     `json:"id" api:"required"`
+	Action     string                                     `json:"action" api:"required"`
+	Enabled    bool                                       `json:"enabled" api:"required"`
+	Expression string                                     `json:"expression" api:"required"`
+	Ref        string                                     `json:"ref" api:"required"`
+	JSON       versionGetResponseObjectRulesRouteRuleJSON `json:"-"`
+	RouteRule
+}
+
+// versionGetResponseObjectRulesRouteRuleJSON contains the JSON metadata for the
+// struct [VersionGetResponseObjectRulesRouteRule]
+type versionGetResponseObjectRulesRouteRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesRouteRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesRouteRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesRouteRule) implementsVersionGetResponseObjectRule() {}
+
+type VersionGetResponseObjectRulesScoreRule struct {
+	ID         string                                     `json:"id" api:"required"`
+	Action     string                                     `json:"action" api:"required"`
+	Enabled    bool                                       `json:"enabled" api:"required"`
+	Expression string                                     `json:"expression" api:"required"`
+	Ref        string                                     `json:"ref" api:"required"`
+	JSON       versionGetResponseObjectRulesScoreRuleJSON `json:"-"`
+	ScoreRule
+}
+
+// versionGetResponseObjectRulesScoreRuleJSON contains the JSON metadata for the
+// struct [VersionGetResponseObjectRulesScoreRule]
+type versionGetResponseObjectRulesScoreRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesScoreRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesScoreRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesScoreRule) implementsVersionGetResponseObjectRule() {}
+
+type VersionGetResponseObjectRulesServeErrorRule struct {
 	ID         string                                          `json:"id" api:"required"`
 	Action     string                                          `json:"action" api:"required"`
 	Enabled    bool                                            `json:"enabled" api:"required"`
 	Expression string                                          `json:"expression" api:"required"`
 	Ref        string                                          `json:"ref" api:"required"`
-	JSON       versionGetResponseRulesSetConfigurationRuleJSON `json:"-"`
-	SetConfigRule
+	JSON       versionGetResponseObjectRulesServeErrorRuleJSON `json:"-"`
+	ServeErrorRule
 }
 
-// versionGetResponseRulesSetConfigurationRuleJSON contains the JSON metadata for
-// the struct [VersionGetResponseRulesSetConfigurationRule]
-type versionGetResponseRulesSetConfigurationRuleJSON struct {
+// versionGetResponseObjectRulesServeErrorRuleJSON contains the JSON metadata for
+// the struct [VersionGetResponseObjectRulesServeErrorRule]
+type versionGetResponseObjectRulesServeErrorRuleJSON struct {
 	ID          apijson.Field
 	Action      apijson.Field
 	Enabled     apijson.Field
@@ -4388,53 +1311,21 @@ type versionGetResponseRulesSetConfigurationRuleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *VersionGetResponseRulesSetConfigurationRule) UnmarshalJSON(data []byte) (err error) {
+func (r *VersionGetResponseObjectRulesServeErrorRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r versionGetResponseRulesSetConfigurationRuleJSON) RawJSON() string {
+func (r versionGetResponseObjectRulesServeErrorRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r VersionGetResponseRulesSetConfigurationRule) implementsVersionGetResponseRule() {}
+func (r VersionGetResponseObjectRulesServeErrorRule) implementsVersionGetResponseObjectRule() {}
 
-type VersionGetResponseRulesSkipRule struct {
-	ID         string                              `json:"id" api:"required"`
-	Action     string                              `json:"action" api:"required"`
-	Enabled    bool                                `json:"enabled" api:"required"`
-	Expression string                              `json:"expression" api:"required"`
-	Ref        string                              `json:"ref" api:"required"`
-	JSON       versionGetResponseRulesSkipRuleJSON `json:"-"`
-	SkipRule
-}
-
-// versionGetResponseRulesSkipRuleJSON contains the JSON metadata for the struct
-// [VersionGetResponseRulesSkipRule]
-type versionGetResponseRulesSkipRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionGetResponseRulesSkipRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionGetResponseRulesSkipRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r VersionGetResponseRulesSkipRule) implementsVersionGetResponseRule() {}
-
-type VersionGetResponseRulesTransformResponseHTMLRule struct {
+type VersionGetResponseObjectRulesSetCacheControlRule struct {
 	// The unique ID of the rule.
 	ID string `json:"id" api:"required"`
 	// The action to perform when the rule matches.
-	Action  VersionGetResponseRulesTransformResponseHTMLRuleAction `json:"action" api:"required"`
+	Action  VersionGetResponseObjectRulesSetCacheControlRuleAction `json:"action" api:"required"`
 	Enabled bool                                                   `json:"enabled" api:"required"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression" api:"required"`
@@ -4445,23 +1336,23 @@ type VersionGetResponseRulesTransformResponseHTMLRule struct {
 	// The version of the rule.
 	Version string `json:"version" api:"required"`
 	// The parameters configuring the rule's action.
-	ActionParameters VersionGetResponseRulesTransformResponseHTMLRuleActionParameters `json:"action_parameters"`
+	ActionParameters VersionGetResponseObjectRulesSetCacheControlRuleActionParameters `json:"action_parameters"`
 	// The categories of the rule.
 	Categories []string `json:"categories"`
 	// An informative description of the rule.
 	Description string `json:"description"`
 	// Configuration for exposed credential checking.
-	ExposedCredentialCheck VersionGetResponseRulesTransformResponseHTMLRuleExposedCredentialCheck `json:"exposed_credential_check"`
+	ExposedCredentialCheck VersionGetResponseObjectRulesSetCacheControlRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
 	// An object configuring the rule's rate limit behavior.
-	Ratelimit VersionGetResponseRulesTransformResponseHTMLRuleRatelimit `json:"ratelimit"`
-	JSON      versionGetResponseRulesTransformResponseHTMLRuleJSON      `json:"-"`
+	Ratelimit VersionGetResponseObjectRulesSetCacheControlRuleRatelimit `json:"ratelimit"`
+	JSON      versionGetResponseObjectRulesSetCacheControlRuleJSON      `json:"-"`
 }
 
-// versionGetResponseRulesTransformResponseHTMLRuleJSON contains the JSON metadata
-// for the struct [VersionGetResponseRulesTransformResponseHTMLRule]
-type versionGetResponseRulesTransformResponseHTMLRuleJSON struct {
+// versionGetResponseObjectRulesSetCacheControlRuleJSON contains the JSON metadata
+// for the struct [VersionGetResponseObjectRulesSetCacheControlRule]
+type versionGetResponseObjectRulesSetCacheControlRuleJSON struct {
 	ID                     apijson.Field
 	Action                 apijson.Field
 	Enabled                apijson.Field
@@ -4479,84 +1370,2477 @@ type versionGetResponseRulesTransformResponseHTMLRuleJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *VersionGetResponseRulesTransformResponseHTMLRule) UnmarshalJSON(data []byte) (err error) {
+func (r *VersionGetResponseObjectRulesSetCacheControlRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r versionGetResponseRulesTransformResponseHTMLRuleJSON) RawJSON() string {
+func (r versionGetResponseObjectRulesSetCacheControlRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r VersionGetResponseRulesTransformResponseHTMLRule) implementsVersionGetResponseRule() {}
+func (r VersionGetResponseObjectRulesSetCacheControlRule) implementsVersionGetResponseObjectRule() {}
 
 // The action to perform when the rule matches.
-type VersionGetResponseRulesTransformResponseHTMLRuleAction string
+type VersionGetResponseObjectRulesSetCacheControlRuleAction string
 
 const (
-	VersionGetResponseRulesTransformResponseHTMLRuleActionTransformResponseHTML VersionGetResponseRulesTransformResponseHTMLRuleAction = "transform_response_html"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionSetCacheControl VersionGetResponseObjectRulesSetCacheControlRuleAction = "set_cache_control"
 )
 
-func (r VersionGetResponseRulesTransformResponseHTMLRuleAction) IsKnown() bool {
+func (r VersionGetResponseObjectRulesSetCacheControlRuleAction) IsKnown() bool {
 	switch r {
-	case VersionGetResponseRulesTransformResponseHTMLRuleActionTransformResponseHTML:
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionSetCacheControl:
 		return true
 	}
 	return false
 }
 
 // The parameters configuring the rule's action.
-type VersionGetResponseRulesTransformResponseHTMLRuleActionParameters struct {
-	// Enables the link maze transformation on the response.
-	LinkMaze interface{}                                                          `json:"link_maze" api:"required"`
-	JSON     versionGetResponseRulesTransformResponseHTMLRuleActionParametersJSON `json:"-"`
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParameters struct {
+	// A cache-control directive configuration.
+	Immutable VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutable `json:"immutable"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	MaxAge VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAge `json:"max-age"`
+	// A cache-control directive configuration.
+	MustRevalidate VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidate `json:"must-revalidate"`
+	// A cache-control directive configuration.
+	MustUnderstand VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstand `json:"must-understand"`
+	// A cache-control directive configuration that accepts optional qualifiers (header
+	// names).
+	NoCache VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCache `json:"no-cache"`
+	// A cache-control directive configuration.
+	NoStore VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStore `json:"no-store"`
+	// A cache-control directive configuration.
+	NoTransform VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransform `json:"no-transform"`
+	// A cache-control directive configuration that accepts optional qualifiers (header
+	// names).
+	Private VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivate `json:"private"`
+	// A cache-control directive configuration.
+	ProxyRevalidate VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidate `json:"proxy-revalidate"`
+	// A cache-control directive configuration.
+	Public VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublic `json:"public"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	SMaxage VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxage `json:"s-maxage"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	StaleIfError VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfError `json:"stale-if-error"`
+	// A cache-control directive configuration that accepts a duration value in
+	// seconds.
+	StaleWhileRevalidate VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidate `json:"stale-while-revalidate"`
+	JSON                 versionGetResponseObjectRulesSetCacheControlRuleActionParametersJSON                 `json:"-"`
 }
 
-// versionGetResponseRulesTransformResponseHTMLRuleActionParametersJSON contains
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersJSON contains
 // the JSON metadata for the struct
-// [VersionGetResponseRulesTransformResponseHTMLRuleActionParameters]
-type versionGetResponseRulesTransformResponseHTMLRuleActionParametersJSON struct {
-	LinkMaze    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParameters]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersJSON struct {
+	Immutable            apijson.Field
+	MaxAge               apijson.Field
+	MustRevalidate       apijson.Field
+	MustUnderstand       apijson.Field
+	NoCache              apijson.Field
+	NoStore              apijson.Field
+	NoTransform          apijson.Field
+	Private              apijson.Field
+	ProxyRevalidate      apijson.Field
+	Public               apijson.Field
+	SMaxage              apijson.Field
+	StaleIfError         apijson.Field
+	StaleWhileRevalidate apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
-func (r *VersionGetResponseRulesTransformResponseHTMLRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r versionGetResponseRulesTransformResponseHTMLRuleActionParametersJSON) RawJSON() string {
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersJSON) RawJSON() string {
 	return r.raw
 }
 
+// A cache-control directive configuration.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutable struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                          `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableJSON `json:"-"`
+	union          VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableUnion
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutable]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutable) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutable{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirective],
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirective].
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutable) AsUnion() VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirective]
+// or
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirective].
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableUnion interface {
+	implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutable()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutable() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                         `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutable() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersImmutableOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAge struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value int64                                                                      `json:"value"`
+	JSON  versionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeJSON `json:"-"`
+	union VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeUnion
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAge]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Value          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAge) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAge{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirective],
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirective].
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAge) AsUnion() VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Union satisfied by
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirective]
+// or
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirective].
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeUnion interface {
+	implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAge()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with a duration value in seconds.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation `json:"operation" api:"required"`
+	// The duration value in seconds for the directive.
+	Value int64 `json:"value" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                   `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON struct {
+	Operation      apijson.Field
+	Value          apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAge() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAge() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMaxAgeOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidate struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                               `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateJSON `json:"-"`
+	union          VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateUnion
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidate]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidate) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidate{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirective],
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirective].
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidate) AsUnion() VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirective]
+// or
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirective].
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateUnion interface {
+	implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidate()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                           `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                              `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustRevalidateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstand struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                               `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandJSON `json:"-"`
+	union          VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandUnion
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstand]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstand) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstand{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirective],
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirective].
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstand) AsUnion() VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirective]
+// or
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirective].
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandUnion interface {
+	implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstand()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                           `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstand() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                              `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstand() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersMustUnderstandOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCache struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// This field can have the runtime type of [[]string].
+	Qualifiers interface{}                                                                 `json:"qualifiers"`
+	JSON       versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheJSON `json:"-"`
+	union      VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheUnion
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCache]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Qualifiers     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCache) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCache{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirective],
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirective].
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCache) AsUnion() VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+//
+// Union satisfied by
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirective]
+// or
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirective].
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheUnion interface {
+	implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCache()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with optional qualifiers.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// Optional list of header names to qualify the directive (e.g., for "private" or
+	// "no-cache" directives).
+	Qualifiers []string                                                                                `json:"qualifiers"`
+	JSON       versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Qualifiers     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCache() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                       `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCache() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoCacheOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStore struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                        `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreJSON `json:"-"`
+	union          VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreUnion
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStore]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStore) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStore{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirective],
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirective].
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStore) AsUnion() VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirective]
+// or
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirective].
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreUnion interface {
+	implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStore()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                    `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStore() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                       `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStore() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoStoreOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransform struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                            `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformJSON `json:"-"`
+	union          VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformUnion
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransform]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransform) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransform{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirective],
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirective].
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransform) AsUnion() VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirective]
+// or
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirective].
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformUnion interface {
+	implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransform()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                        `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransform() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                           `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransform() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersNoTransformOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivate struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// This field can have the runtime type of [[]string].
+	Qualifiers interface{}                                                                 `json:"qualifiers"`
+	JSON       versionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateJSON `json:"-"`
+	union      VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateUnion
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivate]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Qualifiers     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivate) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivate{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirective],
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirective].
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivate) AsUnion() VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts optional qualifiers (header
+// names).
+//
+// Union satisfied by
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirective]
+// or
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirective].
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateUnion interface {
+	implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivate()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with optional qualifiers.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// Optional list of header names to qualify the directive (e.g., for "private" or
+	// "no-cache" directives).
+	Qualifiers []string                                                                                `json:"qualifiers"`
+	JSON       versionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Qualifiers     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivate() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                       `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivate() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPrivateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidate struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateJSON `json:"-"`
+	union          VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateUnion
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidate]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidate) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidate{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirective],
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective].
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidate) AsUnion() VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirective]
+// or
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective].
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateUnion interface {
+	implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidate()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                            `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                               `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersProxyRevalidateOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublic struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                       `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicJSON `json:"-"`
+	union          VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicUnion
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublic]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublic) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublic{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirective],
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirective].
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublic) AsUnion() VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicUnion {
+	return r.union
+}
+
+// A cache-control directive configuration.
+//
+// Union satisfied by
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirective]
+// or
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirective].
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicUnion interface {
+	implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublic()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                   `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublic() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                      `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublic() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersPublicOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxage struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value int64                                                                       `json:"value"`
+	JSON  versionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageJSON `json:"-"`
+	union VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageUnion
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxage]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Value          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxage) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxage{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirective],
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirective].
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxage) AsUnion() VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Union satisfied by
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirective]
+// or
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirective].
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageUnion interface {
+	implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxage()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with a duration value in seconds.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation `json:"operation" api:"required"`
+	// The duration value in seconds for the directive.
+	Value int64 `json:"value" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                    `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON struct {
+	Operation      apijson.Field
+	Value          apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxage() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                       `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxage() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersSMaxageOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfError struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value int64                                                                            `json:"value"`
+	JSON  versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorJSON `json:"-"`
+	union VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorUnion
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfError]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Value          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfError) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfError{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirective],
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective].
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfError) AsUnion() VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Union satisfied by
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirective]
+// or
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective].
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorUnion interface {
+	implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfError()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with a duration value in seconds.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation `json:"operation" api:"required"`
+	// The duration value in seconds for the directive.
+	Value int64 `json:"value" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                         `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON struct {
+	Operation      apijson.Field
+	Value          apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfError() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                            `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfError() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleIfErrorOperationRemove:
+		return true
+	}
+	return false
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidate struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool `json:"cloudflare_only"`
+	// The duration value in seconds for the directive.
+	Value int64                                                                                    `json:"value"`
+	JSON  versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateJSON `json:"-"`
+	union VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateUnion
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidate]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	Value          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidate) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidate{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective],
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective].
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidate) AsUnion() VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateUnion {
+	return r.union
+}
+
+// A cache-control directive configuration that accepts a duration value in
+// seconds.
+//
+// Union satisfied by
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective]
+// or
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective].
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateUnion interface {
+	implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidate()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective{}),
+		},
+	)
+}
+
+// Set the directive with a duration value in seconds.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation `json:"operation" api:"required"`
+	// The duration value in seconds for the directive.
+	Value int64 `json:"value" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                                 `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON struct {
+	Operation      apijson.Field
+	Value          apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateSetDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// Remove the directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective struct {
+	// The operation to perform on the cache-control directive.
+	Operation VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation `json:"operation" api:"required"`
+	// Whether the directive should only be applied to the Cloudflare CDN cache.
+	CloudflareOnly bool                                                                                                    `json:"cloudflare_only"`
+	JSON           versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective]
+type versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON struct {
+	Operation      apijson.Field
+	CloudflareOnly apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirective) implementsVersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidate() {
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateRemoveDirectiveOperationRemove:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache-control directive.
+type VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateOperationSet    VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateOperation = "set"
+	VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateOperationRemove VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateOperation = "remove"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateOperationSet, VersionGetResponseObjectRulesSetCacheControlRuleActionParametersStaleWhileRevalidateOperationRemove:
+		return true
+	}
+	return false
+}
+
 // Configuration for exposed credential checking.
-type VersionGetResponseRulesTransformResponseHTMLRuleExposedCredentialCheck struct {
+type VersionGetResponseObjectRulesSetCacheControlRuleExposedCredentialCheck struct {
 	// An expression that selects the password used in the credentials check.
 	PasswordExpression string `json:"password_expression" api:"required"`
 	// An expression that selects the user ID used in the credentials check.
 	UsernameExpression string                                                                     `json:"username_expression" api:"required"`
-	JSON               versionGetResponseRulesTransformResponseHTMLRuleExposedCredentialCheckJSON `json:"-"`
+	JSON               versionGetResponseObjectRulesSetCacheControlRuleExposedCredentialCheckJSON `json:"-"`
 }
 
-// versionGetResponseRulesTransformResponseHTMLRuleExposedCredentialCheckJSON
+// versionGetResponseObjectRulesSetCacheControlRuleExposedCredentialCheckJSON
 // contains the JSON metadata for the struct
-// [VersionGetResponseRulesTransformResponseHTMLRuleExposedCredentialCheck]
-type versionGetResponseRulesTransformResponseHTMLRuleExposedCredentialCheckJSON struct {
+// [VersionGetResponseObjectRulesSetCacheControlRuleExposedCredentialCheck]
+type versionGetResponseObjectRulesSetCacheControlRuleExposedCredentialCheckJSON struct {
 	PasswordExpression apijson.Field
 	UsernameExpression apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *VersionGetResponseRulesTransformResponseHTMLRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r versionGetResponseRulesTransformResponseHTMLRuleExposedCredentialCheckJSON) RawJSON() string {
+func (r versionGetResponseObjectRulesSetCacheControlRuleExposedCredentialCheckJSON) RawJSON() string {
 	return r.raw
 }
 
 // An object configuring the rule's rate limit behavior.
-type VersionGetResponseRulesTransformResponseHTMLRuleRatelimit struct {
+type VersionGetResponseObjectRulesSetCacheControlRuleRatelimit struct {
 	// Characteristics of the request on which the rate limit counter will be
 	// incremented.
 	Characteristics []string `json:"characteristics" api:"required"`
@@ -4579,13 +3863,13 @@ type VersionGetResponseRulesTransformResponseHTMLRuleRatelimit struct {
 	// A response header name provided by the origin, which contains the score to
 	// increment rate limit counter with.
 	ScoreResponseHeaderName string                                                        `json:"score_response_header_name"`
-	JSON                    versionGetResponseRulesTransformResponseHTMLRuleRatelimitJSON `json:"-"`
+	JSON                    versionGetResponseObjectRulesSetCacheControlRuleRatelimitJSON `json:"-"`
 }
 
-// versionGetResponseRulesTransformResponseHTMLRuleRatelimitJSON contains the JSON
+// versionGetResponseObjectRulesSetCacheControlRuleRatelimitJSON contains the JSON
 // metadata for the struct
-// [VersionGetResponseRulesTransformResponseHTMLRuleRatelimit]
-type versionGetResponseRulesTransformResponseHTMLRuleRatelimitJSON struct {
+// [VersionGetResponseObjectRulesSetCacheControlRuleRatelimit]
+type versionGetResponseObjectRulesSetCacheControlRuleRatelimitJSON struct {
 	Characteristics         apijson.Field
 	Period                  apijson.Field
 	CountingExpression      apijson.Field
@@ -4598,11 +3882,830 @@ type versionGetResponseRulesTransformResponseHTMLRuleRatelimitJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *VersionGetResponseRulesTransformResponseHTMLRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
+func (r *VersionGetResponseObjectRulesSetCacheControlRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r versionGetResponseRulesTransformResponseHTMLRuleRatelimitJSON) RawJSON() string {
+func (r versionGetResponseObjectRulesSetCacheControlRuleRatelimitJSON) RawJSON() string {
+	return r.raw
+}
+
+type VersionGetResponseObjectRulesSetCacheSettingsRule struct {
+	ID         string                                                `json:"id" api:"required"`
+	Action     string                                                `json:"action" api:"required"`
+	Enabled    bool                                                  `json:"enabled" api:"required"`
+	Expression string                                                `json:"expression" api:"required"`
+	Ref        string                                                `json:"ref" api:"required"`
+	JSON       versionGetResponseObjectRulesSetCacheSettingsRuleJSON `json:"-"`
+	SetCacheSettingsRule
+}
+
+// versionGetResponseObjectRulesSetCacheSettingsRuleJSON contains the JSON metadata
+// for the struct [VersionGetResponseObjectRulesSetCacheSettingsRule]
+type versionGetResponseObjectRulesSetCacheSettingsRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheSettingsRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheSettingsRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheSettingsRule) implementsVersionGetResponseObjectRule() {}
+
+type VersionGetResponseObjectRulesSetCacheTagsRule struct {
+	// The unique ID of the rule.
+	ID string `json:"id" api:"required"`
+	// The action to perform when the rule matches.
+	Action  VersionGetResponseObjectRulesSetCacheTagsRuleAction `json:"action" api:"required"`
+	Enabled bool                                                `json:"enabled" api:"required"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression" api:"required"`
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
+	// The reference of the rule (the rule's ID by default).
+	Ref string `json:"ref" api:"required"`
+	// The version of the rule.
+	Version string `json:"version" api:"required"`
+	// The parameters configuring the rule's action.
+	ActionParameters VersionGetResponseObjectRulesSetCacheTagsRuleActionParameters `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Configuration for exposed credential checking.
+	ExposedCredentialCheck VersionGetResponseObjectRulesSetCacheTagsRuleExposedCredentialCheck `json:"exposed_credential_check"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// An object configuring the rule's rate limit behavior.
+	Ratelimit VersionGetResponseObjectRulesSetCacheTagsRuleRatelimit `json:"ratelimit"`
+	JSON      versionGetResponseObjectRulesSetCacheTagsRuleJSON      `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheTagsRuleJSON contains the JSON metadata for
+// the struct [VersionGetResponseObjectRulesSetCacheTagsRule]
+type versionGetResponseObjectRulesSetCacheTagsRuleJSON struct {
+	ID                     apijson.Field
+	Action                 apijson.Field
+	Enabled                apijson.Field
+	Expression             apijson.Field
+	LastUpdated            apijson.Field
+	Ref                    apijson.Field
+	Version                apijson.Field
+	ActionParameters       apijson.Field
+	Categories             apijson.Field
+	Description            apijson.Field
+	ExposedCredentialCheck apijson.Field
+	Logging                apijson.Field
+	Ratelimit              apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheTagsRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheTagsRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheTagsRule) implementsVersionGetResponseObjectRule() {}
+
+// The action to perform when the rule matches.
+type VersionGetResponseObjectRulesSetCacheTagsRuleAction string
+
+const (
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionSetCacheTags VersionGetResponseObjectRulesSetCacheTagsRuleAction = "set_cache_tags"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheTagsRuleAction) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheTagsRuleActionSetCacheTags:
+		return true
+	}
+	return false
+}
+
+// The parameters configuring the rule's action.
+type VersionGetResponseObjectRulesSetCacheTagsRuleActionParameters struct {
+	// The operation to perform on the cache tags.
+	Operation VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersOperation `json:"operation" api:"required"`
+	// An expression that evaluates to an array of cache tag values.
+	Expression string `json:"expression"`
+	// This field can have the runtime type of [[]string].
+	Values interface{}                                                       `json:"values"`
+	JSON   versionGetResponseObjectRulesSetCacheTagsRuleActionParametersJSON `json:"-"`
+	union  VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersUnion
+}
+
+// versionGetResponseObjectRulesSetCacheTagsRuleActionParametersJSON contains the
+// JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParameters]
+type versionGetResponseObjectRulesSetCacheTagsRuleActionParametersJSON struct {
+	Operation   apijson.Field
+	Expression  apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r versionGetResponseObjectRulesSetCacheTagsRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheTagsRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
+	*r = VersionGetResponseObjectRulesSetCacheTagsRuleActionParameters{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersUnion] interface
+// which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValues],
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpression],
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValues],
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpression],
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValues],
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpression].
+func (r VersionGetResponseObjectRulesSetCacheTagsRuleActionParameters) AsUnion() VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersUnion {
+	return r.union
+}
+
+// The parameters configuring the rule's action.
+//
+// Union satisfied by
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValues],
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpression],
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValues],
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpression],
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValues]
+// or
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpression].
+type VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersUnion interface {
+	implementsVersionGetResponseObjectRulesSetCacheTagsRuleActionParameters()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValues{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpression{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValues{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpression{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValues{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpression{}),
+		},
+	)
+}
+
+// Add cache tags using a list of values.
+type VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValues struct {
+	// The operation to perform on the cache tags.
+	Operation VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation `json:"operation" api:"required"`
+	// A list of cache tag values.
+	Values []string                                                                            `json:"values" api:"required"`
+	JSON   versionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValues]
+type versionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON struct {
+	Operation   apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValues) implementsVersionGetResponseObjectRulesSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationAdd    VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "add"
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationRemove VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "remove"
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationSet    VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation = "set"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationAdd, VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationRemove, VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsValuesOperationSet:
+		return true
+	}
+	return false
+}
+
+// Add cache tags using an expression.
+type VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpression struct {
+	// An expression that evaluates to an array of cache tag values.
+	Expression string `json:"expression" api:"required"`
+	// The operation to perform on the cache tags.
+	Operation VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation `json:"operation" api:"required"`
+	JSON      versionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON      `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpression]
+type versionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON struct {
+	Expression  apijson.Field
+	Operation   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpression) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpression) implementsVersionGetResponseObjectRulesSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationAdd    VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "add"
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationRemove VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "remove"
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationSet    VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation = "set"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationAdd, VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationRemove, VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersAddCacheTagsExpressionOperationSet:
+		return true
+	}
+	return false
+}
+
+// Remove cache tags using a list of values.
+type VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValues struct {
+	// The operation to perform on the cache tags.
+	Operation VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation `json:"operation" api:"required"`
+	// A list of cache tag values.
+	Values []string                                                                               `json:"values" api:"required"`
+	JSON   versionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValues]
+type versionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON struct {
+	Operation   apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValues) implementsVersionGetResponseObjectRulesSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationAdd    VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "add"
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationRemove VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "remove"
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationSet    VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation = "set"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationAdd, VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationRemove, VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsValuesOperationSet:
+		return true
+	}
+	return false
+}
+
+// Remove cache tags using an expression.
+type VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpression struct {
+	// An expression that evaluates to an array of cache tag values.
+	Expression string `json:"expression" api:"required"`
+	// The operation to perform on the cache tags.
+	Operation VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation `json:"operation" api:"required"`
+	JSON      versionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON      `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpression]
+type versionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON struct {
+	Expression  apijson.Field
+	Operation   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpression) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpression) implementsVersionGetResponseObjectRulesSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationAdd    VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "add"
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationRemove VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "remove"
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationSet    VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation = "set"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationAdd, VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationRemove, VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersRemoveCacheTagsExpressionOperationSet:
+		return true
+	}
+	return false
+}
+
+// Set cache tags using a list of values.
+type VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValues struct {
+	// The operation to perform on the cache tags.
+	Operation VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation `json:"operation" api:"required"`
+	// A list of cache tag values.
+	Values []string                                                                            `json:"values" api:"required"`
+	JSON   versionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValues]
+type versionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON struct {
+	Operation   apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValues) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValues) implementsVersionGetResponseObjectRulesSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationAdd    VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "add"
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationRemove VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "remove"
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationSet    VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation = "set"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationAdd, VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationRemove, VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsValuesOperationSet:
+		return true
+	}
+	return false
+}
+
+// Set cache tags using an expression.
+type VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpression struct {
+	// An expression that evaluates to an array of cache tag values.
+	Expression string `json:"expression" api:"required"`
+	// The operation to perform on the cache tags.
+	Operation VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation `json:"operation" api:"required"`
+	JSON      versionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON      `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpression]
+type versionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON struct {
+	Expression  apijson.Field
+	Operation   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpression) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpression) implementsVersionGetResponseObjectRulesSetCacheTagsRuleActionParameters() {
+}
+
+// The operation to perform on the cache tags.
+type VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationAdd    VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "add"
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationRemove VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "remove"
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationSet    VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation = "set"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationAdd, VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationRemove, VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersSetCacheTagsExpressionOperationSet:
+		return true
+	}
+	return false
+}
+
+// The operation to perform on the cache tags.
+type VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersOperation string
+
+const (
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersOperationAdd    VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersOperation = "add"
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersOperationRemove VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersOperation = "remove"
+	VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersOperationSet    VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersOperation = "set"
+)
+
+func (r VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersOperation) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersOperationAdd, VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersOperationRemove, VersionGetResponseObjectRulesSetCacheTagsRuleActionParametersOperationSet:
+		return true
+	}
+	return false
+}
+
+// Configuration for exposed credential checking.
+type VersionGetResponseObjectRulesSetCacheTagsRuleExposedCredentialCheck struct {
+	// An expression that selects the password used in the credentials check.
+	PasswordExpression string `json:"password_expression" api:"required"`
+	// An expression that selects the user ID used in the credentials check.
+	UsernameExpression string                                                                  `json:"username_expression" api:"required"`
+	JSON               versionGetResponseObjectRulesSetCacheTagsRuleExposedCredentialCheckJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheTagsRuleExposedCredentialCheckJSON contains
+// the JSON metadata for the struct
+// [VersionGetResponseObjectRulesSetCacheTagsRuleExposedCredentialCheck]
+type versionGetResponseObjectRulesSetCacheTagsRuleExposedCredentialCheckJSON struct {
+	PasswordExpression apijson.Field
+	UsernameExpression apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheTagsRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheTagsRuleExposedCredentialCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// An object configuring the rule's rate limit behavior.
+type VersionGetResponseObjectRulesSetCacheTagsRuleRatelimit struct {
+	// Characteristics of the request on which the rate limit counter will be
+	// incremented.
+	Characteristics []string `json:"characteristics" api:"required"`
+	// Period in seconds over which the counter is being incremented.
+	Period int64 `json:"period" api:"required"`
+	// An expression that defines when the rate limit counter should be incremented. It
+	// defaults to the same as the rule's expression.
+	CountingExpression string `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout int64 `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod int64 `json:"requests_per_period"`
+	// Whether counting is only performed when an origin is reached.
+	RequestsToOrigin bool `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod int64 `json:"score_per_period"`
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
+	ScoreResponseHeaderName string                                                     `json:"score_response_header_name"`
+	JSON                    versionGetResponseObjectRulesSetCacheTagsRuleRatelimitJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesSetCacheTagsRuleRatelimitJSON contains the JSON
+// metadata for the struct [VersionGetResponseObjectRulesSetCacheTagsRuleRatelimit]
+type versionGetResponseObjectRulesSetCacheTagsRuleRatelimitJSON struct {
+	Characteristics         apijson.Field
+	Period                  apijson.Field
+	CountingExpression      apijson.Field
+	MitigationTimeout       apijson.Field
+	RequestsPerPeriod       apijson.Field
+	RequestsToOrigin        apijson.Field
+	ScorePerPeriod          apijson.Field
+	ScoreResponseHeaderName apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetCacheTagsRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetCacheTagsRuleRatelimitJSON) RawJSON() string {
+	return r.raw
+}
+
+type VersionGetResponseObjectRulesSetConfigurationRule struct {
+	ID         string                                                `json:"id" api:"required"`
+	Action     string                                                `json:"action" api:"required"`
+	Enabled    bool                                                  `json:"enabled" api:"required"`
+	Expression string                                                `json:"expression" api:"required"`
+	Ref        string                                                `json:"ref" api:"required"`
+	JSON       versionGetResponseObjectRulesSetConfigurationRuleJSON `json:"-"`
+	SetConfigRule
+}
+
+// versionGetResponseObjectRulesSetConfigurationRuleJSON contains the JSON metadata
+// for the struct [VersionGetResponseObjectRulesSetConfigurationRule]
+type versionGetResponseObjectRulesSetConfigurationRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSetConfigurationRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSetConfigurationRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSetConfigurationRule) implementsVersionGetResponseObjectRule() {}
+
+type VersionGetResponseObjectRulesSkipRule struct {
+	ID         string                                    `json:"id" api:"required"`
+	Action     string                                    `json:"action" api:"required"`
+	Enabled    bool                                      `json:"enabled" api:"required"`
+	Expression string                                    `json:"expression" api:"required"`
+	Ref        string                                    `json:"ref" api:"required"`
+	JSON       versionGetResponseObjectRulesSkipRuleJSON `json:"-"`
+	SkipRule
+}
+
+// versionGetResponseObjectRulesSkipRuleJSON contains the JSON metadata for the
+// struct [VersionGetResponseObjectRulesSkipRule]
+type versionGetResponseObjectRulesSkipRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesSkipRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesSkipRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesSkipRule) implementsVersionGetResponseObjectRule() {}
+
+type VersionGetResponseObjectRulesTransformResponseHTMLRule struct {
+	// The unique ID of the rule.
+	ID string `json:"id" api:"required"`
+	// The action to perform when the rule matches.
+	Action  VersionGetResponseObjectRulesTransformResponseHTMLRuleAction `json:"action" api:"required"`
+	Enabled bool                                                         `json:"enabled" api:"required"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression" api:"required"`
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated" api:"required" format:"date-time"`
+	// The reference of the rule (the rule's ID by default).
+	Ref string `json:"ref" api:"required"`
+	// The version of the rule.
+	Version string `json:"version" api:"required"`
+	// The parameters configuring the rule's action.
+	ActionParameters VersionGetResponseObjectRulesTransformResponseHTMLRuleActionParameters `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Configuration for exposed credential checking.
+	ExposedCredentialCheck VersionGetResponseObjectRulesTransformResponseHTMLRuleExposedCredentialCheck `json:"exposed_credential_check"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// An object configuring the rule's rate limit behavior.
+	Ratelimit VersionGetResponseObjectRulesTransformResponseHTMLRuleRatelimit `json:"ratelimit"`
+	JSON      versionGetResponseObjectRulesTransformResponseHTMLRuleJSON      `json:"-"`
+}
+
+// versionGetResponseObjectRulesTransformResponseHTMLRuleJSON contains the JSON
+// metadata for the struct [VersionGetResponseObjectRulesTransformResponseHTMLRule]
+type versionGetResponseObjectRulesTransformResponseHTMLRuleJSON struct {
+	ID                     apijson.Field
+	Action                 apijson.Field
+	Enabled                apijson.Field
+	Expression             apijson.Field
+	LastUpdated            apijson.Field
+	Ref                    apijson.Field
+	Version                apijson.Field
+	ActionParameters       apijson.Field
+	Categories             apijson.Field
+	Description            apijson.Field
+	ExposedCredentialCheck apijson.Field
+	Logging                apijson.Field
+	Ratelimit              apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesTransformResponseHTMLRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesTransformResponseHTMLRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionGetResponseObjectRulesTransformResponseHTMLRule) implementsVersionGetResponseObjectRule() {
+}
+
+// The action to perform when the rule matches.
+type VersionGetResponseObjectRulesTransformResponseHTMLRuleAction string
+
+const (
+	VersionGetResponseObjectRulesTransformResponseHTMLRuleActionTransformResponseHTML VersionGetResponseObjectRulesTransformResponseHTMLRuleAction = "transform_response_html"
+)
+
+func (r VersionGetResponseObjectRulesTransformResponseHTMLRuleAction) IsKnown() bool {
+	switch r {
+	case VersionGetResponseObjectRulesTransformResponseHTMLRuleActionTransformResponseHTML:
+		return true
+	}
+	return false
+}
+
+// The parameters configuring the rule's action.
+type VersionGetResponseObjectRulesTransformResponseHTMLRuleActionParameters struct {
+	// Enables the link maze transformation on the response.
+	LinkMaze interface{}                                                                `json:"link_maze" api:"required"`
+	JSON     versionGetResponseObjectRulesTransformResponseHTMLRuleActionParametersJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesTransformResponseHTMLRuleActionParametersJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesTransformResponseHTMLRuleActionParameters]
+type versionGetResponseObjectRulesTransformResponseHTMLRuleActionParametersJSON struct {
+	LinkMaze    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesTransformResponseHTMLRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesTransformResponseHTMLRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
+// Configuration for exposed credential checking.
+type VersionGetResponseObjectRulesTransformResponseHTMLRuleExposedCredentialCheck struct {
+	// An expression that selects the password used in the credentials check.
+	PasswordExpression string `json:"password_expression" api:"required"`
+	// An expression that selects the user ID used in the credentials check.
+	UsernameExpression string                                                                           `json:"username_expression" api:"required"`
+	JSON               versionGetResponseObjectRulesTransformResponseHTMLRuleExposedCredentialCheckJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesTransformResponseHTMLRuleExposedCredentialCheckJSON
+// contains the JSON metadata for the struct
+// [VersionGetResponseObjectRulesTransformResponseHTMLRuleExposedCredentialCheck]
+type versionGetResponseObjectRulesTransformResponseHTMLRuleExposedCredentialCheckJSON struct {
+	PasswordExpression apijson.Field
+	UsernameExpression apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesTransformResponseHTMLRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesTransformResponseHTMLRuleExposedCredentialCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// An object configuring the rule's rate limit behavior.
+type VersionGetResponseObjectRulesTransformResponseHTMLRuleRatelimit struct {
+	// Characteristics of the request on which the rate limit counter will be
+	// incremented.
+	Characteristics []string `json:"characteristics" api:"required"`
+	// Period in seconds over which the counter is being incremented.
+	Period int64 `json:"period" api:"required"`
+	// An expression that defines when the rate limit counter should be incremented. It
+	// defaults to the same as the rule's expression.
+	CountingExpression string `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout int64 `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod int64 `json:"requests_per_period"`
+	// Whether counting is only performed when an origin is reached.
+	RequestsToOrigin bool `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod int64 `json:"score_per_period"`
+	// A response header name provided by the origin, which contains the score to
+	// increment rate limit counter with.
+	ScoreResponseHeaderName string                                                              `json:"score_response_header_name"`
+	JSON                    versionGetResponseObjectRulesTransformResponseHTMLRuleRatelimitJSON `json:"-"`
+}
+
+// versionGetResponseObjectRulesTransformResponseHTMLRuleRatelimitJSON contains the
+// JSON metadata for the struct
+// [VersionGetResponseObjectRulesTransformResponseHTMLRuleRatelimit]
+type versionGetResponseObjectRulesTransformResponseHTMLRuleRatelimitJSON struct {
+	Characteristics         apijson.Field
+	Period                  apijson.Field
+	CountingExpression      apijson.Field
+	MitigationTimeout       apijson.Field
+	RequestsPerPeriod       apijson.Field
+	RequestsToOrigin        apijson.Field
+	ScorePerPeriod          apijson.Field
+	ScoreResponseHeaderName apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *VersionGetResponseObjectRulesTransformResponseHTMLRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionGetResponseObjectRulesTransformResponseHTMLRuleRatelimitJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -4611,6 +4714,206 @@ type VersionListParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
+}
+
+// A response object.
+type VersionListResponseEnvelope struct {
+	// A list of error messages.
+	Errors []VersionListResponseEnvelopeErrors `json:"errors" api:"required"`
+	// A list of warning messages.
+	Messages []VersionListResponseEnvelopeMessages `json:"messages" api:"required"`
+	// A result.
+	Result VersionListResponseUnion `json:"result" api:"required"`
+	// Whether the API call was successful.
+	Success VersionListResponseEnvelopeSuccess `json:"success" api:"required"`
+	// Information to navigate the results.
+	ResultInfo VersionListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       versionListResponseEnvelopeJSON       `json:"-"`
+}
+
+// versionListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [VersionListResponseEnvelope]
+type versionListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// A message.
+type VersionListResponseEnvelopeErrors struct {
+	// A text description of this message.
+	Message string `json:"message" api:"required"`
+	// A unique code for this message.
+	Code int64 `json:"code"`
+	// The source of this message.
+	Source VersionListResponseEnvelopeErrorsSource `json:"source"`
+	JSON   versionListResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// versionListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [VersionListResponseEnvelopeErrors]
+type versionListResponseEnvelopeErrorsJSON struct {
+	Message     apijson.Field
+	Code        apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+// The source of this message.
+type VersionListResponseEnvelopeErrorsSource struct {
+	// A JSON pointer to the field that is the source of the message.
+	Pointer string                                      `json:"pointer" api:"required"`
+	JSON    versionListResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// versionListResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [VersionListResponseEnvelopeErrorsSource]
+type versionListResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionListResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionListResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// A message.
+type VersionListResponseEnvelopeMessages struct {
+	// A text description of this message.
+	Message string `json:"message" api:"required"`
+	// A unique code for this message.
+	Code int64 `json:"code"`
+	// The source of this message.
+	Source VersionListResponseEnvelopeMessagesSource `json:"source"`
+	JSON   versionListResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// versionListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [VersionListResponseEnvelopeMessages]
+type versionListResponseEnvelopeMessagesJSON struct {
+	Message     apijson.Field
+	Code        apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// The source of this message.
+type VersionListResponseEnvelopeMessagesSource struct {
+	// A JSON pointer to the field that is the source of the message.
+	Pointer string                                        `json:"pointer" api:"required"`
+	JSON    versionListResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// versionListResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
+// struct [VersionListResponseEnvelopeMessagesSource]
+type versionListResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionListResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionListResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type VersionListResponseEnvelopeSuccess bool
+
+const (
+	VersionListResponseEnvelopeSuccessTrue VersionListResponseEnvelopeSuccess = true
+)
+
+func (r VersionListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case VersionListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+// Information to navigate the results.
+type VersionListResponseEnvelopeResultInfo struct {
+	// The set of cursors.
+	Cursors VersionListResponseEnvelopeResultInfoCursors `json:"cursors"`
+	JSON    versionListResponseEnvelopeResultInfoJSON    `json:"-"`
+}
+
+// versionListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [VersionListResponseEnvelopeResultInfo]
+type versionListResponseEnvelopeResultInfoJSON struct {
+	Cursors     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// The set of cursors.
+type VersionListResponseEnvelopeResultInfoCursors struct {
+	// The cursor to use for the next page.
+	After string                                           `json:"after" api:"required"`
+	JSON  versionListResponseEnvelopeResultInfoCursorsJSON `json:"-"`
+}
+
+// versionListResponseEnvelopeResultInfoCursorsJSON contains the JSON metadata for
+// the struct [VersionListResponseEnvelopeResultInfoCursors]
+type versionListResponseEnvelopeResultInfoCursorsJSON struct {
+	After       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionListResponseEnvelopeResultInfoCursors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionListResponseEnvelopeResultInfoCursorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type VersionDeleteParams struct {
@@ -4645,7 +4948,7 @@ type VersionGetResponseEnvelope struct {
 	Errors []VersionGetResponseEnvelopeErrors `json:"errors" api:"required"`
 	// A list of warning messages.
 	Messages []VersionGetResponseEnvelopeMessages `json:"messages" api:"required"`
-	// A ruleset object.
+	// A result.
 	Result VersionGetResponse `json:"result" api:"required"`
 	// Whether the API call was successful.
 	Success VersionGetResponseEnvelopeSuccess `json:"success" api:"required"`

@@ -206,6 +206,9 @@ type AttackSurfaceReportIssueListResponseIssue struct {
 	ResolveText        string                                             `json:"resolve_text"`
 	Severity           AttackSurfaceReportIssueListResponseIssuesSeverity `json:"severity"`
 	Since              time.Time                                          `json:"since" format:"date-time"`
+	// Who generated the insight. `cloudflare` for Cloudflare-generated insights,
+	// otherwise the partner.
+	Source AttackSurfaceReportIssueListResponseIssuesSource `json:"source"`
 	// The current status of the insight.
 	Status    AttackSurfaceReportIssueListResponseIssuesStatus `json:"status"`
 	Subject   string                                           `json:"subject"`
@@ -229,6 +232,7 @@ type attackSurfaceReportIssueListResponseIssueJSON struct {
 	ResolveText        apijson.Field
 	Severity           apijson.Field
 	Since              apijson.Field
+	Source             apijson.Field
 	Status             apijson.Field
 	Subject            apijson.Field
 	Timestamp          apijson.Field
@@ -280,6 +284,23 @@ const (
 func (r AttackSurfaceReportIssueListResponseIssuesSeverity) IsKnown() bool {
 	switch r {
 	case AttackSurfaceReportIssueListResponseIssuesSeverityLow, AttackSurfaceReportIssueListResponseIssuesSeverityModerate, AttackSurfaceReportIssueListResponseIssuesSeverityCritical:
+		return true
+	}
+	return false
+}
+
+// Who generated the insight. `cloudflare` for Cloudflare-generated insights,
+// otherwise the partner.
+type AttackSurfaceReportIssueListResponseIssuesSource string
+
+const (
+	AttackSurfaceReportIssueListResponseIssuesSourceCloudflare AttackSurfaceReportIssueListResponseIssuesSource = "cloudflare"
+	AttackSurfaceReportIssueListResponseIssuesSourceRiskrecon  AttackSurfaceReportIssueListResponseIssuesSource = "riskrecon"
+)
+
+func (r AttackSurfaceReportIssueListResponseIssuesSource) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueListResponseIssuesSourceCloudflare, AttackSurfaceReportIssueListResponseIssuesSourceRiskrecon:
 		return true
 	}
 	return false
@@ -418,6 +439,8 @@ func (r AttackSurfaceReportIssueListParams) URLQuery() (v url.Values) {
 	})
 }
 
+// Who generated the insight. `cloudflare` for Cloudflare-generated insights,
+// otherwise the partner.
 type AttackSurfaceReportIssueListParamsSource string
 
 const (
@@ -459,6 +482,8 @@ func (r AttackSurfaceReportIssueClassParams) URLQuery() (v url.Values) {
 	})
 }
 
+// Who generated the insight. `cloudflare` for Cloudflare-generated insights,
+// otherwise the partner.
 type AttackSurfaceReportIssueClassParamsSource string
 
 const (
@@ -641,6 +666,8 @@ func (r AttackSurfaceReportIssueSeverityParams) URLQuery() (v url.Values) {
 	})
 }
 
+// Who generated the insight. `cloudflare` for Cloudflare-generated insights,
+// otherwise the partner.
 type AttackSurfaceReportIssueSeverityParamsSource string
 
 const (
@@ -824,6 +851,8 @@ func (r AttackSurfaceReportIssueTypeParams) URLQuery() (v url.Values) {
 	})
 }
 
+// Who generated the insight. `cloudflare` for Cloudflare-generated insights,
+// otherwise the partner.
 type AttackSurfaceReportIssueTypeParamsSource string
 
 const (

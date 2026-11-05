@@ -39,8 +39,9 @@ func NewInstanceJobService(opts ...option.RequestOption) (r *InstanceJobService)
 
 // Creates a new indexing job for an AI Search instance.
 //
-// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
-// (and descendant paths) instead.
+// Deprecated: use
+// /accounts/{account_id}/ai-search/namespaces/{namespace}/instances (and
+// descendant paths) instead.
 //
 // Deprecated: deprecated
 func (r *InstanceJobService) New(ctx context.Context, id string, params InstanceJobNewParams, opts ...option.RequestOption) (res *InstanceJobNewResponse, err error) {
@@ -65,8 +66,9 @@ func (r *InstanceJobService) New(ctx context.Context, id string, params Instance
 
 // Lists indexing jobs for an AI Search instance.
 //
-// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
-// (and descendant paths) instead.
+// Deprecated: use
+// /accounts/{account_id}/ai-search/namespaces/{namespace}/instances (and
+// descendant paths) instead.
 //
 // Deprecated: deprecated
 func (r *InstanceJobService) List(ctx context.Context, id string, params InstanceJobListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InstanceJobListResponse], err error) {
@@ -96,8 +98,9 @@ func (r *InstanceJobService) List(ctx context.Context, id string, params Instanc
 
 // Lists indexing jobs for an AI Search instance.
 //
-// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
-// (and descendant paths) instead.
+// Deprecated: use
+// /accounts/{account_id}/ai-search/namespaces/{namespace}/instances (and
+// descendant paths) instead.
 //
 // Deprecated: deprecated
 func (r *InstanceJobService) ListAutoPaging(ctx context.Context, id string, params InstanceJobListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[InstanceJobListResponse] {
@@ -106,8 +109,9 @@ func (r *InstanceJobService) ListAutoPaging(ctx context.Context, id string, para
 
 // Retrieves details for a specific AI Search indexing job.
 //
-// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
-// (and descendant paths) instead.
+// Deprecated: use
+// /accounts/{account_id}/ai-search/namespaces/{namespace}/instances (and
+// descendant paths) instead.
 //
 // Deprecated: deprecated
 func (r *InstanceJobService) Get(ctx context.Context, id string, jobID string, query InstanceJobGetParams, opts ...option.RequestOption) (res *InstanceJobGetResponse, err error) {
@@ -136,8 +140,9 @@ func (r *InstanceJobService) Get(ctx context.Context, id string, jobID string, q
 
 // Lists log entries for an AI Search indexing job.
 //
-// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
-// (and descendant paths) instead.
+// Deprecated: use
+// /accounts/{account_id}/ai-search/namespaces/{namespace}/instances (and
+// descendant paths) instead.
 //
 // Deprecated: deprecated
 func (r *InstanceJobService) Logs(ctx context.Context, id string, jobID string, params InstanceJobLogsParams, opts ...option.RequestOption) (res *[]InstanceJobLogsResponse, err error) {

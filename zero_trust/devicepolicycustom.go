@@ -194,6 +194,10 @@ type DevicePolicyCustomNewParams struct {
 	// List of DNS search suffixes to apply to clients. Suffixes are evaluated in
 	// order. Use an empty array to clear.
 	DNSSearchSuffixes param.Field[[]DevicePolicyCustomNewParamsDNSSearchSuffix] `json:"dns_search_suffixes"`
+	// Determines whether the WARP client can silently reauthenticate the user with
+	// device credentials (Microsoft Entra) instead of prompting for browser-based
+	// reauthentication.
+	EnableDeviceCredentialAuthentication param.Field[bool] `json:"enable_device_credential_authentication"`
 	// Whether the policy will be applied to matching devices.
 	Enabled param.Field[bool] `json:"enabled"`
 	// List of routes excluded in the WARP client's tunnel. Both 'exclude' and
@@ -307,6 +311,9 @@ type DevicePolicyCustomNewParamsGlobalAcceleration struct {
 	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
 	// or masque_endpoints must be provided.
 	WireguardEndpoints param.Field[[]string] `json:"wireguard_endpoints" api:"required"`
+	// Whether WARP users may manually override the automatic Global Acceleration
+	// decision. Defaults to true when not provided.
+	AllowManualOverride param.Field[bool] `json:"allow_manual_override"`
 	// Automatically switch Global Acceleration regions based on device location.
 	// Defaults to false when not provided.
 	Autoswitch param.Field[bool] `json:"autoswitch"`
@@ -463,6 +470,10 @@ type DevicePolicyCustomEditParams struct {
 	// List of DNS search suffixes to apply to clients. Suffixes are evaluated in
 	// order. Use an empty array to clear.
 	DNSSearchSuffixes param.Field[[]DevicePolicyCustomEditParamsDNSSearchSuffix] `json:"dns_search_suffixes"`
+	// Determines whether the WARP client can silently reauthenticate the user with
+	// device credentials (Microsoft Entra) instead of prompting for browser-based
+	// reauthentication.
+	EnableDeviceCredentialAuthentication param.Field[bool] `json:"enable_device_credential_authentication"`
 	// Whether the policy will be applied to matching devices.
 	Enabled param.Field[bool] `json:"enabled"`
 	// List of routes excluded in the WARP client's tunnel. Both 'exclude' and
@@ -575,6 +586,9 @@ type DevicePolicyCustomEditParamsGlobalAcceleration struct {
 	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
 	// or masque_endpoints must be provided.
 	WireguardEndpoints param.Field[[]string] `json:"wireguard_endpoints" api:"required"`
+	// Whether WARP users may manually override the automatic Global Acceleration
+	// decision. Defaults to true when not provided.
+	AllowManualOverride param.Field[bool] `json:"allow_manual_override"`
 	// Automatically switch Global Acceleration regions based on device location.
 	// Defaults to false when not provided.
 	Autoswitch param.Field[bool] `json:"autoswitch"`

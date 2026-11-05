@@ -35,10 +35,10 @@ func TestCasbIntegrationNewWithOptionalParams(t *testing.T) {
 			"admin_email": "bar",
 		}),
 		Name:        cloudflare.F("My Google Workspace"),
+		UseCases:    cloudflare.F([]zero_trust.CasbIntegrationNewParamsUseCase{zero_trust.CasbIntegrationNewParamsUseCaseCasb, zero_trust.CasbIntegrationNewParamsUseCaseCes}),
 		AuthMethod:  cloudflare.F("service_account"),
 		DLPProfiles: cloudflare.F([]string{"e91a2360-da51-4fdf-9711-bcdecd462614"}),
 		Permissions: cloudflare.F([]string{"https://www.googleapis.com/auth/drive.readonly"}),
-		UseCases:    cloudflare.F([]zero_trust.CasbIntegrationNewParamsUseCase{zero_trust.CasbIntegrationNewParamsUseCaseCasb, zero_trust.CasbIntegrationNewParamsUseCaseCes}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

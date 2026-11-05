@@ -36,23 +36,28 @@ func NewPrecursorService(opts ...option.RequestOption) (r *PrecursorService) {
 
 // Updates the Precursor configuration for a zone.
 //
-// `default_mode` sets the zone-level enforcement mode. `enforcement_rules` is the
-// ordered list of rules that override enforcement for matching requests.
+// `mode` controls whether Precursor detection is off, monitoring, or armed.
+// `show_interstitial` controls the zone-level response when armed. `rules` is the
+// ordered list of overrides for matching requests.
 //
 // This is a partial update: only the fields present in the request body are
 // changed.
 //
-//   - Sending an empty array (`[]`) clears all enforcement rules.
-//   - At least one of `default_mode` or `enforcement_rules` must be present; an
+//   - Sending an empty array (`[]`) clears all rules.
+//   - At least one of `mode`, `show_interstitial`, or `rules` must be present; an
 //     empty body (`{}`) is rejected with `400`.
 //   - Rule `id` is read-only (assigned by Cloudflare) and ignored on input.
-//   - Rule `mode` must be `min-friction` or `max-security` (`off` is not a valid
-//     rule mode; use `default_mode` to disable enforcement).
+//   - Rule `show_interstitial` is required and controls the response for requests
+//     that match that rule.
 //   - Rule `expression` is limited to 4000 characters. The limit applies to each
 //     rule individually, not to the combined size of all rules.
 func (r *PrecursorService) Update(ctx context.Context, params PrecursorUpdateParams, opts ...option.RequestOption) (res *PrecursorConfig, err error) {
 	var env PrecursorUpdateResponseEnvelope
+	if params.CloudflareVersion.Present {
+		opts = append(opts, option.WithHeader("Cloudflare-Version", fmt.Sprintf("%v", params.CloudflareVersion)))
+	}
 	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithHeader("Cloudflare-Version", "1.0")}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
@@ -66,16 +71,20 @@ func (r *PrecursorService) Update(ctx context.Context, params PrecursorUpdatePar
 	return res, nil
 }
 
-// Retrieve a zone's Precursor configuration: the zone-level `default_mode` and the
-// ordered list of `enforcement_rules`.
-func (r *PrecursorService) Get(ctx context.Context, query PrecursorGetParams, opts ...option.RequestOption) (res *PrecursorConfig, err error) {
+// Retrieve a zone's Precursor configuration: the detection `mode`, whether to
+// `show_interstitial`, and the ordered list of `rules`.
+func (r *PrecursorService) Get(ctx context.Context, params PrecursorGetParams, opts ...option.RequestOption) (res *PrecursorConfig, err error) {
 	var env PrecursorGetResponseEnvelope
+	if params.CloudflareVersion.Present {
+		opts = append(opts, option.WithHeader("Cloudflare-Version", fmt.Sprintf("%v", params.CloudflareVersion)))
+	}
 	opts = slices.Concat(r.Options, opts)
-	if query.ZoneID.Value == "" {
+	opts = append([]option.RequestOption{option.WithHeader("Cloudflare-Version", "1.0")}, opts...)
+	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("zones/%s/precursor", query.ZoneID)
+	path := fmt.Sprintf("zones/%s/precursor", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -84,90 +93,23 @@ func (r *PrecursorService) Get(ctx context.Context, query PrecursorGetParams, op
 	return res, nil
 }
 
-type EnforcementRule struct {
-	// The filter expression that determines which requests the rule matches.
-	Expression string `json:"expression" api:"required"`
-	// The override mode Precursor applies to requests matching an enforcement rule.
-	// Unlike `default_mode`, this cannot be `off`.
-	Mode EnforcementRuleMode `json:"mode" api:"required"`
-	// The read-only identifier that Cloudflare assigns to the rule.
-	ID string `json:"id"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule is active.
-	Enabled bool                `json:"enabled"`
-	JSON    enforcementRuleJSON `json:"-"`
-}
-
-// enforcementRuleJSON contains the JSON metadata for the struct [EnforcementRule]
-type enforcementRuleJSON struct {
-	Expression  apijson.Field
-	Mode        apijson.Field
-	ID          apijson.Field
-	Description apijson.Field
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EnforcementRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r enforcementRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-// The override mode Precursor applies to requests matching an enforcement rule.
-// Unlike `default_mode`, this cannot be `off`.
-type EnforcementRuleMode string
-
-const (
-	EnforcementRuleModeMinFriction EnforcementRuleMode = "min-friction"
-	EnforcementRuleModeMaxSecurity EnforcementRuleMode = "max-security"
-)
-
-func (r EnforcementRuleMode) IsKnown() bool {
-	switch r {
-	case EnforcementRuleModeMinFriction, EnforcementRuleModeMaxSecurity:
-		return true
-	}
-	return false
-}
-
-type EnforcementRuleParam struct {
-	// The filter expression that determines which requests the rule matches.
-	Expression param.Field[string] `json:"expression" api:"required"`
-	// The override mode Precursor applies to requests matching an enforcement rule.
-	// Unlike `default_mode`, this cannot be `off`.
-	Mode param.Field[EnforcementRuleMode] `json:"mode" api:"required"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule is active.
-	Enabled param.Field[bool] `json:"enabled"`
-}
-
-func (r EnforcementRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type PrecursorConfig struct {
-	// The zone-level Precursor enforcement mode applied to requests that do not match
-	// a more specific enforcement rule.
-	//
-	// Deprecated: deprecated
-	DefaultMode PrecursorConfigDefaultMode `json:"default_mode"`
-	// The ordered list of enforcement rules for the zone.
-	//
-	// Deprecated: deprecated
-	EnforcementRules []EnforcementRule   `json:"enforcement_rules"`
+	// Controls Precursor detection for the zone. `off` disables detection, `monitor`
+	// records detections without affecting bot scores, and `arm` allows detections to
+	// affect bot scores.
+	Mode PrecursorConfigMode `json:"mode"`
+	// The ordered list of Precursor rules for the zone.
+	Rules []PrecursorConfigRule `json:"rules"`
+	// Whether Precursor shows an interstitial when it takes action on a request.
+	ShowInterstitial bool                `json:"show_interstitial"`
 	JSON             precursorConfigJSON `json:"-"`
 }
 
 // precursorConfigJSON contains the JSON metadata for the struct [PrecursorConfig]
 type precursorConfigJSON struct {
-	DefaultMode      apijson.Field
-	EnforcementRules apijson.Field
+	Mode             apijson.Field
+	Rules            apijson.Field
+	ShowInterstitial apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -180,48 +122,112 @@ func (r precursorConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// The zone-level Precursor enforcement mode applied to requests that do not match
-// a more specific enforcement rule.
-type PrecursorConfigDefaultMode string
+// Controls Precursor detection for the zone. `off` disables detection, `monitor`
+// records detections without affecting bot scores, and `arm` allows detections to
+// affect bot scores.
+type PrecursorConfigMode string
 
 const (
-	PrecursorConfigDefaultModeOff         PrecursorConfigDefaultMode = "off"
-	PrecursorConfigDefaultModeMinFriction PrecursorConfigDefaultMode = "min-friction"
-	PrecursorConfigDefaultModeMaxSecurity PrecursorConfigDefaultMode = "max-security"
+	PrecursorConfigModeOff     PrecursorConfigMode = "off"
+	PrecursorConfigModeMonitor PrecursorConfigMode = "monitor"
+	PrecursorConfigModeArm     PrecursorConfigMode = "arm"
 )
 
-func (r PrecursorConfigDefaultMode) IsKnown() bool {
+func (r PrecursorConfigMode) IsKnown() bool {
 	switch r {
-	case PrecursorConfigDefaultModeOff, PrecursorConfigDefaultModeMinFriction, PrecursorConfigDefaultModeMaxSecurity:
+	case PrecursorConfigModeOff, PrecursorConfigModeMonitor, PrecursorConfigModeArm:
 		return true
 	}
 	return false
 }
 
+type PrecursorConfigRule struct {
+	// The filter expression that determines which requests the rule matches.
+	Expression string `json:"expression" api:"required"`
+	// Whether Precursor shows an interstitial when it takes action on a request.
+	ShowInterstitial bool `json:"show_interstitial" api:"required"`
+	// The read-only identifier that Cloudflare assigns to the rule.
+	ID string `json:"id"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule is active.
+	Enabled bool                    `json:"enabled"`
+	JSON    precursorConfigRuleJSON `json:"-"`
+}
+
+// precursorConfigRuleJSON contains the JSON metadata for the struct
+// [PrecursorConfigRule]
+type precursorConfigRuleJSON struct {
+	Expression       apijson.Field
+	ShowInterstitial apijson.Field
+	ID               apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *PrecursorConfigRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r precursorConfigRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 type PrecursorConfigParam struct {
-	// The zone-level Precursor enforcement mode applied to requests that do not match
-	// a more specific enforcement rule.
-	//
-	// Deprecated: deprecated
-	DefaultMode param.Field[PrecursorConfigDefaultMode] `json:"default_mode"`
-	// The ordered list of enforcement rules for the zone.
-	//
-	// Deprecated: deprecated
-	EnforcementRules param.Field[[]EnforcementRuleParam] `json:"enforcement_rules"`
+	// Controls Precursor detection for the zone. `off` disables detection, `monitor`
+	// records detections without affecting bot scores, and `arm` allows detections to
+	// affect bot scores.
+	Mode param.Field[PrecursorConfigMode] `json:"mode"`
+	// The ordered list of Precursor rules for the zone.
+	Rules param.Field[[]PrecursorConfigRuleParam] `json:"rules"`
+	// Whether Precursor shows an interstitial when it takes action on a request.
+	ShowInterstitial param.Field[bool] `json:"show_interstitial"`
 }
 
 func (r PrecursorConfigParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type PrecursorConfigRuleParam struct {
+	// The filter expression that determines which requests the rule matches.
+	Expression param.Field[string] `json:"expression" api:"required"`
+	// Whether Precursor shows an interstitial when it takes action on a request.
+	ShowInterstitial param.Field[bool] `json:"show_interstitial" api:"required"`
+	// An informative description of the rule.
+	Description param.Field[string] `json:"description"`
+	// Whether the rule is active.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r PrecursorConfigRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type PrecursorUpdateParams struct {
 	// Identifier.
-	ZoneID          param.Field[string]  `path:"zone_id" api:"required"`
-	PrecursorConfig PrecursorConfigParam `json:"precursor_config" api:"required"`
+	ZoneID            param.Field[string]                                 `path:"zone_id" api:"required"`
+	PrecursorConfig   PrecursorConfigParam                                `json:"precursor_config" api:"required"`
+	CloudflareVersion param.Field[PrecursorUpdateParamsCloudflareVersion] `header:"Cloudflare-Version" api:"required"`
 }
 
 func (r PrecursorUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.PrecursorConfig)
+}
+
+type PrecursorUpdateParamsCloudflareVersion string
+
+const (
+	PrecursorUpdateParamsCloudflareVersion1_0 PrecursorUpdateParamsCloudflareVersion = "1.0"
+)
+
+func (r PrecursorUpdateParamsCloudflareVersion) IsKnown() bool {
+	switch r {
+	case PrecursorUpdateParamsCloudflareVersion1_0:
+		return true
+	}
+	return false
 }
 
 type PrecursorUpdateResponseEnvelope struct {
@@ -365,7 +371,22 @@ func (r PrecursorUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type PrecursorGetParams struct {
 	// Identifier.
-	ZoneID param.Field[string] `path:"zone_id" api:"required"`
+	ZoneID            param.Field[string]                              `path:"zone_id" api:"required"`
+	CloudflareVersion param.Field[PrecursorGetParamsCloudflareVersion] `header:"Cloudflare-Version" api:"required"`
+}
+
+type PrecursorGetParamsCloudflareVersion string
+
+const (
+	PrecursorGetParamsCloudflareVersion1_0 PrecursorGetParamsCloudflareVersion = "1.0"
+)
+
+func (r PrecursorGetParamsCloudflareVersion) IsKnown() bool {
+	switch r {
+	case PrecursorGetParamsCloudflareVersion1_0:
+		return true
+	}
+	return false
 }
 
 type PrecursorGetResponseEnvelope struct {

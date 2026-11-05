@@ -182,7 +182,7 @@ type MemberPoliciesPermissionGroupsMeta = shared.MemberPoliciesPermissionGroupsM
 // This is an alias to an internal type.
 type MemberPoliciesResourceGroup = shared.MemberPoliciesResourceGroup
 
-// A scope is a combination of scope objects which provides additional context.
+// The scope associated to the resource group
 //
 // This is an alias to an internal type.
 type MemberPoliciesResourceGroupsScope = shared.MemberPoliciesResourceGroupsScope

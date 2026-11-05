@@ -3976,6 +3976,7 @@ type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscovery struct {
 	McpServerCard          ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryMcpServerCard          `json:"mcpServerCard" api:"required"`
 	OAuthDiscovery         ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthDiscovery         `json:"oauthDiscovery" api:"required"`
 	OAuthProtectedResource ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthProtectedResource `json:"oauthProtectedResource" api:"required"`
+	PersonalAgentProtocol  ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocol  `json:"personalAgentProtocol" api:"required"`
 	WebMcp                 ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryWebMcp                 `json:"webMcp" api:"required"`
 	JSON                   scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryJSON                   `json:"-"`
 }
@@ -3992,6 +3993,7 @@ type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryJSON struct {
 	McpServerCard          apijson.Field
 	OAuthDiscovery         apijson.Field
 	OAuthProtectedResource apijson.Field
+	PersonalAgentProtocol  apijson.Field
 	WebMcp                 apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
@@ -5354,6 +5356,175 @@ func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthProtecte
 }
 
 func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryOAuthProtectedResourceMessageRefJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocol struct {
+	Status     string                                                                                    `json:"status" api:"required"`
+	Details    interface{}                                                                               `json:"details"`
+	DurationMs float64                                                                                   `json:"durationMs"`
+	Evidence   []ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidence `json:"evidence"`
+	Message    string                                                                                    `json:"message"`
+	MessageRef ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolMessageRef `json:"messageRef"`
+	JSON       scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolJSON       `json:"-"`
+}
+
+// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolJSON
+// contains the JSON metadata for the struct
+// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocol]
+type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolJSON struct {
+	Status      apijson.Field
+	Details     apijson.Field
+	DurationMs  apijson.Field
+	Evidence    apijson.Field
+	Message     apijson.Field
+	MessageRef  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocol) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidence struct {
+	Action   string                                                                                          `json:"action" api:"required"`
+	Label    string                                                                                          `json:"label" api:"required"`
+	Finding  ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceFinding  `json:"finding"`
+	Request  ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceRequest  `json:"request"`
+	Response ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceResponse `json:"response"`
+	JSON     scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceJSON     `json:"-"`
+}
+
+// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceJSON
+// contains the JSON metadata for the struct
+// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidence]
+type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceJSON struct {
+	Action      apijson.Field
+	Label       apijson.Field
+	Finding     apijson.Field
+	Request     apijson.Field
+	Response    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidence) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceFinding struct {
+	Outcome string                                                                                             `json:"outcome" api:"required"`
+	Summary string                                                                                             `json:"summary" api:"required"`
+	JSON    scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceFindingJSON `json:"-"`
+}
+
+// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceFindingJSON
+// contains the JSON metadata for the struct
+// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceFinding]
+type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceFindingJSON struct {
+	Outcome     apijson.Field
+	Summary     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceFinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceFindingJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceRequest struct {
+	Method  string                                                                                             `json:"method" api:"required"`
+	URL     string                                                                                             `json:"url" api:"required"`
+	Headers interface{}                                                                                        `json:"headers"`
+	JSON    scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceRequestJSON `json:"-"`
+}
+
+// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceRequestJSON
+// contains the JSON metadata for the struct
+// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceRequest]
+type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceRequestJSON struct {
+	Method      apijson.Field
+	URL         apijson.Field
+	Headers     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceRequestJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceResponse struct {
+	Status       int64                                                                                               `json:"status" api:"required"`
+	StatusText   string                                                                                              `json:"statusText" api:"required"`
+	BodyPreview  string                                                                                              `json:"bodyPreview"`
+	BodySize     int64                                                                                               `json:"bodySize"`
+	Headers      interface{}                                                                                         `json:"headers"`
+	RedirectedTo string                                                                                              `json:"redirectedTo"`
+	JSON         scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceResponseJSON `json:"-"`
+}
+
+// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceResponseJSON
+// contains the JSON metadata for the struct
+// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceResponse]
+type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceResponseJSON struct {
+	Status       apijson.Field
+	StatusText   apijson.Field
+	BodyPreview  apijson.Field
+	BodySize     apijson.Field
+	Headers      apijson.Field
+	RedirectedTo apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolEvidenceResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolMessageRef struct {
+	// Stable, translatable message code.
+	Code   string                                                                                        `json:"code" api:"required"`
+	Params interface{}                                                                                   `json:"params"`
+	JSON   scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolMessageRefJSON `json:"-"`
+}
+
+// scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolMessageRefJSON
+// contains the JSON metadata for the struct
+// [ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolMessageRef]
+type scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolMessageRefJSON struct {
+	Code        apijson.Field
+	Params      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolMessageRef) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseMetaProcessorsAgentReadinessChecksDiscoveryPersonalAgentProtocolMessageRefJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -6771,206 +6942,151 @@ func (r ScanNewParams) MarshalJSON() (data []byte, err error) {
 type ScanNewParamsCountry string
 
 const (
-	ScanNewParamsCountryAf ScanNewParamsCountry = "AF"
+	ScanNewParamsCountryAe ScanNewParamsCountry = "AE"
 	ScanNewParamsCountryAl ScanNewParamsCountry = "AL"
-	ScanNewParamsCountryDz ScanNewParamsCountry = "DZ"
-	ScanNewParamsCountryAD ScanNewParamsCountry = "AD"
-	ScanNewParamsCountryAo ScanNewParamsCountry = "AO"
-	ScanNewParamsCountryAg ScanNewParamsCountry = "AG"
-	ScanNewParamsCountryAr ScanNewParamsCountry = "AR"
 	ScanNewParamsCountryAm ScanNewParamsCountry = "AM"
-	ScanNewParamsCountryAu ScanNewParamsCountry = "AU"
+	ScanNewParamsCountryAo ScanNewParamsCountry = "AO"
+	ScanNewParamsCountryAr ScanNewParamsCountry = "AR"
 	ScanNewParamsCountryAt ScanNewParamsCountry = "AT"
+	ScanNewParamsCountryAu ScanNewParamsCountry = "AU"
 	ScanNewParamsCountryAz ScanNewParamsCountry = "AZ"
-	ScanNewParamsCountryBh ScanNewParamsCountry = "BH"
-	ScanNewParamsCountryBd ScanNewParamsCountry = "BD"
 	ScanNewParamsCountryBb ScanNewParamsCountry = "BB"
-	ScanNewParamsCountryBy ScanNewParamsCountry = "BY"
+	ScanNewParamsCountryBd ScanNewParamsCountry = "BD"
 	ScanNewParamsCountryBe ScanNewParamsCountry = "BE"
-	ScanNewParamsCountryBz ScanNewParamsCountry = "BZ"
-	ScanNewParamsCountryBj ScanNewParamsCountry = "BJ"
-	ScanNewParamsCountryBm ScanNewParamsCountry = "BM"
-	ScanNewParamsCountryBt ScanNewParamsCountry = "BT"
-	ScanNewParamsCountryBo ScanNewParamsCountry = "BO"
-	ScanNewParamsCountryBa ScanNewParamsCountry = "BA"
-	ScanNewParamsCountryBw ScanNewParamsCountry = "BW"
-	ScanNewParamsCountryBr ScanNewParamsCountry = "BR"
-	ScanNewParamsCountryBn ScanNewParamsCountry = "BN"
-	ScanNewParamsCountryBg ScanNewParamsCountry = "BG"
 	ScanNewParamsCountryBf ScanNewParamsCountry = "BF"
-	ScanNewParamsCountryBi ScanNewParamsCountry = "BI"
-	ScanNewParamsCountryKh ScanNewParamsCountry = "KH"
-	ScanNewParamsCountryCm ScanNewParamsCountry = "CM"
+	ScanNewParamsCountryBg ScanNewParamsCountry = "BG"
+	ScanNewParamsCountryBh ScanNewParamsCountry = "BH"
+	ScanNewParamsCountryBn ScanNewParamsCountry = "BN"
+	ScanNewParamsCountryBo ScanNewParamsCountry = "BO"
+	ScanNewParamsCountryBr ScanNewParamsCountry = "BR"
+	ScanNewParamsCountryBt ScanNewParamsCountry = "BT"
+	ScanNewParamsCountryBw ScanNewParamsCountry = "BW"
+	ScanNewParamsCountryBy ScanNewParamsCountry = "BY"
 	ScanNewParamsCountryCA ScanNewParamsCountry = "CA"
-	ScanNewParamsCountryCv ScanNewParamsCountry = "CV"
-	ScanNewParamsCountryKy ScanNewParamsCountry = "KY"
-	ScanNewParamsCountryCf ScanNewParamsCountry = "CF"
-	ScanNewParamsCountryTd ScanNewParamsCountry = "TD"
-	ScanNewParamsCountryCl ScanNewParamsCountry = "CL"
-	ScanNewParamsCountryCn ScanNewParamsCountry = "CN"
-	ScanNewParamsCountryCo ScanNewParamsCountry = "CO"
-	ScanNewParamsCountryKm ScanNewParamsCountry = "KM"
-	ScanNewParamsCountryCg ScanNewParamsCountry = "CG"
-	ScanNewParamsCountryCr ScanNewParamsCountry = "CR"
+	ScanNewParamsCountryCd ScanNewParamsCountry = "CD"
+	ScanNewParamsCountryCh ScanNewParamsCountry = "CH"
 	ScanNewParamsCountryCi ScanNewParamsCountry = "CI"
-	ScanNewParamsCountryHr ScanNewParamsCountry = "HR"
-	ScanNewParamsCountryCu ScanNewParamsCountry = "CU"
+	ScanNewParamsCountryCl ScanNewParamsCountry = "CL"
+	ScanNewParamsCountryCm ScanNewParamsCountry = "CM"
+	ScanNewParamsCountryCo ScanNewParamsCountry = "CO"
+	ScanNewParamsCountryCr ScanNewParamsCountry = "CR"
+	ScanNewParamsCountryCw ScanNewParamsCountry = "CW"
 	ScanNewParamsCountryCy ScanNewParamsCountry = "CY"
 	ScanNewParamsCountryCz ScanNewParamsCountry = "CZ"
-	ScanNewParamsCountryCd ScanNewParamsCountry = "CD"
-	ScanNewParamsCountryDK ScanNewParamsCountry = "DK"
-	ScanNewParamsCountryDj ScanNewParamsCountry = "DJ"
-	ScanNewParamsCountryDm ScanNewParamsCountry = "DM"
-	ScanNewParamsCountryDo ScanNewParamsCountry = "DO"
-	ScanNewParamsCountryEc ScanNewParamsCountry = "EC"
-	ScanNewParamsCountryEg ScanNewParamsCountry = "EG"
-	ScanNewParamsCountrySv ScanNewParamsCountry = "SV"
-	ScanNewParamsCountryGq ScanNewParamsCountry = "GQ"
-	ScanNewParamsCountryEr ScanNewParamsCountry = "ER"
-	ScanNewParamsCountryEe ScanNewParamsCountry = "EE"
-	ScanNewParamsCountrySz ScanNewParamsCountry = "SZ"
-	ScanNewParamsCountryEt ScanNewParamsCountry = "ET"
-	ScanNewParamsCountryFj ScanNewParamsCountry = "FJ"
-	ScanNewParamsCountryFi ScanNewParamsCountry = "FI"
-	ScanNewParamsCountryFr ScanNewParamsCountry = "FR"
-	ScanNewParamsCountryGa ScanNewParamsCountry = "GA"
-	ScanNewParamsCountryGe ScanNewParamsCountry = "GE"
 	ScanNewParamsCountryDe ScanNewParamsCountry = "DE"
+	ScanNewParamsCountryDj ScanNewParamsCountry = "DJ"
+	ScanNewParamsCountryDK ScanNewParamsCountry = "DK"
+	ScanNewParamsCountryDo ScanNewParamsCountry = "DO"
+	ScanNewParamsCountryDz ScanNewParamsCountry = "DZ"
+	ScanNewParamsCountryEc ScanNewParamsCountry = "EC"
+	ScanNewParamsCountryEe ScanNewParamsCountry = "EE"
+	ScanNewParamsCountryEg ScanNewParamsCountry = "EG"
+	ScanNewParamsCountryEs ScanNewParamsCountry = "ES"
+	ScanNewParamsCountryEt ScanNewParamsCountry = "ET"
+	ScanNewParamsCountryFi ScanNewParamsCountry = "FI"
+	ScanNewParamsCountryFj ScanNewParamsCountry = "FJ"
+	ScanNewParamsCountryFr ScanNewParamsCountry = "FR"
+	ScanNewParamsCountryGB ScanNewParamsCountry = "GB"
+	ScanNewParamsCountryGd ScanNewParamsCountry = "GD"
+	ScanNewParamsCountryGe ScanNewParamsCountry = "GE"
 	ScanNewParamsCountryGh ScanNewParamsCountry = "GH"
 	ScanNewParamsCountryGr ScanNewParamsCountry = "GR"
-	ScanNewParamsCountryGl ScanNewParamsCountry = "GL"
-	ScanNewParamsCountryGd ScanNewParamsCountry = "GD"
 	ScanNewParamsCountryGt ScanNewParamsCountry = "GT"
-	ScanNewParamsCountryGn ScanNewParamsCountry = "GN"
-	ScanNewParamsCountryGw ScanNewParamsCountry = "GW"
+	ScanNewParamsCountryGu ScanNewParamsCountry = "GU"
 	ScanNewParamsCountryGy ScanNewParamsCountry = "GY"
-	ScanNewParamsCountryHt ScanNewParamsCountry = "HT"
+	ScanNewParamsCountryHk ScanNewParamsCountry = "HK"
 	ScanNewParamsCountryHn ScanNewParamsCountry = "HN"
+	ScanNewParamsCountryHr ScanNewParamsCountry = "HR"
+	ScanNewParamsCountryHt ScanNewParamsCountry = "HT"
 	ScanNewParamsCountryHu ScanNewParamsCountry = "HU"
-	ScanNewParamsCountryIs ScanNewParamsCountry = "IS"
-	ScanNewParamsCountryIn ScanNewParamsCountry = "IN"
 	ScanNewParamsCountryID ScanNewParamsCountry = "ID"
-	ScanNewParamsCountryIr ScanNewParamsCountry = "IR"
-	ScanNewParamsCountryIq ScanNewParamsCountry = "IQ"
 	ScanNewParamsCountryIe ScanNewParamsCountry = "IE"
 	ScanNewParamsCountryIl ScanNewParamsCountry = "IL"
+	ScanNewParamsCountryIn ScanNewParamsCountry = "IN"
+	ScanNewParamsCountryIq ScanNewParamsCountry = "IQ"
+	ScanNewParamsCountryIs ScanNewParamsCountry = "IS"
 	ScanNewParamsCountryIt ScanNewParamsCountry = "IT"
 	ScanNewParamsCountryJm ScanNewParamsCountry = "JM"
-	ScanNewParamsCountryJp ScanNewParamsCountry = "JP"
 	ScanNewParamsCountryJo ScanNewParamsCountry = "JO"
-	ScanNewParamsCountryKz ScanNewParamsCountry = "KZ"
+	ScanNewParamsCountryJp ScanNewParamsCountry = "JP"
 	ScanNewParamsCountryKe ScanNewParamsCountry = "KE"
-	ScanNewParamsCountryKi ScanNewParamsCountry = "KI"
-	ScanNewParamsCountryKw ScanNewParamsCountry = "KW"
 	ScanNewParamsCountryKg ScanNewParamsCountry = "KG"
+	ScanNewParamsCountryKh ScanNewParamsCountry = "KH"
+	ScanNewParamsCountryKr ScanNewParamsCountry = "KR"
+	ScanNewParamsCountryKw ScanNewParamsCountry = "KW"
+	ScanNewParamsCountryKz ScanNewParamsCountry = "KZ"
 	ScanNewParamsCountryLa ScanNewParamsCountry = "LA"
-	ScanNewParamsCountryLv ScanNewParamsCountry = "LV"
 	ScanNewParamsCountryLB ScanNewParamsCountry = "LB"
-	ScanNewParamsCountryLs ScanNewParamsCountry = "LS"
+	ScanNewParamsCountryLk ScanNewParamsCountry = "LK"
 	ScanNewParamsCountryLr ScanNewParamsCountry = "LR"
-	ScanNewParamsCountryLy ScanNewParamsCountry = "LY"
-	ScanNewParamsCountryLi ScanNewParamsCountry = "LI"
 	ScanNewParamsCountryLt ScanNewParamsCountry = "LT"
 	ScanNewParamsCountryLu ScanNewParamsCountry = "LU"
-	ScanNewParamsCountryMo ScanNewParamsCountry = "MO"
-	ScanNewParamsCountryMg ScanNewParamsCountry = "MG"
-	ScanNewParamsCountryMw ScanNewParamsCountry = "MW"
-	ScanNewParamsCountryMy ScanNewParamsCountry = "MY"
-	ScanNewParamsCountryMv ScanNewParamsCountry = "MV"
-	ScanNewParamsCountryMl ScanNewParamsCountry = "ML"
-	ScanNewParamsCountryMr ScanNewParamsCountry = "MR"
-	ScanNewParamsCountryMu ScanNewParamsCountry = "MU"
-	ScanNewParamsCountryMX ScanNewParamsCountry = "MX"
-	ScanNewParamsCountryFm ScanNewParamsCountry = "FM"
-	ScanNewParamsCountryMd ScanNewParamsCountry = "MD"
-	ScanNewParamsCountryMc ScanNewParamsCountry = "MC"
-	ScanNewParamsCountryMn ScanNewParamsCountry = "MN"
-	ScanNewParamsCountryMs ScanNewParamsCountry = "MS"
+	ScanNewParamsCountryLv ScanNewParamsCountry = "LV"
 	ScanNewParamsCountryMa ScanNewParamsCountry = "MA"
-	ScanNewParamsCountryMz ScanNewParamsCountry = "MZ"
-	ScanNewParamsCountryMm ScanNewParamsCountry = "MM"
-	ScanNewParamsCountryNa ScanNewParamsCountry = "NA"
-	ScanNewParamsCountryNr ScanNewParamsCountry = "NR"
-	ScanNewParamsCountryNp ScanNewParamsCountry = "NP"
-	ScanNewParamsCountryNl ScanNewParamsCountry = "NL"
-	ScanNewParamsCountryNz ScanNewParamsCountry = "NZ"
-	ScanNewParamsCountryNi ScanNewParamsCountry = "NI"
-	ScanNewParamsCountryNe ScanNewParamsCountry = "NE"
-	ScanNewParamsCountryNg ScanNewParamsCountry = "NG"
-	ScanNewParamsCountryKp ScanNewParamsCountry = "KP"
+	ScanNewParamsCountryMd ScanNewParamsCountry = "MD"
+	ScanNewParamsCountryMg ScanNewParamsCountry = "MG"
 	ScanNewParamsCountryMk ScanNewParamsCountry = "MK"
+	ScanNewParamsCountryMm ScanNewParamsCountry = "MM"
+	ScanNewParamsCountryMn ScanNewParamsCountry = "MN"
+	ScanNewParamsCountryMo ScanNewParamsCountry = "MO"
+	ScanNewParamsCountryMt ScanNewParamsCountry = "MT"
+	ScanNewParamsCountryMu ScanNewParamsCountry = "MU"
+	ScanNewParamsCountryMv ScanNewParamsCountry = "MV"
+	ScanNewParamsCountryMw ScanNewParamsCountry = "MW"
+	ScanNewParamsCountryMX ScanNewParamsCountry = "MX"
+	ScanNewParamsCountryMy ScanNewParamsCountry = "MY"
+	ScanNewParamsCountryMz ScanNewParamsCountry = "MZ"
+	ScanNewParamsCountryNa ScanNewParamsCountry = "NA"
+	ScanNewParamsCountryNc ScanNewParamsCountry = "NC"
+	ScanNewParamsCountryNg ScanNewParamsCountry = "NG"
+	ScanNewParamsCountryNl ScanNewParamsCountry = "NL"
 	ScanNewParamsCountryNo ScanNewParamsCountry = "NO"
+	ScanNewParamsCountryNp ScanNewParamsCountry = "NP"
+	ScanNewParamsCountryNz ScanNewParamsCountry = "NZ"
 	ScanNewParamsCountryOm ScanNewParamsCountry = "OM"
-	ScanNewParamsCountryPk ScanNewParamsCountry = "PK"
-	ScanNewParamsCountryPs ScanNewParamsCountry = "PS"
 	ScanNewParamsCountryPa ScanNewParamsCountry = "PA"
-	ScanNewParamsCountryPg ScanNewParamsCountry = "PG"
-	ScanNewParamsCountryPy ScanNewParamsCountry = "PY"
 	ScanNewParamsCountryPe ScanNewParamsCountry = "PE"
+	ScanNewParamsCountryPf ScanNewParamsCountry = "PF"
 	ScanNewParamsCountryPh ScanNewParamsCountry = "PH"
+	ScanNewParamsCountryPk ScanNewParamsCountry = "PK"
 	ScanNewParamsCountryPl ScanNewParamsCountry = "PL"
+	ScanNewParamsCountryPr ScanNewParamsCountry = "PR"
+	ScanNewParamsCountryPs ScanNewParamsCountry = "PS"
 	ScanNewParamsCountryPt ScanNewParamsCountry = "PT"
+	ScanNewParamsCountryPy ScanNewParamsCountry = "PY"
 	ScanNewParamsCountryQa ScanNewParamsCountry = "QA"
+	ScanNewParamsCountryRe ScanNewParamsCountry = "RE"
 	ScanNewParamsCountryRo ScanNewParamsCountry = "RO"
+	ScanNewParamsCountryRs ScanNewParamsCountry = "RS"
 	ScanNewParamsCountryRu ScanNewParamsCountry = "RU"
 	ScanNewParamsCountryRw ScanNewParamsCountry = "RW"
-	ScanNewParamsCountrySh ScanNewParamsCountry = "SH"
-	ScanNewParamsCountryKn ScanNewParamsCountry = "KN"
-	ScanNewParamsCountryLc ScanNewParamsCountry = "LC"
-	ScanNewParamsCountryVc ScanNewParamsCountry = "VC"
-	ScanNewParamsCountryWs ScanNewParamsCountry = "WS"
-	ScanNewParamsCountrySm ScanNewParamsCountry = "SM"
-	ScanNewParamsCountrySt ScanNewParamsCountry = "ST"
 	ScanNewParamsCountrySa ScanNewParamsCountry = "SA"
-	ScanNewParamsCountrySn ScanNewParamsCountry = "SN"
-	ScanNewParamsCountryRs ScanNewParamsCountry = "RS"
-	ScanNewParamsCountrySc ScanNewParamsCountry = "SC"
-	ScanNewParamsCountrySl ScanNewParamsCountry = "SL"
-	ScanNewParamsCountrySk ScanNewParamsCountry = "SK"
-	ScanNewParamsCountrySi ScanNewParamsCountry = "SI"
-	ScanNewParamsCountrySb ScanNewParamsCountry = "SB"
-	ScanNewParamsCountrySo ScanNewParamsCountry = "SO"
-	ScanNewParamsCountryZa ScanNewParamsCountry = "ZA"
-	ScanNewParamsCountryKr ScanNewParamsCountry = "KR"
-	ScanNewParamsCountrySS ScanNewParamsCountry = "SS"
-	ScanNewParamsCountryEs ScanNewParamsCountry = "ES"
-	ScanNewParamsCountryLk ScanNewParamsCountry = "LK"
-	ScanNewParamsCountrySd ScanNewParamsCountry = "SD"
-	ScanNewParamsCountrySr ScanNewParamsCountry = "SR"
 	ScanNewParamsCountrySe ScanNewParamsCountry = "SE"
-	ScanNewParamsCountryCh ScanNewParamsCountry = "CH"
-	ScanNewParamsCountrySy ScanNewParamsCountry = "SY"
-	ScanNewParamsCountryTw ScanNewParamsCountry = "TW"
-	ScanNewParamsCountryTj ScanNewParamsCountry = "TJ"
-	ScanNewParamsCountryTz ScanNewParamsCountry = "TZ"
+	ScanNewParamsCountrySg ScanNewParamsCountry = "SG"
+	ScanNewParamsCountrySi ScanNewParamsCountry = "SI"
+	ScanNewParamsCountrySk ScanNewParamsCountry = "SK"
+	ScanNewParamsCountrySn ScanNewParamsCountry = "SN"
+	ScanNewParamsCountrySr ScanNewParamsCountry = "SR"
 	ScanNewParamsCountryTh ScanNewParamsCountry = "TH"
-	ScanNewParamsCountryBs ScanNewParamsCountry = "BS"
-	ScanNewParamsCountryGm ScanNewParamsCountry = "GM"
-	ScanNewParamsCountryTl ScanNewParamsCountry = "TL"
-	ScanNewParamsCountryTg ScanNewParamsCountry = "TG"
-	ScanNewParamsCountryTo ScanNewParamsCountry = "TO"
-	ScanNewParamsCountryTt ScanNewParamsCountry = "TT"
+	ScanNewParamsCountryTj ScanNewParamsCountry = "TJ"
 	ScanNewParamsCountryTn ScanNewParamsCountry = "TN"
 	ScanNewParamsCountryTr ScanNewParamsCountry = "TR"
-	ScanNewParamsCountryTm ScanNewParamsCountry = "TM"
-	ScanNewParamsCountryUg ScanNewParamsCountry = "UG"
+	ScanNewParamsCountryTt ScanNewParamsCountry = "TT"
+	ScanNewParamsCountryTw ScanNewParamsCountry = "TW"
+	ScanNewParamsCountryTz ScanNewParamsCountry = "TZ"
 	ScanNewParamsCountryUA ScanNewParamsCountry = "UA"
-	ScanNewParamsCountryAe ScanNewParamsCountry = "AE"
-	ScanNewParamsCountryGB ScanNewParamsCountry = "GB"
+	ScanNewParamsCountryUg ScanNewParamsCountry = "UG"
 	ScanNewParamsCountryUs ScanNewParamsCountry = "US"
-	ScanNewParamsCountryUy ScanNewParamsCountry = "UY"
 	ScanNewParamsCountryUz ScanNewParamsCountry = "UZ"
-	ScanNewParamsCountryVu ScanNewParamsCountry = "VU"
-	ScanNewParamsCountryVe ScanNewParamsCountry = "VE"
 	ScanNewParamsCountryVn ScanNewParamsCountry = "VN"
-	ScanNewParamsCountryYe ScanNewParamsCountry = "YE"
+	ScanNewParamsCountryZa ScanNewParamsCountry = "ZA"
 	ScanNewParamsCountryZm ScanNewParamsCountry = "ZM"
 	ScanNewParamsCountryZw ScanNewParamsCountry = "ZW"
 )
 
 func (r ScanNewParamsCountry) IsKnown() bool {
 	switch r {
-	case ScanNewParamsCountryAf, ScanNewParamsCountryAl, ScanNewParamsCountryDz, ScanNewParamsCountryAD, ScanNewParamsCountryAo, ScanNewParamsCountryAg, ScanNewParamsCountryAr, ScanNewParamsCountryAm, ScanNewParamsCountryAu, ScanNewParamsCountryAt, ScanNewParamsCountryAz, ScanNewParamsCountryBh, ScanNewParamsCountryBd, ScanNewParamsCountryBb, ScanNewParamsCountryBy, ScanNewParamsCountryBe, ScanNewParamsCountryBz, ScanNewParamsCountryBj, ScanNewParamsCountryBm, ScanNewParamsCountryBt, ScanNewParamsCountryBo, ScanNewParamsCountryBa, ScanNewParamsCountryBw, ScanNewParamsCountryBr, ScanNewParamsCountryBn, ScanNewParamsCountryBg, ScanNewParamsCountryBf, ScanNewParamsCountryBi, ScanNewParamsCountryKh, ScanNewParamsCountryCm, ScanNewParamsCountryCA, ScanNewParamsCountryCv, ScanNewParamsCountryKy, ScanNewParamsCountryCf, ScanNewParamsCountryTd, ScanNewParamsCountryCl, ScanNewParamsCountryCn, ScanNewParamsCountryCo, ScanNewParamsCountryKm, ScanNewParamsCountryCg, ScanNewParamsCountryCr, ScanNewParamsCountryCi, ScanNewParamsCountryHr, ScanNewParamsCountryCu, ScanNewParamsCountryCy, ScanNewParamsCountryCz, ScanNewParamsCountryCd, ScanNewParamsCountryDK, ScanNewParamsCountryDj, ScanNewParamsCountryDm, ScanNewParamsCountryDo, ScanNewParamsCountryEc, ScanNewParamsCountryEg, ScanNewParamsCountrySv, ScanNewParamsCountryGq, ScanNewParamsCountryEr, ScanNewParamsCountryEe, ScanNewParamsCountrySz, ScanNewParamsCountryEt, ScanNewParamsCountryFj, ScanNewParamsCountryFi, ScanNewParamsCountryFr, ScanNewParamsCountryGa, ScanNewParamsCountryGe, ScanNewParamsCountryDe, ScanNewParamsCountryGh, ScanNewParamsCountryGr, ScanNewParamsCountryGl, ScanNewParamsCountryGd, ScanNewParamsCountryGt, ScanNewParamsCountryGn, ScanNewParamsCountryGw, ScanNewParamsCountryGy, ScanNewParamsCountryHt, ScanNewParamsCountryHn, ScanNewParamsCountryHu, ScanNewParamsCountryIs, ScanNewParamsCountryIn, ScanNewParamsCountryID, ScanNewParamsCountryIr, ScanNewParamsCountryIq, ScanNewParamsCountryIe, ScanNewParamsCountryIl, ScanNewParamsCountryIt, ScanNewParamsCountryJm, ScanNewParamsCountryJp, ScanNewParamsCountryJo, ScanNewParamsCountryKz, ScanNewParamsCountryKe, ScanNewParamsCountryKi, ScanNewParamsCountryKw, ScanNewParamsCountryKg, ScanNewParamsCountryLa, ScanNewParamsCountryLv, ScanNewParamsCountryLB, ScanNewParamsCountryLs, ScanNewParamsCountryLr, ScanNewParamsCountryLy, ScanNewParamsCountryLi, ScanNewParamsCountryLt, ScanNewParamsCountryLu, ScanNewParamsCountryMo, ScanNewParamsCountryMg, ScanNewParamsCountryMw, ScanNewParamsCountryMy, ScanNewParamsCountryMv, ScanNewParamsCountryMl, ScanNewParamsCountryMr, ScanNewParamsCountryMu, ScanNewParamsCountryMX, ScanNewParamsCountryFm, ScanNewParamsCountryMd, ScanNewParamsCountryMc, ScanNewParamsCountryMn, ScanNewParamsCountryMs, ScanNewParamsCountryMa, ScanNewParamsCountryMz, ScanNewParamsCountryMm, ScanNewParamsCountryNa, ScanNewParamsCountryNr, ScanNewParamsCountryNp, ScanNewParamsCountryNl, ScanNewParamsCountryNz, ScanNewParamsCountryNi, ScanNewParamsCountryNe, ScanNewParamsCountryNg, ScanNewParamsCountryKp, ScanNewParamsCountryMk, ScanNewParamsCountryNo, ScanNewParamsCountryOm, ScanNewParamsCountryPk, ScanNewParamsCountryPs, ScanNewParamsCountryPa, ScanNewParamsCountryPg, ScanNewParamsCountryPy, ScanNewParamsCountryPe, ScanNewParamsCountryPh, ScanNewParamsCountryPl, ScanNewParamsCountryPt, ScanNewParamsCountryQa, ScanNewParamsCountryRo, ScanNewParamsCountryRu, ScanNewParamsCountryRw, ScanNewParamsCountrySh, ScanNewParamsCountryKn, ScanNewParamsCountryLc, ScanNewParamsCountryVc, ScanNewParamsCountryWs, ScanNewParamsCountrySm, ScanNewParamsCountrySt, ScanNewParamsCountrySa, ScanNewParamsCountrySn, ScanNewParamsCountryRs, ScanNewParamsCountrySc, ScanNewParamsCountrySl, ScanNewParamsCountrySk, ScanNewParamsCountrySi, ScanNewParamsCountrySb, ScanNewParamsCountrySo, ScanNewParamsCountryZa, ScanNewParamsCountryKr, ScanNewParamsCountrySS, ScanNewParamsCountryEs, ScanNewParamsCountryLk, ScanNewParamsCountrySd, ScanNewParamsCountrySr, ScanNewParamsCountrySe, ScanNewParamsCountryCh, ScanNewParamsCountrySy, ScanNewParamsCountryTw, ScanNewParamsCountryTj, ScanNewParamsCountryTz, ScanNewParamsCountryTh, ScanNewParamsCountryBs, ScanNewParamsCountryGm, ScanNewParamsCountryTl, ScanNewParamsCountryTg, ScanNewParamsCountryTo, ScanNewParamsCountryTt, ScanNewParamsCountryTn, ScanNewParamsCountryTr, ScanNewParamsCountryTm, ScanNewParamsCountryUg, ScanNewParamsCountryUA, ScanNewParamsCountryAe, ScanNewParamsCountryGB, ScanNewParamsCountryUs, ScanNewParamsCountryUy, ScanNewParamsCountryUz, ScanNewParamsCountryVu, ScanNewParamsCountryVe, ScanNewParamsCountryVn, ScanNewParamsCountryYe, ScanNewParamsCountryZm, ScanNewParamsCountryZw:
+	case ScanNewParamsCountryAe, ScanNewParamsCountryAl, ScanNewParamsCountryAm, ScanNewParamsCountryAo, ScanNewParamsCountryAr, ScanNewParamsCountryAt, ScanNewParamsCountryAu, ScanNewParamsCountryAz, ScanNewParamsCountryBb, ScanNewParamsCountryBd, ScanNewParamsCountryBe, ScanNewParamsCountryBf, ScanNewParamsCountryBg, ScanNewParamsCountryBh, ScanNewParamsCountryBn, ScanNewParamsCountryBo, ScanNewParamsCountryBr, ScanNewParamsCountryBt, ScanNewParamsCountryBw, ScanNewParamsCountryBy, ScanNewParamsCountryCA, ScanNewParamsCountryCd, ScanNewParamsCountryCh, ScanNewParamsCountryCi, ScanNewParamsCountryCl, ScanNewParamsCountryCm, ScanNewParamsCountryCo, ScanNewParamsCountryCr, ScanNewParamsCountryCw, ScanNewParamsCountryCy, ScanNewParamsCountryCz, ScanNewParamsCountryDe, ScanNewParamsCountryDj, ScanNewParamsCountryDK, ScanNewParamsCountryDo, ScanNewParamsCountryDz, ScanNewParamsCountryEc, ScanNewParamsCountryEe, ScanNewParamsCountryEg, ScanNewParamsCountryEs, ScanNewParamsCountryEt, ScanNewParamsCountryFi, ScanNewParamsCountryFj, ScanNewParamsCountryFr, ScanNewParamsCountryGB, ScanNewParamsCountryGd, ScanNewParamsCountryGe, ScanNewParamsCountryGh, ScanNewParamsCountryGr, ScanNewParamsCountryGt, ScanNewParamsCountryGu, ScanNewParamsCountryGy, ScanNewParamsCountryHk, ScanNewParamsCountryHn, ScanNewParamsCountryHr, ScanNewParamsCountryHt, ScanNewParamsCountryHu, ScanNewParamsCountryID, ScanNewParamsCountryIe, ScanNewParamsCountryIl, ScanNewParamsCountryIn, ScanNewParamsCountryIq, ScanNewParamsCountryIs, ScanNewParamsCountryIt, ScanNewParamsCountryJm, ScanNewParamsCountryJo, ScanNewParamsCountryJp, ScanNewParamsCountryKe, ScanNewParamsCountryKg, ScanNewParamsCountryKh, ScanNewParamsCountryKr, ScanNewParamsCountryKw, ScanNewParamsCountryKz, ScanNewParamsCountryLa, ScanNewParamsCountryLB, ScanNewParamsCountryLk, ScanNewParamsCountryLr, ScanNewParamsCountryLt, ScanNewParamsCountryLu, ScanNewParamsCountryLv, ScanNewParamsCountryMa, ScanNewParamsCountryMd, ScanNewParamsCountryMg, ScanNewParamsCountryMk, ScanNewParamsCountryMm, ScanNewParamsCountryMn, ScanNewParamsCountryMo, ScanNewParamsCountryMt, ScanNewParamsCountryMu, ScanNewParamsCountryMv, ScanNewParamsCountryMw, ScanNewParamsCountryMX, ScanNewParamsCountryMy, ScanNewParamsCountryMz, ScanNewParamsCountryNa, ScanNewParamsCountryNc, ScanNewParamsCountryNg, ScanNewParamsCountryNl, ScanNewParamsCountryNo, ScanNewParamsCountryNp, ScanNewParamsCountryNz, ScanNewParamsCountryOm, ScanNewParamsCountryPa, ScanNewParamsCountryPe, ScanNewParamsCountryPf, ScanNewParamsCountryPh, ScanNewParamsCountryPk, ScanNewParamsCountryPl, ScanNewParamsCountryPr, ScanNewParamsCountryPs, ScanNewParamsCountryPt, ScanNewParamsCountryPy, ScanNewParamsCountryQa, ScanNewParamsCountryRe, ScanNewParamsCountryRo, ScanNewParamsCountryRs, ScanNewParamsCountryRu, ScanNewParamsCountryRw, ScanNewParamsCountrySa, ScanNewParamsCountrySe, ScanNewParamsCountrySg, ScanNewParamsCountrySi, ScanNewParamsCountrySk, ScanNewParamsCountrySn, ScanNewParamsCountrySr, ScanNewParamsCountryTh, ScanNewParamsCountryTj, ScanNewParamsCountryTn, ScanNewParamsCountryTr, ScanNewParamsCountryTt, ScanNewParamsCountryTw, ScanNewParamsCountryTz, ScanNewParamsCountryUA, ScanNewParamsCountryUg, ScanNewParamsCountryUs, ScanNewParamsCountryUz, ScanNewParamsCountryVn, ScanNewParamsCountryZa, ScanNewParamsCountryZm, ScanNewParamsCountryZw:
 		return true
 	}
 	return false

@@ -168,6 +168,9 @@ type InsightListResponseIssue struct {
 	ResolveText        string                            `json:"resolve_text"`
 	Severity           InsightListResponseIssuesSeverity `json:"severity"`
 	Since              time.Time                         `json:"since" format:"date-time"`
+	// Who generated the insight. `cloudflare` for Cloudflare-generated insights,
+	// otherwise the partner.
+	Source InsightListResponseIssuesSource `json:"source"`
 	// The current status of the insight.
 	Status    InsightListResponseIssuesStatus `json:"status"`
 	Subject   string                          `json:"subject"`
@@ -191,6 +194,7 @@ type insightListResponseIssueJSON struct {
 	ResolveText        apijson.Field
 	Severity           apijson.Field
 	Since              apijson.Field
+	Source             apijson.Field
 	Status             apijson.Field
 	Subject            apijson.Field
 	Timestamp          apijson.Field
@@ -242,6 +246,23 @@ const (
 func (r InsightListResponseIssuesSeverity) IsKnown() bool {
 	switch r {
 	case InsightListResponseIssuesSeverityLow, InsightListResponseIssuesSeverityModerate, InsightListResponseIssuesSeverityCritical:
+		return true
+	}
+	return false
+}
+
+// Who generated the insight. `cloudflare` for Cloudflare-generated insights,
+// otherwise the partner.
+type InsightListResponseIssuesSource string
+
+const (
+	InsightListResponseIssuesSourceCloudflare InsightListResponseIssuesSource = "cloudflare"
+	InsightListResponseIssuesSourceRiskrecon  InsightListResponseIssuesSource = "riskrecon"
+)
+
+func (r InsightListResponseIssuesSource) IsKnown() bool {
+	switch r {
+	case InsightListResponseIssuesSourceCloudflare, InsightListResponseIssuesSourceRiskrecon:
 		return true
 	}
 	return false
@@ -449,6 +470,8 @@ func (r InsightListParams) URLQuery() (v url.Values) {
 	})
 }
 
+// Who generated the insight. `cloudflare` for Cloudflare-generated insights,
+// otherwise the partner.
 type InsightListParamsSource string
 
 const (

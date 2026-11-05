@@ -48,8 +48,9 @@ func NewInstanceService(opts ...option.RequestOption) (r *InstanceService) {
 // infers r2; r2 sources must name an existing bucket. A missing or blank source
 // without a type creates a managed upload-only instance.
 //
-// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
-// (and descendant paths) instead.
+// Deprecated: use
+// /accounts/{account_id}/ai-search/namespaces/{namespace}/instances (and
+// descendant paths) instead.
 //
 // Deprecated: deprecated
 func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opts ...option.RequestOption) (res *InstanceNewResponse, err error) {
@@ -68,10 +69,11 @@ func (r *InstanceService) New(ctx context.Context, params InstanceNewParams, opt
 	return res, nil
 }
 
-// Update the configuration of an AI Search instance.
+// Updates the configuration of an AI Search instance.
 //
-// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
-// (and descendant paths) instead.
+// Deprecated: use
+// /accounts/{account_id}/ai-search/namespaces/{namespace}/instances (and
+// descendant paths) instead.
 //
 // Deprecated: deprecated
 func (r *InstanceService) Update(ctx context.Context, id string, params InstanceUpdateParams, opts ...option.RequestOption) (res *InstanceUpdateResponse, err error) {
@@ -94,10 +96,11 @@ func (r *InstanceService) Update(ctx context.Context, id string, params Instance
 	return res, nil
 }
 
-// List all AI Search instances in the account.
+// Lists all AI Search instances in the account.
 //
-// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
-// (and descendant paths) instead.
+// Deprecated: use
+// /accounts/{account_id}/ai-search/namespaces/{namespace}/instances (and
+// descendant paths) instead.
 //
 // Deprecated: deprecated
 func (r *InstanceService) List(ctx context.Context, params InstanceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InstanceListResponse], err error) {
@@ -121,20 +124,22 @@ func (r *InstanceService) List(ctx context.Context, params InstanceListParams, o
 	return res, nil
 }
 
-// List all AI Search instances in the account.
+// Lists all AI Search instances in the account.
 //
-// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
-// (and descendant paths) instead.
+// Deprecated: use
+// /accounts/{account_id}/ai-search/namespaces/{namespace}/instances (and
+// descendant paths) instead.
 //
 // Deprecated: deprecated
 func (r *InstanceService) ListAutoPaging(ctx context.Context, params InstanceListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[InstanceListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Permanently delete an AI Search instance and all its indexed data.
+// Deletes an AI Search instance and all its indexed data permanently.
 //
-// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
-// (and descendant paths) instead.
+// Deprecated: use
+// /accounts/{account_id}/ai-search/namespaces/{namespace}/instances (and
+// descendant paths) instead.
 //
 // Deprecated: deprecated
 func (r *InstanceService) Delete(ctx context.Context, id string, body InstanceDeleteParams, opts ...option.RequestOption) (res *InstanceDeleteResponse, err error) {
@@ -160,8 +165,9 @@ func (r *InstanceService) Delete(ctx context.Context, id string, body InstanceDe
 // Performs a chat completion request against an AI Search instance, using indexed
 // content as context for generating responses.
 //
-// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
-// (and descendant paths) instead.
+// Deprecated: use
+// /accounts/{account_id}/ai-search/namespaces/{namespace}/instances (and
+// descendant paths) instead.
 //
 // Deprecated: deprecated
 func (r *InstanceService) ChatCompletions(ctx context.Context, id string, params InstanceChatCompletionsParams, opts ...option.RequestOption) (res *InstanceChatCompletionsResponse, err error) {
@@ -181,8 +187,9 @@ func (r *InstanceService) ChatCompletions(ctx context.Context, id string, params
 
 // Retrieve the configuration and status of an AI Search instance.
 //
-// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
-// (and descendant paths) instead.
+// Deprecated: use
+// /accounts/{account_id}/ai-search/namespaces/{namespace}/instances (and
+// descendant paths) instead.
 //
 // Deprecated: deprecated
 func (r *InstanceService) Read(ctx context.Context, id string, query InstanceReadParams, opts ...option.RequestOption) (res *InstanceReadResponse, err error) {
@@ -208,8 +215,9 @@ func (r *InstanceService) Read(ctx context.Context, id string, query InstanceRea
 // Executes a semantic search query against an AI Search instance to find relevant
 // indexed content.
 //
-// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
-// (and descendant paths) instead.
+// Deprecated: use
+// /accounts/{account_id}/ai-search/namespaces/{namespace}/instances (and
+// descendant paths) instead.
 //
 // Deprecated: deprecated
 func (r *InstanceService) Search(ctx context.Context, id string, params InstanceSearchParams, opts ...option.RequestOption) (res *InstanceSearchResponse, err error) {
@@ -234,8 +242,9 @@ func (r *InstanceService) Search(ctx context.Context, id string, params Instance
 
 // Retrieve usage and indexing statistics for an AI Search instance.
 //
-// Deprecated: use /accounts/{account_id}/ai-search/namespaces/{name}/instances
-// (and descendant paths) instead.
+// Deprecated: use
+// /accounts/{account_id}/ai-search/namespaces/{namespace}/instances (and
+// descendant paths) instead.
 //
 // Deprecated: deprecated
 func (r *InstanceService) Stats(ctx context.Context, id string, query InstanceStatsParams, opts ...option.RequestOption) (res *InstanceStatsResponse, err error) {
@@ -286,8 +295,8 @@ type InstanceNewResponse struct {
 	//
 	// Deprecated: deprecated
 	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
-	// Controls which storage backends are used during indexing. Defaults to vector and
-	// keyword indexing for new instances.
+	// Controls which storage backends indexing uses. Defaults to vector and keyword
+	// indexing for new instances. When set, both vector and keyword are required.
 	IndexMethod          InstanceNewResponseIndexMethod          `json:"index_method"`
 	IndexingOptions      InstanceNewResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
 	LastActivity         time.Time                               `json:"last_activity" api:"nullable" format:"date-time"`
@@ -303,14 +312,16 @@ type InstanceNewResponse struct {
 	RetrievalOptions     InstanceNewResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
 	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
 	// Completions API. An empty string uses the configured or default model.
-	RewriteModel   string                          `json:"rewrite_model" api:"nullable"`
-	RewriteQuery   bool                            `json:"rewrite_query"`
+	RewriteModel string `json:"rewrite_model" api:"nullable"`
+	RewriteQuery bool   `json:"rewrite_query"`
+	// Minimum similarity score a chunk must reach to be returned. Defaults to 0.4.
 	ScoreThreshold float64                         `json:"score_threshold"`
 	Source         string                          `json:"source" api:"nullable"`
 	SourceParams   InstanceNewResponseSourceParams `json:"source_params" api:"nullable"`
 	Status         string                          `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Defaults to 86400 (24h).
 	SyncInterval InstanceNewResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                          `json:"token_id" format:"uuid"`
 	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
@@ -472,8 +483,8 @@ func (r InstanceNewResponseFusionMethod) IsKnown() bool {
 	return false
 }
 
-// Controls which storage backends are used during indexing. Defaults to vector and
-// keyword indexing for new instances.
+// Controls which storage backends indexing uses. Defaults to vector and keyword
+// indexing for new instances. When set, both vector and keyword are required.
 type InstanceNewResponseIndexMethod struct {
 	// Enable keyword (BM25) storage backend.
 	Keyword bool `json:"keyword" api:"required"`
@@ -656,7 +667,7 @@ func (r instanceNewResponsePublicEndpointParamsJSON) RawJSON() string {
 }
 
 type InstanceNewResponsePublicEndpointParamsChatCompletionsEndpoint struct {
-	// Disable chat completions endpoint for this public endpoint
+	// Disable chat completions endpoint for this public endpoint.
 	Disabled bool                                                               `json:"disabled"`
 	JSON     instanceNewResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
 }
@@ -680,7 +691,7 @@ func (r instanceNewResponsePublicEndpointParamsChatCompletionsEndpointJSON) RawJ
 
 type InstanceNewResponsePublicEndpointParamsMcp struct {
 	Description string `json:"description"`
-	// Disable MCP endpoint for this public endpoint
+	// Disable MCP endpoint for this public endpoint.
 	Disabled bool                                           `json:"disabled"`
 	JSON     instanceNewResponsePublicEndpointParamsMcpJSON `json:"-"`
 }
@@ -743,7 +754,7 @@ func (r InstanceNewResponsePublicEndpointParamsRateLimitTechnique) IsKnown() boo
 }
 
 type InstanceNewResponsePublicEndpointParamsSearchEndpoint struct {
-	// Disable search endpoint for this public endpoint
+	// Disable search endpoint for this public endpoint.
 	Disabled bool                                                      `json:"disabled"`
 	JSON     instanceNewResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
 }
@@ -770,11 +781,11 @@ type InstanceNewResponseRetrievalOptions struct {
 	// numeric/datetime fields and 'exists' for text/boolean fields. Fields must match
 	// 'timestamp' or a defined custom_metadata field.
 	BoostBy []InstanceNewResponseRetrievalOptionsBoostBy `json:"boost_by"`
-	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// Controls which documents become candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. When omitted on an
-	// update, the existing stored value is preserved; when never set, search falls
-	// back to 'and'.
+	// containing at least one term and ranks results according to BM25 relevance. When
+	// omitted on an update, the existing stored value stays unchanged; when never set,
+	// search falls back to 'and'.
 	KeywordMatchMode InstanceNewResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceNewResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -848,11 +859,11 @@ func (r InstanceNewResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// Controls which documents become candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. When omitted on an
-// update, the existing stored value is preserved; when never set, search falls
-// back to 'and'.
+// containing at least one term and ranks results according to BM25 relevance. When
+// omitted on an update, the existing stored value stays unchanged; when never set,
+// search falls back to 'and'.
 type InstanceNewResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -871,12 +882,12 @@ func (r InstanceNewResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 type InstanceNewResponseSourceParams struct {
 	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced). Most accounts are limited to 10
+	// /admin/users and /admin/settings/advanced). Most accounts have a limit of 10
 	// rules; contact support to raise it.
 	ExcludeItems []string `json:"exclude_items"`
 	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact
+	// /blog/post and /blog/2024/post). Most accounts have a limit of 10 rules; contact
 	// support to raise it.
 	IncludeItems   []string                                  `json:"include_items"`
 	Prefix         string                                    `json:"prefix"`
@@ -906,12 +917,13 @@ func (r instanceNewResponseSourceParamsJSON) RawJSON() string {
 }
 
 type InstanceNewResponseSourceParamsWebCrawler struct {
-	// Options for parse_type 'discover', where Browser Run discovers URLs by link
+	// Options for parse_type 'discover', where Browser Run discovers URLs through link
 	// following and sitemaps. Ignored for 'sitemap'.
 	DiscoverOptions InstanceNewResponseSourceParamsWebCrawlerDiscoverOptions `json:"discover_options"`
 	ParseOptions    InstanceNewResponseSourceParamsWebCrawlerParseOptions    `json:"parse_options"`
-	// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
-	// recursively and requires the source to be a Verified zone on this account.
+	// How the crawler finds URLs. 'sitemap' reads XML sitemaps; 'discover' follows
+	// links recursively and requires the source to belong to a Verified zone on this
+	// account.
 	ParseType InstanceNewResponseSourceParamsWebCrawlerParseType `json:"parse_type"`
 	JSON      instanceNewResponseSourceParamsWebCrawlerJSON      `json:"-"`
 }
@@ -934,13 +946,13 @@ func (r instanceNewResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
 }
 
-// Options for parse_type 'discover', where Browser Run discovers URLs by link
+// Options for parse_type 'discover', where Browser Run discovers URLs through link
 // following and sitemaps. Ignored for 'sitemap'.
 type InstanceNewResponseSourceParamsWebCrawlerDiscoverOptions struct {
 	// Maximum link-follow depth from the seed URL.
 	Depth float64 `json:"depth"`
-	// Follow links that point outside the source domain. Must stay `false` — discover
-	// crawls are restricted to the zone you own.
+	// Follow links that point outside the source domain. Must stay `false` because
+	// discover crawls only cover the zone you own.
 	IncludeExternalLinks bool `json:"include_external_links"`
 	// Follow links to subdomains of the source host.
 	IncludeSubdomains bool `json:"include_subdomains"`
@@ -997,12 +1009,13 @@ func (r InstanceNewResponseSourceParamsWebCrawlerDiscoverOptionsSource) IsKnown(
 type InstanceNewResponseSourceParamsWebCrawlerParseOptions struct {
 	// List of path-to-selector mappings for extracting specific content from crawled
 	// pages. Each entry pairs a URL glob pattern with a CSS selector. The first
-	// matching path wins. Only the matched HTML fragment is stored and indexed. Omit
-	// the field to disable content selection — empty arrays are rejected.
+	// matching path wins. The crawler stores and indexes only the matched HTML
+	// fragment. Omit the field to disable content selection; the API rejects empty
+	// arrays.
 	ContentSelector []InstanceNewResponseSourceParamsWebCrawlerParseOptionsContentSelector `json:"content_selector"`
-	// Up to 5 custom HTTP headers sent with each crawl request. Names must be RFC-7230
-	// token characters (no spaces, colons, or control characters); values must be
-	// HTAB + printable ASCII (no CR/LF).
+	// Up to 5 custom HTTP headers sent with each crawl request. Names must use
+	// RFC-7230 token characters, excluding spaces, colons, and control characters.
+	// Values must use HTAB and printable ASCII only, excluding CR and LF.
 	IncludeHeaders map[string]string `json:"include_headers"`
 	IncludeImages  bool              `json:"include_images"`
 	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
@@ -1036,9 +1049,9 @@ type InstanceNewResponseSourceParamsWebCrawlerParseOptionsContentSelector struct
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
 	Path string `json:"path" api:"required"`
-	// CSS selector to extract content from pages matching the path pattern. Must not
-	// contain disallowed characters (;, `, $, {, }, \). Must target a single element;
-	// if multiple elements match, the selector is ignored and the full page is used.
+	// CSS selector to extract content from pages matching the path pattern. Disallowed
+	// characters: ;, `, $, {, }, \. Must target a single element; if multiple elements
+	// match, the crawler ignores the selector and uses the full page.
 	Selector string                                                                   `json:"selector" api:"required"`
 	JSON     instanceNewResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
@@ -1061,8 +1074,9 @@ func (r instanceNewResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON
 	return r.raw
 }
 
-// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
-// recursively and requires the source to be a Verified zone on this account.
+// How the crawler finds URLs. 'sitemap' reads XML sitemaps; 'discover' follows
+// links recursively and requires the source to belong to a Verified zone on this
+// account.
 type InstanceNewResponseSourceParamsWebCrawlerParseType string
 
 const (
@@ -1080,6 +1094,7 @@ func (r InstanceNewResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 // (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Defaults to 86400 (24h).
 type InstanceNewResponseSyncInterval float64
 
 const (
@@ -1147,8 +1162,8 @@ type InstanceUpdateResponse struct {
 	//
 	// Deprecated: deprecated
 	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
-	// Controls which storage backends are used during indexing. Defaults to vector and
-	// keyword indexing for new instances.
+	// Controls which storage backends indexing uses. Defaults to vector and keyword
+	// indexing for new instances. When set, both vector and keyword are required.
 	IndexMethod          InstanceUpdateResponseIndexMethod          `json:"index_method"`
 	IndexingOptions      InstanceUpdateResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
 	LastActivity         time.Time                                  `json:"last_activity" api:"nullable" format:"date-time"`
@@ -1164,14 +1179,16 @@ type InstanceUpdateResponse struct {
 	RetrievalOptions     InstanceUpdateResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
 	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
 	// Completions API. An empty string uses the configured or default model.
-	RewriteModel   string                             `json:"rewrite_model" api:"nullable"`
-	RewriteQuery   bool                               `json:"rewrite_query"`
+	RewriteModel string `json:"rewrite_model" api:"nullable"`
+	RewriteQuery bool   `json:"rewrite_query"`
+	// Minimum similarity score a chunk must reach to be returned. Defaults to 0.4.
 	ScoreThreshold float64                            `json:"score_threshold"`
 	Source         string                             `json:"source" api:"nullable"`
 	SourceParams   InstanceUpdateResponseSourceParams `json:"source_params" api:"nullable"`
 	Status         string                             `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Defaults to 86400 (24h).
 	SyncInterval InstanceUpdateResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                             `json:"token_id" format:"uuid"`
 	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
@@ -1333,8 +1350,8 @@ func (r InstanceUpdateResponseFusionMethod) IsKnown() bool {
 	return false
 }
 
-// Controls which storage backends are used during indexing. Defaults to vector and
-// keyword indexing for new instances.
+// Controls which storage backends indexing uses. Defaults to vector and keyword
+// indexing for new instances. When set, both vector and keyword are required.
 type InstanceUpdateResponseIndexMethod struct {
 	// Enable keyword (BM25) storage backend.
 	Keyword bool `json:"keyword" api:"required"`
@@ -1517,7 +1534,7 @@ func (r instanceUpdateResponsePublicEndpointParamsJSON) RawJSON() string {
 }
 
 type InstanceUpdateResponsePublicEndpointParamsChatCompletionsEndpoint struct {
-	// Disable chat completions endpoint for this public endpoint
+	// Disable chat completions endpoint for this public endpoint.
 	Disabled bool                                                                  `json:"disabled"`
 	JSON     instanceUpdateResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
 }
@@ -1541,7 +1558,7 @@ func (r instanceUpdateResponsePublicEndpointParamsChatCompletionsEndpointJSON) R
 
 type InstanceUpdateResponsePublicEndpointParamsMcp struct {
 	Description string `json:"description"`
-	// Disable MCP endpoint for this public endpoint
+	// Disable MCP endpoint for this public endpoint.
 	Disabled bool                                              `json:"disabled"`
 	JSON     instanceUpdateResponsePublicEndpointParamsMcpJSON `json:"-"`
 }
@@ -1604,7 +1621,7 @@ func (r InstanceUpdateResponsePublicEndpointParamsRateLimitTechnique) IsKnown() 
 }
 
 type InstanceUpdateResponsePublicEndpointParamsSearchEndpoint struct {
-	// Disable search endpoint for this public endpoint
+	// Disable search endpoint for this public endpoint.
 	Disabled bool                                                         `json:"disabled"`
 	JSON     instanceUpdateResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
 }
@@ -1632,11 +1649,11 @@ type InstanceUpdateResponseRetrievalOptions struct {
 	// numeric/datetime fields and 'exists' for text/boolean fields. Fields must match
 	// 'timestamp' or a defined custom_metadata field.
 	BoostBy []InstanceUpdateResponseRetrievalOptionsBoostBy `json:"boost_by"`
-	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// Controls which documents become candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. When omitted on an
-	// update, the existing stored value is preserved; when never set, search falls
-	// back to 'and'.
+	// containing at least one term and ranks results according to BM25 relevance. When
+	// omitted on an update, the existing stored value stays unchanged; when never set,
+	// search falls back to 'and'.
 	KeywordMatchMode InstanceUpdateResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceUpdateResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -1710,11 +1727,11 @@ func (r InstanceUpdateResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// Controls which documents become candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. When omitted on an
-// update, the existing stored value is preserved; when never set, search falls
-// back to 'and'.
+// containing at least one term and ranks results according to BM25 relevance. When
+// omitted on an update, the existing stored value stays unchanged; when never set,
+// search falls back to 'and'.
 type InstanceUpdateResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -1733,12 +1750,12 @@ func (r InstanceUpdateResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 type InstanceUpdateResponseSourceParams struct {
 	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced). Most accounts are limited to 10
+	// /admin/users and /admin/settings/advanced). Most accounts have a limit of 10
 	// rules; contact support to raise it.
 	ExcludeItems []string `json:"exclude_items"`
 	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact
+	// /blog/post and /blog/2024/post). Most accounts have a limit of 10 rules; contact
 	// support to raise it.
 	IncludeItems   []string                                     `json:"include_items"`
 	Prefix         string                                       `json:"prefix"`
@@ -1768,12 +1785,13 @@ func (r instanceUpdateResponseSourceParamsJSON) RawJSON() string {
 }
 
 type InstanceUpdateResponseSourceParamsWebCrawler struct {
-	// Options for parse_type 'discover', where Browser Run discovers URLs by link
+	// Options for parse_type 'discover', where Browser Run discovers URLs through link
 	// following and sitemaps. Ignored for 'sitemap'.
 	DiscoverOptions InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptions `json:"discover_options"`
 	ParseOptions    InstanceUpdateResponseSourceParamsWebCrawlerParseOptions    `json:"parse_options"`
-	// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
-	// recursively and requires the source to be a Verified zone on this account.
+	// How the crawler finds URLs. 'sitemap' reads XML sitemaps; 'discover' follows
+	// links recursively and requires the source to belong to a Verified zone on this
+	// account.
 	ParseType InstanceUpdateResponseSourceParamsWebCrawlerParseType `json:"parse_type"`
 	JSON      instanceUpdateResponseSourceParamsWebCrawlerJSON      `json:"-"`
 }
@@ -1796,13 +1814,13 @@ func (r instanceUpdateResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
 }
 
-// Options for parse_type 'discover', where Browser Run discovers URLs by link
+// Options for parse_type 'discover', where Browser Run discovers URLs through link
 // following and sitemaps. Ignored for 'sitemap'.
 type InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptions struct {
 	// Maximum link-follow depth from the seed URL.
 	Depth float64 `json:"depth"`
-	// Follow links that point outside the source domain. Must stay `false` — discover
-	// crawls are restricted to the zone you own.
+	// Follow links that point outside the source domain. Must stay `false` because
+	// discover crawls only cover the zone you own.
 	IncludeExternalLinks bool `json:"include_external_links"`
 	// Follow links to subdomains of the source host.
 	IncludeSubdomains bool `json:"include_subdomains"`
@@ -1859,12 +1877,13 @@ func (r InstanceUpdateResponseSourceParamsWebCrawlerDiscoverOptionsSource) IsKno
 type InstanceUpdateResponseSourceParamsWebCrawlerParseOptions struct {
 	// List of path-to-selector mappings for extracting specific content from crawled
 	// pages. Each entry pairs a URL glob pattern with a CSS selector. The first
-	// matching path wins. Only the matched HTML fragment is stored and indexed. Omit
-	// the field to disable content selection — empty arrays are rejected.
+	// matching path wins. The crawler stores and indexes only the matched HTML
+	// fragment. Omit the field to disable content selection; the API rejects empty
+	// arrays.
 	ContentSelector []InstanceUpdateResponseSourceParamsWebCrawlerParseOptionsContentSelector `json:"content_selector"`
-	// Up to 5 custom HTTP headers sent with each crawl request. Names must be RFC-7230
-	// token characters (no spaces, colons, or control characters); values must be
-	// HTAB + printable ASCII (no CR/LF).
+	// Up to 5 custom HTTP headers sent with each crawl request. Names must use
+	// RFC-7230 token characters, excluding spaces, colons, and control characters.
+	// Values must use HTAB and printable ASCII only, excluding CR and LF.
 	IncludeHeaders map[string]string `json:"include_headers"`
 	IncludeImages  bool              `json:"include_images"`
 	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
@@ -1899,9 +1918,9 @@ type InstanceUpdateResponseSourceParamsWebCrawlerParseOptionsContentSelector str
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
 	Path string `json:"path" api:"required"`
-	// CSS selector to extract content from pages matching the path pattern. Must not
-	// contain disallowed characters (;, `, $, {, }, \). Must target a single element;
-	// if multiple elements match, the selector is ignored and the full page is used.
+	// CSS selector to extract content from pages matching the path pattern. Disallowed
+	// characters: ;, `, $, {, }, \. Must target a single element; if multiple elements
+	// match, the crawler ignores the selector and uses the full page.
 	Selector string                                                                      `json:"selector" api:"required"`
 	JSON     instanceUpdateResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
@@ -1924,8 +1943,9 @@ func (r instanceUpdateResponseSourceParamsWebCrawlerParseOptionsContentSelectorJ
 	return r.raw
 }
 
-// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
-// recursively and requires the source to be a Verified zone on this account.
+// How the crawler finds URLs. 'sitemap' reads XML sitemaps; 'discover' follows
+// links recursively and requires the source to belong to a Verified zone on this
+// account.
 type InstanceUpdateResponseSourceParamsWebCrawlerParseType string
 
 const (
@@ -1943,6 +1963,7 @@ func (r InstanceUpdateResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 // (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Defaults to 86400 (24h).
 type InstanceUpdateResponseSyncInterval float64
 
 const (
@@ -2619,7 +2640,7 @@ type InstanceListResponseSourceParamsWebCrawlerDiscoverOptions struct {
 	Depth                float64 `json:"depth"`
 	IncludeExternalLinks bool    `json:"include_external_links"`
 	IncludeSubdomains    bool    `json:"include_subdomains"`
-	// Maximum number of pages to crawl. New values are capped at 100000; instances
+	// Maximum number of pages to crawl. New values have a maximum of 100000; instances
 	// configured before that cap may report a higher stored value, which the crawler
 	// clamps at run time.
 	Limit       float64                                                         `json:"limit"`
@@ -2801,8 +2822,8 @@ type InstanceDeleteResponse struct {
 	//
 	// Deprecated: deprecated
 	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
-	// Controls which storage backends are used during indexing. Defaults to vector and
-	// keyword indexing for new instances.
+	// Controls which storage backends indexing uses. Defaults to vector and keyword
+	// indexing for new instances. When set, both vector and keyword are required.
 	IndexMethod          InstanceDeleteResponseIndexMethod          `json:"index_method"`
 	IndexingOptions      InstanceDeleteResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
 	LastActivity         time.Time                                  `json:"last_activity" api:"nullable" format:"date-time"`
@@ -2818,14 +2839,16 @@ type InstanceDeleteResponse struct {
 	RetrievalOptions     InstanceDeleteResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
 	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
 	// Completions API. An empty string uses the configured or default model.
-	RewriteModel   string                             `json:"rewrite_model" api:"nullable"`
-	RewriteQuery   bool                               `json:"rewrite_query"`
+	RewriteModel string `json:"rewrite_model" api:"nullable"`
+	RewriteQuery bool   `json:"rewrite_query"`
+	// Minimum similarity score a chunk must reach to be returned. Defaults to 0.4.
 	ScoreThreshold float64                            `json:"score_threshold"`
 	Source         string                             `json:"source" api:"nullable"`
 	SourceParams   InstanceDeleteResponseSourceParams `json:"source_params" api:"nullable"`
 	Status         string                             `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Defaults to 86400 (24h).
 	SyncInterval InstanceDeleteResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                             `json:"token_id" format:"uuid"`
 	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
@@ -2987,8 +3010,8 @@ func (r InstanceDeleteResponseFusionMethod) IsKnown() bool {
 	return false
 }
 
-// Controls which storage backends are used during indexing. Defaults to vector and
-// keyword indexing for new instances.
+// Controls which storage backends indexing uses. Defaults to vector and keyword
+// indexing for new instances. When set, both vector and keyword are required.
 type InstanceDeleteResponseIndexMethod struct {
 	// Enable keyword (BM25) storage backend.
 	Keyword bool `json:"keyword" api:"required"`
@@ -3171,7 +3194,7 @@ func (r instanceDeleteResponsePublicEndpointParamsJSON) RawJSON() string {
 }
 
 type InstanceDeleteResponsePublicEndpointParamsChatCompletionsEndpoint struct {
-	// Disable chat completions endpoint for this public endpoint
+	// Disable chat completions endpoint for this public endpoint.
 	Disabled bool                                                                  `json:"disabled"`
 	JSON     instanceDeleteResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
 }
@@ -3195,7 +3218,7 @@ func (r instanceDeleteResponsePublicEndpointParamsChatCompletionsEndpointJSON) R
 
 type InstanceDeleteResponsePublicEndpointParamsMcp struct {
 	Description string `json:"description"`
-	// Disable MCP endpoint for this public endpoint
+	// Disable MCP endpoint for this public endpoint.
 	Disabled bool                                              `json:"disabled"`
 	JSON     instanceDeleteResponsePublicEndpointParamsMcpJSON `json:"-"`
 }
@@ -3258,7 +3281,7 @@ func (r InstanceDeleteResponsePublicEndpointParamsRateLimitTechnique) IsKnown() 
 }
 
 type InstanceDeleteResponsePublicEndpointParamsSearchEndpoint struct {
-	// Disable search endpoint for this public endpoint
+	// Disable search endpoint for this public endpoint.
 	Disabled bool                                                         `json:"disabled"`
 	JSON     instanceDeleteResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
 }
@@ -3286,11 +3309,11 @@ type InstanceDeleteResponseRetrievalOptions struct {
 	// numeric/datetime fields and 'exists' for text/boolean fields. Fields must match
 	// 'timestamp' or a defined custom_metadata field.
 	BoostBy []InstanceDeleteResponseRetrievalOptionsBoostBy `json:"boost_by"`
-	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// Controls which documents become candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. When omitted on an
-	// update, the existing stored value is preserved; when never set, search falls
-	// back to 'and'.
+	// containing at least one term and ranks results according to BM25 relevance. When
+	// omitted on an update, the existing stored value stays unchanged; when never set,
+	// search falls back to 'and'.
 	KeywordMatchMode InstanceDeleteResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceDeleteResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -3364,11 +3387,11 @@ func (r InstanceDeleteResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// Controls which documents become candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. When omitted on an
-// update, the existing stored value is preserved; when never set, search falls
-// back to 'and'.
+// containing at least one term and ranks results according to BM25 relevance. When
+// omitted on an update, the existing stored value stays unchanged; when never set,
+// search falls back to 'and'.
 type InstanceDeleteResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -3387,12 +3410,12 @@ func (r InstanceDeleteResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 type InstanceDeleteResponseSourceParams struct {
 	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced). Most accounts are limited to 10
+	// /admin/users and /admin/settings/advanced). Most accounts have a limit of 10
 	// rules; contact support to raise it.
 	ExcludeItems []string `json:"exclude_items"`
 	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact
+	// /blog/post and /blog/2024/post). Most accounts have a limit of 10 rules; contact
 	// support to raise it.
 	IncludeItems   []string                                     `json:"include_items"`
 	Prefix         string                                       `json:"prefix"`
@@ -3422,12 +3445,13 @@ func (r instanceDeleteResponseSourceParamsJSON) RawJSON() string {
 }
 
 type InstanceDeleteResponseSourceParamsWebCrawler struct {
-	// Options for parse_type 'discover', where Browser Run discovers URLs by link
+	// Options for parse_type 'discover', where Browser Run discovers URLs through link
 	// following and sitemaps. Ignored for 'sitemap'.
 	DiscoverOptions InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptions `json:"discover_options"`
 	ParseOptions    InstanceDeleteResponseSourceParamsWebCrawlerParseOptions    `json:"parse_options"`
-	// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
-	// recursively and requires the source to be a Verified zone on this account.
+	// How the crawler finds URLs. 'sitemap' reads XML sitemaps; 'discover' follows
+	// links recursively and requires the source to belong to a Verified zone on this
+	// account.
 	ParseType InstanceDeleteResponseSourceParamsWebCrawlerParseType `json:"parse_type"`
 	JSON      instanceDeleteResponseSourceParamsWebCrawlerJSON      `json:"-"`
 }
@@ -3450,13 +3474,13 @@ func (r instanceDeleteResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
 }
 
-// Options for parse_type 'discover', where Browser Run discovers URLs by link
+// Options for parse_type 'discover', where Browser Run discovers URLs through link
 // following and sitemaps. Ignored for 'sitemap'.
 type InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptions struct {
 	// Maximum link-follow depth from the seed URL.
 	Depth float64 `json:"depth"`
-	// Follow links that point outside the source domain. Must stay `false` — discover
-	// crawls are restricted to the zone you own.
+	// Follow links that point outside the source domain. Must stay `false` because
+	// discover crawls only cover the zone you own.
 	IncludeExternalLinks bool `json:"include_external_links"`
 	// Follow links to subdomains of the source host.
 	IncludeSubdomains bool `json:"include_subdomains"`
@@ -3513,12 +3537,13 @@ func (r InstanceDeleteResponseSourceParamsWebCrawlerDiscoverOptionsSource) IsKno
 type InstanceDeleteResponseSourceParamsWebCrawlerParseOptions struct {
 	// List of path-to-selector mappings for extracting specific content from crawled
 	// pages. Each entry pairs a URL glob pattern with a CSS selector. The first
-	// matching path wins. Only the matched HTML fragment is stored and indexed. Omit
-	// the field to disable content selection — empty arrays are rejected.
+	// matching path wins. The crawler stores and indexes only the matched HTML
+	// fragment. Omit the field to disable content selection; the API rejects empty
+	// arrays.
 	ContentSelector []InstanceDeleteResponseSourceParamsWebCrawlerParseOptionsContentSelector `json:"content_selector"`
-	// Up to 5 custom HTTP headers sent with each crawl request. Names must be RFC-7230
-	// token characters (no spaces, colons, or control characters); values must be
-	// HTAB + printable ASCII (no CR/LF).
+	// Up to 5 custom HTTP headers sent with each crawl request. Names must use
+	// RFC-7230 token characters, excluding spaces, colons, and control characters.
+	// Values must use HTAB and printable ASCII only, excluding CR and LF.
 	IncludeHeaders map[string]string `json:"include_headers"`
 	IncludeImages  bool              `json:"include_images"`
 	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
@@ -3553,9 +3578,9 @@ type InstanceDeleteResponseSourceParamsWebCrawlerParseOptionsContentSelector str
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
 	Path string `json:"path" api:"required"`
-	// CSS selector to extract content from pages matching the path pattern. Must not
-	// contain disallowed characters (;, `, $, {, }, \). Must target a single element;
-	// if multiple elements match, the selector is ignored and the full page is used.
+	// CSS selector to extract content from pages matching the path pattern. Disallowed
+	// characters: ;, `, $, {, }, \. Must target a single element; if multiple elements
+	// match, the crawler ignores the selector and uses the full page.
 	Selector string                                                                      `json:"selector" api:"required"`
 	JSON     instanceDeleteResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
@@ -3578,8 +3603,9 @@ func (r instanceDeleteResponseSourceParamsWebCrawlerParseOptionsContentSelectorJ
 	return r.raw
 }
 
-// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
-// recursively and requires the source to be a Verified zone on this account.
+// How the crawler finds URLs. 'sitemap' reads XML sitemaps; 'discover' follows
+// links recursively and requires the source to belong to a Verified zone on this
+// account.
 type InstanceDeleteResponseSourceParamsWebCrawlerParseType string
 
 const (
@@ -3597,6 +3623,7 @@ func (r InstanceDeleteResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 // (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Defaults to 86400 (24h).
 type InstanceDeleteResponseSyncInterval float64
 
 const (
@@ -3897,26 +3924,42 @@ func (r InstanceChatCompletionsResponseChoicesMessageRole) IsKnown() bool {
 }
 
 type InstanceChatCompletionsResponseChunk struct {
-	ID             string                                              `json:"id" api:"required"`
-	Score          float64                                             `json:"score" api:"required"`
-	Text           string                                              `json:"text" api:"required"`
-	Type           string                                              `json:"type" api:"required"`
-	Item           InstanceChatCompletionsResponseChunksItem           `json:"item"`
+	ID    string                                    `json:"id" api:"required"`
+	Score float64                                   `json:"score" api:"required"`
+	Text  string                                    `json:"text" api:"required"`
+	Type  string                                    `json:"type" api:"required"`
+	Item  InstanceChatCompletionsResponseChunksItem `json:"item"`
+	// Audio/video transcript chunks only: end, in milliseconds from the start of the
+	// media (whole seconds), of the last transcript section the matched chunk covers.
+	// Describes the matched chunk before any context expansion, not the expanded
+	// `text`.
+	MediaEndMs int64 `json:"media_end_ms"`
+	// Audio/video transcript chunks only: start, in milliseconds from the start of the
+	// media (whole seconds), of the transcript section the matched chunk begins in.
+	// Describes the matched chunk before any context expansion, not the expanded
+	// `text`.
+	MediaStartMs   int64                                               `json:"media_start_ms"`
 	ScoringDetails InstanceChatCompletionsResponseChunksScoringDetails `json:"scoring_details"`
-	JSON           instanceChatCompletionsResponseChunkJSON            `json:"-"`
+	// Audio/video transcript chunks only: type of the source media file. Omitted for
+	// all other chunks.
+	SourceMediaType InstanceChatCompletionsResponseChunksSourceMediaType `json:"source_media_type"`
+	JSON            instanceChatCompletionsResponseChunkJSON             `json:"-"`
 }
 
 // instanceChatCompletionsResponseChunkJSON contains the JSON metadata for the
 // struct [InstanceChatCompletionsResponseChunk]
 type instanceChatCompletionsResponseChunkJSON struct {
-	ID             apijson.Field
-	Score          apijson.Field
-	Text           apijson.Field
-	Type           apijson.Field
-	Item           apijson.Field
-	ScoringDetails apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	ID              apijson.Field
+	Score           apijson.Field
+	Text            apijson.Field
+	Type            apijson.Field
+	Item            apijson.Field
+	MediaEndMs      apijson.Field
+	MediaStartMs    apijson.Field
+	ScoringDetails  apijson.Field
+	SourceMediaType apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *InstanceChatCompletionsResponseChunk) UnmarshalJSON(data []byte) (err error) {
@@ -3998,6 +4041,23 @@ func (r InstanceChatCompletionsResponseChunksScoringDetailsFusionMethod) IsKnown
 	return false
 }
 
+// Audio/video transcript chunks only: type of the source media file. Omitted for
+// all other chunks.
+type InstanceChatCompletionsResponseChunksSourceMediaType string
+
+const (
+	InstanceChatCompletionsResponseChunksSourceMediaTypeAudio InstanceChatCompletionsResponseChunksSourceMediaType = "audio"
+	InstanceChatCompletionsResponseChunksSourceMediaTypeVideo InstanceChatCompletionsResponseChunksSourceMediaType = "video"
+)
+
+func (r InstanceChatCompletionsResponseChunksSourceMediaType) IsKnown() bool {
+	switch r {
+	case InstanceChatCompletionsResponseChunksSourceMediaTypeAudio, InstanceChatCompletionsResponseChunksSourceMediaTypeVideo:
+		return true
+	}
+	return false
+}
+
 type InstanceReadResponse struct {
 	// AI Search instance ID. Lowercase alphanumeric, hyphens, and underscores.
 	ID          string    `json:"id" api:"required"`
@@ -4026,8 +4086,8 @@ type InstanceReadResponse struct {
 	//
 	// Deprecated: deprecated
 	HybridSearchEnabled bool `json:"hybrid_search_enabled"`
-	// Controls which storage backends are used during indexing. Defaults to vector and
-	// keyword indexing for new instances.
+	// Controls which storage backends indexing uses. Defaults to vector and keyword
+	// indexing for new instances. When set, both vector and keyword are required.
 	IndexMethod          InstanceReadResponseIndexMethod          `json:"index_method"`
 	IndexingOptions      InstanceReadResponseIndexingOptions      `json:"indexing_options" api:"nullable"`
 	LastActivity         time.Time                                `json:"last_activity" api:"nullable" format:"date-time"`
@@ -4043,14 +4103,16 @@ type InstanceReadResponse struct {
 	RetrievalOptions     InstanceReadResponseRetrievalOptions     `json:"retrieval_options" api:"nullable"`
 	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
 	// Completions API. An empty string uses the configured or default model.
-	RewriteModel   string                           `json:"rewrite_model" api:"nullable"`
-	RewriteQuery   bool                             `json:"rewrite_query"`
+	RewriteModel string `json:"rewrite_model" api:"nullable"`
+	RewriteQuery bool   `json:"rewrite_query"`
+	// Minimum similarity score a chunk must reach to be returned. Defaults to 0.4.
 	ScoreThreshold float64                          `json:"score_threshold"`
 	Source         string                           `json:"source" api:"nullable"`
 	SourceParams   InstanceReadResponseSourceParams `json:"source_params" api:"nullable"`
 	Status         string                           `json:"status"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Defaults to 86400 (24h).
 	SyncInterval InstanceReadResponseSyncInterval `json:"sync_interval"`
 	TokenID      string                           `json:"token_id" format:"uuid"`
 	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
@@ -4212,8 +4274,8 @@ func (r InstanceReadResponseFusionMethod) IsKnown() bool {
 	return false
 }
 
-// Controls which storage backends are used during indexing. Defaults to vector and
-// keyword indexing for new instances.
+// Controls which storage backends indexing uses. Defaults to vector and keyword
+// indexing for new instances. When set, both vector and keyword are required.
 type InstanceReadResponseIndexMethod struct {
 	// Enable keyword (BM25) storage backend.
 	Keyword bool `json:"keyword" api:"required"`
@@ -4396,7 +4458,7 @@ func (r instanceReadResponsePublicEndpointParamsJSON) RawJSON() string {
 }
 
 type InstanceReadResponsePublicEndpointParamsChatCompletionsEndpoint struct {
-	// Disable chat completions endpoint for this public endpoint
+	// Disable chat completions endpoint for this public endpoint.
 	Disabled bool                                                                `json:"disabled"`
 	JSON     instanceReadResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
 }
@@ -4420,7 +4482,7 @@ func (r instanceReadResponsePublicEndpointParamsChatCompletionsEndpointJSON) Raw
 
 type InstanceReadResponsePublicEndpointParamsMcp struct {
 	Description string `json:"description"`
-	// Disable MCP endpoint for this public endpoint
+	// Disable MCP endpoint for this public endpoint.
 	Disabled bool                                            `json:"disabled"`
 	JSON     instanceReadResponsePublicEndpointParamsMcpJSON `json:"-"`
 }
@@ -4483,7 +4545,7 @@ func (r InstanceReadResponsePublicEndpointParamsRateLimitTechnique) IsKnown() bo
 }
 
 type InstanceReadResponsePublicEndpointParamsSearchEndpoint struct {
-	// Disable search endpoint for this public endpoint
+	// Disable search endpoint for this public endpoint.
 	Disabled bool                                                       `json:"disabled"`
 	JSON     instanceReadResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
 }
@@ -4510,11 +4572,11 @@ type InstanceReadResponseRetrievalOptions struct {
 	// numeric/datetime fields and 'exists' for text/boolean fields. Fields must match
 	// 'timestamp' or a defined custom_metadata field.
 	BoostBy []InstanceReadResponseRetrievalOptionsBoostBy `json:"boost_by"`
-	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// Controls which documents become candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. When omitted on an
-	// update, the existing stored value is preserved; when never set, search falls
-	// back to 'and'.
+	// containing at least one term and ranks results according to BM25 relevance. When
+	// omitted on an update, the existing stored value stays unchanged; when never set,
+	// search falls back to 'and'.
 	KeywordMatchMode InstanceReadResponseRetrievalOptionsKeywordMatchMode `json:"keyword_match_mode"`
 	JSON             instanceReadResponseRetrievalOptionsJSON             `json:"-"`
 }
@@ -4588,11 +4650,11 @@ func (r InstanceReadResponseRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// Controls which documents become candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. When omitted on an
-// update, the existing stored value is preserved; when never set, search falls
-// back to 'and'.
+// containing at least one term and ranks results according to BM25 relevance. When
+// omitted on an update, the existing stored value stays unchanged; when never set,
+// search falls back to 'and'.
 type InstanceReadResponseRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -4611,12 +4673,12 @@ func (r InstanceReadResponseRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 type InstanceReadResponseSourceParams struct {
 	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced). Most accounts are limited to 10
+	// /admin/users and /admin/settings/advanced). Most accounts have a limit of 10
 	// rules; contact support to raise it.
 	ExcludeItems []string `json:"exclude_items"`
 	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact
+	// /blog/post and /blog/2024/post). Most accounts have a limit of 10 rules; contact
 	// support to raise it.
 	IncludeItems   []string                                   `json:"include_items"`
 	Prefix         string                                     `json:"prefix"`
@@ -4646,12 +4708,13 @@ func (r instanceReadResponseSourceParamsJSON) RawJSON() string {
 }
 
 type InstanceReadResponseSourceParamsWebCrawler struct {
-	// Options for parse_type 'discover', where Browser Run discovers URLs by link
+	// Options for parse_type 'discover', where Browser Run discovers URLs through link
 	// following and sitemaps. Ignored for 'sitemap'.
 	DiscoverOptions InstanceReadResponseSourceParamsWebCrawlerDiscoverOptions `json:"discover_options"`
 	ParseOptions    InstanceReadResponseSourceParamsWebCrawlerParseOptions    `json:"parse_options"`
-	// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
-	// recursively and requires the source to be a Verified zone on this account.
+	// How the crawler finds URLs. 'sitemap' reads XML sitemaps; 'discover' follows
+	// links recursively and requires the source to belong to a Verified zone on this
+	// account.
 	ParseType InstanceReadResponseSourceParamsWebCrawlerParseType `json:"parse_type"`
 	JSON      instanceReadResponseSourceParamsWebCrawlerJSON      `json:"-"`
 }
@@ -4674,13 +4737,13 @@ func (r instanceReadResponseSourceParamsWebCrawlerJSON) RawJSON() string {
 	return r.raw
 }
 
-// Options for parse_type 'discover', where Browser Run discovers URLs by link
+// Options for parse_type 'discover', where Browser Run discovers URLs through link
 // following and sitemaps. Ignored for 'sitemap'.
 type InstanceReadResponseSourceParamsWebCrawlerDiscoverOptions struct {
 	// Maximum link-follow depth from the seed URL.
 	Depth float64 `json:"depth"`
-	// Follow links that point outside the source domain. Must stay `false` — discover
-	// crawls are restricted to the zone you own.
+	// Follow links that point outside the source domain. Must stay `false` because
+	// discover crawls only cover the zone you own.
 	IncludeExternalLinks bool `json:"include_external_links"`
 	// Follow links to subdomains of the source host.
 	IncludeSubdomains bool `json:"include_subdomains"`
@@ -4737,12 +4800,13 @@ func (r InstanceReadResponseSourceParamsWebCrawlerDiscoverOptionsSource) IsKnown
 type InstanceReadResponseSourceParamsWebCrawlerParseOptions struct {
 	// List of path-to-selector mappings for extracting specific content from crawled
 	// pages. Each entry pairs a URL glob pattern with a CSS selector. The first
-	// matching path wins. Only the matched HTML fragment is stored and indexed. Omit
-	// the field to disable content selection — empty arrays are rejected.
+	// matching path wins. The crawler stores and indexes only the matched HTML
+	// fragment. Omit the field to disable content selection; the API rejects empty
+	// arrays.
 	ContentSelector []InstanceReadResponseSourceParamsWebCrawlerParseOptionsContentSelector `json:"content_selector"`
-	// Up to 5 custom HTTP headers sent with each crawl request. Names must be RFC-7230
-	// token characters (no spaces, colons, or control characters); values must be
-	// HTAB + printable ASCII (no CR/LF).
+	// Up to 5 custom HTTP headers sent with each crawl request. Names must use
+	// RFC-7230 token characters, excluding spaces, colons, and control characters.
+	// Values must use HTAB and printable ASCII only, excluding CR and LF.
 	IncludeHeaders map[string]string `json:"include_headers"`
 	IncludeImages  bool              `json:"include_images"`
 	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
@@ -4776,9 +4840,9 @@ type InstanceReadResponseSourceParamsWebCrawlerParseOptionsContentSelector struc
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
 	Path string `json:"path" api:"required"`
-	// CSS selector to extract content from pages matching the path pattern. Must not
-	// contain disallowed characters (;, `, $, {, }, \). Must target a single element;
-	// if multiple elements match, the selector is ignored and the full page is used.
+	// CSS selector to extract content from pages matching the path pattern. Disallowed
+	// characters: ;, `, $, {, }, \. Must target a single element; if multiple elements
+	// match, the crawler ignores the selector and uses the full page.
 	Selector string                                                                    `json:"selector" api:"required"`
 	JSON     instanceReadResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSON `json:"-"`
 }
@@ -4801,8 +4865,9 @@ func (r instanceReadResponseSourceParamsWebCrawlerParseOptionsContentSelectorJSO
 	return r.raw
 }
 
-// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
-// recursively and requires the source to be a Verified zone on this account.
+// How the crawler finds URLs. 'sitemap' reads XML sitemaps; 'discover' follows
+// links recursively and requires the source to belong to a Verified zone on this
+// account.
 type InstanceReadResponseSourceParamsWebCrawlerParseType string
 
 const (
@@ -4820,6 +4885,7 @@ func (r InstanceReadResponseSourceParamsWebCrawlerParseType) IsKnown() bool {
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 // (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Defaults to 86400 (24h).
 type InstanceReadResponseSyncInterval float64
 
 const (
@@ -4885,26 +4951,42 @@ func (r instanceSearchResponseJSON) RawJSON() string {
 }
 
 type InstanceSearchResponseChunk struct {
-	ID             string                                     `json:"id" api:"required"`
-	Score          float64                                    `json:"score" api:"required"`
-	Text           string                                     `json:"text" api:"required"`
-	Type           string                                     `json:"type" api:"required"`
-	Item           InstanceSearchResponseChunksItem           `json:"item"`
+	ID    string                           `json:"id" api:"required"`
+	Score float64                          `json:"score" api:"required"`
+	Text  string                           `json:"text" api:"required"`
+	Type  string                           `json:"type" api:"required"`
+	Item  InstanceSearchResponseChunksItem `json:"item"`
+	// Audio/video transcript chunks only: end, in milliseconds from the start of the
+	// media (whole seconds), of the last transcript section the matched chunk covers.
+	// Describes the matched chunk before any context expansion, not the expanded
+	// `text`.
+	MediaEndMs int64 `json:"media_end_ms"`
+	// Audio/video transcript chunks only: start, in milliseconds from the start of the
+	// media (whole seconds), of the transcript section the matched chunk begins in.
+	// Describes the matched chunk before any context expansion, not the expanded
+	// `text`.
+	MediaStartMs   int64                                      `json:"media_start_ms"`
 	ScoringDetails InstanceSearchResponseChunksScoringDetails `json:"scoring_details"`
-	JSON           instanceSearchResponseChunkJSON            `json:"-"`
+	// Audio/video transcript chunks only: type of the source media file. Omitted for
+	// all other chunks.
+	SourceMediaType InstanceSearchResponseChunksSourceMediaType `json:"source_media_type"`
+	JSON            instanceSearchResponseChunkJSON             `json:"-"`
 }
 
 // instanceSearchResponseChunkJSON contains the JSON metadata for the struct
 // [InstanceSearchResponseChunk]
 type instanceSearchResponseChunkJSON struct {
-	ID             apijson.Field
-	Score          apijson.Field
-	Text           apijson.Field
-	Type           apijson.Field
-	Item           apijson.Field
-	ScoringDetails apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	ID              apijson.Field
+	Score           apijson.Field
+	Text            apijson.Field
+	Type            apijson.Field
+	Item            apijson.Field
+	MediaEndMs      apijson.Field
+	MediaStartMs    apijson.Field
+	ScoringDetails  apijson.Field
+	SourceMediaType apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *InstanceSearchResponseChunk) UnmarshalJSON(data []byte) (err error) {
@@ -4986,6 +5068,23 @@ func (r InstanceSearchResponseChunksScoringDetailsFusionMethod) IsKnown() bool {
 	return false
 }
 
+// Audio/video transcript chunks only: type of the source media file. Omitted for
+// all other chunks.
+type InstanceSearchResponseChunksSourceMediaType string
+
+const (
+	InstanceSearchResponseChunksSourceMediaTypeAudio InstanceSearchResponseChunksSourceMediaType = "audio"
+	InstanceSearchResponseChunksSourceMediaTypeVideo InstanceSearchResponseChunksSourceMediaType = "video"
+)
+
+func (r InstanceSearchResponseChunksSourceMediaType) IsKnown() bool {
+	switch r {
+	case InstanceSearchResponseChunksSourceMediaTypeAudio, InstanceSearchResponseChunksSourceMediaTypeVideo:
+		return true
+	}
+	return false
+}
+
 type InstanceSearchResponseQueryKind string
 
 const (
@@ -5004,8 +5103,8 @@ func (r InstanceSearchResponseQueryKind) IsKnown() bool {
 
 type InstanceStatsResponse struct {
 	Completed int64 `json:"completed"`
-	// True when status counts are unavailable (e.g. legacy stats query exceeded D1
-	// statement-size limit). Counts are omitted in this case.
+	// True when the API cannot compute status counts (e.g. the legacy stats query
+	// exceeded the D1 statement-size limit). The response omits counts in this case.
 	Degraded bool `json:"degraded"`
 	// Engine-specific metadata. Present only for managed (v3) instances.
 	Engine            InstanceStatsResponseEngine `json:"engine"`
@@ -5145,8 +5244,8 @@ type InstanceNewParams struct {
 	// Deprecated — use index_method instead. Defaults to true for new instances; set
 	// false to create a vector-only instance.
 	HybridSearchEnabled param.Field[bool] `json:"hybrid_search_enabled"`
-	// Controls which storage backends are used during indexing. Defaults to vector and
-	// keyword indexing for new instances.
+	// Controls which storage backends indexing uses. Defaults to vector and keyword
+	// indexing for new instances. When set, both vector and keyword are required.
 	IndexMethod          param.Field[InstanceNewParamsIndexMethod]          `json:"index_method"`
 	IndexingOptions      param.Field[InstanceNewParamsIndexingOptions]      `json:"indexing_options"`
 	MaxNumResults        param.Field[int64]                                 `json:"max_num_results"`
@@ -5157,13 +5256,15 @@ type InstanceNewParams struct {
 	RetrievalOptions     param.Field[InstanceNewParamsRetrievalOptions]     `json:"retrieval_options"`
 	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
 	// Completions API. An empty string uses the configured or default model.
-	RewriteModel   param.Field[string]                        `json:"rewrite_model"`
-	RewriteQuery   param.Field[bool]                          `json:"rewrite_query"`
+	RewriteModel param.Field[string] `json:"rewrite_model"`
+	RewriteQuery param.Field[bool]   `json:"rewrite_query"`
+	// Minimum similarity score a chunk must reach to be returned. Defaults to 0.4.
 	ScoreThreshold param.Field[float64]                       `json:"score_threshold"`
 	Source         param.Field[string]                        `json:"source"`
 	SourceParams   param.Field[InstanceNewParamsSourceParams] `json:"source_params"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Defaults to 86400 (24h).
 	SyncInterval param.Field[InstanceNewParamsSyncInterval] `json:"sync_interval"`
 	TokenID      param.Field[string]                        `json:"token_id" format:"uuid"`
 	// Source type. When omitted or null with a non-blank source, HTTP(S) URLs infer
@@ -5260,8 +5361,8 @@ func (r InstanceNewParamsFusionMethod) IsKnown() bool {
 	return false
 }
 
-// Controls which storage backends are used during indexing. Defaults to vector and
-// keyword indexing for new instances.
+// Controls which storage backends indexing uses. Defaults to vector and keyword
+// indexing for new instances. When set, both vector and keyword are required.
 type InstanceNewParamsIndexMethod struct {
 	// Enable keyword (BM25) storage backend.
 	Keyword param.Field[bool] `json:"keyword" api:"required"`
@@ -5367,7 +5468,7 @@ func (r InstanceNewParamsPublicEndpointParams) MarshalJSON() (data []byte, err e
 }
 
 type InstanceNewParamsPublicEndpointParamsChatCompletionsEndpoint struct {
-	// Disable chat completions endpoint for this public endpoint
+	// Disable chat completions endpoint for this public endpoint.
 	Disabled param.Field[bool] `json:"disabled"`
 }
 
@@ -5377,7 +5478,7 @@ func (r InstanceNewParamsPublicEndpointParamsChatCompletionsEndpoint) MarshalJSO
 
 type InstanceNewParamsPublicEndpointParamsMcp struct {
 	Description param.Field[string] `json:"description"`
-	// Disable MCP endpoint for this public endpoint
+	// Disable MCP endpoint for this public endpoint.
 	Disabled param.Field[bool] `json:"disabled"`
 }
 
@@ -5411,7 +5512,7 @@ func (r InstanceNewParamsPublicEndpointParamsRateLimitTechnique) IsKnown() bool 
 }
 
 type InstanceNewParamsPublicEndpointParamsSearchEndpoint struct {
-	// Disable search endpoint for this public endpoint
+	// Disable search endpoint for this public endpoint.
 	Disabled param.Field[bool] `json:"disabled"`
 }
 
@@ -5425,11 +5526,11 @@ type InstanceNewParamsRetrievalOptions struct {
 	// numeric/datetime fields and 'exists' for text/boolean fields. Fields must match
 	// 'timestamp' or a defined custom_metadata field.
 	BoostBy param.Field[[]InstanceNewParamsRetrievalOptionsBoostBy] `json:"boost_by"`
-	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// Controls which documents become candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. When omitted on an
-	// update, the existing stored value is preserved; when never set, search falls
-	// back to 'and'.
+	// containing at least one term and ranks results according to BM25 relevance. When
+	// omitted on an update, the existing stored value stays unchanged; when never set,
+	// search falls back to 'and'.
 	KeywordMatchMode param.Field[InstanceNewParamsRetrievalOptionsKeywordMatchMode] `json:"keyword_match_mode"`
 }
 
@@ -5475,11 +5576,11 @@ func (r InstanceNewParamsRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// Controls which documents become candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. When omitted on an
-// update, the existing stored value is preserved; when never set, search falls
-// back to 'and'.
+// containing at least one term and ranks results according to BM25 relevance. When
+// omitted on an update, the existing stored value stays unchanged; when never set,
+// search falls back to 'and'.
 type InstanceNewParamsRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -5498,12 +5599,12 @@ func (r InstanceNewParamsRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 type InstanceNewParamsSourceParams struct {
 	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced). Most accounts are limited to 10
+	// /admin/users and /admin/settings/advanced). Most accounts have a limit of 10
 	// rules; contact support to raise it.
 	ExcludeItems param.Field[[]string] `json:"exclude_items"`
 	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact
+	// /blog/post and /blog/2024/post). Most accounts have a limit of 10 rules; contact
 	// support to raise it.
 	IncludeItems   param.Field[[]string]                                `json:"include_items"`
 	Prefix         param.Field[string]                                  `json:"prefix"`
@@ -5516,12 +5617,13 @@ func (r InstanceNewParamsSourceParams) MarshalJSON() (data []byte, err error) {
 }
 
 type InstanceNewParamsSourceParamsWebCrawler struct {
-	// Options for parse_type 'discover', where Browser Run discovers URLs by link
+	// Options for parse_type 'discover', where Browser Run discovers URLs through link
 	// following and sitemaps. Ignored for 'sitemap'.
 	DiscoverOptions param.Field[InstanceNewParamsSourceParamsWebCrawlerDiscoverOptions] `json:"discover_options"`
 	ParseOptions    param.Field[InstanceNewParamsSourceParamsWebCrawlerParseOptions]    `json:"parse_options"`
-	// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
-	// recursively and requires the source to be a Verified zone on this account.
+	// How the crawler finds URLs. 'sitemap' reads XML sitemaps; 'discover' follows
+	// links recursively and requires the source to belong to a Verified zone on this
+	// account.
 	ParseType param.Field[InstanceNewParamsSourceParamsWebCrawlerParseType] `json:"parse_type"`
 }
 
@@ -5529,13 +5631,13 @@ func (r InstanceNewParamsSourceParamsWebCrawler) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-// Options for parse_type 'discover', where Browser Run discovers URLs by link
+// Options for parse_type 'discover', where Browser Run discovers URLs through link
 // following and sitemaps. Ignored for 'sitemap'.
 type InstanceNewParamsSourceParamsWebCrawlerDiscoverOptions struct {
 	// Maximum link-follow depth from the seed URL.
 	Depth param.Field[float64] `json:"depth"`
-	// Follow links that point outside the source domain. Must stay `false` — discover
-	// crawls are restricted to the zone you own.
+	// Follow links that point outside the source domain. Must stay `false` because
+	// discover crawls only cover the zone you own.
 	IncludeExternalLinks param.Field[bool] `json:"include_external_links"`
 	// Follow links to subdomains of the source host.
 	IncludeSubdomains param.Field[bool] `json:"include_subdomains"`
@@ -5573,12 +5675,13 @@ func (r InstanceNewParamsSourceParamsWebCrawlerDiscoverOptionsSource) IsKnown() 
 type InstanceNewParamsSourceParamsWebCrawlerParseOptions struct {
 	// List of path-to-selector mappings for extracting specific content from crawled
 	// pages. Each entry pairs a URL glob pattern with a CSS selector. The first
-	// matching path wins. Only the matched HTML fragment is stored and indexed. Omit
-	// the field to disable content selection — empty arrays are rejected.
+	// matching path wins. The crawler stores and indexes only the matched HTML
+	// fragment. Omit the field to disable content selection; the API rejects empty
+	// arrays.
 	ContentSelector param.Field[[]InstanceNewParamsSourceParamsWebCrawlerParseOptionsContentSelector] `json:"content_selector"`
-	// Up to 5 custom HTTP headers sent with each crawl request. Names must be RFC-7230
-	// token characters (no spaces, colons, or control characters); values must be
-	// HTAB + printable ASCII (no CR/LF).
+	// Up to 5 custom HTTP headers sent with each crawl request. Names must use
+	// RFC-7230 token characters, excluding spaces, colons, and control characters.
+	// Values must use HTAB and printable ASCII only, excluding CR and LF.
 	IncludeHeaders param.Field[map[string]string] `json:"include_headers"`
 	IncludeImages  param.Field[bool]              `json:"include_images"`
 	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
@@ -5595,9 +5698,9 @@ type InstanceNewParamsSourceParamsWebCrawlerParseOptionsContentSelector struct {
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
 	Path param.Field[string] `json:"path" api:"required"`
-	// CSS selector to extract content from pages matching the path pattern. Must not
-	// contain disallowed characters (;, `, $, {, }, \). Must target a single element;
-	// if multiple elements match, the selector is ignored and the full page is used.
+	// CSS selector to extract content from pages matching the path pattern. Disallowed
+	// characters: ;, `, $, {, }, \. Must target a single element; if multiple elements
+	// match, the crawler ignores the selector and uses the full page.
 	Selector param.Field[string] `json:"selector" api:"required"`
 }
 
@@ -5605,8 +5708,9 @@ func (r InstanceNewParamsSourceParamsWebCrawlerParseOptionsContentSelector) Mars
 	return apijson.MarshalRoot(r)
 }
 
-// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
-// recursively and requires the source to be a Verified zone on this account.
+// How the crawler finds URLs. 'sitemap' reads XML sitemaps; 'discover' follows
+// links recursively and requires the source to belong to a Verified zone on this
+// account.
 type InstanceNewParamsSourceParamsWebCrawlerParseType string
 
 const (
@@ -5624,6 +5728,7 @@ func (r InstanceNewParamsSourceParamsWebCrawlerParseType) IsKnown() bool {
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 // (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Defaults to 86400 (24h).
 type InstanceNewParamsSyncInterval float64
 
 const (
@@ -5704,8 +5809,8 @@ type InstanceUpdateParams struct {
 	CustomMetadata param.Field[[]InstanceUpdateParamsCustomMetadata] `json:"custom_metadata"`
 	EmbeddingModel param.Field[string]                               `json:"embedding_model"`
 	FusionMethod   param.Field[InstanceUpdateParamsFusionMethod]     `json:"fusion_method"`
-	// Controls which storage backends are used during indexing. Defaults to vector and
-	// keyword indexing for new instances.
+	// Controls which storage backends indexing uses. Defaults to vector and keyword
+	// indexing for new instances. When set, both vector and keyword are required.
 	IndexMethod          param.Field[InstanceUpdateParamsIndexMethod]          `json:"index_method"`
 	IndexingOptions      param.Field[InstanceUpdateParamsIndexingOptions]      `json:"indexing_options"`
 	MaxNumResults        param.Field[int64]                                    `json:"max_num_results"`
@@ -5717,8 +5822,9 @@ type InstanceUpdateParams struct {
 	RetrievalOptions     param.Field[InstanceUpdateParamsRetrievalOptions]     `json:"retrieval_options"`
 	// A Workers AI model ID or an AI Gateway model ID compatible with the OpenAI Chat
 	// Completions API. An empty string uses the configured or default model.
-	RewriteModel       param.Field[string]                           `json:"rewrite_model"`
-	RewriteQuery       param.Field[bool]                             `json:"rewrite_query"`
+	RewriteModel param.Field[string] `json:"rewrite_model"`
+	RewriteQuery param.Field[bool]   `json:"rewrite_query"`
+	// Minimum similarity score a chunk must reach to be returned. Defaults to 0.4.
 	ScoreThreshold     param.Field[float64]                          `json:"score_threshold"`
 	Source             param.Field[string]                           `json:"source"`
 	SourceParams       param.Field[InstanceUpdateParamsSourceParams] `json:"source_params"`
@@ -5726,6 +5832,7 @@ type InstanceUpdateParams struct {
 	SummarizationModel param.Field[string]                           `json:"summarization_model"`
 	// Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 	// (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+	// Defaults to 86400 (24h).
 	SyncInterval                   param.Field[InstanceUpdateParamsSyncInterval] `json:"sync_interval"`
 	SystemPromptAISearch           param.Field[string]                           `json:"system_prompt_ai_search"`
 	SystemPromptIndexSummarization param.Field[string]                           `json:"system_prompt_index_summarization"`
@@ -5821,8 +5928,8 @@ func (r InstanceUpdateParamsFusionMethod) IsKnown() bool {
 	return false
 }
 
-// Controls which storage backends are used during indexing. Defaults to vector and
-// keyword indexing for new instances.
+// Controls which storage backends indexing uses. Defaults to vector and keyword
+// indexing for new instances. When set, both vector and keyword are required.
 type InstanceUpdateParamsIndexMethod struct {
 	// Enable keyword (BM25) storage backend.
 	Keyword param.Field[bool] `json:"keyword" api:"required"`
@@ -5928,7 +6035,7 @@ func (r InstanceUpdateParamsPublicEndpointParams) MarshalJSON() (data []byte, er
 }
 
 type InstanceUpdateParamsPublicEndpointParamsChatCompletionsEndpoint struct {
-	// Disable chat completions endpoint for this public endpoint
+	// Disable chat completions endpoint for this public endpoint.
 	Disabled param.Field[bool] `json:"disabled"`
 }
 
@@ -5938,7 +6045,7 @@ func (r InstanceUpdateParamsPublicEndpointParamsChatCompletionsEndpoint) Marshal
 
 type InstanceUpdateParamsPublicEndpointParamsMcp struct {
 	Description param.Field[string] `json:"description"`
-	// Disable MCP endpoint for this public endpoint
+	// Disable MCP endpoint for this public endpoint.
 	Disabled param.Field[bool] `json:"disabled"`
 }
 
@@ -5972,7 +6079,7 @@ func (r InstanceUpdateParamsPublicEndpointParamsRateLimitTechnique) IsKnown() bo
 }
 
 type InstanceUpdateParamsPublicEndpointParamsSearchEndpoint struct {
-	// Disable search endpoint for this public endpoint
+	// Disable search endpoint for this public endpoint.
 	Disabled param.Field[bool] `json:"disabled"`
 }
 
@@ -5986,11 +6093,11 @@ type InstanceUpdateParamsRetrievalOptions struct {
 	// numeric/datetime fields and 'exists' for text/boolean fields. Fields must match
 	// 'timestamp' or a defined custom_metadata field.
 	BoostBy param.Field[[]InstanceUpdateParamsRetrievalOptionsBoostBy] `json:"boost_by"`
-	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// Controls which documents become candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. When omitted on an
-	// update, the existing stored value is preserved; when never set, search falls
-	// back to 'and'.
+	// containing at least one term and ranks results according to BM25 relevance. When
+	// omitted on an update, the existing stored value stays unchanged; when never set,
+	// search falls back to 'and'.
 	KeywordMatchMode param.Field[InstanceUpdateParamsRetrievalOptionsKeywordMatchMode] `json:"keyword_match_mode"`
 }
 
@@ -6036,11 +6143,11 @@ func (r InstanceUpdateParamsRetrievalOptionsBoostByDirection) IsKnown() bool {
 	return false
 }
 
-// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// Controls which documents become candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. When omitted on an
-// update, the existing stored value is preserved; when never set, search falls
-// back to 'and'.
+// containing at least one term and ranks results according to BM25 relevance. When
+// omitted on an update, the existing stored value stays unchanged; when never set,
+// search falls back to 'and'.
 type InstanceUpdateParamsRetrievalOptionsKeywordMatchMode string
 
 const (
@@ -6059,12 +6166,12 @@ func (r InstanceUpdateParamsRetrievalOptionsKeywordMatchMode) IsKnown() bool {
 type InstanceUpdateParamsSourceParams struct {
 	// List of path patterns to exclude. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /admin/** matches
-	// /admin/users and /admin/settings/advanced). Most accounts are limited to 10
+	// /admin/users and /admin/settings/advanced). Most accounts have a limit of 10
 	// rules; contact support to raise it.
 	ExcludeItems param.Field[[]string] `json:"exclude_items"`
 	// List of path patterns to include. Uses micromatch glob syntax: \* matches within
 	// a path segment, ** matches across path segments (e.g., /blog/** matches
-	// /blog/post and /blog/2024/post). Most accounts are limited to 10 rules; contact
+	// /blog/post and /blog/2024/post). Most accounts have a limit of 10 rules; contact
 	// support to raise it.
 	IncludeItems   param.Field[[]string]                                   `json:"include_items"`
 	Prefix         param.Field[string]                                     `json:"prefix"`
@@ -6077,12 +6184,13 @@ func (r InstanceUpdateParamsSourceParams) MarshalJSON() (data []byte, err error)
 }
 
 type InstanceUpdateParamsSourceParamsWebCrawler struct {
-	// Options for parse_type 'discover', where Browser Run discovers URLs by link
+	// Options for parse_type 'discover', where Browser Run discovers URLs through link
 	// following and sitemaps. Ignored for 'sitemap'.
 	DiscoverOptions param.Field[InstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptions] `json:"discover_options"`
 	ParseOptions    param.Field[InstanceUpdateParamsSourceParamsWebCrawlerParseOptions]    `json:"parse_options"`
-	// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
-	// recursively and requires the source to be a Verified zone on this account.
+	// How the crawler finds URLs. 'sitemap' reads XML sitemaps; 'discover' follows
+	// links recursively and requires the source to belong to a Verified zone on this
+	// account.
 	ParseType param.Field[InstanceUpdateParamsSourceParamsWebCrawlerParseType] `json:"parse_type"`
 }
 
@@ -6090,13 +6198,13 @@ func (r InstanceUpdateParamsSourceParamsWebCrawler) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-// Options for parse_type 'discover', where Browser Run discovers URLs by link
+// Options for parse_type 'discover', where Browser Run discovers URLs through link
 // following and sitemaps. Ignored for 'sitemap'.
 type InstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptions struct {
 	// Maximum link-follow depth from the seed URL.
 	Depth param.Field[float64] `json:"depth"`
-	// Follow links that point outside the source domain. Must stay `false` — discover
-	// crawls are restricted to the zone you own.
+	// Follow links that point outside the source domain. Must stay `false` because
+	// discover crawls only cover the zone you own.
 	IncludeExternalLinks param.Field[bool] `json:"include_external_links"`
 	// Follow links to subdomains of the source host.
 	IncludeSubdomains param.Field[bool] `json:"include_subdomains"`
@@ -6134,12 +6242,13 @@ func (r InstanceUpdateParamsSourceParamsWebCrawlerDiscoverOptionsSource) IsKnown
 type InstanceUpdateParamsSourceParamsWebCrawlerParseOptions struct {
 	// List of path-to-selector mappings for extracting specific content from crawled
 	// pages. Each entry pairs a URL glob pattern with a CSS selector. The first
-	// matching path wins. Only the matched HTML fragment is stored and indexed. Omit
-	// the field to disable content selection — empty arrays are rejected.
+	// matching path wins. The crawler stores and indexes only the matched HTML
+	// fragment. Omit the field to disable content selection; the API rejects empty
+	// arrays.
 	ContentSelector param.Field[[]InstanceUpdateParamsSourceParamsWebCrawlerParseOptionsContentSelector] `json:"content_selector"`
-	// Up to 5 custom HTTP headers sent with each crawl request. Names must be RFC-7230
-	// token characters (no spaces, colons, or control characters); values must be
-	// HTAB + printable ASCII (no CR/LF).
+	// Up to 5 custom HTTP headers sent with each crawl request. Names must use
+	// RFC-7230 token characters, excluding spaces, colons, and control characters.
+	// Values must use HTAB and printable ASCII only, excluding CR and LF.
 	IncludeHeaders param.Field[map[string]string] `json:"include_headers"`
 	IncludeImages  param.Field[bool]              `json:"include_images"`
 	// List of specific sitemap URLs to use for crawling. Only valid when parse_type is
@@ -6156,9 +6265,9 @@ type InstanceUpdateParamsSourceParamsWebCrawlerParseOptionsContentSelector struc
 	// Glob pattern to match against the page URL path. Uses standard glob syntax: \*
 	// matches within a segment, \*\* crosses directories.
 	Path param.Field[string] `json:"path" api:"required"`
-	// CSS selector to extract content from pages matching the path pattern. Must not
-	// contain disallowed characters (;, `, $, {, }, \). Must target a single element;
-	// if multiple elements match, the selector is ignored and the full page is used.
+	// CSS selector to extract content from pages matching the path pattern. Disallowed
+	// characters: ;, `, $, {, }, \. Must target a single element; if multiple elements
+	// match, the crawler ignores the selector and uses the full page.
 	Selector param.Field[string] `json:"selector" api:"required"`
 }
 
@@ -6166,8 +6275,9 @@ func (r InstanceUpdateParamsSourceParamsWebCrawlerParseOptionsContentSelector) M
 	return apijson.MarshalRoot(r)
 }
 
-// How URLs are discovered. 'sitemap' reads XML sitemaps; 'discover' follows links
-// recursively and requires the source to be a Verified zone on this account.
+// How the crawler finds URLs. 'sitemap' reads XML sitemaps; 'discover' follows
+// links recursively and requires the source to belong to a Verified zone on this
+// account.
 type InstanceUpdateParamsSourceParamsWebCrawlerParseType string
 
 const (
@@ -6185,6 +6295,7 @@ func (r InstanceUpdateParamsSourceParamsWebCrawlerParseType) IsKnown() bool {
 
 // Interval between automatic syncs, in seconds. Allowed values: 900 (15min), 1800
 // (30min), 3600 (1h), 7200 (2h), 14400 (4h), 21600 (6h), 43200 (12h), 86400 (24h).
+// Defaults to 86400 (24h).
 type InstanceUpdateParamsSyncInterval float64
 
 const (
@@ -6231,9 +6342,10 @@ func (r instanceUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type InstanceListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Filter by exact Search for Agents hostname (case-insensitive).
+	// Return only instances with this exact Search for Agents hostname
+	// (case-insensitive).
 	Hostname param.Field[string] `query:"hostname"`
-	// Filter by namespace.
+	// Return only instances in this namespace.
 	Namespace param.Field[string] `query:"namespace"`
 	// Field to order results by.
 	OrderBy param.Field[InstanceListParamsOrderBy] `query:"order_by"`
@@ -6434,9 +6546,9 @@ func (r InstanceChatCompletionsParamsMessagesRole) IsKnown() bool {
 
 type InstanceChatCompletionsParamsAISearchOptions struct {
 	Cache param.Field[InstanceChatCompletionsParamsAISearchOptionsCache] `json:"cache"`
-	// Metadata added to AI Gateway logs for requests triggered by this operation.
-	// Accepts up to 2 string, number, or boolean entries. Keys 'ai-search', 'task',
-	// 'origin', and keys beginning with 'cf.' are reserved.
+	// Metadata added to AI Gateway logs for requests this operation triggers. Accepts
+	// up to 2 string, number, or boolean entries. Reserved keys: 'ai-search', 'task',
+	// 'origin', and any key beginning with 'cf.'.
 	CustomMetadata param.Field[map[string]InstanceChatCompletionsParamsAISearchOptionsCustomMetadataUnion] `json:"custom_metadata"`
 	QueryRewrite   param.Field[InstanceChatCompletionsParamsAISearchOptionsQueryRewrite]                   `json:"query_rewrite"`
 	Reranking      param.Field[InstanceChatCompletionsParamsAISearchOptionsReranking]                      `json:"reranking"`
@@ -6509,15 +6621,20 @@ type InstanceChatCompletionsParamsAISearchOptionsRetrieval struct {
 	ContextExpansion param.Field[int64]                                                             `json:"context_expansion"`
 	Filters          param.Field[map[string]interface{}]                                            `json:"filters"`
 	FusionMethod     param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod] `json:"fusion_method"`
-	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// Controls which documents become candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. When omitted, falls back
-	// to the instance-level retrieval_options.keyword_match_mode, then to 'and'.
+	// containing at least one term and ranks results according to BM25 relevance. When
+	// omitted, falls back to the instance-level retrieval_options.keyword_match_mode,
+	// then to 'and'.
 	KeywordMatchMode param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
-	MatchThreshold   param.Field[float64]                                                               `json:"match_threshold"`
-	MaxNumResults    param.Field[int64]                                                                 `json:"max_num_results"`
-	RetrievalType    param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType]    `json:"retrieval_type"`
-	ReturnOnFailure  param.Field[bool]                                                                  `json:"return_on_failure"`
+	// Minimum similarity score a chunk must reach to be returned. When omitted, falls
+	// back to the instance-level score_threshold, then to 0.4.
+	MatchThreshold param.Field[float64] `json:"match_threshold"`
+	// Maximum number of results to return. When omitted, falls back to the
+	// instance-level max_num_results, then to 10.
+	MaxNumResults   param.Field[int64]                                                              `json:"max_num_results"`
+	RetrievalType   param.Field[InstanceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType] `json:"retrieval_type"`
+	ReturnOnFailure param.Field[bool]                                                               `json:"return_on_failure"`
 }
 
 func (r InstanceChatCompletionsParamsAISearchOptionsRetrieval) MarshalJSON() (data []byte, err error) {
@@ -6577,10 +6694,11 @@ func (r InstanceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod) IsKno
 	return false
 }
 
-// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// Controls which documents become candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. When omitted, falls back
-// to the instance-level retrieval_options.keyword_match_mode, then to 'and'.
+// containing at least one term and ranks results according to BM25 relevance. When
+// omitted, falls back to the instance-level retrieval_options.keyword_match_mode,
+// then to 'and'.
 type InstanceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode string
 
 const (
@@ -6659,9 +6777,9 @@ func (r InstanceSearchParams) MarshalJSON() (data []byte, err error) {
 
 type InstanceSearchParamsAISearchOptions struct {
 	Cache param.Field[InstanceSearchParamsAISearchOptionsCache] `json:"cache"`
-	// Metadata added to AI Gateway logs for requests triggered by this operation.
-	// Accepts up to 2 string, number, or boolean entries. Keys 'ai-search', 'task',
-	// 'origin', and keys beginning with 'cf.' are reserved.
+	// Metadata added to AI Gateway logs for requests this operation triggers. Accepts
+	// up to 2 string, number, or boolean entries. Reserved keys: 'ai-search', 'task',
+	// 'origin', and any key beginning with 'cf.'.
 	CustomMetadata param.Field[map[string]InstanceSearchParamsAISearchOptionsCustomMetadataUnion] `json:"custom_metadata"`
 	QueryRewrite   param.Field[InstanceSearchParamsAISearchOptionsQueryRewrite]                   `json:"query_rewrite"`
 	Reranking      param.Field[InstanceSearchParamsAISearchOptionsReranking]                      `json:"reranking"`
@@ -6734,15 +6852,20 @@ type InstanceSearchParamsAISearchOptionsRetrieval struct {
 	ContextExpansion param.Field[int64]                                                    `json:"context_expansion"`
 	Filters          param.Field[map[string]interface{}]                                   `json:"filters"`
 	FusionMethod     param.Field[InstanceSearchParamsAISearchOptionsRetrievalFusionMethod] `json:"fusion_method"`
-	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// Controls which documents become candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. When omitted, falls back
-	// to the instance-level retrieval_options.keyword_match_mode, then to 'and'.
+	// containing at least one term and ranks results according to BM25 relevance. When
+	// omitted, falls back to the instance-level retrieval_options.keyword_match_mode,
+	// then to 'and'.
 	KeywordMatchMode param.Field[InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
-	MatchThreshold   param.Field[float64]                                                      `json:"match_threshold"`
-	MaxNumResults    param.Field[int64]                                                        `json:"max_num_results"`
-	RetrievalType    param.Field[InstanceSearchParamsAISearchOptionsRetrievalRetrievalType]    `json:"retrieval_type"`
-	ReturnOnFailure  param.Field[bool]                                                         `json:"return_on_failure"`
+	// Minimum similarity score a chunk must reach to be returned. When omitted, falls
+	// back to the instance-level score_threshold, then to 0.4.
+	MatchThreshold param.Field[float64] `json:"match_threshold"`
+	// Maximum number of results to return. When omitted, falls back to the
+	// instance-level max_num_results, then to 10.
+	MaxNumResults   param.Field[int64]                                                     `json:"max_num_results"`
+	RetrievalType   param.Field[InstanceSearchParamsAISearchOptionsRetrievalRetrievalType] `json:"retrieval_type"`
+	ReturnOnFailure param.Field[bool]                                                      `json:"return_on_failure"`
 }
 
 func (r InstanceSearchParamsAISearchOptionsRetrieval) MarshalJSON() (data []byte, err error) {
@@ -6802,10 +6925,11 @@ func (r InstanceSearchParamsAISearchOptionsRetrievalFusionMethod) IsKnown() bool
 	return false
 }
 
-// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// Controls which documents become candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. When omitted, falls back
-// to the instance-level retrieval_options.keyword_match_mode, then to 'and'.
+// containing at least one term and ranks results according to BM25 relevance. When
+// omitted, falls back to the instance-level retrieval_options.keyword_match_mode,
+// then to 'and'.
 type InstanceSearchParamsAISearchOptionsRetrievalKeywordMatchMode string
 
 const (

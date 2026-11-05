@@ -188,6 +188,8 @@ type CNINewResponseBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Extra set of static prefixes to advertise to the customer's end of the session
+	// Prefixes containing host bits will be normalized to contain network bits only.
+	// Duplicates are not allowed.
 	ExtraPrefixes []string `json:"extra_prefixes" api:"required" format:"A.B.C.D/N"`
 	// MD5 key to use for session authentication.
 	//
@@ -322,6 +324,8 @@ type CNIUpdateResponseBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Extra set of static prefixes to advertise to the customer's end of the session
+	// Prefixes containing host bits will be normalized to contain network bits only.
+	// Duplicates are not allowed.
 	ExtraPrefixes []string `json:"extra_prefixes" api:"required" format:"A.B.C.D/N"`
 	// MD5 key to use for session authentication.
 	//
@@ -478,6 +482,8 @@ type CNIListResponseItemsBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Extra set of static prefixes to advertise to the customer's end of the session
+	// Prefixes containing host bits will be normalized to contain network bits only.
+	// Duplicates are not allowed.
 	ExtraPrefixes []string `json:"extra_prefixes" api:"required" format:"A.B.C.D/N"`
 	// MD5 key to use for session authentication.
 	//
@@ -611,6 +617,8 @@ type CNIGetResponseBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN int64 `json:"customer_asn" api:"required"`
 	// Extra set of static prefixes to advertise to the customer's end of the session
+	// Prefixes containing host bits will be normalized to contain network bits only.
+	// Duplicates are not allowed.
 	ExtraPrefixes []string `json:"extra_prefixes" api:"required" format:"A.B.C.D/N"`
 	// MD5 key to use for session authentication.
 	//
@@ -699,6 +707,8 @@ type CNINewParamsBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN param.Field[int64] `json:"customer_asn" api:"required"`
 	// Extra set of static prefixes to advertise to the customer's end of the session
+	// Prefixes containing host bits will be normalized to contain network bits only.
+	// Duplicates are not allowed.
 	ExtraPrefixes param.Field[[]string] `json:"extra_prefixes" api:"required" format:"A.B.C.D/N"`
 	// MD5 key to use for session authentication.
 	//
@@ -766,6 +776,8 @@ type CNIUpdateParamsBGP struct {
 	// ASN used on the customer end of the BGP session
 	CustomerASN param.Field[int64] `json:"customer_asn" api:"required"`
 	// Extra set of static prefixes to advertise to the customer's end of the session
+	// Prefixes containing host bits will be normalized to contain network bits only.
+	// Duplicates are not allowed.
 	ExtraPrefixes param.Field[[]string] `json:"extra_prefixes" api:"required" format:"A.B.C.D/N"`
 	// MD5 key to use for session authentication.
 	//

@@ -272,12 +272,12 @@ type LogGetResponse struct {
 	Metadata             string             `json:"metadata"`
 	ModelType            string             `json:"model_type"`
 	RequestContentType   string             `json:"request_content_type"`
-	RequestHead          string             `json:"request_head"`
+	RequestHead          string             `json:"request_head" api:"nullable"`
 	RequestHeadComplete  bool               `json:"request_head_complete"`
 	RequestSize          int64              `json:"request_size"`
 	RequestType          string             `json:"request_type"`
 	ResponseContentType  string             `json:"response_content_type"`
-	ResponseHead         string             `json:"response_head"`
+	ResponseHead         string             `json:"response_head" api:"nullable"`
 	ResponseHeadComplete bool               `json:"response_head_complete"`
 	ResponseSize         int64              `json:"response_size"`
 	StatusCode           int64              `json:"status_code"`

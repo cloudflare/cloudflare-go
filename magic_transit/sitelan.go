@@ -378,11 +378,12 @@ type LAN struct {
 	// mark true to use this LAN for source-based breakout traffic
 	IsBreakout bool `json:"is_breakout"`
 	// mark true to use this LAN for source-based prioritized traffic
-	IsPrioritized bool           `json:"is_prioritized"`
-	Name          string         `json:"name"`
-	Nat           Nat            `json:"nat"`
-	Physport      int64          `json:"physport"`
-	RoutedSubnets []RoutedSubnet `json:"routed_subnets"`
+	IsPrioritized bool              `json:"is_prioritized"`
+	Name          string            `json:"name"`
+	Nat           Nat               `json:"nat"`
+	Physport      int64             `json:"physport"`
+	RemoteSubnets []LANRemoteSubnet `json:"remote_subnets"`
+	RoutedSubnets []RoutedSubnet    `json:"routed_subnets"`
 	// Identifier
 	SiteID string `json:"site_id"`
 	// If the site is not configured in high availability mode, this configuration is
@@ -404,6 +405,7 @@ type lanJSON struct {
 	Name             apijson.Field
 	Nat              apijson.Field
 	Physport         apijson.Field
+	RemoteSubnets    apijson.Field
 	RoutedSubnets    apijson.Field
 	SiteID           apijson.Field
 	StaticAddressing apijson.Field
@@ -417,6 +419,34 @@ func (r *LAN) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r lanJSON) RawJSON() string {
+	return r.raw
+}
+
+// A remote subnet reachable through Cloudflare that is addressed from this LAN by
+// a local alias prefix of the same size. The local alias prefix must not overlap
+// other subnets on the LAN, and the remote prefix must not overlap other remote
+// prefixes on the LAN.
+type LANRemoteSubnet struct {
+	// A valid CIDR notation representing an IP range.
+	LocalAliasPrefix string `json:"local_alias_prefix" api:"required"`
+	// A valid CIDR notation representing an IP range.
+	RemotePrefix string              `json:"remote_prefix" api:"required"`
+	JSON         lanRemoteSubnetJSON `json:"-"`
+}
+
+// lanRemoteSubnetJSON contains the JSON metadata for the struct [LANRemoteSubnet]
+type lanRemoteSubnetJSON struct {
+	LocalAliasPrefix apijson.Field
+	RemotePrefix     apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *LANRemoteSubnet) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r lanRemoteSubnetJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -551,11 +581,12 @@ type SiteLANNewParams struct {
 	// mark true to use this LAN for source-based breakout traffic
 	IsBreakout param.Field[bool] `json:"is_breakout"`
 	// mark true to use this LAN for source-based prioritized traffic
-	IsPrioritized param.Field[bool]                `json:"is_prioritized"`
-	Name          param.Field[string]              `json:"name"`
-	Nat           param.Field[NatParam]            `json:"nat"`
-	Physport      param.Field[int64]               `json:"physport"`
-	RoutedSubnets param.Field[[]RoutedSubnetParam] `json:"routed_subnets"`
+	IsPrioritized param.Field[bool]                           `json:"is_prioritized"`
+	Name          param.Field[string]                         `json:"name"`
+	Nat           param.Field[NatParam]                       `json:"nat"`
+	Physport      param.Field[int64]                          `json:"physport"`
+	RemoteSubnets param.Field[[]SiteLANNewParamsRemoteSubnet] `json:"remote_subnets"`
+	RoutedSubnets param.Field[[]RoutedSubnetParam]            `json:"routed_subnets"`
 	// If the site is not configured in high availability mode, this configuration is
 	// optional (if omitted, use DHCP). However, if in high availability mode,
 	// static_address is required along with secondary and virtual address.
@@ -565,6 +596,21 @@ type SiteLANNewParams struct {
 }
 
 func (r SiteLANNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A remote subnet reachable through Cloudflare that is addressed from this LAN by
+// a local alias prefix of the same size. The local alias prefix must not overlap
+// other subnets on the LAN, and the remote prefix must not overlap other remote
+// prefixes on the LAN.
+type SiteLANNewParamsRemoteSubnet struct {
+	// A valid CIDR notation representing an IP range.
+	LocalAliasPrefix param.Field[string] `json:"local_alias_prefix" api:"required"`
+	// A valid CIDR notation representing an IP range.
+	RemotePrefix param.Field[string] `json:"remote_prefix" api:"required"`
+}
+
+func (r SiteLANNewParamsRemoteSubnet) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -578,11 +624,12 @@ type SiteLANUpdateParams struct {
 	// mark true to use this LAN for source-based breakout traffic
 	IsBreakout param.Field[bool] `json:"is_breakout"`
 	// mark true to use this LAN for source-based prioritized traffic
-	IsPrioritized param.Field[bool]                `json:"is_prioritized"`
-	Name          param.Field[string]              `json:"name"`
-	Nat           param.Field[NatParam]            `json:"nat"`
-	Physport      param.Field[int64]               `json:"physport"`
-	RoutedSubnets param.Field[[]RoutedSubnetParam] `json:"routed_subnets"`
+	IsPrioritized param.Field[bool]                              `json:"is_prioritized"`
+	Name          param.Field[string]                            `json:"name"`
+	Nat           param.Field[NatParam]                          `json:"nat"`
+	Physport      param.Field[int64]                             `json:"physport"`
+	RemoteSubnets param.Field[[]SiteLANUpdateParamsRemoteSubnet] `json:"remote_subnets"`
+	RoutedSubnets param.Field[[]RoutedSubnetParam]               `json:"routed_subnets"`
 	// If the site is not configured in high availability mode, this configuration is
 	// optional (if omitted, use DHCP). However, if in high availability mode,
 	// static_address is required along with secondary and virtual address.
@@ -592,6 +639,21 @@ type SiteLANUpdateParams struct {
 }
 
 func (r SiteLANUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A remote subnet reachable through Cloudflare that is addressed from this LAN by
+// a local alias prefix of the same size. The local alias prefix must not overlap
+// other subnets on the LAN, and the remote prefix must not overlap other remote
+// prefixes on the LAN.
+type SiteLANUpdateParamsRemoteSubnet struct {
+	// A valid CIDR notation representing an IP range.
+	LocalAliasPrefix param.Field[string] `json:"local_alias_prefix" api:"required"`
+	// A valid CIDR notation representing an IP range.
+	RemotePrefix param.Field[string] `json:"remote_prefix" api:"required"`
+}
+
+func (r SiteLANUpdateParamsRemoteSubnet) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -701,11 +763,12 @@ type SiteLANEditParams struct {
 	// mark true to use this LAN for source-based breakout traffic
 	IsBreakout param.Field[bool] `json:"is_breakout"`
 	// mark true to use this LAN for source-based prioritized traffic
-	IsPrioritized param.Field[bool]                `json:"is_prioritized"`
-	Name          param.Field[string]              `json:"name"`
-	Nat           param.Field[NatParam]            `json:"nat"`
-	Physport      param.Field[int64]               `json:"physport"`
-	RoutedSubnets param.Field[[]RoutedSubnetParam] `json:"routed_subnets"`
+	IsPrioritized param.Field[bool]                            `json:"is_prioritized"`
+	Name          param.Field[string]                          `json:"name"`
+	Nat           param.Field[NatParam]                        `json:"nat"`
+	Physport      param.Field[int64]                           `json:"physport"`
+	RemoteSubnets param.Field[[]SiteLANEditParamsRemoteSubnet] `json:"remote_subnets"`
+	RoutedSubnets param.Field[[]RoutedSubnetParam]             `json:"routed_subnets"`
 	// If the site is not configured in high availability mode, this configuration is
 	// optional (if omitted, use DHCP). However, if in high availability mode,
 	// static_address is required along with secondary and virtual address.
@@ -715,6 +778,21 @@ type SiteLANEditParams struct {
 }
 
 func (r SiteLANEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A remote subnet reachable through Cloudflare that is addressed from this LAN by
+// a local alias prefix of the same size. The local alias prefix must not overlap
+// other subnets on the LAN, and the remote prefix must not overlap other remote
+// prefixes on the LAN.
+type SiteLANEditParamsRemoteSubnet struct {
+	// A valid CIDR notation representing an IP range.
+	LocalAliasPrefix param.Field[string] `json:"local_alias_prefix" api:"required"`
+	// A valid CIDR notation representing an IP range.
+	RemotePrefix param.Field[string] `json:"remote_prefix" api:"required"`
+}
+
+func (r SiteLANEditParamsRemoteSubnet) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

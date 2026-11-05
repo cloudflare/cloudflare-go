@@ -30,10 +30,10 @@ func TestThreatEventQueryNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CloudforceOne.ThreatEvents.Queries.New(context.TODO(), cloudforce_one.ThreatEventQueryNewParams{
 		AccountID:          cloudflare.F("account_id"),
-		AlertEnabled:       cloudflare.F(true),
-		AlertRollupEnabled: cloudflare.F(true),
 		Name:               cloudflare.F("name"),
 		QueryJson:          cloudflare.F("query_json"),
+		AlertEnabled:       cloudflare.F(true),
+		AlertRollupEnabled: cloudflare.F(true),
 		RuleEnabled:        cloudflare.F(true),
 		RuleScope:          cloudflare.F("rule_scope"),
 	})

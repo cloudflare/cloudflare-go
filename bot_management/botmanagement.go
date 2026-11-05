@@ -139,6 +139,8 @@ func (r *BotManagementService) Get(ctx context.Context, query BotManagementGetPa
 }
 
 type BotFightModeConfiguration struct {
+	// Configure blocking behavior for supported personal AI agents.
+	AIAgents BotFightModeConfigurationAIAgents `json:"ai_agents"`
 	// Temporary migration flag tracking zones opted out of AI bots managed-rule
 	// updates.
 	AIBotsMigrationOptOut bool `json:"ai_bots_migration_opt_out"`
@@ -185,6 +187,7 @@ type BotFightModeConfiguration struct {
 // botFightModeConfigurationJSON contains the JSON metadata for the struct
 // [BotFightModeConfiguration]
 type botFightModeConfigurationJSON struct {
+	AIAgents                 apijson.Field
 	AIBotsMigrationOptOut    apijson.Field
 	AIBotsProtection         apijson.Field
 	AISearch                 apijson.Field
@@ -215,6 +218,126 @@ func (r botFightModeConfigurationJSON) RawJSON() string {
 func (r BotFightModeConfiguration) implementsBotManagementUpdateResponse() {}
 
 func (r BotFightModeConfiguration) implementsBotManagementGetResponse() {}
+
+// Configure blocking behavior for supported personal AI agents.
+type BotFightModeConfigurationAIAgents struct {
+	// Action to apply to one supported personal AI agent.
+	AnthropicAgent BotFightModeConfigurationAIAgentsAnthropicAgent `json:"anthropic_agent"`
+	// Action to apply to one supported personal AI agent.
+	GoogleAgent BotFightModeConfigurationAIAgentsGoogleAgent `json:"google_agent"`
+	// Action to apply to one supported personal AI agent.
+	Instinct BotFightModeConfigurationAIAgentsInstinct `json:"instinct"`
+	// Action to apply to one supported personal AI agent.
+	Muse BotFightModeConfigurationAIAgentsMuse `json:"muse"`
+	// Action to apply to one supported personal AI agent.
+	OpenAIAgent BotFightModeConfigurationAIAgentsOpenAIAgent `json:"openai_agent"`
+	JSON        botFightModeConfigurationAIAgentsJSON        `json:"-"`
+}
+
+// botFightModeConfigurationAIAgentsJSON contains the JSON metadata for the struct
+// [BotFightModeConfigurationAIAgents]
+type botFightModeConfigurationAIAgentsJSON struct {
+	AnthropicAgent apijson.Field
+	GoogleAgent    apijson.Field
+	Instinct       apijson.Field
+	Muse           apijson.Field
+	OpenAIAgent    apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *BotFightModeConfigurationAIAgents) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botFightModeConfigurationAIAgentsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Action to apply to one supported personal AI agent.
+type BotFightModeConfigurationAIAgentsAnthropicAgent string
+
+const (
+	BotFightModeConfigurationAIAgentsAnthropicAgentDisabled      BotFightModeConfigurationAIAgentsAnthropicAgent = "disabled"
+	BotFightModeConfigurationAIAgentsAnthropicAgentBlock         BotFightModeConfigurationAIAgentsAnthropicAgent = "block"
+	BotFightModeConfigurationAIAgentsAnthropicAgentOnlyOnADPages BotFightModeConfigurationAIAgentsAnthropicAgent = "only_on_ad_pages"
+)
+
+func (r BotFightModeConfigurationAIAgentsAnthropicAgent) IsKnown() bool {
+	switch r {
+	case BotFightModeConfigurationAIAgentsAnthropicAgentDisabled, BotFightModeConfigurationAIAgentsAnthropicAgentBlock, BotFightModeConfigurationAIAgentsAnthropicAgentOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Action to apply to one supported personal AI agent.
+type BotFightModeConfigurationAIAgentsGoogleAgent string
+
+const (
+	BotFightModeConfigurationAIAgentsGoogleAgentDisabled      BotFightModeConfigurationAIAgentsGoogleAgent = "disabled"
+	BotFightModeConfigurationAIAgentsGoogleAgentBlock         BotFightModeConfigurationAIAgentsGoogleAgent = "block"
+	BotFightModeConfigurationAIAgentsGoogleAgentOnlyOnADPages BotFightModeConfigurationAIAgentsGoogleAgent = "only_on_ad_pages"
+)
+
+func (r BotFightModeConfigurationAIAgentsGoogleAgent) IsKnown() bool {
+	switch r {
+	case BotFightModeConfigurationAIAgentsGoogleAgentDisabled, BotFightModeConfigurationAIAgentsGoogleAgentBlock, BotFightModeConfigurationAIAgentsGoogleAgentOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Action to apply to one supported personal AI agent.
+type BotFightModeConfigurationAIAgentsInstinct string
+
+const (
+	BotFightModeConfigurationAIAgentsInstinctDisabled      BotFightModeConfigurationAIAgentsInstinct = "disabled"
+	BotFightModeConfigurationAIAgentsInstinctBlock         BotFightModeConfigurationAIAgentsInstinct = "block"
+	BotFightModeConfigurationAIAgentsInstinctOnlyOnADPages BotFightModeConfigurationAIAgentsInstinct = "only_on_ad_pages"
+)
+
+func (r BotFightModeConfigurationAIAgentsInstinct) IsKnown() bool {
+	switch r {
+	case BotFightModeConfigurationAIAgentsInstinctDisabled, BotFightModeConfigurationAIAgentsInstinctBlock, BotFightModeConfigurationAIAgentsInstinctOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Action to apply to one supported personal AI agent.
+type BotFightModeConfigurationAIAgentsMuse string
+
+const (
+	BotFightModeConfigurationAIAgentsMuseDisabled      BotFightModeConfigurationAIAgentsMuse = "disabled"
+	BotFightModeConfigurationAIAgentsMuseBlock         BotFightModeConfigurationAIAgentsMuse = "block"
+	BotFightModeConfigurationAIAgentsMuseOnlyOnADPages BotFightModeConfigurationAIAgentsMuse = "only_on_ad_pages"
+)
+
+func (r BotFightModeConfigurationAIAgentsMuse) IsKnown() bool {
+	switch r {
+	case BotFightModeConfigurationAIAgentsMuseDisabled, BotFightModeConfigurationAIAgentsMuseBlock, BotFightModeConfigurationAIAgentsMuseOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Action to apply to one supported personal AI agent.
+type BotFightModeConfigurationAIAgentsOpenAIAgent string
+
+const (
+	BotFightModeConfigurationAIAgentsOpenAIAgentDisabled      BotFightModeConfigurationAIAgentsOpenAIAgent = "disabled"
+	BotFightModeConfigurationAIAgentsOpenAIAgentBlock         BotFightModeConfigurationAIAgentsOpenAIAgent = "block"
+	BotFightModeConfigurationAIAgentsOpenAIAgentOnlyOnADPages BotFightModeConfigurationAIAgentsOpenAIAgent = "only_on_ad_pages"
+)
+
+func (r BotFightModeConfigurationAIAgentsOpenAIAgent) IsKnown() bool {
+	switch r {
+	case BotFightModeConfigurationAIAgentsOpenAIAgentDisabled, BotFightModeConfigurationAIAgentsOpenAIAgentBlock, BotFightModeConfigurationAIAgentsOpenAIAgentOnlyOnADPages:
+		return true
+	}
+	return false
+}
 
 // Enable rule to block AI Scrapers and Crawlers.
 type BotFightModeConfigurationAIBotsProtection string
@@ -377,6 +500,8 @@ func (r botFightModeConfigurationStaleZoneConfigurationJSON) RawJSON() string {
 }
 
 type BotFightModeConfigurationParam struct {
+	// Configure blocking behavior for supported personal AI agents.
+	AIAgents param.Field[BotFightModeConfigurationAIAgentsParam] `json:"ai_agents"`
 	// Temporary migration flag tracking zones opted out of AI bots managed-rule
 	// updates.
 	AIBotsMigrationOptOut param.Field[bool] `json:"ai_bots_migration_opt_out"`
@@ -419,6 +544,24 @@ func (r BotFightModeConfigurationParam) MarshalJSON() (data []byte, err error) {
 
 func (r BotFightModeConfigurationParam) implementsBotManagementUpdateParamsBodyUnion() {}
 
+// Configure blocking behavior for supported personal AI agents.
+type BotFightModeConfigurationAIAgentsParam struct {
+	// Action to apply to one supported personal AI agent.
+	AnthropicAgent param.Field[BotFightModeConfigurationAIAgentsAnthropicAgent] `json:"anthropic_agent"`
+	// Action to apply to one supported personal AI agent.
+	GoogleAgent param.Field[BotFightModeConfigurationAIAgentsGoogleAgent] `json:"google_agent"`
+	// Action to apply to one supported personal AI agent.
+	Instinct param.Field[BotFightModeConfigurationAIAgentsInstinct] `json:"instinct"`
+	// Action to apply to one supported personal AI agent.
+	Muse param.Field[BotFightModeConfigurationAIAgentsMuse] `json:"muse"`
+	// Action to apply to one supported personal AI agent.
+	OpenAIAgent param.Field[BotFightModeConfigurationAIAgentsOpenAIAgent] `json:"openai_agent"`
+}
+
+func (r BotFightModeConfigurationAIAgentsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // A read-only field that shows which unauthorized settings are currently active on
 // the zone. These settings typically result from upgrades or downgrades.
 type BotFightModeConfigurationStaleZoneConfigurationParam struct {
@@ -443,6 +586,8 @@ func (r BotFightModeConfigurationStaleZoneConfigurationParam) MarshalJSON() (dat
 }
 
 type SubscriptionConfiguration struct {
+	// Configure blocking behavior for supported personal AI agents.
+	AIAgents SubscriptionConfigurationAIAgents `json:"ai_agents"`
 	// Temporary migration flag tracking zones opted out of AI bots managed-rule
 	// updates.
 	AIBotsMigrationOptOut bool `json:"ai_bots_migration_opt_out"`
@@ -497,6 +642,7 @@ type SubscriptionConfiguration struct {
 // subscriptionConfigurationJSON contains the JSON metadata for the struct
 // [SubscriptionConfiguration]
 type subscriptionConfigurationJSON struct {
+	AIAgents                 apijson.Field
 	AIBotsMigrationOptOut    apijson.Field
 	AIBotsProtection         apijson.Field
 	AISearch                 apijson.Field
@@ -529,6 +675,126 @@ func (r subscriptionConfigurationJSON) RawJSON() string {
 func (r SubscriptionConfiguration) implementsBotManagementUpdateResponse() {}
 
 func (r SubscriptionConfiguration) implementsBotManagementGetResponse() {}
+
+// Configure blocking behavior for supported personal AI agents.
+type SubscriptionConfigurationAIAgents struct {
+	// Action to apply to one supported personal AI agent.
+	AnthropicAgent SubscriptionConfigurationAIAgentsAnthropicAgent `json:"anthropic_agent"`
+	// Action to apply to one supported personal AI agent.
+	GoogleAgent SubscriptionConfigurationAIAgentsGoogleAgent `json:"google_agent"`
+	// Action to apply to one supported personal AI agent.
+	Instinct SubscriptionConfigurationAIAgentsInstinct `json:"instinct"`
+	// Action to apply to one supported personal AI agent.
+	Muse SubscriptionConfigurationAIAgentsMuse `json:"muse"`
+	// Action to apply to one supported personal AI agent.
+	OpenAIAgent SubscriptionConfigurationAIAgentsOpenAIAgent `json:"openai_agent"`
+	JSON        subscriptionConfigurationAIAgentsJSON        `json:"-"`
+}
+
+// subscriptionConfigurationAIAgentsJSON contains the JSON metadata for the struct
+// [SubscriptionConfigurationAIAgents]
+type subscriptionConfigurationAIAgentsJSON struct {
+	AnthropicAgent apijson.Field
+	GoogleAgent    apijson.Field
+	Instinct       apijson.Field
+	Muse           apijson.Field
+	OpenAIAgent    apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *SubscriptionConfigurationAIAgents) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subscriptionConfigurationAIAgentsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Action to apply to one supported personal AI agent.
+type SubscriptionConfigurationAIAgentsAnthropicAgent string
+
+const (
+	SubscriptionConfigurationAIAgentsAnthropicAgentDisabled      SubscriptionConfigurationAIAgentsAnthropicAgent = "disabled"
+	SubscriptionConfigurationAIAgentsAnthropicAgentBlock         SubscriptionConfigurationAIAgentsAnthropicAgent = "block"
+	SubscriptionConfigurationAIAgentsAnthropicAgentOnlyOnADPages SubscriptionConfigurationAIAgentsAnthropicAgent = "only_on_ad_pages"
+)
+
+func (r SubscriptionConfigurationAIAgentsAnthropicAgent) IsKnown() bool {
+	switch r {
+	case SubscriptionConfigurationAIAgentsAnthropicAgentDisabled, SubscriptionConfigurationAIAgentsAnthropicAgentBlock, SubscriptionConfigurationAIAgentsAnthropicAgentOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Action to apply to one supported personal AI agent.
+type SubscriptionConfigurationAIAgentsGoogleAgent string
+
+const (
+	SubscriptionConfigurationAIAgentsGoogleAgentDisabled      SubscriptionConfigurationAIAgentsGoogleAgent = "disabled"
+	SubscriptionConfigurationAIAgentsGoogleAgentBlock         SubscriptionConfigurationAIAgentsGoogleAgent = "block"
+	SubscriptionConfigurationAIAgentsGoogleAgentOnlyOnADPages SubscriptionConfigurationAIAgentsGoogleAgent = "only_on_ad_pages"
+)
+
+func (r SubscriptionConfigurationAIAgentsGoogleAgent) IsKnown() bool {
+	switch r {
+	case SubscriptionConfigurationAIAgentsGoogleAgentDisabled, SubscriptionConfigurationAIAgentsGoogleAgentBlock, SubscriptionConfigurationAIAgentsGoogleAgentOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Action to apply to one supported personal AI agent.
+type SubscriptionConfigurationAIAgentsInstinct string
+
+const (
+	SubscriptionConfigurationAIAgentsInstinctDisabled      SubscriptionConfigurationAIAgentsInstinct = "disabled"
+	SubscriptionConfigurationAIAgentsInstinctBlock         SubscriptionConfigurationAIAgentsInstinct = "block"
+	SubscriptionConfigurationAIAgentsInstinctOnlyOnADPages SubscriptionConfigurationAIAgentsInstinct = "only_on_ad_pages"
+)
+
+func (r SubscriptionConfigurationAIAgentsInstinct) IsKnown() bool {
+	switch r {
+	case SubscriptionConfigurationAIAgentsInstinctDisabled, SubscriptionConfigurationAIAgentsInstinctBlock, SubscriptionConfigurationAIAgentsInstinctOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Action to apply to one supported personal AI agent.
+type SubscriptionConfigurationAIAgentsMuse string
+
+const (
+	SubscriptionConfigurationAIAgentsMuseDisabled      SubscriptionConfigurationAIAgentsMuse = "disabled"
+	SubscriptionConfigurationAIAgentsMuseBlock         SubscriptionConfigurationAIAgentsMuse = "block"
+	SubscriptionConfigurationAIAgentsMuseOnlyOnADPages SubscriptionConfigurationAIAgentsMuse = "only_on_ad_pages"
+)
+
+func (r SubscriptionConfigurationAIAgentsMuse) IsKnown() bool {
+	switch r {
+	case SubscriptionConfigurationAIAgentsMuseDisabled, SubscriptionConfigurationAIAgentsMuseBlock, SubscriptionConfigurationAIAgentsMuseOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Action to apply to one supported personal AI agent.
+type SubscriptionConfigurationAIAgentsOpenAIAgent string
+
+const (
+	SubscriptionConfigurationAIAgentsOpenAIAgentDisabled      SubscriptionConfigurationAIAgentsOpenAIAgent = "disabled"
+	SubscriptionConfigurationAIAgentsOpenAIAgentBlock         SubscriptionConfigurationAIAgentsOpenAIAgent = "block"
+	SubscriptionConfigurationAIAgentsOpenAIAgentOnlyOnADPages SubscriptionConfigurationAIAgentsOpenAIAgent = "only_on_ad_pages"
+)
+
+func (r SubscriptionConfigurationAIAgentsOpenAIAgent) IsKnown() bool {
+	switch r {
+	case SubscriptionConfigurationAIAgentsOpenAIAgentDisabled, SubscriptionConfigurationAIAgentsOpenAIAgentBlock, SubscriptionConfigurationAIAgentsOpenAIAgentOnlyOnADPages:
+		return true
+	}
+	return false
+}
 
 // Enable rule to block AI Scrapers and Crawlers.
 type SubscriptionConfigurationAIBotsProtection string
@@ -691,6 +957,8 @@ func (r subscriptionConfigurationStaleZoneConfigurationJSON) RawJSON() string {
 }
 
 type SubscriptionConfigurationParam struct {
+	// Configure blocking behavior for supported personal AI agents.
+	AIAgents param.Field[SubscriptionConfigurationAIAgentsParam] `json:"ai_agents"`
 	// Temporary migration flag tracking zones opted out of AI bots managed-rule
 	// updates.
 	AIBotsMigrationOptOut param.Field[bool] `json:"ai_bots_migration_opt_out"`
@@ -741,6 +1009,24 @@ func (r SubscriptionConfigurationParam) MarshalJSON() (data []byte, err error) {
 
 func (r SubscriptionConfigurationParam) implementsBotManagementUpdateParamsBodyUnion() {}
 
+// Configure blocking behavior for supported personal AI agents.
+type SubscriptionConfigurationAIAgentsParam struct {
+	// Action to apply to one supported personal AI agent.
+	AnthropicAgent param.Field[SubscriptionConfigurationAIAgentsAnthropicAgent] `json:"anthropic_agent"`
+	// Action to apply to one supported personal AI agent.
+	GoogleAgent param.Field[SubscriptionConfigurationAIAgentsGoogleAgent] `json:"google_agent"`
+	// Action to apply to one supported personal AI agent.
+	Instinct param.Field[SubscriptionConfigurationAIAgentsInstinct] `json:"instinct"`
+	// Action to apply to one supported personal AI agent.
+	Muse param.Field[SubscriptionConfigurationAIAgentsMuse] `json:"muse"`
+	// Action to apply to one supported personal AI agent.
+	OpenAIAgent param.Field[SubscriptionConfigurationAIAgentsOpenAIAgent] `json:"openai_agent"`
+}
+
+func (r SubscriptionConfigurationAIAgentsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // A read-only field that shows which unauthorized settings are currently active on
 // the zone. These settings typically result from upgrades or downgrades.
 type SubscriptionConfigurationStaleZoneConfigurationParam struct {
@@ -765,6 +1051,8 @@ func (r SubscriptionConfigurationStaleZoneConfigurationParam) MarshalJSON() (dat
 }
 
 type SuperBotFightModeDefinitelyConfiguration struct {
+	// Configure blocking behavior for supported personal AI agents.
+	AIAgents SuperBotFightModeDefinitelyConfigurationAIAgents `json:"ai_agents"`
 	// Temporary migration flag tracking zones opted out of AI bots managed-rule
 	// updates.
 	AIBotsMigrationOptOut bool `json:"ai_bots_migration_opt_out"`
@@ -819,6 +1107,7 @@ type SuperBotFightModeDefinitelyConfiguration struct {
 // superBotFightModeDefinitelyConfigurationJSON contains the JSON metadata for the
 // struct [SuperBotFightModeDefinitelyConfiguration]
 type superBotFightModeDefinitelyConfigurationJSON struct {
+	AIAgents                     apijson.Field
 	AIBotsMigrationOptOut        apijson.Field
 	AIBotsProtection             apijson.Field
 	AISearch                     apijson.Field
@@ -852,6 +1141,126 @@ func (r superBotFightModeDefinitelyConfigurationJSON) RawJSON() string {
 func (r SuperBotFightModeDefinitelyConfiguration) implementsBotManagementUpdateResponse() {}
 
 func (r SuperBotFightModeDefinitelyConfiguration) implementsBotManagementGetResponse() {}
+
+// Configure blocking behavior for supported personal AI agents.
+type SuperBotFightModeDefinitelyConfigurationAIAgents struct {
+	// Action to apply to one supported personal AI agent.
+	AnthropicAgent SuperBotFightModeDefinitelyConfigurationAIAgentsAnthropicAgent `json:"anthropic_agent"`
+	// Action to apply to one supported personal AI agent.
+	GoogleAgent SuperBotFightModeDefinitelyConfigurationAIAgentsGoogleAgent `json:"google_agent"`
+	// Action to apply to one supported personal AI agent.
+	Instinct SuperBotFightModeDefinitelyConfigurationAIAgentsInstinct `json:"instinct"`
+	// Action to apply to one supported personal AI agent.
+	Muse SuperBotFightModeDefinitelyConfigurationAIAgentsMuse `json:"muse"`
+	// Action to apply to one supported personal AI agent.
+	OpenAIAgent SuperBotFightModeDefinitelyConfigurationAIAgentsOpenAIAgent `json:"openai_agent"`
+	JSON        superBotFightModeDefinitelyConfigurationAIAgentsJSON        `json:"-"`
+}
+
+// superBotFightModeDefinitelyConfigurationAIAgentsJSON contains the JSON metadata
+// for the struct [SuperBotFightModeDefinitelyConfigurationAIAgents]
+type superBotFightModeDefinitelyConfigurationAIAgentsJSON struct {
+	AnthropicAgent apijson.Field
+	GoogleAgent    apijson.Field
+	Instinct       apijson.Field
+	Muse           apijson.Field
+	OpenAIAgent    apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *SuperBotFightModeDefinitelyConfigurationAIAgents) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r superBotFightModeDefinitelyConfigurationAIAgentsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Action to apply to one supported personal AI agent.
+type SuperBotFightModeDefinitelyConfigurationAIAgentsAnthropicAgent string
+
+const (
+	SuperBotFightModeDefinitelyConfigurationAIAgentsAnthropicAgentDisabled      SuperBotFightModeDefinitelyConfigurationAIAgentsAnthropicAgent = "disabled"
+	SuperBotFightModeDefinitelyConfigurationAIAgentsAnthropicAgentBlock         SuperBotFightModeDefinitelyConfigurationAIAgentsAnthropicAgent = "block"
+	SuperBotFightModeDefinitelyConfigurationAIAgentsAnthropicAgentOnlyOnADPages SuperBotFightModeDefinitelyConfigurationAIAgentsAnthropicAgent = "only_on_ad_pages"
+)
+
+func (r SuperBotFightModeDefinitelyConfigurationAIAgentsAnthropicAgent) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeDefinitelyConfigurationAIAgentsAnthropicAgentDisabled, SuperBotFightModeDefinitelyConfigurationAIAgentsAnthropicAgentBlock, SuperBotFightModeDefinitelyConfigurationAIAgentsAnthropicAgentOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Action to apply to one supported personal AI agent.
+type SuperBotFightModeDefinitelyConfigurationAIAgentsGoogleAgent string
+
+const (
+	SuperBotFightModeDefinitelyConfigurationAIAgentsGoogleAgentDisabled      SuperBotFightModeDefinitelyConfigurationAIAgentsGoogleAgent = "disabled"
+	SuperBotFightModeDefinitelyConfigurationAIAgentsGoogleAgentBlock         SuperBotFightModeDefinitelyConfigurationAIAgentsGoogleAgent = "block"
+	SuperBotFightModeDefinitelyConfigurationAIAgentsGoogleAgentOnlyOnADPages SuperBotFightModeDefinitelyConfigurationAIAgentsGoogleAgent = "only_on_ad_pages"
+)
+
+func (r SuperBotFightModeDefinitelyConfigurationAIAgentsGoogleAgent) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeDefinitelyConfigurationAIAgentsGoogleAgentDisabled, SuperBotFightModeDefinitelyConfigurationAIAgentsGoogleAgentBlock, SuperBotFightModeDefinitelyConfigurationAIAgentsGoogleAgentOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Action to apply to one supported personal AI agent.
+type SuperBotFightModeDefinitelyConfigurationAIAgentsInstinct string
+
+const (
+	SuperBotFightModeDefinitelyConfigurationAIAgentsInstinctDisabled      SuperBotFightModeDefinitelyConfigurationAIAgentsInstinct = "disabled"
+	SuperBotFightModeDefinitelyConfigurationAIAgentsInstinctBlock         SuperBotFightModeDefinitelyConfigurationAIAgentsInstinct = "block"
+	SuperBotFightModeDefinitelyConfigurationAIAgentsInstinctOnlyOnADPages SuperBotFightModeDefinitelyConfigurationAIAgentsInstinct = "only_on_ad_pages"
+)
+
+func (r SuperBotFightModeDefinitelyConfigurationAIAgentsInstinct) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeDefinitelyConfigurationAIAgentsInstinctDisabled, SuperBotFightModeDefinitelyConfigurationAIAgentsInstinctBlock, SuperBotFightModeDefinitelyConfigurationAIAgentsInstinctOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Action to apply to one supported personal AI agent.
+type SuperBotFightModeDefinitelyConfigurationAIAgentsMuse string
+
+const (
+	SuperBotFightModeDefinitelyConfigurationAIAgentsMuseDisabled      SuperBotFightModeDefinitelyConfigurationAIAgentsMuse = "disabled"
+	SuperBotFightModeDefinitelyConfigurationAIAgentsMuseBlock         SuperBotFightModeDefinitelyConfigurationAIAgentsMuse = "block"
+	SuperBotFightModeDefinitelyConfigurationAIAgentsMuseOnlyOnADPages SuperBotFightModeDefinitelyConfigurationAIAgentsMuse = "only_on_ad_pages"
+)
+
+func (r SuperBotFightModeDefinitelyConfigurationAIAgentsMuse) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeDefinitelyConfigurationAIAgentsMuseDisabled, SuperBotFightModeDefinitelyConfigurationAIAgentsMuseBlock, SuperBotFightModeDefinitelyConfigurationAIAgentsMuseOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Action to apply to one supported personal AI agent.
+type SuperBotFightModeDefinitelyConfigurationAIAgentsOpenAIAgent string
+
+const (
+	SuperBotFightModeDefinitelyConfigurationAIAgentsOpenAIAgentDisabled      SuperBotFightModeDefinitelyConfigurationAIAgentsOpenAIAgent = "disabled"
+	SuperBotFightModeDefinitelyConfigurationAIAgentsOpenAIAgentBlock         SuperBotFightModeDefinitelyConfigurationAIAgentsOpenAIAgent = "block"
+	SuperBotFightModeDefinitelyConfigurationAIAgentsOpenAIAgentOnlyOnADPages SuperBotFightModeDefinitelyConfigurationAIAgentsOpenAIAgent = "only_on_ad_pages"
+)
+
+func (r SuperBotFightModeDefinitelyConfigurationAIAgentsOpenAIAgent) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeDefinitelyConfigurationAIAgentsOpenAIAgentDisabled, SuperBotFightModeDefinitelyConfigurationAIAgentsOpenAIAgentBlock, SuperBotFightModeDefinitelyConfigurationAIAgentsOpenAIAgentOnlyOnADPages:
+		return true
+	}
+	return false
+}
 
 // Enable rule to block AI Scrapers and Crawlers.
 type SuperBotFightModeDefinitelyConfigurationAIBotsProtection string
@@ -1035,6 +1444,8 @@ func (r superBotFightModeDefinitelyConfigurationStaleZoneConfigurationJSON) RawJ
 }
 
 type SuperBotFightModeDefinitelyConfigurationParam struct {
+	// Configure blocking behavior for supported personal AI agents.
+	AIAgents param.Field[SuperBotFightModeDefinitelyConfigurationAIAgentsParam] `json:"ai_agents"`
 	// Temporary migration flag tracking zones opted out of AI bots managed-rule
 	// updates.
 	AIBotsMigrationOptOut param.Field[bool] `json:"ai_bots_migration_opt_out"`
@@ -1086,6 +1497,24 @@ func (r SuperBotFightModeDefinitelyConfigurationParam) MarshalJSON() (data []byt
 func (r SuperBotFightModeDefinitelyConfigurationParam) implementsBotManagementUpdateParamsBodyUnion() {
 }
 
+// Configure blocking behavior for supported personal AI agents.
+type SuperBotFightModeDefinitelyConfigurationAIAgentsParam struct {
+	// Action to apply to one supported personal AI agent.
+	AnthropicAgent param.Field[SuperBotFightModeDefinitelyConfigurationAIAgentsAnthropicAgent] `json:"anthropic_agent"`
+	// Action to apply to one supported personal AI agent.
+	GoogleAgent param.Field[SuperBotFightModeDefinitelyConfigurationAIAgentsGoogleAgent] `json:"google_agent"`
+	// Action to apply to one supported personal AI agent.
+	Instinct param.Field[SuperBotFightModeDefinitelyConfigurationAIAgentsInstinct] `json:"instinct"`
+	// Action to apply to one supported personal AI agent.
+	Muse param.Field[SuperBotFightModeDefinitelyConfigurationAIAgentsMuse] `json:"muse"`
+	// Action to apply to one supported personal AI agent.
+	OpenAIAgent param.Field[SuperBotFightModeDefinitelyConfigurationAIAgentsOpenAIAgent] `json:"openai_agent"`
+}
+
+func (r SuperBotFightModeDefinitelyConfigurationAIAgentsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // A read-only field that shows which unauthorized settings are currently active on
 // the zone. These settings typically result from upgrades or downgrades.
 type SuperBotFightModeDefinitelyConfigurationStaleZoneConfigurationParam struct {
@@ -1101,6 +1530,8 @@ func (r SuperBotFightModeDefinitelyConfigurationStaleZoneConfigurationParam) Mar
 }
 
 type SuperBotFightModeLikelyConfiguration struct {
+	// Configure blocking behavior for supported personal AI agents.
+	AIAgents SuperBotFightModeLikelyConfigurationAIAgents `json:"ai_agents"`
 	// Temporary migration flag tracking zones opted out of AI bots managed-rule
 	// updates.
 	AIBotsMigrationOptOut bool `json:"ai_bots_migration_opt_out"`
@@ -1157,6 +1588,7 @@ type SuperBotFightModeLikelyConfiguration struct {
 // superBotFightModeLikelyConfigurationJSON contains the JSON metadata for the
 // struct [SuperBotFightModeLikelyConfiguration]
 type superBotFightModeLikelyConfigurationJSON struct {
+	AIAgents                     apijson.Field
 	AIBotsMigrationOptOut        apijson.Field
 	AIBotsProtection             apijson.Field
 	AISearch                     apijson.Field
@@ -1191,6 +1623,126 @@ func (r superBotFightModeLikelyConfigurationJSON) RawJSON() string {
 func (r SuperBotFightModeLikelyConfiguration) implementsBotManagementUpdateResponse() {}
 
 func (r SuperBotFightModeLikelyConfiguration) implementsBotManagementGetResponse() {}
+
+// Configure blocking behavior for supported personal AI agents.
+type SuperBotFightModeLikelyConfigurationAIAgents struct {
+	// Action to apply to one supported personal AI agent.
+	AnthropicAgent SuperBotFightModeLikelyConfigurationAIAgentsAnthropicAgent `json:"anthropic_agent"`
+	// Action to apply to one supported personal AI agent.
+	GoogleAgent SuperBotFightModeLikelyConfigurationAIAgentsGoogleAgent `json:"google_agent"`
+	// Action to apply to one supported personal AI agent.
+	Instinct SuperBotFightModeLikelyConfigurationAIAgentsInstinct `json:"instinct"`
+	// Action to apply to one supported personal AI agent.
+	Muse SuperBotFightModeLikelyConfigurationAIAgentsMuse `json:"muse"`
+	// Action to apply to one supported personal AI agent.
+	OpenAIAgent SuperBotFightModeLikelyConfigurationAIAgentsOpenAIAgent `json:"openai_agent"`
+	JSON        superBotFightModeLikelyConfigurationAIAgentsJSON        `json:"-"`
+}
+
+// superBotFightModeLikelyConfigurationAIAgentsJSON contains the JSON metadata for
+// the struct [SuperBotFightModeLikelyConfigurationAIAgents]
+type superBotFightModeLikelyConfigurationAIAgentsJSON struct {
+	AnthropicAgent apijson.Field
+	GoogleAgent    apijson.Field
+	Instinct       apijson.Field
+	Muse           apijson.Field
+	OpenAIAgent    apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *SuperBotFightModeLikelyConfigurationAIAgents) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r superBotFightModeLikelyConfigurationAIAgentsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Action to apply to one supported personal AI agent.
+type SuperBotFightModeLikelyConfigurationAIAgentsAnthropicAgent string
+
+const (
+	SuperBotFightModeLikelyConfigurationAIAgentsAnthropicAgentDisabled      SuperBotFightModeLikelyConfigurationAIAgentsAnthropicAgent = "disabled"
+	SuperBotFightModeLikelyConfigurationAIAgentsAnthropicAgentBlock         SuperBotFightModeLikelyConfigurationAIAgentsAnthropicAgent = "block"
+	SuperBotFightModeLikelyConfigurationAIAgentsAnthropicAgentOnlyOnADPages SuperBotFightModeLikelyConfigurationAIAgentsAnthropicAgent = "only_on_ad_pages"
+)
+
+func (r SuperBotFightModeLikelyConfigurationAIAgentsAnthropicAgent) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeLikelyConfigurationAIAgentsAnthropicAgentDisabled, SuperBotFightModeLikelyConfigurationAIAgentsAnthropicAgentBlock, SuperBotFightModeLikelyConfigurationAIAgentsAnthropicAgentOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Action to apply to one supported personal AI agent.
+type SuperBotFightModeLikelyConfigurationAIAgentsGoogleAgent string
+
+const (
+	SuperBotFightModeLikelyConfigurationAIAgentsGoogleAgentDisabled      SuperBotFightModeLikelyConfigurationAIAgentsGoogleAgent = "disabled"
+	SuperBotFightModeLikelyConfigurationAIAgentsGoogleAgentBlock         SuperBotFightModeLikelyConfigurationAIAgentsGoogleAgent = "block"
+	SuperBotFightModeLikelyConfigurationAIAgentsGoogleAgentOnlyOnADPages SuperBotFightModeLikelyConfigurationAIAgentsGoogleAgent = "only_on_ad_pages"
+)
+
+func (r SuperBotFightModeLikelyConfigurationAIAgentsGoogleAgent) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeLikelyConfigurationAIAgentsGoogleAgentDisabled, SuperBotFightModeLikelyConfigurationAIAgentsGoogleAgentBlock, SuperBotFightModeLikelyConfigurationAIAgentsGoogleAgentOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Action to apply to one supported personal AI agent.
+type SuperBotFightModeLikelyConfigurationAIAgentsInstinct string
+
+const (
+	SuperBotFightModeLikelyConfigurationAIAgentsInstinctDisabled      SuperBotFightModeLikelyConfigurationAIAgentsInstinct = "disabled"
+	SuperBotFightModeLikelyConfigurationAIAgentsInstinctBlock         SuperBotFightModeLikelyConfigurationAIAgentsInstinct = "block"
+	SuperBotFightModeLikelyConfigurationAIAgentsInstinctOnlyOnADPages SuperBotFightModeLikelyConfigurationAIAgentsInstinct = "only_on_ad_pages"
+)
+
+func (r SuperBotFightModeLikelyConfigurationAIAgentsInstinct) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeLikelyConfigurationAIAgentsInstinctDisabled, SuperBotFightModeLikelyConfigurationAIAgentsInstinctBlock, SuperBotFightModeLikelyConfigurationAIAgentsInstinctOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Action to apply to one supported personal AI agent.
+type SuperBotFightModeLikelyConfigurationAIAgentsMuse string
+
+const (
+	SuperBotFightModeLikelyConfigurationAIAgentsMuseDisabled      SuperBotFightModeLikelyConfigurationAIAgentsMuse = "disabled"
+	SuperBotFightModeLikelyConfigurationAIAgentsMuseBlock         SuperBotFightModeLikelyConfigurationAIAgentsMuse = "block"
+	SuperBotFightModeLikelyConfigurationAIAgentsMuseOnlyOnADPages SuperBotFightModeLikelyConfigurationAIAgentsMuse = "only_on_ad_pages"
+)
+
+func (r SuperBotFightModeLikelyConfigurationAIAgentsMuse) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeLikelyConfigurationAIAgentsMuseDisabled, SuperBotFightModeLikelyConfigurationAIAgentsMuseBlock, SuperBotFightModeLikelyConfigurationAIAgentsMuseOnlyOnADPages:
+		return true
+	}
+	return false
+}
+
+// Action to apply to one supported personal AI agent.
+type SuperBotFightModeLikelyConfigurationAIAgentsOpenAIAgent string
+
+const (
+	SuperBotFightModeLikelyConfigurationAIAgentsOpenAIAgentDisabled      SuperBotFightModeLikelyConfigurationAIAgentsOpenAIAgent = "disabled"
+	SuperBotFightModeLikelyConfigurationAIAgentsOpenAIAgentBlock         SuperBotFightModeLikelyConfigurationAIAgentsOpenAIAgent = "block"
+	SuperBotFightModeLikelyConfigurationAIAgentsOpenAIAgentOnlyOnADPages SuperBotFightModeLikelyConfigurationAIAgentsOpenAIAgent = "only_on_ad_pages"
+)
+
+func (r SuperBotFightModeLikelyConfigurationAIAgentsOpenAIAgent) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeLikelyConfigurationAIAgentsOpenAIAgentDisabled, SuperBotFightModeLikelyConfigurationAIAgentsOpenAIAgentBlock, SuperBotFightModeLikelyConfigurationAIAgentsOpenAIAgentOnlyOnADPages:
+		return true
+	}
+	return false
+}
 
 // Enable rule to block AI Scrapers and Crawlers.
 type SuperBotFightModeLikelyConfigurationAIBotsProtection string
@@ -1387,6 +1939,8 @@ func (r superBotFightModeLikelyConfigurationStaleZoneConfigurationJSON) RawJSON(
 }
 
 type SuperBotFightModeLikelyConfigurationParam struct {
+	// Configure blocking behavior for supported personal AI agents.
+	AIAgents param.Field[SuperBotFightModeLikelyConfigurationAIAgentsParam] `json:"ai_agents"`
 	// Temporary migration flag tracking zones opted out of AI bots managed-rule
 	// updates.
 	AIBotsMigrationOptOut param.Field[bool] `json:"ai_bots_migration_opt_out"`
@@ -1439,6 +1993,24 @@ func (r SuperBotFightModeLikelyConfigurationParam) MarshalJSON() (data []byte, e
 
 func (r SuperBotFightModeLikelyConfigurationParam) implementsBotManagementUpdateParamsBodyUnion() {}
 
+// Configure blocking behavior for supported personal AI agents.
+type SuperBotFightModeLikelyConfigurationAIAgentsParam struct {
+	// Action to apply to one supported personal AI agent.
+	AnthropicAgent param.Field[SuperBotFightModeLikelyConfigurationAIAgentsAnthropicAgent] `json:"anthropic_agent"`
+	// Action to apply to one supported personal AI agent.
+	GoogleAgent param.Field[SuperBotFightModeLikelyConfigurationAIAgentsGoogleAgent] `json:"google_agent"`
+	// Action to apply to one supported personal AI agent.
+	Instinct param.Field[SuperBotFightModeLikelyConfigurationAIAgentsInstinct] `json:"instinct"`
+	// Action to apply to one supported personal AI agent.
+	Muse param.Field[SuperBotFightModeLikelyConfigurationAIAgentsMuse] `json:"muse"`
+	// Action to apply to one supported personal AI agent.
+	OpenAIAgent param.Field[SuperBotFightModeLikelyConfigurationAIAgentsOpenAIAgent] `json:"openai_agent"`
+}
+
+func (r SuperBotFightModeLikelyConfigurationAIAgentsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // A read-only field that shows which unauthorized settings are currently active on
 // the zone. These settings typically result from upgrades or downgrades.
 type SuperBotFightModeLikelyConfigurationStaleZoneConfigurationParam struct {
@@ -1451,6 +2023,11 @@ func (r SuperBotFightModeLikelyConfigurationStaleZoneConfigurationParam) Marshal
 }
 
 type BotManagementUpdateResponse struct {
+	// This field can have the runtime type of [BotFightModeConfigurationAIAgents],
+	// [SuperBotFightModeDefinitelyConfigurationAIAgents],
+	// [SuperBotFightModeLikelyConfigurationAIAgents],
+	// [SubscriptionConfigurationAIAgents].
+	AIAgents interface{} `json:"ai_agents"`
 	// Temporary migration flag tracking zones opted out of AI bots managed-rule
 	// updates.
 	AIBotsMigrationOptOut bool `json:"ai_bots_migration_opt_out"`
@@ -1523,6 +2100,7 @@ type BotManagementUpdateResponse struct {
 // botManagementUpdateResponseJSON contains the JSON metadata for the struct
 // [BotManagementUpdateResponse]
 type botManagementUpdateResponseJSON struct {
+	AIAgents                     apijson.Field
 	AIBotsMigrationOptOut        apijson.Field
 	AIBotsProtection             apijson.Field
 	AISearch                     apijson.Field
@@ -1773,6 +2351,11 @@ func (r BotManagementUpdateResponseSBFMVerifiedBots) IsKnown() bool {
 }
 
 type BotManagementGetResponse struct {
+	// This field can have the runtime type of [BotFightModeConfigurationAIAgents],
+	// [SuperBotFightModeDefinitelyConfigurationAIAgents],
+	// [SuperBotFightModeLikelyConfigurationAIAgents],
+	// [SubscriptionConfigurationAIAgents].
+	AIAgents interface{} `json:"ai_agents"`
 	// Temporary migration flag tracking zones opted out of AI bots managed-rule
 	// updates.
 	AIBotsMigrationOptOut bool `json:"ai_bots_migration_opt_out"`
@@ -1845,6 +2428,7 @@ type BotManagementGetResponse struct {
 // botManagementGetResponseJSON contains the JSON metadata for the struct
 // [BotManagementGetResponse]
 type botManagementGetResponseJSON struct {
+	AIAgents                     apijson.Field
 	AIBotsMigrationOptOut        apijson.Field
 	AIBotsProtection             apijson.Field
 	AISearch                     apijson.Field
@@ -2105,6 +2689,7 @@ func (r BotManagementUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type BotManagementUpdateParamsBody struct {
+	AIAgents param.Field[interface{}] `json:"ai_agents"`
 	// Temporary migration flag tracking zones opted out of AI bots managed-rule
 	// updates.
 	AIBotsMigrationOptOut param.Field[bool] `json:"ai_bots_migration_opt_out"`

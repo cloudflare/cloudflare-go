@@ -27,6 +27,8 @@ type AccessService struct {
 	Keys                *AccessKeyService
 	Logs                *AccessLogService
 	Users               *AccessUserService
+	UserPopulations     *AccessUserPopulationService
+	Mfa                 *AccessMfaService
 	CustomPages         *AccessCustomPageService
 	Tags                *AccessTagService
 	Policies            *AccessPolicyService
@@ -51,6 +53,8 @@ func NewAccessService(opts ...option.RequestOption) (r *AccessService) {
 	r.Keys = NewAccessKeyService(opts...)
 	r.Logs = NewAccessLogService(opts...)
 	r.Users = NewAccessUserService(opts...)
+	r.UserPopulations = NewAccessUserPopulationService(opts...)
+	r.Mfa = NewAccessMfaService(opts...)
 	r.CustomPages = NewAccessCustomPageService(opts...)
 	r.Tags = NewAccessTagService(opts...)
 	r.Policies = NewAccessPolicyService(opts...)

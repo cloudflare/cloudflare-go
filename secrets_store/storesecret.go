@@ -235,8 +235,10 @@ type StoreSecretNewResponse struct {
 	StoreID string `json:"store_id" api:"required"`
 	// Freeform text describing the secret.
 	Comment string `json:"comment"`
-	// The list of services that can use this secret.
-	Scopes []StoreSecretNewResponseScope `json:"scopes"`
+	// The list of services that can use this secret, or null when the secret inherits
+	// its store's scopes. Set it to null in a patch to inherit again. An empty list
+	// lets no service use the secret.
+	Scopes []StoreSecretNewResponseScope `json:"scopes" api:"nullable"`
 	JSON   storeSecretNewResponseJSON    `json:"-"`
 }
 
@@ -312,8 +314,10 @@ type StoreSecretListResponse struct {
 	StoreID string `json:"store_id" api:"required"`
 	// Freeform text describing the secret.
 	Comment string `json:"comment"`
-	// The list of services that can use this secret.
-	Scopes []StoreSecretListResponseScope `json:"scopes"`
+	// The list of services that can use this secret, or null when the secret inherits
+	// its store's scopes. Set it to null in a patch to inherit again. An empty list
+	// lets no service use the secret.
+	Scopes []StoreSecretListResponseScope `json:"scopes" api:"nullable"`
 	JSON   storeSecretListResponseJSON    `json:"-"`
 }
 
@@ -393,8 +397,10 @@ type StoreSecretDuplicateResponse struct {
 	StoreID string `json:"store_id" api:"required"`
 	// Freeform text describing the secret.
 	Comment string `json:"comment"`
-	// The list of services that can use this secret.
-	Scopes []StoreSecretDuplicateResponseScope `json:"scopes"`
+	// The list of services that can use this secret, or null when the secret inherits
+	// its store's scopes. Set it to null in a patch to inherit again. An empty list
+	// lets no service use the secret.
+	Scopes []StoreSecretDuplicateResponseScope `json:"scopes" api:"nullable"`
 	JSON   storeSecretDuplicateResponseJSON    `json:"-"`
 }
 
@@ -470,8 +476,10 @@ type StoreSecretEditResponse struct {
 	StoreID string `json:"store_id" api:"required"`
 	// Freeform text describing the secret.
 	Comment string `json:"comment"`
-	// The list of services that can use this secret.
-	Scopes []StoreSecretEditResponseScope `json:"scopes"`
+	// The list of services that can use this secret, or null when the secret inherits
+	// its store's scopes. Set it to null in a patch to inherit again. An empty list
+	// lets no service use the secret.
+	Scopes []StoreSecretEditResponseScope `json:"scopes" api:"nullable"`
 	JSON   storeSecretEditResponseJSON    `json:"-"`
 }
 
@@ -547,8 +555,10 @@ type StoreSecretGetResponse struct {
 	StoreID string `json:"store_id" api:"required"`
 	// Freeform text describing the secret.
 	Comment string `json:"comment"`
-	// The list of services that can use this secret.
-	Scopes []StoreSecretGetResponseScope `json:"scopes"`
+	// The list of services that can use this secret, or null when the secret inherits
+	// its store's scopes. Set it to null in a patch to inherit again. An empty list
+	// lets no service use the secret.
+	Scopes []StoreSecretGetResponseScope `json:"scopes" api:"nullable"`
 	JSON   storeSecretGetResponseJSON    `json:"-"`
 }
 
@@ -622,14 +632,15 @@ func (r StoreSecretNewParams) MarshalJSON() (data []byte, err error) {
 type StoreSecretNewParamsBody struct {
 	// The name of the secret.
 	Name param.Field[string] `json:"name" api:"required"`
-	// The list of services that can use this secret.
-	Scopes param.Field[[]StoreSecretNewParamsBodyScope] `json:"scopes" api:"required"`
 	// The value of the secret. Maximum 64 KiB (65,536 bytes). Note that this is 'write
 	// only' - the API never returns this value; it exists only to create or modify
 	// secrets.
 	Value param.Field[string] `json:"value" api:"required"`
 	// Freeform text describing the secret.
 	Comment param.Field[string] `json:"comment"`
+	// The list of services that can use this secret. Omit it on create or duplicate to
+	// inherit the store's scopes. An empty list lets no service use the secret.
+	Scopes param.Field[[]StoreSecretNewParamsBodyScope] `json:"scopes"`
 }
 
 func (r StoreSecretNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -1025,10 +1036,11 @@ type StoreSecretDuplicateParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The name of the secret.
 	Name param.Field[string] `json:"name" api:"required"`
-	// The list of services that can use this secret.
-	Scopes param.Field[[]StoreSecretDuplicateParamsScope] `json:"scopes" api:"required"`
 	// Freeform text describing the secret.
 	Comment param.Field[string] `json:"comment"`
+	// The list of services that can use this secret. Omit it on create or duplicate to
+	// inherit the store's scopes. An empty list lets no service use the secret.
+	Scopes param.Field[[]StoreSecretDuplicateParamsScope] `json:"scopes"`
 }
 
 func (r StoreSecretDuplicateParams) MarshalJSON() (data []byte, err error) {
@@ -1197,7 +1209,9 @@ type StoreSecretEditParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Freeform text describing the secret.
 	Comment param.Field[string] `json:"comment"`
-	// The list of services that can use this secret.
+	// The list of services that can use this secret, or null when the secret inherits
+	// its store's scopes. Set it to null in a patch to inherit again. An empty list
+	// lets no service use the secret.
 	Scopes param.Field[[]StoreSecretEditParamsScope] `json:"scopes"`
 	// The value of the secret. Maximum 64 KiB (65,536 bytes). Note that this is 'write
 	// only' - the API never returns this value; it exists only to create or modify

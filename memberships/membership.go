@@ -420,7 +420,7 @@ func (r membershipUpdateResponsePoliciesPermissionGroupsMetaJSON) RawJSON() stri
 type MembershipUpdateResponsePoliciesResourceGroup struct {
 	// Identifier of the resource group.
 	ID string `json:"id" api:"required"`
-	// A scope is a combination of scope objects which provides additional context.
+	// The scope associated to the resource group
 	Scope MembershipUpdateResponsePoliciesResourceGroupsScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta MembershipUpdateResponsePoliciesResourceGroupsMeta `json:"meta"`
@@ -448,7 +448,7 @@ func (r membershipUpdateResponsePoliciesResourceGroupJSON) RawJSON() string {
 	return r.raw
 }
 
-// A scope is a combination of scope objects which provides additional context.
+// The scope associated to the resource group
 type MembershipUpdateResponsePoliciesResourceGroupsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
@@ -773,7 +773,7 @@ func (r membershipGetResponsePoliciesPermissionGroupsMetaJSON) RawJSON() string 
 type MembershipGetResponsePoliciesResourceGroup struct {
 	// Identifier of the resource group.
 	ID string `json:"id" api:"required"`
-	// A scope is a combination of scope objects which provides additional context.
+	// The scope associated to the resource group
 	Scope MembershipGetResponsePoliciesResourceGroupsScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta MembershipGetResponsePoliciesResourceGroupsMeta `json:"meta"`
@@ -801,7 +801,7 @@ func (r membershipGetResponsePoliciesResourceGroupJSON) RawJSON() string {
 	return r.raw
 }
 
-// A scope is a combination of scope objects which provides additional context.
+// The scope associated to the resource group
 type MembershipGetResponsePoliciesResourceGroupsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)

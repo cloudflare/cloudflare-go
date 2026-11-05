@@ -49,9 +49,6 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 				"X-Custom-Header-Name": {"somecustomvalue"},
 			}),
 			AllowChildBypass: cloudflare.F(false),
-			AuditSSH: cloudflare.F(zero_trust.RuleSettingAuditSSHParam{
-				CommandLogging: cloudflare.F(false),
-			}),
 			BISOAdminControls: cloudflare.F(zero_trust.RuleSettingBISOAdminControlsParam{
 				Copy:     cloudflare.F(zero_trust.RuleSettingBISOAdminControlsCopyRemoteOnly),
 				DCP:      cloudflare.F(true),
@@ -100,6 +97,9 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 			}),
 			ForensicCopy: cloudflare.F(zero_trust.RuleSettingForensicCopyParam{
 				Enabled: cloudflare.F(true),
+			}),
+			Forward: cloudflare.F(zero_trust.RuleSettingForwardParam{
+				WorkerID: cloudflare.F("0123456789abcdef0123456789abcdef"),
 			}),
 			IgnoreCNAMECategoryMatches:      cloudflare.F(true),
 			InsecureDisableDNSSECValidation: cloudflare.F(false),
@@ -198,9 +198,6 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 					"X-Custom-Header-Name": {"somecustomvalue"},
 				}),
 				AllowChildBypass: cloudflare.F(false),
-				AuditSSH: cloudflare.F(zero_trust.RuleSettingAuditSSHParam{
-					CommandLogging: cloudflare.F(false),
-				}),
 				BISOAdminControls: cloudflare.F(zero_trust.RuleSettingBISOAdminControlsParam{
 					Copy:     cloudflare.F(zero_trust.RuleSettingBISOAdminControlsCopyRemoteOnly),
 					DCP:      cloudflare.F(true),
@@ -249,6 +246,9 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 				}),
 				ForensicCopy: cloudflare.F(zero_trust.RuleSettingForensicCopyParam{
 					Enabled: cloudflare.F(true),
+				}),
+				Forward: cloudflare.F(zero_trust.RuleSettingForwardParam{
+					WorkerID: cloudflare.F("0123456789abcdef0123456789abcdef"),
 				}),
 				IgnoreCNAMECategoryMatches:      cloudflare.F(true),
 				InsecureDisableDNSSECValidation: cloudflare.F(false),

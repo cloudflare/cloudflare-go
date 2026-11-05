@@ -24,6 +24,7 @@ func TestAccountNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -55,21 +56,20 @@ func TestAccountUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Update(context.TODO(), accounts.AccountUpdateParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Account: accounts.AccountParam{
-			ID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Name:      cloudflare.F("Demo Account"),
-			Type:      cloudflare.F(accounts.AccountTypeStandard),
-			ManagedBy: cloudflare.F(accounts.AccountManagedByParam{}),
-			Settings: cloudflare.F(accounts.AccountSettingsParam{
-				AbuseContactEmail: cloudflare.F("abuse_contact_email"),
-				EnforceTwofactor:  cloudflare.F(true),
-			}),
-		},
+		ID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:      cloudflare.F("Demo Account"),
+		Type:      cloudflare.F(accounts.AccountUpdateParamsTypeStandard),
+		ManagedBy: cloudflare.F(accounts.AccountUpdateParamsManagedBy{}),
+		Settings: cloudflare.F(accounts.AccountUpdateParamsSettings{
+			AbuseContactEmail: cloudflare.F("abuse_contact_email"),
+			EnforceTwofactor:  cloudflare.F(true),
+		}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -90,6 +90,7 @@ func TestAccountListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -118,6 +119,7 @@ func TestAccountDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
@@ -143,6 +145,7 @@ func TestAccountGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)

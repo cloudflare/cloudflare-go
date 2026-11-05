@@ -62,6 +62,9 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 					Enabled:           cloudflare.F(true),
 					CrossVersionCache: cloudflare.F(true),
 				}),
+				CodeUpdateStrategy: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataCodeUpdateStrategyUnion](workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataCodeUpdateStrategyMode{
+					Mode: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataCodeUpdateStrategyModeModeImmediate),
+				}),
 				CompatibilityDate:  cloudflare.F("2021-01-01T00:00:00Z"),
 				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
 				Exports: cloudflare.F(map[string]workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataExportsUnion{

@@ -42,6 +42,10 @@ func TestSiteLANNewWithOptionalParams(t *testing.T) {
 				StaticPrefix: cloudflare.F("192.0.2.0/24"),
 			}),
 			Physport: cloudflare.F(int64(1)),
+			RemoteSubnets: cloudflare.F([]magic_transit.SiteLANNewParamsRemoteSubnet{{
+				LocalAliasPrefix: cloudflare.F("192.0.2.0/24"),
+				RemotePrefix:     cloudflare.F("192.0.2.0/24"),
+			}}),
 			RoutedSubnets: cloudflare.F([]magic_transit.RoutedSubnetParam{{
 				NextHop: cloudflare.F("192.0.2.1"),
 				Prefix:  cloudflare.F("192.0.2.0/24"),
@@ -113,6 +117,10 @@ func TestSiteLANUpdateWithOptionalParams(t *testing.T) {
 				StaticPrefix: cloudflare.F("192.0.2.0/24"),
 			}),
 			Physport: cloudflare.F(int64(1)),
+			RemoteSubnets: cloudflare.F([]magic_transit.SiteLANUpdateParamsRemoteSubnet{{
+				LocalAliasPrefix: cloudflare.F("192.0.2.0/24"),
+				RemotePrefix:     cloudflare.F("192.0.2.0/24"),
+			}}),
 			RoutedSubnets: cloudflare.F([]magic_transit.RoutedSubnetParam{{
 				NextHop: cloudflare.F("192.0.2.1"),
 				Prefix:  cloudflare.F("192.0.2.0/24"),
@@ -245,6 +253,10 @@ func TestSiteLANEditWithOptionalParams(t *testing.T) {
 				StaticPrefix: cloudflare.F("192.0.2.0/24"),
 			}),
 			Physport: cloudflare.F(int64(1)),
+			RemoteSubnets: cloudflare.F([]magic_transit.SiteLANEditParamsRemoteSubnet{{
+				LocalAliasPrefix: cloudflare.F("192.0.2.0/24"),
+				RemotePrefix:     cloudflare.F("192.0.2.0/24"),
+			}}),
 			RoutedSubnets: cloudflare.F([]magic_transit.RoutedSubnetParam{{
 				NextHop: cloudflare.F("192.0.2.1"),
 				Prefix:  cloudflare.F("192.0.2.0/24"),

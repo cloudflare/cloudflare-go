@@ -74,16 +74,21 @@ func (r trafficAnomalyGetResponseJSON) RawJSON() string {
 }
 
 type TrafficAnomalyGetResponseTrafficAnomaly struct {
-	ASNDetails           TrafficAnomalyGetResponseTrafficAnomaliesASNDetails      `json:"asnDetails" api:"required,nullable"`
-	EndDate              time.Time                                                `json:"endDate" api:"required,nullable" format:"date-time"`
-	LocationDetails      TrafficAnomalyGetResponseTrafficAnomaliesLocationDetails `json:"locationDetails" api:"required,nullable"`
-	OriginDetails        TrafficAnomalyGetResponseTrafficAnomaliesOriginDetails   `json:"originDetails" api:"required,nullable"`
-	StartDate            time.Time                                                `json:"startDate" api:"required" format:"date-time"`
-	Status               string                                                   `json:"status" api:"required"`
-	Type                 string                                                   `json:"type" api:"required"`
-	UUID                 string                                                   `json:"uuid" api:"required"`
-	VisibleInDataSources []string                                                 `json:"visibleInDataSources" api:"required,nullable"`
-	JSON                 trafficAnomalyGetResponseTrafficAnomalyJSON              `json:"-"`
+	ASNDetails      TrafficAnomalyGetResponseTrafficAnomaliesASNDetails      `json:"asnDetails" api:"required,nullable"`
+	EndDate         time.Time                                                `json:"endDate" api:"required,nullable" format:"date-time"`
+	LocationDetails TrafficAnomalyGetResponseTrafficAnomaliesLocationDetails `json:"locationDetails" api:"required,nullable"`
+	OriginDetails   TrafficAnomalyGetResponseTrafficAnomaliesOriginDetails   `json:"originDetails" api:"required,nullable"`
+	// ID of the published outage this anomaly was confirmed as, if any.
+	OutageID  string    `json:"outageId" api:"required,nullable"`
+	StartDate time.Time `json:"startDate" api:"required" format:"date-time"`
+	// Verification status: UNVERIFIED (automatically detected, not yet validated by
+	// Radar), TP (verified by Radar) or VERIFIED (verified by Radar and a third-party
+	// source).
+	Status               string                                      `json:"status" api:"required"`
+	Type                 string                                      `json:"type" api:"required"`
+	UUID                 string                                      `json:"uuid" api:"required"`
+	VisibleInDataSources []string                                    `json:"visibleInDataSources" api:"required,nullable"`
+	JSON                 trafficAnomalyGetResponseTrafficAnomalyJSON `json:"-"`
 }
 
 // trafficAnomalyGetResponseTrafficAnomalyJSON contains the JSON metadata for the
@@ -93,6 +98,7 @@ type trafficAnomalyGetResponseTrafficAnomalyJSON struct {
 	EndDate              apijson.Field
 	LocationDetails      apijson.Field
 	OriginDetails        apijson.Field
+	OutageID             apijson.Field
 	StartDate            apijson.Field
 	Status               apijson.Field
 	Type                 apijson.Field

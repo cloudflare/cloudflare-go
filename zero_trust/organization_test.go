@@ -36,6 +36,7 @@ func TestOrganizationNewWithOptionalParams(t *testing.T) {
 		AutoRedirectToIdentity:                 cloudflare.F(true),
 		DenyUnmatchedRequests:                  cloudflare.F(true),
 		DenyUnmatchedRequestsExemptedZoneNames: cloudflare.F([]string{"example.com"}),
+		DisableEndUserAppCreation:              cloudflare.F(false),
 		IsUIReadOnly:                           cloudflare.F(true),
 		LoginDesign: cloudflare.F(zero_trust.LoginDesignParam{
 			BackgroundColor: cloudflare.F("#c5ed1b"),
@@ -106,6 +107,7 @@ func TestOrganizationUpdateWithOptionalParams(t *testing.T) {
 		}),
 		DenyUnmatchedRequests:                  cloudflare.F(true),
 		DenyUnmatchedRequestsExemptedZoneNames: cloudflare.F([]string{"example.com"}),
+		DisableEndUserAppCreation:              cloudflare.F(false),
 		IsUIReadOnly:                           cloudflare.F(true),
 		LoginDesign: cloudflare.F(zero_trust.LoginDesignParam{
 			BackgroundColor: cloudflare.F("#c5ed1b"),

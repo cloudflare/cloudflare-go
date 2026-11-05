@@ -36,7 +36,8 @@ func NewThreatEventAttackerService(opts ...option.RequestOption) (r *ThreatEvent
 	return
 }
 
-// Lists known threat attackers tracked in Cloudforce One threat intelligence.
+// Lists the attackers referenced by events in the datasets given by `datasetIds`,
+// or in the default dataset when `datasetIds` is omitted.
 func (r *ThreatEventAttackerService) List(ctx context.Context, params ThreatEventAttackerListParams, opts ...option.RequestOption) (res *ThreatEventAttackerListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {

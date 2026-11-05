@@ -258,7 +258,8 @@ func (r ThreatSignalArticleTagGenerateResponseTagsAppliedBy) IsKnown() bool {
 
 type ThreatSignalArticleTagNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	TagID     param.Field[string] `json:"tag_id" api:"required" format:"uuid"`
+	// UUID of a tag from the account's catalog to apply to the article.
+	TagID param.Field[string] `json:"tag_id" api:"required" format:"uuid"`
 }
 
 func (r ThreatSignalArticleTagNewParams) MarshalJSON() (data []byte, err error) {

@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // NetworkSubnetInitialResolvedIPService contains methods and other services that
@@ -104,9 +103,9 @@ func (r NetworkSubnetInitialResolvedIPUpdateParamsAddressFamily) IsKnown() bool 
 }
 
 type NetworkSubnetInitialResolvedIPUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	Result   Subnet                `json:"result" api:"required"`
+	Errors   []NetworkSubnetInitialResolvedIPUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []NetworkSubnetInitialResolvedIPUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Subnet                                                         `json:"result" api:"required"`
 	// Whether the API call was successful
 	Success NetworkSubnetInitialResolvedIPUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkSubnetInitialResolvedIPUpdateResponseEnvelopeJSON    `json:"-"`
@@ -128,6 +127,60 @@ func (r *NetworkSubnetInitialResolvedIPUpdateResponseEnvelope) UnmarshalJSON(dat
 }
 
 func (r networkSubnetInitialResolvedIPUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkSubnetInitialResolvedIPUpdateResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                                         `json:"context"`
+	JSON    networkSubnetInitialResolvedIPUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// networkSubnetInitialResolvedIPUpdateResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [NetworkSubnetInitialResolvedIPUpdateResponseEnvelopeErrors]
+type networkSubnetInitialResolvedIPUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkSubnetInitialResolvedIPUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkSubnetInitialResolvedIPUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkSubnetInitialResolvedIPUpdateResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                                           `json:"context"`
+	JSON    networkSubnetInitialResolvedIPUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// networkSubnetInitialResolvedIPUpdateResponseEnvelopeMessagesJSON contains the
+// JSON metadata for the struct
+// [NetworkSubnetInitialResolvedIPUpdateResponseEnvelopeMessages]
+type networkSubnetInitialResolvedIPUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkSubnetInitialResolvedIPUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkSubnetInitialResolvedIPUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -168,9 +221,9 @@ func (r NetworkSubnetInitialResolvedIPGetParamsAddressFamily) IsKnown() bool {
 }
 
 type NetworkSubnetInitialResolvedIPGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	Result   Subnet                `json:"result" api:"required"`
+	Errors   []NetworkSubnetInitialResolvedIPGetResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []NetworkSubnetInitialResolvedIPGetResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Subnet                                                      `json:"result" api:"required"`
 	// Whether the API call was successful
 	Success NetworkSubnetInitialResolvedIPGetResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkSubnetInitialResolvedIPGetResponseEnvelopeJSON    `json:"-"`
@@ -192,6 +245,60 @@ func (r *NetworkSubnetInitialResolvedIPGetResponseEnvelope) UnmarshalJSON(data [
 }
 
 func (r networkSubnetInitialResolvedIPGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkSubnetInitialResolvedIPGetResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                                      `json:"context"`
+	JSON    networkSubnetInitialResolvedIPGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// networkSubnetInitialResolvedIPGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [NetworkSubnetInitialResolvedIPGetResponseEnvelopeErrors]
+type networkSubnetInitialResolvedIPGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkSubnetInitialResolvedIPGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkSubnetInitialResolvedIPGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkSubnetInitialResolvedIPGetResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                                        `json:"context"`
+	JSON    networkSubnetInitialResolvedIPGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// networkSubnetInitialResolvedIPGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [NetworkSubnetInitialResolvedIPGetResponseEnvelopeMessages]
+type networkSubnetInitialResolvedIPGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkSubnetInitialResolvedIPGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkSubnetInitialResolvedIPGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

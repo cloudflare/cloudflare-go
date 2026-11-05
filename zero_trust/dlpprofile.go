@@ -371,6 +371,8 @@ type ProfileCustomProfileEntry struct {
 	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// This field can have the runtime type of [[]string].
+	ValidatorIDs interface{} `json:"validator_ids"`
 	// This field can have the runtime type of
 	// [ProfileCustomProfileEntriesPredefinedEntryVariant].
 	Variant interface{} `json:"variant"`
@@ -396,6 +398,7 @@ type profileCustomProfileEntryJSON struct {
 	ProfileID     apijson.Field
 	Secret        apijson.Field
 	UpdatedAt     apijson.Field
+	ValidatorIDs  apijson.Field
 	Variant       apijson.Field
 	WordList      apijson.Field
 	raw           string
@@ -487,24 +490,31 @@ type ProfileCustomProfileEntriesCustomEntry struct {
 	UpdatedAt   time.Time                                  `json:"updated_at" api:"required" format:"date-time"`
 	Description string                                     `json:"description" api:"nullable"`
 	// Deprecated: deprecated
-	ProfileID string                                     `json:"profile_id" api:"nullable" format:"uuid"`
-	JSON      profileCustomProfileEntriesCustomEntryJSON `json:"-"`
+	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
+	// Validators this entry references, by id, at most 10. An empty list means the
+	// entry references none.
+	//
+	// Returned by the entry endpoints. Not returned on entries embedded in other
+	// responses, such as profiles.
+	ValidatorIDs []string                                   `json:"validator_ids" format:"uuid"`
+	JSON         profileCustomProfileEntriesCustomEntryJSON `json:"-"`
 }
 
 // profileCustomProfileEntriesCustomEntryJSON contains the JSON metadata for the
 // struct [ProfileCustomProfileEntriesCustomEntry]
 type profileCustomProfileEntriesCustomEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	Description apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID           apijson.Field
+	CreatedAt    apijson.Field
+	Enabled      apijson.Field
+	Name         apijson.Field
+	Pattern      apijson.Field
+	Type         apijson.Field
+	UpdatedAt    apijson.Field
+	Description  apijson.Field
+	ProfileID    apijson.Field
+	ValidatorIDs apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *ProfileCustomProfileEntriesCustomEntry) UnmarshalJSON(data []byte) (err error) {
@@ -1093,6 +1103,8 @@ type ProfileCustomProfileSharedEntry struct {
 	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// This field can have the runtime type of [[]string].
+	ValidatorIDs interface{} `json:"validator_ids"`
 	// This field can have the runtime type of
 	// [ProfileCustomProfileSharedEntriesPredefinedEntryVariant].
 	Variant interface{} `json:"variant"`
@@ -1118,6 +1130,7 @@ type profileCustomProfileSharedEntryJSON struct {
 	ProfileID     apijson.Field
 	Secret        apijson.Field
 	UpdatedAt     apijson.Field
+	ValidatorIDs  apijson.Field
 	Variant       apijson.Field
 	WordList      apijson.Field
 	raw           string
@@ -1209,24 +1222,31 @@ type ProfileCustomProfileSharedEntriesCustomEntry struct {
 	UpdatedAt   time.Time                                        `json:"updated_at" api:"required" format:"date-time"`
 	Description string                                           `json:"description" api:"nullable"`
 	// Deprecated: deprecated
-	ProfileID string                                           `json:"profile_id" api:"nullable" format:"uuid"`
-	JSON      profileCustomProfileSharedEntriesCustomEntryJSON `json:"-"`
+	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
+	// Validators this entry references, by id, at most 10. An empty list means the
+	// entry references none.
+	//
+	// Returned by the entry endpoints. Not returned on entries embedded in other
+	// responses, such as profiles.
+	ValidatorIDs []string                                         `json:"validator_ids" format:"uuid"`
+	JSON         profileCustomProfileSharedEntriesCustomEntryJSON `json:"-"`
 }
 
 // profileCustomProfileSharedEntriesCustomEntryJSON contains the JSON metadata for
 // the struct [ProfileCustomProfileSharedEntriesCustomEntry]
 type profileCustomProfileSharedEntriesCustomEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	Description apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID           apijson.Field
+	CreatedAt    apijson.Field
+	Enabled      apijson.Field
+	Name         apijson.Field
+	Pattern      apijson.Field
+	Type         apijson.Field
+	UpdatedAt    apijson.Field
+	Description  apijson.Field
+	ProfileID    apijson.Field
+	ValidatorIDs apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *ProfileCustomProfileSharedEntriesCustomEntry) UnmarshalJSON(data []byte) (err error) {
@@ -1850,6 +1870,8 @@ type ProfilePredefinedProfileEntry struct {
 	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// This field can have the runtime type of [[]string].
+	ValidatorIDs interface{} `json:"validator_ids"`
 	// This field can have the runtime type of
 	// [ProfilePredefinedProfileEntriesPredefinedEntryVariant].
 	Variant interface{} `json:"variant"`
@@ -1875,6 +1897,7 @@ type profilePredefinedProfileEntryJSON struct {
 	ProfileID     apijson.Field
 	Secret        apijson.Field
 	UpdatedAt     apijson.Field
+	ValidatorIDs  apijson.Field
 	Variant       apijson.Field
 	WordList      apijson.Field
 	raw           string
@@ -1966,24 +1989,31 @@ type ProfilePredefinedProfileEntriesCustomEntry struct {
 	UpdatedAt   time.Time                                      `json:"updated_at" api:"required" format:"date-time"`
 	Description string                                         `json:"description" api:"nullable"`
 	// Deprecated: deprecated
-	ProfileID string                                         `json:"profile_id" api:"nullable" format:"uuid"`
-	JSON      profilePredefinedProfileEntriesCustomEntryJSON `json:"-"`
+	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
+	// Validators this entry references, by id, at most 10. An empty list means the
+	// entry references none.
+	//
+	// Returned by the entry endpoints. Not returned on entries embedded in other
+	// responses, such as profiles.
+	ValidatorIDs []string                                       `json:"validator_ids" format:"uuid"`
+	JSON         profilePredefinedProfileEntriesCustomEntryJSON `json:"-"`
 }
 
 // profilePredefinedProfileEntriesCustomEntryJSON contains the JSON metadata for
 // the struct [ProfilePredefinedProfileEntriesCustomEntry]
 type profilePredefinedProfileEntriesCustomEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	Description apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID           apijson.Field
+	CreatedAt    apijson.Field
+	Enabled      apijson.Field
+	Name         apijson.Field
+	Pattern      apijson.Field
+	Type         apijson.Field
+	UpdatedAt    apijson.Field
+	Description  apijson.Field
+	ProfileID    apijson.Field
+	ValidatorIDs apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *ProfilePredefinedProfileEntriesCustomEntry) UnmarshalJSON(data []byte) (err error) {
@@ -2624,6 +2654,8 @@ type ProfileIntegrationProfileEntry struct {
 	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// This field can have the runtime type of [[]string].
+	ValidatorIDs interface{} `json:"validator_ids"`
 	// This field can have the runtime type of
 	// [ProfileIntegrationProfileEntriesPredefinedEntryVariant].
 	Variant interface{} `json:"variant"`
@@ -2649,6 +2681,7 @@ type profileIntegrationProfileEntryJSON struct {
 	ProfileID     apijson.Field
 	Secret        apijson.Field
 	UpdatedAt     apijson.Field
+	ValidatorIDs  apijson.Field
 	Variant       apijson.Field
 	WordList      apijson.Field
 	raw           string
@@ -2740,24 +2773,31 @@ type ProfileIntegrationProfileEntriesCustomEntry struct {
 	UpdatedAt   time.Time                                       `json:"updated_at" api:"required" format:"date-time"`
 	Description string                                          `json:"description" api:"nullable"`
 	// Deprecated: deprecated
-	ProfileID string                                          `json:"profile_id" api:"nullable" format:"uuid"`
-	JSON      profileIntegrationProfileEntriesCustomEntryJSON `json:"-"`
+	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
+	// Validators this entry references, by id, at most 10. An empty list means the
+	// entry references none.
+	//
+	// Returned by the entry endpoints. Not returned on entries embedded in other
+	// responses, such as profiles.
+	ValidatorIDs []string                                        `json:"validator_ids" format:"uuid"`
+	JSON         profileIntegrationProfileEntriesCustomEntryJSON `json:"-"`
 }
 
 // profileIntegrationProfileEntriesCustomEntryJSON contains the JSON metadata for
 // the struct [ProfileIntegrationProfileEntriesCustomEntry]
 type profileIntegrationProfileEntriesCustomEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	Description apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID           apijson.Field
+	CreatedAt    apijson.Field
+	Enabled      apijson.Field
+	Name         apijson.Field
+	Pattern      apijson.Field
+	Type         apijson.Field
+	UpdatedAt    apijson.Field
+	Description  apijson.Field
+	ProfileID    apijson.Field
+	ValidatorIDs apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *ProfileIntegrationProfileEntriesCustomEntry) UnmarshalJSON(data []byte) (err error) {
@@ -3328,6 +3368,8 @@ type ProfileIntegrationProfileSharedEntry struct {
 	ProfileID string    `json:"profile_id" api:"nullable" format:"uuid"`
 	Secret    bool      `json:"secret"`
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// This field can have the runtime type of [[]string].
+	ValidatorIDs interface{} `json:"validator_ids"`
 	// This field can have the runtime type of
 	// [ProfileIntegrationProfileSharedEntriesPredefinedEntryVariant].
 	Variant interface{} `json:"variant"`
@@ -3353,6 +3395,7 @@ type profileIntegrationProfileSharedEntryJSON struct {
 	ProfileID     apijson.Field
 	Secret        apijson.Field
 	UpdatedAt     apijson.Field
+	ValidatorIDs  apijson.Field
 	Variant       apijson.Field
 	WordList      apijson.Field
 	raw           string
@@ -3444,24 +3487,31 @@ type ProfileIntegrationProfileSharedEntriesCustomEntry struct {
 	UpdatedAt   time.Time                                             `json:"updated_at" api:"required" format:"date-time"`
 	Description string                                                `json:"description" api:"nullable"`
 	// Deprecated: deprecated
-	ProfileID string                                                `json:"profile_id" api:"nullable" format:"uuid"`
-	JSON      profileIntegrationProfileSharedEntriesCustomEntryJSON `json:"-"`
+	ProfileID string `json:"profile_id" api:"nullable" format:"uuid"`
+	// Validators this entry references, by id, at most 10. An empty list means the
+	// entry references none.
+	//
+	// Returned by the entry endpoints. Not returned on entries embedded in other
+	// responses, such as profiles.
+	ValidatorIDs []string                                              `json:"validator_ids" format:"uuid"`
+	JSON         profileIntegrationProfileSharedEntriesCustomEntryJSON `json:"-"`
 }
 
 // profileIntegrationProfileSharedEntriesCustomEntryJSON contains the JSON metadata
 // for the struct [ProfileIntegrationProfileSharedEntriesCustomEntry]
 type profileIntegrationProfileSharedEntriesCustomEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	Description apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID           apijson.Field
+	CreatedAt    apijson.Field
+	Enabled      apijson.Field
+	Name         apijson.Field
+	Pattern      apijson.Field
+	Type         apijson.Field
+	UpdatedAt    apijson.Field
+	Description  apijson.Field
+	ProfileID    apijson.Field
+	ValidatorIDs apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
 }
 
 func (r *ProfileIntegrationProfileSharedEntriesCustomEntry) UnmarshalJSON(data []byte) (err error) {

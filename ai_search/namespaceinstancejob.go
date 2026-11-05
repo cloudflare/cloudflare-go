@@ -38,22 +38,22 @@ func NewNamespaceInstanceJobService(opts ...option.RequestOption) (r *NamespaceI
 }
 
 // Creates a new indexing job for an AI Search instance.
-func (r *NamespaceInstanceJobService) New(ctx context.Context, name string, id string, params NamespaceInstanceJobNewParams, opts ...option.RequestOption) (res *NamespaceInstanceJobNewResponse, err error) {
+func (r *NamespaceInstanceJobService) New(ctx context.Context, namespace string, id string, params NamespaceInstanceJobNewParams, opts ...option.RequestOption) (res *NamespaceInstanceJobNewResponse, err error) {
 	var env NamespaceInstanceJobNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	if name == "" {
-		err = errors.New("missing required name parameter")
+	if namespace == "" {
+		err = errors.New("missing required namespace parameter")
 		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/jobs", params.AccountID, name, id)
+	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/jobs", params.AccountID, namespace, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -62,16 +62,16 @@ func (r *NamespaceInstanceJobService) New(ctx context.Context, name string, id s
 	return res, nil
 }
 
-// Cancel an in-progress indexing job for an AI Search instance.
-func (r *NamespaceInstanceJobService) Update(ctx context.Context, name string, id string, jobID string, params NamespaceInstanceJobUpdateParams, opts ...option.RequestOption) (res *NamespaceInstanceJobUpdateResponse, err error) {
+// Cancels an in-progress indexing job for an AI Search instance.
+func (r *NamespaceInstanceJobService) Update(ctx context.Context, namespace string, id string, jobID string, params NamespaceInstanceJobUpdateParams, opts ...option.RequestOption) (res *NamespaceInstanceJobUpdateResponse, err error) {
 	var env NamespaceInstanceJobUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	if name == "" {
-		err = errors.New("missing required name parameter")
+	if namespace == "" {
+		err = errors.New("missing required namespace parameter")
 		return nil, err
 	}
 	if id == "" {
@@ -82,7 +82,7 @@ func (r *NamespaceInstanceJobService) Update(ctx context.Context, name string, i
 		err = errors.New("missing required job_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/jobs/%s", params.AccountID, name, id, jobID)
+	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/jobs/%s", params.AccountID, namespace, id, jobID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -92,7 +92,7 @@ func (r *NamespaceInstanceJobService) Update(ctx context.Context, name string, i
 }
 
 // Lists indexing jobs for an AI Search instance.
-func (r *NamespaceInstanceJobService) List(ctx context.Context, name string, id string, params NamespaceInstanceJobListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[NamespaceInstanceJobListResponse], err error) {
+func (r *NamespaceInstanceJobService) List(ctx context.Context, namespace string, id string, params NamespaceInstanceJobListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[NamespaceInstanceJobListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -100,15 +100,15 @@ func (r *NamespaceInstanceJobService) List(ctx context.Context, name string, id 
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	if name == "" {
-		err = errors.New("missing required name parameter")
+	if namespace == "" {
+		err = errors.New("missing required namespace parameter")
 		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/jobs", params.AccountID, name, id)
+	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/jobs", params.AccountID, namespace, id)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -122,20 +122,20 @@ func (r *NamespaceInstanceJobService) List(ctx context.Context, name string, id 
 }
 
 // Lists indexing jobs for an AI Search instance.
-func (r *NamespaceInstanceJobService) ListAutoPaging(ctx context.Context, name string, id string, params NamespaceInstanceJobListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[NamespaceInstanceJobListResponse] {
-	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, name, id, params, opts...))
+func (r *NamespaceInstanceJobService) ListAutoPaging(ctx context.Context, namespace string, id string, params NamespaceInstanceJobListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[NamespaceInstanceJobListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, namespace, id, params, opts...))
 }
 
 // Retrieves details for a specific AI Search indexing job.
-func (r *NamespaceInstanceJobService) Get(ctx context.Context, name string, id string, jobID string, query NamespaceInstanceJobGetParams, opts ...option.RequestOption) (res *NamespaceInstanceJobGetResponse, err error) {
+func (r *NamespaceInstanceJobService) Get(ctx context.Context, namespace string, id string, jobID string, query NamespaceInstanceJobGetParams, opts ...option.RequestOption) (res *NamespaceInstanceJobGetResponse, err error) {
 	var env NamespaceInstanceJobGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	if name == "" {
-		err = errors.New("missing required name parameter")
+	if namespace == "" {
+		err = errors.New("missing required namespace parameter")
 		return nil, err
 	}
 	if id == "" {
@@ -146,7 +146,7 @@ func (r *NamespaceInstanceJobService) Get(ctx context.Context, name string, id s
 		err = errors.New("missing required job_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/jobs/%s", query.AccountID, name, id, jobID)
+	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/jobs/%s", query.AccountID, namespace, id, jobID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -156,15 +156,15 @@ func (r *NamespaceInstanceJobService) Get(ctx context.Context, name string, id s
 }
 
 // Lists log entries for an AI Search indexing job.
-func (r *NamespaceInstanceJobService) Logs(ctx context.Context, name string, id string, jobID string, params NamespaceInstanceJobLogsParams, opts ...option.RequestOption) (res *[]NamespaceInstanceJobLogsResponse, err error) {
+func (r *NamespaceInstanceJobService) Logs(ctx context.Context, namespace string, id string, jobID string, params NamespaceInstanceJobLogsParams, opts ...option.RequestOption) (res *[]NamespaceInstanceJobLogsResponse, err error) {
 	var env NamespaceInstanceJobLogsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	if name == "" {
-		err = errors.New("missing required name parameter")
+	if namespace == "" {
+		err = errors.New("missing required namespace parameter")
 		return nil, err
 	}
 	if id == "" {
@@ -175,7 +175,7 @@ func (r *NamespaceInstanceJobService) Logs(ctx context.Context, name string, id 
 		err = errors.New("missing required job_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/jobs/%s/logs", params.AccountID, name, id, jobID)
+	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/jobs/%s/logs", params.AccountID, namespace, id, jobID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return nil, err

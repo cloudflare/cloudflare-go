@@ -98,6 +98,10 @@ type DevicePolicyDefaultEditResponse struct {
 	// List of DNS search suffixes to apply to clients. Suffixes are evaluated in
 	// order. Use an empty array to clear.
 	DNSSearchSuffixes []DevicePolicyDefaultEditResponseDNSSearchSuffix `json:"dns_search_suffixes"`
+	// Determines whether the WARP client can silently reauthenticate the user with
+	// device credentials (Microsoft Entra) instead of prompting for browser-based
+	// reauthentication.
+	EnableDeviceCredentialAuthentication bool `json:"enable_device_credential_authentication"`
 	// Whether the policy will be applied to matching devices.
 	Enabled bool `json:"enabled"`
 	// List of routes excluded in the WARP client's tunnel.
@@ -141,33 +145,34 @@ type DevicePolicyDefaultEditResponse struct {
 // devicePolicyDefaultEditResponseJSON contains the JSON metadata for the struct
 // [DevicePolicyDefaultEditResponse]
 type devicePolicyDefaultEditResponseJSON struct {
-	AllowModeSwitch            apijson.Field
-	AllowUpdates               apijson.Field
-	AllowedToLeave             apijson.Field
-	AutoConnect                apijson.Field
-	CaptivePortal              apijson.Field
-	Default                    apijson.Field
-	DisableAutoFallback        apijson.Field
-	DNSSearchSuffixes          apijson.Field
-	Enabled                    apijson.Field
-	Exclude                    apijson.Field
-	ExcludeOfficeIPs           apijson.Field
-	FallbackDomains            apijson.Field
-	GatewayUniqueID            apijson.Field
-	GlobalAcceleration         apijson.Field
-	Include                    apijson.Field
-	PolicyID                   apijson.Field
-	ProfileType                apijson.Field
-	RegisterInterfaceIPWithDNS apijson.Field
-	SccmVpnBoundarySupport     apijson.Field
-	ServiceModeV2              apijson.Field
-	SupportURL                 apijson.Field
-	SwitchLocked               apijson.Field
-	TunnelProtocol             apijson.Field
-	UninstallProtection        apijson.Field
-	VirtualNetworks            apijson.Field
-	raw                        string
-	ExtraFields                map[string]apijson.Field
+	AllowModeSwitch                      apijson.Field
+	AllowUpdates                         apijson.Field
+	AllowedToLeave                       apijson.Field
+	AutoConnect                          apijson.Field
+	CaptivePortal                        apijson.Field
+	Default                              apijson.Field
+	DisableAutoFallback                  apijson.Field
+	DNSSearchSuffixes                    apijson.Field
+	EnableDeviceCredentialAuthentication apijson.Field
+	Enabled                              apijson.Field
+	Exclude                              apijson.Field
+	ExcludeOfficeIPs                     apijson.Field
+	FallbackDomains                      apijson.Field
+	GatewayUniqueID                      apijson.Field
+	GlobalAcceleration                   apijson.Field
+	Include                              apijson.Field
+	PolicyID                             apijson.Field
+	ProfileType                          apijson.Field
+	RegisterInterfaceIPWithDNS           apijson.Field
+	SccmVpnBoundarySupport               apijson.Field
+	ServiceModeV2                        apijson.Field
+	SupportURL                           apijson.Field
+	SwitchLocked                         apijson.Field
+	TunnelProtocol                       apijson.Field
+	UninstallProtection                  apijson.Field
+	VirtualNetworks                      apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *DevicePolicyDefaultEditResponse) UnmarshalJSON(data []byte) (err error) {
@@ -218,6 +223,9 @@ type DevicePolicyDefaultEditResponseGlobalAcceleration struct {
 	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
 	// or masque_endpoints must be provided.
 	WireguardEndpoints []string `json:"wireguard_endpoints" api:"required"`
+	// Whether WARP users may manually override the automatic Global Acceleration
+	// decision. Defaults to true when not provided.
+	AllowManualOverride bool `json:"allow_manual_override"`
 	// Automatically switch Global Acceleration regions based on device location.
 	// Defaults to false when not provided.
 	Autoswitch bool                                                  `json:"autoswitch"`
@@ -227,13 +235,14 @@ type DevicePolicyDefaultEditResponseGlobalAcceleration struct {
 // devicePolicyDefaultEditResponseGlobalAccelerationJSON contains the JSON metadata
 // for the struct [DevicePolicyDefaultEditResponseGlobalAcceleration]
 type devicePolicyDefaultEditResponseGlobalAccelerationJSON struct {
-	APIEndpoints       apijson.Field
-	Enabled            apijson.Field
-	MasqueEndpoints    apijson.Field
-	WireguardEndpoints apijson.Field
-	Autoswitch         apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	APIEndpoints        apijson.Field
+	Enabled             apijson.Field
+	MasqueEndpoints     apijson.Field
+	WireguardEndpoints  apijson.Field
+	AllowManualOverride apijson.Field
+	Autoswitch          apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
 }
 
 func (r *DevicePolicyDefaultEditResponseGlobalAcceleration) UnmarshalJSON(data []byte) (err error) {
@@ -334,6 +343,10 @@ type DevicePolicyDefaultGetResponse struct {
 	// List of DNS search suffixes to apply to clients. Suffixes are evaluated in
 	// order. Use an empty array to clear.
 	DNSSearchSuffixes []DevicePolicyDefaultGetResponseDNSSearchSuffix `json:"dns_search_suffixes"`
+	// Determines whether the WARP client can silently reauthenticate the user with
+	// device credentials (Microsoft Entra) instead of prompting for browser-based
+	// reauthentication.
+	EnableDeviceCredentialAuthentication bool `json:"enable_device_credential_authentication"`
 	// Whether the policy will be applied to matching devices.
 	Enabled bool `json:"enabled"`
 	// List of routes excluded in the WARP client's tunnel.
@@ -377,33 +390,34 @@ type DevicePolicyDefaultGetResponse struct {
 // devicePolicyDefaultGetResponseJSON contains the JSON metadata for the struct
 // [DevicePolicyDefaultGetResponse]
 type devicePolicyDefaultGetResponseJSON struct {
-	AllowModeSwitch            apijson.Field
-	AllowUpdates               apijson.Field
-	AllowedToLeave             apijson.Field
-	AutoConnect                apijson.Field
-	CaptivePortal              apijson.Field
-	Default                    apijson.Field
-	DisableAutoFallback        apijson.Field
-	DNSSearchSuffixes          apijson.Field
-	Enabled                    apijson.Field
-	Exclude                    apijson.Field
-	ExcludeOfficeIPs           apijson.Field
-	FallbackDomains            apijson.Field
-	GatewayUniqueID            apijson.Field
-	GlobalAcceleration         apijson.Field
-	Include                    apijson.Field
-	PolicyID                   apijson.Field
-	ProfileType                apijson.Field
-	RegisterInterfaceIPWithDNS apijson.Field
-	SccmVpnBoundarySupport     apijson.Field
-	ServiceModeV2              apijson.Field
-	SupportURL                 apijson.Field
-	SwitchLocked               apijson.Field
-	TunnelProtocol             apijson.Field
-	UninstallProtection        apijson.Field
-	VirtualNetworks            apijson.Field
-	raw                        string
-	ExtraFields                map[string]apijson.Field
+	AllowModeSwitch                      apijson.Field
+	AllowUpdates                         apijson.Field
+	AllowedToLeave                       apijson.Field
+	AutoConnect                          apijson.Field
+	CaptivePortal                        apijson.Field
+	Default                              apijson.Field
+	DisableAutoFallback                  apijson.Field
+	DNSSearchSuffixes                    apijson.Field
+	EnableDeviceCredentialAuthentication apijson.Field
+	Enabled                              apijson.Field
+	Exclude                              apijson.Field
+	ExcludeOfficeIPs                     apijson.Field
+	FallbackDomains                      apijson.Field
+	GatewayUniqueID                      apijson.Field
+	GlobalAcceleration                   apijson.Field
+	Include                              apijson.Field
+	PolicyID                             apijson.Field
+	ProfileType                          apijson.Field
+	RegisterInterfaceIPWithDNS           apijson.Field
+	SccmVpnBoundarySupport               apijson.Field
+	ServiceModeV2                        apijson.Field
+	SupportURL                           apijson.Field
+	SwitchLocked                         apijson.Field
+	TunnelProtocol                       apijson.Field
+	UninstallProtection                  apijson.Field
+	VirtualNetworks                      apijson.Field
+	raw                                  string
+	ExtraFields                          map[string]apijson.Field
 }
 
 func (r *DevicePolicyDefaultGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -454,6 +468,9 @@ type DevicePolicyDefaultGetResponseGlobalAcceleration struct {
 	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
 	// or masque_endpoints must be provided.
 	WireguardEndpoints []string `json:"wireguard_endpoints" api:"required"`
+	// Whether WARP users may manually override the automatic Global Acceleration
+	// decision. Defaults to true when not provided.
+	AllowManualOverride bool `json:"allow_manual_override"`
 	// Automatically switch Global Acceleration regions based on device location.
 	// Defaults to false when not provided.
 	Autoswitch bool                                                 `json:"autoswitch"`
@@ -463,13 +480,14 @@ type DevicePolicyDefaultGetResponseGlobalAcceleration struct {
 // devicePolicyDefaultGetResponseGlobalAccelerationJSON contains the JSON metadata
 // for the struct [DevicePolicyDefaultGetResponseGlobalAcceleration]
 type devicePolicyDefaultGetResponseGlobalAccelerationJSON struct {
-	APIEndpoints       apijson.Field
-	Enabled            apijson.Field
-	MasqueEndpoints    apijson.Field
-	WireguardEndpoints apijson.Field
-	Autoswitch         apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	APIEndpoints        apijson.Field
+	Enabled             apijson.Field
+	MasqueEndpoints     apijson.Field
+	WireguardEndpoints  apijson.Field
+	AllowManualOverride apijson.Field
+	Autoswitch          apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
 }
 
 func (r *DevicePolicyDefaultGetResponseGlobalAcceleration) UnmarshalJSON(data []byte) (err error) {
@@ -569,6 +587,10 @@ type DevicePolicyDefaultEditParams struct {
 	// List of DNS search suffixes to apply to clients. Suffixes are evaluated in
 	// order. Use an empty array to clear.
 	DNSSearchSuffixes param.Field[[]DevicePolicyDefaultEditParamsDNSSearchSuffix] `json:"dns_search_suffixes"`
+	// Determines whether the WARP client can silently reauthenticate the user with
+	// device credentials (Microsoft Entra) instead of prompting for browser-based
+	// reauthentication.
+	EnableDeviceCredentialAuthentication param.Field[bool] `json:"enable_device_credential_authentication"`
 	// List of routes excluded in the WARP client's tunnel. Both 'exclude' and
 	// 'include' cannot be set in the same request.
 	Exclude param.Field[[]SplitTunnelExcludeUnionParam] `json:"exclude"`
@@ -640,6 +662,9 @@ type DevicePolicyDefaultEditParamsGlobalAcceleration struct {
 	// IP:port entries for the WireGuard tunnel endpoints. Either wireguard_endpoints
 	// or masque_endpoints must be provided.
 	WireguardEndpoints param.Field[[]string] `json:"wireguard_endpoints" api:"required"`
+	// Whether WARP users may manually override the automatic Global Acceleration
+	// decision. Defaults to true when not provided.
+	AllowManualOverride param.Field[bool] `json:"allow_manual_override"`
 	// Automatically switch Global Acceleration regions based on device location.
 	// Defaults to false when not provided.
 	Autoswitch param.Field[bool] `json:"autoswitch"`

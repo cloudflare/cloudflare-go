@@ -131,8 +131,12 @@ func TestMeetingAddParticipantWithOptionalParams(t *testing.T) {
 			AccountID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			CustomParticipantID: cloudflare.F("custom_participant_id"),
 			PresetName:          cloudflare.F("preset_name"),
-			Name:                cloudflare.F("Mary Sue"),
-			Picture:             cloudflare.F("https://i.imgur.com/test.jpg"),
+			Token: cloudflare.F(realtime_kit.MeetingAddParticipantParamsToken{
+				ExpiresOn: cloudflare.F(time.Now()),
+				NotBefore: cloudflare.F(time.Now()),
+			}),
+			Name:    cloudflare.F("Mary Sue"),
+			Picture: cloudflare.F("https://i.imgur.com/test.jpg"),
 		},
 	)
 	if err != nil {
@@ -350,7 +354,7 @@ func TestMeetingGetMeetingParticipantsWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestMeetingRefreshParticipantToken(t *testing.T) {
+func TestMeetingRefreshParticipantTokenWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -372,6 +376,8 @@ func TestMeetingRefreshParticipantToken(t *testing.T) {
 		"participant_id",
 		realtime_kit.MeetingRefreshParticipantTokenParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ExpiresOn: cloudflare.F(time.Now()),
+			NotBefore: cloudflare.F(time.Now()),
 		},
 	)
 	if err != nil {

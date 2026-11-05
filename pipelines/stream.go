@@ -2130,10 +2130,14 @@ func (r streamUpdateResponseEnvelopeJSON) RawJSON() string {
 type StreamListParams struct {
 	// Specifies the public ID of the account.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Sort direction.
+	Direction param.Field[StreamListParamsDirection] `query:"direction"`
 	// Filters streams by name (case-insensitive substring).
-	Name    param.Field[string]  `query:"name"`
-	Page    param.Field[float64] `query:"page"`
-	PerPage param.Field[float64] `query:"per_page"`
+	Name param.Field[string] `query:"name"`
+	// Sorts streams by this field. Defaults to `created_at`.
+	OrderBy param.Field[StreamListParamsOrderBy] `query:"order_by"`
+	Page    param.Field[float64]                 `query:"page"`
+	PerPage param.Field[float64]                 `query:"per_page"`
 	// Specifies the public ID of the pipeline.
 	PipelineID param.Field[string] `query:"pipeline_id"`
 }
@@ -2144,6 +2148,38 @@ func (r StreamListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Sort direction.
+type StreamListParamsDirection string
+
+const (
+	StreamListParamsDirectionAsc  StreamListParamsDirection = "asc"
+	StreamListParamsDirectionDesc StreamListParamsDirection = "desc"
+)
+
+func (r StreamListParamsDirection) IsKnown() bool {
+	switch r {
+	case StreamListParamsDirectionAsc, StreamListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
+// Sorts streams by this field. Defaults to `created_at`.
+type StreamListParamsOrderBy string
+
+const (
+	StreamListParamsOrderByName      StreamListParamsOrderBy = "name"
+	StreamListParamsOrderByCreatedAt StreamListParamsOrderBy = "created_at"
+)
+
+func (r StreamListParamsOrderBy) IsKnown() bool {
+	switch r {
+	case StreamListParamsOrderByName, StreamListParamsOrderByCreatedAt:
+		return true
+	}
+	return false
 }
 
 type StreamDeleteParams struct {

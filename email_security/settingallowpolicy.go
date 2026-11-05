@@ -184,6 +184,10 @@ type SettingAllowPolicyNewResponse struct {
 	// Deprecated: Use `modified_at` instead.
 	LastModified time.Time `json:"last_modified" api:"required" format:"date-time"`
 	Comments     string    `json:"comments" api:"nullable"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt time.Time `json:"expires_at" api:"nullable" format:"date-time"`
 	// Exempts messages from this sender from Spam, Spoof and Bulk dispositions only;
 	// Malicious and Suspicious dispositions still apply.
 	IsAcceptableSender bool `json:"is_acceptable_sender"`
@@ -213,19 +217,20 @@ type SettingAllowPolicyNewResponse struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType SettingAllowPolicyNewResponsePatternType `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -240,6 +245,7 @@ type settingAllowPolicyNewResponseJSON struct {
 	CreatedAt          apijson.Field
 	LastModified       apijson.Field
 	Comments           apijson.Field
+	ExpiresAt          apijson.Field
 	IsAcceptableSender apijson.Field
 	IsExemptRecipient  apijson.Field
 	IsRecipient        apijson.Field
@@ -301,6 +307,10 @@ type SettingAllowPolicyListResponse struct {
 	// Deprecated: Use `modified_at` instead.
 	LastModified time.Time `json:"last_modified" api:"required" format:"date-time"`
 	Comments     string    `json:"comments" api:"nullable"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt time.Time `json:"expires_at" api:"nullable" format:"date-time"`
 	// Exempts messages from this sender from Spam, Spoof and Bulk dispositions only;
 	// Malicious and Suspicious dispositions still apply.
 	IsAcceptableSender bool `json:"is_acceptable_sender"`
@@ -330,19 +340,20 @@ type SettingAllowPolicyListResponse struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType SettingAllowPolicyListResponsePatternType `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -357,6 +368,7 @@ type settingAllowPolicyListResponseJSON struct {
 	CreatedAt          apijson.Field
 	LastModified       apijson.Field
 	Comments           apijson.Field
+	ExpiresAt          apijson.Field
 	IsAcceptableSender apijson.Field
 	IsExemptRecipient  apijson.Field
 	IsRecipient        apijson.Field
@@ -489,6 +501,10 @@ type SettingAllowPolicyBatchResponsePatch struct {
 	// Deprecated: Use `modified_at` instead.
 	LastModified time.Time `json:"last_modified" api:"required" format:"date-time"`
 	Comments     string    `json:"comments" api:"nullable"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt time.Time `json:"expires_at" api:"nullable" format:"date-time"`
 	// Exempts messages from this sender from Spam, Spoof and Bulk dispositions only;
 	// Malicious and Suspicious dispositions still apply.
 	IsAcceptableSender bool `json:"is_acceptable_sender"`
@@ -518,19 +534,20 @@ type SettingAllowPolicyBatchResponsePatch struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType SettingAllowPolicyBatchResponsePatchesPatternType `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -545,6 +562,7 @@ type settingAllowPolicyBatchResponsePatchJSON struct {
 	CreatedAt          apijson.Field
 	LastModified       apijson.Field
 	Comments           apijson.Field
+	ExpiresAt          apijson.Field
 	IsAcceptableSender apijson.Field
 	IsExemptRecipient  apijson.Field
 	IsRecipient        apijson.Field
@@ -606,6 +624,10 @@ type SettingAllowPolicyBatchResponsePost struct {
 	// Deprecated: Use `modified_at` instead.
 	LastModified time.Time `json:"last_modified" api:"required" format:"date-time"`
 	Comments     string    `json:"comments" api:"nullable"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt time.Time `json:"expires_at" api:"nullable" format:"date-time"`
 	// Exempts messages from this sender from Spam, Spoof and Bulk dispositions only;
 	// Malicious and Suspicious dispositions still apply.
 	IsAcceptableSender bool `json:"is_acceptable_sender"`
@@ -635,19 +657,20 @@ type SettingAllowPolicyBatchResponsePost struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType SettingAllowPolicyBatchResponsePostsPatternType `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -662,6 +685,7 @@ type settingAllowPolicyBatchResponsePostJSON struct {
 	CreatedAt          apijson.Field
 	LastModified       apijson.Field
 	Comments           apijson.Field
+	ExpiresAt          apijson.Field
 	IsAcceptableSender apijson.Field
 	IsExemptRecipient  apijson.Field
 	IsRecipient        apijson.Field
@@ -723,6 +747,10 @@ type SettingAllowPolicyBatchResponsePut struct {
 	// Deprecated: Use `modified_at` instead.
 	LastModified time.Time `json:"last_modified" api:"required" format:"date-time"`
 	Comments     string    `json:"comments" api:"nullable"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt time.Time `json:"expires_at" api:"nullable" format:"date-time"`
 	// Exempts messages from this sender from Spam, Spoof and Bulk dispositions only;
 	// Malicious and Suspicious dispositions still apply.
 	IsAcceptableSender bool `json:"is_acceptable_sender"`
@@ -752,19 +780,20 @@ type SettingAllowPolicyBatchResponsePut struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType SettingAllowPolicyBatchResponsePutsPatternType `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -779,6 +808,7 @@ type settingAllowPolicyBatchResponsePutJSON struct {
 	CreatedAt          apijson.Field
 	LastModified       apijson.Field
 	Comments           apijson.Field
+	ExpiresAt          apijson.Field
 	IsAcceptableSender apijson.Field
 	IsExemptRecipient  apijson.Field
 	IsRecipient        apijson.Field
@@ -840,6 +870,10 @@ type SettingAllowPolicyEditResponse struct {
 	// Deprecated: Use `modified_at` instead.
 	LastModified time.Time `json:"last_modified" api:"required" format:"date-time"`
 	Comments     string    `json:"comments" api:"nullable"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt time.Time `json:"expires_at" api:"nullable" format:"date-time"`
 	// Exempts messages from this sender from Spam, Spoof and Bulk dispositions only;
 	// Malicious and Suspicious dispositions still apply.
 	IsAcceptableSender bool `json:"is_acceptable_sender"`
@@ -869,19 +903,20 @@ type SettingAllowPolicyEditResponse struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType SettingAllowPolicyEditResponsePatternType `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -896,6 +931,7 @@ type settingAllowPolicyEditResponseJSON struct {
 	CreatedAt          apijson.Field
 	LastModified       apijson.Field
 	Comments           apijson.Field
+	ExpiresAt          apijson.Field
 	IsAcceptableSender apijson.Field
 	IsExemptRecipient  apijson.Field
 	IsRecipient        apijson.Field
@@ -957,6 +993,10 @@ type SettingAllowPolicyGetResponse struct {
 	// Deprecated: Use `modified_at` instead.
 	LastModified time.Time `json:"last_modified" api:"required" format:"date-time"`
 	Comments     string    `json:"comments" api:"nullable"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt time.Time `json:"expires_at" api:"nullable" format:"date-time"`
 	// Exempts messages from this sender from Spam, Spoof and Bulk dispositions only;
 	// Malicious and Suspicious dispositions still apply.
 	IsAcceptableSender bool `json:"is_acceptable_sender"`
@@ -986,19 +1026,20 @@ type SettingAllowPolicyGetResponse struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern string `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType SettingAllowPolicyGetResponsePatternType `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -1013,6 +1054,7 @@ type settingAllowPolicyGetResponseJSON struct {
 	CreatedAt          apijson.Field
 	LastModified       apijson.Field
 	Comments           apijson.Field
+	ExpiresAt          apijson.Field
 	IsAcceptableSender apijson.Field
 	IsExemptRecipient  apijson.Field
 	IsRecipient        apijson.Field
@@ -1080,24 +1122,29 @@ type SettingAllowPolicyNewParams struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern param.Field[string] `json:"pattern" api:"required"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType param.Field[SettingAllowPolicyNewParamsPatternType] `json:"pattern_type" api:"required"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
 	VerifySender param.Field[bool]   `json:"verify_sender" api:"required"`
 	Comments     param.Field[string] `json:"comments"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt param.Field[time.Time] `json:"expires_at" format:"date-time"`
 	// Deprecated as of July 1, 2025. Use `is_exempt_recipient` instead. End of life:
 	// July 1, 2026.
 	IsRecipient param.Field[bool] `json:"is_recipient"`
@@ -1286,6 +1333,9 @@ type SettingAllowPolicyListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// The sorting direction.
 	Direction param.Field[SettingAllowPolicyListParamsDirection] `query:"direction"`
+	// Filter to return only expired policies (`true`) or only policies that still
+	// apply (`false`). Omit to return both.
+	Expired param.Field[bool] `query:"expired"`
 	// Filter to show only policies where messages from the sender are exempted from
 	// Spam, Spoof, and Bulk dispositions (not Malicious or Suspicious).
 	IsAcceptableSender param.Field[bool] `query:"is_acceptable_sender"`
@@ -1545,6 +1595,10 @@ func (r SettingAllowPolicyBatchParamsDelete) MarshalJSON() (data []byte, err err
 // An email allow policy.
 type SettingAllowPolicyBatchParamsPatch struct {
 	Comments param.Field[string] `json:"comments"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt param.Field[time.Time] `json:"expires_at" format:"date-time"`
 	// Exempts messages from this sender from Spam, Spoof and Bulk dispositions only;
 	// Malicious and Suspicious dispositions still apply.
 	IsAcceptableSender param.Field[bool] `json:"is_acceptable_sender"`
@@ -1573,19 +1627,20 @@ type SettingAllowPolicyBatchParamsPatch struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern param.Field[string] `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType param.Field[SettingAllowPolicyBatchParamsPatchesPatternType] `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -1639,24 +1694,29 @@ type SettingAllowPolicyBatchParamsPost struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern param.Field[string] `json:"pattern" api:"required"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType param.Field[SettingAllowPolicyBatchParamsPostsPatternType] `json:"pattern_type" api:"required"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
 	VerifySender param.Field[bool]   `json:"verify_sender" api:"required"`
 	Comments     param.Field[string] `json:"comments"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt param.Field[time.Time] `json:"expires_at" format:"date-time"`
 	// Deprecated as of July 1, 2025. Use `is_exempt_recipient` instead. End of life:
 	// July 1, 2026.
 	//
@@ -1709,6 +1769,10 @@ func (r SettingAllowPolicyBatchParamsPostsPatternType) IsKnown() bool {
 // An email allow policy.
 type SettingAllowPolicyBatchParamsPut struct {
 	Comments param.Field[string] `json:"comments"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt param.Field[time.Time] `json:"expires_at" format:"date-time"`
 	// Exempts messages from this sender from Spam, Spoof and Bulk dispositions only;
 	// Malicious and Suspicious dispositions still apply.
 	IsAcceptableSender param.Field[bool] `json:"is_acceptable_sender"`
@@ -1737,19 +1801,20 @@ type SettingAllowPolicyBatchParamsPut struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern param.Field[string] `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType param.Field[SettingAllowPolicyBatchParamsPutsPatternType] `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.
@@ -1931,6 +1996,10 @@ type SettingAllowPolicyEditParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	Comments  param.Field[string] `json:"comments"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt param.Field[time.Time] `json:"expires_at" format:"date-time"`
 	// Exempts messages from this sender from Spam, Spoof and Bulk dispositions only;
 	// Malicious and Suspicious dispositions still apply.
 	IsAcceptableSender param.Field[bool] `json:"is_acceptable_sender"`
@@ -1953,19 +2022,20 @@ type SettingAllowPolicyEditParams struct {
 	// (e.g. `example.com`), or a plain IPv4 or IPv6 address or CIDR block for IP (e.g.
 	// `1.2.3.4`, `1.2.3.0/24`, `2606:4700:4700::1111`, or `2606:4700:4700::/48`); the
 	// API rejects private or unique-local, loopback, link-local, unspecified, and IPv4
-	// broadcast addresses, including their IPv4-mapped IPv6 equivalents.
+	// broadcast addresses, including their IPv4-mapped IPv6 equivalents. The API also
+	// rejects a pattern that equals a domain onboarded to the account, ignoring case.
 	Pattern param.Field[string] `json:"pattern"`
 	// Type of pattern matching.
 	//
-	//   - EMAIL: matches a full email address (e.g. `user@example.com`)
-	//   - DOMAIN: matches a domain name (e.g. `example.com`)
-	//   - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
-	//     `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
-	//     `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
-	//     link-local, unspecified, and IPv4 broadcast addresses, including their
-	//     IPv4-mapped IPv6 equivalents.
-	//   - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
-	//     but it may appear on existing entries.
+	// - EMAIL: matches a full email address (e.g. `user@example.com`)
+	// - DOMAIN: matches a domain name (e.g. `example.com`)
+	// - IP: matches a plain IPv4 or IPv6 address (e.g. `1.2.3.4` or
+	//   `2606:4700:4700::1111`) or CIDR block (e.g. `1.2.3.0/24` or
+	//   `2606:4700:4700::/48`). The API rejects private or unique-local, loopback,
+	//   link-local, unspecified, and IPv4 broadcast addresses, including their
+	//   IPv4-mapped IPv6 equivalents.
+	// - UNKNOWN: deprecated; you cannot use this when creating or updating policies,
+	//   but it may appear on existing entries.
 	PatternType param.Field[SettingAllowPolicyEditParamsPatternType] `json:"pattern_type"`
 	// Enforce DMARC, SPF or DKIM authentication. When on, Email Security only honors
 	// policies that pass authentication.

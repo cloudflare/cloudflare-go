@@ -178,7 +178,11 @@ type SettingContentPolicyNewResponse struct {
 	ID        string    `json:"id" format:"uuid"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Whether the policy is active.
-	Enabled    bool      `json:"enabled"`
+	Enabled bool `json:"enabled"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt  time.Time `json:"expires_at" api:"nullable" format:"date-time"`
 	ModifiedAt time.Time `json:"modified_at" format:"date-time"`
 	// Human-readable name of the policy.
 	Name string `json:"name"`
@@ -197,6 +201,7 @@ type settingContentPolicyNewResponseJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
+	ExpiresAt   apijson.Field
 	ModifiedAt  apijson.Field
 	Name        apijson.Field
 	Notes       apijson.Field
@@ -236,7 +241,11 @@ type SettingContentPolicyListResponse struct {
 	ID        string    `json:"id" format:"uuid"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Whether the policy is active.
-	Enabled    bool      `json:"enabled"`
+	Enabled bool `json:"enabled"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt  time.Time `json:"expires_at" api:"nullable" format:"date-time"`
 	ModifiedAt time.Time `json:"modified_at" format:"date-time"`
 	// Human-readable name of the policy.
 	Name string `json:"name"`
@@ -255,6 +264,7 @@ type settingContentPolicyListResponseJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
+	ExpiresAt   apijson.Field
 	ModifiedAt  apijson.Field
 	Name        apijson.Field
 	Notes       apijson.Field
@@ -365,7 +375,11 @@ type SettingContentPolicyBatchResponsePatch struct {
 	ID        string    `json:"id" format:"uuid"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Whether the policy is active.
-	Enabled    bool      `json:"enabled"`
+	Enabled bool `json:"enabled"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt  time.Time `json:"expires_at" api:"nullable" format:"date-time"`
 	ModifiedAt time.Time `json:"modified_at" format:"date-time"`
 	// Human-readable name of the policy.
 	Name string `json:"name"`
@@ -384,6 +398,7 @@ type settingContentPolicyBatchResponsePatchJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
+	ExpiresAt   apijson.Field
 	ModifiedAt  apijson.Field
 	Name        apijson.Field
 	Notes       apijson.Field
@@ -423,7 +438,11 @@ type SettingContentPolicyBatchResponsePost struct {
 	ID        string    `json:"id" format:"uuid"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Whether the policy is active.
-	Enabled    bool      `json:"enabled"`
+	Enabled bool `json:"enabled"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt  time.Time `json:"expires_at" api:"nullable" format:"date-time"`
 	ModifiedAt time.Time `json:"modified_at" format:"date-time"`
 	// Human-readable name of the policy.
 	Name string `json:"name"`
@@ -442,6 +461,7 @@ type settingContentPolicyBatchResponsePostJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
+	ExpiresAt   apijson.Field
 	ModifiedAt  apijson.Field
 	Name        apijson.Field
 	Notes       apijson.Field
@@ -481,7 +501,11 @@ type SettingContentPolicyBatchResponsePut struct {
 	ID        string    `json:"id" format:"uuid"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Whether the policy is active.
-	Enabled    bool      `json:"enabled"`
+	Enabled bool `json:"enabled"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt  time.Time `json:"expires_at" api:"nullable" format:"date-time"`
 	ModifiedAt time.Time `json:"modified_at" format:"date-time"`
 	// Human-readable name of the policy.
 	Name string `json:"name"`
@@ -500,6 +524,7 @@ type settingContentPolicyBatchResponsePutJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
+	ExpiresAt   apijson.Field
 	ModifiedAt  apijson.Field
 	Name        apijson.Field
 	Notes       apijson.Field
@@ -539,7 +564,11 @@ type SettingContentPolicyEditResponse struct {
 	ID        string    `json:"id" format:"uuid"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Whether the policy is active.
-	Enabled    bool      `json:"enabled"`
+	Enabled bool `json:"enabled"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt  time.Time `json:"expires_at" api:"nullable" format:"date-time"`
 	ModifiedAt time.Time `json:"modified_at" format:"date-time"`
 	// Human-readable name of the policy.
 	Name string `json:"name"`
@@ -558,6 +587,7 @@ type settingContentPolicyEditResponseJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
+	ExpiresAt   apijson.Field
 	ModifiedAt  apijson.Field
 	Name        apijson.Field
 	Notes       apijson.Field
@@ -597,7 +627,11 @@ type SettingContentPolicyGetResponse struct {
 	ID        string    `json:"id" format:"uuid"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Whether the policy is active.
-	Enabled    bool      `json:"enabled"`
+	Enabled bool `json:"enabled"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt  time.Time `json:"expires_at" api:"nullable" format:"date-time"`
 	ModifiedAt time.Time `json:"modified_at" format:"date-time"`
 	// Human-readable name of the policy.
 	Name string `json:"name"`
@@ -616,6 +650,7 @@ type settingContentPolicyGetResponseJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
+	ExpiresAt   apijson.Field
 	ModifiedAt  apijson.Field
 	Name        apijson.Field
 	Notes       apijson.Field
@@ -660,6 +695,10 @@ type SettingContentPolicyNewParams struct {
 	Pattern param.Field[string] `json:"pattern" api:"required"`
 	// Parts of the email the pattern is matched against.
 	Targets param.Field[[]SettingContentPolicyNewParamsTarget] `json:"targets" api:"required"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt param.Field[time.Time] `json:"expires_at" format:"date-time"`
 	// Optional note describing the purpose of the policy.
 	Notes param.Field[string] `json:"notes"`
 }
@@ -831,6 +870,9 @@ type SettingContentPolicyListParams struct {
 	Direction param.Field[SettingContentPolicyListParamsDirection] `query:"direction"`
 	// Filter by enabled status.
 	Enabled param.Field[bool] `query:"enabled"`
+	// Filter to return only expired policies (`true`) or only policies that still
+	// apply (`false`). Omit to return both.
+	Expired param.Field[bool] `query:"expired"`
 	// Filter by exact policy name.
 	Name param.Field[string] `query:"name"`
 	// Field to sort by.
@@ -1061,6 +1103,10 @@ func (r SettingContentPolicyBatchParamsDelete) MarshalJSON() (data []byte, err e
 type SettingContentPolicyBatchParamsPatch struct {
 	// Whether the policy is active.
 	Enabled param.Field[bool] `json:"enabled"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt param.Field[time.Time] `json:"expires_at" format:"date-time"`
 	// Human-readable name of the policy.
 	Name param.Field[string] `json:"name"`
 	// Optional note describing the purpose of the policy.
@@ -1101,6 +1147,10 @@ type SettingContentPolicyBatchParamsPost struct {
 	Pattern param.Field[string] `json:"pattern" api:"required"`
 	// Parts of the email the pattern is matched against.
 	Targets param.Field[[]SettingContentPolicyBatchParamsPostsTarget] `json:"targets" api:"required"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt param.Field[time.Time] `json:"expires_at" format:"date-time"`
 	// Optional note describing the purpose of the policy.
 	Notes param.Field[string] `json:"notes"`
 }
@@ -1135,6 +1185,10 @@ type SettingContentPolicyBatchParamsPut struct {
 	Pattern param.Field[string] `json:"pattern" api:"required"`
 	// Parts of the email the pattern is matched against.
 	Targets param.Field[[]SettingContentPolicyBatchParamsPutsTarget] `json:"targets" api:"required"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt param.Field[time.Time] `json:"expires_at" format:"date-time"`
 	// Optional note describing the purpose of the policy.
 	Notes param.Field[string] `json:"notes"`
 }
@@ -1304,6 +1358,10 @@ type SettingContentPolicyEditParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Whether the policy is active.
 	Enabled param.Field[bool] `json:"enabled"`
+	// Timestamp at which the policy expires. After this time, Email Security ignores
+	// the policy. The value must lie in the future. Send `null` to clear the
+	// expiration.
+	ExpiresAt param.Field[time.Time] `json:"expires_at" format:"date-time"`
 	// Human-readable name of the policy.
 	Name param.Field[string] `json:"name"`
 	// Optional note describing the purpose of the policy.

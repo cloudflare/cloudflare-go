@@ -35,15 +35,12 @@ func NewAccountProfileService(opts ...option.RequestOption) (r *AccountProfileSe
 	return
 }
 
-// Updates the business profile (name, email, phone, address, and external
-// metadata) associated with this account's parent organization customer record.
-// Changes apply to every account and organization sharing that profile. Omitted or
-// empty fields are left unchanged. Only available to members of an organization
-// that contains the account.
-//
-// Authentication: Use a Global API key, or a user-owned API Token scoped to the
-// account with the `Account Settings Write` permission, which grants
-// `com.cloudflare.api.account.update`.
+// Partially updates the business profile (name, email, phone, address, and
+// external metadata) associated with this account's parent organization customer
+// record, creating the profile if it does not exist. Changes apply to every
+// account and organization sharing that profile. Omitted, empty, or null fields
+// are left unchanged. Each profile field is limited to 1,000 UTF-8 bytes. Only
+// available to members of an organization that contains the account.
 func (r *AccountProfileService) Update(ctx context.Context, params AccountProfileUpdateParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -57,13 +54,9 @@ func (r *AccountProfileService) Update(ctx context.Context, params AccountProfil
 }
 
 // Retrieves the business profile (name, email, phone, address, and external
-// metadata) associated with this account's parent organization customer record.
-// Profiles can be shared across accounts and organizations. Only available to
-// members of an organization that contains the account.
-//
-// Authentication: Use a Global API key, or a user-owned API Token scoped to the
-// account with the `Account Settings Read` permission, which grants
-// `com.cloudflare.api.account.read`.
+// metadata) associated with this account's customer record. Profiles can be shared
+// across accounts and organizations. Only available to members of an organization
+// that contains the account.
 func (r *AccountProfileService) Get(ctx context.Context, query AccountProfileGetParams, opts ...option.RequestOption) (res *AccountProfile, err error) {
 	var env AccountProfileGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -108,25 +101,17 @@ func (r accountProfileJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccountProfileParam struct {
-	BusinessAddress  param.Field[string] `json:"business_address" api:"required"`
-	BusinessEmail    param.Field[string] `json:"business_email" api:"required"`
-	BusinessName     param.Field[string] `json:"business_name" api:"required"`
-	BusinessPhone    param.Field[string] `json:"business_phone" api:"required"`
-	ExternalMetadata param.Field[string] `json:"external_metadata" api:"required"`
-}
-
-func (r AccountProfileParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type AccountProfileUpdateParams struct {
-	AccountID      param.Field[string] `path:"account_id" api:"required"`
-	AccountProfile AccountProfileParam `json:"account_profile" api:"required"`
+	AccountID        param.Field[string] `path:"account_id" api:"required"`
+	BusinessAddress  param.Field[string] `json:"business_address"`
+	BusinessEmail    param.Field[string] `json:"business_email"`
+	BusinessName     param.Field[string] `json:"business_name"`
+	BusinessPhone    param.Field[string] `json:"business_phone"`
+	ExternalMetadata param.Field[string] `json:"external_metadata"`
 }
 
 func (r AccountProfileUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.AccountProfile)
+	return apijson.MarshalRoot(r)
 }
 
 type AccountProfileGetParams struct {

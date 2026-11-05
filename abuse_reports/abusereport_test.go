@@ -90,6 +90,7 @@ func TestAbuseReportListWithOptionalParams(t *testing.T) {
 		Domain:           cloudflare.F("domain"),
 		MitigationStatus: cloudflare.F(abuse_reports.AbuseReportListParamsMitigationStatusPending),
 		Page:             cloudflare.F(int64(0)),
+		PendingNotice:    cloudflare.F(true),
 		PerPage:          cloudflare.F(int64(0)),
 		Search:           cloudflare.F("search"),
 		Sort:             cloudflare.F("sort"),

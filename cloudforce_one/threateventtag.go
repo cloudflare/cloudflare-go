@@ -40,8 +40,7 @@ func NewThreatEventTagService(opts ...option.RequestOption) (r *ThreatEventTagSe
 	return
 }
 
-// Creates an account-owned tag for threat events and returns its complete owner
-// projection.
+// Creates a tag in the account and returns the complete tag.
 func (r *ThreatEventTagService) New(ctx context.Context, params ThreatEventTagNewParams, opts ...option.RequestOption) (res *ThreatEventTagNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -53,13 +52,11 @@ func (r *ThreatEventTagService) New(ctx context.Context, params ThreatEventTagNe
 	return res, err
 }
 
-// Returns all Source-of-Truth tags for an account. Supports legacy free-text
-// `search` on tag value and `categoryUuid` exact match, plus a structured
-// `filters` JSON array for filtering by metadata fields (originCountryISO,
-// actorCategory, motive, priority, etc.). The authenticated account owns these
-// account-scoped tags and receives their complete owner projection. Country values
-// may be passed as alpha-2, alpha-3, name, or common alias. Purple TLP remains
-// CFONE-only.
+// Lists the account's tags. Use `search` to match tag values, `categoryUuid` to
+// limit results to one category, and `filters` (a JSON array) to filter by fields
+// such as `originCountryISO`, `actorCategory`, `motive`, or `priority`. Country
+// filters accept alpha-2 or alpha-3 codes, names, or common aliases. Tags marked
+// TLP:PURPLE are visible only to Cloudforce One.
 func (r *ThreatEventTagService) List(ctx context.Context, params ThreatEventTagListParams, opts ...option.RequestOption) (res *ThreatEventTagListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -71,7 +68,7 @@ func (r *ThreatEventTagService) List(ctx context.Context, params ThreatEventTagL
 	return res, err
 }
 
-// Deletes a Source-of-Truth tag by UUID.
+// Deletes a tag by its UUID.
 func (r *ThreatEventTagService) Delete(ctx context.Context, tagUUID string, body ThreatEventTagDeleteParams, opts ...option.RequestOption) (res *ThreatEventTagDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
@@ -87,8 +84,7 @@ func (r *ThreatEventTagService) Delete(ctx context.Context, tagUUID string, body
 	return res, err
 }
 
-// Updates an account-owned Source-of-Truth tag by UUID and returns its complete
-// owner projection.
+// Updates the given fields of a tag and returns the complete tag.
 func (r *ThreatEventTagService) Edit(ctx context.Context, tagUUID string, params ThreatEventTagEditParams, opts ...option.RequestOption) (res *ThreatEventTagEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {

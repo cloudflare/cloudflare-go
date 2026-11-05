@@ -37,7 +37,8 @@ func NewBillingTopupService(opts ...option.RequestOption) (r *BillingTopupServic
 }
 
 // Create a credit top-up for the given account, charged to the account's default
-// payment method.
+// payment method. Requires a dashboard session; API token, OAuth, and service
+// credentials receive 403.
 func (r *BillingTopupService) New(ctx context.Context, params BillingTopupNewParams, opts ...option.RequestOption) (res *BillingTopupNewResponse, err error) {
 	var env BillingTopupNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -54,7 +55,7 @@ func (r *BillingTopupService) New(ctx context.Context, params BillingTopupNewPar
 	return res, nil
 }
 
-// Get the payment processing status of a top-up by its invoice ID.
+// Get the payment processing status of a top-up by its top-up identifier.
 func (r *BillingTopupService) Status(ctx context.Context, params BillingTopupStatusParams, opts ...option.RequestOption) (res *BillingTopupStatusResponse, err error) {
 	var env BillingTopupStatusResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -72,11 +73,11 @@ func (r *BillingTopupService) Status(ctx context.Context, params BillingTopupSta
 }
 
 type BillingTopupNewResponse struct {
-	// Stripe PaymentIntent client secret.
+	// Client secret used to complete payment authentication.
 	ClientSecret string `json:"client_secret" api:"required,nullable"`
 	// Whether the user was already onboarded.
 	Onboarding bool `json:"onboarding" api:"required"`
-	// Stripe invoice ID.
+	// Top-up payment identifier.
 	PaymentIntentID string `json:"payment_intent_id" api:"required"`
 	// Card brand (visa, mastercard, etc.).
 	Brand string `json:"brand"`
@@ -147,7 +148,7 @@ type BillingTopupNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Top-up amount in cents (min 1000).
 	Amount param.Field[int64] `json:"amount" api:"required"`
-	// Stripe PaymentMethod to charge instead of the customer's default payment method.
+	// Payment method to charge instead of the customer's default payment method.
 	PaymentMethodID param.Field[string] `json:"payment_method_id"`
 }
 
@@ -273,7 +274,7 @@ func (r billingTopupNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type BillingTopupStatusParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Stripe invoice ID to check status for.
+	// Top-up identifier to check status for.
 	PaymentIntentID param.Field[string] `json:"payment_intent_id" api:"required"`
 }
 

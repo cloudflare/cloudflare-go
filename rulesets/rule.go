@@ -6815,8 +6815,7 @@ type SetConfigRuleActionParameters struct {
 	WebmcpEnabled bool `json:"webmcp_enabled"`
 	// Bundled WebMCP tool packs to activate for matching requests. An empty array
 	// disables all packs. Omitting this parameter leaves the pack selection unchanged.
-	// Does not enable the WebMCP bridge itself. Non-empty selections require the
-	// WebMCP Configuration Rules entitlement.
+	// Does not enable the WebMCP bridge itself.
 	WebmcpPacks []string                          `json:"webmcp_packs"`
 	JSON        setConfigRuleActionParametersJSON `json:"-"`
 }
@@ -7207,8 +7206,7 @@ type SetConfigRuleActionParametersParam struct {
 	WebmcpEnabled param.Field[bool] `json:"webmcp_enabled"`
 	// Bundled WebMCP tool packs to activate for matching requests. An empty array
 	// disables all packs. Omitting this parameter leaves the pack selection unchanged.
-	// Does not enable the WebMCP bridge itself. Non-empty selections require the
-	// WebMCP Configuration Rules entitlement.
+	// Does not enable the WebMCP bridge itself.
 	WebmcpPacks param.Field[[]string] `json:"webmcp_packs"`
 }
 

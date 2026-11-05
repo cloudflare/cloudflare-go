@@ -2306,7 +2306,7 @@ type AccessApplicationNewResponse struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool `json:"skip_app_launcher_login_page"`
@@ -3131,7 +3131,7 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -3911,6 +3911,10 @@ type AccessApplicationNewResponseSelfHostedApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseSelfHostedApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -3945,6 +3949,7 @@ type accessApplicationNewResponseSelfHostedApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -4499,6 +4504,10 @@ type AccessApplicationNewResponseSaaSApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseSaaSApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -4532,6 +4541,7 @@ type accessApplicationNewResponseSaaSApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -5238,7 +5248,7 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -6047,6 +6057,10 @@ type AccessApplicationNewResponseBrowserSSHApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseBrowserSSHApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -6081,6 +6095,7 @@ type accessApplicationNewResponseBrowserSSHApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -6637,7 +6652,7 @@ type AccessApplicationNewResponseBrowserVNCApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -7446,6 +7461,10 @@ type AccessApplicationNewResponseBrowserVNCApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseBrowserVNCApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -7480,6 +7499,7 @@ type accessApplicationNewResponseBrowserVNCApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -7980,7 +8000,7 @@ type AccessApplicationNewResponseAppLauncherApplication struct {
 	Policies []AccessApplicationNewResponseAppLauncherApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool                                                   `json:"skip_app_launcher_login_page"`
@@ -8145,6 +8165,10 @@ type AccessApplicationNewResponseAppLauncherApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseAppLauncherApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -8179,6 +8203,7 @@ type accessApplicationNewResponseAppLauncherApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -8358,7 +8383,7 @@ type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication struct {
 	Policies []AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                 `json:"session_duration"`
 	JSON            accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
@@ -8425,6 +8450,10 @@ type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy st
 	MfaConfig AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -8459,6 +8488,7 @@ type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicyJSO
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -8638,7 +8668,7 @@ type AccessApplicationNewResponseBrowserIsolationPermissionsApplication struct {
 	Policies []AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                 `json:"session_duration"`
 	JSON            accessApplicationNewResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
@@ -8705,6 +8735,10 @@ type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy st
 	MfaConfig AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -8739,6 +8773,7 @@ type accessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicyJSO
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -8918,7 +8953,7 @@ type AccessApplicationNewResponseGatewayIdentityProxyEndpointApplication struct 
 	Policies []AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                  `json:"session_duration"`
 	JSON            accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationJSON `json:"-"`
 }
@@ -8985,6 +9020,10 @@ type AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicy s
 	MfaConfig AccessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -9019,6 +9058,7 @@ type accessApplicationNewResponseGatewayIdentityProxyEndpointApplicationPolicyJS
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -9248,6 +9288,10 @@ type AccessApplicationNewResponseBookmarkApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseBookmarkApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -9281,6 +9325,7 @@ type accessApplicationNewResponseBookmarkApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -9445,21 +9490,26 @@ type AccessApplicationNewResponseInfrastructureApplication struct {
 	// The name of the application.
 	Name     string                                                        `json:"name"`
 	Policies []AccessApplicationNewResponseInfrastructureApplicationPolicy `json:"policies"`
-	JSON     accessApplicationNewResponseInfrastructureApplicationJSON     `json:"-"`
+	// The maximum duration of a connection to this application's targets. Connections
+	// are terminated once it elapses. Must be in the format `30m` or `2h45m`, in whole
+	// seconds. Valid time units are: s, m, h.
+	SessionDuration string                                                    `json:"session_duration"`
+	JSON            accessApplicationNewResponseInfrastructureApplicationJSON `json:"-"`
 }
 
 // accessApplicationNewResponseInfrastructureApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationNewResponseInfrastructureApplication]
 type accessApplicationNewResponseInfrastructureApplicationJSON struct {
-	TargetCriteria apijson.Field
-	Type           apijson.Field
-	ID             apijson.Field
-	AUD            apijson.Field
-	MfaConfig      apijson.Field
-	Name           apijson.Field
-	Policies       apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	TargetCriteria  apijson.Field
+	Type            apijson.Field
+	ID              apijson.Field
+	AUD             apijson.Field
+	MfaConfig       apijson.Field
+	Name            apijson.Field
+	Policies        apijson.Field
+	SessionDuration apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
@@ -9764,6 +9814,10 @@ type AccessApplicationNewResponseInfrastructureApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseInfrastructureApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require   []AccessRule                                                    `json:"require"`
@@ -9775,18 +9829,19 @@ type AccessApplicationNewResponseInfrastructureApplicationPolicy struct {
 // JSON metadata for the struct
 // [AccessApplicationNewResponseInfrastructureApplicationPolicy]
 type accessApplicationNewResponseInfrastructureApplicationPolicyJSON struct {
-	ID              apijson.Field
-	ConnectionRules apijson.Field
-	CreatedAt       apijson.Field
-	Decision        apijson.Field
-	Exclude         apijson.Field
-	Include         apijson.Field
-	MfaConfig       apijson.Field
-	Name            apijson.Field
-	Require         apijson.Field
-	UpdatedAt       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	ID                        apijson.Field
+	ConnectionRules           apijson.Field
+	CreatedAt                 apijson.Field
+	Decision                  apijson.Field
+	Exclude                   apijson.Field
+	Include                   apijson.Field
+	MfaConfig                 apijson.Field
+	Name                      apijson.Field
+	PolicyResolutionAccountID apijson.Field
+	Require                   apijson.Field
+	UpdatedAt                 apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -9996,7 +10051,7 @@ type AccessApplicationNewResponseBrowserRDPApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -10998,6 +11053,10 @@ type AccessApplicationNewResponseBrowserRDPApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseBrowserRDPApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -11032,6 +11091,7 @@ type accessApplicationNewResponseBrowserRDPApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -11551,7 +11611,7 @@ type AccessApplicationNewResponseMcpServerApplication struct {
 	SCIMConfig AccessApplicationNewResponseMcpServerApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -12263,6 +12323,10 @@ type AccessApplicationNewResponseMcpServerApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseMcpServerApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -12296,6 +12360,7 @@ type accessApplicationNewResponseMcpServerApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -12818,7 +12883,7 @@ type AccessApplicationNewResponseMcpServerPortalApplication struct {
 	SCIMConfig AccessApplicationNewResponseMcpServerPortalApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -13532,6 +13597,10 @@ type AccessApplicationNewResponseMcpServerPortalApplicationPolicy struct {
 	MfaConfig AccessApplicationNewResponseMcpServerPortalApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -13566,6 +13635,7 @@ type accessApplicationNewResponseMcpServerPortalApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -14192,7 +14262,7 @@ type AccessApplicationUpdateResponse struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool `json:"skip_app_launcher_login_page"`
@@ -15018,7 +15088,7 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -15799,6 +15869,10 @@ type AccessApplicationUpdateResponseSelfHostedApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseSelfHostedApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -15833,6 +15907,7 @@ type accessApplicationUpdateResponseSelfHostedApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -16387,6 +16462,10 @@ type AccessApplicationUpdateResponseSaaSApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseSaaSApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -16420,6 +16499,7 @@ type accessApplicationUpdateResponseSaaSApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -17127,7 +17207,7 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -17937,6 +18017,10 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseBrowserSSHApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -17971,6 +18055,7 @@ type accessApplicationUpdateResponseBrowserSSHApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -18527,7 +18612,7 @@ type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -19337,6 +19422,10 @@ type AccessApplicationUpdateResponseBrowserVNCApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseBrowserVNCApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -19371,6 +19460,7 @@ type accessApplicationUpdateResponseBrowserVNCApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -19871,7 +19961,7 @@ type AccessApplicationUpdateResponseAppLauncherApplication struct {
 	Policies []AccessApplicationUpdateResponseAppLauncherApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool                                                      `json:"skip_app_launcher_login_page"`
@@ -20036,6 +20126,10 @@ type AccessApplicationUpdateResponseAppLauncherApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseAppLauncherApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -20070,6 +20164,7 @@ type accessApplicationUpdateResponseAppLauncherApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -20249,7 +20344,7 @@ type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication struc
 	Policies []AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                    `json:"session_duration"`
 	JSON            accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
@@ -20316,6 +20411,10 @@ type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy
 	MfaConfig AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -20350,6 +20449,7 @@ type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -20529,7 +20629,7 @@ type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication struc
 	Policies []AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                    `json:"session_duration"`
 	JSON            accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
@@ -20596,6 +20696,10 @@ type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy
 	MfaConfig AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -20630,6 +20734,7 @@ type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -20809,7 +20914,7 @@ type AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplication stru
 	Policies []AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                     `json:"session_duration"`
 	JSON            accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationJSON `json:"-"`
 }
@@ -20876,6 +20981,10 @@ type AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolic
 	MfaConfig AccessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -20910,6 +21019,7 @@ type accessApplicationUpdateResponseGatewayIdentityProxyEndpointApplicationPolic
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -21140,6 +21250,10 @@ type AccessApplicationUpdateResponseBookmarkApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseBookmarkApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -21174,6 +21288,7 @@ type accessApplicationUpdateResponseBookmarkApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -21338,22 +21453,27 @@ type AccessApplicationUpdateResponseInfrastructureApplication struct {
 	// The name of the application.
 	Name     string                                                           `json:"name"`
 	Policies []AccessApplicationUpdateResponseInfrastructureApplicationPolicy `json:"policies"`
-	JSON     accessApplicationUpdateResponseInfrastructureApplicationJSON     `json:"-"`
+	// The maximum duration of a connection to this application's targets. Connections
+	// are terminated once it elapses. Must be in the format `30m` or `2h45m`, in whole
+	// seconds. Valid time units are: s, m, h.
+	SessionDuration string                                                       `json:"session_duration"`
+	JSON            accessApplicationUpdateResponseInfrastructureApplicationJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseInfrastructureApplicationJSON contains the JSON
 // metadata for the struct
 // [AccessApplicationUpdateResponseInfrastructureApplication]
 type accessApplicationUpdateResponseInfrastructureApplicationJSON struct {
-	TargetCriteria apijson.Field
-	Type           apijson.Field
-	ID             apijson.Field
-	AUD            apijson.Field
-	MfaConfig      apijson.Field
-	Name           apijson.Field
-	Policies       apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	TargetCriteria  apijson.Field
+	Type            apijson.Field
+	ID              apijson.Field
+	AUD             apijson.Field
+	MfaConfig       apijson.Field
+	Name            apijson.Field
+	Policies        apijson.Field
+	SessionDuration apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
@@ -21658,6 +21778,10 @@ type AccessApplicationUpdateResponseInfrastructureApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseInfrastructureApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require   []AccessRule                                                       `json:"require"`
@@ -21669,18 +21793,19 @@ type AccessApplicationUpdateResponseInfrastructureApplicationPolicy struct {
 // JSON metadata for the struct
 // [AccessApplicationUpdateResponseInfrastructureApplicationPolicy]
 type accessApplicationUpdateResponseInfrastructureApplicationPolicyJSON struct {
-	ID              apijson.Field
-	ConnectionRules apijson.Field
-	CreatedAt       apijson.Field
-	Decision        apijson.Field
-	Exclude         apijson.Field
-	Include         apijson.Field
-	MfaConfig       apijson.Field
-	Name            apijson.Field
-	Require         apijson.Field
-	UpdatedAt       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	ID                        apijson.Field
+	ConnectionRules           apijson.Field
+	CreatedAt                 apijson.Field
+	Decision                  apijson.Field
+	Exclude                   apijson.Field
+	Include                   apijson.Field
+	MfaConfig                 apijson.Field
+	Name                      apijson.Field
+	PolicyResolutionAccountID apijson.Field
+	Require                   apijson.Field
+	UpdatedAt                 apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -21890,7 +22015,7 @@ type AccessApplicationUpdateResponseBrowserRDPApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -22893,6 +23018,10 @@ type AccessApplicationUpdateResponseBrowserRDPApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseBrowserRDPApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -22927,6 +23056,7 @@ type accessApplicationUpdateResponseBrowserRDPApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -23446,7 +23576,7 @@ type AccessApplicationUpdateResponseMcpServerApplication struct {
 	SCIMConfig AccessApplicationUpdateResponseMcpServerApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -24159,6 +24289,10 @@ type AccessApplicationUpdateResponseMcpServerApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseMcpServerApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -24193,6 +24327,7 @@ type accessApplicationUpdateResponseMcpServerApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -24715,7 +24850,7 @@ type AccessApplicationUpdateResponseMcpServerPortalApplication struct {
 	SCIMConfig AccessApplicationUpdateResponseMcpServerPortalApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -25430,6 +25565,10 @@ type AccessApplicationUpdateResponseMcpServerPortalApplicationPolicy struct {
 	MfaConfig AccessApplicationUpdateResponseMcpServerPortalApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -25464,6 +25603,7 @@ type accessApplicationUpdateResponseMcpServerPortalApplicationPolicyJSON struct 
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -26090,7 +26230,7 @@ type AccessApplicationListResponse struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool `json:"skip_app_launcher_login_page"`
@@ -26915,7 +27055,7 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -27696,6 +27836,10 @@ type AccessApplicationListResponseSelfHostedApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseSelfHostedApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -27730,6 +27874,7 @@ type accessApplicationListResponseSelfHostedApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -28284,6 +28429,10 @@ type AccessApplicationListResponseSaaSApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseSaaSApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -28317,6 +28466,7 @@ type accessApplicationListResponseSaaSApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -29023,7 +29173,7 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -29833,6 +29983,10 @@ type AccessApplicationListResponseBrowserSSHApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseBrowserSSHApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -29867,6 +30021,7 @@ type accessApplicationListResponseBrowserSSHApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -30423,7 +30578,7 @@ type AccessApplicationListResponseBrowserVNCApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -31233,6 +31388,10 @@ type AccessApplicationListResponseBrowserVNCApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseBrowserVNCApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -31267,6 +31426,7 @@ type accessApplicationListResponseBrowserVNCApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -31767,7 +31927,7 @@ type AccessApplicationListResponseAppLauncherApplication struct {
 	Policies []AccessApplicationListResponseAppLauncherApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool                                                    `json:"skip_app_launcher_login_page"`
@@ -31932,6 +32092,10 @@ type AccessApplicationListResponseAppLauncherApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseAppLauncherApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -31966,6 +32130,7 @@ type accessApplicationListResponseAppLauncherApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -32145,7 +32310,7 @@ type AccessApplicationListResponseDeviceEnrollmentPermissionsApplication struct 
 	Policies []AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                  `json:"session_duration"`
 	JSON            accessApplicationListResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
@@ -32212,6 +32377,10 @@ type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy s
 	MfaConfig AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -32246,6 +32415,7 @@ type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicyJS
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -32425,7 +32595,7 @@ type AccessApplicationListResponseBrowserIsolationPermissionsApplication struct 
 	Policies []AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                  `json:"session_duration"`
 	JSON            accessApplicationListResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
@@ -32492,6 +32662,10 @@ type AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy s
 	MfaConfig AccessApplicationListResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -32526,6 +32700,7 @@ type accessApplicationListResponseBrowserIsolationPermissionsApplicationPolicyJS
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -32705,7 +32880,7 @@ type AccessApplicationListResponseGatewayIdentityProxyEndpointApplication struct
 	Policies []AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                   `json:"session_duration"`
 	JSON            accessApplicationListResponseGatewayIdentityProxyEndpointApplicationJSON `json:"-"`
 }
@@ -32772,6 +32947,10 @@ type AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicy 
 	MfaConfig AccessApplicationListResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -32806,6 +32985,7 @@ type accessApplicationListResponseGatewayIdentityProxyEndpointApplicationPolicyJ
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -33035,6 +33215,10 @@ type AccessApplicationListResponseBookmarkApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseBookmarkApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -33068,6 +33252,7 @@ type accessApplicationListResponseBookmarkApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -33232,21 +33417,26 @@ type AccessApplicationListResponseInfrastructureApplication struct {
 	// The name of the application.
 	Name     string                                                         `json:"name"`
 	Policies []AccessApplicationListResponseInfrastructureApplicationPolicy `json:"policies"`
-	JSON     accessApplicationListResponseInfrastructureApplicationJSON     `json:"-"`
+	// The maximum duration of a connection to this application's targets. Connections
+	// are terminated once it elapses. Must be in the format `30m` or `2h45m`, in whole
+	// seconds. Valid time units are: s, m, h.
+	SessionDuration string                                                     `json:"session_duration"`
+	JSON            accessApplicationListResponseInfrastructureApplicationJSON `json:"-"`
 }
 
 // accessApplicationListResponseInfrastructureApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationListResponseInfrastructureApplication]
 type accessApplicationListResponseInfrastructureApplicationJSON struct {
-	TargetCriteria apijson.Field
-	Type           apijson.Field
-	ID             apijson.Field
-	AUD            apijson.Field
-	MfaConfig      apijson.Field
-	Name           apijson.Field
-	Policies       apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	TargetCriteria  apijson.Field
+	Type            apijson.Field
+	ID              apijson.Field
+	AUD             apijson.Field
+	MfaConfig       apijson.Field
+	Name            apijson.Field
+	Policies        apijson.Field
+	SessionDuration apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
@@ -33551,6 +33741,10 @@ type AccessApplicationListResponseInfrastructureApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseInfrastructureApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require   []AccessRule                                                     `json:"require"`
@@ -33562,18 +33756,19 @@ type AccessApplicationListResponseInfrastructureApplicationPolicy struct {
 // JSON metadata for the struct
 // [AccessApplicationListResponseInfrastructureApplicationPolicy]
 type accessApplicationListResponseInfrastructureApplicationPolicyJSON struct {
-	ID              apijson.Field
-	ConnectionRules apijson.Field
-	CreatedAt       apijson.Field
-	Decision        apijson.Field
-	Exclude         apijson.Field
-	Include         apijson.Field
-	MfaConfig       apijson.Field
-	Name            apijson.Field
-	Require         apijson.Field
-	UpdatedAt       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	ID                        apijson.Field
+	ConnectionRules           apijson.Field
+	CreatedAt                 apijson.Field
+	Decision                  apijson.Field
+	Exclude                   apijson.Field
+	Include                   apijson.Field
+	MfaConfig                 apijson.Field
+	Name                      apijson.Field
+	PolicyResolutionAccountID apijson.Field
+	Require                   apijson.Field
+	UpdatedAt                 apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -33783,7 +33978,7 @@ type AccessApplicationListResponseBrowserRDPApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -34786,6 +34981,10 @@ type AccessApplicationListResponseBrowserRDPApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseBrowserRDPApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -34820,6 +35019,7 @@ type accessApplicationListResponseBrowserRDPApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -35339,7 +35539,7 @@ type AccessApplicationListResponseMcpServerApplication struct {
 	SCIMConfig AccessApplicationListResponseMcpServerApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -36052,6 +36252,10 @@ type AccessApplicationListResponseMcpServerApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseMcpServerApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -36086,6 +36290,7 @@ type accessApplicationListResponseMcpServerApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -36608,7 +36813,7 @@ type AccessApplicationListResponseMcpServerPortalApplication struct {
 	SCIMConfig AccessApplicationListResponseMcpServerPortalApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -37323,6 +37528,10 @@ type AccessApplicationListResponseMcpServerPortalApplicationPolicy struct {
 	MfaConfig AccessApplicationListResponseMcpServerPortalApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -37357,6 +37566,7 @@ type accessApplicationListResponseMcpServerPortalApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -38005,7 +38215,7 @@ type AccessApplicationGetResponse struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool `json:"skip_app_launcher_login_page"`
@@ -38830,7 +39040,7 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -39610,6 +39820,10 @@ type AccessApplicationGetResponseSelfHostedApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseSelfHostedApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -39644,6 +39858,7 @@ type accessApplicationGetResponseSelfHostedApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -40198,6 +40413,10 @@ type AccessApplicationGetResponseSaaSApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseSaaSApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -40231,6 +40450,7 @@ type accessApplicationGetResponseSaaSApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -40937,7 +41157,7 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -41746,6 +41966,10 @@ type AccessApplicationGetResponseBrowserSSHApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseBrowserSSHApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -41780,6 +42004,7 @@ type accessApplicationGetResponseBrowserSSHApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -42336,7 +42561,7 @@ type AccessApplicationGetResponseBrowserVNCApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -43145,6 +43370,10 @@ type AccessApplicationGetResponseBrowserVNCApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseBrowserVNCApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -43179,6 +43408,7 @@ type accessApplicationGetResponseBrowserVNCApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -43679,7 +43909,7 @@ type AccessApplicationGetResponseAppLauncherApplication struct {
 	Policies []AccessApplicationGetResponseAppLauncherApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage bool                                                   `json:"skip_app_launcher_login_page"`
@@ -43844,6 +44074,10 @@ type AccessApplicationGetResponseAppLauncherApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseAppLauncherApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -43878,6 +44112,7 @@ type accessApplicationGetResponseAppLauncherApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -44057,7 +44292,7 @@ type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication struct {
 	Policies []AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                 `json:"session_duration"`
 	JSON            accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
@@ -44124,6 +44359,10 @@ type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy st
 	MfaConfig AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -44158,6 +44397,7 @@ type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicyJSO
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -44337,7 +44577,7 @@ type AccessApplicationGetResponseBrowserIsolationPermissionsApplication struct {
 	Policies []AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                 `json:"session_duration"`
 	JSON            accessApplicationGetResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
@@ -44404,6 +44644,10 @@ type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy st
 	MfaConfig AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -44438,6 +44682,7 @@ type accessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicyJSO
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -44617,7 +44862,7 @@ type AccessApplicationGetResponseGatewayIdentityProxyEndpointApplication struct 
 	Policies []AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string                                                                  `json:"session_duration"`
 	JSON            accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationJSON `json:"-"`
 }
@@ -44684,6 +44929,10 @@ type AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicy s
 	MfaConfig AccessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -44718,6 +44967,7 @@ type accessApplicationGetResponseGatewayIdentityProxyEndpointApplicationPolicyJS
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -44947,6 +45197,10 @@ type AccessApplicationGetResponseBookmarkApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseBookmarkApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -44980,6 +45234,7 @@ type accessApplicationGetResponseBookmarkApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -45144,21 +45399,26 @@ type AccessApplicationGetResponseInfrastructureApplication struct {
 	// The name of the application.
 	Name     string                                                        `json:"name"`
 	Policies []AccessApplicationGetResponseInfrastructureApplicationPolicy `json:"policies"`
-	JSON     accessApplicationGetResponseInfrastructureApplicationJSON     `json:"-"`
+	// The maximum duration of a connection to this application's targets. Connections
+	// are terminated once it elapses. Must be in the format `30m` or `2h45m`, in whole
+	// seconds. Valid time units are: s, m, h.
+	SessionDuration string                                                    `json:"session_duration"`
+	JSON            accessApplicationGetResponseInfrastructureApplicationJSON `json:"-"`
 }
 
 // accessApplicationGetResponseInfrastructureApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationGetResponseInfrastructureApplication]
 type accessApplicationGetResponseInfrastructureApplicationJSON struct {
-	TargetCriteria apijson.Field
-	Type           apijson.Field
-	ID             apijson.Field
-	AUD            apijson.Field
-	MfaConfig      apijson.Field
-	Name           apijson.Field
-	Policies       apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	TargetCriteria  apijson.Field
+	Type            apijson.Field
+	ID              apijson.Field
+	AUD             apijson.Field
+	MfaConfig       apijson.Field
+	Name            apijson.Field
+	Policies        apijson.Field
+	SessionDuration apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
@@ -45463,6 +45723,10 @@ type AccessApplicationGetResponseInfrastructureApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseInfrastructureApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require   []AccessRule                                                    `json:"require"`
@@ -45474,18 +45738,19 @@ type AccessApplicationGetResponseInfrastructureApplicationPolicy struct {
 // JSON metadata for the struct
 // [AccessApplicationGetResponseInfrastructureApplicationPolicy]
 type accessApplicationGetResponseInfrastructureApplicationPolicyJSON struct {
-	ID              apijson.Field
-	ConnectionRules apijson.Field
-	CreatedAt       apijson.Field
-	Decision        apijson.Field
-	Exclude         apijson.Field
-	Include         apijson.Field
-	MfaConfig       apijson.Field
-	Name            apijson.Field
-	Require         apijson.Field
-	UpdatedAt       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	ID                        apijson.Field
+	ConnectionRules           apijson.Field
+	CreatedAt                 apijson.Field
+	Decision                  apijson.Field
+	Exclude                   apijson.Field
+	Include                   apijson.Field
+	MfaConfig                 apijson.Field
+	Name                      apijson.Field
+	PolicyResolutionAccountID apijson.Field
+	Require                   apijson.Field
+	UpdatedAt                 apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -45695,7 +45960,7 @@ type AccessApplicationGetResponseBrowserRDPApplication struct {
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
@@ -46697,6 +46962,10 @@ type AccessApplicationGetResponseBrowserRDPApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseBrowserRDPApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -46731,6 +47000,7 @@ type accessApplicationGetResponseBrowserRDPApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -47250,7 +47520,7 @@ type AccessApplicationGetResponseMcpServerApplication struct {
 	SCIMConfig AccessApplicationGetResponseMcpServerApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -47962,6 +48232,10 @@ type AccessApplicationGetResponseMcpServerApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseMcpServerApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -47995,6 +48269,7 @@ type accessApplicationGetResponseMcpServerApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -48517,7 +48792,7 @@ type AccessApplicationGetResponseMcpServerPortalApplication struct {
 	SCIMConfig AccessApplicationGetResponseMcpServerPortalApplicationSCIMConfig `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration string `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -49231,6 +49506,10 @@ type AccessApplicationGetResponseMcpServerPortalApplicationPolicy struct {
 	MfaConfig AccessApplicationGetResponseMcpServerPortalApplicationPoliciesMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -49265,6 +49544,7 @@ type accessApplicationGetResponseMcpServerPortalApplicationPolicyJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -49856,7 +50136,7 @@ type AccessApplicationNewParamsBody struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
@@ -50329,7 +50609,7 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
@@ -51826,7 +52106,7 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
@@ -52815,7 +53095,7 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
@@ -53743,7 +54023,7 @@ type AccessApplicationNewParamsBodyAppLauncherApplication struct {
 	Policies param.Field[[]AccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
@@ -54027,7 +54307,7 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication struct
 	Policies param.Field[[]AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
@@ -54251,7 +54531,7 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication struct
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
@@ -54480,7 +54760,7 @@ type AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplication struc
 	Policies param.Field[[]AccessApplicationNewParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
@@ -54908,6 +55188,10 @@ type AccessApplicationNewParamsBodyInfrastructureApplication struct {
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyInfrastructureApplicationPolicy] `json:"policies"`
+	// The maximum duration of a connection to this application's targets. Connections
+	// are terminated once it elapses. Must be in the format `30m` or `2h45m`, in whole
+	// seconds. Valid time units are: s, m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r AccessApplicationNewParamsBodyInfrastructureApplication) MarshalJSON() (data []byte, err error) {
@@ -55083,6 +55367,10 @@ type AccessApplicationNewParamsBodyInfrastructureApplicationPolicy struct {
 	// Configures multi-factor authentication (MFA) settings for infrastructure
 	// applications.
 	MfaConfig param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesMfaConfig] `json:"mfa_config"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID param.Field[string] `json:"policy_resolution_account_id"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
@@ -55247,7 +55535,7 @@ type AccessApplicationNewParamsBodyBrowserRDPApplication struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
@@ -56285,7 +56573,7 @@ type AccessApplicationNewParamsBodyMcpServerApplication struct {
 	SCIMConfig param.Field[AccessApplicationNewParamsBodyMcpServerApplicationSCIMConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -57172,7 +57460,7 @@ type AccessApplicationNewParamsBodyMcpServerPortalApplication struct {
 	SCIMConfig param.Field[AccessApplicationNewParamsBodyMcpServerPortalApplicationSCIMConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -58265,7 +58553,7 @@ type AccessApplicationUpdateParamsBody struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
@@ -58738,7 +59026,7 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
@@ -60235,7 +60523,7 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
@@ -61224,7 +61512,7 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
@@ -62152,7 +62440,7 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplication struct {
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
@@ -62436,7 +62724,7 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication str
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
@@ -62660,7 +62948,7 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication str
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
@@ -62889,7 +63177,7 @@ type AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplication st
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyGatewayIdentityProxyEndpointApplicationPolicyUnion] `json:"policies"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
@@ -63317,6 +63605,10 @@ type AccessApplicationUpdateParamsBodyInfrastructureApplication struct {
 	Name param.Field[string] `json:"name"`
 	// The policies that Access applies to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy] `json:"policies"`
+	// The maximum duration of a connection to this application's targets. Connections
+	// are terminated once it elapses. Must be in the format `30m` or `2h45m`, in whole
+	// seconds. Valid time units are: s, m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r AccessApplicationUpdateParamsBodyInfrastructureApplication) MarshalJSON() (data []byte, err error) {
@@ -63492,6 +63784,10 @@ type AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy struct {
 	// Configures multi-factor authentication (MFA) settings for infrastructure
 	// applications.
 	MfaConfig param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesMfaConfig] `json:"mfa_config"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID param.Field[string] `json:"policy_resolution_account_id"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
@@ -63656,7 +63952,7 @@ type AccessApplicationUpdateParamsBodyBrowserRDPApplication struct {
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
@@ -64694,7 +64990,7 @@ type AccessApplicationUpdateParamsBodyMcpServerApplication struct {
 	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyMcpServerApplicationSCIMConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
@@ -65581,7 +65877,7 @@ type AccessApplicationUpdateParamsBodyMcpServerPortalApplication struct {
 	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyMcpServerPortalApplicationSCIMConfig] `json:"scim_config"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h. Note: unsupported for infrastructure type applications.
+	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.

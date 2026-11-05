@@ -22,6 +22,7 @@ import (
 // the [NewBillingService] method instead.
 type BillingService struct {
 	Options       []option.RequestOption
+	SpendPolicies *SpendPolicyService
 	Profiles      *ProfileService
 	Usage         *UsageService
 	Credits       *CreditService
@@ -37,6 +38,7 @@ type BillingService struct {
 func NewBillingService(opts ...option.RequestOption) (r *BillingService) {
 	r = &BillingService{}
 	r.Options = opts
+	r.SpendPolicies = NewSpendPolicyService(opts...)
 	r.Profiles = NewProfileService(opts...)
 	r.Usage = NewUsageService(opts...)
 	r.Credits = NewCreditService(opts...)

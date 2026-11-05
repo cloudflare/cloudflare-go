@@ -362,6 +362,8 @@ type CasbIntegrationListResponse struct {
 	// Integration ID.
 	ID          string            `json:"id" api:"required" format:"uuid"`
 	Application map[string]string `json:"application" api:"required"`
+	// The integration's authentication method.
+	AuthMethod CasbIntegrationListResponseAuthMethod `json:"auth_method" api:"required,nullable"`
 	// When the integration was created.
 	Created time.Time `json:"created" api:"required" format:"date-time"`
 	// Whether the user paused the integration.
@@ -371,8 +373,10 @@ type CasbIntegrationListResponse struct {
 	// Integration status.
 	Status string `json:"status" api:"required"`
 	// When the integration was last updated.
-	Updated time.Time                       `json:"updated" api:"required" format:"date-time"`
-	JSON    casbIntegrationListResponseJSON `json:"-"`
+	Updated time.Time `json:"updated" api:"required" format:"date-time"`
+	// Use cases enabled for the integration.
+	UseCases []string                        `json:"use_cases" api:"required"`
+	JSON     casbIntegrationListResponseJSON `json:"-"`
 }
 
 // casbIntegrationListResponseJSON contains the JSON metadata for the struct
@@ -380,11 +384,13 @@ type CasbIntegrationListResponse struct {
 type casbIntegrationListResponseJSON struct {
 	ID          apijson.Field
 	Application apijson.Field
+	AuthMethod  apijson.Field
 	Created     apijson.Field
 	IsPaused    apijson.Field
 	Name        apijson.Field
 	Status      apijson.Field
 	Updated     apijson.Field
+	UseCases    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -394,6 +400,30 @@ func (r *CasbIntegrationListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r casbIntegrationListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The integration's authentication method.
+type CasbIntegrationListResponseAuthMethod struct {
+	ID          string                                    `json:"id" api:"required"`
+	DisplayName string                                    `json:"display_name" api:"required"`
+	JSON        casbIntegrationListResponseAuthMethodJSON `json:"-"`
+}
+
+// casbIntegrationListResponseAuthMethodJSON contains the JSON metadata for the
+// struct [CasbIntegrationListResponseAuthMethod]
+type casbIntegrationListResponseAuthMethodJSON struct {
+	ID          apijson.Field
+	DisplayName apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CasbIntegrationListResponseAuthMethod) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r casbIntegrationListResponseAuthMethodJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -671,20 +701,22 @@ type CasbIntegrationNewParams struct {
 	// - `SALESFORCE` - SALESFORCE
 	// - `SERVICENOW` - SERVICENOW
 	// - `SLACK` - SLACK
+	// - `ZOOM` - ZOOM
 	Application param.Field[CasbIntegrationNewParamsApplication] `json:"application" api:"required"`
 	// Credentials for the integration.
 	Credentials param.Field[map[string]interface{}] `json:"credentials" api:"required"`
 	// Name of the integration.
 	Name param.Field[string] `json:"name" api:"required"`
+	// List of use case or feature slugs to enroll. At least one use case (casb, ces)
+	// is required; auto_remediation may be added alongside casb (e.g., ['casb', 'ces',
+	// 'auto_remediation']).
+	UseCases param.Field[[]CasbIntegrationNewParamsUseCase] `json:"use_cases" api:"required"`
 	// Authentication method slug (uses default if omitted).
 	AuthMethod param.Field[string] `json:"auth_method"`
 	// List of DLP profile IDs to associate.
 	DLPProfiles param.Field[[]string] `json:"dlp_profiles" format:"uuid"`
 	// List of permission scopes (uses policy defaults if empty).
 	Permissions param.Field[[]string] `json:"permissions"`
-	// List of use case or feature slugs to enroll (e.g., ['casb', 'ces',
-	// 'auto_remediation']).
-	UseCases param.Field[[]CasbIntegrationNewParamsUseCase] `json:"use_cases"`
 }
 
 func (r CasbIntegrationNewParams) MarshalJSON() (data []byte, err error) {
@@ -708,6 +740,7 @@ func (r CasbIntegrationNewParams) MarshalJSON() (data []byte, err error) {
 // - `SALESFORCE` - SALESFORCE
 // - `SERVICENOW` - SERVICENOW
 // - `SLACK` - SLACK
+// - `ZOOM` - ZOOM
 type CasbIntegrationNewParamsApplication string
 
 const (
@@ -726,11 +759,12 @@ const (
 	CasbIntegrationNewParamsApplicationSalesforce          CasbIntegrationNewParamsApplication = "SALESFORCE"
 	CasbIntegrationNewParamsApplicationServicenow          CasbIntegrationNewParamsApplication = "SERVICENOW"
 	CasbIntegrationNewParamsApplicationSlack               CasbIntegrationNewParamsApplication = "SLACK"
+	CasbIntegrationNewParamsApplicationZoom                CasbIntegrationNewParamsApplication = "ZOOM"
 )
 
 func (r CasbIntegrationNewParamsApplication) IsKnown() bool {
 	switch r {
-	case CasbIntegrationNewParamsApplicationAnthropic, CasbIntegrationNewParamsApplicationAws, CasbIntegrationNewParamsApplicationBitbucket, CasbIntegrationNewParamsApplicationBox, CasbIntegrationNewParamsApplicationConfluence, CasbIntegrationNewParamsApplicationDropbox, CasbIntegrationNewParamsApplicationGitHub, CasbIntegrationNewParamsApplicationGoogleCloudPlatform, CasbIntegrationNewParamsApplicationGoogleWorkspace, CasbIntegrationNewParamsApplicationJira, CasbIntegrationNewParamsApplicationMicrosoftInternal, CasbIntegrationNewParamsApplicationOpenAI, CasbIntegrationNewParamsApplicationSalesforce, CasbIntegrationNewParamsApplicationServicenow, CasbIntegrationNewParamsApplicationSlack:
+	case CasbIntegrationNewParamsApplicationAnthropic, CasbIntegrationNewParamsApplicationAws, CasbIntegrationNewParamsApplicationBitbucket, CasbIntegrationNewParamsApplicationBox, CasbIntegrationNewParamsApplicationConfluence, CasbIntegrationNewParamsApplicationDropbox, CasbIntegrationNewParamsApplicationGitHub, CasbIntegrationNewParamsApplicationGoogleCloudPlatform, CasbIntegrationNewParamsApplicationGoogleWorkspace, CasbIntegrationNewParamsApplicationJira, CasbIntegrationNewParamsApplicationMicrosoftInternal, CasbIntegrationNewParamsApplicationOpenAI, CasbIntegrationNewParamsApplicationSalesforce, CasbIntegrationNewParamsApplicationServicenow, CasbIntegrationNewParamsApplicationSlack, CasbIntegrationNewParamsApplicationZoom:
 		return true
 	}
 	return false

@@ -158,7 +158,7 @@ type InvestigateListResponse struct {
 	ThreatCategories  []string                          `json:"threat_categories" api:"nullable"`
 	To                []string                          `json:"to" api:"nullable"`
 	ToName            []string                          `json:"to_name" api:"nullable"`
-	Validation        InvestigateListResponseValidation `json:"validation" api:"nullable"`
+	Validation        InvestigateListResponseValidation `json:"validation"`
 	XOriginatingIP    string                            `json:"x_originating_ip" api:"nullable"`
 	JSON              investigateListResponseJSON       `json:"-"`
 }
@@ -658,7 +658,7 @@ type InvestigateGetResponse struct {
 	ThreatCategories  []string                         `json:"threat_categories" api:"nullable"`
 	To                []string                         `json:"to" api:"nullable"`
 	ToName            []string                         `json:"to_name" api:"nullable"`
-	Validation        InvestigateGetResponseValidation `json:"validation" api:"nullable"`
+	Validation        InvestigateGetResponseValidation `json:"validation"`
 	XOriginatingIP    string                           `json:"x_originating_ip" api:"nullable"`
 	JSON              investigateGetResponseJSON       `json:"-"`
 }

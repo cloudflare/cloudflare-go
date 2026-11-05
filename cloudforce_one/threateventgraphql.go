@@ -34,8 +34,8 @@ func NewThreatEventGraphqlService(opts ...option.RequestOption) (r *ThreatEventG
 	return
 }
 
-// Execute GraphQL aggregations over threat events. Supports multi-dimensional
-// group-bys, optional date range filtering, and multi-dataset aggregation.
+// Runs a GraphQL aggregation query over events. Supports grouping by multiple
+// fields, date range filters, and aggregation across datasets.
 func (r *ThreatEventGraphqlService) New(ctx context.Context, body ThreatEventGraphqlNewParams, opts ...option.RequestOption) (res *ThreatEventGraphqlNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {

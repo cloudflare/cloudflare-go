@@ -225,6 +225,10 @@ type AccessApplicationPolicyTestNewParamsPoliciesObject struct {
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// Configures multi-factor authentication (MFA) settings.
 	MfaConfig param.Field[AccessApplicationPolicyTestNewParamsPoliciesObjectMfaConfig] `json:"mfa_config"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID param.Field[string] `json:"policy_resolution_account_id"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.

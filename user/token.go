@@ -176,6 +176,14 @@ type TokenNewResponse struct {
 	ProvisionerType string `json:"provisioner_type"`
 	// Status of the token.
 	Status TokenNewResponseStatus `json:"status"`
+	// The prefix of the token value, before the first underscore. Use it with
+	// `token_suffix` to identify a token. Only present for tokens created or rolled
+	// after this field was added.
+	TokenPrefix string `json:"token_prefix"`
+	// The last 4 characters of the token value. Use it with `token_prefix` to identify
+	// a token. It is not unique. Only present for tokens created or rolled after this
+	// field was added.
+	TokenSuffix string `json:"token_suffix"`
 	// The token value.
 	Value shared.TokenValue    `json:"value"`
 	JSON  tokenNewResponseJSON `json:"-"`
@@ -197,6 +205,8 @@ type tokenNewResponseJSON struct {
 	ProvisionerID          apijson.Field
 	ProvisionerType        apijson.Field
 	Status                 apijson.Field
+	TokenPrefix            apijson.Field
+	TokenSuffix            apijson.Field
 	Value                  apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field

@@ -36,7 +36,9 @@ func NewThreatEventIndicatorTypeService(opts ...option.RequestOption) (r *Threat
 	return
 }
 
-// Lists indicator types across multiple datasets
+// Lists the indicator types used in the datasets given by `datasetIds`, which
+// accepts dataset UUIDs or one scope value used alone. Without `datasetIds`, every
+// dataset you can read is included, analytics datasets too.
 func (r *ThreatEventIndicatorTypeService) List(ctx context.Context, params ThreatEventIndicatorTypeListParams, opts ...option.RequestOption) (res *ThreatEventIndicatorTypeListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {

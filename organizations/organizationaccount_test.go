@@ -45,8 +45,12 @@ func TestOrganizationAccountGetWithOptionalParams(t *testing.T) {
 				StartsWith: cloudflare.F("startsWith"),
 			}),
 			OrderBy:   cloudflare.F(organizations.OrganizationAccountGetParamsOrderByAccountName),
+			Page:      cloudflare.F(int64(0)),
 			PageSize:  cloudflare.F(int64(0)),
 			PageToken: cloudflare.F("page_token"),
+			PerPage:   cloudflare.F(int64(0)),
+			Status:    cloudflare.F(organizations.OrganizationAccountGetParamsStatusActive),
+			Accept:    cloudflare.F("Accept"),
 		},
 	)
 	if err != nil {

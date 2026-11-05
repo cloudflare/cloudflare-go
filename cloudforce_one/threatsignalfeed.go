@@ -41,7 +41,11 @@ func NewThreatSignalFeedService(opts ...option.RequestOption) (r *ThreatSignalFe
 	return
 }
 
-// Subscribes the account to a custom or curated Threat Signals feed.
+// Subscribes the account to a custom or curated Threat Signals feed. Adding a
+// custom feed when the account is at its custom-feed limit returns 403 with
+// `errors[0].reason` `threat_signals_feed_limit`, and
+// `errors[0].custom_feed_limit` and `errors[0].custom_feed_count` give the limit
+// and current count. Curated feeds are not subject to this limit.
 func (r *ThreatSignalFeedService) New(ctx context.Context, params ThreatSignalFeedNewParams, opts ...option.RequestOption) (res *ThreatSignalFeedNewResponse, err error) {
 	var env ThreatSignalFeedNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -467,13 +471,24 @@ type ThreatSignalFeedNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// One of the predefined Threat Signals feed categories; see GET
 	// /:account_id/v2/threat-signals/categories.
-	CategoryID    param.Field[ThreatSignalFeedNewParamsCategoryID] `json:"category_id"`
-	CuratedFeedID param.Field[string]                              `json:"curated_feed_id" format:"uuid"`
-	DisplayName   param.Field[string]                              `json:"display_name"`
-	Enabled       param.Field[bool]                                `json:"enabled"`
-	PollIntervalS param.Field[int64]                               `json:"poll_interval_s"`
-	Title         param.Field[string]                              `json:"title"`
-	URL           param.Field[string]                              `json:"url" format:"uri"`
+	CategoryID param.Field[ThreatSignalFeedNewParamsCategoryID] `json:"category_id"`
+	// UUID of a curated feed to subscribe to. Provide exactly one of url or
+	// curated_feed_id. The account must have feed creation entitlement and not exceed
+	// feed allowance.
+	CuratedFeedID param.Field[string] `json:"curated_feed_id" format:"uuid"`
+	// Override the feed's display name. Null clears it; omit to keep existing or
+	// derived value.
+	DisplayName param.Field[string] `json:"display_name"`
+	// Whether to actively poll the feed. Default true.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Polling interval in seconds (60-86400). Default 300s (5 minutes).
+	PollIntervalS param.Field[int64] `json:"poll_interval_s"`
+	// Override the feed's title. Null clears it; omit to keep existing or derived
+	// value.
+	Title param.Field[string] `json:"title"`
+	// HTTPS RSS feed URL. Provide exactly one of url or curated_feed_id. The account
+	// must have feed creation entitlement and not exceed feed allowance.
+	URL param.Field[string] `json:"url" format:"uri"`
 }
 
 func (r ThreatSignalFeedNewParams) MarshalJSON() (data []byte, err error) {
@@ -621,15 +636,27 @@ func (r ThreatSignalFeedNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ThreatSignalFeedListParams struct {
-	AccountID  param.Field[string]                               `path:"account_id" api:"required"`
-	Category   param.Field[string]                               `query:"category"`
-	Enabled    param.Field[bool]                                 `query:"enabled"`
-	Limit      param.Field[int64]                                `query:"limit"`
-	Page       param.Field[int64]                                `query:"page"`
-	PerPage    param.Field[int64]                                `query:"per_page"`
-	Sort       param.Field[string]                               `query:"sort"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Exact feed-category filter, up to 100 characters. Omit to include all
+	// categories.
+	Category param.Field[string] `query:"category"`
+	// Filter by enabled state. Accepts true, false, 1, or 0; omit to include enabled
+	// and disabled feeds.
+	Enabled param.Field[bool] `query:"enabled"`
+	// Optional 1–100 alias for per_page. When provided, limit takes precedence.
+	Limit param.Field[int64] `query:"limit"`
+	// 1-based page number. Minimum 1; defaults to 1.
+	Page param.Field[int64] `query:"page"`
+	// Number of feeds per page, from 1 to 100. Defaults to 20.
+	PerPage param.Field[int64] `query:"per_page"`
+	// Sort by created_at, title, category, or url. Prefix the field with - for
+	// descending order; defaults to -created_at.
+	Sort param.Field[string] `query:"sort"`
+	// Filter by curated or custom feed source. Omit to include both source types.
 	SourceType param.Field[ThreatSignalFeedListParamsSourceType] `query:"source_type"`
-	Status     param.Field[string]                               `query:"status"`
+	// Exact stored polling-status filter, such as active or error. Omit to include
+	// every status.
+	Status param.Field[string] `query:"status"`
 }
 
 // URLQuery serializes [ThreatSignalFeedListParams]'s query parameters as
@@ -641,6 +668,7 @@ func (r ThreatSignalFeedListParams) URLQuery() (v url.Values) {
 	})
 }
 
+// Filter by curated or custom feed source. Omit to include both source types.
 type ThreatSignalFeedListParamsSourceType string
 
 const (
@@ -781,11 +809,17 @@ type ThreatSignalFeedEditParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// One of the predefined Threat Signals feed categories; see GET
 	// /:account_id/v2/threat-signals/categories.
-	CategoryID    param.Field[ThreatSignalFeedEditParamsCategoryID] `json:"category_id"`
-	DisplayName   param.Field[string]                               `json:"display_name"`
-	Enabled       param.Field[bool]                                 `json:"enabled"`
-	PollIntervalS param.Field[int64]                                `json:"poll_interval_s"`
-	Title         param.Field[string]                               `json:"title"`
+	CategoryID param.Field[ThreatSignalFeedEditParamsCategoryID] `json:"category_id"`
+	// Override the feed's display name. Null clears it; omit to keep existing or
+	// derived value.
+	DisplayName param.Field[string] `json:"display_name"`
+	// Whether to actively poll the feed. Omit to keep current value.
+	Enabled param.Field[bool] `json:"enabled"`
+	// New polling interval in seconds (60-86400). Omit to keep current value.
+	PollIntervalS param.Field[int64] `json:"poll_interval_s"`
+	// Override the feed's title. Null clears it; omit to keep existing or derived
+	// value.
+	Title param.Field[string] `json:"title"`
 }
 
 func (r ThreatSignalFeedEditParams) MarshalJSON() (data []byte, err error) {
@@ -933,8 +967,10 @@ func (r ThreatSignalFeedEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ThreatSignalFeedPollParams struct {
-	AccountID param.Field[string]                           `path:"account_id" api:"required"`
-	FeedID    param.Field[ThreatSignalFeedPollParamsFeedID] `query:"feed_id"`
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// UUID of a specific feed to poll, or "all" to poll all feeds. Omit or pass "all"
+	// for all feeds.
+	FeedID param.Field[ThreatSignalFeedPollParamsFeedID] `query:"feed_id"`
 }
 
 // URLQuery serializes [ThreatSignalFeedPollParams]'s query parameters as
@@ -946,6 +982,8 @@ func (r ThreatSignalFeedPollParams) URLQuery() (v url.Values) {
 	})
 }
 
+// UUID of a specific feed to poll, or "all" to poll all feeds. Omit or pass "all"
+// for all feeds.
 type ThreatSignalFeedPollParamsFeedID string
 
 const (

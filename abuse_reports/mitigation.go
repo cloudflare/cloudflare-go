@@ -380,6 +380,9 @@ type MitigationReviewParams struct {
 	Appeals param.Field[[]MitigationReviewParamsAppeal] `json:"appeals"`
 	// Counter-notice details supporting an appeal.
 	Data param.Field[MitigationReviewParamsData] `json:"data"`
+	// Optional explanation for a "content_removed" appeal, such as how the content was
+	// removed. Not accepted for other appeal types.
+	Explanation param.Field[string] `json:"explanation"`
 	// The type of appeal being submitted.
 	Type param.Field[MitigationReviewParamsType] `json:"type"`
 }

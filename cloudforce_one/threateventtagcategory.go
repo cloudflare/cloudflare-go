@@ -36,7 +36,8 @@ func NewThreatEventTagCategoryService(opts ...option.RequestOption) (r *ThreatEv
 	return
 }
 
-// Creates a new Source-of-Truth tag category for an account.
+// Creates a tag category. Use `schema` to define the custom fields its tags can
+// have.
 func (r *ThreatEventTagCategoryService) New(ctx context.Context, params ThreatEventTagCategoryNewParams, opts ...option.RequestOption) (res *ThreatEventTagCategoryNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -48,7 +49,7 @@ func (r *ThreatEventTagCategoryService) New(ctx context.Context, params ThreatEv
 	return res, err
 }
 
-// Returns all Source-of-Truth tag categories for an account.
+// Lists the account's tag categories. Use `search` to filter them.
 func (r *ThreatEventTagCategoryService) List(ctx context.Context, params ThreatEventTagCategoryListParams, opts ...option.RequestOption) (res *ThreatEventTagCategoryListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -60,7 +61,8 @@ func (r *ThreatEventTagCategoryService) List(ctx context.Context, params ThreatE
 	return res, err
 }
 
-// Deprecated; use DELETE /events/tag-categories/{category_uuid}. Available through
+// Legacy. Use `threat-intel tags categories delete`
+// (`DELETE /events/tag-categories/{category_uuid}`) instead. Available through
 // 2026-11-28.
 //
 // Deprecated: Use DELETE /events/tag-categories/{category_uuid} before 2026-11-28.
@@ -79,7 +81,8 @@ func (r *ThreatEventTagCategoryService) Delete(ctx context.Context, categoryUUID
 	return res, err
 }
 
-// Deprecated; use PATCH /events/tag-categories/{category_uuid}. Available through
+// Legacy. Use `threat-intel tags categories update`
+// (`PATCH /events/tag-categories/{category_uuid}`) instead. Available through
 // 2026-11-28.
 //
 // Deprecated: Use PATCH /events/tag-categories/{category_uuid} before 2026-11-28.

@@ -31,6 +31,13 @@ func TestBotManagementUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.BotManagement.Update(context.TODO(), bot_management.BotManagementUpdateParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Body: bot_management.BotFightModeConfigurationParam{
+			AIAgents: cloudflare.F(bot_management.BotFightModeConfigurationAIAgentsParam{
+				AnthropicAgent: cloudflare.F(bot_management.BotFightModeConfigurationAIAgentsAnthropicAgentBlock),
+				GoogleAgent:    cloudflare.F(bot_management.BotFightModeConfigurationAIAgentsGoogleAgentBlock),
+				Instinct:       cloudflare.F(bot_management.BotFightModeConfigurationAIAgentsInstinctBlock),
+				Muse:           cloudflare.F(bot_management.BotFightModeConfigurationAIAgentsMuseBlock),
+				OpenAIAgent:    cloudflare.F(bot_management.BotFightModeConfigurationAIAgentsOpenAIAgentBlock),
+			}),
 			AIBotsMigrationOptOut:    cloudflare.F(false),
 			AIBotsProtection:         cloudflare.F(bot_management.BotFightModeConfigurationAIBotsProtectionBlock),
 			AISearch:                 cloudflare.F(bot_management.BotFightModeConfigurationAISearchBlock),

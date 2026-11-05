@@ -37,9 +37,9 @@ func NewResourceLibraryCategoryService(opts ...option.RequestOption) (r *Resourc
 	return
 }
 
-// List the categories available for classifying applications. Results are
-// paginated.
-func (r *ResourceLibraryCategoryService) List(ctx context.Context, params ResourceLibraryCategoryListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ResourceLibraryCategoryListResponse], err error) {
+// List the categories available for classifying applications, ordered by name.
+// Results are paginated by `offset` or `cursor`.
+func (r *ResourceLibraryCategoryService) List(ctx context.Context, params ResourceLibraryCategoryListParams, opts ...option.RequestOption) (res *pagination.CursorPaginationAfter[ResourceLibraryCategoryListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -60,10 +60,10 @@ func (r *ResourceLibraryCategoryService) List(ctx context.Context, params Resour
 	return res, nil
 }
 
-// List the categories available for classifying applications. Results are
-// paginated.
-func (r *ResourceLibraryCategoryService) ListAutoPaging(ctx context.Context, params ResourceLibraryCategoryListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ResourceLibraryCategoryListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+// List the categories available for classifying applications, ordered by name.
+// Results are paginated by `offset` or `cursor`.
+func (r *ResourceLibraryCategoryService) ListAutoPaging(ctx context.Context, params ResourceLibraryCategoryListParams, opts ...option.RequestOption) *pagination.CursorPaginationAfterAutoPager[ResourceLibraryCategoryListResponse] {
+	return pagination.NewCursorPaginationAfterAutoPager(r.List(ctx, params, opts...))
 }
 
 // Retrieve an application category by its numeric ID.
@@ -147,9 +147,15 @@ func (r resourceLibraryCategoryGetResponseJSON) RawJSON() string {
 
 type ResourceLibraryCategoryListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Opaque value from `result_info.cursor` of the previous response. Returns the
+	// categories that follow it. `limit` may change between requests. An empty value
+	// is the same as no cursor. A modified cursor, or one returned by a different
+	// list, returns `400`.
+	Cursor param.Field[string] `query:"cursor"`
 	// Number of results to return. Defaults to 25; values are clamped to 1–250.
 	Limit param.Field[int64] `query:"limit"`
 	// Number of results to skip. Defaults to 0; negative values are clamped to 0.
+	// Ignored when `cursor` is provided.
 	Offset param.Field[int64] `query:"offset"`
 }
 

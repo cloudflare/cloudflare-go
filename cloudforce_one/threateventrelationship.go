@@ -36,7 +36,8 @@ func NewThreatEventRelationshipService(opts ...option.RequestOption) (r *ThreatE
 	return
 }
 
-// Deprecated; use GET /events/by-id/{event_id}/relationships. Available through
+// Legacy. Use `threat-intel events relationships list`
+// (`GET /events/by-id/{event_id}/relationships`) instead. Available through
 // 2026-11-28.
 //
 // Deprecated: Use GET /events/by-id/{event_id}/relationships before 2026-11-28.

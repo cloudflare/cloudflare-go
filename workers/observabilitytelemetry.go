@@ -2308,6 +2308,12 @@ type ObservabilityTelemetryQueryResponseEventsEventsMetadata struct {
 	SpanID string `json:"spanId"`
 	// Human-readable name for this span.
 	SpanName string `json:"spanName"`
+	// OpenTelemetry span status. Present only on spans. `unset` when the span did not
+	// set a status, including spans recorded before status was captured.
+	SpanStatus ObservabilityTelemetryQueryResponseEventsEventsMetadataSpanStatus `json:"spanStatus"`
+	// OpenTelemetry span status message. Present only on spans when the status is
+	// `error` and a message was set.
+	SpanStatusMessage string `json:"spanStatusMessage"`
 	// Stack / deployment identifier.
 	StackID string `json:"stackId"`
 	// Span start time as a Unix epoch in milliseconds.
@@ -2337,44 +2343,46 @@ type ObservabilityTelemetryQueryResponseEventsEventsMetadata struct {
 // metadata for the struct
 // [ObservabilityTelemetryQueryResponseEventsEventsMetadata]
 type observabilityTelemetryQueryResponseEventsEventsMetadataJSON struct {
-	ID              apijson.Field
-	Account         apijson.Field
-	CloudService    apijson.Field
-	ColdStart       apijson.Field
-	Cost            apijson.Field
-	Duration        apijson.Field
-	EndTime         apijson.Field
-	EndTimeNS       apijson.Field
-	Error           apijson.Field
-	ErrorTemplate   apijson.Field
-	EventSize       apijson.Field
-	Fingerprint     apijson.Field
-	Level           apijson.Field
-	Message         apijson.Field
-	MessageTemplate apijson.Field
-	MetricName      apijson.Field
-	Origin          apijson.Field
-	ParentSpanID    apijson.Field
-	Provider        apijson.Field
-	RayID           apijson.Field
-	Region          apijson.Field
-	RequestID       apijson.Field
-	Service         apijson.Field
-	SpanID          apijson.Field
-	SpanName        apijson.Field
-	StackID         apijson.Field
-	StartTime       apijson.Field
-	StartTimeNS     apijson.Field
-	StatusCode      apijson.Field
-	TimestampNS     apijson.Field
-	TraceDuration   apijson.Field
-	TraceID         apijson.Field
-	TransactionName apijson.Field
-	Trigger         apijson.Field
-	Type            apijson.Field
-	URL             apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	ID                apijson.Field
+	Account           apijson.Field
+	CloudService      apijson.Field
+	ColdStart         apijson.Field
+	Cost              apijson.Field
+	Duration          apijson.Field
+	EndTime           apijson.Field
+	EndTimeNS         apijson.Field
+	Error             apijson.Field
+	ErrorTemplate     apijson.Field
+	EventSize         apijson.Field
+	Fingerprint       apijson.Field
+	Level             apijson.Field
+	Message           apijson.Field
+	MessageTemplate   apijson.Field
+	MetricName        apijson.Field
+	Origin            apijson.Field
+	ParentSpanID      apijson.Field
+	Provider          apijson.Field
+	RayID             apijson.Field
+	Region            apijson.Field
+	RequestID         apijson.Field
+	Service           apijson.Field
+	SpanID            apijson.Field
+	SpanName          apijson.Field
+	SpanStatus        apijson.Field
+	SpanStatusMessage apijson.Field
+	StackID           apijson.Field
+	StartTime         apijson.Field
+	StartTimeNS       apijson.Field
+	StatusCode        apijson.Field
+	TimestampNS       apijson.Field
+	TraceDuration     apijson.Field
+	TraceID           apijson.Field
+	TransactionName   apijson.Field
+	Trigger           apijson.Field
+	Type              apijson.Field
+	URL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *ObservabilityTelemetryQueryResponseEventsEventsMetadata) UnmarshalJSON(data []byte) (err error) {
@@ -2383,6 +2391,24 @@ func (r *ObservabilityTelemetryQueryResponseEventsEventsMetadata) UnmarshalJSON(
 
 func (r observabilityTelemetryQueryResponseEventsEventsMetadataJSON) RawJSON() string {
 	return r.raw
+}
+
+// OpenTelemetry span status. Present only on spans. `unset` when the span did not
+// set a status, including spans recorded before status was captured.
+type ObservabilityTelemetryQueryResponseEventsEventsMetadataSpanStatus string
+
+const (
+	ObservabilityTelemetryQueryResponseEventsEventsMetadataSpanStatusUnset ObservabilityTelemetryQueryResponseEventsEventsMetadataSpanStatus = "unset"
+	ObservabilityTelemetryQueryResponseEventsEventsMetadataSpanStatusOk    ObservabilityTelemetryQueryResponseEventsEventsMetadataSpanStatus = "ok"
+	ObservabilityTelemetryQueryResponseEventsEventsMetadataSpanStatusError ObservabilityTelemetryQueryResponseEventsEventsMetadataSpanStatus = "error"
+)
+
+func (r ObservabilityTelemetryQueryResponseEventsEventsMetadataSpanStatus) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryResponseEventsEventsMetadataSpanStatusUnset, ObservabilityTelemetryQueryResponseEventsEventsMetadataSpanStatusOk, ObservabilityTelemetryQueryResponseEventsEventsMetadataSpanStatusError:
+		return true
+	}
+	return false
 }
 
 // Raw log payload. May be a string or a structured object depending on how the log
@@ -2950,6 +2976,12 @@ type ObservabilityTelemetryQueryResponseInvocationsMetadata struct {
 	SpanID string `json:"spanId"`
 	// Human-readable name for this span.
 	SpanName string `json:"spanName"`
+	// OpenTelemetry span status. Present only on spans. `unset` when the span did not
+	// set a status, including spans recorded before status was captured.
+	SpanStatus ObservabilityTelemetryQueryResponseInvocationsMetadataSpanStatus `json:"spanStatus"`
+	// OpenTelemetry span status message. Present only on spans when the status is
+	// `error` and a message was set.
+	SpanStatusMessage string `json:"spanStatusMessage"`
 	// Stack / deployment identifier.
 	StackID string `json:"stackId"`
 	// Span start time as a Unix epoch in milliseconds.
@@ -2978,44 +3010,46 @@ type ObservabilityTelemetryQueryResponseInvocationsMetadata struct {
 // observabilityTelemetryQueryResponseInvocationsMetadataJSON contains the JSON
 // metadata for the struct [ObservabilityTelemetryQueryResponseInvocationsMetadata]
 type observabilityTelemetryQueryResponseInvocationsMetadataJSON struct {
-	ID              apijson.Field
-	Account         apijson.Field
-	CloudService    apijson.Field
-	ColdStart       apijson.Field
-	Cost            apijson.Field
-	Duration        apijson.Field
-	EndTime         apijson.Field
-	EndTimeNS       apijson.Field
-	Error           apijson.Field
-	ErrorTemplate   apijson.Field
-	EventSize       apijson.Field
-	Fingerprint     apijson.Field
-	Level           apijson.Field
-	Message         apijson.Field
-	MessageTemplate apijson.Field
-	MetricName      apijson.Field
-	Origin          apijson.Field
-	ParentSpanID    apijson.Field
-	Provider        apijson.Field
-	RayID           apijson.Field
-	Region          apijson.Field
-	RequestID       apijson.Field
-	Service         apijson.Field
-	SpanID          apijson.Field
-	SpanName        apijson.Field
-	StackID         apijson.Field
-	StartTime       apijson.Field
-	StartTimeNS     apijson.Field
-	StatusCode      apijson.Field
-	TimestampNS     apijson.Field
-	TraceDuration   apijson.Field
-	TraceID         apijson.Field
-	TransactionName apijson.Field
-	Trigger         apijson.Field
-	Type            apijson.Field
-	URL             apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	ID                apijson.Field
+	Account           apijson.Field
+	CloudService      apijson.Field
+	ColdStart         apijson.Field
+	Cost              apijson.Field
+	Duration          apijson.Field
+	EndTime           apijson.Field
+	EndTimeNS         apijson.Field
+	Error             apijson.Field
+	ErrorTemplate     apijson.Field
+	EventSize         apijson.Field
+	Fingerprint       apijson.Field
+	Level             apijson.Field
+	Message           apijson.Field
+	MessageTemplate   apijson.Field
+	MetricName        apijson.Field
+	Origin            apijson.Field
+	ParentSpanID      apijson.Field
+	Provider          apijson.Field
+	RayID             apijson.Field
+	Region            apijson.Field
+	RequestID         apijson.Field
+	Service           apijson.Field
+	SpanID            apijson.Field
+	SpanName          apijson.Field
+	SpanStatus        apijson.Field
+	SpanStatusMessage apijson.Field
+	StackID           apijson.Field
+	StartTime         apijson.Field
+	StartTimeNS       apijson.Field
+	StatusCode        apijson.Field
+	TimestampNS       apijson.Field
+	TraceDuration     apijson.Field
+	TraceID           apijson.Field
+	TransactionName   apijson.Field
+	Trigger           apijson.Field
+	Type              apijson.Field
+	URL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *ObservabilityTelemetryQueryResponseInvocationsMetadata) UnmarshalJSON(data []byte) (err error) {
@@ -3024,6 +3058,24 @@ func (r *ObservabilityTelemetryQueryResponseInvocationsMetadata) UnmarshalJSON(d
 
 func (r observabilityTelemetryQueryResponseInvocationsMetadataJSON) RawJSON() string {
 	return r.raw
+}
+
+// OpenTelemetry span status. Present only on spans. `unset` when the span did not
+// set a status, including spans recorded before status was captured.
+type ObservabilityTelemetryQueryResponseInvocationsMetadataSpanStatus string
+
+const (
+	ObservabilityTelemetryQueryResponseInvocationsMetadataSpanStatusUnset ObservabilityTelemetryQueryResponseInvocationsMetadataSpanStatus = "unset"
+	ObservabilityTelemetryQueryResponseInvocationsMetadataSpanStatusOk    ObservabilityTelemetryQueryResponseInvocationsMetadataSpanStatus = "ok"
+	ObservabilityTelemetryQueryResponseInvocationsMetadataSpanStatusError ObservabilityTelemetryQueryResponseInvocationsMetadataSpanStatus = "error"
+)
+
+func (r ObservabilityTelemetryQueryResponseInvocationsMetadataSpanStatus) IsKnown() bool {
+	switch r {
+	case ObservabilityTelemetryQueryResponseInvocationsMetadataSpanStatusUnset, ObservabilityTelemetryQueryResponseInvocationsMetadataSpanStatusOk, ObservabilityTelemetryQueryResponseInvocationsMetadataSpanStatusError:
+		return true
+	}
+	return false
 }
 
 // Raw log payload. May be a string or a structured object depending on how the log

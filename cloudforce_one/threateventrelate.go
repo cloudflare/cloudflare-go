@@ -34,7 +34,9 @@ func NewThreatEventRelateService(opts ...option.RequestOption) (r *ThreatEventRe
 	return
 }
 
-// Removes a reference link between related threat events in Cloudforce One.
+// Legacy. Removes references created with
+// `threat-intel events legacy references create`. Use
+// `threat-intel events relationships` for new event links.
 func (r *ThreatEventRelateService) Delete(ctx context.Context, eventID string, body ThreatEventRelateDeleteParams, opts ...option.RequestOption) (res *ThreatEventRelateDeleteResponse, err error) {
 	var env ThreatEventRelateDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

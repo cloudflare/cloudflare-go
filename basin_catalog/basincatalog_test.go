@@ -101,7 +101,7 @@ func TestBasinCatalogDisable(t *testing.T) {
 	}
 }
 
-func TestBasinCatalogEnable(t *testing.T) {
+func TestBasinCatalogEnableWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -120,6 +120,9 @@ func TestBasinCatalogEnable(t *testing.T) {
 		"my-data-bucket",
 		basin_catalog.BasinCatalogEnableParams{
 			AccountID: cloudflare.F("0123456789abcdef0123456789abcdef"),
+			Credential: cloudflare.F(basin_catalog.BasinCatalogEnableParamsCredential{
+				Token: cloudflare.F("your-cloudflare-api-token-here"),
+			}),
 		},
 	)
 	if err != nil {

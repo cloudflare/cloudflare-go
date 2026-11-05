@@ -38,8 +38,8 @@ func NewThreatEventCategoryService(opts ...option.RequestOption) (r *ThreatEvent
 	return
 }
 
-// Creates a new threat event category in Cloudforce One for organizing and
-// classifying threat events.
+// Creates an event category for classifying events. `name` and `killChain` are
+// required.
 func (r *ThreatEventCategoryService) New(ctx context.Context, params ThreatEventCategoryNewParams, opts ...option.RequestOption) (res *ThreatEventCategoryNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -51,8 +51,10 @@ func (r *ThreatEventCategoryService) New(ctx context.Context, params ThreatEvent
 	return res, err
 }
 
-// Lists all threat event categories configured for classifying and organizing
-// threat events.
+// Lists the event categories used by events in the datasets given by `datasetIds`,
+// or in the default dataset when `datasetIds` is omitted. Dataset scope values are
+// not supported. To list every category, use
+// `threat-intel events categories catalog list`.
 func (r *ThreatEventCategoryService) List(ctx context.Context, params ThreatEventCategoryListParams, opts ...option.RequestOption) (res *[]ThreatEventCategoryListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -64,7 +66,8 @@ func (r *ThreatEventCategoryService) List(ctx context.Context, params ThreatEven
 	return res, err
 }
 
-// Deprecated; use DELETE /events/event-categories/by-id/{category_id}. Available
+// Legacy. Use `threat-intel events categories delete`
+// (`DELETE /events/event-categories/by-id/{category_id}`) instead. Available
 // through 2026-11-28.
 //
 // Deprecated: Use DELETE /events/event-categories/by-id/{category_id} before
@@ -84,7 +87,8 @@ func (r *ThreatEventCategoryService) Delete(ctx context.Context, categoryID stri
 	return res, err
 }
 
-// Deprecated; use PATCH /events/event-categories/by-id/{category_id}. Available
+// Legacy. Use `threat-intel events categories update`
+// (`PATCH /events/event-categories/by-id/{category_id}`) instead. Available
 // through 2026-11-28.
 //
 // Deprecated: Use PATCH /events/event-categories/by-id/{category_id} before
@@ -104,8 +108,9 @@ func (r *ThreatEventCategoryService) Edit(ctx context.Context, categoryID string
 	return res, err
 }
 
-// Deprecated; use GET /events/event-categories/by-id/{category_id}. Available
-// through 2026-11-28.
+// Legacy. Use `threat-intel events categories get`
+// (`GET /events/event-categories/by-id/{category_id}`) instead. Available through
+// 2026-11-28.
 //
 // Deprecated: Use GET /events/event-categories/by-id/{category_id} before
 // 2026-11-28.

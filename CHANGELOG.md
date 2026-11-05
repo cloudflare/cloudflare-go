@@ -1,5 +1,111 @@
 # Changelog
 
+## 7.14.0 (2026-11-05)
+
+Full Changelog: [v7.13.1...v7.14.0](https://github.com/cloudflare/cloudflare-go/compare/v7.13.1...v7.14.0)
+
+Please ensure you read through the list of changes below. This release removes the `MagicCloudNetworking`
+service in its entirety and restructures several response and parameter types. Review the breaking changes
+and the migration guide before upgrading.
+
+### Breaking Changes
+
+See the [v7.14.0 Migration Guide](./docs/migration-guides/v7.14.0-migration-guide.md) for before/after code examples
+and actions needed for each change.
+
+* **magic_cloud_networking:** the entire `MagicCloudNetworking` service is removed. `client.MagicCloudNetworking`
+  no longer exists, and the `github.com/cloudflare/cloudflare-go/v7/magic_cloud_networking` package is deleted
+  along with `MagicCloudNetworkingService`, `CatalogSync`, `CloudIntegration`, `Onramp`, and all associated
+  response and parameter types.
+* **accounts:** `Accounts.PayBadDebt.New()` and the `PayBadDebt` sub-resource are removed, along with
+  `PayBadDebtService`, its constructor, `PayBadDebtNewParams`, `PayBadDebtNewResponse`, and the
+  `PayBadDebtNewResponseEnvelope` types.
+* **accounts:** `Accounts.Subscriptions.Bulk.New()` return type changed from `*[]SubscriptionBulkNewResponse`
+  to `*SubscriptionBulkNewResponse`. The `SubscriptionBulkNewResponseEnvelopeResultInfo` type is removed.
+* **accounts:** the parameter helper types `AccountParam`, `AccountProfileParam`, `AccountManagedByParam`, and
+  `AccountSettingsParam` are removed.
+* **diagnostics:** `Diagnostics.EndpointHealthchecks.List()` return type changed from
+  `*EndpointHealthcheckListResponse` to `*pagination.SinglePage[EndpointHealthcheckListResponse]`. The
+  `EndpointHealthcheckListResponseEnvelope` types are removed.
+* **magic_transit:** the `WANStaticAddressingParam` type is removed from the `magic_transit` package.
+* **organizations:** `Organizations.OrganizationAccounts.Get()` return type changed from `*[]tenants.TenantAccount`
+  to `*[]organizations.OrganizationAccountGetResponse`, and now takes an `OrganizationAccountGetParams` struct.
+* **organizations:** `Organizations.Members.Delete()` signature changed from returning only `error` to returning
+  `(*organizations.MemberDeleteResponse, error)`.
+* **organizations:** the parameter helper types `OrganizationParam`, `OrganizationMetaParam`,
+  `OrganizationMetaTenantFlagsParam`, `OrganizationParentParam`, and the `MemberNewParamsMemberStatus` enum are removed.
+* **precursor:** the `EnforcementRule`, `EnforcementRuleParam`, and `EnforcementRuleMode` types are removed, along
+  with the `PrecursorConfigDefaultMode` enum.
+* **rulesets:** the ruleset response models are consolidated into union types. `Rulesets.New()`, `Update()`, and
+  `List()`; `Rulesets.Rules.New()`, `Delete()`, and `Edit()`; `Rulesets.Phases.Update()`;
+  `Rulesets.Phases.Versions.List()`; and `Rulesets.Versions.List()` now return `*...ResponseUnion` types instead
+  of the previous `*...ResponseEnvelopeResult` and paginated types. `Rulesets.List()` is no longer paginated (was
+  `*pagination.CursorPagination[RulesetListResponse]`). The `RulesetListResponse`, `PhaseVersionListResponse`,
+  `VersionListResponse`, and the `VersionGetResponse*`/`PhaseVersionGetResponse*` rule type trees are removed.
+* **tenants:** `Tenants.Get()` is removed along with the `Tenant` type and its nested types.
+* **tenants:** `Tenants.AccountTypes.List()` is removed.
+* **tenants:** `Tenants.Entitlements.Get()` is removed along with the `TenantEntitlements` type and its nested types.
+* **tenants:** `Tenants.Memberships.List()` is removed along with the `TenantMembership` type.
+* **tenants:** `Tenants.Accounts.List()` signature changed: it now takes a `query tenants.AccountListParams` argument
+  and its return type changed from `*pagination.SinglePage[tenants.TenantAccount]` to
+  `*pagination.V4PagePaginationArray[tenants.AccountListResponse]`.
+* **tenant_custom_nameservers:** `TenantCustomNameservers.New()`, `Delete()`, and `Get()` are removed. The service is
+  still wired on the client but now exposes no methods. `TenantCustomNameserverNewParams`,
+  `TenantCustomNameserverNewResponse`, `TenantCustomNameserverGetResponse`, and their nested and envelope types are removed.
+* **user:** `User.Tenants.List()` return type changed from `*pagination.SinglePage[organizations.Organization]` to
+  `*pagination.SinglePage[user.TenantListResponse]`.
+* **vectorize:** `Vectorize.Indexes.GetByIDs()` return type changed from `*IndexGetByIDsResponse` (an
+  `interface{}` alias) to `*pagination.SinglePage[IndexGetByIDsResponse]`.
+* **zero_trust:** `ZeroTrust.ResourceLibrary.Applications.List()` and `ZeroTrust.ResourceLibrary.Categories.List()`
+  return types changed from `*pagination.SinglePage[...]` to `*pagination.CursorPaginationAfter[...]`.
+* **zero_trust:** the DLP entry update body variants `DLPEntryUpdateParamsBodyCustom`,
+  `DLPEntryUpdateParamsBodyIntegration`, `DLPEntryUpdateParamsBodyPredefined`, and their `*Type` enums are removed.
+* **zero_trust:** the Gateway `RuleSettingAuditSSH` and `RuleSettingAuditSSHParam` types are removed.
+* **zones:** the zone setting value types are restructured. The concrete per-setting `Value` enum types (e.g.
+  `HTTP2Value`, `HTTP3Value`, `BrotliValue`, `MinTLSVersionValue`, `IPV6Value`, `TLS1_3Value`, `WebsocketValue`,
+  and roughly 80 others, including the `SettingEditResponseZones*Value` and `SettingGetResponseZones*Value` families)
+  are removed and replaced by `*ValueUnion` interfaces and `*ValueArray` types. The `AutomaticPlatformOptimization`
+  response struct is also removed (the `AutomaticPlatformOptimizationParam` type is retained).
+
+### Features
+
+* **NEW SERVICE: `zero_trust.CWS`** -- Cloud Web Security management (`/accounts/{account_id}/cws`)
+    * `ZeroTrust.CWS.BasicAuthCredentials.New()`, `List()`, `Delete()`, `Get()`
+    * `ZeroTrust.CWS.BasicAuthCredentials.Secrets.New()`, `List()`, `Delete()`, `Get()`
+    * `ZeroTrust.CWS.Deployments.New()`, `Update()`, `List()`, `Delete()`, `Get()`
+    * `ZeroTrust.CWS.DomainACLs.New()`, `Update()`, `List()`, `Delete()`, `Get()`
+    * `ZeroTrust.CWS.Policies.New()`, `Update()`, `List()`, `Delete()`, `Get()`
+    * `ZeroTrust.CWS.PolicySets.New()`, `Update()`, `List()`, `Delete()`, `Get()`
+    * `ZeroTrust.CWS.RegoMetadata.New()`, `Update()`, `List()`, `Delete()`, `Get()`
+    * `ZeroTrust.CWS.RegoModules.New()`, `Update()`, `List()`, `Delete()`, `Get()`
+    * `ZeroTrust.CWS.TenantStructures.New()`, `Update()`, `List()`, `Delete()`, `Get()`
+    * `ZeroTrust.CWS.TenantStructures.Nodes.New()`, `Update()`, `List()`, `Delete()`, `Batch()`, `Get()`
+    * `ZeroTrust.CWS.Workloads.New()`, `Update()`, `List()`, `Delete()`, `Get()`
+* **billing:** add `Billing.SpendPolicies` sub-resource with `New()`, `Update()`, `List()`, `Delete()`, and `Get()` methods
+  (`/accounts/{account_id}/billing/spend-policies`)
+    * `Billing.SpendPolicies.Audit.List()`
+    * `Billing.SpendPolicies.Activity.List()`
+* **ai_search:** add `AISearch.Namespaces.Instances.Move()` method
+  (`PATCH /accounts/{account_id}/ai-search/namespaces/{namespace}/instances/{id}`) and the
+  `NamespaceInstanceMoveResponse` type
+* **d1:** add `D1.Database.Undelete()` method (`POST /accounts/{account_id}/d1/database/{database_id}/undelete`)
+* **r2:** add `R2.Buckets.Jobs` sub-resource with `New()`, `List()`, and `Get()` methods
+  (`/accounts/{account_id}/r2/buckets/{bucket_name}/jobs`)
+* **zero_trust:** add `Access.IdentityProviders.SCIM.Groups.Delete()` and `Get()` methods
+* **zero_trust:** add `Access.IdentityProviders.SCIM.Users.Delete()` and `Get()` methods
+* **zero_trust:** add `Access.Logs.JitRequests` sub-resource with `List()` and `Get()` methods
+* **zero_trust:** add `Access.Users.MfaAuthenticators.Delete()` method
+* **zero_trust:** add `Access.Users.Passkeys.Delete()` method
+* **zero_trust:** add `Access.UserPopulations` sub-resource with `New()`, `Update()`, `List()`, `Delete()`, and `Get()`
+  methods, plus `Access.UserPopulations.Users` with `New()`, `Update()`, `List()`, `Delete()`, `Get()`, and `Replace()`
+* **zero_trust:** add `Access.Mfa.AuthenticatorCatalog.List()` method
+* **zero_trust:** add `Access.CustomPages.Validate()` method
+* **zero_trust:** add `Casb.Posture.FindingTypes.New()`, `Update()`, `Delete()`, and `Validate()` methods
+* **zero_trust:** add `Casb.Posture.AssetSchemas` sub-resource with `List()` and `Get()` methods
+* **zero_trust:** add `DLP.Validators` sub-resource with `List()` and `Get()` methods, plus
+  `DLP.Validators.ProximityWords` with `New()`, `Update()`, `List()`, `Delete()`, and `Get()`
+* **zero_trust:** add `Gateway.DNSDestinationIPs` sub-resource with `List()` method
+
 ## 7.13.1 (2026-10-20)
 
 Full Changelog: [v7.13.0...v7.13.1](https://github.com/cloudflare/cloudflare-go/compare/v7.13.0...v7.13.1)

@@ -43,6 +43,7 @@ func TestWorkflowUpdateWithOptionalParams(t *testing.T) {
 				ErrorRetention:   cloudflare.F[workflows.WorkflowUpdateParamsDefaultRetentionErrorRetentionUnion](shared.UnionString("5 minutes")),
 				SuccessRetention: cloudflare.F[workflows.WorkflowUpdateParamsDefaultRetentionSuccessRetentionUnion](shared.UnionString("5 minutes")),
 			}),
+			Jurisdiction: cloudflare.F(workflows.WorkflowUpdateParamsJurisdictionEu),
 			Limits: cloudflare.F(workflows.WorkflowUpdateParamsLimits{
 				Steps: cloudflare.F(int64(1)),
 			}),

@@ -7,12 +7,14 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 	"slices"
 
 	"github.com/cloudflare/cloudflare-go/v7/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/tidwall/gjson"
 )
 
 // URLNormalizationService contains methods and other services that help with
@@ -84,10 +86,11 @@ func (r *URLNormalizationService) Get(ctx context.Context, query URLNormalizatio
 // A result.
 type URLNormalizationUpdateResponse struct {
 	// The scope of the URL normalization.
-	Scope URLNormalizationUpdateResponseScope `json:"scope" api:"required"`
+	Scope URLNormalizationUpdateResponseScope `json:"scope"`
 	// The type of URL normalization performed by Cloudflare.
-	Type URLNormalizationUpdateResponseType `json:"type" api:"required"`
-	JSON urlNormalizationUpdateResponseJSON `json:"-"`
+	Type  URLNormalizationUpdateResponseType `json:"type"`
+	JSON  urlNormalizationUpdateResponseJSON `json:"-"`
+	union URLNormalizationUpdateResponseUnion
 }
 
 // urlNormalizationUpdateResponseJSON contains the JSON metadata for the struct
@@ -99,12 +102,124 @@ type urlNormalizationUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
+func (r urlNormalizationUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r *URLNormalizationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = URLNormalizationUpdateResponse{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [URLNormalizationUpdateResponseUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [URLNormalizationUpdateResponseObject],
+// [URLNormalizationUpdateResponseObject], [URLNormalizationUpdateResponseObject],
+// [URLNormalizationUpdateResponseObject], [URLNormalizationUpdateResponseObject].
+func (r URLNormalizationUpdateResponse) AsUnion() URLNormalizationUpdateResponseUnion {
+	return r.union
+}
+
+// A result.
+//
+// Union satisfied by [URLNormalizationUpdateResponseObject],
+// [URLNormalizationUpdateResponseObject], [URLNormalizationUpdateResponseObject],
+// [URLNormalizationUpdateResponseObject] or
+// [URLNormalizationUpdateResponseObject].
+type URLNormalizationUpdateResponseUnion interface {
+	implementsURLNormalizationUpdateResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*URLNormalizationUpdateResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(URLNormalizationUpdateResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(URLNormalizationUpdateResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(URLNormalizationUpdateResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(URLNormalizationUpdateResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(URLNormalizationUpdateResponseObject{}),
+		},
+	)
+}
+
+type URLNormalizationUpdateResponseObject struct {
+	// The scope of the URL normalization.
+	Scope URLNormalizationUpdateResponseObjectScope `json:"scope"`
+	// The type of URL normalization performed by Cloudflare.
+	Type URLNormalizationUpdateResponseObjectType `json:"type"`
+	JSON urlNormalizationUpdateResponseObjectJSON `json:"-"`
+}
+
+// urlNormalizationUpdateResponseObjectJSON contains the JSON metadata for the
+// struct [URLNormalizationUpdateResponseObject]
+type urlNormalizationUpdateResponseObjectJSON struct {
+	Scope       apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *URLNormalizationUpdateResponseObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r urlNormalizationUpdateResponseJSON) RawJSON() string {
+func (r urlNormalizationUpdateResponseObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r URLNormalizationUpdateResponseObject) implementsURLNormalizationUpdateResponse() {}
+
+// The scope of the URL normalization.
+type URLNormalizationUpdateResponseObjectScope string
+
+const (
+	URLNormalizationUpdateResponseObjectScopeIncoming URLNormalizationUpdateResponseObjectScope = "incoming"
+	URLNormalizationUpdateResponseObjectScopeBoth     URLNormalizationUpdateResponseObjectScope = "both"
+	URLNormalizationUpdateResponseObjectScopeNone     URLNormalizationUpdateResponseObjectScope = "none"
+)
+
+func (r URLNormalizationUpdateResponseObjectScope) IsKnown() bool {
+	switch r {
+	case URLNormalizationUpdateResponseObjectScopeIncoming, URLNormalizationUpdateResponseObjectScopeBoth, URLNormalizationUpdateResponseObjectScopeNone:
+		return true
+	}
+	return false
+}
+
+// The type of URL normalization performed by Cloudflare.
+type URLNormalizationUpdateResponseObjectType string
+
+const (
+	URLNormalizationUpdateResponseObjectTypeCloudflare URLNormalizationUpdateResponseObjectType = "cloudflare"
+	URLNormalizationUpdateResponseObjectTypeRfc3986    URLNormalizationUpdateResponseObjectType = "rfc3986"
+)
+
+func (r URLNormalizationUpdateResponseObjectType) IsKnown() bool {
+	switch r {
+	case URLNormalizationUpdateResponseObjectTypeCloudflare, URLNormalizationUpdateResponseObjectTypeRfc3986:
+		return true
+	}
+	return false
 }
 
 // The scope of the URL normalization.
@@ -143,10 +258,11 @@ func (r URLNormalizationUpdateResponseType) IsKnown() bool {
 // A result.
 type URLNormalizationGetResponse struct {
 	// The scope of the URL normalization.
-	Scope URLNormalizationGetResponseScope `json:"scope" api:"required"`
+	Scope URLNormalizationGetResponseScope `json:"scope"`
 	// The type of URL normalization performed by Cloudflare.
-	Type URLNormalizationGetResponseType `json:"type" api:"required"`
-	JSON urlNormalizationGetResponseJSON `json:"-"`
+	Type  URLNormalizationGetResponseType `json:"type"`
+	JSON  urlNormalizationGetResponseJSON `json:"-"`
+	union URLNormalizationGetResponseUnion
 }
 
 // urlNormalizationGetResponseJSON contains the JSON metadata for the struct
@@ -158,12 +274,123 @@ type urlNormalizationGetResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
+func (r urlNormalizationGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r *URLNormalizationGetResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = URLNormalizationGetResponse{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [URLNormalizationGetResponseUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [URLNormalizationGetResponseObject],
+// [URLNormalizationGetResponseObject], [URLNormalizationGetResponseObject],
+// [URLNormalizationGetResponseObject], [URLNormalizationGetResponseObject].
+func (r URLNormalizationGetResponse) AsUnion() URLNormalizationGetResponseUnion {
+	return r.union
+}
+
+// A result.
+//
+// Union satisfied by [URLNormalizationGetResponseObject],
+// [URLNormalizationGetResponseObject], [URLNormalizationGetResponseObject],
+// [URLNormalizationGetResponseObject] or [URLNormalizationGetResponseObject].
+type URLNormalizationGetResponseUnion interface {
+	implementsURLNormalizationGetResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*URLNormalizationGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(URLNormalizationGetResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(URLNormalizationGetResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(URLNormalizationGetResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(URLNormalizationGetResponseObject{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(URLNormalizationGetResponseObject{}),
+		},
+	)
+}
+
+type URLNormalizationGetResponseObject struct {
+	// The scope of the URL normalization.
+	Scope URLNormalizationGetResponseObjectScope `json:"scope"`
+	// The type of URL normalization performed by Cloudflare.
+	Type URLNormalizationGetResponseObjectType `json:"type"`
+	JSON urlNormalizationGetResponseObjectJSON `json:"-"`
+}
+
+// urlNormalizationGetResponseObjectJSON contains the JSON metadata for the struct
+// [URLNormalizationGetResponseObject]
+type urlNormalizationGetResponseObjectJSON struct {
+	Scope       apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *URLNormalizationGetResponseObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r urlNormalizationGetResponseJSON) RawJSON() string {
+func (r urlNormalizationGetResponseObjectJSON) RawJSON() string {
 	return r.raw
+}
+
+func (r URLNormalizationGetResponseObject) implementsURLNormalizationGetResponse() {}
+
+// The scope of the URL normalization.
+type URLNormalizationGetResponseObjectScope string
+
+const (
+	URLNormalizationGetResponseObjectScopeIncoming URLNormalizationGetResponseObjectScope = "incoming"
+	URLNormalizationGetResponseObjectScopeBoth     URLNormalizationGetResponseObjectScope = "both"
+	URLNormalizationGetResponseObjectScopeNone     URLNormalizationGetResponseObjectScope = "none"
+)
+
+func (r URLNormalizationGetResponseObjectScope) IsKnown() bool {
+	switch r {
+	case URLNormalizationGetResponseObjectScopeIncoming, URLNormalizationGetResponseObjectScopeBoth, URLNormalizationGetResponseObjectScopeNone:
+		return true
+	}
+	return false
+}
+
+// The type of URL normalization performed by Cloudflare.
+type URLNormalizationGetResponseObjectType string
+
+const (
+	URLNormalizationGetResponseObjectTypeCloudflare URLNormalizationGetResponseObjectType = "cloudflare"
+	URLNormalizationGetResponseObjectTypeRfc3986    URLNormalizationGetResponseObjectType = "rfc3986"
+)
+
+func (r URLNormalizationGetResponseObjectType) IsKnown() bool {
+	switch r {
+	case URLNormalizationGetResponseObjectTypeCloudflare, URLNormalizationGetResponseObjectTypeRfc3986:
+		return true
+	}
+	return false
 }
 
 // The scope of the URL normalization.

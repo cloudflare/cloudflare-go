@@ -178,11 +178,18 @@ type AIGatewayNewResponse struct {
 	ModifiedAt              time.Time `json:"modified_at" api:"required" format:"date-time"`
 	RateLimitingInterval    int64     `json:"rate_limiting_interval" api:"required,nullable"`
 	RateLimitingLimit       int64     `json:"rate_limiting_limit" api:"required,nullable"`
-	Authentication          bool      `json:"authentication"`
+	// Require authentication for gateway access. New gateways must have authentication
+	// enabled. Once enabled, authentication cannot be disabled.
+	Authentication bool `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
-	ByokOnly              bool                                      `json:"byok_only"`
-	DLP                   AIGatewayNewResponseDLP                   `json:"dlp"`
+	ByokOnly bool                    `json:"byok_only"`
+	DLP      AIGatewayNewResponseDLP `json:"dlp"`
+	// FedRAMP compliance level: fedramp-medium or fedramp-high.
+	FedrampLevel AIGatewayNewResponseFedrampLevel `json:"fedramp_level" api:"nullable"`
+	// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+	// fallback. "require" strictly filters.
+	FedrampMode           AIGatewayNewResponseFedrampMode           `json:"fedramp_mode" api:"nullable"`
 	Guardrails            AIGatewayNewResponseGuardrails            `json:"guardrails" api:"nullable"`
 	IsDefault             bool                                      `json:"is_default"`
 	LogClassification     bool                                      `json:"log_classification"`
@@ -199,8 +206,10 @@ type AIGatewayNewResponse struct {
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts int64                           `json:"retry_max_attempts" api:"nullable"`
 	SpendLimits      AIGatewayNewResponseSpendLimits `json:"spend_limits" api:"nullable"`
-	StoreID          string                          `json:"store_id" api:"nullable"`
-	Stripe           AIGatewayNewResponseStripe      `json:"stripe" api:"nullable"`
+	// Secrets Store used by this gateway. Omit on update to keep the current store.
+	// Cannot be cleared while stored keys or secret references depend on it.
+	StoreID string                     `json:"store_id" api:"nullable"`
+	Stripe  AIGatewayNewResponseStripe `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
 	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
@@ -224,6 +233,8 @@ type aiGatewayNewResponseJSON struct {
 	Authentication          apijson.Field
 	ByokOnly                apijson.Field
 	DLP                     apijson.Field
+	FedrampLevel            apijson.Field
+	FedrampMode             apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
 	LogClassification       apijson.Field
@@ -375,6 +386,39 @@ func (r AIGatewayNewResponseDLPAction) IsKnown() bool {
 	return false
 }
 
+// FedRAMP compliance level: fedramp-medium or fedramp-high.
+type AIGatewayNewResponseFedrampLevel string
+
+const (
+	AIGatewayNewResponseFedrampLevelFedrampMedium AIGatewayNewResponseFedrampLevel = "fedramp-medium"
+	AIGatewayNewResponseFedrampLevelFedrampHigh   AIGatewayNewResponseFedrampLevel = "fedramp-high"
+)
+
+func (r AIGatewayNewResponseFedrampLevel) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseFedrampLevelFedrampMedium, AIGatewayNewResponseFedrampLevelFedrampHigh:
+		return true
+	}
+	return false
+}
+
+// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+// fallback. "require" strictly filters.
+type AIGatewayNewResponseFedrampMode string
+
+const (
+	AIGatewayNewResponseFedrampModePrefer  AIGatewayNewResponseFedrampMode = "prefer"
+	AIGatewayNewResponseFedrampModeRequire AIGatewayNewResponseFedrampMode = "require"
+)
+
+func (r AIGatewayNewResponseFedrampMode) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseFedrampModePrefer, AIGatewayNewResponseFedrampModeRequire:
+		return true
+	}
+	return false
+}
+
 type AIGatewayNewResponseGuardrails struct {
 	Prompt   AIGatewayNewResponseGuardrailsPrompt   `json:"prompt" api:"required"`
 	Response AIGatewayNewResponseGuardrailsResponse `json:"response" api:"required"`
@@ -405,6 +449,7 @@ type AIGatewayNewResponseGuardrailsPrompt struct {
 	S11  AIGatewayNewResponseGuardrailsPromptS11  `json:"S11"`
 	S12  AIGatewayNewResponseGuardrailsPromptS12  `json:"S12"`
 	S13  AIGatewayNewResponseGuardrailsPromptS13  `json:"S13"`
+	S14  AIGatewayNewResponseGuardrailsPromptS14  `json:"S14"`
 	S2   AIGatewayNewResponseGuardrailsPromptS2   `json:"S2"`
 	S3   AIGatewayNewResponseGuardrailsPromptS3   `json:"S3"`
 	S4   AIGatewayNewResponseGuardrailsPromptS4   `json:"S4"`
@@ -425,6 +470,7 @@ type aiGatewayNewResponseGuardrailsPromptJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -530,6 +576,21 @@ const (
 func (r AIGatewayNewResponseGuardrailsPromptS13) IsKnown() bool {
 	switch r {
 	case AIGatewayNewResponseGuardrailsPromptS13Flag, AIGatewayNewResponseGuardrailsPromptS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewResponseGuardrailsPromptS14 string
+
+const (
+	AIGatewayNewResponseGuardrailsPromptS14Flag  AIGatewayNewResponseGuardrailsPromptS14 = "FLAG"
+	AIGatewayNewResponseGuardrailsPromptS14Block AIGatewayNewResponseGuardrailsPromptS14 = "BLOCK"
+)
+
+func (r AIGatewayNewResponseGuardrailsPromptS14) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseGuardrailsPromptS14Flag, AIGatewayNewResponseGuardrailsPromptS14Block:
 		return true
 	}
 	return false
@@ -662,6 +723,7 @@ type AIGatewayNewResponseGuardrailsResponse struct {
 	S11  AIGatewayNewResponseGuardrailsResponseS11  `json:"S11"`
 	S12  AIGatewayNewResponseGuardrailsResponseS12  `json:"S12"`
 	S13  AIGatewayNewResponseGuardrailsResponseS13  `json:"S13"`
+	S14  AIGatewayNewResponseGuardrailsResponseS14  `json:"S14"`
 	S2   AIGatewayNewResponseGuardrailsResponseS2   `json:"S2"`
 	S3   AIGatewayNewResponseGuardrailsResponseS3   `json:"S3"`
 	S4   AIGatewayNewResponseGuardrailsResponseS4   `json:"S4"`
@@ -682,6 +744,7 @@ type aiGatewayNewResponseGuardrailsResponseJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -787,6 +850,21 @@ const (
 func (r AIGatewayNewResponseGuardrailsResponseS13) IsKnown() bool {
 	switch r {
 	case AIGatewayNewResponseGuardrailsResponseS13Flag, AIGatewayNewResponseGuardrailsResponseS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewResponseGuardrailsResponseS14 string
+
+const (
+	AIGatewayNewResponseGuardrailsResponseS14Flag  AIGatewayNewResponseGuardrailsResponseS14 = "FLAG"
+	AIGatewayNewResponseGuardrailsResponseS14Block AIGatewayNewResponseGuardrailsResponseS14 = "BLOCK"
+)
+
+func (r AIGatewayNewResponseGuardrailsResponseS14) IsKnown() bool {
+	switch r {
+	case AIGatewayNewResponseGuardrailsResponseS14Flag, AIGatewayNewResponseGuardrailsResponseS14Block:
 		return true
 	}
 	return false
@@ -1376,11 +1454,18 @@ type AIGatewayUpdateResponse struct {
 	ModifiedAt              time.Time `json:"modified_at" api:"required" format:"date-time"`
 	RateLimitingInterval    int64     `json:"rate_limiting_interval" api:"required,nullable"`
 	RateLimitingLimit       int64     `json:"rate_limiting_limit" api:"required,nullable"`
-	Authentication          bool      `json:"authentication"`
+	// Require authentication for gateway access. New gateways must have authentication
+	// enabled. Once enabled, authentication cannot be disabled.
+	Authentication bool `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
-	ByokOnly              bool                                         `json:"byok_only"`
-	DLP                   AIGatewayUpdateResponseDLP                   `json:"dlp"`
+	ByokOnly bool                       `json:"byok_only"`
+	DLP      AIGatewayUpdateResponseDLP `json:"dlp"`
+	// FedRAMP compliance level: fedramp-medium or fedramp-high.
+	FedrampLevel AIGatewayUpdateResponseFedrampLevel `json:"fedramp_level" api:"nullable"`
+	// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+	// fallback. "require" strictly filters.
+	FedrampMode           AIGatewayUpdateResponseFedrampMode           `json:"fedramp_mode" api:"nullable"`
 	Guardrails            AIGatewayUpdateResponseGuardrails            `json:"guardrails" api:"nullable"`
 	IsDefault             bool                                         `json:"is_default"`
 	LogClassification     bool                                         `json:"log_classification"`
@@ -1397,8 +1482,10 @@ type AIGatewayUpdateResponse struct {
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts int64                              `json:"retry_max_attempts" api:"nullable"`
 	SpendLimits      AIGatewayUpdateResponseSpendLimits `json:"spend_limits" api:"nullable"`
-	StoreID          string                             `json:"store_id" api:"nullable"`
-	Stripe           AIGatewayUpdateResponseStripe      `json:"stripe" api:"nullable"`
+	// Secrets Store used by this gateway. Omit on update to keep the current store.
+	// Cannot be cleared while stored keys or secret references depend on it.
+	StoreID string                        `json:"store_id" api:"nullable"`
+	Stripe  AIGatewayUpdateResponseStripe `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
 	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
@@ -1422,6 +1509,8 @@ type aiGatewayUpdateResponseJSON struct {
 	Authentication          apijson.Field
 	ByokOnly                apijson.Field
 	DLP                     apijson.Field
+	FedrampLevel            apijson.Field
+	FedrampMode             apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
 	LogClassification       apijson.Field
@@ -1574,6 +1663,39 @@ func (r AIGatewayUpdateResponseDLPAction) IsKnown() bool {
 	return false
 }
 
+// FedRAMP compliance level: fedramp-medium or fedramp-high.
+type AIGatewayUpdateResponseFedrampLevel string
+
+const (
+	AIGatewayUpdateResponseFedrampLevelFedrampMedium AIGatewayUpdateResponseFedrampLevel = "fedramp-medium"
+	AIGatewayUpdateResponseFedrampLevelFedrampHigh   AIGatewayUpdateResponseFedrampLevel = "fedramp-high"
+)
+
+func (r AIGatewayUpdateResponseFedrampLevel) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseFedrampLevelFedrampMedium, AIGatewayUpdateResponseFedrampLevelFedrampHigh:
+		return true
+	}
+	return false
+}
+
+// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+// fallback. "require" strictly filters.
+type AIGatewayUpdateResponseFedrampMode string
+
+const (
+	AIGatewayUpdateResponseFedrampModePrefer  AIGatewayUpdateResponseFedrampMode = "prefer"
+	AIGatewayUpdateResponseFedrampModeRequire AIGatewayUpdateResponseFedrampMode = "require"
+)
+
+func (r AIGatewayUpdateResponseFedrampMode) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseFedrampModePrefer, AIGatewayUpdateResponseFedrampModeRequire:
+		return true
+	}
+	return false
+}
+
 type AIGatewayUpdateResponseGuardrails struct {
 	Prompt   AIGatewayUpdateResponseGuardrailsPrompt   `json:"prompt" api:"required"`
 	Response AIGatewayUpdateResponseGuardrailsResponse `json:"response" api:"required"`
@@ -1604,6 +1726,7 @@ type AIGatewayUpdateResponseGuardrailsPrompt struct {
 	S11  AIGatewayUpdateResponseGuardrailsPromptS11  `json:"S11"`
 	S12  AIGatewayUpdateResponseGuardrailsPromptS12  `json:"S12"`
 	S13  AIGatewayUpdateResponseGuardrailsPromptS13  `json:"S13"`
+	S14  AIGatewayUpdateResponseGuardrailsPromptS14  `json:"S14"`
 	S2   AIGatewayUpdateResponseGuardrailsPromptS2   `json:"S2"`
 	S3   AIGatewayUpdateResponseGuardrailsPromptS3   `json:"S3"`
 	S4   AIGatewayUpdateResponseGuardrailsPromptS4   `json:"S4"`
@@ -1624,6 +1747,7 @@ type aiGatewayUpdateResponseGuardrailsPromptJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -1729,6 +1853,21 @@ const (
 func (r AIGatewayUpdateResponseGuardrailsPromptS13) IsKnown() bool {
 	switch r {
 	case AIGatewayUpdateResponseGuardrailsPromptS13Flag, AIGatewayUpdateResponseGuardrailsPromptS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayUpdateResponseGuardrailsPromptS14 string
+
+const (
+	AIGatewayUpdateResponseGuardrailsPromptS14Flag  AIGatewayUpdateResponseGuardrailsPromptS14 = "FLAG"
+	AIGatewayUpdateResponseGuardrailsPromptS14Block AIGatewayUpdateResponseGuardrailsPromptS14 = "BLOCK"
+)
+
+func (r AIGatewayUpdateResponseGuardrailsPromptS14) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseGuardrailsPromptS14Flag, AIGatewayUpdateResponseGuardrailsPromptS14Block:
 		return true
 	}
 	return false
@@ -1861,6 +2000,7 @@ type AIGatewayUpdateResponseGuardrailsResponse struct {
 	S11  AIGatewayUpdateResponseGuardrailsResponseS11  `json:"S11"`
 	S12  AIGatewayUpdateResponseGuardrailsResponseS12  `json:"S12"`
 	S13  AIGatewayUpdateResponseGuardrailsResponseS13  `json:"S13"`
+	S14  AIGatewayUpdateResponseGuardrailsResponseS14  `json:"S14"`
 	S2   AIGatewayUpdateResponseGuardrailsResponseS2   `json:"S2"`
 	S3   AIGatewayUpdateResponseGuardrailsResponseS3   `json:"S3"`
 	S4   AIGatewayUpdateResponseGuardrailsResponseS4   `json:"S4"`
@@ -1881,6 +2021,7 @@ type aiGatewayUpdateResponseGuardrailsResponseJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -1986,6 +2127,21 @@ const (
 func (r AIGatewayUpdateResponseGuardrailsResponseS13) IsKnown() bool {
 	switch r {
 	case AIGatewayUpdateResponseGuardrailsResponseS13Flag, AIGatewayUpdateResponseGuardrailsResponseS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayUpdateResponseGuardrailsResponseS14 string
+
+const (
+	AIGatewayUpdateResponseGuardrailsResponseS14Flag  AIGatewayUpdateResponseGuardrailsResponseS14 = "FLAG"
+	AIGatewayUpdateResponseGuardrailsResponseS14Block AIGatewayUpdateResponseGuardrailsResponseS14 = "BLOCK"
+)
+
+func (r AIGatewayUpdateResponseGuardrailsResponseS14) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateResponseGuardrailsResponseS14Flag, AIGatewayUpdateResponseGuardrailsResponseS14Block:
 		return true
 	}
 	return false
@@ -2575,11 +2731,18 @@ type AIGatewayListResponse struct {
 	ModifiedAt              time.Time `json:"modified_at" api:"required" format:"date-time"`
 	RateLimitingInterval    int64     `json:"rate_limiting_interval" api:"required,nullable"`
 	RateLimitingLimit       int64     `json:"rate_limiting_limit" api:"required,nullable"`
-	Authentication          bool      `json:"authentication"`
+	// Require authentication for gateway access. New gateways must have authentication
+	// enabled. Once enabled, authentication cannot be disabled.
+	Authentication bool `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
-	ByokOnly              bool                                       `json:"byok_only"`
-	DLP                   AIGatewayListResponseDLP                   `json:"dlp"`
+	ByokOnly bool                     `json:"byok_only"`
+	DLP      AIGatewayListResponseDLP `json:"dlp"`
+	// FedRAMP compliance level: fedramp-medium or fedramp-high.
+	FedrampLevel AIGatewayListResponseFedrampLevel `json:"fedramp_level" api:"nullable"`
+	// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+	// fallback. "require" strictly filters.
+	FedrampMode           AIGatewayListResponseFedrampMode           `json:"fedramp_mode" api:"nullable"`
 	Guardrails            AIGatewayListResponseGuardrails            `json:"guardrails" api:"nullable"`
 	IsDefault             bool                                       `json:"is_default"`
 	LogClassification     bool                                       `json:"log_classification"`
@@ -2596,8 +2759,10 @@ type AIGatewayListResponse struct {
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts int64                            `json:"retry_max_attempts" api:"nullable"`
 	SpendLimits      AIGatewayListResponseSpendLimits `json:"spend_limits" api:"nullable"`
-	StoreID          string                           `json:"store_id" api:"nullable"`
-	Stripe           AIGatewayListResponseStripe      `json:"stripe" api:"nullable"`
+	// Secrets Store used by this gateway. Omit on update to keep the current store.
+	// Cannot be cleared while stored keys or secret references depend on it.
+	StoreID string                      `json:"store_id" api:"nullable"`
+	Stripe  AIGatewayListResponseStripe `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
 	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
@@ -2621,6 +2786,8 @@ type aiGatewayListResponseJSON struct {
 	Authentication          apijson.Field
 	ByokOnly                apijson.Field
 	DLP                     apijson.Field
+	FedrampLevel            apijson.Field
+	FedrampMode             apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
 	LogClassification       apijson.Field
@@ -2773,6 +2940,39 @@ func (r AIGatewayListResponseDLPAction) IsKnown() bool {
 	return false
 }
 
+// FedRAMP compliance level: fedramp-medium or fedramp-high.
+type AIGatewayListResponseFedrampLevel string
+
+const (
+	AIGatewayListResponseFedrampLevelFedrampMedium AIGatewayListResponseFedrampLevel = "fedramp-medium"
+	AIGatewayListResponseFedrampLevelFedrampHigh   AIGatewayListResponseFedrampLevel = "fedramp-high"
+)
+
+func (r AIGatewayListResponseFedrampLevel) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseFedrampLevelFedrampMedium, AIGatewayListResponseFedrampLevelFedrampHigh:
+		return true
+	}
+	return false
+}
+
+// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+// fallback. "require" strictly filters.
+type AIGatewayListResponseFedrampMode string
+
+const (
+	AIGatewayListResponseFedrampModePrefer  AIGatewayListResponseFedrampMode = "prefer"
+	AIGatewayListResponseFedrampModeRequire AIGatewayListResponseFedrampMode = "require"
+)
+
+func (r AIGatewayListResponseFedrampMode) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseFedrampModePrefer, AIGatewayListResponseFedrampModeRequire:
+		return true
+	}
+	return false
+}
+
 type AIGatewayListResponseGuardrails struct {
 	Prompt   AIGatewayListResponseGuardrailsPrompt   `json:"prompt" api:"required"`
 	Response AIGatewayListResponseGuardrailsResponse `json:"response" api:"required"`
@@ -2803,6 +3003,7 @@ type AIGatewayListResponseGuardrailsPrompt struct {
 	S11  AIGatewayListResponseGuardrailsPromptS11  `json:"S11"`
 	S12  AIGatewayListResponseGuardrailsPromptS12  `json:"S12"`
 	S13  AIGatewayListResponseGuardrailsPromptS13  `json:"S13"`
+	S14  AIGatewayListResponseGuardrailsPromptS14  `json:"S14"`
 	S2   AIGatewayListResponseGuardrailsPromptS2   `json:"S2"`
 	S3   AIGatewayListResponseGuardrailsPromptS3   `json:"S3"`
 	S4   AIGatewayListResponseGuardrailsPromptS4   `json:"S4"`
@@ -2823,6 +3024,7 @@ type aiGatewayListResponseGuardrailsPromptJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -2928,6 +3130,21 @@ const (
 func (r AIGatewayListResponseGuardrailsPromptS13) IsKnown() bool {
 	switch r {
 	case AIGatewayListResponseGuardrailsPromptS13Flag, AIGatewayListResponseGuardrailsPromptS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayListResponseGuardrailsPromptS14 string
+
+const (
+	AIGatewayListResponseGuardrailsPromptS14Flag  AIGatewayListResponseGuardrailsPromptS14 = "FLAG"
+	AIGatewayListResponseGuardrailsPromptS14Block AIGatewayListResponseGuardrailsPromptS14 = "BLOCK"
+)
+
+func (r AIGatewayListResponseGuardrailsPromptS14) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseGuardrailsPromptS14Flag, AIGatewayListResponseGuardrailsPromptS14Block:
 		return true
 	}
 	return false
@@ -3060,6 +3277,7 @@ type AIGatewayListResponseGuardrailsResponse struct {
 	S11  AIGatewayListResponseGuardrailsResponseS11  `json:"S11"`
 	S12  AIGatewayListResponseGuardrailsResponseS12  `json:"S12"`
 	S13  AIGatewayListResponseGuardrailsResponseS13  `json:"S13"`
+	S14  AIGatewayListResponseGuardrailsResponseS14  `json:"S14"`
 	S2   AIGatewayListResponseGuardrailsResponseS2   `json:"S2"`
 	S3   AIGatewayListResponseGuardrailsResponseS3   `json:"S3"`
 	S4   AIGatewayListResponseGuardrailsResponseS4   `json:"S4"`
@@ -3080,6 +3298,7 @@ type aiGatewayListResponseGuardrailsResponseJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -3185,6 +3404,21 @@ const (
 func (r AIGatewayListResponseGuardrailsResponseS13) IsKnown() bool {
 	switch r {
 	case AIGatewayListResponseGuardrailsResponseS13Flag, AIGatewayListResponseGuardrailsResponseS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayListResponseGuardrailsResponseS14 string
+
+const (
+	AIGatewayListResponseGuardrailsResponseS14Flag  AIGatewayListResponseGuardrailsResponseS14 = "FLAG"
+	AIGatewayListResponseGuardrailsResponseS14Block AIGatewayListResponseGuardrailsResponseS14 = "BLOCK"
+)
+
+func (r AIGatewayListResponseGuardrailsResponseS14) IsKnown() bool {
+	switch r {
+	case AIGatewayListResponseGuardrailsResponseS14Flag, AIGatewayListResponseGuardrailsResponseS14Block:
 		return true
 	}
 	return false
@@ -3774,11 +4008,18 @@ type AIGatewayDeleteResponse struct {
 	ModifiedAt              time.Time `json:"modified_at" api:"required" format:"date-time"`
 	RateLimitingInterval    int64     `json:"rate_limiting_interval" api:"required,nullable"`
 	RateLimitingLimit       int64     `json:"rate_limiting_limit" api:"required,nullable"`
-	Authentication          bool      `json:"authentication"`
+	// Require authentication for gateway access. New gateways must have authentication
+	// enabled. Once enabled, authentication cannot be disabled.
+	Authentication bool `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
-	ByokOnly              bool                                         `json:"byok_only"`
-	DLP                   AIGatewayDeleteResponseDLP                   `json:"dlp"`
+	ByokOnly bool                       `json:"byok_only"`
+	DLP      AIGatewayDeleteResponseDLP `json:"dlp"`
+	// FedRAMP compliance level: fedramp-medium or fedramp-high.
+	FedrampLevel AIGatewayDeleteResponseFedrampLevel `json:"fedramp_level" api:"nullable"`
+	// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+	// fallback. "require" strictly filters.
+	FedrampMode           AIGatewayDeleteResponseFedrampMode           `json:"fedramp_mode" api:"nullable"`
 	Guardrails            AIGatewayDeleteResponseGuardrails            `json:"guardrails" api:"nullable"`
 	IsDefault             bool                                         `json:"is_default"`
 	LogClassification     bool                                         `json:"log_classification"`
@@ -3795,8 +4036,10 @@ type AIGatewayDeleteResponse struct {
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts int64                              `json:"retry_max_attempts" api:"nullable"`
 	SpendLimits      AIGatewayDeleteResponseSpendLimits `json:"spend_limits" api:"nullable"`
-	StoreID          string                             `json:"store_id" api:"nullable"`
-	Stripe           AIGatewayDeleteResponseStripe      `json:"stripe" api:"nullable"`
+	// Secrets Store used by this gateway. Omit on update to keep the current store.
+	// Cannot be cleared while stored keys or secret references depend on it.
+	StoreID string                        `json:"store_id" api:"nullable"`
+	Stripe  AIGatewayDeleteResponseStripe `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
 	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
@@ -3820,6 +4063,8 @@ type aiGatewayDeleteResponseJSON struct {
 	Authentication          apijson.Field
 	ByokOnly                apijson.Field
 	DLP                     apijson.Field
+	FedrampLevel            apijson.Field
+	FedrampMode             apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
 	LogClassification       apijson.Field
@@ -3972,6 +4217,39 @@ func (r AIGatewayDeleteResponseDLPAction) IsKnown() bool {
 	return false
 }
 
+// FedRAMP compliance level: fedramp-medium or fedramp-high.
+type AIGatewayDeleteResponseFedrampLevel string
+
+const (
+	AIGatewayDeleteResponseFedrampLevelFedrampMedium AIGatewayDeleteResponseFedrampLevel = "fedramp-medium"
+	AIGatewayDeleteResponseFedrampLevelFedrampHigh   AIGatewayDeleteResponseFedrampLevel = "fedramp-high"
+)
+
+func (r AIGatewayDeleteResponseFedrampLevel) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseFedrampLevelFedrampMedium, AIGatewayDeleteResponseFedrampLevelFedrampHigh:
+		return true
+	}
+	return false
+}
+
+// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+// fallback. "require" strictly filters.
+type AIGatewayDeleteResponseFedrampMode string
+
+const (
+	AIGatewayDeleteResponseFedrampModePrefer  AIGatewayDeleteResponseFedrampMode = "prefer"
+	AIGatewayDeleteResponseFedrampModeRequire AIGatewayDeleteResponseFedrampMode = "require"
+)
+
+func (r AIGatewayDeleteResponseFedrampMode) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseFedrampModePrefer, AIGatewayDeleteResponseFedrampModeRequire:
+		return true
+	}
+	return false
+}
+
 type AIGatewayDeleteResponseGuardrails struct {
 	Prompt   AIGatewayDeleteResponseGuardrailsPrompt   `json:"prompt" api:"required"`
 	Response AIGatewayDeleteResponseGuardrailsResponse `json:"response" api:"required"`
@@ -4002,6 +4280,7 @@ type AIGatewayDeleteResponseGuardrailsPrompt struct {
 	S11  AIGatewayDeleteResponseGuardrailsPromptS11  `json:"S11"`
 	S12  AIGatewayDeleteResponseGuardrailsPromptS12  `json:"S12"`
 	S13  AIGatewayDeleteResponseGuardrailsPromptS13  `json:"S13"`
+	S14  AIGatewayDeleteResponseGuardrailsPromptS14  `json:"S14"`
 	S2   AIGatewayDeleteResponseGuardrailsPromptS2   `json:"S2"`
 	S3   AIGatewayDeleteResponseGuardrailsPromptS3   `json:"S3"`
 	S4   AIGatewayDeleteResponseGuardrailsPromptS4   `json:"S4"`
@@ -4022,6 +4301,7 @@ type aiGatewayDeleteResponseGuardrailsPromptJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -4127,6 +4407,21 @@ const (
 func (r AIGatewayDeleteResponseGuardrailsPromptS13) IsKnown() bool {
 	switch r {
 	case AIGatewayDeleteResponseGuardrailsPromptS13Flag, AIGatewayDeleteResponseGuardrailsPromptS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayDeleteResponseGuardrailsPromptS14 string
+
+const (
+	AIGatewayDeleteResponseGuardrailsPromptS14Flag  AIGatewayDeleteResponseGuardrailsPromptS14 = "FLAG"
+	AIGatewayDeleteResponseGuardrailsPromptS14Block AIGatewayDeleteResponseGuardrailsPromptS14 = "BLOCK"
+)
+
+func (r AIGatewayDeleteResponseGuardrailsPromptS14) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseGuardrailsPromptS14Flag, AIGatewayDeleteResponseGuardrailsPromptS14Block:
 		return true
 	}
 	return false
@@ -4259,6 +4554,7 @@ type AIGatewayDeleteResponseGuardrailsResponse struct {
 	S11  AIGatewayDeleteResponseGuardrailsResponseS11  `json:"S11"`
 	S12  AIGatewayDeleteResponseGuardrailsResponseS12  `json:"S12"`
 	S13  AIGatewayDeleteResponseGuardrailsResponseS13  `json:"S13"`
+	S14  AIGatewayDeleteResponseGuardrailsResponseS14  `json:"S14"`
 	S2   AIGatewayDeleteResponseGuardrailsResponseS2   `json:"S2"`
 	S3   AIGatewayDeleteResponseGuardrailsResponseS3   `json:"S3"`
 	S4   AIGatewayDeleteResponseGuardrailsResponseS4   `json:"S4"`
@@ -4279,6 +4575,7 @@ type aiGatewayDeleteResponseGuardrailsResponseJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -4384,6 +4681,21 @@ const (
 func (r AIGatewayDeleteResponseGuardrailsResponseS13) IsKnown() bool {
 	switch r {
 	case AIGatewayDeleteResponseGuardrailsResponseS13Flag, AIGatewayDeleteResponseGuardrailsResponseS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayDeleteResponseGuardrailsResponseS14 string
+
+const (
+	AIGatewayDeleteResponseGuardrailsResponseS14Flag  AIGatewayDeleteResponseGuardrailsResponseS14 = "FLAG"
+	AIGatewayDeleteResponseGuardrailsResponseS14Block AIGatewayDeleteResponseGuardrailsResponseS14 = "BLOCK"
+)
+
+func (r AIGatewayDeleteResponseGuardrailsResponseS14) IsKnown() bool {
+	switch r {
+	case AIGatewayDeleteResponseGuardrailsResponseS14Flag, AIGatewayDeleteResponseGuardrailsResponseS14Block:
 		return true
 	}
 	return false
@@ -4973,11 +5285,18 @@ type AIGatewayGetResponse struct {
 	ModifiedAt              time.Time `json:"modified_at" api:"required" format:"date-time"`
 	RateLimitingInterval    int64     `json:"rate_limiting_interval" api:"required,nullable"`
 	RateLimitingLimit       int64     `json:"rate_limiting_limit" api:"required,nullable"`
-	Authentication          bool      `json:"authentication"`
+	// Require authentication for gateway access. New gateways must have authentication
+	// enabled. Once enabled, authentication cannot be disabled.
+	Authentication bool `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
-	ByokOnly              bool                                      `json:"byok_only"`
-	DLP                   AIGatewayGetResponseDLP                   `json:"dlp"`
+	ByokOnly bool                    `json:"byok_only"`
+	DLP      AIGatewayGetResponseDLP `json:"dlp"`
+	// FedRAMP compliance level: fedramp-medium or fedramp-high.
+	FedrampLevel AIGatewayGetResponseFedrampLevel `json:"fedramp_level" api:"nullable"`
+	// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+	// fallback. "require" strictly filters.
+	FedrampMode           AIGatewayGetResponseFedrampMode           `json:"fedramp_mode" api:"nullable"`
 	Guardrails            AIGatewayGetResponseGuardrails            `json:"guardrails" api:"nullable"`
 	IsDefault             bool                                      `json:"is_default"`
 	LogClassification     bool                                      `json:"log_classification"`
@@ -4994,8 +5313,10 @@ type AIGatewayGetResponse struct {
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts int64                           `json:"retry_max_attempts" api:"nullable"`
 	SpendLimits      AIGatewayGetResponseSpendLimits `json:"spend_limits" api:"nullable"`
-	StoreID          string                          `json:"store_id" api:"nullable"`
-	Stripe           AIGatewayGetResponseStripe      `json:"stripe" api:"nullable"`
+	// Secrets Store used by this gateway. Omit on update to keep the current store.
+	// Cannot be cleared while stored keys or secret references depend on it.
+	StoreID string                     `json:"store_id" api:"nullable"`
+	Stripe  AIGatewayGetResponseStripe `json:"stripe" api:"nullable"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
 	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
@@ -5019,6 +5340,8 @@ type aiGatewayGetResponseJSON struct {
 	Authentication          apijson.Field
 	ByokOnly                apijson.Field
 	DLP                     apijson.Field
+	FedrampLevel            apijson.Field
+	FedrampMode             apijson.Field
 	Guardrails              apijson.Field
 	IsDefault               apijson.Field
 	LogClassification       apijson.Field
@@ -5170,6 +5493,39 @@ func (r AIGatewayGetResponseDLPAction) IsKnown() bool {
 	return false
 }
 
+// FedRAMP compliance level: fedramp-medium or fedramp-high.
+type AIGatewayGetResponseFedrampLevel string
+
+const (
+	AIGatewayGetResponseFedrampLevelFedrampMedium AIGatewayGetResponseFedrampLevel = "fedramp-medium"
+	AIGatewayGetResponseFedrampLevelFedrampHigh   AIGatewayGetResponseFedrampLevel = "fedramp-high"
+)
+
+func (r AIGatewayGetResponseFedrampLevel) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseFedrampLevelFedrampMedium, AIGatewayGetResponseFedrampLevelFedrampHigh:
+		return true
+	}
+	return false
+}
+
+// FedRAMP enforcement mode. "prefer" prioritizes compliant connectors but allows
+// fallback. "require" strictly filters.
+type AIGatewayGetResponseFedrampMode string
+
+const (
+	AIGatewayGetResponseFedrampModePrefer  AIGatewayGetResponseFedrampMode = "prefer"
+	AIGatewayGetResponseFedrampModeRequire AIGatewayGetResponseFedrampMode = "require"
+)
+
+func (r AIGatewayGetResponseFedrampMode) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseFedrampModePrefer, AIGatewayGetResponseFedrampModeRequire:
+		return true
+	}
+	return false
+}
+
 type AIGatewayGetResponseGuardrails struct {
 	Prompt   AIGatewayGetResponseGuardrailsPrompt   `json:"prompt" api:"required"`
 	Response AIGatewayGetResponseGuardrailsResponse `json:"response" api:"required"`
@@ -5200,6 +5556,7 @@ type AIGatewayGetResponseGuardrailsPrompt struct {
 	S11  AIGatewayGetResponseGuardrailsPromptS11  `json:"S11"`
 	S12  AIGatewayGetResponseGuardrailsPromptS12  `json:"S12"`
 	S13  AIGatewayGetResponseGuardrailsPromptS13  `json:"S13"`
+	S14  AIGatewayGetResponseGuardrailsPromptS14  `json:"S14"`
 	S2   AIGatewayGetResponseGuardrailsPromptS2   `json:"S2"`
 	S3   AIGatewayGetResponseGuardrailsPromptS3   `json:"S3"`
 	S4   AIGatewayGetResponseGuardrailsPromptS4   `json:"S4"`
@@ -5220,6 +5577,7 @@ type aiGatewayGetResponseGuardrailsPromptJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -5325,6 +5683,21 @@ const (
 func (r AIGatewayGetResponseGuardrailsPromptS13) IsKnown() bool {
 	switch r {
 	case AIGatewayGetResponseGuardrailsPromptS13Flag, AIGatewayGetResponseGuardrailsPromptS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayGetResponseGuardrailsPromptS14 string
+
+const (
+	AIGatewayGetResponseGuardrailsPromptS14Flag  AIGatewayGetResponseGuardrailsPromptS14 = "FLAG"
+	AIGatewayGetResponseGuardrailsPromptS14Block AIGatewayGetResponseGuardrailsPromptS14 = "BLOCK"
+)
+
+func (r AIGatewayGetResponseGuardrailsPromptS14) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseGuardrailsPromptS14Flag, AIGatewayGetResponseGuardrailsPromptS14Block:
 		return true
 	}
 	return false
@@ -5457,6 +5830,7 @@ type AIGatewayGetResponseGuardrailsResponse struct {
 	S11  AIGatewayGetResponseGuardrailsResponseS11  `json:"S11"`
 	S12  AIGatewayGetResponseGuardrailsResponseS12  `json:"S12"`
 	S13  AIGatewayGetResponseGuardrailsResponseS13  `json:"S13"`
+	S14  AIGatewayGetResponseGuardrailsResponseS14  `json:"S14"`
 	S2   AIGatewayGetResponseGuardrailsResponseS2   `json:"S2"`
 	S3   AIGatewayGetResponseGuardrailsResponseS3   `json:"S3"`
 	S4   AIGatewayGetResponseGuardrailsResponseS4   `json:"S4"`
@@ -5477,6 +5851,7 @@ type aiGatewayGetResponseGuardrailsResponseJSON struct {
 	S11         apijson.Field
 	S12         apijson.Field
 	S13         apijson.Field
+	S14         apijson.Field
 	S2          apijson.Field
 	S3          apijson.Field
 	S4          apijson.Field
@@ -5582,6 +5957,21 @@ const (
 func (r AIGatewayGetResponseGuardrailsResponseS13) IsKnown() bool {
 	switch r {
 	case AIGatewayGetResponseGuardrailsResponseS13Flag, AIGatewayGetResponseGuardrailsResponseS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayGetResponseGuardrailsResponseS14 string
+
+const (
+	AIGatewayGetResponseGuardrailsResponseS14Flag  AIGatewayGetResponseGuardrailsResponseS14 = "FLAG"
+	AIGatewayGetResponseGuardrailsResponseS14Block AIGatewayGetResponseGuardrailsResponseS14 = "BLOCK"
+)
+
+func (r AIGatewayGetResponseGuardrailsResponseS14) IsKnown() bool {
+	switch r {
+	case AIGatewayGetResponseGuardrailsResponseS14Flag, AIGatewayGetResponseGuardrailsResponseS14Block:
 		return true
 	}
 	return false
@@ -6170,7 +6560,9 @@ type AIGatewayNewParams struct {
 	CollectLogs             param.Field[bool]   `json:"collect_logs" api:"required"`
 	RateLimitingInterval    param.Field[int64]  `json:"rate_limiting_interval" api:"required"`
 	RateLimitingLimit       param.Field[int64]  `json:"rate_limiting_limit" api:"required"`
-	Authentication          param.Field[bool]   `json:"authentication"`
+	// Require authentication for gateway access. New gateways must have authentication
+	// enabled. Once enabled, authentication cannot be disabled.
+	Authentication param.Field[bool] `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
 	ByokOnly              param.Field[bool]                                    `json:"byok_only"`
@@ -6190,8 +6582,10 @@ type AIGatewayNewParams struct {
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts param.Field[int64]                         `json:"retry_max_attempts"`
 	SpendLimits      param.Field[AIGatewayNewParamsSpendLimits] `json:"spend_limits"`
-	StoreID          param.Field[string]                        `json:"store_id"`
-	Stripe           param.Field[AIGatewayNewParamsStripe]      `json:"stripe"`
+	// Secrets Store used by this gateway. Omit on update to keep the current store.
+	// Cannot be cleared while stored keys or secret references depend on it.
+	StoreID param.Field[string]                   `json:"store_id"`
+	Stripe  param.Field[AIGatewayNewParamsStripe] `json:"stripe"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
 	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
@@ -6281,6 +6675,7 @@ type AIGatewayNewParamsGuardrailsPrompt struct {
 	S11 param.Field[AIGatewayNewParamsGuardrailsPromptS11] `json:"S11"`
 	S12 param.Field[AIGatewayNewParamsGuardrailsPromptS12] `json:"S12"`
 	S13 param.Field[AIGatewayNewParamsGuardrailsPromptS13] `json:"S13"`
+	S14 param.Field[AIGatewayNewParamsGuardrailsPromptS14] `json:"S14"`
 	S2  param.Field[AIGatewayNewParamsGuardrailsPromptS2]  `json:"S2"`
 	S3  param.Field[AIGatewayNewParamsGuardrailsPromptS3]  `json:"S3"`
 	S4  param.Field[AIGatewayNewParamsGuardrailsPromptS4]  `json:"S4"`
@@ -6380,6 +6775,21 @@ const (
 func (r AIGatewayNewParamsGuardrailsPromptS13) IsKnown() bool {
 	switch r {
 	case AIGatewayNewParamsGuardrailsPromptS13Flag, AIGatewayNewParamsGuardrailsPromptS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsPromptS14 string
+
+const (
+	AIGatewayNewParamsGuardrailsPromptS14Flag  AIGatewayNewParamsGuardrailsPromptS14 = "FLAG"
+	AIGatewayNewParamsGuardrailsPromptS14Block AIGatewayNewParamsGuardrailsPromptS14 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsPromptS14) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsPromptS14Flag, AIGatewayNewParamsGuardrailsPromptS14Block:
 		return true
 	}
 	return false
@@ -6512,6 +6922,7 @@ type AIGatewayNewParamsGuardrailsResponse struct {
 	S11 param.Field[AIGatewayNewParamsGuardrailsResponseS11] `json:"S11"`
 	S12 param.Field[AIGatewayNewParamsGuardrailsResponseS12] `json:"S12"`
 	S13 param.Field[AIGatewayNewParamsGuardrailsResponseS13] `json:"S13"`
+	S14 param.Field[AIGatewayNewParamsGuardrailsResponseS14] `json:"S14"`
 	S2  param.Field[AIGatewayNewParamsGuardrailsResponseS2]  `json:"S2"`
 	S3  param.Field[AIGatewayNewParamsGuardrailsResponseS3]  `json:"S3"`
 	S4  param.Field[AIGatewayNewParamsGuardrailsResponseS4]  `json:"S4"`
@@ -6611,6 +7022,21 @@ const (
 func (r AIGatewayNewParamsGuardrailsResponseS13) IsKnown() bool {
 	switch r {
 	case AIGatewayNewParamsGuardrailsResponseS13Flag, AIGatewayNewParamsGuardrailsResponseS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayNewParamsGuardrailsResponseS14 string
+
+const (
+	AIGatewayNewParamsGuardrailsResponseS14Flag  AIGatewayNewParamsGuardrailsResponseS14 = "FLAG"
+	AIGatewayNewParamsGuardrailsResponseS14Block AIGatewayNewParamsGuardrailsResponseS14 = "BLOCK"
+)
+
+func (r AIGatewayNewParamsGuardrailsResponseS14) IsKnown() bool {
+	switch r {
+	case AIGatewayNewParamsGuardrailsResponseS14Flag, AIGatewayNewParamsGuardrailsResponseS14Block:
 		return true
 	}
 	return false
@@ -7045,7 +7471,9 @@ type AIGatewayUpdateParams struct {
 	CollectLogs             param.Field[bool]   `json:"collect_logs" api:"required"`
 	RateLimitingInterval    param.Field[int64]  `json:"rate_limiting_interval" api:"required"`
 	RateLimitingLimit       param.Field[int64]  `json:"rate_limiting_limit" api:"required"`
-	Authentication          param.Field[bool]   `json:"authentication"`
+	// Require authentication for gateway access. New gateways must have authentication
+	// enabled. Once enabled, authentication cannot be disabled.
+	Authentication param.Field[bool] `json:"authentication"`
 	// Requires customer-provided provider credentials and prevents fallback to Unified
 	// Billing.
 	ByokOnly              param.Field[bool]                                       `json:"byok_only"`
@@ -7065,8 +7493,10 @@ type AIGatewayUpdateParams struct {
 	// Maximum number of retry attempts for failed requests (1-5)
 	RetryMaxAttempts param.Field[int64]                            `json:"retry_max_attempts"`
 	SpendLimits      param.Field[AIGatewayUpdateParamsSpendLimits] `json:"spend_limits"`
-	StoreID          param.Field[string]                           `json:"store_id"`
-	Stripe           param.Field[AIGatewayUpdateParamsStripe]      `json:"stripe"`
+	// Secrets Store used by this gateway. Omit on update to keep the current store.
+	// Cannot be cleared while stored keys or secret references depend on it.
+	StoreID param.Field[string]                      `json:"store_id"`
+	Stripe  param.Field[AIGatewayUpdateParamsStripe] `json:"stripe"`
 	// Controls how Workers AI inference calls routed through this gateway are billed.
 	// 'postpaid' bills the account directly through Workers AI; 'unified' deducts
 	// credits via AI Gateway using neuron-based pricing and delegates billing to AI
@@ -7156,6 +7586,7 @@ type AIGatewayUpdateParamsGuardrailsPrompt struct {
 	S11 param.Field[AIGatewayUpdateParamsGuardrailsPromptS11] `json:"S11"`
 	S12 param.Field[AIGatewayUpdateParamsGuardrailsPromptS12] `json:"S12"`
 	S13 param.Field[AIGatewayUpdateParamsGuardrailsPromptS13] `json:"S13"`
+	S14 param.Field[AIGatewayUpdateParamsGuardrailsPromptS14] `json:"S14"`
 	S2  param.Field[AIGatewayUpdateParamsGuardrailsPromptS2]  `json:"S2"`
 	S3  param.Field[AIGatewayUpdateParamsGuardrailsPromptS3]  `json:"S3"`
 	S4  param.Field[AIGatewayUpdateParamsGuardrailsPromptS4]  `json:"S4"`
@@ -7255,6 +7686,21 @@ const (
 func (r AIGatewayUpdateParamsGuardrailsPromptS13) IsKnown() bool {
 	switch r {
 	case AIGatewayUpdateParamsGuardrailsPromptS13Flag, AIGatewayUpdateParamsGuardrailsPromptS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayUpdateParamsGuardrailsPromptS14 string
+
+const (
+	AIGatewayUpdateParamsGuardrailsPromptS14Flag  AIGatewayUpdateParamsGuardrailsPromptS14 = "FLAG"
+	AIGatewayUpdateParamsGuardrailsPromptS14Block AIGatewayUpdateParamsGuardrailsPromptS14 = "BLOCK"
+)
+
+func (r AIGatewayUpdateParamsGuardrailsPromptS14) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateParamsGuardrailsPromptS14Flag, AIGatewayUpdateParamsGuardrailsPromptS14Block:
 		return true
 	}
 	return false
@@ -7387,6 +7833,7 @@ type AIGatewayUpdateParamsGuardrailsResponse struct {
 	S11 param.Field[AIGatewayUpdateParamsGuardrailsResponseS11] `json:"S11"`
 	S12 param.Field[AIGatewayUpdateParamsGuardrailsResponseS12] `json:"S12"`
 	S13 param.Field[AIGatewayUpdateParamsGuardrailsResponseS13] `json:"S13"`
+	S14 param.Field[AIGatewayUpdateParamsGuardrailsResponseS14] `json:"S14"`
 	S2  param.Field[AIGatewayUpdateParamsGuardrailsResponseS2]  `json:"S2"`
 	S3  param.Field[AIGatewayUpdateParamsGuardrailsResponseS3]  `json:"S3"`
 	S4  param.Field[AIGatewayUpdateParamsGuardrailsResponseS4]  `json:"S4"`
@@ -7486,6 +7933,21 @@ const (
 func (r AIGatewayUpdateParamsGuardrailsResponseS13) IsKnown() bool {
 	switch r {
 	case AIGatewayUpdateParamsGuardrailsResponseS13Flag, AIGatewayUpdateParamsGuardrailsResponseS13Block:
+		return true
+	}
+	return false
+}
+
+type AIGatewayUpdateParamsGuardrailsResponseS14 string
+
+const (
+	AIGatewayUpdateParamsGuardrailsResponseS14Flag  AIGatewayUpdateParamsGuardrailsResponseS14 = "FLAG"
+	AIGatewayUpdateParamsGuardrailsResponseS14Block AIGatewayUpdateParamsGuardrailsResponseS14 = "BLOCK"
+)
+
+func (r AIGatewayUpdateParamsGuardrailsResponseS14) IsKnown() bool {
+	switch r {
+	case AIGatewayUpdateParamsGuardrailsResponseS14Flag, AIGatewayUpdateParamsGuardrailsResponseS14Block:
 		return true
 	}
 	return false

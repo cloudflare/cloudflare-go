@@ -37,7 +37,7 @@ func NewQueryService(opts ...option.RequestOption) (r *QueryService) {
 	return
 }
 
-// Return a success message after creating new saved string queries
+// Return a success message after creating new saved string queries.
 func (r *QueryService) New(ctx context.Context, params QueryNewParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -50,7 +50,7 @@ func (r *QueryService) New(ctx context.Context, params QueryNewParams, opts ...o
 	return err
 }
 
-// Return a success message after deleting saved string queries by ID
+// Return a success message after deleting saved string queries by ID.
 func (r *QueryService) Delete(ctx context.Context, params QueryDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -63,7 +63,7 @@ func (r *QueryService) Delete(ctx context.Context, params QueryDeleteParams, opt
 	return err
 }
 
-// Return a success message after creating new saved string queries in bulk
+// Return a success message after creating new saved string queries in bulk.
 func (r *QueryService) Bulk(ctx context.Context, params QueryBulkParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -77,15 +77,15 @@ func (r *QueryService) Bulk(ctx context.Context, params QueryBulkParams, opts ..
 }
 
 type QueryNewParams struct {
-	AccountID     param.Field[string]      `path:"account_id" api:"required"`
-	ID            param.Field[string]      `query:"id"`
-	QueryScan     param.Field[bool]        `query:"scan"`
-	QueryTag      param.Field[string]      `query:"tag"`
-	MaxTime       param.Field[time.Time]   `json:"max_time" format:"date-time"`
-	MinTime       param.Field[time.Time]   `json:"min_time" format:"date-time"`
-	BodyScan      param.Field[bool]        `json:"scan"`
-	StringMatches param.Field[interface{}] `json:"string_matches"`
-	BodyTag       param.Field[string]      `json:"tag"`
+	AccountID     param.Field[string]                      `path:"account_id" api:"required"`
+	ID            param.Field[string]                      `query:"id"`
+	QueryScan     param.Field[bool]                        `query:"scan"`
+	QueryTag      param.Field[string]                      `query:"tag"`
+	MaxTime       param.Field[time.Time]                   `json:"max_time" format:"date-time"`
+	MinTime       param.Field[time.Time]                   `json:"min_time" format:"date-time"`
+	BodyScan      param.Field[bool]                        `json:"scan"`
+	StringMatches param.Field[[]QueryNewParamsStringMatch] `json:"string_matches"`
+	BodyTag       param.Field[string]                      `json:"tag"`
 }
 
 func (r QueryNewParams) MarshalJSON() (data []byte, err error) {
@@ -98,6 +98,15 @@ func (r QueryNewParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type QueryNewParamsStringMatch struct {
+	Pattern         param.Field[string]  `json:"pattern" api:"required"`
+	MaxEditDistance param.Field[float64] `json:"max_edit_distance"`
+}
+
+func (r QueryNewParamsStringMatch) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type QueryDeleteParams struct {

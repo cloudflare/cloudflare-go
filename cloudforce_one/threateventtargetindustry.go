@@ -40,8 +40,9 @@ func NewThreatEventTargetIndustryService(opts ...option.RequestOption) (r *Threa
 	return
 }
 
-// Retrieves the catalog of industry classifications used in Cloudforce One threat
-// intelligence.
+// Lists the target industries referenced by events in the datasets given by
+// `datasetIds`, or in the default dataset when `datasetIds` is omitted. To list
+// every target industry, use `threat-intel events target-industries catalog list`.
 func (r *ThreatEventTargetIndustryService) List(ctx context.Context, params ThreatEventTargetIndustryListParams, opts ...option.RequestOption) (res *ThreatEventTargetIndustryListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {

@@ -93,7 +93,8 @@ func TestMitigationReviewWithOptionalParams(t *testing.T) {
 				Company:               cloudflare.F("company"),
 				CounterNoticeResponse: cloudflare.F("counter_notice_response"),
 			}),
-			Type: cloudflare.F(abuse_reports.MitigationReviewParamsTypeCounterNotice),
+			Explanation: cloudflare.F("explanation"),
+			Type:        cloudflare.F(abuse_reports.MitigationReviewParamsTypeCounterNotice),
 		},
 	)
 	if err != nil {

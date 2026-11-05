@@ -250,7 +250,10 @@ type GRETunnelNewResponseBGP struct {
 	// ID of the BGP filter profile applied to routes advertised to the customer.
 	ExportFilterID string `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
-	// the routes in the Magic routing table.
+	// the routes in the Magic routing table. Each entry must be a network address in
+	// CIDR notation with no host bits set (for example `192.0.2.0/24`, not
+	// `192.0.2.1/24`) and must not repeat another entry. IPv6 prefixes are accepted
+	// only when the tunnel has an `interface_address6`.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
 	// ID of the BGP filter profile applied to routes received from the customer.
 	ImportFilterID string `json:"import_filter_id"`
@@ -574,7 +577,10 @@ type GRETunnelUpdateResponseModifiedGRETunnelBGP struct {
 	// ID of the BGP filter profile applied to routes advertised to the customer.
 	ExportFilterID string `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
-	// the routes in the Magic routing table.
+	// the routes in the Magic routing table. Each entry must be a network address in
+	// CIDR notation with no host bits set (for example `192.0.2.0/24`, not
+	// `192.0.2.1/24`) and must not repeat another entry. IPv6 prefixes are accepted
+	// only when the tunnel has an `interface_address6`.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
 	// ID of the BGP filter profile applied to routes received from the customer.
 	ImportFilterID string `json:"import_filter_id"`
@@ -897,7 +903,10 @@ type GRETunnelListResponseGRETunnelsBGP struct {
 	// ID of the BGP filter profile applied to routes advertised to the customer.
 	ExportFilterID string `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
-	// the routes in the Magic routing table.
+	// the routes in the Magic routing table. Each entry must be a network address in
+	// CIDR notation with no host bits set (for example `192.0.2.0/24`, not
+	// `192.0.2.1/24`) and must not repeat another entry. IPv6 prefixes are accepted
+	// only when the tunnel has an `interface_address6`.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
 	// ID of the BGP filter profile applied to routes received from the customer.
 	ImportFilterID string `json:"import_filter_id"`
@@ -1222,7 +1231,10 @@ type GRETunnelDeleteResponseDeletedGRETunnelBGP struct {
 	// ID of the BGP filter profile applied to routes advertised to the customer.
 	ExportFilterID string `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
-	// the routes in the Magic routing table.
+	// the routes in the Magic routing table. Each entry must be a network address in
+	// CIDR notation with no host bits set (for example `192.0.2.0/24`, not
+	// `192.0.2.1/24`) and must not repeat another entry. IPv6 prefixes are accepted
+	// only when the tunnel has an `interface_address6`.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
 	// ID of the BGP filter profile applied to routes received from the customer.
 	ImportFilterID string `json:"import_filter_id"`
@@ -1547,7 +1559,10 @@ type GRETunnelBulkUpdateResponseModifiedGRETunnelsBGP struct {
 	// ID of the BGP filter profile applied to routes advertised to the customer.
 	ExportFilterID string `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
-	// the routes in the Magic routing table.
+	// the routes in the Magic routing table. Each entry must be a network address in
+	// CIDR notation with no host bits set (for example `192.0.2.0/24`, not
+	// `192.0.2.1/24`) and must not repeat another entry. IPv6 prefixes are accepted
+	// only when the tunnel has an `interface_address6`.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
 	// ID of the BGP filter profile applied to routes received from the customer.
 	ImportFilterID string `json:"import_filter_id"`
@@ -1871,7 +1886,10 @@ type GRETunnelGetResponseGRETunnelBGP struct {
 	// ID of the BGP filter profile applied to routes advertised to the customer.
 	ExportFilterID string `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
-	// the routes in the Magic routing table.
+	// the routes in the Magic routing table. Each entry must be a network address in
+	// CIDR notation with no host bits set (for example `192.0.2.0/24`, not
+	// `192.0.2.1/24`) and must not repeat another entry. IPv6 prefixes are accepted
+	// only when the tunnel has an `interface_address6`.
 	ExtraPrefixes []string `json:"extra_prefixes" format:"cidr"`
 	// ID of the BGP filter profile applied to routes received from the customer.
 	ImportFilterID string `json:"import_filter_id"`
@@ -2142,7 +2160,10 @@ type GRETunnelNewParamsBGP struct {
 	// ID of the BGP filter profile applied to routes advertised to the customer.
 	ExportFilterID param.Field[string] `json:"export_filter_id"`
 	// Prefixes in this list will be advertised to the customer device, in addition to
-	// the routes in the Magic routing table.
+	// the routes in the Magic routing table. Each entry must be a network address in
+	// CIDR notation with no host bits set (for example `192.0.2.0/24`, not
+	// `192.0.2.1/24`) and must not repeat another entry. IPv6 prefixes are accepted
+	// only when the tunnel has an `interface_address6`.
 	ExtraPrefixes param.Field[[]string] `json:"extra_prefixes" format:"cidr"`
 	// ID of the BGP filter profile applied to routes received from the customer.
 	ImportFilterID param.Field[string] `json:"import_filter_id"`

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/email_security"
@@ -34,6 +35,7 @@ func TestSettingBlockSenderNewWithOptionalParams(t *testing.T) {
 		Pattern:     cloudflare.F("test@example.com"),
 		PatternType: cloudflare.F(email_security.SettingBlockSenderNewParamsPatternTypeEmail),
 		Comments:    cloudflare.F("Block sender with email test@example.com"),
+		ExpiresAt:   cloudflare.F(time.Now()),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -61,6 +63,7 @@ func TestSettingBlockSenderListWithOptionalParams(t *testing.T) {
 	_, err := client.EmailSecurity.Settings.BlockSenders.List(context.TODO(), email_security.SettingBlockSenderListParams{
 		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Direction:   cloudflare.F(email_security.SettingBlockSenderListParamsDirectionAsc),
+		Expired:     cloudflare.F(true),
 		Order:       cloudflare.F(email_security.SettingBlockSenderListParamsOrderPattern),
 		Page:        cloudflare.F(int64(1)),
 		Pattern:     cloudflare.F("pattern"),
@@ -128,6 +131,7 @@ func TestSettingBlockSenderBatch(t *testing.T) {
 		}}),
 		Patches: cloudflare.F([]email_security.SettingBlockSenderBatchParamsPatch{{
 			Comments:    cloudflare.F("Block sender with email test@example.com"),
+			ExpiresAt:   cloudflare.F(time.Now()),
 			IsRegex:     cloudflare.F(false),
 			Pattern:     cloudflare.F("test@example.com"),
 			PatternType: cloudflare.F(email_security.SettingBlockSenderBatchParamsPatchesPatternTypeEmail),
@@ -137,12 +141,14 @@ func TestSettingBlockSenderBatch(t *testing.T) {
 			Pattern:     cloudflare.F("test@example.com"),
 			PatternType: cloudflare.F(email_security.SettingBlockSenderBatchParamsPostsPatternTypeEmail),
 			Comments:    cloudflare.F("Block sender with email test@example.com"),
+			ExpiresAt:   cloudflare.F(time.Now()),
 		}}),
 		Puts: cloudflare.F([]email_security.SettingBlockSenderBatchParamsPut{{
 			IsRegex:     cloudflare.F(false),
 			Pattern:     cloudflare.F("test@example.com"),
 			PatternType: cloudflare.F(email_security.SettingBlockSenderBatchParamsPutsPatternTypeEmail),
 			Comments:    cloudflare.F("Block sender with email test@example.com"),
+			ExpiresAt:   cloudflare.F(time.Now()),
 		}}),
 	})
 	if err != nil {
@@ -175,6 +181,7 @@ func TestSettingBlockSenderEditWithOptionalParams(t *testing.T) {
 		email_security.SettingBlockSenderEditParams{
 			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Comments:    cloudflare.F("Block sender with email test@example.com"),
+			ExpiresAt:   cloudflare.F(time.Now()),
 			IsRegex:     cloudflare.F(false),
 			Pattern:     cloudflare.F("test@example.com"),
 			PatternType: cloudflare.F(email_security.SettingBlockSenderEditParamsPatternTypeEmail),

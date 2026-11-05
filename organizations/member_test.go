@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/organizations"
 )
 
-func TestMemberNewWithOptionalParams(t *testing.T) {
+func TestMemberNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -35,7 +35,6 @@ func TestMemberNewWithOptionalParams(t *testing.T) {
 				User: cloudflare.F(organizations.MemberNewParamsMemberUser{
 					Email: cloudflare.F("email"),
 				}),
-				Status: cloudflare.F(organizations.MemberNewParamsMemberStatusActive),
 			}),
 		},
 	)
@@ -95,7 +94,7 @@ func TestMemberDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.Organizations.Members.Delete(
+	_, err := client.Organizations.Members.Delete(
 		context.TODO(),
 		"a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8",
 		"a7b9c3d2e8f4a1b5c6d0e9f2a3b7c4d8",

@@ -145,6 +145,7 @@ func (r riskScoringGetResponseEventJSON) RawJSON() string {
 type RiskScoringGetResponseEventsRiskLevel string
 
 const (
+	RiskScoringGetResponseEventsRiskLevelInfo   RiskScoringGetResponseEventsRiskLevel = "info"
 	RiskScoringGetResponseEventsRiskLevelLow    RiskScoringGetResponseEventsRiskLevel = "low"
 	RiskScoringGetResponseEventsRiskLevelMedium RiskScoringGetResponseEventsRiskLevel = "medium"
 	RiskScoringGetResponseEventsRiskLevelHigh   RiskScoringGetResponseEventsRiskLevel = "high"
@@ -152,7 +153,7 @@ const (
 
 func (r RiskScoringGetResponseEventsRiskLevel) IsKnown() bool {
 	switch r {
-	case RiskScoringGetResponseEventsRiskLevelLow, RiskScoringGetResponseEventsRiskLevelMedium, RiskScoringGetResponseEventsRiskLevelHigh:
+	case RiskScoringGetResponseEventsRiskLevelInfo, RiskScoringGetResponseEventsRiskLevelLow, RiskScoringGetResponseEventsRiskLevelMedium, RiskScoringGetResponseEventsRiskLevelHigh:
 		return true
 	}
 	return false
@@ -161,6 +162,7 @@ func (r RiskScoringGetResponseEventsRiskLevel) IsKnown() bool {
 type RiskScoringGetResponseRiskLevel string
 
 const (
+	RiskScoringGetResponseRiskLevelInfo   RiskScoringGetResponseRiskLevel = "info"
 	RiskScoringGetResponseRiskLevelLow    RiskScoringGetResponseRiskLevel = "low"
 	RiskScoringGetResponseRiskLevelMedium RiskScoringGetResponseRiskLevel = "medium"
 	RiskScoringGetResponseRiskLevelHigh   RiskScoringGetResponseRiskLevel = "high"
@@ -168,7 +170,7 @@ const (
 
 func (r RiskScoringGetResponseRiskLevel) IsKnown() bool {
 	switch r {
-	case RiskScoringGetResponseRiskLevelLow, RiskScoringGetResponseRiskLevelMedium, RiskScoringGetResponseRiskLevelHigh:
+	case RiskScoringGetResponseRiskLevelInfo, RiskScoringGetResponseRiskLevelLow, RiskScoringGetResponseRiskLevelMedium, RiskScoringGetResponseRiskLevelHigh:
 		return true
 	}
 	return false

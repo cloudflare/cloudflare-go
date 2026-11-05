@@ -43,6 +43,9 @@ func TestScriptDeploymentNewWithOptionalParams(t *testing.T) {
 				Annotations: cloudflare.F(workers.DeploymentAnnotationsParam{
 					WorkersMessage: cloudflare.F("Deploy bug fix."),
 				}),
+				CodeUpdateStrategy: cloudflare.F[workers.DeploymentCodeUpdateStrategyUnionParam](workers.DeploymentCodeUpdateStrategyModeParam{
+					Mode: cloudflare.F(workers.DeploymentCodeUpdateStrategyModeModeImmediate),
+				}),
 			},
 			Force: cloudflare.F(true),
 		},

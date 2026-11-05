@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
 )
 
 // EndpointHealthcheckService contains methods and other services that help with
@@ -51,7 +52,7 @@ func (r *EndpointHealthcheckService) New(ctx context.Context, params EndpointHea
 	return res, nil
 }
 
-// Update a Endpoint Health Check.
+// Update an Endpoint Health Check.
 func (r *EndpointHealthcheckService) Update(ctx context.Context, id string, params EndpointHealthcheckUpdateParams, opts ...option.RequestOption) (res *EndpointHealthcheckUpdateResponse, err error) {
 	var env EndpointHealthcheckUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -73,20 +74,30 @@ func (r *EndpointHealthcheckService) Update(ctx context.Context, id string, para
 }
 
 // List Endpoint Health Checks.
-func (r *EndpointHealthcheckService) List(ctx context.Context, query EndpointHealthcheckListParams, opts ...option.RequestOption) (res *EndpointHealthcheckListResponse, err error) {
-	var env EndpointHealthcheckListResponseEnvelope
+func (r *EndpointHealthcheckService) List(ctx context.Context, query EndpointHealthcheckListParams, opts ...option.RequestOption) (res *pagination.SinglePage[EndpointHealthcheckListResponse], err error) {
+	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
 	path := fmt.Sprintf("accounts/%s/diagnostics/endpoint-healthchecks", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
-	res = &env.Result
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
 	return res, nil
+}
+
+// List Endpoint Health Checks.
+func (r *EndpointHealthcheckService) ListAutoPaging(ctx context.Context, query EndpointHealthcheckListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[EndpointHealthcheckListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete Endpoint Health Check.
@@ -777,145 +788,6 @@ func (r EndpointHealthcheckUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type EndpointHealthcheckListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-}
-
-type EndpointHealthcheckListResponseEnvelope struct {
-	Errors   []EndpointHealthcheckListResponseEnvelopeErrors   `json:"errors" api:"required"`
-	Messages []EndpointHealthcheckListResponseEnvelopeMessages `json:"messages" api:"required"`
-	// Whether the API call was successful.
-	Success EndpointHealthcheckListResponseEnvelopeSuccess `json:"success" api:"required"`
-	Result  EndpointHealthcheckListResponse                `json:"result"`
-	JSON    endpointHealthcheckListResponseEnvelopeJSON    `json:"-"`
-}
-
-// endpointHealthcheckListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [EndpointHealthcheckListResponseEnvelope]
-type endpointHealthcheckListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EndpointHealthcheckListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r endpointHealthcheckListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type EndpointHealthcheckListResponseEnvelopeErrors struct {
-	Code             int64                                               `json:"code" api:"required"`
-	Message          string                                              `json:"message" api:"required"`
-	DocumentationURL string                                              `json:"documentation_url"`
-	Source           EndpointHealthcheckListResponseEnvelopeErrorsSource `json:"source"`
-	JSON             endpointHealthcheckListResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// endpointHealthcheckListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [EndpointHealthcheckListResponseEnvelopeErrors]
-type endpointHealthcheckListResponseEnvelopeErrorsJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *EndpointHealthcheckListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r endpointHealthcheckListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type EndpointHealthcheckListResponseEnvelopeErrorsSource struct {
-	Pointer string                                                  `json:"pointer"`
-	JSON    endpointHealthcheckListResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// endpointHealthcheckListResponseEnvelopeErrorsSourceJSON contains the JSON
-// metadata for the struct [EndpointHealthcheckListResponseEnvelopeErrorsSource]
-type endpointHealthcheckListResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EndpointHealthcheckListResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r endpointHealthcheckListResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type EndpointHealthcheckListResponseEnvelopeMessages struct {
-	Code             int64                                                 `json:"code" api:"required"`
-	Message          string                                                `json:"message" api:"required"`
-	DocumentationURL string                                                `json:"documentation_url"`
-	Source           EndpointHealthcheckListResponseEnvelopeMessagesSource `json:"source"`
-	JSON             endpointHealthcheckListResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// endpointHealthcheckListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [EndpointHealthcheckListResponseEnvelopeMessages]
-type endpointHealthcheckListResponseEnvelopeMessagesJSON struct {
-	Code             apijson.Field
-	Message          apijson.Field
-	DocumentationURL apijson.Field
-	Source           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *EndpointHealthcheckListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r endpointHealthcheckListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type EndpointHealthcheckListResponseEnvelopeMessagesSource struct {
-	Pointer string                                                    `json:"pointer"`
-	JSON    endpointHealthcheckListResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// endpointHealthcheckListResponseEnvelopeMessagesSourceJSON contains the JSON
-// metadata for the struct [EndpointHealthcheckListResponseEnvelopeMessagesSource]
-type endpointHealthcheckListResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EndpointHealthcheckListResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r endpointHealthcheckListResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type EndpointHealthcheckListResponseEnvelopeSuccess bool
-
-const (
-	EndpointHealthcheckListResponseEnvelopeSuccessTrue EndpointHealthcheckListResponseEnvelopeSuccess = true
-)
-
-func (r EndpointHealthcheckListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case EndpointHealthcheckListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type EndpointHealthcheckDeleteParams struct {

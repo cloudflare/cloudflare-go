@@ -31,14 +31,16 @@ func TestPrecursorUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.Precursor.Update(context.TODO(), precursor.PrecursorUpdateParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		PrecursorConfig: precursor.PrecursorConfigParam{
-			DefaultMode: cloudflare.F(precursor.PrecursorConfigDefaultModeMinFriction),
-			EnforcementRules: cloudflare.F([]precursor.EnforcementRuleParam{{
-				Expression:  cloudflare.F(`http.request.uri.path eq "/shop"`),
-				Mode:        cloudflare.F(precursor.EnforcementRuleModeMaxSecurity),
-				Description: cloudflare.F("Enforce max-security on the shop page"),
-				Enabled:     cloudflare.F(true),
+			Mode: cloudflare.F(precursor.PrecursorConfigModeMonitor),
+			Rules: cloudflare.F([]precursor.PrecursorConfigRuleParam{{
+				Expression:       cloudflare.F(`http.request.uri.path eq "/shop"`),
+				ShowInterstitial: cloudflare.F(true),
+				Description:      cloudflare.F("Show an interstitial on the shop page"),
+				Enabled:          cloudflare.F(true),
 			}}),
+			ShowInterstitial: cloudflare.F(false),
 		},
+		CloudflareVersion: cloudflare.F(precursor.PrecursorUpdateParamsCloudflareVersion1_0),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -64,7 +66,8 @@ func TestPrecursorGet(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Precursor.Get(context.TODO(), precursor.PrecursorGetParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		CloudflareVersion: cloudflare.F(precursor.PrecursorGetParamsCloudflareVersion1_0),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

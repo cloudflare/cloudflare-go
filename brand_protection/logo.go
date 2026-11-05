@@ -40,7 +40,7 @@ func NewLogoService(opts ...option.RequestOption) (r *LogoService) {
 	return
 }
 
-// Return new saved logo queries created from image files
+// Return new saved logo queries created from image files.
 func (r *LogoService) New(ctx context.Context, params LogoNewParams, opts ...option.RequestOption) (res *LogoNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -52,7 +52,7 @@ func (r *LogoService) New(ctx context.Context, params LogoNewParams, opts ...opt
 	return res, err
 }
 
-// Return a success message after deleting saved logo queries by ID
+// Return a success message after deleting saved logo queries by ID.
 func (r *LogoService) Delete(ctx context.Context, logoID string, body LogoDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)

@@ -149,7 +149,7 @@ func (r *UserGroupService) Get(ctx context.Context, userGroupID string, query Us
 
 // A group of policies resources.
 type UserGroupNewResponse struct {
-	// User Group identifier tag.
+	// Identifier of the user group.
 	ID string `json:"id" api:"required"`
 	// Timestamp for the creation of the user group
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
@@ -308,7 +308,7 @@ func (r userGroupNewResponsePoliciesPermissionGroupsMetaJSON) RawJSON() string {
 type UserGroupNewResponsePoliciesResourceGroup struct {
 	// Identifier of the resource group.
 	ID string `json:"id" api:"required"`
-	// A scope is a combination of scope objects which provides additional context.
+	// The scope associated to the resource group
 	Scope UserGroupNewResponsePoliciesResourceGroupsScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta UserGroupNewResponsePoliciesResourceGroupsMeta `json:"meta"`
@@ -336,7 +336,7 @@ func (r userGroupNewResponsePoliciesResourceGroupJSON) RawJSON() string {
 	return r.raw
 }
 
-// A scope is a combination of scope objects which provides additional context.
+// The scope associated to the resource group
 type UserGroupNewResponsePoliciesResourceGroupsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
@@ -414,7 +414,7 @@ func (r userGroupNewResponsePoliciesResourceGroupsMetaJSON) RawJSON() string {
 
 // A group of policies resources.
 type UserGroupUpdateResponse struct {
-	// User Group identifier tag.
+	// Identifier of the user group.
 	ID string `json:"id" api:"required"`
 	// Timestamp for the creation of the user group
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
@@ -573,7 +573,7 @@ func (r userGroupUpdateResponsePoliciesPermissionGroupsMetaJSON) RawJSON() strin
 type UserGroupUpdateResponsePoliciesResourceGroup struct {
 	// Identifier of the resource group.
 	ID string `json:"id" api:"required"`
-	// A scope is a combination of scope objects which provides additional context.
+	// The scope associated to the resource group
 	Scope UserGroupUpdateResponsePoliciesResourceGroupsScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta UserGroupUpdateResponsePoliciesResourceGroupsMeta `json:"meta"`
@@ -601,7 +601,7 @@ func (r userGroupUpdateResponsePoliciesResourceGroupJSON) RawJSON() string {
 	return r.raw
 }
 
-// A scope is a combination of scope objects which provides additional context.
+// The scope associated to the resource group
 type UserGroupUpdateResponsePoliciesResourceGroupsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
@@ -680,7 +680,7 @@ func (r userGroupUpdateResponsePoliciesResourceGroupsMetaJSON) RawJSON() string 
 
 // A group of policies resources.
 type UserGroupListResponse struct {
-	// User Group identifier tag.
+	// Identifier of the user group.
 	ID string `json:"id" api:"required"`
 	// Timestamp for the creation of the user group
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
@@ -839,7 +839,7 @@ func (r userGroupListResponsePoliciesPermissionGroupsMetaJSON) RawJSON() string 
 type UserGroupListResponsePoliciesResourceGroup struct {
 	// Identifier of the resource group.
 	ID string `json:"id" api:"required"`
-	// A scope is a combination of scope objects which provides additional context.
+	// The scope associated to the resource group
 	Scope UserGroupListResponsePoliciesResourceGroupsScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta UserGroupListResponsePoliciesResourceGroupsMeta `json:"meta"`
@@ -867,7 +867,7 @@ func (r userGroupListResponsePoliciesResourceGroupJSON) RawJSON() string {
 	return r.raw
 }
 
-// A scope is a combination of scope objects which provides additional context.
+// The scope associated to the resource group
 type UserGroupListResponsePoliciesResourceGroupsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
@@ -967,7 +967,7 @@ func (r userGroupDeleteResponseJSON) RawJSON() string {
 
 // A group of policies resources.
 type UserGroupGetResponse struct {
-	// User Group identifier tag.
+	// Identifier of the user group.
 	ID string `json:"id" api:"required"`
 	// Timestamp for the creation of the user group
 	CreatedOn time.Time `json:"created_on" api:"required" format:"date-time"`
@@ -1126,7 +1126,7 @@ func (r userGroupGetResponsePoliciesPermissionGroupsMetaJSON) RawJSON() string {
 type UserGroupGetResponsePoliciesResourceGroup struct {
 	// Identifier of the resource group.
 	ID string `json:"id" api:"required"`
-	// A scope is a combination of scope objects which provides additional context.
+	// The scope associated to the resource group
 	Scope UserGroupGetResponsePoliciesResourceGroupsScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta UserGroupGetResponsePoliciesResourceGroupsMeta `json:"meta"`
@@ -1154,7 +1154,7 @@ func (r userGroupGetResponsePoliciesResourceGroupJSON) RawJSON() string {
 	return r.raw
 }
 
-// A scope is a combination of scope objects which provides additional context.
+// The scope associated to the resource group
 type UserGroupGetResponsePoliciesResourceGroupsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)

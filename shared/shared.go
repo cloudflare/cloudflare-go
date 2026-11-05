@@ -605,7 +605,7 @@ func (r memberPoliciesPermissionGroupsMetaJSON) RawJSON() string {
 type MemberPoliciesResourceGroup struct {
 	// Identifier of the resource group.
 	ID string `json:"id" api:"required"`
-	// A scope is a combination of scope objects which provides additional context.
+	// The scope associated to the resource group
 	Scope MemberPoliciesResourceGroupsScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta MemberPoliciesResourceGroupsMeta `json:"meta"`
@@ -633,7 +633,7 @@ func (r memberPoliciesResourceGroupJSON) RawJSON() string {
 	return r.raw
 }
 
-// A scope is a combination of scope objects which provides additional context.
+// The scope associated to the resource group
 type MemberPoliciesResourceGroupsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
@@ -1165,7 +1165,15 @@ type Token struct {
 	ProvisionerType string `json:"provisioner_type"`
 	// Status of the token.
 	Status TokenStatus `json:"status"`
-	JSON   tokenJSON   `json:"-"`
+	// The prefix of the token value, before the first underscore. Use it with
+	// `token_suffix` to identify a token. Only present for tokens created or rolled
+	// after this field was added.
+	TokenPrefix string `json:"token_prefix"`
+	// The last 4 characters of the token value. Use it with `token_prefix` to identify
+	// a token. It is not unique. Only present for tokens created or rolled after this
+	// field was added.
+	TokenSuffix string    `json:"token_suffix"`
+	JSON        tokenJSON `json:"-"`
 }
 
 // tokenJSON contains the JSON metadata for the struct [Token]
@@ -1183,6 +1191,8 @@ type tokenJSON struct {
 	ProvisionerID          apijson.Field
 	ProvisionerType        apijson.Field
 	Status                 apijson.Field
+	TokenPrefix            apijson.Field
+	TokenSuffix            apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }

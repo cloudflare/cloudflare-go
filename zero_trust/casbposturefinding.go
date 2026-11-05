@@ -247,25 +247,64 @@ type CasbPostureFindingListResponseFinding struct {
 	Severity CasbPostureFindingListResponseFindingSeverity `json:"severity" api:"required"`
 	// The SaaS/Cloud vendor of the platform with which the finding is associated.
 	Vendor string `json:"vendor" api:"required"`
+	// Whether this finding type applies to every current and future integration of the
+	// vendor.
+	AppliesToAllIntegrations bool `json:"applies_to_all_integrations"`
+	// Asset class the finding type's policy evaluates.
+	AssetClass string `json:"asset_class"`
+	// Canonical vendor enum value.
+	AssetVendor CasbPostureFindingListResponseFindingAssetVendor `json:"asset_vendor"`
+	// Timestamp when the finding type was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Detailed description of the finding.
 	Description string `json:"description" api:"nullable"`
+	// Rego expression backing this finding type. For custom finding types, generated
+	// package and import declarations are omitted. System expressions are returned
+	// unchanged.
+	Expression string `json:"expression"`
+	// Integrations this finding type applies to when applies_to_all_integrations is
+	// false.
+	IntegrationIDs []string `json:"integration_ids" format:"uuid"`
+	// Number of currently active finding instances across the account's integrations.
+	// Zero when none have been detected.
+	MatchCount int64 `json:"match_count"`
+	// Whether the finding type is system-managed or customer-created.
+	Origin CasbPostureFindingListResponseFindingOrigin `json:"origin"`
+	// Whether evaluation of this finding type is suspended by an operator. Present
+	// only when true.
+	Quarantined bool `json:"quarantined"`
 	// Remediation guide information for a finding.
 	Remediation CasbPostureFindingListResponseFindingRemediation `json:"remediation" api:"nullable"`
-	JSON        casbPostureFindingListResponseFindingJSON        `json:"-"`
+	// Timestamp when the finding type was last updated.
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// Current version of the finding type. Incremented on each update.
+	Version int64                                     `json:"version"`
+	JSON    casbPostureFindingListResponseFindingJSON `json:"-"`
 }
 
 // casbPostureFindingListResponseFindingJSON contains the JSON metadata for the
 // struct [CasbPostureFindingListResponseFinding]
 type casbPostureFindingListResponseFindingJSON struct {
-	ID          apijson.Field
-	Category    apijson.Field
-	Name        apijson.Field
-	Severity    apijson.Field
-	Vendor      apijson.Field
-	Description apijson.Field
-	Remediation apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                       apijson.Field
+	Category                 apijson.Field
+	Name                     apijson.Field
+	Severity                 apijson.Field
+	Vendor                   apijson.Field
+	AppliesToAllIntegrations apijson.Field
+	AssetClass               apijson.Field
+	AssetVendor              apijson.Field
+	CreatedAt                apijson.Field
+	Description              apijson.Field
+	Expression               apijson.Field
+	IntegrationIDs           apijson.Field
+	MatchCount               apijson.Field
+	Origin                   apijson.Field
+	Quarantined              apijson.Field
+	Remediation              apijson.Field
+	UpdatedAt                apijson.Field
+	Version                  apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *CasbPostureFindingListResponseFinding) UnmarshalJSON(data []byte) (err error) {
@@ -366,6 +405,52 @@ const (
 func (r CasbPostureFindingListResponseFindingSeverity) IsKnown() bool {
 	switch r {
 	case CasbPostureFindingListResponseFindingSeverityCritical, CasbPostureFindingListResponseFindingSeverityHigh, CasbPostureFindingListResponseFindingSeverityMedium, CasbPostureFindingListResponseFindingSeverityLow:
+		return true
+	}
+	return false
+}
+
+// Canonical vendor enum value.
+type CasbPostureFindingListResponseFindingAssetVendor string
+
+const (
+	CasbPostureFindingListResponseFindingAssetVendorAnthropic           CasbPostureFindingListResponseFindingAssetVendor = "ANTHROPIC"
+	CasbPostureFindingListResponseFindingAssetVendorAws                 CasbPostureFindingListResponseFindingAssetVendor = "AWS"
+	CasbPostureFindingListResponseFindingAssetVendorBitbucket           CasbPostureFindingListResponseFindingAssetVendor = "BITBUCKET"
+	CasbPostureFindingListResponseFindingAssetVendorBox                 CasbPostureFindingListResponseFindingAssetVendor = "BOX"
+	CasbPostureFindingListResponseFindingAssetVendorConfluence          CasbPostureFindingListResponseFindingAssetVendor = "CONFLUENCE"
+	CasbPostureFindingListResponseFindingAssetVendorDropbox             CasbPostureFindingListResponseFindingAssetVendor = "DROPBOX"
+	CasbPostureFindingListResponseFindingAssetVendorGitHub              CasbPostureFindingListResponseFindingAssetVendor = "GITHUB"
+	CasbPostureFindingListResponseFindingAssetVendorGoogleCloudPlatform CasbPostureFindingListResponseFindingAssetVendor = "GOOGLE_CLOUD_PLATFORM"
+	CasbPostureFindingListResponseFindingAssetVendorGoogleWorkspace     CasbPostureFindingListResponseFindingAssetVendor = "GOOGLE_WORKSPACE"
+	CasbPostureFindingListResponseFindingAssetVendorJira                CasbPostureFindingListResponseFindingAssetVendor = "JIRA"
+	CasbPostureFindingListResponseFindingAssetVendorMicrosoft           CasbPostureFindingListResponseFindingAssetVendor = "MICROSOFT"
+	CasbPostureFindingListResponseFindingAssetVendorOpenAI              CasbPostureFindingListResponseFindingAssetVendor = "OPENAI"
+	CasbPostureFindingListResponseFindingAssetVendorSalesforce          CasbPostureFindingListResponseFindingAssetVendor = "SALESFORCE"
+	CasbPostureFindingListResponseFindingAssetVendorServicenow          CasbPostureFindingListResponseFindingAssetVendor = "SERVICENOW"
+	CasbPostureFindingListResponseFindingAssetVendorSlack               CasbPostureFindingListResponseFindingAssetVendor = "SLACK"
+	CasbPostureFindingListResponseFindingAssetVendorZoom                CasbPostureFindingListResponseFindingAssetVendor = "ZOOM"
+)
+
+func (r CasbPostureFindingListResponseFindingAssetVendor) IsKnown() bool {
+	switch r {
+	case CasbPostureFindingListResponseFindingAssetVendorAnthropic, CasbPostureFindingListResponseFindingAssetVendorAws, CasbPostureFindingListResponseFindingAssetVendorBitbucket, CasbPostureFindingListResponseFindingAssetVendorBox, CasbPostureFindingListResponseFindingAssetVendorConfluence, CasbPostureFindingListResponseFindingAssetVendorDropbox, CasbPostureFindingListResponseFindingAssetVendorGitHub, CasbPostureFindingListResponseFindingAssetVendorGoogleCloudPlatform, CasbPostureFindingListResponseFindingAssetVendorGoogleWorkspace, CasbPostureFindingListResponseFindingAssetVendorJira, CasbPostureFindingListResponseFindingAssetVendorMicrosoft, CasbPostureFindingListResponseFindingAssetVendorOpenAI, CasbPostureFindingListResponseFindingAssetVendorSalesforce, CasbPostureFindingListResponseFindingAssetVendorServicenow, CasbPostureFindingListResponseFindingAssetVendorSlack, CasbPostureFindingListResponseFindingAssetVendorZoom:
+		return true
+	}
+	return false
+}
+
+// Whether the finding type is system-managed or customer-created.
+type CasbPostureFindingListResponseFindingOrigin string
+
+const (
+	CasbPostureFindingListResponseFindingOriginSystem CasbPostureFindingListResponseFindingOrigin = "system"
+	CasbPostureFindingListResponseFindingOriginCustom CasbPostureFindingListResponseFindingOrigin = "custom"
+)
+
+func (r CasbPostureFindingListResponseFindingOrigin) IsKnown() bool {
+	switch r {
+	case CasbPostureFindingListResponseFindingOriginSystem, CasbPostureFindingListResponseFindingOriginCustom:
 		return true
 	}
 	return false
@@ -795,25 +880,64 @@ type CasbPostureFindingGetResponseFinding struct {
 	Severity CasbPostureFindingGetResponseFindingSeverity `json:"severity" api:"required"`
 	// The SaaS/Cloud vendor of the platform with which the finding is associated.
 	Vendor string `json:"vendor" api:"required"`
+	// Whether this finding type applies to every current and future integration of the
+	// vendor.
+	AppliesToAllIntegrations bool `json:"applies_to_all_integrations"`
+	// Asset class the finding type's policy evaluates.
+	AssetClass string `json:"asset_class"`
+	// Canonical vendor enum value.
+	AssetVendor CasbPostureFindingGetResponseFindingAssetVendor `json:"asset_vendor"`
+	// Timestamp when the finding type was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Detailed description of the finding.
 	Description string `json:"description" api:"nullable"`
+	// Rego expression backing this finding type. For custom finding types, generated
+	// package and import declarations are omitted. System expressions are returned
+	// unchanged.
+	Expression string `json:"expression"`
+	// Integrations this finding type applies to when applies_to_all_integrations is
+	// false.
+	IntegrationIDs []string `json:"integration_ids" format:"uuid"`
+	// Number of currently active finding instances across the account's integrations.
+	// Zero when none have been detected.
+	MatchCount int64 `json:"match_count"`
+	// Whether the finding type is system-managed or customer-created.
+	Origin CasbPostureFindingGetResponseFindingOrigin `json:"origin"`
+	// Whether evaluation of this finding type is suspended by an operator. Present
+	// only when true.
+	Quarantined bool `json:"quarantined"`
 	// Remediation guide information for a finding.
 	Remediation CasbPostureFindingGetResponseFindingRemediation `json:"remediation" api:"nullable"`
-	JSON        casbPostureFindingGetResponseFindingJSON        `json:"-"`
+	// Timestamp when the finding type was last updated.
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// Current version of the finding type. Incremented on each update.
+	Version int64                                    `json:"version"`
+	JSON    casbPostureFindingGetResponseFindingJSON `json:"-"`
 }
 
 // casbPostureFindingGetResponseFindingJSON contains the JSON metadata for the
 // struct [CasbPostureFindingGetResponseFinding]
 type casbPostureFindingGetResponseFindingJSON struct {
-	ID          apijson.Field
-	Category    apijson.Field
-	Name        apijson.Field
-	Severity    apijson.Field
-	Vendor      apijson.Field
-	Description apijson.Field
-	Remediation apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                       apijson.Field
+	Category                 apijson.Field
+	Name                     apijson.Field
+	Severity                 apijson.Field
+	Vendor                   apijson.Field
+	AppliesToAllIntegrations apijson.Field
+	AssetClass               apijson.Field
+	AssetVendor              apijson.Field
+	CreatedAt                apijson.Field
+	Description              apijson.Field
+	Expression               apijson.Field
+	IntegrationIDs           apijson.Field
+	MatchCount               apijson.Field
+	Origin                   apijson.Field
+	Quarantined              apijson.Field
+	Remediation              apijson.Field
+	UpdatedAt                apijson.Field
+	Version                  apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *CasbPostureFindingGetResponseFinding) UnmarshalJSON(data []byte) (err error) {
@@ -914,6 +1038,52 @@ const (
 func (r CasbPostureFindingGetResponseFindingSeverity) IsKnown() bool {
 	switch r {
 	case CasbPostureFindingGetResponseFindingSeverityCritical, CasbPostureFindingGetResponseFindingSeverityHigh, CasbPostureFindingGetResponseFindingSeverityMedium, CasbPostureFindingGetResponseFindingSeverityLow:
+		return true
+	}
+	return false
+}
+
+// Canonical vendor enum value.
+type CasbPostureFindingGetResponseFindingAssetVendor string
+
+const (
+	CasbPostureFindingGetResponseFindingAssetVendorAnthropic           CasbPostureFindingGetResponseFindingAssetVendor = "ANTHROPIC"
+	CasbPostureFindingGetResponseFindingAssetVendorAws                 CasbPostureFindingGetResponseFindingAssetVendor = "AWS"
+	CasbPostureFindingGetResponseFindingAssetVendorBitbucket           CasbPostureFindingGetResponseFindingAssetVendor = "BITBUCKET"
+	CasbPostureFindingGetResponseFindingAssetVendorBox                 CasbPostureFindingGetResponseFindingAssetVendor = "BOX"
+	CasbPostureFindingGetResponseFindingAssetVendorConfluence          CasbPostureFindingGetResponseFindingAssetVendor = "CONFLUENCE"
+	CasbPostureFindingGetResponseFindingAssetVendorDropbox             CasbPostureFindingGetResponseFindingAssetVendor = "DROPBOX"
+	CasbPostureFindingGetResponseFindingAssetVendorGitHub              CasbPostureFindingGetResponseFindingAssetVendor = "GITHUB"
+	CasbPostureFindingGetResponseFindingAssetVendorGoogleCloudPlatform CasbPostureFindingGetResponseFindingAssetVendor = "GOOGLE_CLOUD_PLATFORM"
+	CasbPostureFindingGetResponseFindingAssetVendorGoogleWorkspace     CasbPostureFindingGetResponseFindingAssetVendor = "GOOGLE_WORKSPACE"
+	CasbPostureFindingGetResponseFindingAssetVendorJira                CasbPostureFindingGetResponseFindingAssetVendor = "JIRA"
+	CasbPostureFindingGetResponseFindingAssetVendorMicrosoft           CasbPostureFindingGetResponseFindingAssetVendor = "MICROSOFT"
+	CasbPostureFindingGetResponseFindingAssetVendorOpenAI              CasbPostureFindingGetResponseFindingAssetVendor = "OPENAI"
+	CasbPostureFindingGetResponseFindingAssetVendorSalesforce          CasbPostureFindingGetResponseFindingAssetVendor = "SALESFORCE"
+	CasbPostureFindingGetResponseFindingAssetVendorServicenow          CasbPostureFindingGetResponseFindingAssetVendor = "SERVICENOW"
+	CasbPostureFindingGetResponseFindingAssetVendorSlack               CasbPostureFindingGetResponseFindingAssetVendor = "SLACK"
+	CasbPostureFindingGetResponseFindingAssetVendorZoom                CasbPostureFindingGetResponseFindingAssetVendor = "ZOOM"
+)
+
+func (r CasbPostureFindingGetResponseFindingAssetVendor) IsKnown() bool {
+	switch r {
+	case CasbPostureFindingGetResponseFindingAssetVendorAnthropic, CasbPostureFindingGetResponseFindingAssetVendorAws, CasbPostureFindingGetResponseFindingAssetVendorBitbucket, CasbPostureFindingGetResponseFindingAssetVendorBox, CasbPostureFindingGetResponseFindingAssetVendorConfluence, CasbPostureFindingGetResponseFindingAssetVendorDropbox, CasbPostureFindingGetResponseFindingAssetVendorGitHub, CasbPostureFindingGetResponseFindingAssetVendorGoogleCloudPlatform, CasbPostureFindingGetResponseFindingAssetVendorGoogleWorkspace, CasbPostureFindingGetResponseFindingAssetVendorJira, CasbPostureFindingGetResponseFindingAssetVendorMicrosoft, CasbPostureFindingGetResponseFindingAssetVendorOpenAI, CasbPostureFindingGetResponseFindingAssetVendorSalesforce, CasbPostureFindingGetResponseFindingAssetVendorServicenow, CasbPostureFindingGetResponseFindingAssetVendorSlack, CasbPostureFindingGetResponseFindingAssetVendorZoom:
+		return true
+	}
+	return false
+}
+
+// Whether the finding type is system-managed or customer-created.
+type CasbPostureFindingGetResponseFindingOrigin string
+
+const (
+	CasbPostureFindingGetResponseFindingOriginSystem CasbPostureFindingGetResponseFindingOrigin = "system"
+	CasbPostureFindingGetResponseFindingOriginCustom CasbPostureFindingGetResponseFindingOrigin = "custom"
+)
+
+func (r CasbPostureFindingGetResponseFindingOrigin) IsKnown() bool {
+	switch r {
+	case CasbPostureFindingGetResponseFindingOriginSystem, CasbPostureFindingGetResponseFindingOriginCustom:
 		return true
 	}
 	return false
@@ -1261,25 +1431,64 @@ type CasbPostureFindingIgnoreResponseFinding struct {
 	Severity CasbPostureFindingIgnoreResponseFindingSeverity `json:"severity" api:"required"`
 	// The SaaS/Cloud vendor of the platform with which the finding is associated.
 	Vendor string `json:"vendor" api:"required"`
+	// Whether this finding type applies to every current and future integration of the
+	// vendor.
+	AppliesToAllIntegrations bool `json:"applies_to_all_integrations"`
+	// Asset class the finding type's policy evaluates.
+	AssetClass string `json:"asset_class"`
+	// Canonical vendor enum value.
+	AssetVendor CasbPostureFindingIgnoreResponseFindingAssetVendor `json:"asset_vendor"`
+	// Timestamp when the finding type was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Detailed description of the finding.
 	Description string `json:"description" api:"nullable"`
+	// Rego expression backing this finding type. For custom finding types, generated
+	// package and import declarations are omitted. System expressions are returned
+	// unchanged.
+	Expression string `json:"expression"`
+	// Integrations this finding type applies to when applies_to_all_integrations is
+	// false.
+	IntegrationIDs []string `json:"integration_ids" format:"uuid"`
+	// Number of currently active finding instances across the account's integrations.
+	// Zero when none have been detected.
+	MatchCount int64 `json:"match_count"`
+	// Whether the finding type is system-managed or customer-created.
+	Origin CasbPostureFindingIgnoreResponseFindingOrigin `json:"origin"`
+	// Whether evaluation of this finding type is suspended by an operator. Present
+	// only when true.
+	Quarantined bool `json:"quarantined"`
 	// Remediation guide information for a finding.
 	Remediation CasbPostureFindingIgnoreResponseFindingRemediation `json:"remediation" api:"nullable"`
-	JSON        casbPostureFindingIgnoreResponseFindingJSON        `json:"-"`
+	// Timestamp when the finding type was last updated.
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// Current version of the finding type. Incremented on each update.
+	Version int64                                       `json:"version"`
+	JSON    casbPostureFindingIgnoreResponseFindingJSON `json:"-"`
 }
 
 // casbPostureFindingIgnoreResponseFindingJSON contains the JSON metadata for the
 // struct [CasbPostureFindingIgnoreResponseFinding]
 type casbPostureFindingIgnoreResponseFindingJSON struct {
-	ID          apijson.Field
-	Category    apijson.Field
-	Name        apijson.Field
-	Severity    apijson.Field
-	Vendor      apijson.Field
-	Description apijson.Field
-	Remediation apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                       apijson.Field
+	Category                 apijson.Field
+	Name                     apijson.Field
+	Severity                 apijson.Field
+	Vendor                   apijson.Field
+	AppliesToAllIntegrations apijson.Field
+	AssetClass               apijson.Field
+	AssetVendor              apijson.Field
+	CreatedAt                apijson.Field
+	Description              apijson.Field
+	Expression               apijson.Field
+	IntegrationIDs           apijson.Field
+	MatchCount               apijson.Field
+	Origin                   apijson.Field
+	Quarantined              apijson.Field
+	Remediation              apijson.Field
+	UpdatedAt                apijson.Field
+	Version                  apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *CasbPostureFindingIgnoreResponseFinding) UnmarshalJSON(data []byte) (err error) {
@@ -1380,6 +1589,52 @@ const (
 func (r CasbPostureFindingIgnoreResponseFindingSeverity) IsKnown() bool {
 	switch r {
 	case CasbPostureFindingIgnoreResponseFindingSeverityCritical, CasbPostureFindingIgnoreResponseFindingSeverityHigh, CasbPostureFindingIgnoreResponseFindingSeverityMedium, CasbPostureFindingIgnoreResponseFindingSeverityLow:
+		return true
+	}
+	return false
+}
+
+// Canonical vendor enum value.
+type CasbPostureFindingIgnoreResponseFindingAssetVendor string
+
+const (
+	CasbPostureFindingIgnoreResponseFindingAssetVendorAnthropic           CasbPostureFindingIgnoreResponseFindingAssetVendor = "ANTHROPIC"
+	CasbPostureFindingIgnoreResponseFindingAssetVendorAws                 CasbPostureFindingIgnoreResponseFindingAssetVendor = "AWS"
+	CasbPostureFindingIgnoreResponseFindingAssetVendorBitbucket           CasbPostureFindingIgnoreResponseFindingAssetVendor = "BITBUCKET"
+	CasbPostureFindingIgnoreResponseFindingAssetVendorBox                 CasbPostureFindingIgnoreResponseFindingAssetVendor = "BOX"
+	CasbPostureFindingIgnoreResponseFindingAssetVendorConfluence          CasbPostureFindingIgnoreResponseFindingAssetVendor = "CONFLUENCE"
+	CasbPostureFindingIgnoreResponseFindingAssetVendorDropbox             CasbPostureFindingIgnoreResponseFindingAssetVendor = "DROPBOX"
+	CasbPostureFindingIgnoreResponseFindingAssetVendorGitHub              CasbPostureFindingIgnoreResponseFindingAssetVendor = "GITHUB"
+	CasbPostureFindingIgnoreResponseFindingAssetVendorGoogleCloudPlatform CasbPostureFindingIgnoreResponseFindingAssetVendor = "GOOGLE_CLOUD_PLATFORM"
+	CasbPostureFindingIgnoreResponseFindingAssetVendorGoogleWorkspace     CasbPostureFindingIgnoreResponseFindingAssetVendor = "GOOGLE_WORKSPACE"
+	CasbPostureFindingIgnoreResponseFindingAssetVendorJira                CasbPostureFindingIgnoreResponseFindingAssetVendor = "JIRA"
+	CasbPostureFindingIgnoreResponseFindingAssetVendorMicrosoft           CasbPostureFindingIgnoreResponseFindingAssetVendor = "MICROSOFT"
+	CasbPostureFindingIgnoreResponseFindingAssetVendorOpenAI              CasbPostureFindingIgnoreResponseFindingAssetVendor = "OPENAI"
+	CasbPostureFindingIgnoreResponseFindingAssetVendorSalesforce          CasbPostureFindingIgnoreResponseFindingAssetVendor = "SALESFORCE"
+	CasbPostureFindingIgnoreResponseFindingAssetVendorServicenow          CasbPostureFindingIgnoreResponseFindingAssetVendor = "SERVICENOW"
+	CasbPostureFindingIgnoreResponseFindingAssetVendorSlack               CasbPostureFindingIgnoreResponseFindingAssetVendor = "SLACK"
+	CasbPostureFindingIgnoreResponseFindingAssetVendorZoom                CasbPostureFindingIgnoreResponseFindingAssetVendor = "ZOOM"
+)
+
+func (r CasbPostureFindingIgnoreResponseFindingAssetVendor) IsKnown() bool {
+	switch r {
+	case CasbPostureFindingIgnoreResponseFindingAssetVendorAnthropic, CasbPostureFindingIgnoreResponseFindingAssetVendorAws, CasbPostureFindingIgnoreResponseFindingAssetVendorBitbucket, CasbPostureFindingIgnoreResponseFindingAssetVendorBox, CasbPostureFindingIgnoreResponseFindingAssetVendorConfluence, CasbPostureFindingIgnoreResponseFindingAssetVendorDropbox, CasbPostureFindingIgnoreResponseFindingAssetVendorGitHub, CasbPostureFindingIgnoreResponseFindingAssetVendorGoogleCloudPlatform, CasbPostureFindingIgnoreResponseFindingAssetVendorGoogleWorkspace, CasbPostureFindingIgnoreResponseFindingAssetVendorJira, CasbPostureFindingIgnoreResponseFindingAssetVendorMicrosoft, CasbPostureFindingIgnoreResponseFindingAssetVendorOpenAI, CasbPostureFindingIgnoreResponseFindingAssetVendorSalesforce, CasbPostureFindingIgnoreResponseFindingAssetVendorServicenow, CasbPostureFindingIgnoreResponseFindingAssetVendorSlack, CasbPostureFindingIgnoreResponseFindingAssetVendorZoom:
+		return true
+	}
+	return false
+}
+
+// Whether the finding type is system-managed or customer-created.
+type CasbPostureFindingIgnoreResponseFindingOrigin string
+
+const (
+	CasbPostureFindingIgnoreResponseFindingOriginSystem CasbPostureFindingIgnoreResponseFindingOrigin = "system"
+	CasbPostureFindingIgnoreResponseFindingOriginCustom CasbPostureFindingIgnoreResponseFindingOrigin = "custom"
+)
+
+func (r CasbPostureFindingIgnoreResponseFindingOrigin) IsKnown() bool {
+	switch r {
+	case CasbPostureFindingIgnoreResponseFindingOriginSystem, CasbPostureFindingIgnoreResponseFindingOriginCustom:
 		return true
 	}
 	return false
@@ -1728,25 +1983,64 @@ type CasbPostureFindingResetSeverityResponseFinding struct {
 	Severity CasbPostureFindingResetSeverityResponseFindingSeverity `json:"severity" api:"required"`
 	// The SaaS/Cloud vendor of the platform with which the finding is associated.
 	Vendor string `json:"vendor" api:"required"`
+	// Whether this finding type applies to every current and future integration of the
+	// vendor.
+	AppliesToAllIntegrations bool `json:"applies_to_all_integrations"`
+	// Asset class the finding type's policy evaluates.
+	AssetClass string `json:"asset_class"`
+	// Canonical vendor enum value.
+	AssetVendor CasbPostureFindingResetSeverityResponseFindingAssetVendor `json:"asset_vendor"`
+	// Timestamp when the finding type was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Detailed description of the finding.
 	Description string `json:"description" api:"nullable"`
+	// Rego expression backing this finding type. For custom finding types, generated
+	// package and import declarations are omitted. System expressions are returned
+	// unchanged.
+	Expression string `json:"expression"`
+	// Integrations this finding type applies to when applies_to_all_integrations is
+	// false.
+	IntegrationIDs []string `json:"integration_ids" format:"uuid"`
+	// Number of currently active finding instances across the account's integrations.
+	// Zero when none have been detected.
+	MatchCount int64 `json:"match_count"`
+	// Whether the finding type is system-managed or customer-created.
+	Origin CasbPostureFindingResetSeverityResponseFindingOrigin `json:"origin"`
+	// Whether evaluation of this finding type is suspended by an operator. Present
+	// only when true.
+	Quarantined bool `json:"quarantined"`
 	// Remediation guide information for a finding.
 	Remediation CasbPostureFindingResetSeverityResponseFindingRemediation `json:"remediation" api:"nullable"`
-	JSON        casbPostureFindingResetSeverityResponseFindingJSON        `json:"-"`
+	// Timestamp when the finding type was last updated.
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// Current version of the finding type. Incremented on each update.
+	Version int64                                              `json:"version"`
+	JSON    casbPostureFindingResetSeverityResponseFindingJSON `json:"-"`
 }
 
 // casbPostureFindingResetSeverityResponseFindingJSON contains the JSON metadata
 // for the struct [CasbPostureFindingResetSeverityResponseFinding]
 type casbPostureFindingResetSeverityResponseFindingJSON struct {
-	ID          apijson.Field
-	Category    apijson.Field
-	Name        apijson.Field
-	Severity    apijson.Field
-	Vendor      apijson.Field
-	Description apijson.Field
-	Remediation apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                       apijson.Field
+	Category                 apijson.Field
+	Name                     apijson.Field
+	Severity                 apijson.Field
+	Vendor                   apijson.Field
+	AppliesToAllIntegrations apijson.Field
+	AssetClass               apijson.Field
+	AssetVendor              apijson.Field
+	CreatedAt                apijson.Field
+	Description              apijson.Field
+	Expression               apijson.Field
+	IntegrationIDs           apijson.Field
+	MatchCount               apijson.Field
+	Origin                   apijson.Field
+	Quarantined              apijson.Field
+	Remediation              apijson.Field
+	UpdatedAt                apijson.Field
+	Version                  apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *CasbPostureFindingResetSeverityResponseFinding) UnmarshalJSON(data []byte) (err error) {
@@ -1847,6 +2141,52 @@ const (
 func (r CasbPostureFindingResetSeverityResponseFindingSeverity) IsKnown() bool {
 	switch r {
 	case CasbPostureFindingResetSeverityResponseFindingSeverityCritical, CasbPostureFindingResetSeverityResponseFindingSeverityHigh, CasbPostureFindingResetSeverityResponseFindingSeverityMedium, CasbPostureFindingResetSeverityResponseFindingSeverityLow:
+		return true
+	}
+	return false
+}
+
+// Canonical vendor enum value.
+type CasbPostureFindingResetSeverityResponseFindingAssetVendor string
+
+const (
+	CasbPostureFindingResetSeverityResponseFindingAssetVendorAnthropic           CasbPostureFindingResetSeverityResponseFindingAssetVendor = "ANTHROPIC"
+	CasbPostureFindingResetSeverityResponseFindingAssetVendorAws                 CasbPostureFindingResetSeverityResponseFindingAssetVendor = "AWS"
+	CasbPostureFindingResetSeverityResponseFindingAssetVendorBitbucket           CasbPostureFindingResetSeverityResponseFindingAssetVendor = "BITBUCKET"
+	CasbPostureFindingResetSeverityResponseFindingAssetVendorBox                 CasbPostureFindingResetSeverityResponseFindingAssetVendor = "BOX"
+	CasbPostureFindingResetSeverityResponseFindingAssetVendorConfluence          CasbPostureFindingResetSeverityResponseFindingAssetVendor = "CONFLUENCE"
+	CasbPostureFindingResetSeverityResponseFindingAssetVendorDropbox             CasbPostureFindingResetSeverityResponseFindingAssetVendor = "DROPBOX"
+	CasbPostureFindingResetSeverityResponseFindingAssetVendorGitHub              CasbPostureFindingResetSeverityResponseFindingAssetVendor = "GITHUB"
+	CasbPostureFindingResetSeverityResponseFindingAssetVendorGoogleCloudPlatform CasbPostureFindingResetSeverityResponseFindingAssetVendor = "GOOGLE_CLOUD_PLATFORM"
+	CasbPostureFindingResetSeverityResponseFindingAssetVendorGoogleWorkspace     CasbPostureFindingResetSeverityResponseFindingAssetVendor = "GOOGLE_WORKSPACE"
+	CasbPostureFindingResetSeverityResponseFindingAssetVendorJira                CasbPostureFindingResetSeverityResponseFindingAssetVendor = "JIRA"
+	CasbPostureFindingResetSeverityResponseFindingAssetVendorMicrosoft           CasbPostureFindingResetSeverityResponseFindingAssetVendor = "MICROSOFT"
+	CasbPostureFindingResetSeverityResponseFindingAssetVendorOpenAI              CasbPostureFindingResetSeverityResponseFindingAssetVendor = "OPENAI"
+	CasbPostureFindingResetSeverityResponseFindingAssetVendorSalesforce          CasbPostureFindingResetSeverityResponseFindingAssetVendor = "SALESFORCE"
+	CasbPostureFindingResetSeverityResponseFindingAssetVendorServicenow          CasbPostureFindingResetSeverityResponseFindingAssetVendor = "SERVICENOW"
+	CasbPostureFindingResetSeverityResponseFindingAssetVendorSlack               CasbPostureFindingResetSeverityResponseFindingAssetVendor = "SLACK"
+	CasbPostureFindingResetSeverityResponseFindingAssetVendorZoom                CasbPostureFindingResetSeverityResponseFindingAssetVendor = "ZOOM"
+)
+
+func (r CasbPostureFindingResetSeverityResponseFindingAssetVendor) IsKnown() bool {
+	switch r {
+	case CasbPostureFindingResetSeverityResponseFindingAssetVendorAnthropic, CasbPostureFindingResetSeverityResponseFindingAssetVendorAws, CasbPostureFindingResetSeverityResponseFindingAssetVendorBitbucket, CasbPostureFindingResetSeverityResponseFindingAssetVendorBox, CasbPostureFindingResetSeverityResponseFindingAssetVendorConfluence, CasbPostureFindingResetSeverityResponseFindingAssetVendorDropbox, CasbPostureFindingResetSeverityResponseFindingAssetVendorGitHub, CasbPostureFindingResetSeverityResponseFindingAssetVendorGoogleCloudPlatform, CasbPostureFindingResetSeverityResponseFindingAssetVendorGoogleWorkspace, CasbPostureFindingResetSeverityResponseFindingAssetVendorJira, CasbPostureFindingResetSeverityResponseFindingAssetVendorMicrosoft, CasbPostureFindingResetSeverityResponseFindingAssetVendorOpenAI, CasbPostureFindingResetSeverityResponseFindingAssetVendorSalesforce, CasbPostureFindingResetSeverityResponseFindingAssetVendorServicenow, CasbPostureFindingResetSeverityResponseFindingAssetVendorSlack, CasbPostureFindingResetSeverityResponseFindingAssetVendorZoom:
+		return true
+	}
+	return false
+}
+
+// Whether the finding type is system-managed or customer-created.
+type CasbPostureFindingResetSeverityResponseFindingOrigin string
+
+const (
+	CasbPostureFindingResetSeverityResponseFindingOriginSystem CasbPostureFindingResetSeverityResponseFindingOrigin = "system"
+	CasbPostureFindingResetSeverityResponseFindingOriginCustom CasbPostureFindingResetSeverityResponseFindingOrigin = "custom"
+)
+
+func (r CasbPostureFindingResetSeverityResponseFindingOrigin) IsKnown() bool {
+	switch r {
+	case CasbPostureFindingResetSeverityResponseFindingOriginSystem, CasbPostureFindingResetSeverityResponseFindingOriginCustom:
 		return true
 	}
 	return false
@@ -2199,25 +2539,64 @@ type CasbPostureFindingTuneSeverityResponseFinding struct {
 	Severity CasbPostureFindingTuneSeverityResponseFindingSeverity `json:"severity" api:"required"`
 	// The SaaS/Cloud vendor of the platform with which the finding is associated.
 	Vendor string `json:"vendor" api:"required"`
+	// Whether this finding type applies to every current and future integration of the
+	// vendor.
+	AppliesToAllIntegrations bool `json:"applies_to_all_integrations"`
+	// Asset class the finding type's policy evaluates.
+	AssetClass string `json:"asset_class"`
+	// Canonical vendor enum value.
+	AssetVendor CasbPostureFindingTuneSeverityResponseFindingAssetVendor `json:"asset_vendor"`
+	// Timestamp when the finding type was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Detailed description of the finding.
 	Description string `json:"description" api:"nullable"`
+	// Rego expression backing this finding type. For custom finding types, generated
+	// package and import declarations are omitted. System expressions are returned
+	// unchanged.
+	Expression string `json:"expression"`
+	// Integrations this finding type applies to when applies_to_all_integrations is
+	// false.
+	IntegrationIDs []string `json:"integration_ids" format:"uuid"`
+	// Number of currently active finding instances across the account's integrations.
+	// Zero when none have been detected.
+	MatchCount int64 `json:"match_count"`
+	// Whether the finding type is system-managed or customer-created.
+	Origin CasbPostureFindingTuneSeverityResponseFindingOrigin `json:"origin"`
+	// Whether evaluation of this finding type is suspended by an operator. Present
+	// only when true.
+	Quarantined bool `json:"quarantined"`
 	// Remediation guide information for a finding.
 	Remediation CasbPostureFindingTuneSeverityResponseFindingRemediation `json:"remediation" api:"nullable"`
-	JSON        casbPostureFindingTuneSeverityResponseFindingJSON        `json:"-"`
+	// Timestamp when the finding type was last updated.
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// Current version of the finding type. Incremented on each update.
+	Version int64                                             `json:"version"`
+	JSON    casbPostureFindingTuneSeverityResponseFindingJSON `json:"-"`
 }
 
 // casbPostureFindingTuneSeverityResponseFindingJSON contains the JSON metadata for
 // the struct [CasbPostureFindingTuneSeverityResponseFinding]
 type casbPostureFindingTuneSeverityResponseFindingJSON struct {
-	ID          apijson.Field
-	Category    apijson.Field
-	Name        apijson.Field
-	Severity    apijson.Field
-	Vendor      apijson.Field
-	Description apijson.Field
-	Remediation apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                       apijson.Field
+	Category                 apijson.Field
+	Name                     apijson.Field
+	Severity                 apijson.Field
+	Vendor                   apijson.Field
+	AppliesToAllIntegrations apijson.Field
+	AssetClass               apijson.Field
+	AssetVendor              apijson.Field
+	CreatedAt                apijson.Field
+	Description              apijson.Field
+	Expression               apijson.Field
+	IntegrationIDs           apijson.Field
+	MatchCount               apijson.Field
+	Origin                   apijson.Field
+	Quarantined              apijson.Field
+	Remediation              apijson.Field
+	UpdatedAt                apijson.Field
+	Version                  apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *CasbPostureFindingTuneSeverityResponseFinding) UnmarshalJSON(data []byte) (err error) {
@@ -2318,6 +2697,52 @@ const (
 func (r CasbPostureFindingTuneSeverityResponseFindingSeverity) IsKnown() bool {
 	switch r {
 	case CasbPostureFindingTuneSeverityResponseFindingSeverityCritical, CasbPostureFindingTuneSeverityResponseFindingSeverityHigh, CasbPostureFindingTuneSeverityResponseFindingSeverityMedium, CasbPostureFindingTuneSeverityResponseFindingSeverityLow:
+		return true
+	}
+	return false
+}
+
+// Canonical vendor enum value.
+type CasbPostureFindingTuneSeverityResponseFindingAssetVendor string
+
+const (
+	CasbPostureFindingTuneSeverityResponseFindingAssetVendorAnthropic           CasbPostureFindingTuneSeverityResponseFindingAssetVendor = "ANTHROPIC"
+	CasbPostureFindingTuneSeverityResponseFindingAssetVendorAws                 CasbPostureFindingTuneSeverityResponseFindingAssetVendor = "AWS"
+	CasbPostureFindingTuneSeverityResponseFindingAssetVendorBitbucket           CasbPostureFindingTuneSeverityResponseFindingAssetVendor = "BITBUCKET"
+	CasbPostureFindingTuneSeverityResponseFindingAssetVendorBox                 CasbPostureFindingTuneSeverityResponseFindingAssetVendor = "BOX"
+	CasbPostureFindingTuneSeverityResponseFindingAssetVendorConfluence          CasbPostureFindingTuneSeverityResponseFindingAssetVendor = "CONFLUENCE"
+	CasbPostureFindingTuneSeverityResponseFindingAssetVendorDropbox             CasbPostureFindingTuneSeverityResponseFindingAssetVendor = "DROPBOX"
+	CasbPostureFindingTuneSeverityResponseFindingAssetVendorGitHub              CasbPostureFindingTuneSeverityResponseFindingAssetVendor = "GITHUB"
+	CasbPostureFindingTuneSeverityResponseFindingAssetVendorGoogleCloudPlatform CasbPostureFindingTuneSeverityResponseFindingAssetVendor = "GOOGLE_CLOUD_PLATFORM"
+	CasbPostureFindingTuneSeverityResponseFindingAssetVendorGoogleWorkspace     CasbPostureFindingTuneSeverityResponseFindingAssetVendor = "GOOGLE_WORKSPACE"
+	CasbPostureFindingTuneSeverityResponseFindingAssetVendorJira                CasbPostureFindingTuneSeverityResponseFindingAssetVendor = "JIRA"
+	CasbPostureFindingTuneSeverityResponseFindingAssetVendorMicrosoft           CasbPostureFindingTuneSeverityResponseFindingAssetVendor = "MICROSOFT"
+	CasbPostureFindingTuneSeverityResponseFindingAssetVendorOpenAI              CasbPostureFindingTuneSeverityResponseFindingAssetVendor = "OPENAI"
+	CasbPostureFindingTuneSeverityResponseFindingAssetVendorSalesforce          CasbPostureFindingTuneSeverityResponseFindingAssetVendor = "SALESFORCE"
+	CasbPostureFindingTuneSeverityResponseFindingAssetVendorServicenow          CasbPostureFindingTuneSeverityResponseFindingAssetVendor = "SERVICENOW"
+	CasbPostureFindingTuneSeverityResponseFindingAssetVendorSlack               CasbPostureFindingTuneSeverityResponseFindingAssetVendor = "SLACK"
+	CasbPostureFindingTuneSeverityResponseFindingAssetVendorZoom                CasbPostureFindingTuneSeverityResponseFindingAssetVendor = "ZOOM"
+)
+
+func (r CasbPostureFindingTuneSeverityResponseFindingAssetVendor) IsKnown() bool {
+	switch r {
+	case CasbPostureFindingTuneSeverityResponseFindingAssetVendorAnthropic, CasbPostureFindingTuneSeverityResponseFindingAssetVendorAws, CasbPostureFindingTuneSeverityResponseFindingAssetVendorBitbucket, CasbPostureFindingTuneSeverityResponseFindingAssetVendorBox, CasbPostureFindingTuneSeverityResponseFindingAssetVendorConfluence, CasbPostureFindingTuneSeverityResponseFindingAssetVendorDropbox, CasbPostureFindingTuneSeverityResponseFindingAssetVendorGitHub, CasbPostureFindingTuneSeverityResponseFindingAssetVendorGoogleCloudPlatform, CasbPostureFindingTuneSeverityResponseFindingAssetVendorGoogleWorkspace, CasbPostureFindingTuneSeverityResponseFindingAssetVendorJira, CasbPostureFindingTuneSeverityResponseFindingAssetVendorMicrosoft, CasbPostureFindingTuneSeverityResponseFindingAssetVendorOpenAI, CasbPostureFindingTuneSeverityResponseFindingAssetVendorSalesforce, CasbPostureFindingTuneSeverityResponseFindingAssetVendorServicenow, CasbPostureFindingTuneSeverityResponseFindingAssetVendorSlack, CasbPostureFindingTuneSeverityResponseFindingAssetVendorZoom:
+		return true
+	}
+	return false
+}
+
+// Whether the finding type is system-managed or customer-created.
+type CasbPostureFindingTuneSeverityResponseFindingOrigin string
+
+const (
+	CasbPostureFindingTuneSeverityResponseFindingOriginSystem CasbPostureFindingTuneSeverityResponseFindingOrigin = "system"
+	CasbPostureFindingTuneSeverityResponseFindingOriginCustom CasbPostureFindingTuneSeverityResponseFindingOrigin = "custom"
+)
+
+func (r CasbPostureFindingTuneSeverityResponseFindingOrigin) IsKnown() bool {
+	switch r {
+	case CasbPostureFindingTuneSeverityResponseFindingOriginSystem, CasbPostureFindingTuneSeverityResponseFindingOriginCustom:
 		return true
 	}
 	return false
@@ -2669,25 +3094,64 @@ type CasbPostureFindingUnignoreResponseFinding struct {
 	Severity CasbPostureFindingUnignoreResponseFindingSeverity `json:"severity" api:"required"`
 	// The SaaS/Cloud vendor of the platform with which the finding is associated.
 	Vendor string `json:"vendor" api:"required"`
+	// Whether this finding type applies to every current and future integration of the
+	// vendor.
+	AppliesToAllIntegrations bool `json:"applies_to_all_integrations"`
+	// Asset class the finding type's policy evaluates.
+	AssetClass string `json:"asset_class"`
+	// Canonical vendor enum value.
+	AssetVendor CasbPostureFindingUnignoreResponseFindingAssetVendor `json:"asset_vendor"`
+	// Timestamp when the finding type was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Detailed description of the finding.
 	Description string `json:"description" api:"nullable"`
+	// Rego expression backing this finding type. For custom finding types, generated
+	// package and import declarations are omitted. System expressions are returned
+	// unchanged.
+	Expression string `json:"expression"`
+	// Integrations this finding type applies to when applies_to_all_integrations is
+	// false.
+	IntegrationIDs []string `json:"integration_ids" format:"uuid"`
+	// Number of currently active finding instances across the account's integrations.
+	// Zero when none have been detected.
+	MatchCount int64 `json:"match_count"`
+	// Whether the finding type is system-managed or customer-created.
+	Origin CasbPostureFindingUnignoreResponseFindingOrigin `json:"origin"`
+	// Whether evaluation of this finding type is suspended by an operator. Present
+	// only when true.
+	Quarantined bool `json:"quarantined"`
 	// Remediation guide information for a finding.
 	Remediation CasbPostureFindingUnignoreResponseFindingRemediation `json:"remediation" api:"nullable"`
-	JSON        casbPostureFindingUnignoreResponseFindingJSON        `json:"-"`
+	// Timestamp when the finding type was last updated.
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// Current version of the finding type. Incremented on each update.
+	Version int64                                         `json:"version"`
+	JSON    casbPostureFindingUnignoreResponseFindingJSON `json:"-"`
 }
 
 // casbPostureFindingUnignoreResponseFindingJSON contains the JSON metadata for the
 // struct [CasbPostureFindingUnignoreResponseFinding]
 type casbPostureFindingUnignoreResponseFindingJSON struct {
-	ID          apijson.Field
-	Category    apijson.Field
-	Name        apijson.Field
-	Severity    apijson.Field
-	Vendor      apijson.Field
-	Description apijson.Field
-	Remediation apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                       apijson.Field
+	Category                 apijson.Field
+	Name                     apijson.Field
+	Severity                 apijson.Field
+	Vendor                   apijson.Field
+	AppliesToAllIntegrations apijson.Field
+	AssetClass               apijson.Field
+	AssetVendor              apijson.Field
+	CreatedAt                apijson.Field
+	Description              apijson.Field
+	Expression               apijson.Field
+	IntegrationIDs           apijson.Field
+	MatchCount               apijson.Field
+	Origin                   apijson.Field
+	Quarantined              apijson.Field
+	Remediation              apijson.Field
+	UpdatedAt                apijson.Field
+	Version                  apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *CasbPostureFindingUnignoreResponseFinding) UnmarshalJSON(data []byte) (err error) {
@@ -2788,6 +3252,52 @@ const (
 func (r CasbPostureFindingUnignoreResponseFindingSeverity) IsKnown() bool {
 	switch r {
 	case CasbPostureFindingUnignoreResponseFindingSeverityCritical, CasbPostureFindingUnignoreResponseFindingSeverityHigh, CasbPostureFindingUnignoreResponseFindingSeverityMedium, CasbPostureFindingUnignoreResponseFindingSeverityLow:
+		return true
+	}
+	return false
+}
+
+// Canonical vendor enum value.
+type CasbPostureFindingUnignoreResponseFindingAssetVendor string
+
+const (
+	CasbPostureFindingUnignoreResponseFindingAssetVendorAnthropic           CasbPostureFindingUnignoreResponseFindingAssetVendor = "ANTHROPIC"
+	CasbPostureFindingUnignoreResponseFindingAssetVendorAws                 CasbPostureFindingUnignoreResponseFindingAssetVendor = "AWS"
+	CasbPostureFindingUnignoreResponseFindingAssetVendorBitbucket           CasbPostureFindingUnignoreResponseFindingAssetVendor = "BITBUCKET"
+	CasbPostureFindingUnignoreResponseFindingAssetVendorBox                 CasbPostureFindingUnignoreResponseFindingAssetVendor = "BOX"
+	CasbPostureFindingUnignoreResponseFindingAssetVendorConfluence          CasbPostureFindingUnignoreResponseFindingAssetVendor = "CONFLUENCE"
+	CasbPostureFindingUnignoreResponseFindingAssetVendorDropbox             CasbPostureFindingUnignoreResponseFindingAssetVendor = "DROPBOX"
+	CasbPostureFindingUnignoreResponseFindingAssetVendorGitHub              CasbPostureFindingUnignoreResponseFindingAssetVendor = "GITHUB"
+	CasbPostureFindingUnignoreResponseFindingAssetVendorGoogleCloudPlatform CasbPostureFindingUnignoreResponseFindingAssetVendor = "GOOGLE_CLOUD_PLATFORM"
+	CasbPostureFindingUnignoreResponseFindingAssetVendorGoogleWorkspace     CasbPostureFindingUnignoreResponseFindingAssetVendor = "GOOGLE_WORKSPACE"
+	CasbPostureFindingUnignoreResponseFindingAssetVendorJira                CasbPostureFindingUnignoreResponseFindingAssetVendor = "JIRA"
+	CasbPostureFindingUnignoreResponseFindingAssetVendorMicrosoft           CasbPostureFindingUnignoreResponseFindingAssetVendor = "MICROSOFT"
+	CasbPostureFindingUnignoreResponseFindingAssetVendorOpenAI              CasbPostureFindingUnignoreResponseFindingAssetVendor = "OPENAI"
+	CasbPostureFindingUnignoreResponseFindingAssetVendorSalesforce          CasbPostureFindingUnignoreResponseFindingAssetVendor = "SALESFORCE"
+	CasbPostureFindingUnignoreResponseFindingAssetVendorServicenow          CasbPostureFindingUnignoreResponseFindingAssetVendor = "SERVICENOW"
+	CasbPostureFindingUnignoreResponseFindingAssetVendorSlack               CasbPostureFindingUnignoreResponseFindingAssetVendor = "SLACK"
+	CasbPostureFindingUnignoreResponseFindingAssetVendorZoom                CasbPostureFindingUnignoreResponseFindingAssetVendor = "ZOOM"
+)
+
+func (r CasbPostureFindingUnignoreResponseFindingAssetVendor) IsKnown() bool {
+	switch r {
+	case CasbPostureFindingUnignoreResponseFindingAssetVendorAnthropic, CasbPostureFindingUnignoreResponseFindingAssetVendorAws, CasbPostureFindingUnignoreResponseFindingAssetVendorBitbucket, CasbPostureFindingUnignoreResponseFindingAssetVendorBox, CasbPostureFindingUnignoreResponseFindingAssetVendorConfluence, CasbPostureFindingUnignoreResponseFindingAssetVendorDropbox, CasbPostureFindingUnignoreResponseFindingAssetVendorGitHub, CasbPostureFindingUnignoreResponseFindingAssetVendorGoogleCloudPlatform, CasbPostureFindingUnignoreResponseFindingAssetVendorGoogleWorkspace, CasbPostureFindingUnignoreResponseFindingAssetVendorJira, CasbPostureFindingUnignoreResponseFindingAssetVendorMicrosoft, CasbPostureFindingUnignoreResponseFindingAssetVendorOpenAI, CasbPostureFindingUnignoreResponseFindingAssetVendorSalesforce, CasbPostureFindingUnignoreResponseFindingAssetVendorServicenow, CasbPostureFindingUnignoreResponseFindingAssetVendorSlack, CasbPostureFindingUnignoreResponseFindingAssetVendorZoom:
+		return true
+	}
+	return false
+}
+
+// Whether the finding type is system-managed or customer-created.
+type CasbPostureFindingUnignoreResponseFindingOrigin string
+
+const (
+	CasbPostureFindingUnignoreResponseFindingOriginSystem CasbPostureFindingUnignoreResponseFindingOrigin = "system"
+	CasbPostureFindingUnignoreResponseFindingOriginCustom CasbPostureFindingUnignoreResponseFindingOrigin = "custom"
+)
+
+func (r CasbPostureFindingUnignoreResponseFindingOrigin) IsKnown() bool {
+	switch r {
+	case CasbPostureFindingUnignoreResponseFindingOriginSystem, CasbPostureFindingUnignoreResponseFindingOriginCustom:
 		return true
 	}
 	return false

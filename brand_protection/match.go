@@ -36,7 +36,7 @@ func NewMatchService(opts ...option.RequestOption) (r *MatchService) {
 	return
 }
 
-// Return matches as CSV for string queries based on ID
+// Return matches as CSV for string queries based on ID.
 func (r *MatchService) Download(ctx context.Context, params MatchDownloadParams, opts ...option.RequestOption) (res *MatchDownloadResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -48,7 +48,7 @@ func (r *MatchService) Download(ctx context.Context, params MatchDownloadParams,
 	return res, err
 }
 
-// Return matches for string queries based on ID
+// Return matches for string queries based on ID.
 func (r *MatchService) Get(ctx context.Context, params MatchGetParams, opts ...option.RequestOption) (res *MatchGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {

@@ -87,12 +87,28 @@ type OrganizationDOHUpdateResponse struct {
 	Duration string `json:"duration"`
 	// Whether the service token is enabled. A disabled service token cannot be used to
 	// authenticate; both its current and previous `client_secret` stop being accepted,
-	// but the token itself is preserved and can be re-enabled at any time. Defaults to
-	// enabled when omitted on create.
+	// but the token itself is preserved and can be re-enabled. A service token
+	// reported as leaked is disabled automatically and cannot be re-enabled until its
+	// secret is rotated; attempting to do so returns a 409. Defaults to enabled when
+	// omitted on create.
 	Enabled   bool      `json:"enabled"`
 	ExpiresAt time.Time `json:"expires_at" format:"date-time"`
+	// Where the leaked `client_secret` was found, if provided by the reporter. Omitted
+	// if the token has not been reported as leaked.
+	LeakReportURL string `json:"leak_report_url" format:"uri"`
+	// When a secret scanning partner reported this service token's `client_secret` as
+	// leaked. A leaked service token is disabled and must be rotated before it can be
+	// re-enabled. Cleared once the secret is rotated. Omitted if the token has not
+	// been reported as leaked.
+	LeakReportedAt time.Time `json:"leak_reported_at" format:"date-time"`
+	// The secret scanning partner that reported the leak. Omitted if the token has not
+	// been reported as leaked.
+	LeakReporter string `json:"leak_reporter"`
 	// The name of the service token.
-	Name string                            `json:"name"`
+	Name string `json:"name"`
+	// Tags associated with the service token, as key-value pairs. On update, replaces
+	// all existing tags.
+	Tags map[string]string                 `json:"tags" api:"nullable"`
 	JSON organizationDOHUpdateResponseJSON `json:"-"`
 }
 
@@ -105,7 +121,11 @@ type organizationDOHUpdateResponseJSON struct {
 	Duration       apijson.Field
 	Enabled        apijson.Field
 	ExpiresAt      apijson.Field
+	LeakReportURL  apijson.Field
+	LeakReportedAt apijson.Field
+	LeakReporter   apijson.Field
 	Name           apijson.Field
+	Tags           apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -135,12 +155,28 @@ type OrganizationDOHGetResponse struct {
 	Duration string `json:"duration"`
 	// Whether the service token is enabled. A disabled service token cannot be used to
 	// authenticate; both its current and previous `client_secret` stop being accepted,
-	// but the token itself is preserved and can be re-enabled at any time. Defaults to
-	// enabled when omitted on create.
+	// but the token itself is preserved and can be re-enabled. A service token
+	// reported as leaked is disabled automatically and cannot be re-enabled until its
+	// secret is rotated; attempting to do so returns a 409. Defaults to enabled when
+	// omitted on create.
 	Enabled   bool      `json:"enabled"`
 	ExpiresAt time.Time `json:"expires_at" format:"date-time"`
+	// Where the leaked `client_secret` was found, if provided by the reporter. Omitted
+	// if the token has not been reported as leaked.
+	LeakReportURL string `json:"leak_report_url" format:"uri"`
+	// When a secret scanning partner reported this service token's `client_secret` as
+	// leaked. A leaked service token is disabled and must be rotated before it can be
+	// re-enabled. Cleared once the secret is rotated. Omitted if the token has not
+	// been reported as leaked.
+	LeakReportedAt time.Time `json:"leak_reported_at" format:"date-time"`
+	// The secret scanning partner that reported the leak. Omitted if the token has not
+	// been reported as leaked.
+	LeakReporter string `json:"leak_reporter"`
 	// The name of the service token.
-	Name string                         `json:"name"`
+	Name string `json:"name"`
+	// Tags associated with the service token, as key-value pairs. On update, replaces
+	// all existing tags.
+	Tags map[string]string              `json:"tags" api:"nullable"`
 	JSON organizationDOHGetResponseJSON `json:"-"`
 }
 
@@ -153,7 +189,11 @@ type organizationDOHGetResponseJSON struct {
 	Duration       apijson.Field
 	Enabled        apijson.Field
 	ExpiresAt      apijson.Field
+	LeakReportURL  apijson.Field
+	LeakReportedAt apijson.Field
+	LeakReporter   apijson.Field
 	Name           apijson.Field
+	Tags           apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }

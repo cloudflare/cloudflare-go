@@ -108,6 +108,7 @@ func (r riskScoringSummaryGetResponseUserJSON) RawJSON() string {
 type RiskScoringSummaryGetResponseUsersMaxRiskLevel string
 
 const (
+	RiskScoringSummaryGetResponseUsersMaxRiskLevelInfo   RiskScoringSummaryGetResponseUsersMaxRiskLevel = "info"
 	RiskScoringSummaryGetResponseUsersMaxRiskLevelLow    RiskScoringSummaryGetResponseUsersMaxRiskLevel = "low"
 	RiskScoringSummaryGetResponseUsersMaxRiskLevelMedium RiskScoringSummaryGetResponseUsersMaxRiskLevel = "medium"
 	RiskScoringSummaryGetResponseUsersMaxRiskLevelHigh   RiskScoringSummaryGetResponseUsersMaxRiskLevel = "high"
@@ -115,7 +116,7 @@ const (
 
 func (r RiskScoringSummaryGetResponseUsersMaxRiskLevel) IsKnown() bool {
 	switch r {
-	case RiskScoringSummaryGetResponseUsersMaxRiskLevelLow, RiskScoringSummaryGetResponseUsersMaxRiskLevelMedium, RiskScoringSummaryGetResponseUsersMaxRiskLevelHigh:
+	case RiskScoringSummaryGetResponseUsersMaxRiskLevelInfo, RiskScoringSummaryGetResponseUsersMaxRiskLevelLow, RiskScoringSummaryGetResponseUsersMaxRiskLevelMedium, RiskScoringSummaryGetResponseUsersMaxRiskLevelHigh:
 		return true
 	}
 	return false

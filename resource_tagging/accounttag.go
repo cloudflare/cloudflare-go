@@ -110,6 +110,9 @@ type AccountTagUpdateResponse struct {
 	Type AccountTagUpdateResponseType `json:"type" api:"required"`
 	// Access application ID is required only for access_application_policy resources
 	AccessApplicationID string `json:"access_application_id" format:"uuid"`
+	// This field can have the runtime type of
+	// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation].
+	Navigation interface{} `json:"navigation"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -135,6 +138,7 @@ type accountTagUpdateResponseJSON struct {
 	Tags                apijson.Field
 	Type                apijson.Field
 	AccessApplicationID apijson.Field
+	Navigation          apijson.Field
 	TagsUpdatedAt       apijson.Field
 	WorkerID            apijson.Field
 	ZoneID              apijson.Field
@@ -166,16 +170,18 @@ func (r *AccountTagUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccount],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRuleset],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAIGateway],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchInstance],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchNamespace],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicy],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhook],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAPIGatewayOperation],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificate],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostname],
-// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment],
-// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy],
-// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet],
-// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeployment],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicy],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySet],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkload],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectD1Database],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDevice],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecord],
@@ -190,6 +196,7 @@ func (r *AccountTagUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPool],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificate],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorker],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProject],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectQueue],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectR2Bucket],
@@ -216,16 +223,18 @@ func (r AccountTagUpdateResponse) AsUnion() AccountTagUpdateResponseUnion {
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccount],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAccountRuleset],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAIGateway],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchInstance],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchNamespace],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicy],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingWebhook],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAPIGatewayOperation],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomCertificate],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostname],
-// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment],
-// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy],
-// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet],
-// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeployment],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicy],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySet],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkload],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectD1Database],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDevice],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectDNSRecord],
@@ -240,6 +249,7 @@ func (r AccountTagUpdateResponse) AsUnion() AccountTagUpdateResponseUnion {
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectLoadBalancerPool],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificate],
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorker],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProject],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectQueue],
 // [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectR2Bucket],
@@ -297,6 +307,16 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchInstance{}),
+			DiscriminatorValue: "ai_search_instance",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchNamespace{}),
+			DiscriminatorValue: "ai_search_namespace",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicy{}),
 			DiscriminatorValue: "alerting_policy",
 		},
@@ -327,22 +347,22 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment{}),
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeployment{}),
 			DiscriminatorValue: "cws_deployment",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy{}),
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicy{}),
 			DiscriminatorValue: "cws_policy",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet{}),
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySet{}),
 			DiscriminatorValue: "cws_policy_set",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload{}),
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkload{}),
 			DiscriminatorValue: "cws_workload",
 		},
 		apijson.UnionVariant{
@@ -414,6 +434,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClientCertificate{}),
 			DiscriminatorValue: "managed_client_certificate",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorker{}),
+			DiscriminatorValue: "namespace_worker",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -946,6 +971,138 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAIGatewayType
 	return false
 }
 
+// Response for ai_search_instance resources
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchInstance struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                               `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchInstanceType `json:"type" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                       `json:"tags_updated_at" format:"date-time"`
+	JSON          accountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchInstanceJSON `json:"-"`
+}
+
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchInstanceJSON
+// contains the JSON metadata for the struct
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchInstance]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchInstanceJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchInstance) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchInstanceJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchInstance) implementsAccountTagUpdateResponse() {
+}
+
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchInstanceType string
+
+const (
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchInstanceTypeAISearchInstance AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchInstanceType = "ai_search_instance"
+)
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchInstanceType) IsKnown() bool {
+	switch r {
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchInstanceTypeAISearchInstance:
+		return true
+	}
+	return false
+}
+
+// Response for ai_search_namespace resources
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchNamespace struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                                `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchNamespaceType `json:"type" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                        `json:"tags_updated_at" format:"date-time"`
+	JSON          accountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchNamespaceJSON `json:"-"`
+}
+
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchNamespaceJSON
+// contains the JSON metadata for the struct
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchNamespace]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchNamespaceJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchNamespace) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchNamespaceJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchNamespace) implementsAccountTagUpdateResponse() {
+}
+
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchNamespaceType string
+
+const (
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchNamespaceTypeAISearchNamespace AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchNamespaceType = "ai_search_namespace"
+)
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchNamespaceType) IsKnown() bool {
+	switch r {
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAISearchNamespaceTypeAISearchNamespace:
+		return true
+	}
+	return false
+}
+
 // Response for alerting_policy resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectAlertingPolicy struct {
 	// Identifies the unique resource.
@@ -1352,7 +1509,7 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCustomHostnam
 }
 
 // Response for cws_deployment resources
-type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment struct {
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeployment struct {
 	// Identifies the unique resource.
 	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
@@ -1366,7 +1523,7 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment st
 	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                            `json:"tags" api:"required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentType `json:"type" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentType `json:"type" api:"required"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -1375,13 +1532,13 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment st
 	// has no current version, and deletions are ordered by event order rather than by
 	// version.
 	TagsUpdatedAt time.Time                                                                    `json:"tags_updated_at" format:"date-time"`
-	JSON          accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON `json:"-"`
+	JSON          accountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentJSON `json:"-"`
 }
 
-// accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentJSON
 // contains the JSON metadata for the struct
-// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment]
-type accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON struct {
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeployment]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentJSON struct {
 	ID            apijson.Field
 	Etag          apijson.Field
 	Name          apijson.Field
@@ -1392,33 +1549,33 @@ type accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSO
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeployment) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON) RawJSON() string {
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeployment) implementsAccountTagUpdateResponse() {
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeployment) implementsAccountTagUpdateResponse() {
 }
 
-type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentType string
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentType string
 
 const (
-	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentTypeCwsDeployment AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentType = "cws_deployment"
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentTypeCWSDeployment AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentType = "cws_deployment"
 )
 
-func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentType) IsKnown() bool {
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentType) IsKnown() bool {
 	switch r {
-	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsDeploymentTypeCwsDeployment:
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSDeploymentTypeCWSDeployment:
 		return true
 	}
 	return false
 }
 
 // Response for cws_policy resources
-type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy struct {
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicy struct {
 	// Identifies the unique resource.
 	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
@@ -1432,7 +1589,7 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy struct
 	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                        `json:"tags" api:"required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyType `json:"type" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyType `json:"type" api:"required"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -1441,13 +1598,13 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy struct
 	// has no current version, and deletions are ordered by event order rather than by
 	// version.
 	TagsUpdatedAt time.Time                                                                `json:"tags_updated_at" format:"date-time"`
-	JSON          accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON `json:"-"`
+	JSON          accountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyJSON `json:"-"`
 }
 
-// accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyJSON
 // contains the JSON metadata for the struct
-// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy]
-type accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON struct {
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicy]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyJSON struct {
 	ID            apijson.Field
 	Etag          apijson.Field
 	Name          apijson.Field
@@ -1458,33 +1615,33 @@ type accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON st
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON) RawJSON() string {
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicy) implementsAccountTagUpdateResponse() {
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicy) implementsAccountTagUpdateResponse() {
 }
 
-type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyType string
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyType string
 
 const (
-	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyTypeCwsPolicy AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyType = "cws_policy"
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyTypeCWSPolicy AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyType = "cws_policy"
 )
 
-func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyType) IsKnown() bool {
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyType) IsKnown() bool {
 	switch r {
-	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicyTypeCwsPolicy:
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicyTypeCWSPolicy:
 		return true
 	}
 	return false
 }
 
 // Response for cws_policy_set resources
-type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet struct {
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySet struct {
 	// Identifies the unique resource.
 	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
@@ -1498,7 +1655,7 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet str
 	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                           `json:"tags" api:"required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetType `json:"type" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetType `json:"type" api:"required"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -1507,13 +1664,13 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet str
 	// has no current version, and deletions are ordered by event order rather than by
 	// version.
 	TagsUpdatedAt time.Time                                                                   `json:"tags_updated_at" format:"date-time"`
-	JSON          accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON `json:"-"`
+	JSON          accountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetJSON `json:"-"`
 }
 
-// accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetJSON
 // contains the JSON metadata for the struct
-// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet]
-type accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON struct {
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySet]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetJSON struct {
 	ID            apijson.Field
 	Etag          apijson.Field
 	Name          apijson.Field
@@ -1524,33 +1681,33 @@ type accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySet) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON) RawJSON() string {
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySet) implementsAccountTagUpdateResponse() {
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySet) implementsAccountTagUpdateResponse() {
 }
 
-type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetType string
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetType string
 
 const (
-	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetTypeCwsPolicySet AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetType = "cws_policy_set"
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetTypeCWSPolicySet AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetType = "cws_policy_set"
 )
 
-func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetType) IsKnown() bool {
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetType) IsKnown() bool {
 	switch r {
-	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsPolicySetTypeCwsPolicySet:
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSPolicySetTypeCWSPolicySet:
 		return true
 	}
 	return false
 }
 
 // Response for cws_workload resources
-type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload struct {
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkload struct {
 	// Identifies the unique resource.
 	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
@@ -1564,7 +1721,7 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload stru
 	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                          `json:"tags" api:"required"`
-	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadType `json:"type" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadType `json:"type" api:"required"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -1573,13 +1730,13 @@ type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload stru
 	// has no current version, and deletions are ordered by event order rather than by
 	// version.
 	TagsUpdatedAt time.Time                                                                  `json:"tags_updated_at" format:"date-time"`
-	JSON          accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON `json:"-"`
+	JSON          accountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadJSON `json:"-"`
 }
 
-// accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadJSON
 // contains the JSON metadata for the struct
-// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload]
-type accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON struct {
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkload]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadJSON struct {
 	ID            apijson.Field
 	Etag          apijson.Field
 	Name          apijson.Field
@@ -1590,26 +1747,26 @@ type accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON 
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkload) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON) RawJSON() string {
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkload) implementsAccountTagUpdateResponse() {
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkload) implementsAccountTagUpdateResponse() {
 }
 
-type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadType string
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadType string
 
 const (
-	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadTypeCwsWorkload AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadType = "cws_workload"
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadTypeCWSWorkload AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadType = "cws_workload"
 )
 
-func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadType) IsKnown() bool {
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadType) IsKnown() bool {
 	switch r {
-	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCwsWorkloadTypeCwsWorkload:
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectCWSWorkloadTypeCWSWorkload:
 		return true
 	}
 	return false
@@ -2551,6 +2708,108 @@ func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectManagedClient
 	return false
 }
 
+// Response for namespace_worker resources
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorker struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                              `json:"tags" api:"required"`
+	Type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerType `json:"type" api:"required"`
+	// Read-only routing metadata resolved from EWC using the account and immutable
+	// namespace Worker ID. Returned only by tagged-resource lists requested with
+	// include_navigation=true. Omitted when lookup is unavailable or the child has
+	// been deleted. Never supplied on tag writes or stored as extra_data.
+	Navigation AccountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation `json:"navigation"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                      `json:"tags_updated_at" format:"date-time"`
+	JSON          accountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerJSON `json:"-"`
+}
+
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerJSON
+// contains the JSON metadata for the struct
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorker]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	Navigation    apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorker) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorker) implementsAccountTagUpdateResponse() {
+}
+
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerType string
+
+const (
+	AccountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerTypeNamespaceWorker AccountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerType = "namespace_worker"
+)
+
+func (r AccountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerType) IsKnown() bool {
+	switch r {
+	case AccountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerTypeNamespaceWorker:
+		return true
+	}
+	return false
+}
+
+// Read-only routing metadata resolved from EWC using the account and immutable
+// namespace Worker ID. Returned only by tagged-resource lists requested with
+// include_navigation=true. Omitted when lookup is unavailable or the child has
+// been deleted. Never supplied on tag writes or stored as extra_data.
+type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation struct {
+	NamespaceID   string                                                                                   `json:"namespace_id" api:"required"`
+	NamespaceName string                                                                                   `json:"namespace_name" api:"required"`
+	ScriptName    string                                                                                   `json:"script_name" api:"required"`
+	JSON          accountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigationJSON `json:"-"`
+}
+
+// accountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigationJSON
+// contains the JSON metadata for the struct
+// [AccountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation]
+type accountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigationJSON struct {
+	NamespaceID   apijson.Field
+	NamespaceName apijson.Field
+	ScriptName    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagUpdateResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Response for pages_project resources
 type AccountTagUpdateResponseResourceTaggingTaggedResourceObjectPagesProject struct {
 	// Identifies the unique resource.
@@ -3365,16 +3624,18 @@ const (
 	AccountTagUpdateResponseTypeAccount                  AccountTagUpdateResponseType = "account"
 	AccountTagUpdateResponseTypeAccountRuleset           AccountTagUpdateResponseType = "account_ruleset"
 	AccountTagUpdateResponseTypeAIGateway                AccountTagUpdateResponseType = "ai_gateway"
+	AccountTagUpdateResponseTypeAISearchInstance         AccountTagUpdateResponseType = "ai_search_instance"
+	AccountTagUpdateResponseTypeAISearchNamespace        AccountTagUpdateResponseType = "ai_search_namespace"
 	AccountTagUpdateResponseTypeAlertingPolicy           AccountTagUpdateResponseType = "alerting_policy"
 	AccountTagUpdateResponseTypeAlertingWebhook          AccountTagUpdateResponseType = "alerting_webhook"
 	AccountTagUpdateResponseTypeAPIGatewayOperation      AccountTagUpdateResponseType = "api_gateway_operation"
 	AccountTagUpdateResponseTypeCloudflaredTunnel        AccountTagUpdateResponseType = "cloudflared_tunnel"
 	AccountTagUpdateResponseTypeCustomCertificate        AccountTagUpdateResponseType = "custom_certificate"
 	AccountTagUpdateResponseTypeCustomHostname           AccountTagUpdateResponseType = "custom_hostname"
-	AccountTagUpdateResponseTypeCwsDeployment            AccountTagUpdateResponseType = "cws_deployment"
-	AccountTagUpdateResponseTypeCwsPolicy                AccountTagUpdateResponseType = "cws_policy"
-	AccountTagUpdateResponseTypeCwsPolicySet             AccountTagUpdateResponseType = "cws_policy_set"
-	AccountTagUpdateResponseTypeCwsWorkload              AccountTagUpdateResponseType = "cws_workload"
+	AccountTagUpdateResponseTypeCWSDeployment            AccountTagUpdateResponseType = "cws_deployment"
+	AccountTagUpdateResponseTypeCWSPolicy                AccountTagUpdateResponseType = "cws_policy"
+	AccountTagUpdateResponseTypeCWSPolicySet             AccountTagUpdateResponseType = "cws_policy_set"
+	AccountTagUpdateResponseTypeCWSWorkload              AccountTagUpdateResponseType = "cws_workload"
 	AccountTagUpdateResponseTypeD1Database               AccountTagUpdateResponseType = "d1_database"
 	AccountTagUpdateResponseTypeDevice                   AccountTagUpdateResponseType = "device"
 	AccountTagUpdateResponseTypeDNSRecord                AccountTagUpdateResponseType = "dns_record"
@@ -3389,6 +3650,7 @@ const (
 	AccountTagUpdateResponseTypeLoadBalancerMonitor      AccountTagUpdateResponseType = "load_balancer_monitor"
 	AccountTagUpdateResponseTypeLoadBalancerPool         AccountTagUpdateResponseType = "load_balancer_pool"
 	AccountTagUpdateResponseTypeManagedClientCertificate AccountTagUpdateResponseType = "managed_client_certificate"
+	AccountTagUpdateResponseTypeNamespaceWorker          AccountTagUpdateResponseType = "namespace_worker"
 	AccountTagUpdateResponseTypePagesProject             AccountTagUpdateResponseType = "pages_project"
 	AccountTagUpdateResponseTypeQueue                    AccountTagUpdateResponseType = "queue"
 	AccountTagUpdateResponseTypeR2Bucket                 AccountTagUpdateResponseType = "r2_bucket"
@@ -3405,7 +3667,7 @@ const (
 
 func (r AccountTagUpdateResponseType) IsKnown() bool {
 	switch r {
-	case AccountTagUpdateResponseTypeAccessApplication, AccountTagUpdateResponseTypeAccessApplicationPolicy, AccountTagUpdateResponseTypeAccessGroup, AccountTagUpdateResponseTypeAccessServiceToken, AccountTagUpdateResponseTypeAccount, AccountTagUpdateResponseTypeAccountRuleset, AccountTagUpdateResponseTypeAIGateway, AccountTagUpdateResponseTypeAlertingPolicy, AccountTagUpdateResponseTypeAlertingWebhook, AccountTagUpdateResponseTypeAPIGatewayOperation, AccountTagUpdateResponseTypeCloudflaredTunnel, AccountTagUpdateResponseTypeCustomCertificate, AccountTagUpdateResponseTypeCustomHostname, AccountTagUpdateResponseTypeCwsDeployment, AccountTagUpdateResponseTypeCwsPolicy, AccountTagUpdateResponseTypeCwsPolicySet, AccountTagUpdateResponseTypeCwsWorkload, AccountTagUpdateResponseTypeD1Database, AccountTagUpdateResponseTypeDevice, AccountTagUpdateResponseTypeDNSRecord, AccountTagUpdateResponseTypeDurableObjectNamespace, AccountTagUpdateResponseTypeGatewayList, AccountTagUpdateResponseTypeGatewayRule, AccountTagUpdateResponseTypeHealthcheck, AccountTagUpdateResponseTypeImage, AccountTagUpdateResponseTypeInfrastructureTarget, AccountTagUpdateResponseTypeKVNamespace, AccountTagUpdateResponseTypeLoadBalancer, AccountTagUpdateResponseTypeLoadBalancerMonitor, AccountTagUpdateResponseTypeLoadBalancerPool, AccountTagUpdateResponseTypeManagedClientCertificate, AccountTagUpdateResponseTypePagesProject, AccountTagUpdateResponseTypeQueue, AccountTagUpdateResponseTypeR2Bucket, AccountTagUpdateResponseTypeResourceShare, AccountTagUpdateResponseTypeStreamLiveInput, AccountTagUpdateResponseTypeStreamVideo, AccountTagUpdateResponseTypeVectorizeIndex, AccountTagUpdateResponseTypeWorker, AccountTagUpdateResponseTypeWorkerRoute, AccountTagUpdateResponseTypeWorkerVersion, AccountTagUpdateResponseTypeZone, AccountTagUpdateResponseTypeZoneRuleset:
+	case AccountTagUpdateResponseTypeAccessApplication, AccountTagUpdateResponseTypeAccessApplicationPolicy, AccountTagUpdateResponseTypeAccessGroup, AccountTagUpdateResponseTypeAccessServiceToken, AccountTagUpdateResponseTypeAccount, AccountTagUpdateResponseTypeAccountRuleset, AccountTagUpdateResponseTypeAIGateway, AccountTagUpdateResponseTypeAISearchInstance, AccountTagUpdateResponseTypeAISearchNamespace, AccountTagUpdateResponseTypeAlertingPolicy, AccountTagUpdateResponseTypeAlertingWebhook, AccountTagUpdateResponseTypeAPIGatewayOperation, AccountTagUpdateResponseTypeCloudflaredTunnel, AccountTagUpdateResponseTypeCustomCertificate, AccountTagUpdateResponseTypeCustomHostname, AccountTagUpdateResponseTypeCWSDeployment, AccountTagUpdateResponseTypeCWSPolicy, AccountTagUpdateResponseTypeCWSPolicySet, AccountTagUpdateResponseTypeCWSWorkload, AccountTagUpdateResponseTypeD1Database, AccountTagUpdateResponseTypeDevice, AccountTagUpdateResponseTypeDNSRecord, AccountTagUpdateResponseTypeDurableObjectNamespace, AccountTagUpdateResponseTypeGatewayList, AccountTagUpdateResponseTypeGatewayRule, AccountTagUpdateResponseTypeHealthcheck, AccountTagUpdateResponseTypeImage, AccountTagUpdateResponseTypeInfrastructureTarget, AccountTagUpdateResponseTypeKVNamespace, AccountTagUpdateResponseTypeLoadBalancer, AccountTagUpdateResponseTypeLoadBalancerMonitor, AccountTagUpdateResponseTypeLoadBalancerPool, AccountTagUpdateResponseTypeManagedClientCertificate, AccountTagUpdateResponseTypeNamespaceWorker, AccountTagUpdateResponseTypePagesProject, AccountTagUpdateResponseTypeQueue, AccountTagUpdateResponseTypeR2Bucket, AccountTagUpdateResponseTypeResourceShare, AccountTagUpdateResponseTypeStreamLiveInput, AccountTagUpdateResponseTypeStreamVideo, AccountTagUpdateResponseTypeVectorizeIndex, AccountTagUpdateResponseTypeWorker, AccountTagUpdateResponseTypeWorkerRoute, AccountTagUpdateResponseTypeWorkerVersion, AccountTagUpdateResponseTypeZone, AccountTagUpdateResponseTypeZoneRuleset:
 		return true
 	}
 	return false
@@ -3428,6 +3690,9 @@ type AccountTagGetResponse struct {
 	Type AccountTagGetResponseType `json:"type" api:"required"`
 	// Access application ID is required only for access_application_policy resources
 	AccessApplicationID string `json:"access_application_id" format:"uuid"`
+	// This field can have the runtime type of
+	// [AccountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation].
+	Navigation interface{} `json:"navigation"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -3453,6 +3718,7 @@ type accountTagGetResponseJSON struct {
 	Tags                apijson.Field
 	Type                apijson.Field
 	AccessApplicationID apijson.Field
+	Navigation          apijson.Field
 	TagsUpdatedAt       apijson.Field
 	WorkerID            apijson.Field
 	ZoneID              apijson.Field
@@ -3484,16 +3750,18 @@ func (r *AccountTagGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccount],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountRuleset],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAIGateway],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchInstance],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchNamespace],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicy],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhook],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAPIGatewayOperation],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificate],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectCustomHostname],
-// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment],
-// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy],
-// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet],
-// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSDeployment],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicy],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySet],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkload],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectD1Database],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectDevice],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectDNSRecord],
@@ -3508,6 +3776,7 @@ func (r *AccountTagGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPool],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificate],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorker],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectPagesProject],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectQueue],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectR2Bucket],
@@ -3534,16 +3803,18 @@ func (r AccountTagGetResponse) AsUnion() AccountTagGetResponseUnion {
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccount],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAccountRuleset],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAIGateway],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchInstance],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchNamespace],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicy],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingWebhook],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectAPIGatewayOperation],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectCloudflaredTunnel],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectCustomCertificate],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectCustomHostname],
-// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment],
-// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy],
-// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet],
-// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSDeployment],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicy],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySet],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkload],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectD1Database],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectDevice],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectDNSRecord],
@@ -3558,6 +3829,7 @@ func (r AccountTagGetResponse) AsUnion() AccountTagGetResponseUnion {
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerMonitor],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectLoadBalancerPool],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificate],
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorker],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectPagesProject],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectQueue],
 // [AccountTagGetResponseResourceTaggingTaggedResourceObjectR2Bucket],
@@ -3615,6 +3887,16 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchInstance{}),
+			DiscriminatorValue: "ai_search_instance",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchNamespace{}),
+			DiscriminatorValue: "ai_search_namespace",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicy{}),
 			DiscriminatorValue: "alerting_policy",
 		},
@@ -3645,22 +3927,22 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment{}),
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSDeployment{}),
 			DiscriminatorValue: "cws_deployment",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy{}),
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicy{}),
 			DiscriminatorValue: "cws_policy",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet{}),
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySet{}),
 			DiscriminatorValue: "cws_policy_set",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload{}),
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkload{}),
 			DiscriminatorValue: "cws_workload",
 		},
 		apijson.UnionVariant{
@@ -3732,6 +4014,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCertificate{}),
 			DiscriminatorValue: "managed_client_certificate",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AccountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorker{}),
+			DiscriminatorValue: "namespace_worker",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -4264,6 +4551,138 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAIGatewayType) I
 	return false
 }
 
+// Response for ai_search_instance resources
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchInstance struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                            `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchInstanceType `json:"type" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                    `json:"tags_updated_at" format:"date-time"`
+	JSON          accountTagGetResponseResourceTaggingTaggedResourceObjectAISearchInstanceJSON `json:"-"`
+}
+
+// accountTagGetResponseResourceTaggingTaggedResourceObjectAISearchInstanceJSON
+// contains the JSON metadata for the struct
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchInstance]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectAISearchInstanceJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchInstance) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectAISearchInstanceJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchInstance) implementsAccountTagGetResponse() {
+}
+
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchInstanceType string
+
+const (
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchInstanceTypeAISearchInstance AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchInstanceType = "ai_search_instance"
+)
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchInstanceType) IsKnown() bool {
+	switch r {
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchInstanceTypeAISearchInstance:
+		return true
+	}
+	return false
+}
+
+// Response for ai_search_namespace resources
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchNamespace struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                             `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchNamespaceType `json:"type" api:"required"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                     `json:"tags_updated_at" format:"date-time"`
+	JSON          accountTagGetResponseResourceTaggingTaggedResourceObjectAISearchNamespaceJSON `json:"-"`
+}
+
+// accountTagGetResponseResourceTaggingTaggedResourceObjectAISearchNamespaceJSON
+// contains the JSON metadata for the struct
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchNamespace]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectAISearchNamespaceJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchNamespace) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectAISearchNamespaceJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchNamespace) implementsAccountTagGetResponse() {
+}
+
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchNamespaceType string
+
+const (
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchNamespaceTypeAISearchNamespace AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchNamespaceType = "ai_search_namespace"
+)
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchNamespaceType) IsKnown() bool {
+	switch r {
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectAISearchNamespaceTypeAISearchNamespace:
+		return true
+	}
+	return false
+}
+
 // Response for alerting_policy resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectAlertingPolicy struct {
 	// Identifies the unique resource.
@@ -4670,7 +5089,7 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCustomHostnameTy
 }
 
 // Response for cws_deployment resources
-type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment struct {
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSDeployment struct {
 	// Identifies the unique resource.
 	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
@@ -4684,7 +5103,7 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment struc
 	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                         `json:"tags" api:"required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentType `json:"type" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentType `json:"type" api:"required"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -4693,13 +5112,13 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment struc
 	// has no current version, and deletions are ordered by event order rather than by
 	// version.
 	TagsUpdatedAt time.Time                                                                 `json:"tags_updated_at" format:"date-time"`
-	JSON          accountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON `json:"-"`
+	JSON          accountTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentJSON `json:"-"`
 }
 
-// accountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON
+// accountTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentJSON
 // contains the JSON metadata for the struct
-// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment]
-type accountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON struct {
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSDeployment]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentJSON struct {
 	ID            apijson.Field
 	Etag          apijson.Field
 	Name          apijson.Field
@@ -4710,33 +5129,33 @@ type accountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON s
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSDeployment) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentJSON) RawJSON() string {
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeployment) implementsAccountTagGetResponse() {
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSDeployment) implementsAccountTagGetResponse() {
 }
 
-type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentType string
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentType string
 
 const (
-	AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentTypeCwsDeployment AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentType = "cws_deployment"
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentTypeCWSDeployment AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentType = "cws_deployment"
 )
 
-func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentType) IsKnown() bool {
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentType) IsKnown() bool {
 	switch r {
-	case AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsDeploymentTypeCwsDeployment:
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSDeploymentTypeCWSDeployment:
 		return true
 	}
 	return false
 }
 
 // Response for cws_policy resources
-type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy struct {
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicy struct {
 	// Identifies the unique resource.
 	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
@@ -4750,7 +5169,7 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy struct {
 	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                     `json:"tags" api:"required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyType `json:"type" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyType `json:"type" api:"required"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -4759,13 +5178,13 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy struct {
 	// has no current version, and deletions are ordered by event order rather than by
 	// version.
 	TagsUpdatedAt time.Time                                                             `json:"tags_updated_at" format:"date-time"`
-	JSON          accountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON `json:"-"`
+	JSON          accountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyJSON `json:"-"`
 }
 
-// accountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON contains
+// accountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyJSON contains
 // the JSON metadata for the struct
-// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy]
-type accountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON struct {
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicy]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyJSON struct {
 	ID            apijson.Field
 	Etag          apijson.Field
 	Name          apijson.Field
@@ -4776,33 +5195,33 @@ type accountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON struc
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyJSON) RawJSON() string {
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicy) implementsAccountTagGetResponse() {
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicy) implementsAccountTagGetResponse() {
 }
 
-type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyType string
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyType string
 
 const (
-	AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyTypeCwsPolicy AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyType = "cws_policy"
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyTypeCWSPolicy AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyType = "cws_policy"
 )
 
-func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyType) IsKnown() bool {
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyType) IsKnown() bool {
 	switch r {
-	case AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicyTypeCwsPolicy:
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicyTypeCWSPolicy:
 		return true
 	}
 	return false
 }
 
 // Response for cws_policy_set resources
-type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet struct {
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySet struct {
 	// Identifies the unique resource.
 	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
@@ -4816,7 +5235,7 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet struct
 	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                        `json:"tags" api:"required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetType `json:"type" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetType `json:"type" api:"required"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -4825,13 +5244,13 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet struct
 	// has no current version, and deletions are ordered by event order rather than by
 	// version.
 	TagsUpdatedAt time.Time                                                                `json:"tags_updated_at" format:"date-time"`
-	JSON          accountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON `json:"-"`
+	JSON          accountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetJSON `json:"-"`
 }
 
-// accountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON
+// accountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetJSON
 // contains the JSON metadata for the struct
-// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet]
-type accountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON struct {
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySet]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetJSON struct {
 	ID            apijson.Field
 	Etag          apijson.Field
 	Name          apijson.Field
@@ -4842,33 +5261,33 @@ type accountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON st
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySet) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetJSON) RawJSON() string {
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySet) implementsAccountTagGetResponse() {
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySet) implementsAccountTagGetResponse() {
 }
 
-type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetType string
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetType string
 
 const (
-	AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetTypeCwsPolicySet AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetType = "cws_policy_set"
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetTypeCWSPolicySet AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetType = "cws_policy_set"
 )
 
-func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetType) IsKnown() bool {
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetType) IsKnown() bool {
 	switch r {
-	case AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsPolicySetTypeCwsPolicySet:
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSPolicySetTypeCWSPolicySet:
 		return true
 	}
 	return false
 }
 
 // Response for cws_workload resources
-type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload struct {
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkload struct {
 	// Identifies the unique resource.
 	ID string `json:"id" api:"required"`
 	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
@@ -4882,7 +5301,7 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload struct 
 	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
 	// Values may contain at most 1024 characters and may be empty for key-only tags.
 	Tags map[string]string                                                       `json:"tags" api:"required"`
-	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadType `json:"type" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadType `json:"type" api:"required"`
 	// Monotonic version of the resource's tags: the timestamp assigned when the tags
 	// were last written. Returned by read endpoints, by 2PC prepare (the version that
 	// will be assigned on commit, unless a concurrent write lands first, in which case
@@ -4891,13 +5310,13 @@ type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload struct 
 	// has no current version, and deletions are ordered by event order rather than by
 	// version.
 	TagsUpdatedAt time.Time                                                               `json:"tags_updated_at" format:"date-time"`
-	JSON          accountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON `json:"-"`
+	JSON          accountTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadJSON `json:"-"`
 }
 
-// accountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON contains
+// accountTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadJSON contains
 // the JSON metadata for the struct
-// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload]
-type accountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON struct {
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkload]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadJSON struct {
 	ID            apijson.Field
 	Etag          apijson.Field
 	Name          apijson.Field
@@ -4908,26 +5327,26 @@ type accountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON str
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkload) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadJSON) RawJSON() string {
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkload) implementsAccountTagGetResponse() {
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkload) implementsAccountTagGetResponse() {
 }
 
-type AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadType string
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadType string
 
 const (
-	AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadTypeCwsWorkload AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadType = "cws_workload"
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadTypeCWSWorkload AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadType = "cws_workload"
 )
 
-func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadType) IsKnown() bool {
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadType) IsKnown() bool {
 	switch r {
-	case AccountTagGetResponseResourceTaggingTaggedResourceObjectCwsWorkloadTypeCwsWorkload:
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectCWSWorkloadTypeCWSWorkload:
 		return true
 	}
 	return false
@@ -5869,6 +6288,108 @@ func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectManagedClientCer
 	return false
 }
 
+// Response for namespace_worker resources
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorker struct {
+	// Identifies the unique resource.
+	ID string `json:"id" api:"required"`
+	// ETag identifier for optimistic concurrency control. Formatted as "v1:<hash>"
+	// where the hash is the base64url-encoded SHA-256 (truncated to 128 bits) of the
+	// tags map canonicalized using RFC 8785 (JSON Canonicalization Scheme). Clients
+	// should treat ETags as opaque strings and pass them back via the If-Match header
+	// on write operations.
+	Etag string `json:"etag" api:"required"`
+	// Human-readable name of the resource.
+	Name string `json:"name" api:"required"`
+	// Contains key-value pairs of tags. Keys may contain at most 256 characters.
+	// Values may contain at most 1024 characters and may be empty for key-only tags.
+	Tags map[string]string                                                           `json:"tags" api:"required"`
+	Type AccountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerType `json:"type" api:"required"`
+	// Read-only routing metadata resolved from EWC using the account and immutable
+	// namespace Worker ID. Returned only by tagged-resource lists requested with
+	// include_navigation=true. Omitted when lookup is unavailable or the child has
+	// been deleted. Never supplied on tag writes or stored as extra_data.
+	Navigation AccountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation `json:"navigation"`
+	// Monotonic version of the resource's tags: the timestamp assigned when the tags
+	// were last written. Returned by read endpoints, by 2PC prepare (the version that
+	// will be assigned on commit, unless a concurrent write lands first, in which case
+	// a newer version is assigned), and by 2PC commit (the authoritative committed
+	// version). Omitted for untagged resources and delete commits: a deleted resource
+	// has no current version, and deletions are ordered by event order rather than by
+	// version.
+	TagsUpdatedAt time.Time                                                                   `json:"tags_updated_at" format:"date-time"`
+	JSON          accountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerJSON `json:"-"`
+}
+
+// accountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerJSON
+// contains the JSON metadata for the struct
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorker]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerJSON struct {
+	ID            apijson.Field
+	Etag          apijson.Field
+	Name          apijson.Field
+	Tags          apijson.Field
+	Type          apijson.Field
+	Navigation    apijson.Field
+	TagsUpdatedAt apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorker) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorker) implementsAccountTagGetResponse() {
+}
+
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerType string
+
+const (
+	AccountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerTypeNamespaceWorker AccountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerType = "namespace_worker"
+)
+
+func (r AccountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerType) IsKnown() bool {
+	switch r {
+	case AccountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerTypeNamespaceWorker:
+		return true
+	}
+	return false
+}
+
+// Read-only routing metadata resolved from EWC using the account and immutable
+// namespace Worker ID. Returned only by tagged-resource lists requested with
+// include_navigation=true. Omitted when lookup is unavailable or the child has
+// been deleted. Never supplied on tag writes or stored as extra_data.
+type AccountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation struct {
+	NamespaceID   string                                                                                `json:"namespace_id" api:"required"`
+	NamespaceName string                                                                                `json:"namespace_name" api:"required"`
+	ScriptName    string                                                                                `json:"script_name" api:"required"`
+	JSON          accountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigationJSON `json:"-"`
+}
+
+// accountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigationJSON
+// contains the JSON metadata for the struct
+// [AccountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation]
+type accountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigationJSON struct {
+	NamespaceID   apijson.Field
+	NamespaceName apijson.Field
+	ScriptName    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountTagGetResponseResourceTaggingTaggedResourceObjectNamespaceWorkerNavigationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Response for pages_project resources
 type AccountTagGetResponseResourceTaggingTaggedResourceObjectPagesProject struct {
 	// Identifies the unique resource.
@@ -6683,16 +7204,18 @@ const (
 	AccountTagGetResponseTypeAccount                  AccountTagGetResponseType = "account"
 	AccountTagGetResponseTypeAccountRuleset           AccountTagGetResponseType = "account_ruleset"
 	AccountTagGetResponseTypeAIGateway                AccountTagGetResponseType = "ai_gateway"
+	AccountTagGetResponseTypeAISearchInstance         AccountTagGetResponseType = "ai_search_instance"
+	AccountTagGetResponseTypeAISearchNamespace        AccountTagGetResponseType = "ai_search_namespace"
 	AccountTagGetResponseTypeAlertingPolicy           AccountTagGetResponseType = "alerting_policy"
 	AccountTagGetResponseTypeAlertingWebhook          AccountTagGetResponseType = "alerting_webhook"
 	AccountTagGetResponseTypeAPIGatewayOperation      AccountTagGetResponseType = "api_gateway_operation"
 	AccountTagGetResponseTypeCloudflaredTunnel        AccountTagGetResponseType = "cloudflared_tunnel"
 	AccountTagGetResponseTypeCustomCertificate        AccountTagGetResponseType = "custom_certificate"
 	AccountTagGetResponseTypeCustomHostname           AccountTagGetResponseType = "custom_hostname"
-	AccountTagGetResponseTypeCwsDeployment            AccountTagGetResponseType = "cws_deployment"
-	AccountTagGetResponseTypeCwsPolicy                AccountTagGetResponseType = "cws_policy"
-	AccountTagGetResponseTypeCwsPolicySet             AccountTagGetResponseType = "cws_policy_set"
-	AccountTagGetResponseTypeCwsWorkload              AccountTagGetResponseType = "cws_workload"
+	AccountTagGetResponseTypeCWSDeployment            AccountTagGetResponseType = "cws_deployment"
+	AccountTagGetResponseTypeCWSPolicy                AccountTagGetResponseType = "cws_policy"
+	AccountTagGetResponseTypeCWSPolicySet             AccountTagGetResponseType = "cws_policy_set"
+	AccountTagGetResponseTypeCWSWorkload              AccountTagGetResponseType = "cws_workload"
 	AccountTagGetResponseTypeD1Database               AccountTagGetResponseType = "d1_database"
 	AccountTagGetResponseTypeDevice                   AccountTagGetResponseType = "device"
 	AccountTagGetResponseTypeDNSRecord                AccountTagGetResponseType = "dns_record"
@@ -6707,6 +7230,7 @@ const (
 	AccountTagGetResponseTypeLoadBalancerMonitor      AccountTagGetResponseType = "load_balancer_monitor"
 	AccountTagGetResponseTypeLoadBalancerPool         AccountTagGetResponseType = "load_balancer_pool"
 	AccountTagGetResponseTypeManagedClientCertificate AccountTagGetResponseType = "managed_client_certificate"
+	AccountTagGetResponseTypeNamespaceWorker          AccountTagGetResponseType = "namespace_worker"
 	AccountTagGetResponseTypePagesProject             AccountTagGetResponseType = "pages_project"
 	AccountTagGetResponseTypeQueue                    AccountTagGetResponseType = "queue"
 	AccountTagGetResponseTypeR2Bucket                 AccountTagGetResponseType = "r2_bucket"
@@ -6723,7 +7247,7 @@ const (
 
 func (r AccountTagGetResponseType) IsKnown() bool {
 	switch r {
-	case AccountTagGetResponseTypeAccessApplication, AccountTagGetResponseTypeAccessApplicationPolicy, AccountTagGetResponseTypeAccessGroup, AccountTagGetResponseTypeAccessServiceToken, AccountTagGetResponseTypeAccount, AccountTagGetResponseTypeAccountRuleset, AccountTagGetResponseTypeAIGateway, AccountTagGetResponseTypeAlertingPolicy, AccountTagGetResponseTypeAlertingWebhook, AccountTagGetResponseTypeAPIGatewayOperation, AccountTagGetResponseTypeCloudflaredTunnel, AccountTagGetResponseTypeCustomCertificate, AccountTagGetResponseTypeCustomHostname, AccountTagGetResponseTypeCwsDeployment, AccountTagGetResponseTypeCwsPolicy, AccountTagGetResponseTypeCwsPolicySet, AccountTagGetResponseTypeCwsWorkload, AccountTagGetResponseTypeD1Database, AccountTagGetResponseTypeDevice, AccountTagGetResponseTypeDNSRecord, AccountTagGetResponseTypeDurableObjectNamespace, AccountTagGetResponseTypeGatewayList, AccountTagGetResponseTypeGatewayRule, AccountTagGetResponseTypeHealthcheck, AccountTagGetResponseTypeImage, AccountTagGetResponseTypeInfrastructureTarget, AccountTagGetResponseTypeKVNamespace, AccountTagGetResponseTypeLoadBalancer, AccountTagGetResponseTypeLoadBalancerMonitor, AccountTagGetResponseTypeLoadBalancerPool, AccountTagGetResponseTypeManagedClientCertificate, AccountTagGetResponseTypePagesProject, AccountTagGetResponseTypeQueue, AccountTagGetResponseTypeR2Bucket, AccountTagGetResponseTypeResourceShare, AccountTagGetResponseTypeStreamLiveInput, AccountTagGetResponseTypeStreamVideo, AccountTagGetResponseTypeVectorizeIndex, AccountTagGetResponseTypeWorker, AccountTagGetResponseTypeWorkerRoute, AccountTagGetResponseTypeWorkerVersion, AccountTagGetResponseTypeZone, AccountTagGetResponseTypeZoneRuleset:
+	case AccountTagGetResponseTypeAccessApplication, AccountTagGetResponseTypeAccessApplicationPolicy, AccountTagGetResponseTypeAccessGroup, AccountTagGetResponseTypeAccessServiceToken, AccountTagGetResponseTypeAccount, AccountTagGetResponseTypeAccountRuleset, AccountTagGetResponseTypeAIGateway, AccountTagGetResponseTypeAISearchInstance, AccountTagGetResponseTypeAISearchNamespace, AccountTagGetResponseTypeAlertingPolicy, AccountTagGetResponseTypeAlertingWebhook, AccountTagGetResponseTypeAPIGatewayOperation, AccountTagGetResponseTypeCloudflaredTunnel, AccountTagGetResponseTypeCustomCertificate, AccountTagGetResponseTypeCustomHostname, AccountTagGetResponseTypeCWSDeployment, AccountTagGetResponseTypeCWSPolicy, AccountTagGetResponseTypeCWSPolicySet, AccountTagGetResponseTypeCWSWorkload, AccountTagGetResponseTypeD1Database, AccountTagGetResponseTypeDevice, AccountTagGetResponseTypeDNSRecord, AccountTagGetResponseTypeDurableObjectNamespace, AccountTagGetResponseTypeGatewayList, AccountTagGetResponseTypeGatewayRule, AccountTagGetResponseTypeHealthcheck, AccountTagGetResponseTypeImage, AccountTagGetResponseTypeInfrastructureTarget, AccountTagGetResponseTypeKVNamespace, AccountTagGetResponseTypeLoadBalancer, AccountTagGetResponseTypeLoadBalancerMonitor, AccountTagGetResponseTypeLoadBalancerPool, AccountTagGetResponseTypeManagedClientCertificate, AccountTagGetResponseTypeNamespaceWorker, AccountTagGetResponseTypePagesProject, AccountTagGetResponseTypeQueue, AccountTagGetResponseTypeR2Bucket, AccountTagGetResponseTypeResourceShare, AccountTagGetResponseTypeStreamLiveInput, AccountTagGetResponseTypeStreamVideo, AccountTagGetResponseTypeVectorizeIndex, AccountTagGetResponseTypeWorker, AccountTagGetResponseTypeWorkerRoute, AccountTagGetResponseTypeWorkerVersion, AccountTagGetResponseTypeZone, AccountTagGetResponseTypeZoneRuleset:
 		return true
 	}
 	return false
@@ -6833,13 +7357,15 @@ const (
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccount                AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "account"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccountRuleset         AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "account_ruleset"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAIGateway              AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "ai_gateway"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAISearchInstance       AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "ai_search_instance"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAISearchNamespace      AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "ai_search_namespace"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAlertingPolicy         AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "alerting_policy"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAlertingWebhook        AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "alerting_webhook"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCloudflaredTunnel      AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "cloudflared_tunnel"
-	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCwsDeployment          AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "cws_deployment"
-	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCwsPolicy              AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "cws_policy"
-	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCwsPolicySet           AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "cws_policy_set"
-	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCwsWorkload            AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "cws_workload"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCWSDeployment          AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "cws_deployment"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCWSPolicy              AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "cws_policy"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCWSPolicySet           AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "cws_policy_set"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCWSWorkload            AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "cws_workload"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeD1Database             AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "d1_database"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeDevice                 AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "device"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeDurableObjectNamespace AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "durable_object_namespace"
@@ -6850,6 +7376,7 @@ const (
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeKVNamespace            AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "kv_namespace"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeLoadBalancerMonitor    AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "load_balancer_monitor"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeLoadBalancerPool       AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "load_balancer_pool"
+	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeNamespaceWorker        AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "namespace_worker"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypePagesProject           AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "pages_project"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeQueue                  AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "queue"
 	AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeR2Bucket               AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType = "r2_bucket"
@@ -6862,7 +7389,7 @@ const (
 
 func (r AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceType) IsKnown() bool {
 	switch r {
-	case AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessApplication, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessGroup, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessServiceToken, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccount, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccountRuleset, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAIGateway, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAlertingPolicy, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAlertingWebhook, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCloudflaredTunnel, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCwsDeployment, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCwsPolicy, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCwsPolicySet, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCwsWorkload, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeD1Database, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeDevice, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeDurableObjectNamespace, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeGatewayList, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeGatewayRule, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeImage, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeInfrastructureTarget, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeKVNamespace, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeLoadBalancerMonitor, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeLoadBalancerPool, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypePagesProject, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeQueue, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeR2Bucket, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeResourceShare, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeStreamLiveInput, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeStreamVideo, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeVectorizeIndex, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeWorker:
+	case AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessApplication, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessGroup, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccessServiceToken, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccount, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAccountRuleset, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAIGateway, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAISearchInstance, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAISearchNamespace, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAlertingPolicy, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeAlertingWebhook, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCloudflaredTunnel, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCWSDeployment, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCWSPolicy, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCWSPolicySet, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeCWSWorkload, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeD1Database, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeDevice, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeDurableObjectNamespace, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeGatewayList, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeGatewayRule, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeImage, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeInfrastructureTarget, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeKVNamespace, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeLoadBalancerMonitor, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeLoadBalancerPool, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeNamespaceWorker, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypePagesProject, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeQueue, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeR2Bucket, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeResourceShare, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeStreamLiveInput, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeStreamVideo, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeVectorizeIndex, AccountTagUpdateParamsBodyResourceTaggingSetTagsRequestAccountLevelBaseResourceTypeWorker:
 		return true
 	}
 	return false
@@ -6879,13 +7406,15 @@ const (
 	AccountTagUpdateParamsBodyResourceTypeAccount                AccountTagUpdateParamsBodyResourceType = "account"
 	AccountTagUpdateParamsBodyResourceTypeAccountRuleset         AccountTagUpdateParamsBodyResourceType = "account_ruleset"
 	AccountTagUpdateParamsBodyResourceTypeAIGateway              AccountTagUpdateParamsBodyResourceType = "ai_gateway"
+	AccountTagUpdateParamsBodyResourceTypeAISearchInstance       AccountTagUpdateParamsBodyResourceType = "ai_search_instance"
+	AccountTagUpdateParamsBodyResourceTypeAISearchNamespace      AccountTagUpdateParamsBodyResourceType = "ai_search_namespace"
 	AccountTagUpdateParamsBodyResourceTypeAlertingPolicy         AccountTagUpdateParamsBodyResourceType = "alerting_policy"
 	AccountTagUpdateParamsBodyResourceTypeAlertingWebhook        AccountTagUpdateParamsBodyResourceType = "alerting_webhook"
 	AccountTagUpdateParamsBodyResourceTypeCloudflaredTunnel      AccountTagUpdateParamsBodyResourceType = "cloudflared_tunnel"
-	AccountTagUpdateParamsBodyResourceTypeCwsDeployment          AccountTagUpdateParamsBodyResourceType = "cws_deployment"
-	AccountTagUpdateParamsBodyResourceTypeCwsPolicy              AccountTagUpdateParamsBodyResourceType = "cws_policy"
-	AccountTagUpdateParamsBodyResourceTypeCwsPolicySet           AccountTagUpdateParamsBodyResourceType = "cws_policy_set"
-	AccountTagUpdateParamsBodyResourceTypeCwsWorkload            AccountTagUpdateParamsBodyResourceType = "cws_workload"
+	AccountTagUpdateParamsBodyResourceTypeCWSDeployment          AccountTagUpdateParamsBodyResourceType = "cws_deployment"
+	AccountTagUpdateParamsBodyResourceTypeCWSPolicy              AccountTagUpdateParamsBodyResourceType = "cws_policy"
+	AccountTagUpdateParamsBodyResourceTypeCWSPolicySet           AccountTagUpdateParamsBodyResourceType = "cws_policy_set"
+	AccountTagUpdateParamsBodyResourceTypeCWSWorkload            AccountTagUpdateParamsBodyResourceType = "cws_workload"
 	AccountTagUpdateParamsBodyResourceTypeD1Database             AccountTagUpdateParamsBodyResourceType = "d1_database"
 	AccountTagUpdateParamsBodyResourceTypeDevice                 AccountTagUpdateParamsBodyResourceType = "device"
 	AccountTagUpdateParamsBodyResourceTypeDurableObjectNamespace AccountTagUpdateParamsBodyResourceType = "durable_object_namespace"
@@ -6896,6 +7425,7 @@ const (
 	AccountTagUpdateParamsBodyResourceTypeKVNamespace            AccountTagUpdateParamsBodyResourceType = "kv_namespace"
 	AccountTagUpdateParamsBodyResourceTypeLoadBalancerMonitor    AccountTagUpdateParamsBodyResourceType = "load_balancer_monitor"
 	AccountTagUpdateParamsBodyResourceTypeLoadBalancerPool       AccountTagUpdateParamsBodyResourceType = "load_balancer_pool"
+	AccountTagUpdateParamsBodyResourceTypeNamespaceWorker        AccountTagUpdateParamsBodyResourceType = "namespace_worker"
 	AccountTagUpdateParamsBodyResourceTypePagesProject           AccountTagUpdateParamsBodyResourceType = "pages_project"
 	AccountTagUpdateParamsBodyResourceTypeQueue                  AccountTagUpdateParamsBodyResourceType = "queue"
 	AccountTagUpdateParamsBodyResourceTypeR2Bucket               AccountTagUpdateParamsBodyResourceType = "r2_bucket"
@@ -6908,7 +7438,7 @@ const (
 
 func (r AccountTagUpdateParamsBodyResourceType) IsKnown() bool {
 	switch r {
-	case AccountTagUpdateParamsBodyResourceTypeWorkerVersion, AccountTagUpdateParamsBodyResourceTypeAccessApplication, AccountTagUpdateParamsBodyResourceTypeAccessGroup, AccountTagUpdateParamsBodyResourceTypeAccessServiceToken, AccountTagUpdateParamsBodyResourceTypeAccount, AccountTagUpdateParamsBodyResourceTypeAccountRuleset, AccountTagUpdateParamsBodyResourceTypeAIGateway, AccountTagUpdateParamsBodyResourceTypeAlertingPolicy, AccountTagUpdateParamsBodyResourceTypeAlertingWebhook, AccountTagUpdateParamsBodyResourceTypeCloudflaredTunnel, AccountTagUpdateParamsBodyResourceTypeCwsDeployment, AccountTagUpdateParamsBodyResourceTypeCwsPolicy, AccountTagUpdateParamsBodyResourceTypeCwsPolicySet, AccountTagUpdateParamsBodyResourceTypeCwsWorkload, AccountTagUpdateParamsBodyResourceTypeD1Database, AccountTagUpdateParamsBodyResourceTypeDevice, AccountTagUpdateParamsBodyResourceTypeDurableObjectNamespace, AccountTagUpdateParamsBodyResourceTypeGatewayList, AccountTagUpdateParamsBodyResourceTypeGatewayRule, AccountTagUpdateParamsBodyResourceTypeImage, AccountTagUpdateParamsBodyResourceTypeInfrastructureTarget, AccountTagUpdateParamsBodyResourceTypeKVNamespace, AccountTagUpdateParamsBodyResourceTypeLoadBalancerMonitor, AccountTagUpdateParamsBodyResourceTypeLoadBalancerPool, AccountTagUpdateParamsBodyResourceTypePagesProject, AccountTagUpdateParamsBodyResourceTypeQueue, AccountTagUpdateParamsBodyResourceTypeR2Bucket, AccountTagUpdateParamsBodyResourceTypeResourceShare, AccountTagUpdateParamsBodyResourceTypeStreamLiveInput, AccountTagUpdateParamsBodyResourceTypeStreamVideo, AccountTagUpdateParamsBodyResourceTypeVectorizeIndex, AccountTagUpdateParamsBodyResourceTypeWorker:
+	case AccountTagUpdateParamsBodyResourceTypeWorkerVersion, AccountTagUpdateParamsBodyResourceTypeAccessApplication, AccountTagUpdateParamsBodyResourceTypeAccessGroup, AccountTagUpdateParamsBodyResourceTypeAccessServiceToken, AccountTagUpdateParamsBodyResourceTypeAccount, AccountTagUpdateParamsBodyResourceTypeAccountRuleset, AccountTagUpdateParamsBodyResourceTypeAIGateway, AccountTagUpdateParamsBodyResourceTypeAISearchInstance, AccountTagUpdateParamsBodyResourceTypeAISearchNamespace, AccountTagUpdateParamsBodyResourceTypeAlertingPolicy, AccountTagUpdateParamsBodyResourceTypeAlertingWebhook, AccountTagUpdateParamsBodyResourceTypeCloudflaredTunnel, AccountTagUpdateParamsBodyResourceTypeCWSDeployment, AccountTagUpdateParamsBodyResourceTypeCWSPolicy, AccountTagUpdateParamsBodyResourceTypeCWSPolicySet, AccountTagUpdateParamsBodyResourceTypeCWSWorkload, AccountTagUpdateParamsBodyResourceTypeD1Database, AccountTagUpdateParamsBodyResourceTypeDevice, AccountTagUpdateParamsBodyResourceTypeDurableObjectNamespace, AccountTagUpdateParamsBodyResourceTypeGatewayList, AccountTagUpdateParamsBodyResourceTypeGatewayRule, AccountTagUpdateParamsBodyResourceTypeImage, AccountTagUpdateParamsBodyResourceTypeInfrastructureTarget, AccountTagUpdateParamsBodyResourceTypeKVNamespace, AccountTagUpdateParamsBodyResourceTypeLoadBalancerMonitor, AccountTagUpdateParamsBodyResourceTypeLoadBalancerPool, AccountTagUpdateParamsBodyResourceTypeNamespaceWorker, AccountTagUpdateParamsBodyResourceTypePagesProject, AccountTagUpdateParamsBodyResourceTypeQueue, AccountTagUpdateParamsBodyResourceTypeR2Bucket, AccountTagUpdateParamsBodyResourceTypeResourceShare, AccountTagUpdateParamsBodyResourceTypeStreamLiveInput, AccountTagUpdateParamsBodyResourceTypeStreamVideo, AccountTagUpdateParamsBodyResourceTypeVectorizeIndex, AccountTagUpdateParamsBodyResourceTypeWorker:
 		return true
 	}
 	return false
@@ -7089,13 +7619,15 @@ const (
 	AccountTagGetParamsResourceTypeAccount                AccountTagGetParamsResourceType = "account"
 	AccountTagGetParamsResourceTypeAccountRuleset         AccountTagGetParamsResourceType = "account_ruleset"
 	AccountTagGetParamsResourceTypeAIGateway              AccountTagGetParamsResourceType = "ai_gateway"
+	AccountTagGetParamsResourceTypeAISearchInstance       AccountTagGetParamsResourceType = "ai_search_instance"
+	AccountTagGetParamsResourceTypeAISearchNamespace      AccountTagGetParamsResourceType = "ai_search_namespace"
 	AccountTagGetParamsResourceTypeAlertingPolicy         AccountTagGetParamsResourceType = "alerting_policy"
 	AccountTagGetParamsResourceTypeAlertingWebhook        AccountTagGetParamsResourceType = "alerting_webhook"
 	AccountTagGetParamsResourceTypeCloudflaredTunnel      AccountTagGetParamsResourceType = "cloudflared_tunnel"
-	AccountTagGetParamsResourceTypeCwsDeployment          AccountTagGetParamsResourceType = "cws_deployment"
-	AccountTagGetParamsResourceTypeCwsPolicy              AccountTagGetParamsResourceType = "cws_policy"
-	AccountTagGetParamsResourceTypeCwsPolicySet           AccountTagGetParamsResourceType = "cws_policy_set"
-	AccountTagGetParamsResourceTypeCwsWorkload            AccountTagGetParamsResourceType = "cws_workload"
+	AccountTagGetParamsResourceTypeCWSDeployment          AccountTagGetParamsResourceType = "cws_deployment"
+	AccountTagGetParamsResourceTypeCWSPolicy              AccountTagGetParamsResourceType = "cws_policy"
+	AccountTagGetParamsResourceTypeCWSPolicySet           AccountTagGetParamsResourceType = "cws_policy_set"
+	AccountTagGetParamsResourceTypeCWSWorkload            AccountTagGetParamsResourceType = "cws_workload"
 	AccountTagGetParamsResourceTypeD1Database             AccountTagGetParamsResourceType = "d1_database"
 	AccountTagGetParamsResourceTypeDevice                 AccountTagGetParamsResourceType = "device"
 	AccountTagGetParamsResourceTypeDurableObjectNamespace AccountTagGetParamsResourceType = "durable_object_namespace"
@@ -7106,6 +7638,7 @@ const (
 	AccountTagGetParamsResourceTypeKVNamespace            AccountTagGetParamsResourceType = "kv_namespace"
 	AccountTagGetParamsResourceTypeLoadBalancerMonitor    AccountTagGetParamsResourceType = "load_balancer_monitor"
 	AccountTagGetParamsResourceTypeLoadBalancerPool       AccountTagGetParamsResourceType = "load_balancer_pool"
+	AccountTagGetParamsResourceTypeNamespaceWorker        AccountTagGetParamsResourceType = "namespace_worker"
 	AccountTagGetParamsResourceTypePagesProject           AccountTagGetParamsResourceType = "pages_project"
 	AccountTagGetParamsResourceTypeQueue                  AccountTagGetParamsResourceType = "queue"
 	AccountTagGetParamsResourceTypeR2Bucket               AccountTagGetParamsResourceType = "r2_bucket"
@@ -7119,7 +7652,7 @@ const (
 
 func (r AccountTagGetParamsResourceType) IsKnown() bool {
 	switch r {
-	case AccountTagGetParamsResourceTypeAccessApplication, AccountTagGetParamsResourceTypeAccessGroup, AccountTagGetParamsResourceTypeAccessServiceToken, AccountTagGetParamsResourceTypeAccount, AccountTagGetParamsResourceTypeAccountRuleset, AccountTagGetParamsResourceTypeAIGateway, AccountTagGetParamsResourceTypeAlertingPolicy, AccountTagGetParamsResourceTypeAlertingWebhook, AccountTagGetParamsResourceTypeCloudflaredTunnel, AccountTagGetParamsResourceTypeCwsDeployment, AccountTagGetParamsResourceTypeCwsPolicy, AccountTagGetParamsResourceTypeCwsPolicySet, AccountTagGetParamsResourceTypeCwsWorkload, AccountTagGetParamsResourceTypeD1Database, AccountTagGetParamsResourceTypeDevice, AccountTagGetParamsResourceTypeDurableObjectNamespace, AccountTagGetParamsResourceTypeGatewayList, AccountTagGetParamsResourceTypeGatewayRule, AccountTagGetParamsResourceTypeImage, AccountTagGetParamsResourceTypeInfrastructureTarget, AccountTagGetParamsResourceTypeKVNamespace, AccountTagGetParamsResourceTypeLoadBalancerMonitor, AccountTagGetParamsResourceTypeLoadBalancerPool, AccountTagGetParamsResourceTypePagesProject, AccountTagGetParamsResourceTypeQueue, AccountTagGetParamsResourceTypeR2Bucket, AccountTagGetParamsResourceTypeResourceShare, AccountTagGetParamsResourceTypeStreamLiveInput, AccountTagGetParamsResourceTypeStreamVideo, AccountTagGetParamsResourceTypeVectorizeIndex, AccountTagGetParamsResourceTypeWorker, AccountTagGetParamsResourceTypeWorkerVersion:
+	case AccountTagGetParamsResourceTypeAccessApplication, AccountTagGetParamsResourceTypeAccessGroup, AccountTagGetParamsResourceTypeAccessServiceToken, AccountTagGetParamsResourceTypeAccount, AccountTagGetParamsResourceTypeAccountRuleset, AccountTagGetParamsResourceTypeAIGateway, AccountTagGetParamsResourceTypeAISearchInstance, AccountTagGetParamsResourceTypeAISearchNamespace, AccountTagGetParamsResourceTypeAlertingPolicy, AccountTagGetParamsResourceTypeAlertingWebhook, AccountTagGetParamsResourceTypeCloudflaredTunnel, AccountTagGetParamsResourceTypeCWSDeployment, AccountTagGetParamsResourceTypeCWSPolicy, AccountTagGetParamsResourceTypeCWSPolicySet, AccountTagGetParamsResourceTypeCWSWorkload, AccountTagGetParamsResourceTypeD1Database, AccountTagGetParamsResourceTypeDevice, AccountTagGetParamsResourceTypeDurableObjectNamespace, AccountTagGetParamsResourceTypeGatewayList, AccountTagGetParamsResourceTypeGatewayRule, AccountTagGetParamsResourceTypeImage, AccountTagGetParamsResourceTypeInfrastructureTarget, AccountTagGetParamsResourceTypeKVNamespace, AccountTagGetParamsResourceTypeLoadBalancerMonitor, AccountTagGetParamsResourceTypeLoadBalancerPool, AccountTagGetParamsResourceTypeNamespaceWorker, AccountTagGetParamsResourceTypePagesProject, AccountTagGetParamsResourceTypeQueue, AccountTagGetParamsResourceTypeR2Bucket, AccountTagGetParamsResourceTypeResourceShare, AccountTagGetParamsResourceTypeStreamLiveInput, AccountTagGetParamsResourceTypeStreamVideo, AccountTagGetParamsResourceTypeVectorizeIndex, AccountTagGetParamsResourceTypeWorker, AccountTagGetParamsResourceTypeWorkerVersion:
 		return true
 	}
 	return false

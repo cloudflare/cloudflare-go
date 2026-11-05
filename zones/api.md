@@ -90,7 +90,6 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#AlwaysOnline">AlwaysOnline</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#AlwaysUseHTTPS">AlwaysUseHTTPS</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#AutomaticHTTPSRewrites">AutomaticHTTPSRewrites</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#AutomaticPlatformOptimization">AutomaticPlatformOptimization</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#Brotli">Brotli</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#BrowserCacheTTL">BrowserCacheTTL</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/zones#BrowserCheck">BrowserCheck</a>

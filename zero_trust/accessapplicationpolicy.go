@@ -377,6 +377,9 @@ type AccessRule struct {
 	// This field can have the runtime type of [ServiceTokenRuleServiceToken].
 	ServiceToken interface{} `json:"service_token"`
 	// This field can have the runtime type of
+	// [AccessRuleAccessServiceTokenTagRuleServiceTokenTag].
+	ServiceTokenTag interface{} `json:"service_token_tag"`
+	// This field can have the runtime type of
 	// [AccessRuleAccessUserRiskScoreRuleUserRiskScore].
 	UserRiskScore interface{}    `json:"user_risk_score"`
 	JSON          accessRuleJSON `json:"-"`
@@ -410,6 +413,7 @@ type accessRuleJSON struct {
 	Okta                    apijson.Field
 	SAML                    apijson.Field
 	ServiceToken            apijson.Field
+	ServiceTokenTag         apijson.Field
 	UserRiskScore           apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
@@ -438,8 +442,8 @@ func (r *AccessRule) UnmarshalJSON(data []byte) (err error) {
 // [EveryoneRule], [ExternalEvaluationRule], [GitHubOrganizationRule],
 // [GSuiteGroupRule], [AccessRuleAccessLoginMethodRule], [IPListRule], [IPRule],
 // [OktaGroupRule], [SAMLGroupRule], [AccessRuleAccessOIDCClaimRule],
-// [ServiceTokenRule], [AccessRuleAccessLinkedAppTokenRule],
-// [AccessRuleAccessUserRiskScoreRule],
+// [ServiceTokenRule], [AccessRuleAccessServiceTokenTagRule],
+// [AccessRuleAccessLinkedAppTokenRule], [AccessRuleAccessUserRiskScoreRule],
 // [AccessRuleAccessCloudflareAccountMemberRule].
 func (r AccessRule) AsUnion() AccessRuleUnion {
 	return r.union
@@ -454,8 +458,8 @@ func (r AccessRule) AsUnion() AccessRuleUnion {
 // [EveryoneRule], [ExternalEvaluationRule], [GitHubOrganizationRule],
 // [GSuiteGroupRule], [AccessRuleAccessLoginMethodRule], [IPListRule], [IPRule],
 // [OktaGroupRule], [SAMLGroupRule], [AccessRuleAccessOIDCClaimRule],
-// [ServiceTokenRule], [AccessRuleAccessLinkedAppTokenRule],
-// [AccessRuleAccessUserRiskScoreRule] or
+// [ServiceTokenRule], [AccessRuleAccessServiceTokenTagRule],
+// [AccessRuleAccessLinkedAppTokenRule], [AccessRuleAccessUserRiskScoreRule] or
 // [AccessRuleAccessCloudflareAccountMemberRule].
 type AccessRuleUnion interface {
 	implementsAccessRule()
@@ -556,6 +560,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(ServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessRuleAccessServiceTokenTagRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -768,6 +776,58 @@ func (r accessRuleAccessOIDCClaimRuleOIDCJSON) RawJSON() string {
 	return r.raw
 }
 
+// Matches an Access service token with the specified tag key and value. Only
+// compatible with non_identity decisions.
+type AccessRuleAccessServiceTokenTagRule struct {
+	ServiceTokenTag AccessRuleAccessServiceTokenTagRuleServiceTokenTag `json:"service_token_tag" api:"required"`
+	JSON            accessRuleAccessServiceTokenTagRuleJSON            `json:"-"`
+}
+
+// accessRuleAccessServiceTokenTagRuleJSON contains the JSON metadata for the
+// struct [AccessRuleAccessServiceTokenTagRule]
+type accessRuleAccessServiceTokenTagRuleJSON struct {
+	ServiceTokenTag apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessServiceTokenTagRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessServiceTokenTagRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessServiceTokenTagRule) implementsAccessRule() {}
+
+type AccessRuleAccessServiceTokenTagRuleServiceTokenTag struct {
+	// The tag key to match. Keys are case-sensitive and may contain Unicode letters
+	// and digits, underscores, periods, and hyphens.
+	Key string `json:"key" api:"required"`
+	// The tag value to match. Values are case-sensitive, preserve whitespace, and must
+	// not contain NUL characters.
+	Value string                                                 `json:"value" api:"required"`
+	JSON  accessRuleAccessServiceTokenTagRuleServiceTokenTagJSON `json:"-"`
+}
+
+// accessRuleAccessServiceTokenTagRuleServiceTokenTagJSON contains the JSON
+// metadata for the struct [AccessRuleAccessServiceTokenTagRuleServiceTokenTag]
+type accessRuleAccessServiceTokenTagRuleServiceTokenTagJSON struct {
+	Key         apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessServiceTokenTagRuleServiceTokenTag) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessServiceTokenTagRuleServiceTokenTagJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches OAuth 2.0 access tokens issued by the specified Access OIDC SaaS
 // application. Only compatible with non_identity and bypass decisions.
 type AccessRuleAccessLinkedAppTokenRule struct {
@@ -954,6 +1014,7 @@ type AccessRuleParam struct {
 	Okta                    param.Field[interface{}] `json:"okta"`
 	SAML                    param.Field[interface{}] `json:"saml"`
 	ServiceToken            param.Field[interface{}] `json:"service_token"`
+	ServiceTokenTag         param.Field[interface{}] `json:"service_token_tag"`
 	UserRiskScore           param.Field[interface{}] `json:"user_risk_score"`
 }
 
@@ -980,6 +1041,7 @@ func (r AccessRuleParam) implementsAccessRuleUnionParam() {}
 // [zero_trust.SAMLGroupRuleParam],
 // [zero_trust.AccessRuleAccessOIDCClaimRuleParam],
 // [zero_trust.ServiceTokenRuleParam],
+// [zero_trust.AccessRuleAccessServiceTokenTagRuleParam],
 // [zero_trust.AccessRuleAccessLinkedAppTokenRuleParam],
 // [zero_trust.AccessRuleAccessUserRiskScoreRuleParam],
 // [zero_trust.AccessRuleAccessCloudflareAccountMemberRuleParam],
@@ -1073,6 +1135,31 @@ type AccessRuleAccessOIDCClaimRuleOIDCParam struct {
 }
 
 func (r AccessRuleAccessOIDCClaimRuleOIDCParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches an Access service token with the specified tag key and value. Only
+// compatible with non_identity decisions.
+type AccessRuleAccessServiceTokenTagRuleParam struct {
+	ServiceTokenTag param.Field[AccessRuleAccessServiceTokenTagRuleServiceTokenTagParam] `json:"service_token_tag" api:"required"`
+}
+
+func (r AccessRuleAccessServiceTokenTagRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessServiceTokenTagRuleParam) implementsAccessRuleUnionParam() {}
+
+type AccessRuleAccessServiceTokenTagRuleServiceTokenTagParam struct {
+	// The tag key to match. Keys are case-sensitive and may contain Unicode letters
+	// and digits, underscores, periods, and hyphens.
+	Key param.Field[string] `json:"key" api:"required"`
+	// The tag value to match. Values are case-sensitive, preserve whitespace, and must
+	// not contain NUL characters.
+	Value param.Field[string] `json:"value" api:"required"`
+}
+
+func (r AccessRuleAccessServiceTokenTagRuleServiceTokenTagParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2379,6 +2466,10 @@ type AccessApplicationPolicyNewResponse struct {
 	MfaConfig interface{} `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -2412,6 +2503,7 @@ type accessApplicationPolicyNewResponseJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -2497,6 +2589,10 @@ type AccessApplicationPolicyNewResponseObject struct {
 	MfaConfig AccessApplicationPolicyNewResponseObjectMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -2530,6 +2626,7 @@ type accessApplicationPolicyNewResponseObjectJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -2711,6 +2808,10 @@ type AccessApplicationPolicyUpdateResponse struct {
 	MfaConfig interface{} `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -2744,6 +2845,7 @@ type accessApplicationPolicyUpdateResponseJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -2829,6 +2931,10 @@ type AccessApplicationPolicyUpdateResponseObject struct {
 	MfaConfig AccessApplicationPolicyUpdateResponseObjectMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -2862,6 +2968,7 @@ type accessApplicationPolicyUpdateResponseObjectJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -3044,6 +3151,10 @@ type AccessApplicationPolicyListResponse struct {
 	MfaConfig interface{} `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -3077,6 +3188,7 @@ type accessApplicationPolicyListResponseJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -3162,6 +3274,10 @@ type AccessApplicationPolicyListResponseObject struct {
 	MfaConfig AccessApplicationPolicyListResponseObjectMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -3195,6 +3311,7 @@ type accessApplicationPolicyListResponseObjectJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -3398,6 +3515,10 @@ type AccessApplicationPolicyGetResponse struct {
 	MfaConfig interface{} `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -3431,6 +3552,7 @@ type accessApplicationPolicyGetResponseJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -3516,6 +3638,10 @@ type AccessApplicationPolicyGetResponseObject struct {
 	MfaConfig AccessApplicationPolicyGetResponseObjectMfaConfig `json:"mfa_config"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID string `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence int64 `json:"precedence"`
@@ -3549,6 +3675,7 @@ type accessApplicationPolicyGetResponseObjectJSON struct {
 	IsolationRequired            apijson.Field
 	MfaConfig                    apijson.Field
 	Name                         apijson.Field
+	PolicyResolutionAccountID    apijson.Field
 	Precedence                   apijson.Field
 	PurposeJustificationPrompt   apijson.Field
 	PurposeJustificationRequired apijson.Field
@@ -3730,6 +3857,10 @@ type AccessApplicationPolicyNewParamsBody struct {
 	MfaConfig         param.Field[interface{}] `json:"mfa_config"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID param.Field[string] `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -3898,6 +4029,10 @@ type AccessApplicationPolicyNewParamsBodyObject struct {
 	// Configures multi-factor authentication (MFA) settings for infrastructure
 	// applications.
 	MfaConfig param.Field[AccessApplicationPolicyNewParamsBodyObjectMfaConfig] `json:"mfa_config"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID param.Field[string] `json:"policy_resolution_account_id"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
@@ -4138,6 +4273,10 @@ type AccessApplicationPolicyUpdateParamsBody struct {
 	MfaConfig         param.Field[interface{}] `json:"mfa_config"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID param.Field[string] `json:"policy_resolution_account_id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence param.Field[int64] `json:"precedence"`
@@ -4307,6 +4446,10 @@ type AccessApplicationPolicyUpdateParamsBodyObject struct {
 	// Configures multi-factor authentication (MFA) settings for infrastructure
 	// applications.
 	MfaConfig param.Field[AccessApplicationPolicyUpdateParamsBodyObjectMfaConfig] `json:"mfa_config"`
+	// The account ID used to resolve policy resources and identity for cross-account
+	// WARP authentication. The account must be trusted by the account that owns this
+	// policy.
+	PolicyResolutionAccountID param.Field[string] `json:"policy_resolution_account_id"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require param.Field[[]AccessRuleUnionParam] `json:"require"`

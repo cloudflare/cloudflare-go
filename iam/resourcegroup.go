@@ -148,7 +148,7 @@ func (r *ResourceGroupService) Get(ctx context.Context, resourceGroupID string, 
 type ResourceGroupNewResponse struct {
 	// Identifier of the resource group.
 	ID string `json:"id" api:"required"`
-	// A scope is a combination of scope objects which provides additional context.
+	// The scope associated to the resource group
 	Scope ResourceGroupNewResponseScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta ResourceGroupNewResponseMeta `json:"meta"`
@@ -176,7 +176,7 @@ func (r resourceGroupNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A scope is a combination of scope objects which provides additional context.
+// The scope associated to the resource group
 type ResourceGroupNewResponseScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
@@ -256,7 +256,7 @@ func (r resourceGroupNewResponseMetaJSON) RawJSON() string {
 type ResourceGroupUpdateResponse struct {
 	// Identifier of the resource group.
 	ID string `json:"id" api:"required"`
-	// A scope is a combination of scope objects which provides additional context.
+	// The scope associated to the resource group
 	Scope ResourceGroupUpdateResponseScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta ResourceGroupUpdateResponseMeta `json:"meta"`
@@ -284,7 +284,7 @@ func (r resourceGroupUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A scope is a combination of scope objects which provides additional context.
+// The scope associated to the resource group
 type ResourceGroupUpdateResponseScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
@@ -364,7 +364,7 @@ func (r resourceGroupUpdateResponseMetaJSON) RawJSON() string {
 type ResourceGroupListResponse struct {
 	// Identifier of the resource group.
 	ID string `json:"id" api:"required"`
-	// A scope is a combination of scope objects which provides additional context.
+	// The scope associated to the resource group
 	Scope ResourceGroupListResponseScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta ResourceGroupListResponseMeta `json:"meta"`
@@ -392,7 +392,7 @@ func (r resourceGroupListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A scope is a combination of scope objects which provides additional context.
+// The scope associated to the resource group
 type ResourceGroupListResponseScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
@@ -494,7 +494,7 @@ func (r resourceGroupDeleteResponseJSON) RawJSON() string {
 type ResourceGroupGetResponse struct {
 	// Identifier of the resource group.
 	ID string `json:"id" api:"required"`
-	// A scope is a combination of scope objects which provides additional context.
+	// The scope associated to the resource group
 	Scope ResourceGroupGetResponseScope `json:"scope" api:"required"`
 	// Attributes associated to the resource group.
 	Meta ResourceGroupGetResponseMeta `json:"meta"`
@@ -522,7 +522,7 @@ func (r resourceGroupGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// A scope is a combination of scope objects which provides additional context.
+// The scope associated to the resource group
 type ResourceGroupGetResponseScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
@@ -603,7 +603,7 @@ type ResourceGroupNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Name of the resource group
 	Name param.Field[string] `json:"name" api:"required"`
-	// A scope is a combination of scope objects which provides additional context.
+	// The scope associated to the resource group
 	Scope param.Field[ResourceGroupNewParamsScope] `json:"scope" api:"required"`
 }
 
@@ -611,7 +611,7 @@ func (r ResourceGroupNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// A scope is a combination of scope objects which provides additional context.
+// The scope associated to the resource group
 type ResourceGroupNewParamsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)
@@ -782,7 +782,7 @@ type ResourceGroupUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Name of the resource group
 	Name param.Field[string] `json:"name"`
-	// A scope is a combination of scope objects which provides additional context.
+	// The scope associated to the resource group
 	Scope param.Field[ResourceGroupUpdateParamsScope] `json:"scope"`
 }
 
@@ -790,7 +790,7 @@ func (r ResourceGroupUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// A scope is a combination of scope objects which provides additional context.
+// The scope associated to the resource group
 type ResourceGroupUpdateParamsScope struct {
 	// This is a combination of pre-defined resource name and identifier (like Account
 	// ID etc.)

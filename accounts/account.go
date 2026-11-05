@@ -75,7 +75,8 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 // `standalone: true` and omit `unit`. Providing both fields is invalid. If you
 // omit both fields, Cloudflare can determine the destination only when the User is
 // an administrator of exactly one Organization. Cloudflare creates the Account in
-// that Organization; otherwise, the request returns an error.
+// that Organization; otherwise, the request returns an error. Account names are
+// limited to 65 UTF-8 bytes.
 func (r *AccountService) New(ctx context.Context, params AccountNewParams, opts ...option.RequestOption) (res *Account, err error) {
 	var env AccountNewResponseEnvelope
 	if params.IdempotencyKey.Present {
@@ -91,7 +92,7 @@ func (r *AccountService) New(ctx context.Context, params AccountNewParams, opts 
 	return res, nil
 }
 
-// Update an existing account.
+// Update an existing account. Account names are limited to 65 UTF-8 bytes.
 func (r *AccountService) Update(ctx context.Context, params AccountUpdateParams, opts ...option.RequestOption) (res *Account, err error) {
 	var env AccountUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -175,6 +176,8 @@ type Account struct {
 	Type AccountType `json:"type" api:"required"`
 	// Timestamp for the creation of the account
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// Legacy account flags.
+	LegacyFlags AccountLegacyFlags `json:"legacy_flags"`
 	// Parent container details
 	ManagedBy AccountManagedBy `json:"managed_by"`
 	// Account settings
@@ -188,6 +191,7 @@ type accountJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	CreatedOn   apijson.Field
+	LegacyFlags apijson.Field
 	ManagedBy   apijson.Field
 	Settings    apijson.Field
 	raw         string
@@ -217,22 +221,83 @@ func (r AccountType) IsKnown() bool {
 	return false
 }
 
+// Legacy account flags.
+type AccountLegacyFlags struct {
+	// Enterprise zone quota for standard and enterprise accounts. Accounts without a
+	// quota have a maximum of 0.
+	EnterpriseZoneQuota AccountLegacyFlagsEnterpriseZoneQuota `json:"enterprise_zone_quota"`
+	JSON                accountLegacyFlagsJSON                `json:"-"`
+}
+
+// accountLegacyFlagsJSON contains the JSON metadata for the struct
+// [AccountLegacyFlags]
+type accountLegacyFlagsJSON struct {
+	EnterpriseZoneQuota apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *AccountLegacyFlags) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountLegacyFlagsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Enterprise zone quota for standard and enterprise accounts. Accounts without a
+// quota have a maximum of 0.
+type AccountLegacyFlagsEnterpriseZoneQuota struct {
+	// Number of additional Enterprise zones available. Returns 0 if the quota is not
+	// allocated or is exhausted.
+	Available int64 `json:"available"`
+	// Current number of Enterprise zones.
+	Current int64 `json:"current"`
+	// Maximum number of Enterprise zones allowed.
+	Maximum int64                                     `json:"maximum"`
+	JSON    accountLegacyFlagsEnterpriseZoneQuotaJSON `json:"-"`
+}
+
+// accountLegacyFlagsEnterpriseZoneQuotaJSON contains the JSON metadata for the
+// struct [AccountLegacyFlagsEnterpriseZoneQuota]
+type accountLegacyFlagsEnterpriseZoneQuotaJSON struct {
+	Available   apijson.Field
+	Current     apijson.Field
+	Maximum     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountLegacyFlagsEnterpriseZoneQuota) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountLegacyFlagsEnterpriseZoneQuotaJSON) RawJSON() string {
+	return r.raw
+}
+
 // Parent container details
 type AccountManagedBy struct {
 	// ID of the parent Organization, if one exists
 	ParentOrgID string `json:"parent_org_id"`
 	// Name of the parent Organization, if one exists
-	ParentOrgName string               `json:"parent_org_name"`
-	JSON          accountManagedByJSON `json:"-"`
+	ParentOrgName string `json:"parent_org_name"`
+	// ID of the root Organization, if one exists
+	RootOrgID string `json:"root_org_id"`
+	// Indicates whether the parent Organization hierarchy should be displayed
+	ShouldDisplayParentOrgs bool                 `json:"should_display_parent_orgs"`
+	JSON                    accountManagedByJSON `json:"-"`
 }
 
 // accountManagedByJSON contains the JSON metadata for the struct
 // [AccountManagedBy]
 type accountManagedByJSON struct {
-	ParentOrgID   apijson.Field
-	ParentOrgName apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ParentOrgID             apijson.Field
+	ParentOrgName           apijson.Field
+	RootOrgID               apijson.Field
+	ShouldDisplayParentOrgs apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r *AccountManagedBy) UnmarshalJSON(data []byte) (err error) {
@@ -269,43 +334,6 @@ func (r accountSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccountParam struct {
-	// Identifier
-	ID param.Field[string] `json:"id" api:"required"`
-	// Account name
-	Name param.Field[string]      `json:"name" api:"required"`
-	Type param.Field[AccountType] `json:"type" api:"required"`
-	// Parent container details
-	ManagedBy param.Field[AccountManagedByParam] `json:"managed_by"`
-	// Account settings
-	Settings param.Field[AccountSettingsParam] `json:"settings"`
-}
-
-func (r AccountParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Parent container details
-type AccountManagedByParam struct {
-}
-
-func (r AccountManagedByParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Account settings
-type AccountSettingsParam struct {
-	// Sets an abuse contact email to notify for abuse reports.
-	AbuseContactEmail param.Field[string] `json:"abuse_contact_email"`
-	// Indicates whether membership in this account requires that Two-Factor
-	// Authentication is enabled
-	EnforceTwofactor param.Field[bool] `json:"enforce_twofactor"`
-}
-
-func (r AccountSettingsParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type AccountDeleteResponse struct {
 	// Identifier
 	ID   string                    `json:"id" api:"required"`
@@ -329,12 +357,14 @@ func (r accountDeleteResponseJSON) RawJSON() string {
 }
 
 type AccountNewParams struct {
-	// Account name
+	// Account name, limited to 65 UTF-8 bytes.
 	Name param.Field[string] `json:"name" api:"required"`
 	// Set to `true` and omit `unit` to create a standalone Free Account. If provided,
 	// this field must be `true`.
 	Standalone param.Field[AccountNewParamsStandalone] `json:"standalone"`
-	Type       param.Field[AccountNewParamsType]       `json:"type"`
+	// the type of account being created. For self-serve customers, use standard. for
+	// enterprise customers, use enterprise.
+	Type param.Field[AccountNewParamsType] `json:"type"`
 	// Information related to the tenant unit. Provide its ID and omit `standalone` to
 	// create the Account within an Organization. See
 	// https://developers.cloudflare.com/tenant/how-to/manage-accounts/.
@@ -362,6 +392,8 @@ func (r AccountNewParamsStandalone) IsKnown() bool {
 	return false
 }
 
+// the type of account being created. For self-serve customers, use standard. for
+// enterprise customers, use enterprise.
 type AccountNewParamsType string
 
 const (
@@ -531,11 +563,55 @@ func (r AccountNewResponseEnvelopeSuccess) IsKnown() bool {
 type AccountUpdateParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Account   AccountParam        `json:"account" api:"required"`
+	// Identifier
+	ID param.Field[string] `json:"id" api:"required"`
+	// Account name, limited to 65 UTF-8 bytes.
+	Name param.Field[string]                  `json:"name" api:"required"`
+	Type param.Field[AccountUpdateParamsType] `json:"type" api:"required"`
+	// Parent container details
+	ManagedBy param.Field[AccountUpdateParamsManagedBy] `json:"managed_by"`
+	// Account settings
+	Settings param.Field[AccountUpdateParamsSettings] `json:"settings"`
 }
 
 func (r AccountUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Account)
+	return apijson.MarshalRoot(r)
+}
+
+type AccountUpdateParamsType string
+
+const (
+	AccountUpdateParamsTypeStandard   AccountUpdateParamsType = "standard"
+	AccountUpdateParamsTypeEnterprise AccountUpdateParamsType = "enterprise"
+)
+
+func (r AccountUpdateParamsType) IsKnown() bool {
+	switch r {
+	case AccountUpdateParamsTypeStandard, AccountUpdateParamsTypeEnterprise:
+		return true
+	}
+	return false
+}
+
+// Parent container details
+type AccountUpdateParamsManagedBy struct {
+}
+
+func (r AccountUpdateParamsManagedBy) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Account settings
+type AccountUpdateParamsSettings struct {
+	// Sets an abuse contact email to notify for abuse reports.
+	AbuseContactEmail param.Field[string] `json:"abuse_contact_email"`
+	// Indicates whether membership in this account requires that Two-Factor
+	// Authentication is enabled
+	EnforceTwofactor param.Field[bool] `json:"enforce_twofactor"`
+}
+
+func (r AccountUpdateParamsSettings) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type AccountUpdateResponseEnvelope struct {

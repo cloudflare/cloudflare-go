@@ -283,6 +283,35 @@ func (r *DatabaseService) RawAutoPaging(ctx context.Context, databaseID string, 
 	return pagination.NewSinglePageAutoPager(r.Raw(ctx, databaseID, params, opts...))
 }
 
+// Restore a deleted D1 database. The database is restored with the name it had
+// when it was deleted, unless `new_name` is provided. The restored database counts
+// against the account's limits. Undeleting a database that is not deleted succeeds
+// without changes, unless `new_name` differs from its current name which errors. A
+// database can only be undeleted within 7 days (7 \* 24 hours) of its deletion.
+//
+// Once a database is undeleted, Time Travel (point-in-time recovery) cannot
+// restore it to a bookmark or timestamp at or before the undeletion. Only states
+// after the undeletion can be restored.
+func (r *DatabaseService) Undelete(ctx context.Context, databaseID string, params DatabaseUndeleteParams, opts ...option.RequestOption) (res *D1, err error) {
+	var env DatabaseUndeleteResponseEnvelope
+	opts = slices.Concat(r.Options, opts)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if databaseID == "" {
+		err = errors.New("missing required database_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/d1/database/%s/undelete", params.AccountID, databaseID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return nil, err
+	}
+	res = &env.Result
+	return res, nil
+}
+
 type QueryResult struct {
 	Meta    QueryResultMeta `json:"meta"`
 	Results []interface{}   `json:"results"`
@@ -1307,6 +1336,11 @@ func (r DatabaseExportParamsOutputFormat) IsKnown() bool {
 }
 
 type DatabaseExportParamsDumpOptions struct {
+	// Dump format. `d1` (the default) gives a dump that D1 can import.
+	// `sqlite3_cli_only` matches the output of the `sqlite3 .dump` command, including
+	// virtual tables such as FTS5 or R\*Tree tables, but cannot be imported back into
+	// D1.
+	Compatibility param.Field[DatabaseExportParamsDumpOptionsCompatibility] `json:"compatibility"`
 	// Export only the table definitions, not their contents
 	NoData param.Field[bool] `json:"no_data"`
 	// Export only each table's contents, not its definition
@@ -1318,6 +1352,25 @@ type DatabaseExportParamsDumpOptions struct {
 
 func (r DatabaseExportParamsDumpOptions) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Dump format. `d1` (the default) gives a dump that D1 can import.
+// `sqlite3_cli_only` matches the output of the `sqlite3 .dump` command, including
+// virtual tables such as FTS5 or R\*Tree tables, but cannot be imported back into
+// D1.
+type DatabaseExportParamsDumpOptionsCompatibility string
+
+const (
+	DatabaseExportParamsDumpOptionsCompatibilityD1             DatabaseExportParamsDumpOptionsCompatibility = "d1"
+	DatabaseExportParamsDumpOptionsCompatibilitySqlite3CliOnly DatabaseExportParamsDumpOptionsCompatibility = "sqlite3_cli_only"
+)
+
+func (r DatabaseExportParamsDumpOptionsCompatibility) IsKnown() bool {
+	switch r {
+	case DatabaseExportParamsDumpOptionsCompatibilityD1, DatabaseExportParamsDumpOptionsCompatibilitySqlite3CliOnly:
+		return true
+	}
+	return false
 }
 
 type DatabaseExportResponseEnvelope struct {
@@ -1768,4 +1821,60 @@ type DatabaseRawParamsBodyMultipleQueriesBatch struct {
 
 func (r DatabaseRawParamsBodyMultipleQueriesBatch) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type DatabaseUndeleteParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// Restore the database with this name instead of the name it had when it was
+	// deleted. Required if another database in the account already uses that name.
+	NewName param.Field[string] `json:"new_name"`
+}
+
+func (r DatabaseUndeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DatabaseUndeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
+	Messages []shared.ResponseInfo `json:"messages" api:"required"`
+	// The details of the D1 database.
+	Result D1 `json:"result" api:"required"`
+	// Whether the API call was successful
+	Success DatabaseUndeleteResponseEnvelopeSuccess `json:"success" api:"required"`
+	JSON    databaseUndeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// databaseUndeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DatabaseUndeleteResponseEnvelope]
+type databaseUndeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DatabaseUndeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r databaseUndeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type DatabaseUndeleteResponseEnvelopeSuccess bool
+
+const (
+	DatabaseUndeleteResponseEnvelopeSuccessTrue DatabaseUndeleteResponseEnvelopeSuccess = true
+)
+
+func (r DatabaseUndeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DatabaseUndeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

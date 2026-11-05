@@ -60,7 +60,7 @@ func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, o
 	return res, nil
 }
 
-// Update the description and/or the public endpoint configuration of an existing
+// Updates the description and/or the public endpoint configuration of an existing
 // namespace. The default namespace's description cannot be modified, but its
 // public endpoint can.
 func (r *NamespaceService) Update(ctx context.Context, name string, params NamespaceUpdateParams, opts ...option.RequestOption) (res *NamespaceUpdateResponse, err error) {
@@ -83,7 +83,8 @@ func (r *NamespaceService) Update(ctx context.Context, name string, params Names
 	return res, nil
 }
 
-// List namespaces in the account, including their descriptions and creation times.
+// Lists namespaces in the account, including their descriptions and creation
+// times.
 func (r *NamespaceService) List(ctx context.Context, params NamespaceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[NamespaceListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -105,13 +106,15 @@ func (r *NamespaceService) List(ctx context.Context, params NamespaceListParams,
 	return res, nil
 }
 
-// List namespaces in the account, including their descriptions and creation times.
+// Lists namespaces in the account, including their descriptions and creation
+// times.
 func (r *NamespaceService) ListAutoPaging(ctx context.Context, params NamespaceListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[NamespaceListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Permanently delete a namespace. The namespace must be empty (no instances), and
-// the default namespace cannot be deleted.
+// Deletes a namespace permanently. The namespace must not contain any instances
+// (instances whose deletion is still in progress do not count), and the default
+// namespace cannot be deleted.
 func (r *NamespaceService) Delete(ctx context.Context, name string, body NamespaceDeleteParams, opts ...option.RequestOption) (res *NamespaceDeleteResponse, err error) {
 	var env NamespaceDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -238,8 +241,8 @@ type NamespaceNewResponsePublicEndpointParams struct {
 	DefaultDomainEnabled bool `json:"default_domain_enabled"`
 	Enabled              bool `json:"enabled"`
 	// Instance IDs exposed through the namespace public endpoint. Empty means nothing
-	// is searchable. Every ID must be an existing instance in this namespace, and the
-	// list cannot exceed the account's multi-instance search limit.
+	// is searchable. Every ID must reference an existing instance in this namespace,
+	// and the list must stay within the account's multi-instance search limit.
 	InstancesAllowed []string                                               `json:"instances_allowed"`
 	Mcp              NamespaceNewResponsePublicEndpointParamsMcp            `json:"mcp"`
 	RateLimit        NamespaceNewResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
@@ -272,7 +275,7 @@ func (r namespaceNewResponsePublicEndpointParamsJSON) RawJSON() string {
 }
 
 type NamespaceNewResponsePublicEndpointParamsChatCompletionsEndpoint struct {
-	// Disable chat completions endpoint for this public endpoint
+	// Disable chat completions endpoint for this public endpoint.
 	Disabled bool                                                                `json:"disabled"`
 	JSON     namespaceNewResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
 }
@@ -296,7 +299,7 @@ func (r namespaceNewResponsePublicEndpointParamsChatCompletionsEndpointJSON) Raw
 
 type NamespaceNewResponsePublicEndpointParamsMcp struct {
 	Description string `json:"description"`
-	// Disable MCP endpoint for this public endpoint
+	// Disable MCP endpoint for this public endpoint.
 	Disabled bool                                            `json:"disabled"`
 	JSON     namespaceNewResponsePublicEndpointParamsMcpJSON `json:"-"`
 }
@@ -359,7 +362,7 @@ func (r NamespaceNewResponsePublicEndpointParamsRateLimitTechnique) IsKnown() bo
 }
 
 type NamespaceNewResponsePublicEndpointParamsSearchEndpoint struct {
-	// Disable search endpoint for this public endpoint
+	// Disable search endpoint for this public endpoint.
 	Disabled bool                                                       `json:"disabled"`
 	JSON     namespaceNewResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
 }
@@ -426,8 +429,8 @@ type NamespaceUpdateResponsePublicEndpointParams struct {
 	DefaultDomainEnabled bool `json:"default_domain_enabled"`
 	Enabled              bool `json:"enabled"`
 	// Instance IDs exposed through the namespace public endpoint. Empty means nothing
-	// is searchable. Every ID must be an existing instance in this namespace, and the
-	// list cannot exceed the account's multi-instance search limit.
+	// is searchable. Every ID must reference an existing instance in this namespace,
+	// and the list must stay within the account's multi-instance search limit.
 	InstancesAllowed []string                                                  `json:"instances_allowed"`
 	Mcp              NamespaceUpdateResponsePublicEndpointParamsMcp            `json:"mcp"`
 	RateLimit        NamespaceUpdateResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
@@ -460,7 +463,7 @@ func (r namespaceUpdateResponsePublicEndpointParamsJSON) RawJSON() string {
 }
 
 type NamespaceUpdateResponsePublicEndpointParamsChatCompletionsEndpoint struct {
-	// Disable chat completions endpoint for this public endpoint
+	// Disable chat completions endpoint for this public endpoint.
 	Disabled bool                                                                   `json:"disabled"`
 	JSON     namespaceUpdateResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
 }
@@ -484,7 +487,7 @@ func (r namespaceUpdateResponsePublicEndpointParamsChatCompletionsEndpointJSON) 
 
 type NamespaceUpdateResponsePublicEndpointParamsMcp struct {
 	Description string `json:"description"`
-	// Disable MCP endpoint for this public endpoint
+	// Disable MCP endpoint for this public endpoint.
 	Disabled bool                                               `json:"disabled"`
 	JSON     namespaceUpdateResponsePublicEndpointParamsMcpJSON `json:"-"`
 }
@@ -547,7 +550,7 @@ func (r NamespaceUpdateResponsePublicEndpointParamsRateLimitTechnique) IsKnown()
 }
 
 type NamespaceUpdateResponsePublicEndpointParamsSearchEndpoint struct {
-	// Disable search endpoint for this public endpoint
+	// Disable search endpoint for this public endpoint.
 	Disabled bool                                                          `json:"disabled"`
 	JSON     namespaceUpdateResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
 }
@@ -615,8 +618,8 @@ type NamespaceListResponsePublicEndpointParams struct {
 	DefaultDomainEnabled bool `json:"default_domain_enabled"`
 	Enabled              bool `json:"enabled"`
 	// Instance IDs exposed through the namespace public endpoint. Empty means nothing
-	// is searchable. Every ID must be an existing instance in this namespace, and the
-	// list cannot exceed the account's multi-instance search limit.
+	// is searchable. Every ID must reference an existing instance in this namespace,
+	// and the list must stay within the account's multi-instance search limit.
 	InstancesAllowed []string                                                `json:"instances_allowed"`
 	Mcp              NamespaceListResponsePublicEndpointParamsMcp            `json:"mcp"`
 	RateLimit        NamespaceListResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
@@ -649,7 +652,7 @@ func (r namespaceListResponsePublicEndpointParamsJSON) RawJSON() string {
 }
 
 type NamespaceListResponsePublicEndpointParamsChatCompletionsEndpoint struct {
-	// Disable chat completions endpoint for this public endpoint
+	// Disable chat completions endpoint for this public endpoint.
 	Disabled bool                                                                 `json:"disabled"`
 	JSON     namespaceListResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
 }
@@ -673,7 +676,7 @@ func (r namespaceListResponsePublicEndpointParamsChatCompletionsEndpointJSON) Ra
 
 type NamespaceListResponsePublicEndpointParamsMcp struct {
 	Description string `json:"description"`
-	// Disable MCP endpoint for this public endpoint
+	// Disable MCP endpoint for this public endpoint.
 	Disabled bool                                             `json:"disabled"`
 	JSON     namespaceListResponsePublicEndpointParamsMcpJSON `json:"-"`
 }
@@ -736,7 +739,7 @@ func (r NamespaceListResponsePublicEndpointParamsRateLimitTechnique) IsKnown() b
 }
 
 type NamespaceListResponsePublicEndpointParamsSearchEndpoint struct {
-	// Disable search endpoint for this public endpoint
+	// Disable search endpoint for this public endpoint.
 	Disabled bool                                                        `json:"disabled"`
 	JSON     namespaceListResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
 }
@@ -1023,28 +1026,44 @@ func (r NamespaceChatCompletionsResponseChoicesMessageRole) IsKnown() bool {
 }
 
 type NamespaceChatCompletionsResponseChunk struct {
-	ID             string                                               `json:"id" api:"required"`
-	InstanceID     string                                               `json:"instance_id" api:"required"`
-	Score          float64                                              `json:"score" api:"required"`
-	Text           string                                               `json:"text" api:"required"`
-	Type           string                                               `json:"type" api:"required"`
-	Item           NamespaceChatCompletionsResponseChunksItem           `json:"item"`
+	ID         string                                     `json:"id" api:"required"`
+	InstanceID string                                     `json:"instance_id" api:"required"`
+	Score      float64                                    `json:"score" api:"required"`
+	Text       string                                     `json:"text" api:"required"`
+	Type       string                                     `json:"type" api:"required"`
+	Item       NamespaceChatCompletionsResponseChunksItem `json:"item"`
+	// Audio/video transcript chunks only: end, in milliseconds from the start of the
+	// media (whole seconds), of the last transcript section the matched chunk covers.
+	// Describes the matched chunk before any context expansion, not the expanded
+	// `text`.
+	MediaEndMs int64 `json:"media_end_ms"`
+	// Audio/video transcript chunks only: start, in milliseconds from the start of the
+	// media (whole seconds), of the transcript section the matched chunk begins in.
+	// Describes the matched chunk before any context expansion, not the expanded
+	// `text`.
+	MediaStartMs   int64                                                `json:"media_start_ms"`
 	ScoringDetails NamespaceChatCompletionsResponseChunksScoringDetails `json:"scoring_details"`
-	JSON           namespaceChatCompletionsResponseChunkJSON            `json:"-"`
+	// Audio/video transcript chunks only: type of the source media file. Omitted for
+	// all other chunks.
+	SourceMediaType NamespaceChatCompletionsResponseChunksSourceMediaType `json:"source_media_type"`
+	JSON            namespaceChatCompletionsResponseChunkJSON             `json:"-"`
 }
 
 // namespaceChatCompletionsResponseChunkJSON contains the JSON metadata for the
 // struct [NamespaceChatCompletionsResponseChunk]
 type namespaceChatCompletionsResponseChunkJSON struct {
-	ID             apijson.Field
-	InstanceID     apijson.Field
-	Score          apijson.Field
-	Text           apijson.Field
-	Type           apijson.Field
-	Item           apijson.Field
-	ScoringDetails apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	ID              apijson.Field
+	InstanceID      apijson.Field
+	Score           apijson.Field
+	Text            apijson.Field
+	Type            apijson.Field
+	Item            apijson.Field
+	MediaEndMs      apijson.Field
+	MediaStartMs    apijson.Field
+	ScoringDetails  apijson.Field
+	SourceMediaType apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *NamespaceChatCompletionsResponseChunk) UnmarshalJSON(data []byte) (err error) {
@@ -1126,6 +1145,23 @@ func (r NamespaceChatCompletionsResponseChunksScoringDetailsFusionMethod) IsKnow
 	return false
 }
 
+// Audio/video transcript chunks only: type of the source media file. Omitted for
+// all other chunks.
+type NamespaceChatCompletionsResponseChunksSourceMediaType string
+
+const (
+	NamespaceChatCompletionsResponseChunksSourceMediaTypeAudio NamespaceChatCompletionsResponseChunksSourceMediaType = "audio"
+	NamespaceChatCompletionsResponseChunksSourceMediaTypeVideo NamespaceChatCompletionsResponseChunksSourceMediaType = "video"
+)
+
+func (r NamespaceChatCompletionsResponseChunksSourceMediaType) IsKnown() bool {
+	switch r {
+	case NamespaceChatCompletionsResponseChunksSourceMediaTypeAudio, NamespaceChatCompletionsResponseChunksSourceMediaTypeVideo:
+		return true
+	}
+	return false
+}
+
 type NamespaceChatCompletionsResponseError struct {
 	InstanceID string                                    `json:"instance_id" api:"required"`
 	Message    string                                    `json:"message" api:"required"`
@@ -1195,8 +1231,8 @@ type NamespaceReadResponsePublicEndpointParams struct {
 	DefaultDomainEnabled bool `json:"default_domain_enabled"`
 	Enabled              bool `json:"enabled"`
 	// Instance IDs exposed through the namespace public endpoint. Empty means nothing
-	// is searchable. Every ID must be an existing instance in this namespace, and the
-	// list cannot exceed the account's multi-instance search limit.
+	// is searchable. Every ID must reference an existing instance in this namespace,
+	// and the list must stay within the account's multi-instance search limit.
 	InstancesAllowed []string                                                `json:"instances_allowed"`
 	Mcp              NamespaceReadResponsePublicEndpointParamsMcp            `json:"mcp"`
 	RateLimit        NamespaceReadResponsePublicEndpointParamsRateLimit      `json:"rate_limit"`
@@ -1229,7 +1265,7 @@ func (r namespaceReadResponsePublicEndpointParamsJSON) RawJSON() string {
 }
 
 type NamespaceReadResponsePublicEndpointParamsChatCompletionsEndpoint struct {
-	// Disable chat completions endpoint for this public endpoint
+	// Disable chat completions endpoint for this public endpoint.
 	Disabled bool                                                                 `json:"disabled"`
 	JSON     namespaceReadResponsePublicEndpointParamsChatCompletionsEndpointJSON `json:"-"`
 }
@@ -1253,7 +1289,7 @@ func (r namespaceReadResponsePublicEndpointParamsChatCompletionsEndpointJSON) Ra
 
 type NamespaceReadResponsePublicEndpointParamsMcp struct {
 	Description string `json:"description"`
-	// Disable MCP endpoint for this public endpoint
+	// Disable MCP endpoint for this public endpoint.
 	Disabled bool                                             `json:"disabled"`
 	JSON     namespaceReadResponsePublicEndpointParamsMcpJSON `json:"-"`
 }
@@ -1316,7 +1352,7 @@ func (r NamespaceReadResponsePublicEndpointParamsRateLimitTechnique) IsKnown() b
 }
 
 type NamespaceReadResponsePublicEndpointParamsSearchEndpoint struct {
-	// Disable search endpoint for this public endpoint
+	// Disable search endpoint for this public endpoint.
 	Disabled bool                                                        `json:"disabled"`
 	JSON     namespaceReadResponsePublicEndpointParamsSearchEndpointJSON `json:"-"`
 }
@@ -1366,28 +1402,44 @@ func (r namespaceSearchResponseJSON) RawJSON() string {
 }
 
 type NamespaceSearchResponseChunk struct {
-	ID             string                                      `json:"id" api:"required"`
-	InstanceID     string                                      `json:"instance_id" api:"required"`
-	Score          float64                                     `json:"score" api:"required"`
-	Text           string                                      `json:"text" api:"required"`
-	Type           string                                      `json:"type" api:"required"`
-	Item           NamespaceSearchResponseChunksItem           `json:"item"`
+	ID         string                            `json:"id" api:"required"`
+	InstanceID string                            `json:"instance_id" api:"required"`
+	Score      float64                           `json:"score" api:"required"`
+	Text       string                            `json:"text" api:"required"`
+	Type       string                            `json:"type" api:"required"`
+	Item       NamespaceSearchResponseChunksItem `json:"item"`
+	// Audio/video transcript chunks only: end, in milliseconds from the start of the
+	// media (whole seconds), of the last transcript section the matched chunk covers.
+	// Describes the matched chunk before any context expansion, not the expanded
+	// `text`.
+	MediaEndMs int64 `json:"media_end_ms"`
+	// Audio/video transcript chunks only: start, in milliseconds from the start of the
+	// media (whole seconds), of the transcript section the matched chunk begins in.
+	// Describes the matched chunk before any context expansion, not the expanded
+	// `text`.
+	MediaStartMs   int64                                       `json:"media_start_ms"`
 	ScoringDetails NamespaceSearchResponseChunksScoringDetails `json:"scoring_details"`
-	JSON           namespaceSearchResponseChunkJSON            `json:"-"`
+	// Audio/video transcript chunks only: type of the source media file. Omitted for
+	// all other chunks.
+	SourceMediaType NamespaceSearchResponseChunksSourceMediaType `json:"source_media_type"`
+	JSON            namespaceSearchResponseChunkJSON             `json:"-"`
 }
 
 // namespaceSearchResponseChunkJSON contains the JSON metadata for the struct
 // [NamespaceSearchResponseChunk]
 type namespaceSearchResponseChunkJSON struct {
-	ID             apijson.Field
-	InstanceID     apijson.Field
-	Score          apijson.Field
-	Text           apijson.Field
-	Type           apijson.Field
-	Item           apijson.Field
-	ScoringDetails apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	ID              apijson.Field
+	InstanceID      apijson.Field
+	Score           apijson.Field
+	Text            apijson.Field
+	Type            apijson.Field
+	Item            apijson.Field
+	MediaEndMs      apijson.Field
+	MediaStartMs    apijson.Field
+	ScoringDetails  apijson.Field
+	SourceMediaType apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *NamespaceSearchResponseChunk) UnmarshalJSON(data []byte) (err error) {
@@ -1469,6 +1521,23 @@ func (r NamespaceSearchResponseChunksScoringDetailsFusionMethod) IsKnown() bool 
 	return false
 }
 
+// Audio/video transcript chunks only: type of the source media file. Omitted for
+// all other chunks.
+type NamespaceSearchResponseChunksSourceMediaType string
+
+const (
+	NamespaceSearchResponseChunksSourceMediaTypeAudio NamespaceSearchResponseChunksSourceMediaType = "audio"
+	NamespaceSearchResponseChunksSourceMediaTypeVideo NamespaceSearchResponseChunksSourceMediaType = "video"
+)
+
+func (r NamespaceSearchResponseChunksSourceMediaType) IsKnown() bool {
+	switch r {
+	case NamespaceSearchResponseChunksSourceMediaTypeAudio, NamespaceSearchResponseChunksSourceMediaTypeVideo:
+		return true
+	}
+	return false
+}
+
 type NamespaceSearchResponseQueryKind string
 
 const (
@@ -1536,8 +1605,8 @@ type NamespaceNewParamsPublicEndpointParams struct {
 	DefaultDomainEnabled param.Field[bool] `json:"default_domain_enabled"`
 	Enabled              param.Field[bool] `json:"enabled"`
 	// Instance IDs exposed through the namespace public endpoint. Empty means nothing
-	// is searchable. Every ID must be an existing instance in this namespace, and the
-	// list cannot exceed the account's multi-instance search limit.
+	// is searchable. Every ID must reference an existing instance in this namespace,
+	// and the list must stay within the account's multi-instance search limit.
 	InstancesAllowed param.Field[[]string]                                             `json:"instances_allowed"`
 	Mcp              param.Field[NamespaceNewParamsPublicEndpointParamsMcp]            `json:"mcp"`
 	RateLimit        param.Field[NamespaceNewParamsPublicEndpointParamsRateLimit]      `json:"rate_limit"`
@@ -1549,7 +1618,7 @@ func (r NamespaceNewParamsPublicEndpointParams) MarshalJSON() (data []byte, err 
 }
 
 type NamespaceNewParamsPublicEndpointParamsChatCompletionsEndpoint struct {
-	// Disable chat completions endpoint for this public endpoint
+	// Disable chat completions endpoint for this public endpoint.
 	Disabled param.Field[bool] `json:"disabled"`
 }
 
@@ -1559,7 +1628,7 @@ func (r NamespaceNewParamsPublicEndpointParamsChatCompletionsEndpoint) MarshalJS
 
 type NamespaceNewParamsPublicEndpointParamsMcp struct {
 	Description param.Field[string] `json:"description"`
-	// Disable MCP endpoint for this public endpoint
+	// Disable MCP endpoint for this public endpoint.
 	Disabled param.Field[bool] `json:"disabled"`
 }
 
@@ -1593,7 +1662,7 @@ func (r NamespaceNewParamsPublicEndpointParamsRateLimitTechnique) IsKnown() bool
 }
 
 type NamespaceNewParamsPublicEndpointParamsSearchEndpoint struct {
-	// Disable search endpoint for this public endpoint
+	// Disable search endpoint for this public endpoint.
 	Disabled param.Field[bool] `json:"disabled"`
 }
 
@@ -1665,8 +1734,8 @@ type NamespaceUpdateParamsPublicEndpointParams struct {
 	DefaultDomainEnabled param.Field[bool] `json:"default_domain_enabled"`
 	Enabled              param.Field[bool] `json:"enabled"`
 	// Instance IDs exposed through the namespace public endpoint. Empty means nothing
-	// is searchable. Every ID must be an existing instance in this namespace, and the
-	// list cannot exceed the account's multi-instance search limit.
+	// is searchable. Every ID must reference an existing instance in this namespace,
+	// and the list must stay within the account's multi-instance search limit.
 	InstancesAllowed param.Field[[]string]                                                `json:"instances_allowed"`
 	Mcp              param.Field[NamespaceUpdateParamsPublicEndpointParamsMcp]            `json:"mcp"`
 	RateLimit        param.Field[NamespaceUpdateParamsPublicEndpointParamsRateLimit]      `json:"rate_limit"`
@@ -1678,7 +1747,7 @@ func (r NamespaceUpdateParamsPublicEndpointParams) MarshalJSON() (data []byte, e
 }
 
 type NamespaceUpdateParamsPublicEndpointParamsChatCompletionsEndpoint struct {
-	// Disable chat completions endpoint for this public endpoint
+	// Disable chat completions endpoint for this public endpoint.
 	Disabled param.Field[bool] `json:"disabled"`
 }
 
@@ -1688,7 +1757,7 @@ func (r NamespaceUpdateParamsPublicEndpointParamsChatCompletionsEndpoint) Marsha
 
 type NamespaceUpdateParamsPublicEndpointParamsMcp struct {
 	Description param.Field[string] `json:"description"`
-	// Disable MCP endpoint for this public endpoint
+	// Disable MCP endpoint for this public endpoint.
 	Disabled param.Field[bool] `json:"disabled"`
 }
 
@@ -1722,7 +1791,7 @@ func (r NamespaceUpdateParamsPublicEndpointParamsRateLimitTechnique) IsKnown() b
 }
 
 type NamespaceUpdateParamsPublicEndpointParamsSearchEndpoint struct {
-	// Disable search endpoint for this public endpoint
+	// Disable search endpoint for this public endpoint.
 	Disabled param.Field[bool] `json:"disabled"`
 }
 
@@ -1844,9 +1913,9 @@ func (r NamespaceChatCompletionsParams) MarshalJSON() (data []byte, err error) {
 type NamespaceChatCompletionsParamsAISearchOptions struct {
 	InstanceIDs param.Field[[]string]                                           `json:"instance_ids" api:"required"`
 	Cache       param.Field[NamespaceChatCompletionsParamsAISearchOptionsCache] `json:"cache"`
-	// Metadata added to AI Gateway logs for requests triggered by this operation.
-	// Accepts up to 2 string, number, or boolean entries. Keys 'ai-search', 'task',
-	// 'origin', and keys beginning with 'cf.' are reserved.
+	// Metadata added to AI Gateway logs for requests this operation triggers. Accepts
+	// up to 2 string, number, or boolean entries. Reserved keys: 'ai-search', 'task',
+	// 'origin', and any key beginning with 'cf.'.
 	CustomMetadata param.Field[map[string]NamespaceChatCompletionsParamsAISearchOptionsCustomMetadataUnion] `json:"custom_metadata"`
 	QueryRewrite   param.Field[NamespaceChatCompletionsParamsAISearchOptionsQueryRewrite]                   `json:"query_rewrite"`
 	Reranking      param.Field[NamespaceChatCompletionsParamsAISearchOptionsReranking]                      `json:"reranking"`
@@ -1919,15 +1988,21 @@ type NamespaceChatCompletionsParamsAISearchOptionsRetrieval struct {
 	ContextExpansion param.Field[int64]                                                              `json:"context_expansion"`
 	Filters          param.Field[map[string]interface{}]                                             `json:"filters"`
 	FusionMethod     param.Field[NamespaceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod] `json:"fusion_method"`
-	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// Controls which documents become candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. When omitted, falls back
-	// to the instance-level retrieval_options.keyword_match_mode, then to 'and'.
+	// containing at least one term and ranks results according to BM25 relevance. When
+	// omitted, falls back to the instance-level retrieval_options.keyword_match_mode,
+	// then to 'and'.
 	KeywordMatchMode param.Field[NamespaceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
-	MatchThreshold   param.Field[float64]                                                                `json:"match_threshold"`
-	MaxNumResults    param.Field[int64]                                                                  `json:"max_num_results"`
-	RetrievalType    param.Field[NamespaceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType]    `json:"retrieval_type"`
-	ReturnOnFailure  param.Field[bool]                                                                   `json:"return_on_failure"`
+	// Minimum score a chunk must reach to be returned. When omitted, each instance's
+	// chunks are filtered by that instance's score_threshold, capped at the lower of
+	// the first instance's score_threshold and 0.4.
+	MatchThreshold param.Field[float64] `json:"match_threshold"`
+	// Maximum number of merged results to return. When omitted, defaults to the first
+	// instance's max_num_results, then 10.
+	MaxNumResults   param.Field[int64]                                                               `json:"max_num_results"`
+	RetrievalType   param.Field[NamespaceChatCompletionsParamsAISearchOptionsRetrievalRetrievalType] `json:"retrieval_type"`
+	ReturnOnFailure param.Field[bool]                                                                `json:"return_on_failure"`
 }
 
 func (r NamespaceChatCompletionsParamsAISearchOptionsRetrieval) MarshalJSON() (data []byte, err error) {
@@ -1987,10 +2062,11 @@ func (r NamespaceChatCompletionsParamsAISearchOptionsRetrievalFusionMethod) IsKn
 	return false
 }
 
-// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// Controls which documents become candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. When omitted, falls back
-// to the instance-level retrieval_options.keyword_match_mode, then to 'and'.
+// containing at least one term and ranks results according to BM25 relevance. When
+// omitted, falls back to the instance-level retrieval_options.keyword_match_mode,
+// then to 'and'.
 type NamespaceChatCompletionsParamsAISearchOptionsRetrievalKeywordMatchMode string
 
 const (
@@ -2189,9 +2265,9 @@ func (r NamespaceSearchParams) MarshalJSON() (data []byte, err error) {
 type NamespaceSearchParamsAISearchOptions struct {
 	InstanceIDs param.Field[[]string]                                  `json:"instance_ids" api:"required"`
 	Cache       param.Field[NamespaceSearchParamsAISearchOptionsCache] `json:"cache"`
-	// Metadata added to AI Gateway logs for requests triggered by this operation.
-	// Accepts up to 2 string, number, or boolean entries. Keys 'ai-search', 'task',
-	// 'origin', and keys beginning with 'cf.' are reserved.
+	// Metadata added to AI Gateway logs for requests this operation triggers. Accepts
+	// up to 2 string, number, or boolean entries. Reserved keys: 'ai-search', 'task',
+	// 'origin', and any key beginning with 'cf.'.
 	CustomMetadata param.Field[map[string]NamespaceSearchParamsAISearchOptionsCustomMetadataUnion] `json:"custom_metadata"`
 	QueryRewrite   param.Field[NamespaceSearchParamsAISearchOptionsQueryRewrite]                   `json:"query_rewrite"`
 	Reranking      param.Field[NamespaceSearchParamsAISearchOptionsReranking]                      `json:"reranking"`
@@ -2264,15 +2340,20 @@ type NamespaceSearchParamsAISearchOptionsRetrieval struct {
 	ContextExpansion param.Field[int64]                                                     `json:"context_expansion"`
 	Filters          param.Field[map[string]interface{}]                                    `json:"filters"`
 	FusionMethod     param.Field[NamespaceSearchParamsAISearchOptionsRetrievalFusionMethod] `json:"fusion_method"`
-	// Controls which documents are candidates for BM25 scoring. 'and' restricts
+	// Controls which documents become candidates for BM25 scoring. 'and' restricts
 	// candidates to documents containing all query terms; 'or' includes any document
-	// containing at least one term, ranked by BM25 relevance. When omitted, falls back
-	// to the instance-level retrieval_options.keyword_match_mode, then to 'and'.
+	// containing at least one term and ranks results according to BM25 relevance. When
+	// omitted, falls back to the instance-level retrieval_options.keyword_match_mode,
+	// then to 'and'.
 	KeywordMatchMode param.Field[NamespaceSearchParamsAISearchOptionsRetrievalKeywordMatchMode] `json:"keyword_match_mode"`
-	MatchThreshold   param.Field[float64]                                                       `json:"match_threshold"`
-	MaxNumResults    param.Field[int64]                                                         `json:"max_num_results"`
-	RetrievalType    param.Field[NamespaceSearchParamsAISearchOptionsRetrievalRetrievalType]    `json:"retrieval_type"`
-	ReturnOnFailure  param.Field[bool]                                                          `json:"return_on_failure"`
+	// Minimum score a chunk must reach to be returned. When omitted, each instance's
+	// chunks are filtered by that instance's score_threshold, capped at 0.4.
+	MatchThreshold param.Field[float64] `json:"match_threshold"`
+	// Maximum number of merged results to return. When omitted, defaults to the sum of
+	// the searched instances' max_num_results (each falling back to 10), up to 50.
+	MaxNumResults   param.Field[int64]                                                      `json:"max_num_results"`
+	RetrievalType   param.Field[NamespaceSearchParamsAISearchOptionsRetrievalRetrievalType] `json:"retrieval_type"`
+	ReturnOnFailure param.Field[bool]                                                       `json:"return_on_failure"`
 }
 
 func (r NamespaceSearchParamsAISearchOptionsRetrieval) MarshalJSON() (data []byte, err error) {
@@ -2332,10 +2413,11 @@ func (r NamespaceSearchParamsAISearchOptionsRetrievalFusionMethod) IsKnown() boo
 	return false
 }
 
-// Controls which documents are candidates for BM25 scoring. 'and' restricts
+// Controls which documents become candidates for BM25 scoring. 'and' restricts
 // candidates to documents containing all query terms; 'or' includes any document
-// containing at least one term, ranked by BM25 relevance. When omitted, falls back
-// to the instance-level retrieval_options.keyword_match_mode, then to 'and'.
+// containing at least one term and ranks results according to BM25 relevance. When
+// omitted, falls back to the instance-level retrieval_options.keyword_match_mode,
+// then to 'and'.
 type NamespaceSearchParamsAISearchOptionsRetrievalKeywordMatchMode string
 
 const (

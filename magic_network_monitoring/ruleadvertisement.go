@@ -36,10 +36,10 @@ func NewRuleAdvertisementService(opts ...option.RequestOption) (r *RuleAdvertise
 }
 
 // Update advertisement for rule.
-func (r *RuleAdvertisementService) Edit(ctx context.Context, ruleID string, params RuleAdvertisementEditParams, opts ...option.RequestOption) (res *Advertisement, err error) {
+func (r *RuleAdvertisementService) Edit(ctx context.Context, ruleID string, body RuleAdvertisementEditParams, opts ...option.RequestOption) (res *Advertisement, err error) {
 	var env RuleAdvertisementEditResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
-	if params.AccountID.Value == "" {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
@@ -47,8 +47,8 @@ func (r *RuleAdvertisementService) Edit(ctx context.Context, ruleID string, para
 		err = errors.New("missing required rule_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/mnm/rules/%s/advertisement", params.AccountID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/mnm/rules/%s/advertisement", body.AccountID, ruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -81,11 +81,6 @@ func (r advertisementJSON) RawJSON() string {
 
 type RuleAdvertisementEditParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	Body      interface{}         `json:"body" api:"required"`
-}
-
-func (r RuleAdvertisementEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type RuleAdvertisementEditResponseEnvelope struct {

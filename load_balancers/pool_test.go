@@ -43,9 +43,11 @@ func TestPoolNewWithOptionalParams(t *testing.T) {
 			VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
 			Weight:           cloudflare.F(0.600000),
 		}}),
-		Description: cloudflare.F("Primary data center - Provider XYZ"),
-		Enabled:     cloudflare.F(false),
-		Latitude:    cloudflare.F(0.000000),
+		CheckRegions:  cloudflare.F([]load_balancers.CheckRegion{load_balancers.CheckRegionWeu, load_balancers.CheckRegionEnam}),
+		Description:   cloudflare.F("Primary data center - Provider XYZ"),
+		Enabled:       cloudflare.F(false),
+		HealthSources: cloudflare.F([]load_balancers.PoolNewParamsHealthSource{load_balancers.PoolNewParamsHealthSourceRegional, load_balancers.PoolNewParamsHealthSourceGlobal}),
+		Latitude:      cloudflare.F(0.000000),
 		LoadShedding: cloudflare.F(load_balancers.LoadSheddingParam{
 			DefaultPercent: cloudflare.F(0.000000),
 			DefaultPolicy:  cloudflare.F(load_balancers.LoadSheddingDefaultPolicyRandom),
@@ -56,6 +58,7 @@ func TestPoolNewWithOptionalParams(t *testing.T) {
 		MinimumOrigins:    cloudflare.F(int64(0)),
 		Monitor:           cloudflare.F("monitor"),
 		MonitorGroup:      cloudflare.F("monitor_group"),
+		Networks:          cloudflare.F([]string{"cloudflare", "jdcloud"}),
 		NotificationEmail: cloudflare.F("someone@example.com,sometwo@example.com"),
 		NotificationFilter: cloudflare.F(load_balancers.NotificationFilterParam{
 			Origin: cloudflare.F(load_balancers.FilterOptionsParam{
@@ -127,6 +130,7 @@ func TestPoolUpdateWithOptionalParams(t *testing.T) {
 			MinimumOrigins:    cloudflare.F(int64(0)),
 			Monitor:           cloudflare.F("monitor"),
 			MonitorGroup:      cloudflare.F("monitor_group"),
+			Networks:          cloudflare.F([]string{"cloudflare", "jdcloud"}),
 			NotificationEmail: cloudflare.F("someone@example.com,sometwo@example.com"),
 			NotificationFilter: cloudflare.F(load_balancers.NotificationFilterParam{
 				Origin: cloudflare.F(load_balancers.FilterOptionsParam{
@@ -272,6 +276,7 @@ func TestPoolEditWithOptionalParams(t *testing.T) {
 			Monitor:           cloudflare.F("monitor"),
 			MonitorGroup:      cloudflare.F("monitor_group"),
 			Name:              cloudflare.F("primary-dc-1"),
+			Networks:          cloudflare.F([]string{"cloudflare", "jdcloud"}),
 			NotificationEmail: cloudflare.F("someone@example.com,sometwo@example.com"),
 			NotificationFilter: cloudflare.F(load_balancers.NotificationFilterParam{
 				Origin: cloudflare.F(load_balancers.FilterOptionsParam{

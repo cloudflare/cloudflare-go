@@ -503,7 +503,8 @@ type VersionBinding struct {
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format VersionBindingsFormat `json:"format"`
 	// Enables Gateway identity for the binding. Requires network_id to be
-	// "cf1:network" and cannot be combined with tunnel_id.
+	// "cf1:network" and cannot be combined with tunnel_id or an explicit
+	// "cf1:vnet:<UUID>" network_id.
 	Identity VersionBindingsIdentity `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
@@ -523,8 +524,9 @@ type VersionBinding struct {
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
-	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
-	// Mutually exclusive with tunnel_id.
+	// Identifier of the network to bind to. Use "cf1:network" to select the account's
+	// default virtual network at runtime, or "cf1:vnet:<UUID>" to select an explicit
+	// virtual network in the Worker's account. Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
@@ -540,9 +542,6 @@ type VersionBinding struct {
 	Pipeline string `json:"pipeline"`
 	// Name of the Queue to bind to.
 	QueueName string `json:"queue_name"`
-	// This field can have the runtime type of
-	// [VersionBindingsWorkersBindingKindDurableObjectNamespaceRetry].
-	Retry interface{} `json:"retry"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName string `json:"script_name"`
@@ -566,9 +565,13 @@ type VersionBinding struct {
 	// This field can have the runtime type of
 	// [[]VersionBindingsWorkersBindingKindSecretKeyUsage].
 	Usages interface{} `json:"usages"`
-	// Identifier for the version to inherit the binding from, which can be the version
-	// ID or the literal "latest" to inherit from the latest version. Defaults to
-	// inheriting the binding from the latest version.
+	// Identifier for the version to inherit the binding from. This can be a version
+	// ID, or the literal "latest" to inherit from the most recently uploaded version,
+	// which may not be the deployed version. Defaults to "latest". Only the Workers
+	// API version endpoints under
+	// `/accounts/{account_id}/workers/workers/{worker_id}/versions` accept a version
+	// ID. Other endpoints, including script upload and script version upload, accept
+	// only "latest" and reject a version ID with error 10057.
 	VersionID string `json:"version_id"`
 	// Name of the Workflow to bind to.
 	WorkflowName string             `json:"workflow_name"`
@@ -609,7 +612,6 @@ type versionBindingJSON struct {
 	Part                        apijson.Field
 	Pipeline                    apijson.Field
 	QueueName                   apijson.Field
-	Retry                       apijson.Field
 	ScriptName                  apijson.Field
 	SecretName                  apijson.Field
 	Service                     apijson.Field
@@ -1525,10 +1527,6 @@ type VersionBindingsWorkersBindingKindDurableObjectNamespace struct {
 	Environment string `json:"environment"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
-	// Retry policy for calls made to the Durable Object through this binding. Omitted
-	// or null properties use the runtime defaults. These limits are upper bounds and
-	// do not enable retries for otherwise ineligible calls.
-	Retry VersionBindingsWorkersBindingKindDurableObjectNamespaceRetry `json:"retry" api:"nullable"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName string                                                      `json:"script_name"`
@@ -1545,7 +1543,6 @@ type versionBindingsWorkersBindingKindDurableObjectNamespaceJSON struct {
 	DispatchNamespace apijson.Field
 	Environment       apijson.Field
 	NamespaceID       apijson.Field
-	Retry             apijson.Field
 	ScriptName        apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
@@ -1574,39 +1571,6 @@ func (r VersionBindingsWorkersBindingKindDurableObjectNamespaceType) IsKnown() b
 		return true
 	}
 	return false
-}
-
-// Retry policy for calls made to the Durable Object through this binding. Omitted
-// or null properties use the runtime defaults. These limits are upper bounds and
-// do not enable retries for otherwise ineligible calls.
-type VersionBindingsWorkersBindingKindDurableObjectNamespaceRetry struct {
-	// Maximum number of retries after the initial request, not the total number of
-	// attempts. Defaults to 4. Zero disables retries.
-	MaxAttempts int64 `json:"max_attempts" api:"nullable"`
-	// Retry timeout in milliseconds, measured from the start of the call. No retry
-	// starts after it expires, and a retry still running when it expires is cancelled.
-	// This is not a request timeout; it does not limit the initial request, which is
-	// still subject to any timeouts set by your Worker. Defaults to 10000.
-	TimeoutMs int64                                                            `json:"timeout_ms" api:"nullable"`
-	JSON      versionBindingsWorkersBindingKindDurableObjectNamespaceRetryJSON `json:"-"`
-}
-
-// versionBindingsWorkersBindingKindDurableObjectNamespaceRetryJSON contains the
-// JSON metadata for the struct
-// [VersionBindingsWorkersBindingKindDurableObjectNamespaceRetry]
-type versionBindingsWorkersBindingKindDurableObjectNamespaceRetryJSON struct {
-	MaxAttempts apijson.Field
-	TimeoutMs   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionBindingsWorkersBindingKindDurableObjectNamespaceRetry) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionBindingsWorkersBindingKindDurableObjectNamespaceRetryJSON) RawJSON() string {
-	return r.raw
 }
 
 type VersionBindingsWorkersBindingKindHyperdrive struct {
@@ -1663,9 +1627,13 @@ type VersionBindingsWorkersBindingKindInherit struct {
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
 	// same name between versions.
 	OldName string `json:"old_name"`
-	// Identifier for the version to inherit the binding from, which can be the version
-	// ID or the literal "latest" to inherit from the latest version. Defaults to
-	// inheriting the binding from the latest version.
+	// Identifier for the version to inherit the binding from. This can be a version
+	// ID, or the literal "latest" to inherit from the most recently uploaded version,
+	// which may not be the deployed version. Defaults to "latest". Only the Workers
+	// API version endpoints under
+	// `/accounts/{account_id}/workers/workers/{worker_id}/versions` accept a version
+	// ID. Other endpoints, including script upload and script version upload, accept
+	// only "latest" and reject a version ID with error 10057.
 	VersionID string                                       `json:"version_id"`
 	JSON      versionBindingsWorkersBindingKindInheritJSON `json:"-"`
 }
@@ -2873,10 +2841,12 @@ type VersionBindingsWorkersBindingKindVPCNetwork struct {
 	// The kind of resource that the binding provides.
 	Type VersionBindingsWorkersBindingKindVPCNetworkType `json:"type" api:"required"`
 	// Enables Gateway identity for the binding. Requires network_id to be
-	// "cf1:network" and cannot be combined with tunnel_id.
+	// "cf1:network" and cannot be combined with tunnel_id or an explicit
+	// "cf1:vnet:<UUID>" network_id.
 	Identity VersionBindingsWorkersBindingKindVPCNetworkIdentity `json:"identity"`
-	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
-	// Mutually exclusive with tunnel_id.
+	// Identifier of the network to bind to. Use "cf1:network" to select the account's
+	// default virtual network at runtime, or "cf1:vnet:<UUID>" to select an explicit
+	// virtual network in the Worker's account. Mutually exclusive with tunnel_id.
 	NetworkID string `json:"network_id"`
 	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
 	TunnelID string                                          `json:"tunnel_id"`
@@ -2921,7 +2891,8 @@ func (r VersionBindingsWorkersBindingKindVPCNetworkType) IsKnown() bool {
 }
 
 // Enables Gateway identity for the binding. Requires network_id to be
-// "cf1:network" and cannot be combined with tunnel_id.
+// "cf1:network" and cannot be combined with tunnel_id or an explicit
+// "cf1:vnet:<UUID>" network_id.
 type VersionBindingsWorkersBindingKindVPCNetworkIdentity string
 
 const (
@@ -3008,7 +2979,8 @@ func (r VersionBindingsFormat) IsKnown() bool {
 }
 
 // Enables Gateway identity for the binding. Requires network_id to be
-// "cf1:network" and cannot be combined with tunnel_id.
+// "cf1:network" and cannot be combined with tunnel_id or an explicit
+// "cf1:vnet:<UUID>" network_id.
 type VersionBindingsIdentity string
 
 const (
@@ -4701,7 +4673,8 @@ type VersionBindingParam struct {
 	// [Learn more](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/importKey#format).
 	Format param.Field[VersionBindingsFormat] `json:"format"`
 	// Enables Gateway identity for the binding. Requires network_id to be
-	// "cf1:network" and cannot be combined with tunnel_id.
+	// "cf1:network" and cannot be combined with tunnel_id or an explicit
+	// "cf1:vnet:<UUID>" network_id.
 	Identity param.Field[VersionBindingsIdentity] `json:"identity"`
 	// Name of the Vectorize index to bind to.
 	IndexName param.Field[string] `json:"index_name"`
@@ -4721,8 +4694,9 @@ type VersionBindingParam struct {
 	Namespace param.Field[string] `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID param.Field[string] `json:"namespace_id"`
-	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
-	// Mutually exclusive with tunnel_id.
+	// Identifier of the network to bind to. Use "cf1:network" to select the account's
+	// default virtual network at runtime, or "cf1:vnet:<UUID>" to select an explicit
+	// virtual network in the Worker's account. Mutually exclusive with tunnel_id.
 	NetworkID param.Field[string] `json:"network_id"`
 	// The old name of the inherited binding. If set, the binding will be renamed from
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
@@ -4735,8 +4709,7 @@ type VersionBindingParam struct {
 	// Name of the Pipeline to bind to.
 	Pipeline param.Field[string] `json:"pipeline"`
 	// Name of the Queue to bind to.
-	QueueName param.Field[string]      `json:"queue_name"`
-	Retry     param.Field[interface{}] `json:"retry"`
+	QueueName param.Field[string] `json:"queue_name"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName param.Field[string] `json:"script_name"`
@@ -4756,9 +4729,13 @@ type VersionBindingParam struct {
 	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
 	TunnelID param.Field[string]      `json:"tunnel_id"`
 	Usages   param.Field[interface{}] `json:"usages"`
-	// Identifier for the version to inherit the binding from, which can be the version
-	// ID or the literal "latest" to inherit from the latest version. Defaults to
-	// inheriting the binding from the latest version.
+	// Identifier for the version to inherit the binding from. This can be a version
+	// ID, or the literal "latest" to inherit from the most recently uploaded version,
+	// which may not be the deployed version. Defaults to "latest". Only the Workers
+	// API version endpoints under
+	// `/accounts/{account_id}/workers/workers/{worker_id}/versions` accept a version
+	// ID. Other endpoints, including script upload and script version upload, accept
+	// only "latest" and reject a version ID with error 10057.
 	VersionID param.Field[string] `json:"version_id"`
 	// Name of the Workflow to bind to.
 	WorkflowName param.Field[string] `json:"workflow_name"`
@@ -5009,10 +4986,6 @@ type VersionBindingsWorkersBindingKindDurableObjectNamespaceParam struct {
 	Environment param.Field[string] `json:"environment"`
 	// Namespace identifier tag.
 	NamespaceID param.Field[string] `json:"namespace_id"`
-	// Retry policy for calls made to the Durable Object through this binding. Omitted
-	// or null properties use the runtime defaults. These limits are upper bounds and
-	// do not enable retries for otherwise ineligible calls.
-	Retry param.Field[VersionBindingsWorkersBindingKindDurableObjectNamespaceRetryParam] `json:"retry"`
 	// The script where the Durable Object is defined, if it is external to this
 	// Worker.
 	ScriptName param.Field[string] `json:"script_name"`
@@ -5023,24 +4996,6 @@ func (r VersionBindingsWorkersBindingKindDurableObjectNamespaceParam) MarshalJSO
 }
 
 func (r VersionBindingsWorkersBindingKindDurableObjectNamespaceParam) implementsVersionBindingsUnionParam() {
-}
-
-// Retry policy for calls made to the Durable Object through this binding. Omitted
-// or null properties use the runtime defaults. These limits are upper bounds and
-// do not enable retries for otherwise ineligible calls.
-type VersionBindingsWorkersBindingKindDurableObjectNamespaceRetryParam struct {
-	// Maximum number of retries after the initial request, not the total number of
-	// attempts. Defaults to 4. Zero disables retries.
-	MaxAttempts param.Field[int64] `json:"max_attempts"`
-	// Retry timeout in milliseconds, measured from the start of the call. No retry
-	// starts after it expires, and a retry still running when it expires is cancelled.
-	// This is not a request timeout; it does not limit the initial request, which is
-	// still subject to any timeouts set by your Worker. Defaults to 10000.
-	TimeoutMs param.Field[int64] `json:"timeout_ms"`
-}
-
-func (r VersionBindingsWorkersBindingKindDurableObjectNamespaceRetryParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type VersionBindingsWorkersBindingKindHyperdriveParam struct {
@@ -5067,9 +5022,13 @@ type VersionBindingsWorkersBindingKindInheritParam struct {
 	// `old_name` to `name` in the new version. If not set, the binding will keep the
 	// same name between versions.
 	OldName param.Field[string] `json:"old_name"`
-	// Identifier for the version to inherit the binding from, which can be the version
-	// ID or the literal "latest" to inherit from the latest version. Defaults to
-	// inheriting the binding from the latest version.
+	// Identifier for the version to inherit the binding from. This can be a version
+	// ID, or the literal "latest" to inherit from the most recently uploaded version,
+	// which may not be the deployed version. Defaults to "latest". Only the Workers
+	// API version endpoints under
+	// `/accounts/{account_id}/workers/workers/{worker_id}/versions` accept a version
+	// ID. Other endpoints, including script upload and script version upload, accept
+	// only "latest" and reject a version ID with error 10057.
 	VersionID param.Field[string] `json:"version_id"`
 }
 
@@ -5485,10 +5444,12 @@ type VersionBindingsWorkersBindingKindVPCNetworkParam struct {
 	// The kind of resource that the binding provides.
 	Type param.Field[VersionBindingsWorkersBindingKindVPCNetworkType] `json:"type" api:"required"`
 	// Enables Gateway identity for the binding. Requires network_id to be
-	// "cf1:network" and cannot be combined with tunnel_id.
+	// "cf1:network" and cannot be combined with tunnel_id or an explicit
+	// "cf1:vnet:<UUID>" network_id.
 	Identity param.Field[VersionBindingsWorkersBindingKindVPCNetworkIdentity] `json:"identity"`
-	// Identifier of the network to bind to. Only "cf1:network" is currently supported.
-	// Mutually exclusive with tunnel_id.
+	// Identifier of the network to bind to. Use "cf1:network" to select the account's
+	// default virtual network at runtime, or "cf1:vnet:<UUID>" to select an explicit
+	// virtual network in the Worker's account. Mutually exclusive with tunnel_id.
 	NetworkID param.Field[string] `json:"network_id"`
 	// UUID of the Cloudflare Tunnel to bind to. Mutually exclusive with network_id.
 	TunnelID param.Field[string] `json:"tunnel_id"`
@@ -6540,7 +6501,7 @@ type BetaWorkerVersionProfileParams struct {
 	DurationMs param.Field[int64] `json:"duration_ms" api:"required"`
 	// Identifies the exact Durable Object actor to profile. Must be specified together
 	// with namespace_id. The actor must currently be active and running the requested
-	// Worker version.
+	// version.
 	ActorID param.Field[string] `json:"actor_id"`
 	// Identifies the Durable Object namespace containing the actor to profile. Must be
 	// specified together with actor_id.

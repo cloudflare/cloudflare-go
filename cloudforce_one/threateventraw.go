@@ -34,8 +34,8 @@ func NewThreatEventRawService(opts ...option.RequestOption) (r *ThreatEventRawSe
 	return
 }
 
-// Partially updates raw threat event data in Cloudforce One, modifying specific
-// fields of the event.
+// Legacy. Updates raw data stored under a `raw_id`, which new events don't use.
+// There is no direct replacement.
 func (r *ThreatEventRawService) Edit(ctx context.Context, eventID string, rawID string, params ThreatEventRawEditParams, opts ...option.RequestOption) (res *ThreatEventRawEditResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -55,7 +55,9 @@ func (r *ThreatEventRawService) Edit(ctx context.Context, eventID string, rawID 
 	return res, err
 }
 
-// Retrieves raw threat event data for a specific event in Cloudforce One.
+// Legacy. Returns raw data stored under a `raw_id`, which new events don't use.
+// Use `threat-intel events raw get`
+// (`GET /events/datasets/{dataset_id}/events/{event_id}/raw`) instead.
 func (r *ThreatEventRawService) Get(ctx context.Context, eventID string, rawID string, query ThreatEventRawGetParams, opts ...option.RequestOption) (res *ThreatEventRawGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

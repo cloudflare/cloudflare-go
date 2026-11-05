@@ -131,6 +131,8 @@ type CrawlGetResponse struct {
 	Finished float64 `json:"finished" api:"required"`
 	// List of crawl job records.
 	Records []CrawlGetResponseRecord `json:"records" api:"required"`
+	// Robots.txt state for the first 50 origins encountered by the crawl.
+	Robots []CrawlGetResponseRobot `json:"robots" api:"required"`
 	// Total number of URLs that were skipped due to include/exclude/subdomain filters.
 	// Skipped URLs are included in records but are not counted toward total/finished.
 	Skipped float64 `json:"skipped" api:"required"`
@@ -150,6 +152,7 @@ type crawlGetResponseJSON struct {
 	BrowserSecondsUsed apijson.Field
 	Finished           apijson.Field
 	Records            apijson.Field
+	Robots             apijson.Field
 	Skipped            apijson.Field
 	Status             apijson.Field
 	Total              apijson.Field
@@ -179,7 +182,9 @@ type CrawlGetResponseRecord struct {
 	Markdown string `json:"markdown"`
 	// Absent for urls that never reached a fetch.
 	Metadata CrawlGetResponseRecordsMetadata `json:"metadata"`
-	JSON     crawlGetResponseRecordJSON      `json:"-"`
+	// Result of processing the URL. Absent for older records.
+	Outcome CrawlGetResponseRecordsOutcome `json:"outcome"`
+	JSON    crawlGetResponseRecordJSON     `json:"-"`
 }
 
 // crawlGetResponseRecordJSON contains the JSON metadata for the struct
@@ -191,6 +196,7 @@ type crawlGetResponseRecordJSON struct {
 	Json        apijson.Field
 	Markdown    apijson.Field
 	Metadata    apijson.Field
+	Outcome     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -229,6 +235,18 @@ type CrawlGetResponseRecordsMetadata struct {
 	Status float64 `json:"status" api:"required"`
 	// Final URL of the crawled page.
 	URL string `json:"url" api:"required"`
+	// Value of the Last-Modified response header, when provided by the origin.
+	LastModified string `json:"lastModified"`
+	// Open Graph description of the crawled page.
+	OgDescription string `json:"og:description"`
+	// Open Graph image of the crawled page.
+	OgImage string `json:"og:image"`
+	// Open Graph site name of the crawled page.
+	OgSiteName string `json:"og:site_name"`
+	// Open Graph title of the crawled page.
+	OgTitle string `json:"og:title"`
+	// Open Graph type of the crawled page.
+	OgType string `json:"og:type"`
 	// Title of the crawled page.
 	Title string                              `json:"title"`
 	JSON  crawlGetResponseRecordsMetadataJSON `json:"-"`
@@ -237,11 +255,17 @@ type CrawlGetResponseRecordsMetadata struct {
 // crawlGetResponseRecordsMetadataJSON contains the JSON metadata for the struct
 // [CrawlGetResponseRecordsMetadata]
 type crawlGetResponseRecordsMetadataJSON struct {
-	Status      apijson.Field
-	URL         apijson.Field
-	Title       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Status        apijson.Field
+	URL           apijson.Field
+	LastModified  apijson.Field
+	OgDescription apijson.Field
+	OgImage       apijson.Field
+	OgSiteName    apijson.Field
+	OgTitle       apijson.Field
+	OgType        apijson.Field
+	Title         apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *CrawlGetResponseRecordsMetadata) UnmarshalJSON(data []byte) (err error) {
@@ -250,6 +274,78 @@ func (r *CrawlGetResponseRecordsMetadata) UnmarshalJSON(data []byte) (err error)
 
 func (r crawlGetResponseRecordsMetadataJSON) RawJSON() string {
 	return r.raw
+}
+
+// Result of processing the URL. Absent for older records.
+type CrawlGetResponseRecordsOutcome string
+
+const (
+	CrawlGetResponseRecordsOutcomeSuccess                CrawlGetResponseRecordsOutcome = "success"
+	CrawlGetResponseRecordsOutcomeRobotsDisallowed       CrawlGetResponseRecordsOutcome = "robots_disallowed"
+	CrawlGetResponseRecordsOutcomeCrawlPurposeDisallowed CrawlGetResponseRecordsOutcome = "crawl_purpose_disallowed"
+	CrawlGetResponseRecordsOutcomeContentUseDisallowed   CrawlGetResponseRecordsOutcome = "content_use_disallowed"
+	CrawlGetResponseRecordsOutcomeConnectionError        CrawlGetResponseRecordsOutcome = "connection_error"
+	CrawlGetResponseRecordsOutcomeTimeout                CrawlGetResponseRecordsOutcome = "timeout"
+	CrawlGetResponseRecordsOutcomeBrowserUnavailable     CrawlGetResponseRecordsOutcome = "browser_unavailable"
+	CrawlGetResponseRecordsOutcomeFormatGenerationError  CrawlGetResponseRecordsOutcome = "format_generation_error"
+	CrawlGetResponseRecordsOutcomeUnsupportedContentType CrawlGetResponseRecordsOutcome = "unsupported_content_type"
+	CrawlGetResponseRecordsOutcomeUnclassifiedError      CrawlGetResponseRecordsOutcome = "unclassified_error"
+	CrawlGetResponseRecordsOutcomePageError              CrawlGetResponseRecordsOutcome = "page_error"
+	CrawlGetResponseRecordsOutcomeTooLarge               CrawlGetResponseRecordsOutcome = "too_large"
+)
+
+func (r CrawlGetResponseRecordsOutcome) IsKnown() bool {
+	switch r {
+	case CrawlGetResponseRecordsOutcomeSuccess, CrawlGetResponseRecordsOutcomeRobotsDisallowed, CrawlGetResponseRecordsOutcomeCrawlPurposeDisallowed, CrawlGetResponseRecordsOutcomeContentUseDisallowed, CrawlGetResponseRecordsOutcomeConnectionError, CrawlGetResponseRecordsOutcomeTimeout, CrawlGetResponseRecordsOutcomeBrowserUnavailable, CrawlGetResponseRecordsOutcomeFormatGenerationError, CrawlGetResponseRecordsOutcomeUnsupportedContentType, CrawlGetResponseRecordsOutcomeUnclassifiedError, CrawlGetResponseRecordsOutcomePageError, CrawlGetResponseRecordsOutcomeTooLarge:
+		return true
+	}
+	return false
+}
+
+type CrawlGetResponseRobot struct {
+	// Origin whose robots.txt was checked.
+	Origin string `json:"origin" api:"required"`
+	// Whether usable robots.txt rules were available.
+	State CrawlGetResponseRobotsState `json:"state" api:"required"`
+	// HTTP status that established the current robots.txt state. Absent when no HTTP
+	// response was received.
+	Status float64                   `json:"status"`
+	JSON   crawlGetResponseRobotJSON `json:"-"`
+}
+
+// crawlGetResponseRobotJSON contains the JSON metadata for the struct
+// [CrawlGetResponseRobot]
+type crawlGetResponseRobotJSON struct {
+	Origin      apijson.Field
+	State       apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CrawlGetResponseRobot) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r crawlGetResponseRobotJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether usable robots.txt rules were available.
+type CrawlGetResponseRobotsState string
+
+const (
+	CrawlGetResponseRobotsStateAvailable   CrawlGetResponseRobotsState = "available"
+	CrawlGetResponseRobotsStateAbsent      CrawlGetResponseRobotsState = "absent"
+	CrawlGetResponseRobotsStateFetchFailed CrawlGetResponseRobotsState = "fetch_failed"
+)
+
+func (r CrawlGetResponseRobotsState) IsKnown() bool {
+	switch r {
+	case CrawlGetResponseRobotsStateAvailable, CrawlGetResponseRobotsStateAbsent, CrawlGetResponseRobotsStateFetchFailed:
+		return true
+	}
+	return false
 }
 
 type CrawlNewParams struct {

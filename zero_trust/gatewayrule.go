@@ -442,11 +442,12 @@ const (
 	GatewayRuleActionResolve      GatewayRuleAction = "resolve"
 	GatewayRuleActionQuarantine   GatewayRuleAction = "quarantine"
 	GatewayRuleActionRedirect     GatewayRuleAction = "redirect"
+	GatewayRuleActionForward      GatewayRuleAction = "forward"
 )
 
 func (r GatewayRuleAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleActionOn, GatewayRuleActionOff, GatewayRuleActionAllow, GatewayRuleActionBlock, GatewayRuleActionScan, GatewayRuleActionNoscan, GatewayRuleActionSafesearch, GatewayRuleActionYtrestricted, GatewayRuleActionIsolate, GatewayRuleActionNoisolate, GatewayRuleActionOverride, GatewayRuleActionL4Override, GatewayRuleActionEgress, GatewayRuleActionResolve, GatewayRuleActionQuarantine, GatewayRuleActionRedirect:
+	case GatewayRuleActionOn, GatewayRuleActionOff, GatewayRuleActionAllow, GatewayRuleActionBlock, GatewayRuleActionScan, GatewayRuleActionNoscan, GatewayRuleActionSafesearch, GatewayRuleActionYtrestricted, GatewayRuleActionIsolate, GatewayRuleActionNoisolate, GatewayRuleActionOverride, GatewayRuleActionL4Override, GatewayRuleActionEgress, GatewayRuleActionResolve, GatewayRuleActionQuarantine, GatewayRuleActionRedirect, GatewayRuleActionForward:
 		return true
 	}
 	return false
@@ -504,9 +505,6 @@ type RuleSetting struct {
 	// Set to enable MSP children to bypass this rule. Only parent MSP accounts can set
 	// this. this rule. Settable for all types of rules.
 	AllowChildBypass bool `json:"allow_child_bypass" api:"nullable"`
-	// Define the settings for the Audit SSH action. Settable only for `l4` rules with
-	// `audit_ssh` action.
-	AuditSSH RuleSettingAuditSSH `json:"audit_ssh" api:"nullable"`
 	// Configure browser isolation behavior. Settable only for `http` rules with the
 	// action set to `isolate`.
 	BISOAdminControls RuleSettingBISOAdminControls `json:"biso_admin_controls"`
@@ -542,6 +540,9 @@ type RuleSetting struct {
 	// Configure whether a copy of the HTTP request will be sent to storage when the
 	// rule matches.
 	ForensicCopy RuleSettingForensicCopy `json:"forensic_copy" api:"nullable"`
+	// Forward matching HTTP requests to a Worker. Required for `http` rules with the
+	// action set to `forward`.
+	Forward RuleSettingForward `json:"forward" api:"nullable"`
 	// Ignore category matches at CNAME domains in a response. When off, evaluate
 	// categories in this rule against all CNAME domain categories in the response.
 	// Settable only for `dns` and `dns_resolver` rules.
@@ -605,7 +606,6 @@ type RuleSetting struct {
 type ruleSettingJSON struct {
 	AddHeaders                      apijson.Field
 	AllowChildBypass                apijson.Field
-	AuditSSH                        apijson.Field
 	BISOAdminControls               apijson.Field
 	BlockPage                       apijson.Field
 	BlockPageEnabled                apijson.Field
@@ -616,6 +616,7 @@ type ruleSettingJSON struct {
 	DNSResolvers                    apijson.Field
 	Egress                          apijson.Field
 	ForensicCopy                    apijson.Field
+	Forward                         apijson.Field
 	IgnoreCNAMECategoryMatches      apijson.Field
 	InsecureDisableDNSSECValidation apijson.Field
 	IPCategories                    apijson.Field
@@ -643,30 +644,6 @@ func (r ruleSettingJSON) RawJSON() string {
 	return r.raw
 }
 
-// Define the settings for the Audit SSH action. Settable only for `l4` rules with
-// `audit_ssh` action.
-type RuleSettingAuditSSH struct {
-	// Enable SSH command logging.
-	CommandLogging bool                    `json:"command_logging"`
-	JSON           ruleSettingAuditSSHJSON `json:"-"`
-}
-
-// ruleSettingAuditSSHJSON contains the JSON metadata for the struct
-// [RuleSettingAuditSSH]
-type ruleSettingAuditSSHJSON struct {
-	CommandLogging apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *RuleSettingAuditSSH) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleSettingAuditSSHJSON) RawJSON() string {
-	return r.raw
-}
-
 // Configure browser isolation behavior. Settable only for `http` rules with the
 // action set to `isolate`.
 type RuleSettingBISOAdminControls struct {
@@ -688,8 +665,12 @@ type RuleSettingBISOAdminControls struct {
 	DP bool `json:"dp"`
 	// Set to false to enable uploading. Only applies when `version == "v1"`.
 	DU bool `json:"du"`
-	// Configure keyboard usage behavior. If this field is absent, keyboard usage
-	// remains enabled. Applies only when version == "v2".
+	// Configure keyboard usage behavior. When set to enable_read_only_actions, only
+	// approved browser commands (find, copy, print, zoom, and select-all) may execute;
+	// other keyboard input is blocked from reaching the page. Copy and print remain
+	// subject to their independent controls. If this field is absent, keyboard usage
+	// remains enabled. Applies only when version == "v2". The enable_read_only_actions
+	// value requires an explicit version of "v2".
 	Keyboard RuleSettingBISOAdminControlsKeyboard `json:"keyboard"`
 	// Configure paste behavior. If set to remote_only, users cannot paste content from
 	// the local clipboard into isolated pages. If this field is absent, pasting
@@ -775,18 +756,23 @@ func (r RuleSettingBISOAdminControlsDownload) IsKnown() bool {
 	return false
 }
 
-// Configure keyboard usage behavior. If this field is absent, keyboard usage
-// remains enabled. Applies only when version == "v2".
+// Configure keyboard usage behavior. When set to enable_read_only_actions, only
+// approved browser commands (find, copy, print, zoom, and select-all) may execute;
+// other keyboard input is blocked from reaching the page. Copy and print remain
+// subject to their independent controls. If this field is absent, keyboard usage
+// remains enabled. Applies only when version == "v2". The enable_read_only_actions
+// value requires an explicit version of "v2".
 type RuleSettingBISOAdminControlsKeyboard string
 
 const (
-	RuleSettingBISOAdminControlsKeyboardEnabled  RuleSettingBISOAdminControlsKeyboard = "enabled"
-	RuleSettingBISOAdminControlsKeyboardDisabled RuleSettingBISOAdminControlsKeyboard = "disabled"
+	RuleSettingBISOAdminControlsKeyboardEnabled               RuleSettingBISOAdminControlsKeyboard = "enabled"
+	RuleSettingBISOAdminControlsKeyboardDisabled              RuleSettingBISOAdminControlsKeyboard = "disabled"
+	RuleSettingBISOAdminControlsKeyboardEnableReadOnlyActions RuleSettingBISOAdminControlsKeyboard = "enable_read_only_actions"
 )
 
 func (r RuleSettingBISOAdminControlsKeyboard) IsKnown() bool {
 	switch r {
-	case RuleSettingBISOAdminControlsKeyboardEnabled, RuleSettingBISOAdminControlsKeyboardDisabled:
+	case RuleSettingBISOAdminControlsKeyboardEnabled, RuleSettingBISOAdminControlsKeyboardDisabled, RuleSettingBISOAdminControlsKeyboardEnableReadOnlyActions:
 		return true
 	}
 	return false
@@ -997,6 +983,30 @@ func (r *RuleSettingForensicCopy) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r ruleSettingForensicCopyJSON) RawJSON() string {
+	return r.raw
+}
+
+// Forward matching HTTP requests to a Worker. Required for `http` rules with the
+// action set to `forward`.
+type RuleSettingForward struct {
+	// Specify the public Worker ID of the target Worker.
+	WorkerID string                 `json:"worker_id" api:"required"`
+	JSON     ruleSettingForwardJSON `json:"-"`
+}
+
+// ruleSettingForwardJSON contains the JSON metadata for the struct
+// [RuleSettingForward]
+type ruleSettingForwardJSON struct {
+	WorkerID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleSettingForward) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleSettingForwardJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1273,9 +1283,6 @@ type RuleSettingParam struct {
 	// Set to enable MSP children to bypass this rule. Only parent MSP accounts can set
 	// this. this rule. Settable for all types of rules.
 	AllowChildBypass param.Field[bool] `json:"allow_child_bypass"`
-	// Define the settings for the Audit SSH action. Settable only for `l4` rules with
-	// `audit_ssh` action.
-	AuditSSH param.Field[RuleSettingAuditSSHParam] `json:"audit_ssh"`
 	// Configure browser isolation behavior. Settable only for `http` rules with the
 	// action set to `isolate`.
 	BISOAdminControls param.Field[RuleSettingBISOAdminControlsParam] `json:"biso_admin_controls"`
@@ -1311,6 +1318,9 @@ type RuleSettingParam struct {
 	// Configure whether a copy of the HTTP request will be sent to storage when the
 	// rule matches.
 	ForensicCopy param.Field[RuleSettingForensicCopyParam] `json:"forensic_copy"`
+	// Forward matching HTTP requests to a Worker. Required for `http` rules with the
+	// action set to `forward`.
+	Forward param.Field[RuleSettingForwardParam] `json:"forward"`
 	// Ignore category matches at CNAME domains in a response. When off, evaluate
 	// categories in this rule against all CNAME domain categories in the response.
 	// Settable only for `dns` and `dns_resolver` rules.
@@ -1373,17 +1383,6 @@ func (r RuleSettingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Define the settings for the Audit SSH action. Settable only for `l4` rules with
-// `audit_ssh` action.
-type RuleSettingAuditSSHParam struct {
-	// Enable SSH command logging.
-	CommandLogging param.Field[bool] `json:"command_logging"`
-}
-
-func (r RuleSettingAuditSSHParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 // Configure browser isolation behavior. Settable only for `http` rules with the
 // action set to `isolate`.
 type RuleSettingBISOAdminControlsParam struct {
@@ -1405,8 +1404,12 @@ type RuleSettingBISOAdminControlsParam struct {
 	DP param.Field[bool] `json:"dp"`
 	// Set to false to enable uploading. Only applies when `version == "v1"`.
 	DU param.Field[bool] `json:"du"`
-	// Configure keyboard usage behavior. If this field is absent, keyboard usage
-	// remains enabled. Applies only when version == "v2".
+	// Configure keyboard usage behavior. When set to enable_read_only_actions, only
+	// approved browser commands (find, copy, print, zoom, and select-all) may execute;
+	// other keyboard input is blocked from reaching the page. Copy and print remain
+	// subject to their independent controls. If this field is absent, keyboard usage
+	// remains enabled. Applies only when version == "v2". The enable_read_only_actions
+	// value requires an explicit version of "v2".
 	Keyboard param.Field[RuleSettingBISOAdminControlsKeyboard] `json:"keyboard"`
 	// Configure paste behavior. If set to remote_only, users cannot paste content from
 	// the local clipboard into isolated pages. If this field is absent, pasting
@@ -1495,6 +1498,17 @@ type RuleSettingForensicCopyParam struct {
 }
 
 func (r RuleSettingForensicCopyParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Forward matching HTTP requests to a Worker. Required for `http` rules with the
+// action set to `forward`.
+type RuleSettingForwardParam struct {
+	// Specify the public Worker ID of the target Worker.
+	WorkerID param.Field[string] `json:"worker_id" api:"required"`
+}
+
+func (r RuleSettingForwardParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1793,11 +1807,12 @@ const (
 	GatewayRuleNewParamsActionResolve      GatewayRuleNewParamsAction = "resolve"
 	GatewayRuleNewParamsActionQuarantine   GatewayRuleNewParamsAction = "quarantine"
 	GatewayRuleNewParamsActionRedirect     GatewayRuleNewParamsAction = "redirect"
+	GatewayRuleNewParamsActionForward      GatewayRuleNewParamsAction = "forward"
 )
 
 func (r GatewayRuleNewParamsAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleNewParamsActionOn, GatewayRuleNewParamsActionOff, GatewayRuleNewParamsActionAllow, GatewayRuleNewParamsActionBlock, GatewayRuleNewParamsActionScan, GatewayRuleNewParamsActionNoscan, GatewayRuleNewParamsActionSafesearch, GatewayRuleNewParamsActionYtrestricted, GatewayRuleNewParamsActionIsolate, GatewayRuleNewParamsActionNoisolate, GatewayRuleNewParamsActionOverride, GatewayRuleNewParamsActionL4Override, GatewayRuleNewParamsActionEgress, GatewayRuleNewParamsActionResolve, GatewayRuleNewParamsActionQuarantine, GatewayRuleNewParamsActionRedirect:
+	case GatewayRuleNewParamsActionOn, GatewayRuleNewParamsActionOff, GatewayRuleNewParamsActionAllow, GatewayRuleNewParamsActionBlock, GatewayRuleNewParamsActionScan, GatewayRuleNewParamsActionNoscan, GatewayRuleNewParamsActionSafesearch, GatewayRuleNewParamsActionYtrestricted, GatewayRuleNewParamsActionIsolate, GatewayRuleNewParamsActionNoisolate, GatewayRuleNewParamsActionOverride, GatewayRuleNewParamsActionL4Override, GatewayRuleNewParamsActionEgress, GatewayRuleNewParamsActionResolve, GatewayRuleNewParamsActionQuarantine, GatewayRuleNewParamsActionRedirect, GatewayRuleNewParamsActionForward:
 		return true
 	}
 	return false
@@ -1940,11 +1955,12 @@ const (
 	GatewayRuleUpdateParamsActionResolve      GatewayRuleUpdateParamsAction = "resolve"
 	GatewayRuleUpdateParamsActionQuarantine   GatewayRuleUpdateParamsAction = "quarantine"
 	GatewayRuleUpdateParamsActionRedirect     GatewayRuleUpdateParamsAction = "redirect"
+	GatewayRuleUpdateParamsActionForward      GatewayRuleUpdateParamsAction = "forward"
 )
 
 func (r GatewayRuleUpdateParamsAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleUpdateParamsActionOn, GatewayRuleUpdateParamsActionOff, GatewayRuleUpdateParamsActionAllow, GatewayRuleUpdateParamsActionBlock, GatewayRuleUpdateParamsActionScan, GatewayRuleUpdateParamsActionNoscan, GatewayRuleUpdateParamsActionSafesearch, GatewayRuleUpdateParamsActionYtrestricted, GatewayRuleUpdateParamsActionIsolate, GatewayRuleUpdateParamsActionNoisolate, GatewayRuleUpdateParamsActionOverride, GatewayRuleUpdateParamsActionL4Override, GatewayRuleUpdateParamsActionEgress, GatewayRuleUpdateParamsActionResolve, GatewayRuleUpdateParamsActionQuarantine, GatewayRuleUpdateParamsActionRedirect:
+	case GatewayRuleUpdateParamsActionOn, GatewayRuleUpdateParamsActionOff, GatewayRuleUpdateParamsActionAllow, GatewayRuleUpdateParamsActionBlock, GatewayRuleUpdateParamsActionScan, GatewayRuleUpdateParamsActionNoscan, GatewayRuleUpdateParamsActionSafesearch, GatewayRuleUpdateParamsActionYtrestricted, GatewayRuleUpdateParamsActionIsolate, GatewayRuleUpdateParamsActionNoisolate, GatewayRuleUpdateParamsActionOverride, GatewayRuleUpdateParamsActionL4Override, GatewayRuleUpdateParamsActionEgress, GatewayRuleUpdateParamsActionResolve, GatewayRuleUpdateParamsActionQuarantine, GatewayRuleUpdateParamsActionRedirect, GatewayRuleUpdateParamsActionForward:
 		return true
 	}
 	return false

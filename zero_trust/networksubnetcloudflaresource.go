@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
 // NetworkSubnetCloudflareSourceService contains methods and other services that
@@ -84,9 +83,9 @@ func (r NetworkSubnetCloudflareSourceUpdateParamsAddressFamily) IsKnown() bool {
 }
 
 type NetworkSubnetCloudflareSourceUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors" api:"required"`
-	Messages []shared.ResponseInfo `json:"messages" api:"required"`
-	Result   Subnet                `json:"result" api:"required"`
+	Errors   []NetworkSubnetCloudflareSourceUpdateResponseEnvelopeErrors   `json:"errors" api:"required"`
+	Messages []NetworkSubnetCloudflareSourceUpdateResponseEnvelopeMessages `json:"messages" api:"required"`
+	Result   Subnet                                                        `json:"result" api:"required"`
 	// Whether the API call was successful
 	Success NetworkSubnetCloudflareSourceUpdateResponseEnvelopeSuccess `json:"success" api:"required"`
 	JSON    networkSubnetCloudflareSourceUpdateResponseEnvelopeJSON    `json:"-"`
@@ -108,6 +107,60 @@ func (r *NetworkSubnetCloudflareSourceUpdateResponseEnvelope) UnmarshalJSON(data
 }
 
 func (r networkSubnetCloudflareSourceUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkSubnetCloudflareSourceUpdateResponseEnvelopeErrors struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                                        `json:"context"`
+	JSON    networkSubnetCloudflareSourceUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// networkSubnetCloudflareSourceUpdateResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [NetworkSubnetCloudflareSourceUpdateResponseEnvelopeErrors]
+type networkSubnetCloudflareSourceUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkSubnetCloudflareSourceUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkSubnetCloudflareSourceUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkSubnetCloudflareSourceUpdateResponseEnvelopeMessages struct {
+	Code    int64  `json:"code" api:"required"`
+	Message string `json:"message" api:"required"`
+	// Optional error-specific context.
+	Context map[string]interface{}                                          `json:"context"`
+	JSON    networkSubnetCloudflareSourceUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// networkSubnetCloudflareSourceUpdateResponseEnvelopeMessagesJSON contains the
+// JSON metadata for the struct
+// [NetworkSubnetCloudflareSourceUpdateResponseEnvelopeMessages]
+type networkSubnetCloudflareSourceUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	Context     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkSubnetCloudflareSourceUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkSubnetCloudflareSourceUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -34,7 +34,9 @@ func NewThreatEventCategoryCatalogService(opts ...option.RequestOption) (r *Thre
 	return
 }
 
-// Lists categories
+// Lists every event category in the catalog, whether or not an event uses it. To
+// list only the categories used in specific datasets, use
+// `threat-intel events categories list`.
 func (r *ThreatEventCategoryCatalogService) List(ctx context.Context, query ThreatEventCategoryCatalogListParams, opts ...option.RequestOption) (res *[]ThreatEventCategoryCatalogListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

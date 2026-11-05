@@ -64,9 +64,12 @@ type AppEvaluateGetResponse struct {
 	// Reason the evaluator selected this variation.
 	Reason AppEvaluateGetResponseReason `json:"reason" api:"required"`
 	// Name of the variation that supplied the resolved value.
-	Variant string                           `json:"variant" api:"required"`
-	Value   AppEvaluateGetResponseValueUnion `json:"value"`
-	JSON    appEvaluateGetResponseJSON       `json:"-"`
+	Variant string `json:"variant" api:"required"`
+	// Key-value metadata associated with the flag. Returned only when the flag has
+	// metadata.
+	Metadata map[string]AppEvaluateGetResponseMetadataUnion `json:"metadata"`
+	Value    AppEvaluateGetResponseValueUnion               `json:"value"`
+	JSON     appEvaluateGetResponseJSON                     `json:"-"`
 }
 
 // appEvaluateGetResponseJSON contains the JSON metadata for the struct
@@ -75,6 +78,7 @@ type appEvaluateGetResponseJSON struct {
 	FlagKey     apijson.Field
 	Reason      apijson.Field
 	Variant     apijson.Field
+	Metadata    apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -105,6 +109,35 @@ func (r AppEvaluateGetResponseReason) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Union satisfied by [shared.UnionBool], [shared.UnionString] or
+// [shared.UnionFloat].
+type AppEvaluateGetResponseMetadataUnion interface {
+	ImplementsAppEvaluateGetResponseMetadataUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AppEvaluateGetResponseMetadataUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+	)
 }
 
 // Union satisfied by [shared.UnionString], [shared.UnionFloat],

@@ -46,7 +46,7 @@ func NewNamespaceInstanceItemService(opts ...option.RequestOption) (r *Namespace
 }
 
 // Lists indexed items in an AI Search instance.
-func (r *NamespaceInstanceItemService) List(ctx context.Context, name string, id string, params NamespaceInstanceItemListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[NamespaceInstanceItemListResponse], err error) {
+func (r *NamespaceInstanceItemService) List(ctx context.Context, namespace string, id string, params NamespaceInstanceItemListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[NamespaceInstanceItemListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -54,15 +54,15 @@ func (r *NamespaceInstanceItemService) List(ctx context.Context, name string, id
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	if name == "" {
-		err = errors.New("missing required name parameter")
+	if namespace == "" {
+		err = errors.New("missing required namespace parameter")
 		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/items", params.AccountID, name, id)
+	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/items", params.AccountID, namespace, id)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -76,20 +76,20 @@ func (r *NamespaceInstanceItemService) List(ctx context.Context, name string, id
 }
 
 // Lists indexed items in an AI Search instance.
-func (r *NamespaceInstanceItemService) ListAutoPaging(ctx context.Context, name string, id string, params NamespaceInstanceItemListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[NamespaceInstanceItemListResponse] {
-	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, name, id, params, opts...))
+func (r *NamespaceInstanceItemService) ListAutoPaging(ctx context.Context, namespace string, id string, params NamespaceInstanceItemListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[NamespaceInstanceItemListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, namespace, id, params, opts...))
 }
 
 // Deletes a file from a managed AI Search instance and removes its indexed data.
-func (r *NamespaceInstanceItemService) Delete(ctx context.Context, name string, id string, itemID string, body NamespaceInstanceItemDeleteParams, opts ...option.RequestOption) (res *NamespaceInstanceItemDeleteResponse, err error) {
+func (r *NamespaceInstanceItemService) Delete(ctx context.Context, namespace string, id string, itemID string, body NamespaceInstanceItemDeleteParams, opts ...option.RequestOption) (res *NamespaceInstanceItemDeleteResponse, err error) {
 	var env NamespaceInstanceItemDeleteResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	if name == "" {
-		err = errors.New("missing required name parameter")
+	if namespace == "" {
+		err = errors.New("missing required namespace parameter")
 		return nil, err
 	}
 	if id == "" {
@@ -100,7 +100,7 @@ func (r *NamespaceInstanceItemService) Delete(ctx context.Context, name string, 
 		err = errors.New("missing required item_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/items/%s", body.AccountID, name, id, itemID)
+	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/items/%s", body.AccountID, namespace, id, itemID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -111,15 +111,15 @@ func (r *NamespaceInstanceItemService) Delete(ctx context.Context, name string, 
 
 // Lists chunks for a specific item in an AI Search instance, including their text
 // content.
-func (r *NamespaceInstanceItemService) Chunks(ctx context.Context, name string, id string, itemID string, params NamespaceInstanceItemChunksParams, opts ...option.RequestOption) (res *[]NamespaceInstanceItemChunksResponse, err error) {
+func (r *NamespaceInstanceItemService) Chunks(ctx context.Context, namespace string, id string, itemID string, params NamespaceInstanceItemChunksParams, opts ...option.RequestOption) (res *[]NamespaceInstanceItemChunksResponse, err error) {
 	var env NamespaceInstanceItemChunksResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	if name == "" {
-		err = errors.New("missing required name parameter")
+	if namespace == "" {
+		err = errors.New("missing required namespace parameter")
 		return nil, err
 	}
 	if id == "" {
@@ -130,7 +130,7 @@ func (r *NamespaceInstanceItemService) Chunks(ctx context.Context, name string, 
 		err = errors.New("missing required item_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/items/%s/chunks", params.AccountID, name, id, itemID)
+	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/items/%s/chunks", params.AccountID, namespace, id, itemID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -140,22 +140,22 @@ func (r *NamespaceInstanceItemService) Chunks(ctx context.Context, name string, 
 }
 
 // Creates or updates an indexed item in an AI Search instance.
-func (r *NamespaceInstanceItemService) NewOrUpdate(ctx context.Context, name string, id string, params NamespaceInstanceItemNewOrUpdateParams, opts ...option.RequestOption) (res *NamespaceInstanceItemNewOrUpdateResponse, err error) {
+func (r *NamespaceInstanceItemService) NewOrUpdate(ctx context.Context, namespace string, id string, params NamespaceInstanceItemNewOrUpdateParams, opts ...option.RequestOption) (res *NamespaceInstanceItemNewOrUpdateResponse, err error) {
 	var env NamespaceInstanceItemNewOrUpdateResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	if name == "" {
-		err = errors.New("missing required name parameter")
+	if namespace == "" {
+		err = errors.New("missing required namespace parameter")
 		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/items", params.AccountID, name, id)
+	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/items", params.AccountID, namespace, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -166,15 +166,15 @@ func (r *NamespaceInstanceItemService) NewOrUpdate(ctx context.Context, name str
 
 // Downloads the raw file content for a specific item from the managed AI Search
 // instance storage.
-func (r *NamespaceInstanceItemService) Download(ctx context.Context, name string, id string, itemID string, query NamespaceInstanceItemDownloadParams, opts ...option.RequestOption) (res *http.Response, err error) {
+func (r *NamespaceInstanceItemService) Download(ctx context.Context, namespace string, id string, itemID string, query NamespaceInstanceItemDownloadParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/octet-stream")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	if name == "" {
-		err = errors.New("missing required name parameter")
+	if namespace == "" {
+		err = errors.New("missing required namespace parameter")
 		return nil, err
 	}
 	if id == "" {
@@ -185,21 +185,21 @@ func (r *NamespaceInstanceItemService) Download(ctx context.Context, name string
 		err = errors.New("missing required item_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/items/%s/download", query.AccountID, name, id, itemID)
+	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/items/%s/download", query.AccountID, namespace, id, itemID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return res, err
 }
 
 // Retrieves a specific indexed item from an AI Search instance.
-func (r *NamespaceInstanceItemService) Get(ctx context.Context, name string, id string, itemID string, query NamespaceInstanceItemGetParams, opts ...option.RequestOption) (res *NamespaceInstanceItemGetResponse, err error) {
+func (r *NamespaceInstanceItemService) Get(ctx context.Context, namespace string, id string, itemID string, query NamespaceInstanceItemGetParams, opts ...option.RequestOption) (res *NamespaceInstanceItemGetResponse, err error) {
 	var env NamespaceInstanceItemGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	if name == "" {
-		err = errors.New("missing required name parameter")
+	if namespace == "" {
+		err = errors.New("missing required namespace parameter")
 		return nil, err
 	}
 	if id == "" {
@@ -210,7 +210,7 @@ func (r *NamespaceInstanceItemService) Get(ctx context.Context, name string, id 
 		err = errors.New("missing required item_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/items/%s", query.AccountID, name, id, itemID)
+	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/items/%s", query.AccountID, namespace, id, itemID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -220,15 +220,15 @@ func (r *NamespaceInstanceItemService) Get(ctx context.Context, name string, id 
 }
 
 // Lists processing logs for a specific item in an AI Search instance.
-func (r *NamespaceInstanceItemService) Logs(ctx context.Context, name string, id string, itemID string, params NamespaceInstanceItemLogsParams, opts ...option.RequestOption) (res *[]NamespaceInstanceItemLogsResponse, err error) {
+func (r *NamespaceInstanceItemService) Logs(ctx context.Context, namespace string, id string, itemID string, params NamespaceInstanceItemLogsParams, opts ...option.RequestOption) (res *[]NamespaceInstanceItemLogsResponse, err error) {
 	var env NamespaceInstanceItemLogsResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	if name == "" {
-		err = errors.New("missing required name parameter")
+	if namespace == "" {
+		err = errors.New("missing required namespace parameter")
 		return nil, err
 	}
 	if id == "" {
@@ -239,7 +239,7 @@ func (r *NamespaceInstanceItemService) Logs(ctx context.Context, name string, id
 		err = errors.New("missing required item_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/items/%s/logs", params.AccountID, name, id, itemID)
+	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/items/%s/logs", params.AccountID, namespace, id, itemID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -248,16 +248,16 @@ func (r *NamespaceInstanceItemService) Logs(ctx context.Context, name string, id
 	return res, nil
 }
 
-// Syncs an item to an AI Search instance index.
-func (r *NamespaceInstanceItemService) Sync(ctx context.Context, name string, id string, itemID string, params NamespaceInstanceItemSyncParams, opts ...option.RequestOption) (res *NamespaceInstanceItemSyncResponse, err error) {
+// Synchronizes an item to an AI Search instance index.
+func (r *NamespaceInstanceItemService) Sync(ctx context.Context, namespace string, id string, itemID string, params NamespaceInstanceItemSyncParams, opts ...option.RequestOption) (res *NamespaceInstanceItemSyncResponse, err error) {
 	var env NamespaceInstanceItemSyncResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	if name == "" {
-		err = errors.New("missing required name parameter")
+	if namespace == "" {
+		err = errors.New("missing required namespace parameter")
 		return nil, err
 	}
 	if id == "" {
@@ -268,7 +268,7 @@ func (r *NamespaceInstanceItemService) Sync(ctx context.Context, name string, id
 		err = errors.New("missing required item_id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/items/%s", params.AccountID, name, id, itemID)
+	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/items/%s", params.AccountID, namespace, id, itemID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -278,22 +278,22 @@ func (r *NamespaceInstanceItemService) Sync(ctx context.Context, name string, id
 }
 
 // Uploads a file to a managed AI Search instance via multipart/form-data.
-func (r *NamespaceInstanceItemService) Upload(ctx context.Context, name string, id string, params NamespaceInstanceItemUploadParams, opts ...option.RequestOption) (res *NamespaceInstanceItemUploadResponse, err error) {
+func (r *NamespaceInstanceItemService) Upload(ctx context.Context, namespace string, id string, params NamespaceInstanceItemUploadParams, opts ...option.RequestOption) (res *NamespaceInstanceItemUploadResponse, err error) {
 	var env NamespaceInstanceItemUploadResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return nil, err
 	}
-	if name == "" {
-		err = errors.New("missing required name parameter")
+	if namespace == "" {
+		err = errors.New("missing required namespace parameter")
 		return nil, err
 	}
 	if id == "" {
 		err = errors.New("missing required id parameter")
 		return nil, err
 	}
-	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/items", params.AccountID, name, id)
+	path := fmt.Sprintf("accounts/%s/ai-search/namespaces/%s/instances/%s/items", params.AccountID, namespace, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return nil, err
@@ -435,24 +435,36 @@ func (r namespaceInstanceItemDeleteResponseJSON) RawJSON() string {
 }
 
 type NamespaceInstanceItemChunksResponse struct {
-	ID        string                                  `json:"id" api:"required"`
-	Item      NamespaceInstanceItemChunksResponseItem `json:"item" api:"required"`
-	Text      string                                  `json:"text" api:"required"`
-	EndByte   float64                                 `json:"end_byte"`
-	StartByte float64                                 `json:"start_byte"`
-	JSON      namespaceInstanceItemChunksResponseJSON `json:"-"`
+	ID      string                                  `json:"id" api:"required"`
+	Item    NamespaceInstanceItemChunksResponseItem `json:"item" api:"required"`
+	Text    string                                  `json:"text" api:"required"`
+	EndByte float64                                 `json:"end_byte"`
+	// Audio/video transcript chunks only: end, in milliseconds from the start of the
+	// media (whole seconds), of the last transcript section the chunk covers.
+	MediaEndMs int64 `json:"media_end_ms"`
+	// Audio/video transcript chunks only: start, in milliseconds from the start of the
+	// media (whole seconds), of the transcript section the chunk begins in.
+	MediaStartMs int64 `json:"media_start_ms"`
+	// Audio/video transcript chunks only: type of the source media file. Omitted for
+	// all other chunks.
+	SourceMediaType NamespaceInstanceItemChunksResponseSourceMediaType `json:"source_media_type"`
+	StartByte       float64                                            `json:"start_byte"`
+	JSON            namespaceInstanceItemChunksResponseJSON            `json:"-"`
 }
 
 // namespaceInstanceItemChunksResponseJSON contains the JSON metadata for the
 // struct [NamespaceInstanceItemChunksResponse]
 type namespaceInstanceItemChunksResponseJSON struct {
-	ID          apijson.Field
-	Item        apijson.Field
-	Text        apijson.Field
-	EndByte     apijson.Field
-	StartByte   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID              apijson.Field
+	Item            apijson.Field
+	Text            apijson.Field
+	EndByte         apijson.Field
+	MediaEndMs      apijson.Field
+	MediaStartMs    apijson.Field
+	SourceMediaType apijson.Field
+	StartByte       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *NamespaceInstanceItemChunksResponse) UnmarshalJSON(data []byte) (err error) {
@@ -486,6 +498,23 @@ func (r *NamespaceInstanceItemChunksResponseItem) UnmarshalJSON(data []byte) (er
 
 func (r namespaceInstanceItemChunksResponseItemJSON) RawJSON() string {
 	return r.raw
+}
+
+// Audio/video transcript chunks only: type of the source media file. Omitted for
+// all other chunks.
+type NamespaceInstanceItemChunksResponseSourceMediaType string
+
+const (
+	NamespaceInstanceItemChunksResponseSourceMediaTypeAudio NamespaceInstanceItemChunksResponseSourceMediaType = "audio"
+	NamespaceInstanceItemChunksResponseSourceMediaTypeVideo NamespaceInstanceItemChunksResponseSourceMediaType = "video"
+)
+
+func (r NamespaceInstanceItemChunksResponseSourceMediaType) IsKnown() bool {
+	switch r {
+	case NamespaceInstanceItemChunksResponseSourceMediaTypeAudio, NamespaceInstanceItemChunksResponseSourceMediaTypeVideo:
+		return true
+	}
+	return false
 }
 
 type NamespaceInstanceItemNewOrUpdateResponse struct {
@@ -1122,24 +1151,25 @@ func (r NamespaceInstanceItemUploadResponseWarningsExpectedType) IsKnown() bool 
 
 type NamespaceInstanceItemListParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Filter items by their unique ID. Returns at most one item.
+	// Return only the item with this unique ID. Returns at most one item.
 	ItemID param.Field[string] `query:"item_id"`
-	// Filter items by their exact key (object key / filename). Keys are unique per
-	// source, so combine with `source` to disambiguate across data sources.
+	// Return only items with this exact key (object key / filename). Each key is
+	// unique within a source, so combine with `source` to disambiguate across data
+	// sources.
 	Key param.Field[string] `query:"key"`
 	// JSON-encoded metadata filter using Vectorize filter syntax. Examples:
 	// {"folder":"reports/"},
-	// {"timestamp":{"$gte":1700000000000}}, {"folder":{"$in":["docs/","reports/"]}}
+	// {"timestamp":{"$gte":1700000000000}}, {"folder":{"$in":["docs/","reports/"]}}.
 	MetadataFilter param.Field[string] `query:"metadata_filter"`
 	Page           param.Field[int64]  `query:"page"`
 	PerPage        param.Field[int64]  `query:"per_page"`
 	Search         param.Field[string] `query:"search"`
-	// Sort order for items. "status" (default) sorts by status priority then
-	// last_seen_at. "modified_at" sorts by file modification time (most recent first),
-	// falling back to created_at.
+	// Sort order for items. "status" (default) sorts items according to status
+	// priority, then last_seen_at. "modified_at" sorts items according to file
+	// modification time (most recent first), falling back to created_at.
 	SortBy param.Field[NamespaceInstanceItemListParamsSortBy] `query:"sort_by"`
-	// Filter items by source_id. Use "builtin" for uploaded files, or a source
-	// identifier like "web-crawler:https://example.com".
+	// Return only items with this source_id. Use "builtin" for uploaded files, or a
+	// source identifier like "web-crawler:https://example.com".
 	Source param.Field[string]                                `query:"source"`
 	Status param.Field[NamespaceInstanceItemListParamsStatus] `query:"status"`
 }
@@ -1153,9 +1183,9 @@ func (r NamespaceInstanceItemListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Sort order for items. "status" (default) sorts by status priority then
-// last_seen_at. "modified_at" sorts by file modification time (most recent first),
-// falling back to created_at.
+// Sort order for items. "status" (default) sorts items according to status
+// priority, then last_seen_at. "modified_at" sorts items according to file
+// modification time (most recent first), falling back to created_at.
 type NamespaceInstanceItemListParamsSortBy string
 
 const (
@@ -1291,9 +1321,9 @@ type NamespaceInstanceItemNewOrUpdateParams struct {
 	NextAction param.Field[NamespaceInstanceItemNewOrUpdateParamsNextAction] `json:"next_action" api:"required"`
 	// Wait for indexing before responding. After processing, vector-indexed instances
 	// use any time remaining in a 25s wait budget to confirm Vectorize ingestion.
-	// Processing itself is not interrupted and can exceed that budget. If confirmation
-	// times out, the current item state is returned and background indexing continues.
-	// Defaults to false.
+	// Processing itself continues uninterrupted and can exceed that budget. If
+	// confirmation times out, the response returns the current item state and
+	// background indexing continues. Defaults to false.
 	WaitForCompletion param.Field[bool] `json:"wait_for_completion"`
 }
 
@@ -1441,9 +1471,9 @@ type NamespaceInstanceItemSyncParams struct {
 	NextAction param.Field[NamespaceInstanceItemSyncParamsNextAction] `json:"next_action" api:"required"`
 	// Wait for indexing before responding. After processing, vector-indexed instances
 	// use any time remaining in a 25s wait budget to confirm Vectorize ingestion.
-	// Processing itself is not interrupted and can exceed that budget. If confirmation
-	// times out, the current item state is returned and background indexing continues.
-	// Defaults to false.
+	// Processing itself continues uninterrupted and can exceed that budget. If
+	// confirmation times out, the response returns the current item state and
+	// background indexing continues. Defaults to false.
 	WaitForCompletion param.Field[bool] `json:"wait_for_completion"`
 }
 
@@ -1515,9 +1545,9 @@ type NamespaceInstanceItemUploadParamsFile struct {
 	Metadata param.Field[string] `json:"metadata"`
 	// Wait for indexing before responding. After processing, vector-indexed instances
 	// use any time remaining in a 25s wait budget to confirm Vectorize ingestion.
-	// Processing itself is not interrupted and can exceed that budget. If confirmation
-	// times out, the current item state is returned and background indexing continues.
-	// Defaults to false.
+	// Processing itself continues uninterrupted and can exceed that budget. If
+	// confirmation times out, the response returns the current item state and
+	// background indexing continues. Defaults to false.
 	WaitForCompletion param.Field[bool] `json:"wait_for_completion"`
 }
 

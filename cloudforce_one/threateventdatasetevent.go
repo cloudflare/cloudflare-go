@@ -34,7 +34,7 @@ func NewThreatEventDatasetEventService(opts ...option.RequestOption) (r *ThreatE
 	return
 }
 
-// Retrieves a specific event by its UUID.
+// Returns an event from a dataset by its UUID.
 func (r *ThreatEventDatasetEventService) Get(ctx context.Context, datasetID string, eventID string, query ThreatEventDatasetEventGetParams, opts ...option.RequestOption) (res *ThreatEventDatasetEventGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID.Value == "" {

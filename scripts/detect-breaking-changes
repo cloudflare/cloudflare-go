@@ -25,7 +25,6 @@ TEST_PATHS=(
 	accounts/speedsettingtransformation_test.go
 	accounts/paymentmethod_test.go
 	accounts/payinvoice_test.go
-	accounts/paybaddebt_test.go
 	accounts/receipt_test.go
 	accounts/invoice_test.go
 	accounts/clientsecret_test.go
@@ -35,11 +34,7 @@ TEST_PATHS=(
 	organizations/member_test.go
 	organizations/logaudit_test.go
 	organizations/billingusage_test.go
-	tenants/tenant_test.go
-	tenants/accounttype_test.go
 	tenants/account_test.go
-	tenants/entitlement_test.go
-	tenants/membership_test.go
 	origin_ca_certificates/origincacertificate_test.go
 	ips/ip_test.go
 	memberships/membership_test.go
@@ -113,7 +108,6 @@ TEST_PATHS=(
 	custom_hostnames/certificatepackcertificate_test.go
 	custom_hostnames/quota_test.go
 	custom_nameservers/customnameserver_test.go
-	tenant_custom_nameservers/tenantcustomnameserver_test.go
 	dns_firewall/dnsfirewall_test.go
 	dns_firewall/analyticsreport_test.go
 	dns_firewall/analyticsreportbytime_test.go
@@ -305,6 +299,9 @@ TEST_PATHS=(
 	dls/regionalserviceprefixbinding_test.go
 	audit_logs/auditlog_test.go
 	billing/billing_test.go
+	billing/spendpolicy_test.go
+	billing/spendpolicyaudit_test.go
+	billing/spendpolicyactivity_test.go
 	billing/profile_test.go
 	billing/profilepaymentmethod_test.go
 	billing/usage_test.go
@@ -387,12 +384,6 @@ TEST_PATHS=(
 	magic_network_monitoring/configfull_test.go
 	magic_network_monitoring/rule_test.go
 	magic_network_monitoring/ruleadvertisement_test.go
-	magic_cloud_networking/catalogsync_test.go
-	magic_cloud_networking/catalogsyncprebuiltpolicy_test.go
-	magic_cloud_networking/onramp_test.go
-	magic_cloud_networking/onrampaddressspace_test.go
-	magic_cloud_networking/cloudintegration_test.go
-	magic_cloud_networking/resource_test.go
 	monetization/rule_test.go
 	network_interconnects/cni_test.go
 	network_interconnects/interconnect_test.go
@@ -458,6 +449,7 @@ TEST_PATHS=(
 	r2/bucketmetric_test.go
 	r2/bucketsippy_test.go
 	r2/bucketobject_test.go
+	r2/bucketjob_test.go
 	r2/temporarycredential_test.go
 	r2/superslurperjob_test.go
 	r2/superslurperjoblog_test.go
@@ -482,6 +474,17 @@ TEST_PATHS=(
 	workers_for_platforms/dispatchnamespacescriptbinding_test.go
 	workers_for_platforms/dispatchnamespacescriptsecret_test.go
 	workers_for_platforms/dispatchnamespacescripttag_test.go
+	zero_trust/cwsbasicauthcredential_test.go
+	zero_trust/cwsbasicauthcredentialsecret_test.go
+	zero_trust/cwsdeployment_test.go
+	zero_trust/cwsdomainacl_test.go
+	zero_trust/cwspolicy_test.go
+	zero_trust/cwspolicyset_test.go
+	zero_trust/cwsregometadata_test.go
+	zero_trust/cwsregomodule_test.go
+	zero_trust/cwstenantstructure_test.go
+	zero_trust/cwstenantstructurenode_test.go
+	zero_trust/cwsworkload_test.go
 	zero_trust/device_test.go
 	zero_trust/devicedevice_test.go
 	zero_trust/deviceresilienceglobalwarpoverride_test.go
@@ -533,11 +536,17 @@ TEST_PATHS=(
 	zero_trust/accessbookmark_test.go
 	zero_trust/accesskey_test.go
 	zero_trust/accesslogaccessrequest_test.go
+	zero_trust/accesslogjitrequest_test.go
 	zero_trust/accesslogscimupdate_test.go
 	zero_trust/accessuser_test.go
 	zero_trust/accessuseractivesession_test.go
 	zero_trust/accessuserlastseenidentity_test.go
 	zero_trust/accessuserfailedlogin_test.go
+	zero_trust/accessusermfaauthenticator_test.go
+	zero_trust/accessuserpasskey_test.go
+	zero_trust/accessuserpopulation_test.go
+	zero_trust/accessuserpopulationuser_test.go
+	zero_trust/accessmfaauthenticatorcatalog_test.go
 	zero_trust/accesscustompage_test.go
 	zero_trust/accesstag_test.go
 	zero_trust/accesspolicy_test.go
@@ -549,6 +558,7 @@ TEST_PATHS=(
 	zero_trust/casbpostureexport_test.go
 	zero_trust/casbposturefindingtype_test.go
 	zero_trust/casbposturefindingtyperemediationtype_test.go
+	zero_trust/casbpostureassetschema_test.go
 	zero_trust/casbposturecontent_test.go
 	zero_trust/casbpostureremediationjob_test.go
 	zero_trust/casbposturepolicy_test.go
@@ -602,6 +612,8 @@ TEST_PATHS=(
 	zero_trust/dlpentrycustom_test.go
 	zero_trust/dlpentrypredefined_test.go
 	zero_trust/dlpentryintegration_test.go
+	zero_trust/dlpvalidator_test.go
+	zero_trust/dlpvalidatorproximityword_test.go
 	zero_trust/dlpsensitivitygroup_test.go
 	zero_trust/dlpsensitivitygrouplevel_test.go
 	zero_trust/dlpsensitivitygrouplevelorder_test.go
@@ -622,6 +634,7 @@ TEST_PATHS=(
 	zero_trust/gatewayrule_test.go
 	zero_trust/gatewaycertificate_test.go
 	zero_trust/gatewaypacfile_test.go
+	zero_trust/gatewaydnsdestinationip_test.go
 	zero_trust/networkroute_test.go
 	zero_trust/networkrouteip_test.go
 	zero_trust/networkroutenetwork_test.go
