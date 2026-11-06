@@ -917,7 +917,7 @@ type WorkerPreviewsBaseConfigPlacement struct {
 	Hostname string `json:"hostname"`
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Mode WorkerPreviewsBaseConfigPlacementMode `json:"mode"`
+	Mode WorkerPreviewsBaseConfigPlacementModeMode `json:"mode"`
 	// Cloud region for targeted placement in format 'provider:region'.
 	Region string `json:"region"`
 	// This field can have the runtime type of

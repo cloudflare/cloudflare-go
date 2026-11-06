@@ -4119,7 +4119,7 @@ type DispatchNamespaceScriptSettingEditResponsePlacement struct {
 	Hostname string `json:"hostname"`
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Mode DispatchNamespaceScriptSettingEditResponsePlacementMode `json:"mode"`
+	Mode DispatchNamespaceScriptSettingEditResponsePlacementModeMode `json:"mode"`
 	// Cloud region for targeted placement in format 'provider:region'.
 	Region string `json:"region"`
 	// This field can have the runtime type of
@@ -8433,7 +8433,7 @@ type DispatchNamespaceScriptSettingGetResponsePlacement struct {
 	Hostname string `json:"hostname"`
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	Mode DispatchNamespaceScriptSettingGetResponsePlacementMode `json:"mode"`
+	Mode DispatchNamespaceScriptSettingGetResponsePlacementModeMode `json:"mode"`
 	// Cloud region for targeted placement in format 'provider:region'.
 	Region string `json:"region"`
 	// This field can have the runtime type of
