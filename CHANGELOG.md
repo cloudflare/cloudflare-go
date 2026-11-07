@@ -12,8 +12,8 @@ and actions needed for each change.
 * **accounts:** the `Type` field is removed from `AccountUpdateParams`, along with the `AccountUpdateParamsType`
   enum (`standard`, `enterprise`). `Accounts.Update()` no longer accepts a `type`.
 * **ssl:** `CertificatePacks.New()` response is simplified. `CertificatePackNewResponse` drops its `Certificates`,
-  `DCVDelegationRecords`, `ValidationErrors`, and `ValidationRecords` fields, and the `RequestValidity` type plus the
-  nested `CertificatePackNewResponseCertificate`, `CertificatePackNewResponseCertificatesGeoRestrictions`,
+  `DCVDelegationRecords`, `ValidationErrors`, and `ValidationRecords` fields, and the nested
+  `CertificatePackNewResponseCertificate`, `CertificatePackNewResponseCertificatesGeoRestrictions`,
   `CertificatePackNewResponseCertificatesGeoRestrictionsLabel`, `CertificatePackNewResponseDCVDelegationRecord`,
   `CertificatePackNewResponseValidationError`, and `CertificatePackNewResponseValidationRecord` types are removed.
 * **rules:** the `ListCursor` and `ListCursorParam` types are removed.
