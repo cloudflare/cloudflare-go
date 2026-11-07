@@ -85,7 +85,8 @@ type CTAlertingSubscription struct {
 	Enabled bool `json:"enabled" api:"required"`
 	// Email addresses that receive CT alert notifications for the zone. A maximum of
 	// 100 addresses may be configured. Each address must be a valid RFC 5322 email
-	// address and must not contain a comma.
+	// address and must not contain a comma. Omitted from responses when no addresses
+	// are configured.
 	Emails []string                   `json:"emails" format:"email"`
 	JSON   ctAlertingSubscriptionJSON `json:"-"`
 }
@@ -114,7 +115,8 @@ type CTAlertingEditParams struct {
 	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// Email addresses that receive CT alert notifications for the zone. A maximum of
 	// 100 addresses may be configured. Each address must be a valid RFC 5322 email
-	// address and must not contain a comma.
+	// address and must not contain a comma. Omitted from responses when no addresses
+	// are configured.
 	Emails param.Field[[]string] `json:"emails" format:"email"`
 }
 

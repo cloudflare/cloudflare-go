@@ -15,6 +15,8 @@ import (
 type ObservabilityService struct {
 	Options       []option.RequestOption
 	Telemetry     *ObservabilityTelemetryService
+	Agents        *ObservabilityAgentService
+	Issues        *ObservabilityIssueService
 	Destinations  *ObservabilityDestinationService
 	Queries       *ObservabilityQueryService
 	SharedQueries *ObservabilitySharedQueryService
@@ -27,6 +29,8 @@ func NewObservabilityService(opts ...option.RequestOption) (r *ObservabilityServ
 	r = &ObservabilityService{}
 	r.Options = opts
 	r.Telemetry = NewObservabilityTelemetryService(opts...)
+	r.Agents = NewObservabilityAgentService(opts...)
+	r.Issues = NewObservabilityIssueService(opts...)
 	r.Destinations = NewObservabilityDestinationService(opts...)
 	r.Queries = NewObservabilityQueryService(opts...)
 	r.SharedQueries = NewObservabilitySharedQueryService(opts...)

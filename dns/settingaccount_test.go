@@ -34,7 +34,6 @@ func TestSettingAccountEditWithOptionalParams(t *testing.T) {
 		EnforceDNSOnly: cloudflare.F(false),
 		ZoneDefaults: cloudflare.F(dns.SettingAccountEditParamsZoneDefaults{
 			FlattenAllCNAMEs: cloudflare.F(false),
-			FoundationDNS:    cloudflare.F(false),
 			InternalDNS: cloudflare.F(dns.SettingAccountEditParamsZoneDefaultsInternalDNS{
 				ReferenceZoneID: cloudflare.F("reference_zone_id"),
 			}),

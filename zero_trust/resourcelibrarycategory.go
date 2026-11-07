@@ -37,8 +37,9 @@ func NewResourceLibraryCategoryService(opts ...option.RequestOption) (r *Resourc
 	return
 }
 
-// List the categories available for classifying applications, ordered by name.
-// Results are paginated by `offset` or `cursor`.
+// List the categories available for classifying applications, ordered by name,
+// ignoring the case of the letters A to Z. Results are paginated by `offset` or
+// `cursor`.
 func (r *ResourceLibraryCategoryService) List(ctx context.Context, params ResourceLibraryCategoryListParams, opts ...option.RequestOption) (res *pagination.CursorPaginationAfter[ResourceLibraryCategoryListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -60,8 +61,9 @@ func (r *ResourceLibraryCategoryService) List(ctx context.Context, params Resour
 	return res, nil
 }
 
-// List the categories available for classifying applications, ordered by name.
-// Results are paginated by `offset` or `cursor`.
+// List the categories available for classifying applications, ordered by name,
+// ignoring the case of the letters A to Z. Results are paginated by `offset` or
+// `cursor`.
 func (r *ResourceLibraryCategoryService) ListAutoPaging(ctx context.Context, params ResourceLibraryCategoryListParams, opts ...option.RequestOption) *pagination.CursorPaginationAfterAutoPager[ResourceLibraryCategoryListResponse] {
 	return pagination.NewCursorPaginationAfterAutoPager(r.List(ctx, params, opts...))
 }

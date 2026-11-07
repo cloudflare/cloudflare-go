@@ -37,13 +37,8 @@ Methods:
 
 ### Items
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/rules">rules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/rules#ListCursorParam">ListCursorParam</a>
-
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/rules">rules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/rules#ListCursor">ListCursor</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/rules">rules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/rules#ListItemNewResponse">ListItemNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/rules">rules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/rules#ListItemUpdateResponse">ListItemUpdateResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/rules">rules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v7/rules#ListItemListResponse">ListItemListResponse</a>

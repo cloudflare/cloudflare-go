@@ -566,8 +566,7 @@ type AccountUpdateParams struct {
 	// Identifier
 	ID param.Field[string] `json:"id" api:"required"`
 	// Account name, limited to 65 UTF-8 bytes.
-	Name param.Field[string]                  `json:"name" api:"required"`
-	Type param.Field[AccountUpdateParamsType] `json:"type" api:"required"`
+	Name param.Field[string] `json:"name" api:"required"`
 	// Parent container details
 	ManagedBy param.Field[AccountUpdateParamsManagedBy] `json:"managed_by"`
 	// Account settings
@@ -576,21 +575,6 @@ type AccountUpdateParams struct {
 
 func (r AccountUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type AccountUpdateParamsType string
-
-const (
-	AccountUpdateParamsTypeStandard   AccountUpdateParamsType = "standard"
-	AccountUpdateParamsTypeEnterprise AccountUpdateParamsType = "enterprise"
-)
-
-func (r AccountUpdateParamsType) IsKnown() bool {
-	switch r {
-	case AccountUpdateParamsTypeStandard, AccountUpdateParamsTypeEnterprise:
-		return true
-	}
-	return false
 }
 
 // Parent container details

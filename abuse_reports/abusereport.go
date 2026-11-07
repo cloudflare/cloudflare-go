@@ -51,15 +51,15 @@ func NewAbuseReportService(opts ...option.RequestOption) (r *AbuseReportService)
 // `Trust and Safety Write` permission. If the account is not entitled, the request
 // is rejected with an HTTP `401` response (see below).
 //
-// Delegated reports: In limited circumstances, Cloudflare works with select
-// customers who have established abuse-handling programs. For these customers,
-// Cloudflare may forward abuse reports directly and in full—including reporter
-// contact information, comments, and supporting evidence—without redaction or
-// preprocessing by Cloudflare. This allows the customer to investigate and respond
-// using their own policies and processes. For delegated reports, the
-// report—including contact information and comments—will be forwarded to the
-// customer in full regardless of the `host_notification` and `owner_notification`
-// values.
+// Delegated reports: In limited circumstances, Cloudflare delegates processing of
+// abuse reports to select customers who have established abuse-handling programs.
+// For these customers, Cloudflare may forward abuse reports directly and in
+// full—including reporter contact information, comments, and supporting
+// evidence—without redaction or preprocessing by Cloudflare. This allows the
+// customer to investigate and respond using their own policies and processes. For
+// delegated reports, the report—including contact information and comments—will be
+// forwarded to the customer in full regardless of the `host_notification` and
+// `owner_notification` values.
 func (r *AbuseReportService) New(ctx context.Context, reportParam string, params AbuseReportNewParams, opts ...option.RequestOption) (res *string, err error) {
 	var env AbuseReportNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -508,9 +508,10 @@ type AbuseReportNewParamsBody struct {
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
 	City param.Field[string] `json:"city"`
 	// Any additional comments about the infringement not exceeding 2000 characters.
-	// Comments are kept internal to Cloudflare and not shared with the host or
-	// customer as part of regular processing. For delegated reports, comments may be
-	// shared in full.
+	// With the exception of delegated reports, comments are kept internal to
+	// Cloudflare and not shared with the host or customer as part of regular
+	// processing. For the limited circumstances where we delegate reports to customers
+	// with established abuse-handling programs, comments may be shared in full.
 	Comments param.Field[string] `json:"comments"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
@@ -644,9 +645,10 @@ type AbuseReportNewParamsBodyAbuseReportsDmcaReport struct {
 	// such as the Lumen Database (https://lumendatabase.org/).
 	URLs param.Field[string] `json:"urls" api:"required"`
 	// Any additional comments about the infringement not exceeding 2000 characters.
-	// Comments are kept internal to Cloudflare and not shared with the host or
-	// customer as part of regular processing. For delegated reports, comments may be
-	// shared in full.
+	// With the exception of delegated reports, comments are kept internal to
+	// Cloudflare and not shared with the host or customer as part of regular
+	// processing. For the limited circumstances where we delegate reports to customers
+	// with established abuse-handling programs, comments may be shared in full.
 	Comments param.Field[string] `json:"comments"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
@@ -771,9 +773,10 @@ type AbuseReportNewParamsBodyAbuseReportsTrademarkReport struct {
 	// such as the Lumen Database (https://lumendatabase.org/).
 	URLs param.Field[string] `json:"urls" api:"required"`
 	// Any additional comments about the infringement not exceeding 2000 characters.
-	// Comments are kept internal to Cloudflare and not shared with the host or
-	// customer as part of regular processing. For delegated reports, comments may be
-	// shared in full.
+	// With the exception of delegated reports, comments are kept internal to
+	// Cloudflare and not shared with the host or customer as part of regular
+	// processing. For the limited circumstances where we delegate reports to customers
+	// with established abuse-handling programs, comments may be shared in full.
 	Comments param.Field[string] `json:"comments"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
@@ -878,9 +881,10 @@ type AbuseReportNewParamsBodyAbuseReportsGeneralReport struct {
 	// such as the Lumen Database (https://lumendatabase.org/).
 	URLs param.Field[string] `json:"urls" api:"required"`
 	// Any additional comments about the infringement not exceeding 2000 characters.
-	// Comments are kept internal to Cloudflare and not shared with the host or
-	// customer as part of regular processing. For delegated reports, comments may be
-	// shared in full.
+	// With the exception of delegated reports, comments are kept internal to
+	// Cloudflare and not shared with the host or customer as part of regular
+	// processing. For the limited circumstances where we delegate reports to customers
+	// with established abuse-handling programs, comments may be shared in full.
 	Comments param.Field[string] `json:"comments"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
@@ -1000,9 +1004,10 @@ type AbuseReportNewParamsBodyAbuseReportsPhishingReport struct {
 	// such as the Lumen Database (https://lumendatabase.org/).
 	URLs param.Field[string] `json:"urls" api:"required"`
 	// Any additional comments about the infringement not exceeding 2000 characters.
-	// Comments are kept internal to Cloudflare and not shared with the host or
-	// customer as part of regular processing. For delegated reports, comments may be
-	// shared in full.
+	// With the exception of delegated reports, comments are kept internal to
+	// Cloudflare and not shared with the host or customer as part of regular
+	// processing. For the limited circumstances where we delegate reports to customers
+	// with established abuse-handling programs, comments may be shared in full.
 	Comments param.Field[string] `json:"comments"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
@@ -1115,9 +1120,10 @@ type AbuseReportNewParamsBodyAbuseReportsCsamReport struct {
 	// such as the Lumen Database (https://lumendatabase.org/).
 	URLs param.Field[string] `json:"urls" api:"required"`
 	// Any additional comments about the infringement not exceeding 2000 characters.
-	// Comments are kept internal to Cloudflare and not shared with the host or
-	// customer as part of regular processing. For delegated reports, comments may be
-	// shared in full.
+	// With the exception of delegated reports, comments are kept internal to
+	// Cloudflare and not shared with the host or customer as part of regular
+	// processing. For the limited circumstances where we delegate reports to customers
+	// with established abuse-handling programs, comments may be shared in full.
 	Comments param.Field[string] `json:"comments"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
@@ -1244,9 +1250,10 @@ type AbuseReportNewParamsBodyAbuseReportsThreatReport struct {
 	// such as the Lumen Database (https://lumendatabase.org/).
 	URLs param.Field[string] `json:"urls" api:"required"`
 	// Any additional comments about the infringement not exceeding 2000 characters.
-	// Comments are kept internal to Cloudflare and not shared with the host or
-	// customer as part of regular processing. For delegated reports, comments may be
-	// shared in full.
+	// With the exception of delegated reports, comments are kept internal to
+	// Cloudflare and not shared with the host or customer as part of regular
+	// processing. For the limited circumstances where we delegate reports to customers
+	// with established abuse-handling programs, comments may be shared in full.
 	Comments param.Field[string] `json:"comments"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
@@ -1343,9 +1350,10 @@ type AbuseReportNewParamsBodyAbuseReportsRegistrarWhoisReport struct {
 	// such as the Lumen Database (https://lumendatabase.org/).
 	URLs param.Field[string] `json:"urls" api:"required"`
 	// Any additional comments about the infringement not exceeding 2000 characters.
-	// Comments are kept internal to Cloudflare and not shared with the host or
-	// customer as part of regular processing. For delegated reports, comments may be
-	// shared in full.
+	// With the exception of delegated reports, comments are kept internal to
+	// Cloudflare and not shared with the host or customer as part of regular
+	// processing. For the limited circumstances where we delegate reports to customers
+	// with established abuse-handling programs, comments may be shared in full.
 	Comments param.Field[string] `json:"comments"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).
@@ -1521,9 +1529,10 @@ type AbuseReportNewParamsBodyAbuseReportsNcseiReport struct {
 	// such as the Lumen Database (https://lumendatabase.org/).
 	URLs param.Field[string] `json:"urls" api:"required"`
 	// Any additional comments about the infringement not exceeding 2000 characters.
-	// Comments are kept internal to Cloudflare and not shared with the host or
-	// customer as part of regular processing. For delegated reports, comments may be
-	// shared in full.
+	// With the exception of delegated reports, comments are kept internal to
+	// Cloudflare and not shared with the host or customer as part of regular
+	// processing. For the limited circumstances where we delegate reports to customers
+	// with established abuse-handling programs, comments may be shared in full.
 	Comments param.Field[string] `json:"comments"`
 	// Text not exceeding 100 characters. This field may be released by Cloudflare to
 	// third parties such as the Lumen Database (https://lumendatabase.org/).

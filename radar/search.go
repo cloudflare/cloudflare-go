@@ -34,11 +34,11 @@ func NewSearchService(opts ...option.RequestOption) (r *SearchService) {
 	return
 }
 
-// Searches for locations, autonomous systems, reports, bots, certificate logs,
-// certificate authorities, industries and verticals. Location names can be
-// localized by sending an `Accept-Language` HTTP header with a BCP 47 language tag
-// (e.g., `Accept-Language: pt-PT`). The full quality-value chain is supported
-// (e.g., `pt-PT,pt;q=0.9,en;q=0.8`).
+// Searches for locations, autonomous systems, reports, bots, bot operators,
+// certificate logs, certificate authorities, industries and verticals. Location
+// names can be localized by sending an `Accept-Language` HTTP header with a BCP 47
+// language tag (e.g., `Accept-Language: pt-PT`). The full quality-value chain is
+// supported (e.g., `pt-PT,pt;q=0.9,en;q=0.8`).
 func (r *SearchService) Global(ctx context.Context, query SearchGlobalParams, opts ...option.RequestOption) (res *SearchGlobalResponse, err error) {
 	var env SearchGlobalResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -126,6 +126,7 @@ const (
 	SearchGlobalParamsExcludeAdm1S                  SearchGlobalParamsExclude = "ADM1S"
 	SearchGlobalParamsExcludeASNs                   SearchGlobalParamsExclude = "ASNS"
 	SearchGlobalParamsExcludeBots                   SearchGlobalParamsExclude = "BOTS"
+	SearchGlobalParamsExcludeBotOperators           SearchGlobalParamsExclude = "BOT_OPERATORS"
 	SearchGlobalParamsExcludeCertificateAuthorities SearchGlobalParamsExclude = "CERTIFICATE_AUTHORITIES"
 	SearchGlobalParamsExcludeCertificateLogs        SearchGlobalParamsExclude = "CERTIFICATE_LOGS"
 	SearchGlobalParamsExcludeOrigins                SearchGlobalParamsExclude = "ORIGINS"
@@ -139,7 +140,7 @@ const (
 
 func (r SearchGlobalParamsExclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsExcludeAdm1S, SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeBots, SearchGlobalParamsExcludeCertificateAuthorities, SearchGlobalParamsExcludeCertificateLogs, SearchGlobalParamsExcludeOrigins, SearchGlobalParamsExcludeOriginRegions, SearchGlobalParamsExcludeIndustries, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks, SearchGlobalParamsExcludeTLDs, SearchGlobalParamsExcludeVerticals:
+	case SearchGlobalParamsExcludeAdm1S, SearchGlobalParamsExcludeASNs, SearchGlobalParamsExcludeBots, SearchGlobalParamsExcludeBotOperators, SearchGlobalParamsExcludeCertificateAuthorities, SearchGlobalParamsExcludeCertificateLogs, SearchGlobalParamsExcludeOrigins, SearchGlobalParamsExcludeOriginRegions, SearchGlobalParamsExcludeIndustries, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeNotebooks, SearchGlobalParamsExcludeTLDs, SearchGlobalParamsExcludeVerticals:
 		return true
 	}
 	return false
@@ -167,6 +168,7 @@ const (
 	SearchGlobalParamsIncludeAdm1S                  SearchGlobalParamsInclude = "ADM1S"
 	SearchGlobalParamsIncludeASNs                   SearchGlobalParamsInclude = "ASNS"
 	SearchGlobalParamsIncludeBots                   SearchGlobalParamsInclude = "BOTS"
+	SearchGlobalParamsIncludeBotOperators           SearchGlobalParamsInclude = "BOT_OPERATORS"
 	SearchGlobalParamsIncludeCertificateAuthorities SearchGlobalParamsInclude = "CERTIFICATE_AUTHORITIES"
 	SearchGlobalParamsIncludeCertificateLogs        SearchGlobalParamsInclude = "CERTIFICATE_LOGS"
 	SearchGlobalParamsIncludeOrigins                SearchGlobalParamsInclude = "ORIGINS"
@@ -180,7 +182,7 @@ const (
 
 func (r SearchGlobalParamsInclude) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsIncludeAdm1S, SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeBots, SearchGlobalParamsIncludeCertificateAuthorities, SearchGlobalParamsIncludeCertificateLogs, SearchGlobalParamsIncludeOrigins, SearchGlobalParamsIncludeOriginRegions, SearchGlobalParamsIncludeIndustries, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks, SearchGlobalParamsIncludeTLDs, SearchGlobalParamsIncludeVerticals:
+	case SearchGlobalParamsIncludeAdm1S, SearchGlobalParamsIncludeASNs, SearchGlobalParamsIncludeBots, SearchGlobalParamsIncludeBotOperators, SearchGlobalParamsIncludeCertificateAuthorities, SearchGlobalParamsIncludeCertificateLogs, SearchGlobalParamsIncludeOrigins, SearchGlobalParamsIncludeOriginRegions, SearchGlobalParamsIncludeIndustries, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeNotebooks, SearchGlobalParamsIncludeTLDs, SearchGlobalParamsIncludeVerticals:
 		return true
 	}
 	return false

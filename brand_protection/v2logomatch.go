@@ -36,7 +36,8 @@ func NewV2LogoMatchService(opts ...option.RequestOption) (r *V2LogoMatchService)
 	return
 }
 
-// Get paginated list of logo matches for a specific brand protection logo query
+// Lists images that matched a saved logo query, most recently matched first by
+// default. Set `download=true` to include each matched image as base64 data.
 func (r *V2LogoMatchService) Get(ctx context.Context, params V2LogoMatchGetParams, opts ...option.RequestOption) (res *V2LogoMatchGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -72,16 +73,25 @@ func (r v2LogoMatchGetResponseJSON) RawJSON() string {
 }
 
 type V2LogoMatchGetResponseMatch struct {
-	ID              int64                           `json:"id" api:"required"`
-	Domain          string                          `json:"domain" api:"required,nullable"`
-	MatchedAt       string                          `json:"matched_at" api:"required,nullable"`
-	QueryID         int64                           `json:"query_id" api:"required"`
-	Registrar       string                          `json:"registrar" api:"required,nullable"`
-	SimilarityScore float64                         `json:"similarity_score" api:"required"`
-	URLScanID       string                          `json:"url_scan_id" api:"required,nullable"`
-	ContentType     string                          `json:"content_type"`
-	ImageData       string                          `json:"image_data"`
-	JSON            v2LogoMatchGetResponseMatchJSON `json:"-"`
+	// ID of the logo match.
+	ID int64 `json:"id" api:"required"`
+	// Domain where the matching image was found, if known.
+	Domain string `json:"domain" api:"required,nullable"`
+	// When the match was recorded.
+	MatchedAt string `json:"matched_at" api:"required,nullable"`
+	// ID of the logo query that produced this match.
+	QueryID int64 `json:"query_id" api:"required"`
+	// Registrar of `domain`, if known.
+	Registrar string `json:"registrar" api:"required,nullable"`
+	// Visual similarity between the matched image and the query logo. Higher is
+	// closer.
+	SimilarityScore float64 `json:"similarity_score" api:"required"`
+	URLScanID       string  `json:"url_scan_id" api:"required,nullable"`
+	// MIME type of the matched image (only present when download=true)
+	ContentType string `json:"content_type"`
+	// Base64-encoded matched image (only present when download=true)
+	ImageData string                          `json:"image_data"`
+	JSON      v2LogoMatchGetResponseMatchJSON `json:"-"`
 }
 
 // v2LogoMatchGetResponseMatchJSON contains the JSON metadata for the struct
@@ -110,14 +120,19 @@ func (r v2LogoMatchGetResponseMatchJSON) RawJSON() string {
 
 type V2LogoMatchGetParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	QueryID   param.Field[string] `query:"query_id" api:"required"`
-	Download  param.Field[string] `query:"download"`
-	Limit     param.Field[string] `query:"limit"`
-	Offset    param.Field[string] `query:"offset"`
-	// Sort order. Options: 'asc' (ascending) or 'desc' (descending)
+	// ID of the logo query whose matches to list.
+	QueryID param.Field[string] `query:"query_id" api:"required"`
+	// Set to `true` to include each matched image as base64 data in `image_data`, with
+	// its MIME type in `content_type`.
+	Download param.Field[string] `query:"download"`
+	// Maximum number of matches to return. Defaults to 50.
+	Limit param.Field[string] `query:"limit"`
+	// Number of matches to skip, for pagination. Defaults to 0.
+	Offset param.Field[string] `query:"offset"`
+	// Sort direction: `asc` or `desc`. Defaults to `desc`.
 	Order param.Field[V2LogoMatchGetParamsOrder] `query:"order"`
-	// Column to sort by. Options: 'matchedAt', 'domain', 'similarityScore', or
-	// 'registrar'
+	// Field to sort by: `matchedAt`, `domain`, `similarityScore`, or `registrar`.
+	// Defaults to `matchedAt`.
 	OrderBy param.Field[V2LogoMatchGetParamsOrderBy] `query:"orderBy"`
 }
 
@@ -129,7 +144,7 @@ func (r V2LogoMatchGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Sort order. Options: 'asc' (ascending) or 'desc' (descending)
+// Sort direction: `asc` or `desc`. Defaults to `desc`.
 type V2LogoMatchGetParamsOrder string
 
 const (
@@ -145,8 +160,8 @@ func (r V2LogoMatchGetParamsOrder) IsKnown() bool {
 	return false
 }
 
-// Column to sort by. Options: 'matchedAt', 'domain', 'similarityScore', or
-// 'registrar'
+// Field to sort by: `matchedAt`, `domain`, `similarityScore`, or `registrar`.
+// Defaults to `matchedAt`.
 type V2LogoMatchGetParamsOrderBy string
 
 const (

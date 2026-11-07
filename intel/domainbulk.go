@@ -267,6 +267,11 @@ type DomainBulkGetParams struct {
 	// Set to `true` to opt in. This parameter replaces the deprecated `skip_ranking`
 	// (see below).
 	IncludeRanking param.Field[bool] `query:"include_ranking"`
+	// Skip the DNS resolution-history lookup for faster responses. Defaults to
+	// `false`. Set to `true` if you only need categorization data; no DNS resolution
+	// history is returned for any domain. Matches the `skip_dns` parameter on
+	// `/intel/domain`.
+	SkipDNS param.Field[bool] `query:"skip_dns"`
 	// **Deprecated.** Previously controlled whether the ranking lookup was skipped
 	// (defaulted to `false`, meaning ranking ran). The endpoint's default behavior is
 	// being flipped — ranking is now opt-in via `include_ranking=true` — and this

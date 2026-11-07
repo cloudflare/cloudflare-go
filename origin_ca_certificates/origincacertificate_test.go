@@ -36,6 +36,7 @@ func TestOriginCACertificateNewWithOptionalParams(t *testing.T) {
 		Hostnames:         cloudflare.F([]string{"example.com", "*.example.com", "sub.example.com"}),
 		RequestType:       cloudflare.F(shared.CertificateRequestTypeOriginRSA),
 		RequestedValidity: cloudflare.F(ssl.RequestValidity5475),
+		ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -63,8 +64,6 @@ func TestOriginCACertificateListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.OriginCACertificates.List(context.TODO(), origin_ca_certificates.OriginCACertificateListParams{
 		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Limit:   cloudflare.F(int64(10)),
-		Offset:  cloudflare.F(int64(10)),
 		Page:    cloudflare.F(1.000000),
 		PerPage: cloudflare.F(5.000000),
 	})

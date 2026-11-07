@@ -32,7 +32,6 @@ func TestSettingZoneEditWithOptionalParams(t *testing.T) {
 	_, err := client.DNS.Settings.Zone.Edit(context.TODO(), dns.SettingZoneEditParams{
 		ZoneID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		FlattenAllCNAMEs: cloudflare.F(false),
-		FoundationDNS:    cloudflare.F(false),
 		InternalDNS: cloudflare.F(dns.SettingZoneEditParamsInternalDNS{
 			ReferenceZoneID: cloudflare.F("reference_zone_id"),
 		}),
