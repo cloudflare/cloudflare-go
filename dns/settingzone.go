@@ -74,12 +74,6 @@ type SettingZoneEditResponse struct {
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.
 	FlattenAllCNAMEs bool `json:"flatten_all_cnames" api:"required"`
-	// Deprecated. Use nameservers.type to configure Advanced Nameservers.
-	//
-	// Deprecated: foundation_dns is deprecated. Use nameservers.type:
-	// cloudflare.advanced to turn on Advanced Nameservers and cloudflare.standard to
-	// turn it off. This field will be removed in a future API version.
-	FoundationDNS bool `json:"foundation_dns" api:"required"`
 	// Settings for this internal zone.
 	InternalDNS SettingZoneEditResponseInternalDNS `json:"internal_dns" api:"required"`
 	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the
@@ -104,7 +98,6 @@ type SettingZoneEditResponse struct {
 // [SettingZoneEditResponse]
 type settingZoneEditResponseJSON struct {
 	FlattenAllCNAMEs   apijson.Field
-	FoundationDNS      apijson.Field
 	InternalDNS        apijson.Field
 	MultiProvider      apijson.Field
 	Nameservers        apijson.Field
@@ -441,12 +434,6 @@ type SettingZoneGetResponse struct {
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.
 	FlattenAllCNAMEs bool `json:"flatten_all_cnames" api:"required"`
-	// Deprecated. Use nameservers.type to configure Advanced Nameservers.
-	//
-	// Deprecated: foundation_dns is deprecated. Use nameservers.type:
-	// cloudflare.advanced to turn on Advanced Nameservers and cloudflare.standard to
-	// turn it off. This field will be removed in a future API version.
-	FoundationDNS bool `json:"foundation_dns" api:"required"`
 	// Settings for this internal zone.
 	InternalDNS SettingZoneGetResponseInternalDNS `json:"internal_dns" api:"required"`
 	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the
@@ -471,7 +458,6 @@ type SettingZoneGetResponse struct {
 // [SettingZoneGetResponse]
 type settingZoneGetResponseJSON struct {
 	FlattenAllCNAMEs   apijson.Field
-	FoundationDNS      apijson.Field
 	InternalDNS        apijson.Field
 	MultiProvider      apijson.Field
 	Nameservers        apijson.Field
@@ -810,8 +796,6 @@ type SettingZoneEditParams struct {
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.
 	FlattenAllCNAMEs param.Field[bool] `json:"flatten_all_cnames"`
-	// Deprecated. Use nameservers.type to configure Advanced Nameservers.
-	FoundationDNS param.Field[bool] `json:"foundation_dns"`
 	// Settings for this internal zone.
 	InternalDNS param.Field[SettingZoneEditParamsInternalDNS] `json:"internal_dns"`
 	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the

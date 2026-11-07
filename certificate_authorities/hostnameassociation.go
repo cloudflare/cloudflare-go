@@ -71,6 +71,7 @@ func (r *HostnameAssociationService) Get(ctx context.Context, params HostnameAss
 }
 
 type TLSHostnameAssociationParam struct {
+	// Unordered set of hostnames. Hostnames are stored as lowercase punycode.
 	Hostnames param.Field[[]string] `json:"hostnames"`
 	// The UUID for a certificate that was uploaded to the mTLS Certificate Management
 	// endpoint. If no mtls_certificate_id is given, the hostnames will be associated
@@ -83,7 +84,9 @@ func (r TLSHostnameAssociationParam) MarshalJSON() (data []byte, err error) {
 }
 
 type HostnameAssociationUpdateResponse struct {
-	Hostnames []string                              `json:"hostnames"`
+	// Hostnames are returned in lowercase punycode, in no particular order. Null when
+	// there are no associations.
+	Hostnames []string                              `json:"hostnames" api:"nullable"`
 	JSON      hostnameAssociationUpdateResponseJSON `json:"-"`
 }
 
@@ -104,7 +107,9 @@ func (r hostnameAssociationUpdateResponseJSON) RawJSON() string {
 }
 
 type HostnameAssociationGetResponse struct {
-	Hostnames []string                           `json:"hostnames"`
+	// Hostnames are returned in lowercase punycode, in no particular order. Null when
+	// there are no associations.
+	Hostnames []string                           `json:"hostnames" api:"nullable"`
 	JSON      hostnameAssociationGetResponseJSON `json:"-"`
 }
 

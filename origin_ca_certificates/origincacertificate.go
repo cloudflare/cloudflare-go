@@ -40,8 +40,10 @@ func NewOriginCACertificateService(opts ...option.RequestOption) (r *OriginCACer
 	return
 }
 
-// Create an Origin CA certificate. You can use an Origin CA Key as your User
-// Service Key or an API token when calling this endpoint ([see above](#requests)).
+// Create an Origin CA certificate. For `keyless-certificate` requests, `zone_id`
+// is required and the response contains only `id`, `certificate`, and
+// `expires_on`. You can use an Origin CA Key as your User Service Key or an API
+// token when calling this endpoint ([see above](#requests)).
 func (r *OriginCACertificateService) New(ctx context.Context, body OriginCACertificateNewParams, opts ...option.RequestOption) (res *OriginCACertificate, err error) {
 	var env OriginCACertificateNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -54,9 +56,9 @@ func (r *OriginCACertificateService) New(ctx context.Context, body OriginCACerti
 	return res, nil
 }
 
-// List all existing Origin CA certificates for a given zone. You can use an Origin
-// CA Key as your User Service Key or an API token when calling this endpoint
-// ([see above](#requests)).
+// List all existing Origin CA certificates for a given zone. Revoked certificates
+// are not included. You can use an Origin CA Key as your User Service Key or an
+// API token when calling this endpoint ([see above](#requests)).
 func (r *OriginCACertificateService) List(ctx context.Context, query OriginCACertificateListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[OriginCACertificate], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -74,9 +76,9 @@ func (r *OriginCACertificateService) List(ctx context.Context, query OriginCACer
 	return res, nil
 }
 
-// List all existing Origin CA certificates for a given zone. You can use an Origin
-// CA Key as your User Service Key or an API token when calling this endpoint
-// ([see above](#requests)).
+// List all existing Origin CA certificates for a given zone. Revoked certificates
+// are not included. You can use an Origin CA Key as your User Service Key or an
+// API token when calling this endpoint ([see above](#requests)).
 func (r *OriginCACertificateService) ListAutoPaging(ctx context.Context, query OriginCACertificateListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[OriginCACertificate] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
 }
@@ -120,8 +122,14 @@ func (r *OriginCACertificateService) Get(ctx context.Context, certificateID stri
 }
 
 type OriginCACertificate struct {
+	// The x509 serial number of the Origin CA certificate.
+	ID string `json:"id"`
+	// The Origin CA certificate. Will be newline-encoded.
+	Certificate string `json:"certificate"`
 	// The Certificate Signing Request (CSR). Must be newline-encoded.
-	Csr string `json:"csr" api:"required"`
+	Csr string `json:"csr"`
+	// When the certificate will expire.
+	ExpiresOn string `json:"expires_on"`
 	// Array of hostnames or wildcard names bound to the certificate. Hostnames must be
 	// fully qualified domain names (FQDNs) belonging to zones on your account (e.g.,
 	// `example.com` or `sub.example.com`). Wildcards are supported only as a `*.`
@@ -130,31 +138,30 @@ type OriginCACertificate struct {
 	// allowed. The wildcard suffix must be a multi-label domain (`*.example.com` is
 	// valid, but `*.com` is not). Unicode/IDN hostnames are accepted and automatically
 	// converted to punycode.
-	Hostnames []string `json:"hostnames" api:"required"`
+	Hostnames []string `json:"hostnames"`
 	// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
 	// or "keyless-certificate" (for Keyless SSL servers).
-	RequestType shared.CertificateRequestType `json:"request_type" api:"required"`
-	// The number of days for which the certificate should be valid.
-	RequestedValidity ssl.RequestValidity `json:"requested_validity" api:"required"`
-	// The x509 serial number of the Origin CA certificate.
-	ID string `json:"id"`
-	// The Origin CA certificate. Will be newline-encoded.
-	Certificate string `json:"certificate"`
-	// When the certificate will expire.
-	ExpiresOn string                  `json:"expires_on"`
+	RequestType shared.CertificateRequestType `json:"request_type"`
+	// The number of days for which the certificate was requested to be valid. Only
+	// returned in the Create Certificate response, where it echoes the requested
+	// value. Not returned when getting or listing certificates.
+	RequestedValidity OriginCACertificateRequestedValidity `json:"requested_validity"`
+	// When the certificate was revoked.
+	RevokedAt time.Time               `json:"revoked_at" format:"date-time"`
 	JSON      originCACertificateJSON `json:"-"`
 }
 
 // originCACertificateJSON contains the JSON metadata for the struct
 // [OriginCACertificate]
 type originCACertificateJSON struct {
+	ID                apijson.Field
+	Certificate       apijson.Field
 	Csr               apijson.Field
+	ExpiresOn         apijson.Field
 	Hostnames         apijson.Field
 	RequestType       apijson.Field
 	RequestedValidity apijson.Field
-	ID                apijson.Field
-	Certificate       apijson.Field
-	ExpiresOn         apijson.Field
+	RevokedAt         apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
@@ -165,6 +172,29 @@ func (r *OriginCACertificate) UnmarshalJSON(data []byte) (err error) {
 
 func (r originCACertificateJSON) RawJSON() string {
 	return r.raw
+}
+
+// The number of days for which the certificate was requested to be valid. Only
+// returned in the Create Certificate response, where it echoes the requested
+// value. Not returned when getting or listing certificates.
+type OriginCACertificateRequestedValidity float64
+
+const (
+	OriginCACertificateRequestedValidity7    OriginCACertificateRequestedValidity = 7
+	OriginCACertificateRequestedValidity30   OriginCACertificateRequestedValidity = 30
+	OriginCACertificateRequestedValidity90   OriginCACertificateRequestedValidity = 90
+	OriginCACertificateRequestedValidity365  OriginCACertificateRequestedValidity = 365
+	OriginCACertificateRequestedValidity730  OriginCACertificateRequestedValidity = 730
+	OriginCACertificateRequestedValidity1095 OriginCACertificateRequestedValidity = 1095
+	OriginCACertificateRequestedValidity5475 OriginCACertificateRequestedValidity = 5475
+)
+
+func (r OriginCACertificateRequestedValidity) IsKnown() bool {
+	switch r {
+	case OriginCACertificateRequestedValidity7, OriginCACertificateRequestedValidity30, OriginCACertificateRequestedValidity90, OriginCACertificateRequestedValidity365, OriginCACertificateRequestedValidity730, OriginCACertificateRequestedValidity1095, OriginCACertificateRequestedValidity5475:
+		return true
+	}
+	return false
 }
 
 type OriginCACertificateDeleteResponse struct {
@@ -209,6 +239,9 @@ type OriginCACertificateNewParams struct {
 	RequestType param.Field[shared.CertificateRequestType] `json:"request_type" api:"required"`
 	// The number of days for which the certificate should be valid.
 	RequestedValidity param.Field[ssl.RequestValidity] `json:"requested_validity"`
+	// Identifier of the zone whose keyless servers the certificate is for. Required
+	// when `request_type` is `keyless-certificate`; ignored otherwise.
+	ZoneID param.Field[string] `json:"zone_id"`
 }
 
 func (r OriginCACertificateNewParams) MarshalJSON() (data []byte, err error) {
@@ -357,10 +390,6 @@ func (r OriginCACertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 type OriginCACertificateListParams struct {
 	// Identifier.
 	ZoneID param.Field[string] `query:"zone_id" api:"required"`
-	// Limit to the number of records returned.
-	Limit param.Field[int64] `query:"limit"`
-	// Offset the results.
-	Offset param.Field[int64] `query:"offset"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Number of records per page.

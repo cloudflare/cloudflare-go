@@ -4712,7 +4712,7 @@ type SettingEditResponse struct {
 	// [SettingEditResponseZonesWebmcpEnabledValueUnion],
 	// [SettingEditResponseZonesWebmcpMcpURLValueUnion],
 	// [SettingEditResponseZonesWebmcpPacksValueUnion], [WebPValueUnion],
-	// [WebsocketValueUnion].
+	// [SettingEditResponseZonesAVIFValueUnion], [WebsocketValueUnion].
 	Value interface{}             `json:"value"`
 	JSON  settingEditResponseJSON `json:"-"`
 	union SettingEditResponseUnion
@@ -4784,7 +4784,8 @@ func (r *SettingEditResponse) UnmarshalJSON(data []byte) (err error) {
 // [SettingEditResponseZonesTransformationsAllowedOrigins],
 // [SettingEditResponseZonesTrueClientIPHeader2], [SettingEditResponseZonesWAF2],
 // [SettingEditResponseZonesWebmcpEnabled], [SettingEditResponseZonesWebmcpMcpURL],
-// [SettingEditResponseZonesWebmcpPacks], [WebP], [Websocket].
+// [SettingEditResponseZonesWebmcpPacks], [WebP], [SettingEditResponseZonesAVIF],
+// [Websocket].
 func (r SettingEditResponse) AsUnion() SettingEditResponseUnion {
 	return r.union
 }
@@ -4828,7 +4829,8 @@ func (r SettingEditResponse) AsUnion() SettingEditResponseUnion {
 // [SettingEditResponseZonesTransformationsAllowedOrigins],
 // [SettingEditResponseZonesTrueClientIPHeader2], [SettingEditResponseZonesWAF2],
 // [SettingEditResponseZonesWebmcpEnabled], [SettingEditResponseZonesWebmcpMcpURL],
-// [SettingEditResponseZonesWebmcpPacks], [WebP] or [Websocket].
+// [SettingEditResponseZonesWebmcpPacks], [WebP], [SettingEditResponseZonesAVIF] or
+// [Websocket].
 type SettingEditResponseUnion interface {
 	implementsSettingEditResponse()
 }
@@ -5100,6 +5102,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(WebP{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesAVIF{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -9420,6 +9426,114 @@ func (r SettingEditResponseZonesWebmcpPacksEditable) IsKnown() bool {
 	return false
 }
 
+// When the client requesting the image supports the AVIF image codec, and AVIF
+// offers a performance advantage over the original image format, Cloudflare will
+// serve an AVIF version of the original image.
+type SettingEditResponseZonesAVIF struct {
+	// ID of the zone setting.
+	ID SettingEditResponseZonesAVIFID `json:"id" api:"required"`
+	// Current value of the zone setting.
+	Value SettingEditResponseZonesAVIFValueUnion `json:"value" api:"required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable SettingEditResponseZonesAVIFEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                        `json:"modified_on" api:"nullable" format:"date-time"`
+	JSON       settingEditResponseZonesAVIFJSON `json:"-"`
+}
+
+// settingEditResponseZonesAVIFJSON contains the JSON metadata for the struct
+// [SettingEditResponseZonesAVIF]
+type settingEditResponseZonesAVIFJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingEditResponseZonesAVIF) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingEditResponseZonesAVIFJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingEditResponseZonesAVIF) implementsSettingEditResponse() {}
+
+// ID of the zone setting.
+type SettingEditResponseZonesAVIFID string
+
+const (
+	SettingEditResponseZonesAVIFIDAVIF SettingEditResponseZonesAVIFID = "avif"
+)
+
+func (r SettingEditResponseZonesAVIFID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesAVIFIDAVIF:
+		return true
+	}
+	return false
+}
+
+// Current value of the zone setting.
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingEditResponseZonesAVIFValueArray].
+type SettingEditResponseZonesAVIFValueUnion interface {
+	ImplementsSettingEditResponseZonesAVIFValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingEditResponseZonesAVIFValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingEditResponseZonesAVIFValueArray{}),
+		},
+	)
+}
+
+type SettingEditResponseZonesAVIFValueArray []string
+
+func (r SettingEditResponseZonesAVIFValueArray) ImplementsSettingEditResponseZonesAVIFValueUnion() {}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingEditResponseZonesAVIFEditable bool
+
+const (
+	SettingEditResponseZonesAVIFEditableTrue  SettingEditResponseZonesAVIFEditable = true
+	SettingEditResponseZonesAVIFEditableFalse SettingEditResponseZonesAVIFEditable = false
+)
+
+func (r SettingEditResponseZonesAVIFEditable) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesAVIFEditableTrue, SettingEditResponseZonesAVIFEditableFalse:
+		return true
+	}
+	return false
+}
+
 // ID of the zone setting.
 type SettingEditResponseID string
 
@@ -9490,12 +9604,13 @@ const (
 	SettingEditResponseIDWebmcpMcpURL                  SettingEditResponseID = "webmcp_mcp_url"
 	SettingEditResponseIDWebmcpPacks                   SettingEditResponseID = "webmcp_packs"
 	SettingEditResponseIDWebP                          SettingEditResponseID = "webp"
+	SettingEditResponseIDAVIF                          SettingEditResponseID = "avif"
 	SettingEditResponseIDWebsockets                    SettingEditResponseID = "websockets"
 )
 
 func (r SettingEditResponseID) IsKnown() bool {
 	switch r {
-	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAegis, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDChinaNetworkEnabled, SettingEditResponseIDContentConverter, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMirage, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDOriginH2MaxStreams, SettingEditResponseIDOriginMaxHTTPVersion, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDPreRender, SettingEditResponseIDPrivacyPass, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDRedirectsForAITraining, SettingEditResponseIDReplaceInsecureJS, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSearchForAgents, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTransformations, SettingEditResponseIDTransformationsAllowedOrigins, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebmcpEnabled, SettingEditResponseIDWebmcpMcpURL, SettingEditResponseIDWebmcpPacks, SettingEditResponseIDWebP, SettingEditResponseIDWebsockets:
+	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAegis, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDChinaNetworkEnabled, SettingEditResponseIDContentConverter, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMirage, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDOriginH2MaxStreams, SettingEditResponseIDOriginMaxHTTPVersion, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDPreRender, SettingEditResponseIDPrivacyPass, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDRedirectsForAITraining, SettingEditResponseIDReplaceInsecureJS, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSearchForAgents, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTransformations, SettingEditResponseIDTransformationsAllowedOrigins, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebmcpEnabled, SettingEditResponseIDWebmcpMcpURL, SettingEditResponseIDWebmcpPacks, SettingEditResponseIDWebP, SettingEditResponseIDAVIF, SettingEditResponseIDWebsockets:
 		return true
 	}
 	return false
@@ -9576,7 +9691,7 @@ type SettingGetResponse struct {
 	// [SettingGetResponseZonesWebmcpEnabledValueUnion],
 	// [SettingGetResponseZonesWebmcpMcpURLValueUnion],
 	// [SettingGetResponseZonesWebmcpPacksValueUnion], [WebPValueUnion],
-	// [WebsocketValueUnion].
+	// [SettingGetResponseZonesAVIFValueUnion], [WebsocketValueUnion].
 	Value interface{}            `json:"value"`
 	JSON  settingGetResponseJSON `json:"-"`
 	union SettingGetResponseUnion
@@ -9648,7 +9763,8 @@ func (r *SettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [SettingGetResponseZonesTransformationsAllowedOrigins],
 // [SettingGetResponseZonesTrueClientIPHeader2], [SettingGetResponseZonesWAF2],
 // [SettingGetResponseZonesWebmcpEnabled], [SettingGetResponseZonesWebmcpMcpURL],
-// [SettingGetResponseZonesWebmcpPacks], [WebP], [Websocket].
+// [SettingGetResponseZonesWebmcpPacks], [WebP], [SettingGetResponseZonesAVIF],
+// [Websocket].
 func (r SettingGetResponse) AsUnion() SettingGetResponseUnion {
 	return r.union
 }
@@ -9692,7 +9808,8 @@ func (r SettingGetResponse) AsUnion() SettingGetResponseUnion {
 // [SettingGetResponseZonesTransformationsAllowedOrigins],
 // [SettingGetResponseZonesTrueClientIPHeader2], [SettingGetResponseZonesWAF2],
 // [SettingGetResponseZonesWebmcpEnabled], [SettingGetResponseZonesWebmcpMcpURL],
-// [SettingGetResponseZonesWebmcpPacks], [WebP] or [Websocket].
+// [SettingGetResponseZonesWebmcpPacks], [WebP], [SettingGetResponseZonesAVIF] or
+// [Websocket].
 type SettingGetResponseUnion interface {
 	implementsSettingGetResponse()
 }
@@ -9964,6 +10081,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(WebP{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesAVIF{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -14283,6 +14404,114 @@ func (r SettingGetResponseZonesWebmcpPacksEditable) IsKnown() bool {
 	return false
 }
 
+// When the client requesting the image supports the AVIF image codec, and AVIF
+// offers a performance advantage over the original image format, Cloudflare will
+// serve an AVIF version of the original image.
+type SettingGetResponseZonesAVIF struct {
+	// ID of the zone setting.
+	ID SettingGetResponseZonesAVIFID `json:"id" api:"required"`
+	// Current value of the zone setting.
+	Value SettingGetResponseZonesAVIFValueUnion `json:"value" api:"required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable SettingGetResponseZonesAVIFEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                       `json:"modified_on" api:"nullable" format:"date-time"`
+	JSON       settingGetResponseZonesAVIFJSON `json:"-"`
+}
+
+// settingGetResponseZonesAVIFJSON contains the JSON metadata for the struct
+// [SettingGetResponseZonesAVIF]
+type settingGetResponseZonesAVIFJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseZonesAVIF) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseZonesAVIFJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingGetResponseZonesAVIF) implementsSettingGetResponse() {}
+
+// ID of the zone setting.
+type SettingGetResponseZonesAVIFID string
+
+const (
+	SettingGetResponseZonesAVIFIDAVIF SettingGetResponseZonesAVIFID = "avif"
+)
+
+func (r SettingGetResponseZonesAVIFID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesAVIFIDAVIF:
+		return true
+	}
+	return false
+}
+
+// Current value of the zone setting.
+//
+// Union satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool]
+// or [SettingGetResponseZonesAVIFValueArray].
+type SettingGetResponseZonesAVIFValueUnion interface {
+	ImplementsSettingGetResponseZonesAVIFValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingGetResponseZonesAVIFValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingGetResponseZonesAVIFValueArray{}),
+		},
+	)
+}
+
+type SettingGetResponseZonesAVIFValueArray []string
+
+func (r SettingGetResponseZonesAVIFValueArray) ImplementsSettingGetResponseZonesAVIFValueUnion() {}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingGetResponseZonesAVIFEditable bool
+
+const (
+	SettingGetResponseZonesAVIFEditableTrue  SettingGetResponseZonesAVIFEditable = true
+	SettingGetResponseZonesAVIFEditableFalse SettingGetResponseZonesAVIFEditable = false
+)
+
+func (r SettingGetResponseZonesAVIFEditable) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesAVIFEditableTrue, SettingGetResponseZonesAVIFEditableFalse:
+		return true
+	}
+	return false
+}
+
 // ID of the zone setting.
 type SettingGetResponseID string
 
@@ -14353,12 +14582,13 @@ const (
 	SettingGetResponseIDWebmcpMcpURL                  SettingGetResponseID = "webmcp_mcp_url"
 	SettingGetResponseIDWebmcpPacks                   SettingGetResponseID = "webmcp_packs"
 	SettingGetResponseIDWebP                          SettingGetResponseID = "webp"
+	SettingGetResponseIDAVIF                          SettingGetResponseID = "avif"
 	SettingGetResponseIDWebsockets                    SettingGetResponseID = "websockets"
 )
 
 func (r SettingGetResponseID) IsKnown() bool {
 	switch r {
-	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAegis, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDChinaNetworkEnabled, SettingGetResponseIDContentConverter, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMirage, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDOriginH2MaxStreams, SettingGetResponseIDOriginMaxHTTPVersion, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDPreRender, SettingGetResponseIDPrivacyPass, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDRedirectsForAITraining, SettingGetResponseIDReplaceInsecureJS, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSearchForAgents, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTransformations, SettingGetResponseIDTransformationsAllowedOrigins, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebmcpEnabled, SettingGetResponseIDWebmcpMcpURL, SettingGetResponseIDWebmcpPacks, SettingGetResponseIDWebP, SettingGetResponseIDWebsockets:
+	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAegis, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDChinaNetworkEnabled, SettingGetResponseIDContentConverter, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMirage, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDOriginH2MaxStreams, SettingGetResponseIDOriginMaxHTTPVersion, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDPreRender, SettingGetResponseIDPrivacyPass, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDRedirectsForAITraining, SettingGetResponseIDReplaceInsecureJS, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSearchForAgents, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTransformations, SettingGetResponseIDTransformationsAllowedOrigins, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebmcpEnabled, SettingGetResponseIDWebmcpMcpURL, SettingGetResponseIDWebmcpPacks, SettingGetResponseIDWebP, SettingGetResponseIDAVIF, SettingGetResponseIDWebsockets:
 		return true
 	}
 	return false

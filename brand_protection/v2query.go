@@ -39,7 +39,10 @@ func NewV2QueryService(opts ...option.RequestOption) (r *V2QueryService) {
 	return
 }
 
-// Get all saved brand protection queries for an account
+// Lists the account's saved domain queries, most recently updated first. Set `id`
+// to return a single query object instead of an array. Set `page` or `per_page` to
+// paginate the list; the response then includes `result_info`. Without them, every
+// query is returned.
 func (r *V2QueryService) Get(ctx context.Context, params V2QueryGetParams, opts ...option.RequestOption) (res *V2QueryGetResponseUnion, err error) {
 	var env V2QueryGetResponseEnvelope
 	opts = slices.Concat(r.Options, opts)
@@ -238,14 +241,15 @@ func (r v2QueryGetResponseObjectParametersStringMatchJSON) RawJSON() string {
 
 type V2QueryGetParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	ID        param.Field[string] `query:"id"`
-	// Optional page number for paginated list requests. Defaults to 1 when only
-	// per_page is supplied. Omit page and per_page to preserve the legacy full-list
-	// response.
+	// ID of a domain query. When set, `result` is that single query object instead of
+	// an array, and `page` and `per_page` are ignored.
+	ID param.Field[string] `query:"id"`
+	// Page number for paginated list requests. Defaults to 1 when only per_page is
+	// supplied. Omit page and per_page to return every query.
 	Page param.Field[int64] `query:"page"`
-	// Optional number of queries per page for paginated list requests. Defaults to 100
-	// when only page is supplied. Maximum 100. Omit page and per_page to preserve the
-	// legacy full-list response.
+	// Number of queries per page for paginated list requests. Defaults to 100 when
+	// only page is supplied. Maximum 100. Omit page and per_page to return every
+	// query.
 	PerPage param.Field[int64] `query:"per_page"`
 }
 

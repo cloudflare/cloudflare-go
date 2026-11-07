@@ -49,6 +49,22 @@ func (r *AppService) Get(ctx context.Context, params AppGetParams, opts ...optio
 	return res, err
 }
 
+// Fetch details for an app in your account.
+func (r *AppService) GetAppByID(ctx context.Context, appID string, query AppGetAppByIDParams, opts ...option.RequestOption) (res *AppGetAppByIDResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/realtime/kit/apps/%s", query.AccountID, appID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return res, err
+}
+
 // Create new app for your account
 func (r *AppService) Post(ctx context.Context, params AppPostParams, opts ...option.RequestOption) (res *AppPostResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
@@ -58,6 +74,22 @@ func (r *AppService) Post(ctx context.Context, params AppPostParams, opts ...opt
 	}
 	path := fmt.Sprintf("accounts/%s/realtime/kit/apps", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
+	return res, err
+}
+
+// Update the name of an app in your account.
+func (r *AppService) UpdateAppByID(ctx context.Context, appID string, params AppUpdateAppByIDParams, opts ...option.RequestOption) (res *AppUpdateAppByIDResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/realtime/kit/apps/%s", params.AccountID, appID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
 	return res, err
 }
 
@@ -135,6 +167,54 @@ func (r appGetResponsePagingJSON) RawJSON() string {
 	return r.raw
 }
 
+type AppGetAppByIDResponse struct {
+	Data    AppGetAppByIDResponseData `json:"data"`
+	Success bool                      `json:"success"`
+	JSON    appGetAppByIDResponseJSON `json:"-"`
+}
+
+// appGetAppByIDResponseJSON contains the JSON metadata for the struct
+// [AppGetAppByIDResponse]
+type appGetAppByIDResponseJSON struct {
+	Data        apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AppGetAppByIDResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r appGetAppByIDResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AppGetAppByIDResponseData struct {
+	ID        string                        `json:"id" format:"uuid"`
+	CreatedAt time.Time                     `json:"created_at" format:"date-time"`
+	Name      string                        `json:"name" api:"nullable"`
+	JSON      appGetAppByIDResponseDataJSON `json:"-"`
+}
+
+// appGetAppByIDResponseDataJSON contains the JSON metadata for the struct
+// [AppGetAppByIDResponseData]
+type appGetAppByIDResponseDataJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AppGetAppByIDResponseData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r appGetAppByIDResponseDataJSON) RawJSON() string {
+	return r.raw
+}
+
 type AppPostResponse struct {
 	Data    AppPostResponseData `json:"data"`
 	Success bool                `json:"success"`
@@ -203,6 +283,72 @@ func (r appPostResponseDataAppJSON) RawJSON() string {
 	return r.raw
 }
 
+type AppUpdateAppByIDResponse struct {
+	Data    AppUpdateAppByIDResponseData    `json:"data" api:"required"`
+	Success AppUpdateAppByIDResponseSuccess `json:"success" api:"required"`
+	JSON    appUpdateAppByIDResponseJSON    `json:"-"`
+}
+
+// appUpdateAppByIDResponseJSON contains the JSON metadata for the struct
+// [AppUpdateAppByIDResponse]
+type appUpdateAppByIDResponseJSON struct {
+	Data        apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AppUpdateAppByIDResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r appUpdateAppByIDResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AppUpdateAppByIDResponseData struct {
+	ID           string                           `json:"id" format:"uuid"`
+	CfAccountTag string                           `json:"cf_account_tag" api:"nullable"`
+	CreatedAt    time.Time                        `json:"created_at" format:"date-time"`
+	IsOrgOnKV    bool                             `json:"is_org_on_kv"`
+	Name         string                           `json:"name" api:"nullable"`
+	JSON         appUpdateAppByIDResponseDataJSON `json:"-"`
+}
+
+// appUpdateAppByIDResponseDataJSON contains the JSON metadata for the struct
+// [AppUpdateAppByIDResponseData]
+type appUpdateAppByIDResponseDataJSON struct {
+	ID           apijson.Field
+	CfAccountTag apijson.Field
+	CreatedAt    apijson.Field
+	IsOrgOnKV    apijson.Field
+	Name         apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AppUpdateAppByIDResponseData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r appUpdateAppByIDResponseDataJSON) RawJSON() string {
+	return r.raw
+}
+
+type AppUpdateAppByIDResponseSuccess bool
+
+const (
+	AppUpdateAppByIDResponseSuccessTrue AppUpdateAppByIDResponseSuccess = true
+)
+
+func (r AppUpdateAppByIDResponseSuccess) IsKnown() bool {
+	switch r {
+	case AppUpdateAppByIDResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AppGetParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -240,6 +386,11 @@ func (r AppGetParamsSortOrder) IsKnown() bool {
 	return false
 }
 
+type AppGetAppByIDParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+}
+
 type AppPostParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -247,5 +398,17 @@ type AppPostParams struct {
 }
 
 func (r AppPostParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AppUpdateAppByIDParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// The app name. Leading and trailing whitespace is removed, and the name must
+	// contain at least one non-whitespace character.
+	Name param.Field[string] `json:"name" api:"required"`
+}
+
+func (r AppUpdateAppByIDParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }

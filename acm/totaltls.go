@@ -86,6 +86,7 @@ func (r *TotalTLSService) Get(ctx context.Context, query TotalTLSGetParams, opts
 }
 
 // The Certificate Authority that Total TLS certificates will be issued through.
+// Not returned in responses when Total TLS is disabled.
 type CertificateAuthority string
 
 const (
@@ -104,11 +105,13 @@ func (r CertificateAuthority) IsKnown() bool {
 
 type TotalTLSUpdateResponse struct {
 	// The Certificate Authority that Total TLS certificates will be issued through.
+	// Not returned in responses when Total TLS is disabled.
 	CertificateAuthority CertificateAuthority `json:"certificate_authority"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled bool `json:"enabled"`
-	// The validity period in days for the certificates ordered via Total TLS.
+	// The validity period in days for the certificates ordered via Total TLS. Not
+	// returned when Total TLS is disabled.
 	ValidityPeriod TotalTLSUpdateResponseValidityPeriod `json:"validity_period"`
 	JSON           totalTLSUpdateResponseJSON           `json:"-"`
 }
@@ -131,7 +134,8 @@ func (r totalTLSUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The validity period in days for the certificates ordered via Total TLS.
+// The validity period in days for the certificates ordered via Total TLS. Not
+// returned when Total TLS is disabled.
 type TotalTLSUpdateResponseValidityPeriod int64
 
 const (
@@ -148,11 +152,13 @@ func (r TotalTLSUpdateResponseValidityPeriod) IsKnown() bool {
 
 type TotalTLSEditResponse struct {
 	// The Certificate Authority that Total TLS certificates will be issued through.
+	// Not returned in responses when Total TLS is disabled.
 	CertificateAuthority CertificateAuthority `json:"certificate_authority"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled bool `json:"enabled"`
-	// The validity period in days for the certificates ordered via Total TLS.
+	// The validity period in days for the certificates ordered via Total TLS. Not
+	// returned when Total TLS is disabled.
 	ValidityPeriod TotalTLSEditResponseValidityPeriod `json:"validity_period"`
 	JSON           totalTLSEditResponseJSON           `json:"-"`
 }
@@ -175,7 +181,8 @@ func (r totalTLSEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The validity period in days for the certificates ordered via Total TLS.
+// The validity period in days for the certificates ordered via Total TLS. Not
+// returned when Total TLS is disabled.
 type TotalTLSEditResponseValidityPeriod int64
 
 const (
@@ -192,11 +199,13 @@ func (r TotalTLSEditResponseValidityPeriod) IsKnown() bool {
 
 type TotalTLSGetResponse struct {
 	// The Certificate Authority that Total TLS certificates will be issued through.
+	// Not returned in responses when Total TLS is disabled.
 	CertificateAuthority CertificateAuthority `json:"certificate_authority"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled bool `json:"enabled"`
-	// The validity period in days for the certificates ordered via Total TLS.
+	// The validity period in days for the certificates ordered via Total TLS. Not
+	// returned when Total TLS is disabled.
 	ValidityPeriod TotalTLSGetResponseValidityPeriod `json:"validity_period"`
 	JSON           totalTLSGetResponseJSON           `json:"-"`
 }
@@ -219,7 +228,8 @@ func (r totalTLSGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The validity period in days for the certificates ordered via Total TLS.
+// The validity period in days for the certificates ordered via Total TLS. Not
+// returned when Total TLS is disabled.
 type TotalTLSGetResponseValidityPeriod int64
 
 const (
@@ -241,6 +251,7 @@ type TotalTLSUpdateParams struct {
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// The Certificate Authority that Total TLS certificates will be issued through.
+	// Not returned in responses when Total TLS is disabled.
 	CertificateAuthority param.Field[CertificateAuthority] `json:"certificate_authority"`
 }
 
@@ -394,6 +405,7 @@ type TotalTLSEditParams struct {
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled param.Field[bool] `json:"enabled" api:"required"`
 	// The Certificate Authority that Total TLS certificates will be issued through.
+	// Not returned in responses when Total TLS is disabled.
 	CertificateAuthority param.Field[CertificateAuthority] `json:"certificate_authority"`
 }
 

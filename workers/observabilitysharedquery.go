@@ -2348,7 +2348,10 @@ type ObservabilitySharedQueryGetResponseEventsEventsWorkers struct {
 	// This field can have the runtime type of [map[string]interface{}].
 	Event          interface{}                                                          `json:"event"`
 	ExecutionModel ObservabilitySharedQueryGetResponseEventsEventsWorkersExecutionModel `json:"executionModel"`
-	Outcome        string                                                               `json:"outcome"`
+	// This field can have the runtime type of
+	// [ObservabilitySharedQueryGetResponseEventsEventsWorkersObjectGateway].
+	Gateway interface{} `json:"gateway"`
+	Outcome string      `json:"outcome"`
 	// This field can have the runtime type of
 	// [ObservabilitySharedQueryGetResponseEventsEventsWorkersObjectPreview].
 	Preview   interface{} `json:"preview"`
@@ -2376,6 +2379,7 @@ type observabilitySharedQueryGetResponseEventsEventsWorkersJSON struct {
 	Entrypoint               apijson.Field
 	Event                    apijson.Field
 	ExecutionModel           apijson.Field
+	Gateway                  apijson.Field
 	Outcome                  apijson.Field
 	Preview                  apijson.Field
 	RequestID                apijson.Field
@@ -2443,6 +2447,7 @@ type ObservabilitySharedQueryGetResponseEventsEventsWorkersObject struct {
 	Entrypoint      string                                                                     `json:"entrypoint"`
 	Event           map[string]interface{}                                                     `json:"event"`
 	ExecutionModel  ObservabilitySharedQueryGetResponseEventsEventsWorkersObjectExecutionModel `json:"executionModel"`
+	Gateway         ObservabilitySharedQueryGetResponseEventsEventsWorkersObjectGateway        `json:"gateway"`
 	Outcome         string                                                                     `json:"outcome"`
 	Preview         ObservabilitySharedQueryGetResponseEventsEventsWorkersObjectPreview        `json:"preview"`
 	RequestID       string                                                                     `json:"requestId"`
@@ -2463,6 +2468,7 @@ type observabilitySharedQueryGetResponseEventsEventsWorkersObjectJSON struct {
 	Entrypoint      apijson.Field
 	Event           apijson.Field
 	ExecutionModel  apijson.Field
+	Gateway         apijson.Field
 	Outcome         apijson.Field
 	Preview         apijson.Field
 	RequestID       apijson.Field
@@ -2523,6 +2529,29 @@ func (r ObservabilitySharedQueryGetResponseEventsEventsWorkersObjectExecutionMod
 		return true
 	}
 	return false
+}
+
+type ObservabilitySharedQueryGetResponseEventsEventsWorkersObjectGateway struct {
+	RequestID   string                                                                  `json:"requestId" api:"required"`
+	ExtraFields map[string]interface{}                                                  `json:"-" api:"extrafields"`
+	JSON        observabilitySharedQueryGetResponseEventsEventsWorkersObjectGatewayJSON `json:"-"`
+}
+
+// observabilitySharedQueryGetResponseEventsEventsWorkersObjectGatewayJSON contains
+// the JSON metadata for the struct
+// [ObservabilitySharedQueryGetResponseEventsEventsWorkersObjectGateway]
+type observabilitySharedQueryGetResponseEventsEventsWorkersObjectGatewayJSON struct {
+	RequestID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ObservabilitySharedQueryGetResponseEventsEventsWorkersObjectGateway) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r observabilitySharedQueryGetResponseEventsEventsWorkersObjectGatewayJSON) RawJSON() string {
+	return r.raw
 }
 
 type ObservabilitySharedQueryGetResponseEventsEventsWorkersObjectPreview struct {
@@ -3015,7 +3044,10 @@ type ObservabilitySharedQueryGetResponseInvocationsWorkers struct {
 	// This field can have the runtime type of [map[string]interface{}].
 	Event          interface{}                                                         `json:"event"`
 	ExecutionModel ObservabilitySharedQueryGetResponseInvocationsWorkersExecutionModel `json:"executionModel"`
-	Outcome        string                                                              `json:"outcome"`
+	// This field can have the runtime type of
+	// [ObservabilitySharedQueryGetResponseInvocationsWorkersObjectGateway].
+	Gateway interface{} `json:"gateway"`
+	Outcome string      `json:"outcome"`
 	// This field can have the runtime type of
 	// [ObservabilitySharedQueryGetResponseInvocationsWorkersObjectPreview].
 	Preview   interface{} `json:"preview"`
@@ -3043,6 +3075,7 @@ type observabilitySharedQueryGetResponseInvocationsWorkersJSON struct {
 	Entrypoint               apijson.Field
 	Event                    apijson.Field
 	ExecutionModel           apijson.Field
+	Gateway                  apijson.Field
 	Outcome                  apijson.Field
 	Preview                  apijson.Field
 	RequestID                apijson.Field
@@ -3109,6 +3142,7 @@ type ObservabilitySharedQueryGetResponseInvocationsWorkersObject struct {
 	Entrypoint      string                                                                    `json:"entrypoint"`
 	Event           map[string]interface{}                                                    `json:"event"`
 	ExecutionModel  ObservabilitySharedQueryGetResponseInvocationsWorkersObjectExecutionModel `json:"executionModel"`
+	Gateway         ObservabilitySharedQueryGetResponseInvocationsWorkersObjectGateway        `json:"gateway"`
 	Outcome         string                                                                    `json:"outcome"`
 	Preview         ObservabilitySharedQueryGetResponseInvocationsWorkersObjectPreview        `json:"preview"`
 	RequestID       string                                                                    `json:"requestId"`
@@ -3129,6 +3163,7 @@ type observabilitySharedQueryGetResponseInvocationsWorkersObjectJSON struct {
 	Entrypoint      apijson.Field
 	Event           apijson.Field
 	ExecutionModel  apijson.Field
+	Gateway         apijson.Field
 	Outcome         apijson.Field
 	Preview         apijson.Field
 	RequestID       apijson.Field
@@ -3189,6 +3224,29 @@ func (r ObservabilitySharedQueryGetResponseInvocationsWorkersObjectExecutionMode
 		return true
 	}
 	return false
+}
+
+type ObservabilitySharedQueryGetResponseInvocationsWorkersObjectGateway struct {
+	RequestID   string                                                                 `json:"requestId" api:"required"`
+	ExtraFields map[string]interface{}                                                 `json:"-" api:"extrafields"`
+	JSON        observabilitySharedQueryGetResponseInvocationsWorkersObjectGatewayJSON `json:"-"`
+}
+
+// observabilitySharedQueryGetResponseInvocationsWorkersObjectGatewayJSON contains
+// the JSON metadata for the struct
+// [ObservabilitySharedQueryGetResponseInvocationsWorkersObjectGateway]
+type observabilitySharedQueryGetResponseInvocationsWorkersObjectGatewayJSON struct {
+	RequestID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ObservabilitySharedQueryGetResponseInvocationsWorkersObjectGateway) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r observabilitySharedQueryGetResponseInvocationsWorkersObjectGatewayJSON) RawJSON() string {
+	return r.raw
 }
 
 type ObservabilitySharedQueryGetResponseInvocationsWorkersObjectPreview struct {

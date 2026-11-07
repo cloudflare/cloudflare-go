@@ -85,6 +85,7 @@ func (UnionString) ImplementsSettingEditResponseZonesWaf2ValueUnion()           
 func (UnionString) ImplementsSettingEditResponseZonesWebmcpEnabledValueUnion()                     {}
 func (UnionString) ImplementsSettingEditResponseZonesWebmcpMcpURLValueUnion()                      {}
 func (UnionString) ImplementsSettingEditResponseZonesWebmcpPacksValueUnion()                       {}
+func (UnionString) ImplementsSettingEditResponseZonesAVIFValueUnion()                              {}
 func (UnionString) ImplementsSettingGetResponseZonesAlwaysUseHttps2ValueUnion()                    {}
 func (UnionString) ImplementsSettingGetResponseZonesAutomaticHTTPSRewrites2ValueUnion()            {}
 func (UnionString) ImplementsSettingGetResponseZonesBrowserCacheTtl2ValueUnion()                   {}
@@ -120,6 +121,7 @@ func (UnionString) ImplementsSettingGetResponseZonesWaf2ValueUnion()            
 func (UnionString) ImplementsSettingGetResponseZonesWebmcpEnabledValueUnion()                      {}
 func (UnionString) ImplementsSettingGetResponseZonesWebmcpMcpURLValueUnion()                       {}
 func (UnionString) ImplementsSettingGetResponseZonesWebmcpPacksValueUnion()                        {}
+func (UnionString) ImplementsSettingGetResponseZonesAVIFValueUnion()                               {}
 func (UnionString) ImplementsSettingEditParamsBodyValueValueUnion()                                {}
 func (UnionString) ImplementsAnalyticsQuerySummaryParamsFiltersValueUnion()                        {}
 func (UnionString) ImplementsAnalyticsQueryTimeseriesParamsFiltersValueUnion()                     {}
@@ -173,6 +175,7 @@ func (UnionString) ImplementsObservabilityTelemetryValuesParamsFiltersObjectFilt
 func (UnionString) ImplementsObservabilityTelemetryValuesParamsFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionString) ImplementsObservabilityTelemetryValuesParamsNeedleValueUnion() {}
+func (UnionString) ImplementsObservabilityAgentTraceEventsResponseSourceUnion()   {}
 func (UnionString) ImplementsObservabilityQueryNewResponseParametersFiltersWorkersObservabilityFilterLeafValueUnion() {
 }
 func (UnionString) ImplementsObservabilityQueryNewResponseParametersNeedleValueUnion() {}
@@ -554,6 +557,7 @@ func (UnionBool) ImplementsSettingEditResponseZonesWaf2ValueUnion()             
 func (UnionBool) ImplementsSettingEditResponseZonesWebmcpEnabledValueUnion()                        {}
 func (UnionBool) ImplementsSettingEditResponseZonesWebmcpMcpURLValueUnion()                         {}
 func (UnionBool) ImplementsSettingEditResponseZonesWebmcpPacksValueUnion()                          {}
+func (UnionBool) ImplementsSettingEditResponseZonesAVIFValueUnion()                                 {}
 func (UnionBool) ImplementsSettingGetResponseZonesAlwaysUseHttps2ValueUnion()                       {}
 func (UnionBool) ImplementsSettingGetResponseZonesAutomaticHTTPSRewrites2ValueUnion()               {}
 func (UnionBool) ImplementsSettingGetResponseZonesBrowserCacheTtl2ValueUnion()                      {}
@@ -589,6 +593,7 @@ func (UnionBool) ImplementsSettingGetResponseZonesWaf2ValueUnion()              
 func (UnionBool) ImplementsSettingGetResponseZonesWebmcpEnabledValueUnion()                         {}
 func (UnionBool) ImplementsSettingGetResponseZonesWebmcpMcpURLValueUnion()                          {}
 func (UnionBool) ImplementsSettingGetResponseZonesWebmcpPacksValueUnion()                           {}
+func (UnionBool) ImplementsSettingGetResponseZonesAVIFValueUnion()                                  {}
 func (UnionBool) ImplementsAnalyticsQuerySummaryParamsFiltersValueUnion()                           {}
 func (UnionBool) ImplementsAnalyticsQueryTimeseriesParamsFiltersValueUnion()                        {}
 func (UnionBool) ImplementsAnalyticsQueryTopNParamsFiltersValueUnion()                              {}
@@ -892,6 +897,7 @@ func (UnionFloat) ImplementsSettingEditResponseZonesWaf2ValueUnion()            
 func (UnionFloat) ImplementsSettingEditResponseZonesWebmcpEnabledValueUnion()                     {}
 func (UnionFloat) ImplementsSettingEditResponseZonesWebmcpMcpURLValueUnion()                      {}
 func (UnionFloat) ImplementsSettingEditResponseZonesWebmcpPacksValueUnion()                       {}
+func (UnionFloat) ImplementsSettingEditResponseZonesAVIFValueUnion()                              {}
 func (UnionFloat) ImplementsSettingGetResponseZonesAlwaysUseHttps2ValueUnion()                    {}
 func (UnionFloat) ImplementsSettingGetResponseZonesAutomaticHTTPSRewrites2ValueUnion()            {}
 func (UnionFloat) ImplementsSettingGetResponseZonesBrowserCacheTtl2ValueUnion()                   {}
@@ -927,6 +933,7 @@ func (UnionFloat) ImplementsSettingGetResponseZonesWaf2ValueUnion()             
 func (UnionFloat) ImplementsSettingGetResponseZonesWebmcpEnabledValueUnion()                      {}
 func (UnionFloat) ImplementsSettingGetResponseZonesWebmcpMcpURLValueUnion()                       {}
 func (UnionFloat) ImplementsSettingGetResponseZonesWebmcpPacksValueUnion()                        {}
+func (UnionFloat) ImplementsSettingGetResponseZonesAVIFValueUnion()                               {}
 func (UnionFloat) ImplementsSettingEditParamsBodyValueValueUnion()                                {}
 func (UnionFloat) ImplementsAnalyticsQuerySummaryParamsFiltersValueUnion()                        {}
 func (UnionFloat) ImplementsAnalyticsQueryTimeseriesParamsFiltersValueUnion()                     {}

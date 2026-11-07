@@ -42,9 +42,8 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 // Account response shape. Use `GET /organizations/{organization_id}/accounts` to
 // list only accounts immediately attached to a specific Organization using the
 // modern Account response shape. Use `page_token` and `page_size` for cursor
-// pagination, or provide `page` and `per_page` together for legacy offset
-// pagination. Cursor pagination takes precedence when requested.
-func (r *AccountService) List(ctx context.Context, tenantID string, query AccountListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccountListResponse], err error) {
+// pagination.
+func (r *AccountService) List(ctx context.Context, tenantID string, query AccountListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccountListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -69,10 +68,9 @@ func (r *AccountService) List(ctx context.Context, tenantID string, query Accoun
 // Account response shape. Use `GET /organizations/{organization_id}/accounts` to
 // list only accounts immediately attached to a specific Organization using the
 // modern Account response shape. Use `page_token` and `page_size` for cursor
-// pagination, or provide `page` and `per_page` together for legacy offset
-// pagination. Cursor pagination takes precedence when requested.
-func (r *AccountService) ListAutoPaging(ctx context.Context, tenantID string, query AccountListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AccountListResponse] {
-	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, tenantID, query, opts...))
+// pagination.
+func (r *AccountService) ListAutoPaging(ctx context.Context, tenantID string, query AccountListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccountListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, tenantID, query, opts...))
 }
 
 type TenantAccount struct {
@@ -241,17 +239,11 @@ type AccountListParams struct {
 	// `asc` when order_by is specified.
 	Direction param.Field[AccountListParamsDirection] `query:"direction"`
 	// Whether to calculate and return the exact `result_info.total_size` for cursor
-	// pagination. Defaults to true. When false, `total_size` is omitted. Legacy
-	// `page`/`per_page` requests always calculate `total_count`.
+	// pagination. Defaults to true. When false, `total_size` is omitted.
 	IncludeTotal param.Field[bool]                  `query:"include_total"`
 	Name         param.Field[AccountListParamsName] `query:"name"`
 	// Field to order results by. Currently supported values: `account_name`.
 	OrderBy param.Field[AccountListParamsOrderBy] `query:"order_by"`
-	// Legacy offset page number. Must be provided with `per_page`. Values below 1 are
-	// treated as
-	//
-	// 1. Cursor pagination takes precedence when requested.
-	Page param.Field[int64] `query:"page"`
 	// The amount of items to return. Defaults to 10.
 	PageSize param.Field[int64] `query:"page_size"`
 	// An opaque token returned from the last list response that when provided will
@@ -260,9 +252,6 @@ type AccountListParams struct {
 	// Parameters used to filter the retrieved list must remain in subsequent requests
 	// with a page token.
 	PageToken param.Field[string] `query:"page_token"`
-	// Legacy offset page size. Must be provided with `page`. Values are clamped to the
-	// range 1-100. Cursor pagination takes precedence when requested.
-	PerPage param.Field[int64] `query:"per_page"`
 	// Filter accounts by lifecycle status. Defaults to `active`.
 	Status param.Field[AccountListParamsStatus] `query:"status"`
 }

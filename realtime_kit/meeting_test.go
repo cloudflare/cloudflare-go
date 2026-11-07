@@ -16,7 +16,6 @@ import (
 )
 
 func TestMeetingNewWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -109,7 +108,6 @@ func TestMeetingNewWithOptionalParams(t *testing.T) {
 }
 
 func TestMeetingAddParticipantWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -149,7 +147,6 @@ func TestMeetingAddParticipantWithOptionalParams(t *testing.T) {
 }
 
 func TestMeetingDeleteMeetingParticipant(t *testing.T) {
-	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -182,7 +179,6 @@ func TestMeetingDeleteMeetingParticipant(t *testing.T) {
 }
 
 func TestMeetingEditParticipantWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -218,7 +214,6 @@ func TestMeetingEditParticipantWithOptionalParams(t *testing.T) {
 }
 
 func TestMeetingGetWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -255,7 +250,6 @@ func TestMeetingGetWithOptionalParams(t *testing.T) {
 }
 
 func TestMeetingGetMeetingByIDWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -288,7 +282,6 @@ func TestMeetingGetMeetingByIDWithOptionalParams(t *testing.T) {
 }
 
 func TestMeetingGetMeetingParticipant(t *testing.T) {
-	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -321,7 +314,6 @@ func TestMeetingGetMeetingParticipant(t *testing.T) {
 }
 
 func TestMeetingGetMeetingParticipantsWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -355,7 +347,6 @@ func TestMeetingGetMeetingParticipantsWithOptionalParams(t *testing.T) {
 }
 
 func TestMeetingRefreshParticipantTokenWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -390,7 +381,6 @@ func TestMeetingRefreshParticipantTokenWithOptionalParams(t *testing.T) {
 }
 
 func TestMeetingReplaceMeetingByIDWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -483,8 +473,75 @@ func TestMeetingReplaceMeetingByIDWithOptionalParams(t *testing.T) {
 	}
 }
 
+func TestMeetingReplaceParticipantWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.RealtimeKit.Meetings.ReplaceParticipant(
+		context.TODO(),
+		"14a396e7-ca44-4937-bf1f-050a69118543",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		"participant_id",
+		realtime_kit.MeetingReplaceParticipantParams{
+			AccountID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CustomParticipantID: cloudflare.F("custom_participant_id"),
+			PresetName:          cloudflare.F("preset_name"),
+			Name:                cloudflare.F("name"),
+			Picture:             cloudflare.F("https://example.com"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestMeetingRevokeParticipantToken(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.RealtimeKit.Meetings.RevokeParticipantToken(
+		context.TODO(),
+		"14a396e7-ca44-4937-bf1f-050a69118543",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		"participant_id",
+		realtime_kit.MeetingRevokeParticipantTokenParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestMeetingUpdateMeetingByIDWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

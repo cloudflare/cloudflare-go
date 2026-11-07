@@ -15,7 +15,6 @@ import (
 )
 
 func TestAnalyticsGetOrgAnalyticsWithOptionalParams(t *testing.T) {
-	t.Skip("requires accumulated historical data")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

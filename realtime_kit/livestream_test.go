@@ -16,7 +16,6 @@ import (
 )
 
 func TestLivestreamGetActiveLivestreamsForLivestreamID(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -48,7 +47,6 @@ func TestLivestreamGetActiveLivestreamsForLivestreamID(t *testing.T) {
 }
 
 func TestLivestreamGetAllLivestreamsWithOptionalParams(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -86,7 +84,6 @@ func TestLivestreamGetAllLivestreamsWithOptionalParams(t *testing.T) {
 }
 
 func TestLivestreamGetLivestreamAnalyticsCompleteWithOptionalParams(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -120,7 +117,6 @@ func TestLivestreamGetLivestreamAnalyticsCompleteWithOptionalParams(t *testing.T
 }
 
 func TestLivestreamGetLivestreamAnalyticsDaywiseWithOptionalParams(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -153,8 +149,40 @@ func TestLivestreamGetLivestreamAnalyticsDaywiseWithOptionalParams(t *testing.T)
 	}
 }
 
+func TestLivestreamGetLivestreamSessionDetailsForMeetingWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.RealtimeKit.Livestreams.GetLivestreamSessionDetailsForMeeting(
+		context.TODO(),
+		"14a396e7-ca44-4937-bf1f-050a69118543",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		realtime_kit.LivestreamGetLivestreamSessionDetailsForMeetingParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			PageNo:    cloudflare.F(int64(0)),
+			PerPage:   cloudflare.F(int64(0)),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestLivestreamGetLivestreamSessionDetailsForSessionID(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -186,7 +214,6 @@ func TestLivestreamGetLivestreamSessionDetailsForSessionID(t *testing.T) {
 }
 
 func TestLivestreamGetLivestreamSessionForLivestreamIDWithOptionalParams(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -219,8 +246,40 @@ func TestLivestreamGetLivestreamSessionForLivestreamIDWithOptionalParams(t *test
 	}
 }
 
+func TestLivestreamGetLivestreamSessionsForSessionWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.RealtimeKit.Livestreams.GetLivestreamSessionsForSession(
+		context.TODO(),
+		"14a396e7-ca44-4937-bf1f-050a69118543",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		realtime_kit.LivestreamGetLivestreamSessionsForSessionParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			PageNo:    cloudflare.F(0.000000),
+			PerPage:   cloudflare.F(0.000000),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestLivestreamGetMeetingActiveLivestreams(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -252,7 +311,6 @@ func TestLivestreamGetMeetingActiveLivestreams(t *testing.T) {
 }
 
 func TestLivestreamGetOrgAnalyticsWithOptionalParams(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -285,7 +343,6 @@ func TestLivestreamGetOrgAnalyticsWithOptionalParams(t *testing.T) {
 }
 
 func TestLivestreamStartLivestreamingAMeetingWithOptionalParams(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -322,7 +379,6 @@ func TestLivestreamStartLivestreamingAMeetingWithOptionalParams(t *testing.T) {
 }
 
 func TestLivestreamStopLivestreamingAMeeting(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

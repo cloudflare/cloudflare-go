@@ -71,8 +71,9 @@ func NewThreatEventService(opts ...option.RequestOption) (r *ThreatEventService)
 	return
 }
 
-// Creates an event. Without `datasetId`, the event is created in the default
-// Cloudforce One Threat Events dataset. To create a dataset, use
+// Creates an event in the dataset given by `datasetId`. Omitting `datasetId` is
+// deprecated: the event is created in the default Cloudforce One Threat Events
+// dataset, and a future release will reject the request. To create a dataset, use
 // `threat-intel datasets create`.
 func (r *ThreatEventService) New(ctx context.Context, params ThreatEventNewParams, opts ...option.RequestOption) (res *ThreatEventNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
@@ -750,8 +751,14 @@ type ThreatEventListParams struct {
 	// 100,000 records. For deep pagination, use cursor-based pagination instead.
 	Page param.Field[float64] `query:"page"`
 	// Number of results per page. Maximum 25,000.
-	PageSize param.Field[float64]                            `query:"pageSize"`
-	Search   param.Field[[]ThreatEventListParamsSearchUnion] `query:"search"`
+	PageSize param.Field[float64] `query:"pageSize"`
+	// JSON-encoded. Structured search as a JSON array of {field, op, value} objects,
+	// AND'd together. Max 10 conditions per request. `in` and `notIn` take an array of
+	// up to 100 values. Exclusions: `not` drops events without a value for the field;
+	// `notIn` and `notContains` keep them. On intelligence datasets, a `notIn` list
+	// containing `"unknown"` also drops them; analytics datasets treat `"unknown"` as
+	// a literal value.
+	Search param.Field[[]ThreatEventListParamsSearchUnion] `query:"search"`
 	// JSON-encoded. OR branches of structured search filters. Filters within a branch
 	// are AND'd, branches are OR'd, and the result is AND'd with `search`:
 	// `AND(search) AND OR(AND(branch 1), ...)`. Max 8 branches of 1-10 conditions
@@ -887,22 +894,23 @@ func (r ThreatEventListParamsSearchObjectField) IsKnown() bool {
 type ThreatEventListParamsSearchObjectOp string
 
 const (
-	ThreatEventListParamsSearchObjectOpEquals     ThreatEventListParamsSearchObjectOp = "equals"
-	ThreatEventListParamsSearchObjectOpNot        ThreatEventListParamsSearchObjectOp = "not"
-	ThreatEventListParamsSearchObjectOpGt         ThreatEventListParamsSearchObjectOp = "gt"
-	ThreatEventListParamsSearchObjectOpGte        ThreatEventListParamsSearchObjectOp = "gte"
-	ThreatEventListParamsSearchObjectOpLt         ThreatEventListParamsSearchObjectOp = "lt"
-	ThreatEventListParamsSearchObjectOpLte        ThreatEventListParamsSearchObjectOp = "lte"
-	ThreatEventListParamsSearchObjectOpLike       ThreatEventListParamsSearchObjectOp = "like"
-	ThreatEventListParamsSearchObjectOpContains   ThreatEventListParamsSearchObjectOp = "contains"
-	ThreatEventListParamsSearchObjectOpStartsWith ThreatEventListParamsSearchObjectOp = "startsWith"
-	ThreatEventListParamsSearchObjectOpEndsWith   ThreatEventListParamsSearchObjectOp = "endsWith"
-	ThreatEventListParamsSearchObjectOpFind       ThreatEventListParamsSearchObjectOp = "find"
+	ThreatEventListParamsSearchObjectOpEquals      ThreatEventListParamsSearchObjectOp = "equals"
+	ThreatEventListParamsSearchObjectOpNot         ThreatEventListParamsSearchObjectOp = "not"
+	ThreatEventListParamsSearchObjectOpGt          ThreatEventListParamsSearchObjectOp = "gt"
+	ThreatEventListParamsSearchObjectOpGte         ThreatEventListParamsSearchObjectOp = "gte"
+	ThreatEventListParamsSearchObjectOpLt          ThreatEventListParamsSearchObjectOp = "lt"
+	ThreatEventListParamsSearchObjectOpLte         ThreatEventListParamsSearchObjectOp = "lte"
+	ThreatEventListParamsSearchObjectOpLike        ThreatEventListParamsSearchObjectOp = "like"
+	ThreatEventListParamsSearchObjectOpContains    ThreatEventListParamsSearchObjectOp = "contains"
+	ThreatEventListParamsSearchObjectOpStartsWith  ThreatEventListParamsSearchObjectOp = "startsWith"
+	ThreatEventListParamsSearchObjectOpEndsWith    ThreatEventListParamsSearchObjectOp = "endsWith"
+	ThreatEventListParamsSearchObjectOpFind        ThreatEventListParamsSearchObjectOp = "find"
+	ThreatEventListParamsSearchObjectOpNotContains ThreatEventListParamsSearchObjectOp = "notContains"
 )
 
 func (r ThreatEventListParamsSearchObjectOp) IsKnown() bool {
 	switch r {
-	case ThreatEventListParamsSearchObjectOpEquals, ThreatEventListParamsSearchObjectOpNot, ThreatEventListParamsSearchObjectOpGt, ThreatEventListParamsSearchObjectOpGte, ThreatEventListParamsSearchObjectOpLt, ThreatEventListParamsSearchObjectOpLte, ThreatEventListParamsSearchObjectOpLike, ThreatEventListParamsSearchObjectOpContains, ThreatEventListParamsSearchObjectOpStartsWith, ThreatEventListParamsSearchObjectOpEndsWith, ThreatEventListParamsSearchObjectOpFind:
+	case ThreatEventListParamsSearchObjectOpEquals, ThreatEventListParamsSearchObjectOpNot, ThreatEventListParamsSearchObjectOpGt, ThreatEventListParamsSearchObjectOpGte, ThreatEventListParamsSearchObjectOpLt, ThreatEventListParamsSearchObjectOpLte, ThreatEventListParamsSearchObjectOpLike, ThreatEventListParamsSearchObjectOpContains, ThreatEventListParamsSearchObjectOpStartsWith, ThreatEventListParamsSearchObjectOpEndsWith, ThreatEventListParamsSearchObjectOpFind, ThreatEventListParamsSearchObjectOpNotContains:
 		return true
 	}
 	return false
@@ -941,23 +949,25 @@ func (r ThreatEventListParamsSearchField) IsKnown() bool {
 type ThreatEventListParamsSearchOp string
 
 const (
-	ThreatEventListParamsSearchOpEquals     ThreatEventListParamsSearchOp = "equals"
-	ThreatEventListParamsSearchOpNot        ThreatEventListParamsSearchOp = "not"
-	ThreatEventListParamsSearchOpGt         ThreatEventListParamsSearchOp = "gt"
-	ThreatEventListParamsSearchOpGte        ThreatEventListParamsSearchOp = "gte"
-	ThreatEventListParamsSearchOpLt         ThreatEventListParamsSearchOp = "lt"
-	ThreatEventListParamsSearchOpLte        ThreatEventListParamsSearchOp = "lte"
-	ThreatEventListParamsSearchOpLike       ThreatEventListParamsSearchOp = "like"
-	ThreatEventListParamsSearchOpContains   ThreatEventListParamsSearchOp = "contains"
-	ThreatEventListParamsSearchOpStartsWith ThreatEventListParamsSearchOp = "startsWith"
-	ThreatEventListParamsSearchOpEndsWith   ThreatEventListParamsSearchOp = "endsWith"
-	ThreatEventListParamsSearchOpFind       ThreatEventListParamsSearchOp = "find"
-	ThreatEventListParamsSearchOpIn         ThreatEventListParamsSearchOp = "in"
+	ThreatEventListParamsSearchOpEquals      ThreatEventListParamsSearchOp = "equals"
+	ThreatEventListParamsSearchOpNot         ThreatEventListParamsSearchOp = "not"
+	ThreatEventListParamsSearchOpGt          ThreatEventListParamsSearchOp = "gt"
+	ThreatEventListParamsSearchOpGte         ThreatEventListParamsSearchOp = "gte"
+	ThreatEventListParamsSearchOpLt          ThreatEventListParamsSearchOp = "lt"
+	ThreatEventListParamsSearchOpLte         ThreatEventListParamsSearchOp = "lte"
+	ThreatEventListParamsSearchOpLike        ThreatEventListParamsSearchOp = "like"
+	ThreatEventListParamsSearchOpContains    ThreatEventListParamsSearchOp = "contains"
+	ThreatEventListParamsSearchOpStartsWith  ThreatEventListParamsSearchOp = "startsWith"
+	ThreatEventListParamsSearchOpEndsWith    ThreatEventListParamsSearchOp = "endsWith"
+	ThreatEventListParamsSearchOpFind        ThreatEventListParamsSearchOp = "find"
+	ThreatEventListParamsSearchOpNotContains ThreatEventListParamsSearchOp = "notContains"
+	ThreatEventListParamsSearchOpIn          ThreatEventListParamsSearchOp = "in"
+	ThreatEventListParamsSearchOpNotIn       ThreatEventListParamsSearchOp = "notIn"
 )
 
 func (r ThreatEventListParamsSearchOp) IsKnown() bool {
 	switch r {
-	case ThreatEventListParamsSearchOpEquals, ThreatEventListParamsSearchOpNot, ThreatEventListParamsSearchOpGt, ThreatEventListParamsSearchOpGte, ThreatEventListParamsSearchOpLt, ThreatEventListParamsSearchOpLte, ThreatEventListParamsSearchOpLike, ThreatEventListParamsSearchOpContains, ThreatEventListParamsSearchOpStartsWith, ThreatEventListParamsSearchOpEndsWith, ThreatEventListParamsSearchOpFind, ThreatEventListParamsSearchOpIn:
+	case ThreatEventListParamsSearchOpEquals, ThreatEventListParamsSearchOpNot, ThreatEventListParamsSearchOpGt, ThreatEventListParamsSearchOpGte, ThreatEventListParamsSearchOpLt, ThreatEventListParamsSearchOpLte, ThreatEventListParamsSearchOpLike, ThreatEventListParamsSearchOpContains, ThreatEventListParamsSearchOpStartsWith, ThreatEventListParamsSearchOpEndsWith, ThreatEventListParamsSearchOpFind, ThreatEventListParamsSearchOpNotContains, ThreatEventListParamsSearchOpIn, ThreatEventListParamsSearchOpNotIn:
 		return true
 	}
 	return false
@@ -1035,22 +1045,23 @@ func (r ThreatEventListParamsSearchBranchesObjectField) IsKnown() bool {
 type ThreatEventListParamsSearchBranchesObjectOp string
 
 const (
-	ThreatEventListParamsSearchBranchesObjectOpEquals     ThreatEventListParamsSearchBranchesObjectOp = "equals"
-	ThreatEventListParamsSearchBranchesObjectOpNot        ThreatEventListParamsSearchBranchesObjectOp = "not"
-	ThreatEventListParamsSearchBranchesObjectOpGt         ThreatEventListParamsSearchBranchesObjectOp = "gt"
-	ThreatEventListParamsSearchBranchesObjectOpGte        ThreatEventListParamsSearchBranchesObjectOp = "gte"
-	ThreatEventListParamsSearchBranchesObjectOpLt         ThreatEventListParamsSearchBranchesObjectOp = "lt"
-	ThreatEventListParamsSearchBranchesObjectOpLte        ThreatEventListParamsSearchBranchesObjectOp = "lte"
-	ThreatEventListParamsSearchBranchesObjectOpLike       ThreatEventListParamsSearchBranchesObjectOp = "like"
-	ThreatEventListParamsSearchBranchesObjectOpContains   ThreatEventListParamsSearchBranchesObjectOp = "contains"
-	ThreatEventListParamsSearchBranchesObjectOpStartsWith ThreatEventListParamsSearchBranchesObjectOp = "startsWith"
-	ThreatEventListParamsSearchBranchesObjectOpEndsWith   ThreatEventListParamsSearchBranchesObjectOp = "endsWith"
-	ThreatEventListParamsSearchBranchesObjectOpFind       ThreatEventListParamsSearchBranchesObjectOp = "find"
+	ThreatEventListParamsSearchBranchesObjectOpEquals      ThreatEventListParamsSearchBranchesObjectOp = "equals"
+	ThreatEventListParamsSearchBranchesObjectOpNot         ThreatEventListParamsSearchBranchesObjectOp = "not"
+	ThreatEventListParamsSearchBranchesObjectOpGt          ThreatEventListParamsSearchBranchesObjectOp = "gt"
+	ThreatEventListParamsSearchBranchesObjectOpGte         ThreatEventListParamsSearchBranchesObjectOp = "gte"
+	ThreatEventListParamsSearchBranchesObjectOpLt          ThreatEventListParamsSearchBranchesObjectOp = "lt"
+	ThreatEventListParamsSearchBranchesObjectOpLte         ThreatEventListParamsSearchBranchesObjectOp = "lte"
+	ThreatEventListParamsSearchBranchesObjectOpLike        ThreatEventListParamsSearchBranchesObjectOp = "like"
+	ThreatEventListParamsSearchBranchesObjectOpContains    ThreatEventListParamsSearchBranchesObjectOp = "contains"
+	ThreatEventListParamsSearchBranchesObjectOpStartsWith  ThreatEventListParamsSearchBranchesObjectOp = "startsWith"
+	ThreatEventListParamsSearchBranchesObjectOpEndsWith    ThreatEventListParamsSearchBranchesObjectOp = "endsWith"
+	ThreatEventListParamsSearchBranchesObjectOpFind        ThreatEventListParamsSearchBranchesObjectOp = "find"
+	ThreatEventListParamsSearchBranchesObjectOpNotContains ThreatEventListParamsSearchBranchesObjectOp = "notContains"
 )
 
 func (r ThreatEventListParamsSearchBranchesObjectOp) IsKnown() bool {
 	switch r {
-	case ThreatEventListParamsSearchBranchesObjectOpEquals, ThreatEventListParamsSearchBranchesObjectOpNot, ThreatEventListParamsSearchBranchesObjectOpGt, ThreatEventListParamsSearchBranchesObjectOpGte, ThreatEventListParamsSearchBranchesObjectOpLt, ThreatEventListParamsSearchBranchesObjectOpLte, ThreatEventListParamsSearchBranchesObjectOpLike, ThreatEventListParamsSearchBranchesObjectOpContains, ThreatEventListParamsSearchBranchesObjectOpStartsWith, ThreatEventListParamsSearchBranchesObjectOpEndsWith, ThreatEventListParamsSearchBranchesObjectOpFind:
+	case ThreatEventListParamsSearchBranchesObjectOpEquals, ThreatEventListParamsSearchBranchesObjectOpNot, ThreatEventListParamsSearchBranchesObjectOpGt, ThreatEventListParamsSearchBranchesObjectOpGte, ThreatEventListParamsSearchBranchesObjectOpLt, ThreatEventListParamsSearchBranchesObjectOpLte, ThreatEventListParamsSearchBranchesObjectOpLike, ThreatEventListParamsSearchBranchesObjectOpContains, ThreatEventListParamsSearchBranchesObjectOpStartsWith, ThreatEventListParamsSearchBranchesObjectOpEndsWith, ThreatEventListParamsSearchBranchesObjectOpFind, ThreatEventListParamsSearchBranchesObjectOpNotContains:
 		return true
 	}
 	return false
@@ -1089,23 +1100,25 @@ func (r ThreatEventListParamsSearchBranchesField) IsKnown() bool {
 type ThreatEventListParamsSearchBranchesOp string
 
 const (
-	ThreatEventListParamsSearchBranchesOpEquals     ThreatEventListParamsSearchBranchesOp = "equals"
-	ThreatEventListParamsSearchBranchesOpNot        ThreatEventListParamsSearchBranchesOp = "not"
-	ThreatEventListParamsSearchBranchesOpGt         ThreatEventListParamsSearchBranchesOp = "gt"
-	ThreatEventListParamsSearchBranchesOpGte        ThreatEventListParamsSearchBranchesOp = "gte"
-	ThreatEventListParamsSearchBranchesOpLt         ThreatEventListParamsSearchBranchesOp = "lt"
-	ThreatEventListParamsSearchBranchesOpLte        ThreatEventListParamsSearchBranchesOp = "lte"
-	ThreatEventListParamsSearchBranchesOpLike       ThreatEventListParamsSearchBranchesOp = "like"
-	ThreatEventListParamsSearchBranchesOpContains   ThreatEventListParamsSearchBranchesOp = "contains"
-	ThreatEventListParamsSearchBranchesOpStartsWith ThreatEventListParamsSearchBranchesOp = "startsWith"
-	ThreatEventListParamsSearchBranchesOpEndsWith   ThreatEventListParamsSearchBranchesOp = "endsWith"
-	ThreatEventListParamsSearchBranchesOpFind       ThreatEventListParamsSearchBranchesOp = "find"
-	ThreatEventListParamsSearchBranchesOpIn         ThreatEventListParamsSearchBranchesOp = "in"
+	ThreatEventListParamsSearchBranchesOpEquals      ThreatEventListParamsSearchBranchesOp = "equals"
+	ThreatEventListParamsSearchBranchesOpNot         ThreatEventListParamsSearchBranchesOp = "not"
+	ThreatEventListParamsSearchBranchesOpGt          ThreatEventListParamsSearchBranchesOp = "gt"
+	ThreatEventListParamsSearchBranchesOpGte         ThreatEventListParamsSearchBranchesOp = "gte"
+	ThreatEventListParamsSearchBranchesOpLt          ThreatEventListParamsSearchBranchesOp = "lt"
+	ThreatEventListParamsSearchBranchesOpLte         ThreatEventListParamsSearchBranchesOp = "lte"
+	ThreatEventListParamsSearchBranchesOpLike        ThreatEventListParamsSearchBranchesOp = "like"
+	ThreatEventListParamsSearchBranchesOpContains    ThreatEventListParamsSearchBranchesOp = "contains"
+	ThreatEventListParamsSearchBranchesOpStartsWith  ThreatEventListParamsSearchBranchesOp = "startsWith"
+	ThreatEventListParamsSearchBranchesOpEndsWith    ThreatEventListParamsSearchBranchesOp = "endsWith"
+	ThreatEventListParamsSearchBranchesOpFind        ThreatEventListParamsSearchBranchesOp = "find"
+	ThreatEventListParamsSearchBranchesOpNotContains ThreatEventListParamsSearchBranchesOp = "notContains"
+	ThreatEventListParamsSearchBranchesOpIn          ThreatEventListParamsSearchBranchesOp = "in"
+	ThreatEventListParamsSearchBranchesOpNotIn       ThreatEventListParamsSearchBranchesOp = "notIn"
 )
 
 func (r ThreatEventListParamsSearchBranchesOp) IsKnown() bool {
 	switch r {
-	case ThreatEventListParamsSearchBranchesOpEquals, ThreatEventListParamsSearchBranchesOpNot, ThreatEventListParamsSearchBranchesOpGt, ThreatEventListParamsSearchBranchesOpGte, ThreatEventListParamsSearchBranchesOpLt, ThreatEventListParamsSearchBranchesOpLte, ThreatEventListParamsSearchBranchesOpLike, ThreatEventListParamsSearchBranchesOpContains, ThreatEventListParamsSearchBranchesOpStartsWith, ThreatEventListParamsSearchBranchesOpEndsWith, ThreatEventListParamsSearchBranchesOpFind, ThreatEventListParamsSearchBranchesOpIn:
+	case ThreatEventListParamsSearchBranchesOpEquals, ThreatEventListParamsSearchBranchesOpNot, ThreatEventListParamsSearchBranchesOpGt, ThreatEventListParamsSearchBranchesOpGte, ThreatEventListParamsSearchBranchesOpLt, ThreatEventListParamsSearchBranchesOpLte, ThreatEventListParamsSearchBranchesOpLike, ThreatEventListParamsSearchBranchesOpContains, ThreatEventListParamsSearchBranchesOpStartsWith, ThreatEventListParamsSearchBranchesOpEndsWith, ThreatEventListParamsSearchBranchesOpFind, ThreatEventListParamsSearchBranchesOpNotContains, ThreatEventListParamsSearchBranchesOpIn, ThreatEventListParamsSearchBranchesOpNotIn:
 		return true
 	}
 	return false

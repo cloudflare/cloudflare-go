@@ -131,8 +131,17 @@ func (r botListResponseJSON) RawJSON() string {
 }
 
 type BotListResponseBot struct {
-	// The category of the bot.
+	// Who can operate the bot: DIRECT bots reach origins under their own identity,
+	// while INTERMEDIARY bots forward requests on behalf of another agent or a person.
+	AccessLevel string `json:"accessLevel" api:"required,nullable"`
+	// The categories of the bot.
+	Categories []string `json:"categories" api:"required"`
+	// The category of the bot. Deprecated: use `categories`.
+	//
+	// Deprecated: deprecated
 	Category string `json:"category" api:"required"`
+	// How the bot uses the content it fetches (e.g., immediate, reference or full).
+	ContentUse string `json:"contentUse" api:"required,nullable"`
 	// A summary for the bot (e.g., purpose).
 	Description string `json:"description" api:"required"`
 	// The kind of the bot.
@@ -152,7 +161,10 @@ type BotListResponseBot struct {
 // botListResponseBotJSON contains the JSON metadata for the struct
 // [BotListResponseBot]
 type botListResponseBotJSON struct {
+	AccessLevel       apijson.Field
+	Categories        apijson.Field
 	Category          apijson.Field
+	ContentUse        apijson.Field
 	Description       apijson.Field
 	Kind              apijson.Field
 	Name              apijson.Field
@@ -192,10 +204,21 @@ func (r botGetResponseJSON) RawJSON() string {
 }
 
 type BotGetResponseBot struct {
-	// The category of the bot.
+	// Who can operate the bot: DIRECT bots reach origins under their own identity,
+	// while INTERMEDIARY bots forward requests on behalf of another agent or a person.
+	AccessLevel string `json:"accessLevel" api:"required,nullable"`
+	// The categories of the bot.
+	Categories []string `json:"categories" api:"required"`
+	// The category of the bot. Deprecated: use `categories`.
+	//
+	// Deprecated: deprecated
 	Category string `json:"category" api:"required"`
+	// How the bot uses the content it fetches (e.g., immediate, reference or full).
+	ContentUse string `json:"contentUse" api:"required,nullable"`
 	// A summary for the bot (e.g., purpose).
 	Description string `json:"description" api:"required"`
+	// The link to the bot documentation.
+	DocumentationURL string `json:"documentationUrl" api:"required,nullable"`
 	// The kind of the bot.
 	//
 	// Deprecated: deprecated
@@ -204,8 +227,12 @@ type BotGetResponseBot struct {
 	Name string `json:"name" api:"required"`
 	// The organization that owns and operates the bot.
 	Operator string `json:"operator" api:"required"`
-	// The link to the bot documentation.
+	// The link to the bot documentation. Deprecated: use `documentationUrl`.
+	//
+	// Deprecated: deprecated
 	OperatorURL string `json:"operatorUrl" api:"required"`
+	// The link to the operator's website.
+	OperatorWebsiteURL string `json:"operatorWebsiteUrl" api:"required,nullable"`
 	// A kebab-case identifier derived from the bot name.
 	Slug              string   `json:"slug" api:"required"`
 	UserAgentPatterns []string `json:"userAgentPatterns" api:"required"`
@@ -219,18 +246,23 @@ type BotGetResponseBot struct {
 // botGetResponseBotJSON contains the JSON metadata for the struct
 // [BotGetResponseBot]
 type botGetResponseBotJSON struct {
-	Category          apijson.Field
-	Description       apijson.Field
-	Kind              apijson.Field
-	Name              apijson.Field
-	Operator          apijson.Field
-	OperatorURL       apijson.Field
-	Slug              apijson.Field
-	UserAgentPatterns apijson.Field
-	UserAgents        apijson.Field
-	SignatureAgentURL apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+	AccessLevel        apijson.Field
+	Categories         apijson.Field
+	Category           apijson.Field
+	ContentUse         apijson.Field
+	Description        apijson.Field
+	DocumentationURL   apijson.Field
+	Kind               apijson.Field
+	Name               apijson.Field
+	Operator           apijson.Field
+	OperatorURL        apijson.Field
+	OperatorWebsiteURL apijson.Field
+	Slug               apijson.Field
+	UserAgentPatterns  apijson.Field
+	UserAgents         apijson.Field
+	SignatureAgentURL  apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *BotGetResponseBot) UnmarshalJSON(data []byte) (err error) {
@@ -1066,7 +1098,9 @@ func (r botTimeseriesGroupsResponseSerie0JSON) RawJSON() string {
 }
 
 type BotListParams struct {
-	// Filters results by bot category.
+	// Filters results by bot category. `ACCESSIBILITY`, `AGGREGATOR`, `AI_SEARCH`,
+	// `ARCHIVER`, `SOCIAL_MEDIA_MARKETING` and `WEBHOOKS` are deprecated legacy
+	// categories that match only that exact category.
 	BotCategory param.Field[BotListParamsBotCategory] `query:"botCategory"`
 	// Filters results by bot operator.
 	BotOperator param.Field[string] `query:"botOperator"`
@@ -1091,31 +1125,35 @@ func (r BotListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Filters results by bot category.
+// Filters results by bot category. `ACCESSIBILITY`, `AGGREGATOR`, `AI_SEARCH`,
+// `ARCHIVER`, `SOCIAL_MEDIA_MARKETING` and `WEBHOOKS` are deprecated legacy
+// categories that match only that exact category.
 type BotListParamsBotCategory string
 
 const (
+	BotListParamsBotCategoryAcademicResearch         BotListParamsBotCategory = "ACADEMIC_RESEARCH"
+	BotListParamsBotCategoryAdvertisingAndMarketing  BotListParamsBotCategory = "ADVERTISING_AND_MARKETING"
+	BotListParamsBotCategoryAIAssistant              BotListParamsBotCategory = "AI_ASSISTANT"
+	BotListParamsBotCategoryAICrawler                BotListParamsBotCategory = "AI_CRAWLER"
+	BotListParamsBotCategoryCommerce                 BotListParamsBotCategory = "COMMERCE"
+	BotListParamsBotCategoryFeedFetcher              BotListParamsBotCategory = "FEED_FETCHER"
+	BotListParamsBotCategoryMonitoringAndAnalytics   BotListParamsBotCategory = "MONITORING_AND_ANALYTICS"
+	BotListParamsBotCategoryOther                    BotListParamsBotCategory = "OTHER"
+	BotListParamsBotCategoryPagePreview              BotListParamsBotCategory = "PAGE_PREVIEW"
 	BotListParamsBotCategorySearchEngineCrawler      BotListParamsBotCategory = "SEARCH_ENGINE_CRAWLER"
 	BotListParamsBotCategorySearchEngineOptimization BotListParamsBotCategory = "SEARCH_ENGINE_OPTIMIZATION"
-	BotListParamsBotCategoryMonitoringAndAnalytics   BotListParamsBotCategory = "MONITORING_AND_ANALYTICS"
-	BotListParamsBotCategoryAdvertisingAndMarketing  BotListParamsBotCategory = "ADVERTISING_AND_MARKETING"
-	BotListParamsBotCategorySocialMediaMarketing     BotListParamsBotCategory = "SOCIAL_MEDIA_MARKETING"
-	BotListParamsBotCategoryPagePreview              BotListParamsBotCategory = "PAGE_PREVIEW"
-	BotListParamsBotCategoryAcademicResearch         BotListParamsBotCategory = "ACADEMIC_RESEARCH"
 	BotListParamsBotCategorySecurity                 BotListParamsBotCategory = "SECURITY"
 	BotListParamsBotCategoryAccessibility            BotListParamsBotCategory = "ACCESSIBILITY"
-	BotListParamsBotCategoryWebhooks                 BotListParamsBotCategory = "WEBHOOKS"
-	BotListParamsBotCategoryFeedFetcher              BotListParamsBotCategory = "FEED_FETCHER"
-	BotListParamsBotCategoryAICrawler                BotListParamsBotCategory = "AI_CRAWLER"
 	BotListParamsBotCategoryAggregator               BotListParamsBotCategory = "AGGREGATOR"
-	BotListParamsBotCategoryAIAssistant              BotListParamsBotCategory = "AI_ASSISTANT"
 	BotListParamsBotCategoryAISearch                 BotListParamsBotCategory = "AI_SEARCH"
 	BotListParamsBotCategoryArchiver                 BotListParamsBotCategory = "ARCHIVER"
+	BotListParamsBotCategorySocialMediaMarketing     BotListParamsBotCategory = "SOCIAL_MEDIA_MARKETING"
+	BotListParamsBotCategoryWebhooks                 BotListParamsBotCategory = "WEBHOOKS"
 )
 
 func (r BotListParamsBotCategory) IsKnown() bool {
 	switch r {
-	case BotListParamsBotCategorySearchEngineCrawler, BotListParamsBotCategorySearchEngineOptimization, BotListParamsBotCategoryMonitoringAndAnalytics, BotListParamsBotCategoryAdvertisingAndMarketing, BotListParamsBotCategorySocialMediaMarketing, BotListParamsBotCategoryPagePreview, BotListParamsBotCategoryAcademicResearch, BotListParamsBotCategorySecurity, BotListParamsBotCategoryAccessibility, BotListParamsBotCategoryWebhooks, BotListParamsBotCategoryFeedFetcher, BotListParamsBotCategoryAICrawler, BotListParamsBotCategoryAggregator, BotListParamsBotCategoryAIAssistant, BotListParamsBotCategoryAISearch, BotListParamsBotCategoryArchiver:
+	case BotListParamsBotCategoryAcademicResearch, BotListParamsBotCategoryAdvertisingAndMarketing, BotListParamsBotCategoryAIAssistant, BotListParamsBotCategoryAICrawler, BotListParamsBotCategoryCommerce, BotListParamsBotCategoryFeedFetcher, BotListParamsBotCategoryMonitoringAndAnalytics, BotListParamsBotCategoryOther, BotListParamsBotCategoryPagePreview, BotListParamsBotCategorySearchEngineCrawler, BotListParamsBotCategorySearchEngineOptimization, BotListParamsBotCategorySecurity, BotListParamsBotCategoryAccessibility, BotListParamsBotCategoryAggregator, BotListParamsBotCategoryAISearch, BotListParamsBotCategoryArchiver, BotListParamsBotCategorySocialMediaMarketing, BotListParamsBotCategoryWebhooks:
 		return true
 	}
 	return false
@@ -1252,7 +1290,9 @@ type BotSummaryParams struct {
 	ASN param.Field[[]string] `query:"asn"`
 	// Filters results by bot name.
 	Bot param.Field[[]string] `query:"bot"`
-	// Filters results by bot category.
+	// Filters results by bot category. `ACCESSIBILITY`, `AGGREGATOR`, `AI_SEARCH`,
+	// `ARCHIVER`, `SOCIAL_MEDIA_MARKETING` and `WEBHOOKS` are deprecated legacy
+	// categories that match only that exact category.
 	BotCategory param.Field[[]BotSummaryParamsBotCategory] `query:"botCategory"`
 	// Filters results by bot kind. Deprecated: the Verified Bot / Signed Agent
 	// distinction is being removed.
@@ -1334,27 +1374,29 @@ func (r BotSummaryParamsDimension) IsKnown() bool {
 type BotSummaryParamsBotCategory string
 
 const (
+	BotSummaryParamsBotCategoryAcademicResearch         BotSummaryParamsBotCategory = "ACADEMIC_RESEARCH"
+	BotSummaryParamsBotCategoryAdvertisingAndMarketing  BotSummaryParamsBotCategory = "ADVERTISING_AND_MARKETING"
+	BotSummaryParamsBotCategoryAIAssistant              BotSummaryParamsBotCategory = "AI_ASSISTANT"
+	BotSummaryParamsBotCategoryAICrawler                BotSummaryParamsBotCategory = "AI_CRAWLER"
+	BotSummaryParamsBotCategoryCommerce                 BotSummaryParamsBotCategory = "COMMERCE"
+	BotSummaryParamsBotCategoryFeedFetcher              BotSummaryParamsBotCategory = "FEED_FETCHER"
+	BotSummaryParamsBotCategoryMonitoringAndAnalytics   BotSummaryParamsBotCategory = "MONITORING_AND_ANALYTICS"
+	BotSummaryParamsBotCategoryOther                    BotSummaryParamsBotCategory = "OTHER"
+	BotSummaryParamsBotCategoryPagePreview              BotSummaryParamsBotCategory = "PAGE_PREVIEW"
 	BotSummaryParamsBotCategorySearchEngineCrawler      BotSummaryParamsBotCategory = "SEARCH_ENGINE_CRAWLER"
 	BotSummaryParamsBotCategorySearchEngineOptimization BotSummaryParamsBotCategory = "SEARCH_ENGINE_OPTIMIZATION"
-	BotSummaryParamsBotCategoryMonitoringAndAnalytics   BotSummaryParamsBotCategory = "MONITORING_AND_ANALYTICS"
-	BotSummaryParamsBotCategoryAdvertisingAndMarketing  BotSummaryParamsBotCategory = "ADVERTISING_AND_MARKETING"
-	BotSummaryParamsBotCategorySocialMediaMarketing     BotSummaryParamsBotCategory = "SOCIAL_MEDIA_MARKETING"
-	BotSummaryParamsBotCategoryPagePreview              BotSummaryParamsBotCategory = "PAGE_PREVIEW"
-	BotSummaryParamsBotCategoryAcademicResearch         BotSummaryParamsBotCategory = "ACADEMIC_RESEARCH"
 	BotSummaryParamsBotCategorySecurity                 BotSummaryParamsBotCategory = "SECURITY"
 	BotSummaryParamsBotCategoryAccessibility            BotSummaryParamsBotCategory = "ACCESSIBILITY"
-	BotSummaryParamsBotCategoryWebhooks                 BotSummaryParamsBotCategory = "WEBHOOKS"
-	BotSummaryParamsBotCategoryFeedFetcher              BotSummaryParamsBotCategory = "FEED_FETCHER"
-	BotSummaryParamsBotCategoryAICrawler                BotSummaryParamsBotCategory = "AI_CRAWLER"
 	BotSummaryParamsBotCategoryAggregator               BotSummaryParamsBotCategory = "AGGREGATOR"
-	BotSummaryParamsBotCategoryAIAssistant              BotSummaryParamsBotCategory = "AI_ASSISTANT"
 	BotSummaryParamsBotCategoryAISearch                 BotSummaryParamsBotCategory = "AI_SEARCH"
 	BotSummaryParamsBotCategoryArchiver                 BotSummaryParamsBotCategory = "ARCHIVER"
+	BotSummaryParamsBotCategorySocialMediaMarketing     BotSummaryParamsBotCategory = "SOCIAL_MEDIA_MARKETING"
+	BotSummaryParamsBotCategoryWebhooks                 BotSummaryParamsBotCategory = "WEBHOOKS"
 )
 
 func (r BotSummaryParamsBotCategory) IsKnown() bool {
 	switch r {
-	case BotSummaryParamsBotCategorySearchEngineCrawler, BotSummaryParamsBotCategorySearchEngineOptimization, BotSummaryParamsBotCategoryMonitoringAndAnalytics, BotSummaryParamsBotCategoryAdvertisingAndMarketing, BotSummaryParamsBotCategorySocialMediaMarketing, BotSummaryParamsBotCategoryPagePreview, BotSummaryParamsBotCategoryAcademicResearch, BotSummaryParamsBotCategorySecurity, BotSummaryParamsBotCategoryAccessibility, BotSummaryParamsBotCategoryWebhooks, BotSummaryParamsBotCategoryFeedFetcher, BotSummaryParamsBotCategoryAICrawler, BotSummaryParamsBotCategoryAggregator, BotSummaryParamsBotCategoryAIAssistant, BotSummaryParamsBotCategoryAISearch, BotSummaryParamsBotCategoryArchiver:
+	case BotSummaryParamsBotCategoryAcademicResearch, BotSummaryParamsBotCategoryAdvertisingAndMarketing, BotSummaryParamsBotCategoryAIAssistant, BotSummaryParamsBotCategoryAICrawler, BotSummaryParamsBotCategoryCommerce, BotSummaryParamsBotCategoryFeedFetcher, BotSummaryParamsBotCategoryMonitoringAndAnalytics, BotSummaryParamsBotCategoryOther, BotSummaryParamsBotCategoryPagePreview, BotSummaryParamsBotCategorySearchEngineCrawler, BotSummaryParamsBotCategorySearchEngineOptimization, BotSummaryParamsBotCategorySecurity, BotSummaryParamsBotCategoryAccessibility, BotSummaryParamsBotCategoryAggregator, BotSummaryParamsBotCategoryAISearch, BotSummaryParamsBotCategoryArchiver, BotSummaryParamsBotCategorySocialMediaMarketing, BotSummaryParamsBotCategoryWebhooks:
 		return true
 	}
 	return false
@@ -1444,7 +1486,9 @@ type BotTimeseriesParams struct {
 	ASN param.Field[[]string] `query:"asn"`
 	// Filters results by bot name.
 	Bot param.Field[[]string] `query:"bot"`
-	// Filters results by bot category.
+	// Filters results by bot category. `ACCESSIBILITY`, `AGGREGATOR`, `AI_SEARCH`,
+	// `ARCHIVER`, `SOCIAL_MEDIA_MARKETING` and `WEBHOOKS` are deprecated legacy
+	// categories that match only that exact category.
 	BotCategory param.Field[[]BotTimeseriesParamsBotCategory] `query:"botCategory"`
 	// Filters results by bot kind. Deprecated: the Verified Bot / Signed Agent
 	// distinction is being removed.
@@ -1526,27 +1570,29 @@ func (r BotTimeseriesParamsAggInterval) IsKnown() bool {
 type BotTimeseriesParamsBotCategory string
 
 const (
+	BotTimeseriesParamsBotCategoryAcademicResearch         BotTimeseriesParamsBotCategory = "ACADEMIC_RESEARCH"
+	BotTimeseriesParamsBotCategoryAdvertisingAndMarketing  BotTimeseriesParamsBotCategory = "ADVERTISING_AND_MARKETING"
+	BotTimeseriesParamsBotCategoryAIAssistant              BotTimeseriesParamsBotCategory = "AI_ASSISTANT"
+	BotTimeseriesParamsBotCategoryAICrawler                BotTimeseriesParamsBotCategory = "AI_CRAWLER"
+	BotTimeseriesParamsBotCategoryCommerce                 BotTimeseriesParamsBotCategory = "COMMERCE"
+	BotTimeseriesParamsBotCategoryFeedFetcher              BotTimeseriesParamsBotCategory = "FEED_FETCHER"
+	BotTimeseriesParamsBotCategoryMonitoringAndAnalytics   BotTimeseriesParamsBotCategory = "MONITORING_AND_ANALYTICS"
+	BotTimeseriesParamsBotCategoryOther                    BotTimeseriesParamsBotCategory = "OTHER"
+	BotTimeseriesParamsBotCategoryPagePreview              BotTimeseriesParamsBotCategory = "PAGE_PREVIEW"
 	BotTimeseriesParamsBotCategorySearchEngineCrawler      BotTimeseriesParamsBotCategory = "SEARCH_ENGINE_CRAWLER"
 	BotTimeseriesParamsBotCategorySearchEngineOptimization BotTimeseriesParamsBotCategory = "SEARCH_ENGINE_OPTIMIZATION"
-	BotTimeseriesParamsBotCategoryMonitoringAndAnalytics   BotTimeseriesParamsBotCategory = "MONITORING_AND_ANALYTICS"
-	BotTimeseriesParamsBotCategoryAdvertisingAndMarketing  BotTimeseriesParamsBotCategory = "ADVERTISING_AND_MARKETING"
-	BotTimeseriesParamsBotCategorySocialMediaMarketing     BotTimeseriesParamsBotCategory = "SOCIAL_MEDIA_MARKETING"
-	BotTimeseriesParamsBotCategoryPagePreview              BotTimeseriesParamsBotCategory = "PAGE_PREVIEW"
-	BotTimeseriesParamsBotCategoryAcademicResearch         BotTimeseriesParamsBotCategory = "ACADEMIC_RESEARCH"
 	BotTimeseriesParamsBotCategorySecurity                 BotTimeseriesParamsBotCategory = "SECURITY"
 	BotTimeseriesParamsBotCategoryAccessibility            BotTimeseriesParamsBotCategory = "ACCESSIBILITY"
-	BotTimeseriesParamsBotCategoryWebhooks                 BotTimeseriesParamsBotCategory = "WEBHOOKS"
-	BotTimeseriesParamsBotCategoryFeedFetcher              BotTimeseriesParamsBotCategory = "FEED_FETCHER"
-	BotTimeseriesParamsBotCategoryAICrawler                BotTimeseriesParamsBotCategory = "AI_CRAWLER"
 	BotTimeseriesParamsBotCategoryAggregator               BotTimeseriesParamsBotCategory = "AGGREGATOR"
-	BotTimeseriesParamsBotCategoryAIAssistant              BotTimeseriesParamsBotCategory = "AI_ASSISTANT"
 	BotTimeseriesParamsBotCategoryAISearch                 BotTimeseriesParamsBotCategory = "AI_SEARCH"
 	BotTimeseriesParamsBotCategoryArchiver                 BotTimeseriesParamsBotCategory = "ARCHIVER"
+	BotTimeseriesParamsBotCategorySocialMediaMarketing     BotTimeseriesParamsBotCategory = "SOCIAL_MEDIA_MARKETING"
+	BotTimeseriesParamsBotCategoryWebhooks                 BotTimeseriesParamsBotCategory = "WEBHOOKS"
 )
 
 func (r BotTimeseriesParamsBotCategory) IsKnown() bool {
 	switch r {
-	case BotTimeseriesParamsBotCategorySearchEngineCrawler, BotTimeseriesParamsBotCategorySearchEngineOptimization, BotTimeseriesParamsBotCategoryMonitoringAndAnalytics, BotTimeseriesParamsBotCategoryAdvertisingAndMarketing, BotTimeseriesParamsBotCategorySocialMediaMarketing, BotTimeseriesParamsBotCategoryPagePreview, BotTimeseriesParamsBotCategoryAcademicResearch, BotTimeseriesParamsBotCategorySecurity, BotTimeseriesParamsBotCategoryAccessibility, BotTimeseriesParamsBotCategoryWebhooks, BotTimeseriesParamsBotCategoryFeedFetcher, BotTimeseriesParamsBotCategoryAICrawler, BotTimeseriesParamsBotCategoryAggregator, BotTimeseriesParamsBotCategoryAIAssistant, BotTimeseriesParamsBotCategoryAISearch, BotTimeseriesParamsBotCategoryArchiver:
+	case BotTimeseriesParamsBotCategoryAcademicResearch, BotTimeseriesParamsBotCategoryAdvertisingAndMarketing, BotTimeseriesParamsBotCategoryAIAssistant, BotTimeseriesParamsBotCategoryAICrawler, BotTimeseriesParamsBotCategoryCommerce, BotTimeseriesParamsBotCategoryFeedFetcher, BotTimeseriesParamsBotCategoryMonitoringAndAnalytics, BotTimeseriesParamsBotCategoryOther, BotTimeseriesParamsBotCategoryPagePreview, BotTimeseriesParamsBotCategorySearchEngineCrawler, BotTimeseriesParamsBotCategorySearchEngineOptimization, BotTimeseriesParamsBotCategorySecurity, BotTimeseriesParamsBotCategoryAccessibility, BotTimeseriesParamsBotCategoryAggregator, BotTimeseriesParamsBotCategoryAISearch, BotTimeseriesParamsBotCategoryArchiver, BotTimeseriesParamsBotCategorySocialMediaMarketing, BotTimeseriesParamsBotCategoryWebhooks:
 		return true
 	}
 	return false
@@ -1636,7 +1682,9 @@ type BotTimeseriesGroupsParams struct {
 	ASN param.Field[[]string] `query:"asn"`
 	// Filters results by bot name.
 	Bot param.Field[[]string] `query:"bot"`
-	// Filters results by bot category.
+	// Filters results by bot category. `ACCESSIBILITY`, `AGGREGATOR`, `AI_SEARCH`,
+	// `ARCHIVER`, `SOCIAL_MEDIA_MARKETING` and `WEBHOOKS` are deprecated legacy
+	// categories that match only that exact category.
 	BotCategory param.Field[[]BotTimeseriesGroupsParamsBotCategory] `query:"botCategory"`
 	// Filters results by bot kind. Deprecated: the Verified Bot / Signed Agent
 	// distinction is being removed.
@@ -1742,27 +1790,29 @@ func (r BotTimeseriesGroupsParamsAggInterval) IsKnown() bool {
 type BotTimeseriesGroupsParamsBotCategory string
 
 const (
+	BotTimeseriesGroupsParamsBotCategoryAcademicResearch         BotTimeseriesGroupsParamsBotCategory = "ACADEMIC_RESEARCH"
+	BotTimeseriesGroupsParamsBotCategoryAdvertisingAndMarketing  BotTimeseriesGroupsParamsBotCategory = "ADVERTISING_AND_MARKETING"
+	BotTimeseriesGroupsParamsBotCategoryAIAssistant              BotTimeseriesGroupsParamsBotCategory = "AI_ASSISTANT"
+	BotTimeseriesGroupsParamsBotCategoryAICrawler                BotTimeseriesGroupsParamsBotCategory = "AI_CRAWLER"
+	BotTimeseriesGroupsParamsBotCategoryCommerce                 BotTimeseriesGroupsParamsBotCategory = "COMMERCE"
+	BotTimeseriesGroupsParamsBotCategoryFeedFetcher              BotTimeseriesGroupsParamsBotCategory = "FEED_FETCHER"
+	BotTimeseriesGroupsParamsBotCategoryMonitoringAndAnalytics   BotTimeseriesGroupsParamsBotCategory = "MONITORING_AND_ANALYTICS"
+	BotTimeseriesGroupsParamsBotCategoryOther                    BotTimeseriesGroupsParamsBotCategory = "OTHER"
+	BotTimeseriesGroupsParamsBotCategoryPagePreview              BotTimeseriesGroupsParamsBotCategory = "PAGE_PREVIEW"
 	BotTimeseriesGroupsParamsBotCategorySearchEngineCrawler      BotTimeseriesGroupsParamsBotCategory = "SEARCH_ENGINE_CRAWLER"
 	BotTimeseriesGroupsParamsBotCategorySearchEngineOptimization BotTimeseriesGroupsParamsBotCategory = "SEARCH_ENGINE_OPTIMIZATION"
-	BotTimeseriesGroupsParamsBotCategoryMonitoringAndAnalytics   BotTimeseriesGroupsParamsBotCategory = "MONITORING_AND_ANALYTICS"
-	BotTimeseriesGroupsParamsBotCategoryAdvertisingAndMarketing  BotTimeseriesGroupsParamsBotCategory = "ADVERTISING_AND_MARKETING"
-	BotTimeseriesGroupsParamsBotCategorySocialMediaMarketing     BotTimeseriesGroupsParamsBotCategory = "SOCIAL_MEDIA_MARKETING"
-	BotTimeseriesGroupsParamsBotCategoryPagePreview              BotTimeseriesGroupsParamsBotCategory = "PAGE_PREVIEW"
-	BotTimeseriesGroupsParamsBotCategoryAcademicResearch         BotTimeseriesGroupsParamsBotCategory = "ACADEMIC_RESEARCH"
 	BotTimeseriesGroupsParamsBotCategorySecurity                 BotTimeseriesGroupsParamsBotCategory = "SECURITY"
 	BotTimeseriesGroupsParamsBotCategoryAccessibility            BotTimeseriesGroupsParamsBotCategory = "ACCESSIBILITY"
-	BotTimeseriesGroupsParamsBotCategoryWebhooks                 BotTimeseriesGroupsParamsBotCategory = "WEBHOOKS"
-	BotTimeseriesGroupsParamsBotCategoryFeedFetcher              BotTimeseriesGroupsParamsBotCategory = "FEED_FETCHER"
-	BotTimeseriesGroupsParamsBotCategoryAICrawler                BotTimeseriesGroupsParamsBotCategory = "AI_CRAWLER"
 	BotTimeseriesGroupsParamsBotCategoryAggregator               BotTimeseriesGroupsParamsBotCategory = "AGGREGATOR"
-	BotTimeseriesGroupsParamsBotCategoryAIAssistant              BotTimeseriesGroupsParamsBotCategory = "AI_ASSISTANT"
 	BotTimeseriesGroupsParamsBotCategoryAISearch                 BotTimeseriesGroupsParamsBotCategory = "AI_SEARCH"
 	BotTimeseriesGroupsParamsBotCategoryArchiver                 BotTimeseriesGroupsParamsBotCategory = "ARCHIVER"
+	BotTimeseriesGroupsParamsBotCategorySocialMediaMarketing     BotTimeseriesGroupsParamsBotCategory = "SOCIAL_MEDIA_MARKETING"
+	BotTimeseriesGroupsParamsBotCategoryWebhooks                 BotTimeseriesGroupsParamsBotCategory = "WEBHOOKS"
 )
 
 func (r BotTimeseriesGroupsParamsBotCategory) IsKnown() bool {
 	switch r {
-	case BotTimeseriesGroupsParamsBotCategorySearchEngineCrawler, BotTimeseriesGroupsParamsBotCategorySearchEngineOptimization, BotTimeseriesGroupsParamsBotCategoryMonitoringAndAnalytics, BotTimeseriesGroupsParamsBotCategoryAdvertisingAndMarketing, BotTimeseriesGroupsParamsBotCategorySocialMediaMarketing, BotTimeseriesGroupsParamsBotCategoryPagePreview, BotTimeseriesGroupsParamsBotCategoryAcademicResearch, BotTimeseriesGroupsParamsBotCategorySecurity, BotTimeseriesGroupsParamsBotCategoryAccessibility, BotTimeseriesGroupsParamsBotCategoryWebhooks, BotTimeseriesGroupsParamsBotCategoryFeedFetcher, BotTimeseriesGroupsParamsBotCategoryAICrawler, BotTimeseriesGroupsParamsBotCategoryAggregator, BotTimeseriesGroupsParamsBotCategoryAIAssistant, BotTimeseriesGroupsParamsBotCategoryAISearch, BotTimeseriesGroupsParamsBotCategoryArchiver:
+	case BotTimeseriesGroupsParamsBotCategoryAcademicResearch, BotTimeseriesGroupsParamsBotCategoryAdvertisingAndMarketing, BotTimeseriesGroupsParamsBotCategoryAIAssistant, BotTimeseriesGroupsParamsBotCategoryAICrawler, BotTimeseriesGroupsParamsBotCategoryCommerce, BotTimeseriesGroupsParamsBotCategoryFeedFetcher, BotTimeseriesGroupsParamsBotCategoryMonitoringAndAnalytics, BotTimeseriesGroupsParamsBotCategoryOther, BotTimeseriesGroupsParamsBotCategoryPagePreview, BotTimeseriesGroupsParamsBotCategorySearchEngineCrawler, BotTimeseriesGroupsParamsBotCategorySearchEngineOptimization, BotTimeseriesGroupsParamsBotCategorySecurity, BotTimeseriesGroupsParamsBotCategoryAccessibility, BotTimeseriesGroupsParamsBotCategoryAggregator, BotTimeseriesGroupsParamsBotCategoryAISearch, BotTimeseriesGroupsParamsBotCategoryArchiver, BotTimeseriesGroupsParamsBotCategorySocialMediaMarketing, BotTimeseriesGroupsParamsBotCategoryWebhooks:
 		return true
 	}
 	return false

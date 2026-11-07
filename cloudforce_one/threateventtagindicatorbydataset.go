@@ -66,16 +66,23 @@ func (r *ThreatEventTagIndicatorByDatasetService) List(ctx context.Context, data
 type ThreatEventTagIndicatorByDatasetListResponse struct {
 	Indicators []ThreatEventTagIndicatorByDatasetListResponseIndicator `json:"indicators" api:"required"`
 	Pagination ThreatEventTagIndicatorByDatasetListResponsePagination  `json:"pagination" api:"required"`
-	JSON       threatEventTagIndicatorByDatasetListResponseJSON        `json:"-"`
+	// Number of shards that failed or timed out. Present only with partialResults.
+	FailedShardCount float64 `json:"failedShardCount"`
+	// Present and true when one or more shards failed or timed out. Indicators from
+	// those shards may be missing from this page and from totalCount.
+	PartialResults bool                                             `json:"partialResults"`
+	JSON           threatEventTagIndicatorByDatasetListResponseJSON `json:"-"`
 }
 
 // threatEventTagIndicatorByDatasetListResponseJSON contains the JSON metadata for
 // the struct [ThreatEventTagIndicatorByDatasetListResponse]
 type threatEventTagIndicatorByDatasetListResponseJSON struct {
-	Indicators  apijson.Field
-	Pagination  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Indicators       apijson.Field
+	Pagination       apijson.Field
+	FailedShardCount apijson.Field
+	PartialResults   apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *ThreatEventTagIndicatorByDatasetListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -220,10 +227,12 @@ func (r threatEventTagIndicatorByDatasetListResponsePaginationJSON) RawJSON() st
 
 type ThreatEventTagIndicatorByDatasetListParams struct {
 	// Account ID.
-	AccountID     param.Field[string]  `path:"account_id" api:"required"`
-	IndicatorType param.Field[string]  `query:"indicatorType"`
-	Page          param.Field[float64] `query:"page"`
-	PageSize      param.Field[float64] `query:"pageSize"`
+	AccountID     param.Field[string] `path:"account_id" api:"required"`
+	IndicatorType param.Field[string] `query:"indicatorType"`
+	// Page number (default 1). page × pageSize may not exceed 10000.
+	Page param.Field[float64] `query:"page"`
+	// Results per page (default 100, maximum 1000; larger values are clamped).
+	PageSize param.Field[float64] `query:"pageSize"`
 	// Filter indicators by related event UUID(s). Multiple UUIDs can be provided by
 	// repeating the parameter.
 	RelatedEvent param.Field[[]string] `query:"relatedEvent"`

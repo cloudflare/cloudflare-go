@@ -39,7 +39,8 @@ func NewAccessUserPopulationService(opts ...option.RequestOption) (r *AccessUser
 	return
 }
 
-// Creates a user population in an account.
+// Creates a user population in an account. Requires permission to update the
+// account's Access organization.
 func (r *AccessUserPopulationService) New(ctx context.Context, params AccessUserPopulationNewParams, opts ...option.RequestOption) (res *AccessUserPopulationNewResponse, err error) {
 	var env AccessUserPopulationNewResponseEnvelope
 	opts = slices.Concat(r.Options, opts)

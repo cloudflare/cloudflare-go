@@ -237,12 +237,8 @@ type CertificatePackCertificateUpdateResponseSSL struct {
 	BundleMethod BundleMethod `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate.
 	CertificateAuthority shared.CertificateCA `json:"certificate_authority"`
-	// If a custom uploaded certificate is used.
-	CustomCertificate string `json:"custom_certificate"`
 	// The identifier for the Custom CSR that was used.
 	CustomCsrID string `json:"custom_csr_id"`
-	// The key for a custom uploaded certificate.
-	CustomKey string `json:"custom_key"`
 	// DCV Delegation records for domain validation.
 	DCVDelegationRecords []CertificatePackCertificateUpdateResponseSsldcvDelegationRecord `json:"dcv_delegation_records"`
 	// The time the custom certificate expires on.
@@ -280,9 +276,7 @@ type certificatePackCertificateUpdateResponseSSLJSON struct {
 	ID                   apijson.Field
 	BundleMethod         apijson.Field
 	CertificateAuthority apijson.Field
-	CustomCertificate    apijson.Field
 	CustomCsrID          apijson.Field
-	CustomKey            apijson.Field
 	DCVDelegationRecords apijson.Field
 	ExpiresOn            apijson.Field
 	Hosts                apijson.Field
