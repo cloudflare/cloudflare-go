@@ -41,6 +41,7 @@ type ZoneService struct {
 	Subscriptions     *SubscriptionService
 	Plans             *PlanService
 	RatePlans         *RatePlanService
+	OhttpGateway      *OhttpGatewayService
 	Entitlements      *EntitlementService
 	CT                *CTService
 }
@@ -63,6 +64,7 @@ func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 	r.Subscriptions = NewSubscriptionService(opts...)
 	r.Plans = NewPlanService(opts...)
 	r.RatePlans = NewRatePlanService(opts...)
+	r.OhttpGateway = NewOhttpGatewayService(opts...)
 	r.Entitlements = NewEntitlementService(opts...)
 	r.CT = NewCTService(opts...)
 	return

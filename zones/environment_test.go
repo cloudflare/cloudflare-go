@@ -11,7 +11,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/rules"
 	"github.com/cloudflare/cloudflare-go/v7/zones"
 )
 
@@ -35,9 +34,9 @@ func TestEnvironmentNew(t *testing.T) {
 			Expression:         cloudflare.F("expression"),
 			LockedOnDeployment: cloudflare.F(true),
 			Name:               cloudflare.F("name"),
-			Position: cloudflare.F(rules.ListCursorParam{
-				After:  cloudflare.F("yyy"),
-				Before: cloudflare.F("xxx"),
+			Position: cloudflare.F(zones.EnvironmentNewParamsEnvironmentsPosition{
+				After:  cloudflare.F("after"),
+				Before: cloudflare.F("before"),
 			}),
 			Ref:               cloudflare.F("ref"),
 			Version:           cloudflare.F(int64(0)),
@@ -73,9 +72,9 @@ func TestEnvironmentUpdate(t *testing.T) {
 			Expression:         cloudflare.F("expression"),
 			LockedOnDeployment: cloudflare.F(true),
 			Name:               cloudflare.F("name"),
-			Position: cloudflare.F(rules.ListCursorParam{
-				After:  cloudflare.F("yyy"),
-				Before: cloudflare.F("xxx"),
+			Position: cloudflare.F(zones.EnvironmentUpdateParamsEnvironmentsPosition{
+				After:  cloudflare.F("after"),
+				Before: cloudflare.F("before"),
 			}),
 			Ref:               cloudflare.F("ref"),
 			Version:           cloudflare.F(int64(0)),
@@ -167,9 +166,9 @@ func TestEnvironmentEdit(t *testing.T) {
 			Expression:         cloudflare.F("expression"),
 			LockedOnDeployment: cloudflare.F(true),
 			Name:               cloudflare.F("name"),
-			Position: cloudflare.F(rules.ListCursorParam{
-				After:  cloudflare.F("yyy"),
-				Before: cloudflare.F("xxx"),
+			Position: cloudflare.F(zones.EnvironmentEditParamsEnvironmentsPosition{
+				After:  cloudflare.F("after"),
+				Before: cloudflare.F("before"),
 			}),
 			Ref:               cloudflare.F("ref"),
 			Version:           cloudflare.F(int64(0)),

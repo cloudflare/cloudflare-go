@@ -91,6 +91,22 @@ func (r *WebhookService) EditWebhook(ctx context.Context, appID string, webhookI
 	return res, err
 }
 
+// Returns the list of webhook event names supported by RealtimeKit.
+func (r *WebhookService) GetAllWebhooks(ctx context.Context, appID string, query WebhookGetAllWebhooksParams, opts ...option.RequestOption) (res *WebhookGetAllWebhooksResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/webhooks/all", query.AccountID, appID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return res, err
+}
+
 // Returns webhook details for the given webhook ID.
 func (r *WebhookService) GetWebhookByID(ctx context.Context, appID string, webhookID string, query WebhookGetWebhookByIDParams, opts ...option.RequestOption) (res *WebhookGetWebhookByIDResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
@@ -397,6 +413,51 @@ const (
 func (r WebhookEditWebhookResponseDataEvent) IsKnown() bool {
 	switch r {
 	case WebhookEditWebhookResponseDataEventMeetingStarted, WebhookEditWebhookResponseDataEventMeetingEnded, WebhookEditWebhookResponseDataEventMeetingParticipantJoined, WebhookEditWebhookResponseDataEventMeetingParticipantLeft, WebhookEditWebhookResponseDataEventMeetingChatSynced, WebhookEditWebhookResponseDataEventRecordingStatusUpdate, WebhookEditWebhookResponseDataEventLivestreamingStatusUpdate, WebhookEditWebhookResponseDataEventMeetingTranscript, WebhookEditWebhookResponseDataEventMeetingSummary:
+		return true
+	}
+	return false
+}
+
+type WebhookGetAllWebhooksResponse struct {
+	Data    []WebhookGetAllWebhooksResponseData `json:"data" api:"required"`
+	Success bool                                `json:"success" api:"required"`
+	JSON    webhookGetAllWebhooksResponseJSON   `json:"-"`
+}
+
+// webhookGetAllWebhooksResponseJSON contains the JSON metadata for the struct
+// [WebhookGetAllWebhooksResponse]
+type webhookGetAllWebhooksResponseJSON struct {
+	Data        apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WebhookGetAllWebhooksResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r webhookGetAllWebhooksResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type WebhookGetAllWebhooksResponseData string
+
+const (
+	WebhookGetAllWebhooksResponseDataMeetingStarted            WebhookGetAllWebhooksResponseData = "meeting.started"
+	WebhookGetAllWebhooksResponseDataMeetingEnded              WebhookGetAllWebhooksResponseData = "meeting.ended"
+	WebhookGetAllWebhooksResponseDataMeetingParticipantJoined  WebhookGetAllWebhooksResponseData = "meeting.participantJoined"
+	WebhookGetAllWebhooksResponseDataMeetingParticipantLeft    WebhookGetAllWebhooksResponseData = "meeting.participantLeft"
+	WebhookGetAllWebhooksResponseDataMeetingChatSynced         WebhookGetAllWebhooksResponseData = "meeting.chatSynced"
+	WebhookGetAllWebhooksResponseDataRecordingStatusUpdate     WebhookGetAllWebhooksResponseData = "recording.statusUpdate"
+	WebhookGetAllWebhooksResponseDataLivestreamingStatusUpdate WebhookGetAllWebhooksResponseData = "livestreaming.statusUpdate"
+	WebhookGetAllWebhooksResponseDataMeetingTranscript         WebhookGetAllWebhooksResponseData = "meeting.transcript"
+	WebhookGetAllWebhooksResponseDataMeetingSummary            WebhookGetAllWebhooksResponseData = "meeting.summary"
+)
+
+func (r WebhookGetAllWebhooksResponseData) IsKnown() bool {
+	switch r {
+	case WebhookGetAllWebhooksResponseDataMeetingStarted, WebhookGetAllWebhooksResponseDataMeetingEnded, WebhookGetAllWebhooksResponseDataMeetingParticipantJoined, WebhookGetAllWebhooksResponseDataMeetingParticipantLeft, WebhookGetAllWebhooksResponseDataMeetingChatSynced, WebhookGetAllWebhooksResponseDataRecordingStatusUpdate, WebhookGetAllWebhooksResponseDataLivestreamingStatusUpdate, WebhookGetAllWebhooksResponseDataMeetingTranscript, WebhookGetAllWebhooksResponseDataMeetingSummary:
 		return true
 	}
 	return false
@@ -737,6 +798,11 @@ func (r WebhookEditWebhookParamsEvent) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type WebhookGetAllWebhooksParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
 }
 
 type WebhookGetWebhookByIDParams struct {

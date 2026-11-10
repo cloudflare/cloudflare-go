@@ -272,7 +272,7 @@ func (r superSlurperJobListResponseJSON) RawJSON() string {
 type SuperSlurperJobListResponseSource struct {
 	Bucket       string                                        `json:"bucket"`
 	Endpoint     string                                        `json:"endpoint" api:"nullable" format:"uri"`
-	Jurisdiction SuperSlurperJobListResponseSourceJurisdiction `json:"jurisdiction"`
+	Jurisdiction SuperSlurperJobListResponseSourceJurisdiction `json:"jurisdiction" api:"nullable"`
 	// This field can have the runtime type of [[]string].
 	Keys       interface{}                             `json:"keys"`
 	PathPrefix string                                  `json:"pathPrefix" api:"nullable"`
@@ -438,7 +438,7 @@ func (r SuperSlurperJobListResponseSourceGcsSourceResponseSchemaVendor) IsKnown(
 
 type SuperSlurperJobListResponseSourceR2SourceResponseSchema struct {
 	Bucket       string                                                              `json:"bucket"`
-	Jurisdiction SuperSlurperJobListResponseSourceR2SourceResponseSchemaJurisdiction `json:"jurisdiction"`
+	Jurisdiction SuperSlurperJobListResponseSourceR2SourceResponseSchemaJurisdiction `json:"jurisdiction" api:"nullable"`
 	Keys         []string                                                            `json:"keys" api:"nullable"`
 	PathPrefix   string                                                              `json:"pathPrefix" api:"nullable"`
 	Vendor       Provider                                                            `json:"vendor"`
@@ -538,7 +538,7 @@ func (r SuperSlurperJobListResponseStatus) IsKnown() bool {
 
 type SuperSlurperJobListResponseTarget struct {
 	Bucket       string                                        `json:"bucket"`
-	Jurisdiction SuperSlurperJobListResponseTargetJurisdiction `json:"jurisdiction"`
+	Jurisdiction SuperSlurperJobListResponseTargetJurisdiction `json:"jurisdiction" api:"nullable"`
 	Vendor       Provider                                      `json:"vendor"`
 	JSON         superSlurperJobListResponseTargetJSON         `json:"-"`
 }
@@ -614,7 +614,7 @@ func (r superSlurperJobGetResponseJSON) RawJSON() string {
 type SuperSlurperJobGetResponseSource struct {
 	Bucket       string                                       `json:"bucket"`
 	Endpoint     string                                       `json:"endpoint" api:"nullable" format:"uri"`
-	Jurisdiction SuperSlurperJobGetResponseSourceJurisdiction `json:"jurisdiction"`
+	Jurisdiction SuperSlurperJobGetResponseSourceJurisdiction `json:"jurisdiction" api:"nullable"`
 	// This field can have the runtime type of [[]string].
 	Keys       interface{}                            `json:"keys"`
 	PathPrefix string                                 `json:"pathPrefix" api:"nullable"`
@@ -779,7 +779,7 @@ func (r SuperSlurperJobGetResponseSourceGcsSourceResponseSchemaVendor) IsKnown()
 
 type SuperSlurperJobGetResponseSourceR2SourceResponseSchema struct {
 	Bucket       string                                                             `json:"bucket"`
-	Jurisdiction SuperSlurperJobGetResponseSourceR2SourceResponseSchemaJurisdiction `json:"jurisdiction"`
+	Jurisdiction SuperSlurperJobGetResponseSourceR2SourceResponseSchemaJurisdiction `json:"jurisdiction" api:"nullable"`
 	Keys         []string                                                           `json:"keys" api:"nullable"`
 	PathPrefix   string                                                             `json:"pathPrefix" api:"nullable"`
 	Vendor       Provider                                                           `json:"vendor"`
@@ -878,7 +878,7 @@ func (r SuperSlurperJobGetResponseStatus) IsKnown() bool {
 
 type SuperSlurperJobGetResponseTarget struct {
 	Bucket       string                                       `json:"bucket"`
-	Jurisdiction SuperSlurperJobGetResponseTargetJurisdiction `json:"jurisdiction"`
+	Jurisdiction SuperSlurperJobGetResponseTargetJurisdiction `json:"jurisdiction" api:"nullable"`
 	Vendor       Provider                                     `json:"vendor"`
 	JSON         superSlurperJobGetResponseTargetJSON         `json:"-"`
 }

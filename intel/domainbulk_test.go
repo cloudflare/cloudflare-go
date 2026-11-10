@@ -32,6 +32,7 @@ func TestDomainBulkGetWithOptionalParams(t *testing.T) {
 		AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Domain:         cloudflare.F([]string{"string"}),
 		IncludeRanking: cloudflare.F(true),
+		SkipDNS:        cloudflare.F(true),
 		SkipRanking:    cloudflare.F(true),
 	})
 	if err != nil {

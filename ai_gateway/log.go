@@ -178,16 +178,21 @@ func (r *LogService) Response(ctx context.Context, gatewayID string, id string, 
 }
 
 type LogListResponse struct {
-	ID                  string              `json:"id" api:"required"`
-	Cached              bool                `json:"cached" api:"required"`
-	CreatedAt           time.Time           `json:"created_at" api:"required" format:"date-time"`
-	Duration            int64               `json:"duration" api:"required"`
-	Model               string              `json:"model" api:"required"`
-	Path                string              `json:"path" api:"required"`
-	Provider            string              `json:"provider" api:"required"`
-	Success             bool                `json:"success" api:"required"`
-	TokensIn            int64               `json:"tokens_in" api:"required,nullable"`
-	TokensOut           int64               `json:"tokens_out" api:"required,nullable"`
+	ID        string    `json:"id" api:"required"`
+	Cached    bool      `json:"cached" api:"required"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	Duration  int64     `json:"duration" api:"required"`
+	Model     string    `json:"model" api:"required"`
+	Path      string    `json:"path" api:"required"`
+	Provider  string    `json:"provider" api:"required"`
+	Success   bool      `json:"success" api:"required"`
+	TokensIn  int64     `json:"tokens_in" api:"required,nullable"`
+	TokensOut int64     `json:"tokens_out" api:"required,nullable"`
+	// Whether the request and response bodies were eligible to be stored. False when
+	// the request sent `cf-aig-collect-log-payload: false`, logging was off, or the
+	// gateway does not store bodies for the request. Null for logs written before this
+	// field existed.
+	CollectLogPayload   bool                `json:"collect_log_payload" api:"nullable"`
 	Cost                float64             `json:"cost"`
 	CustomCost          bool                `json:"custom_cost"`
 	Metadata            string              `json:"metadata"`
@@ -212,6 +217,7 @@ type logListResponseJSON struct {
 	Success             apijson.Field
 	TokensIn            apijson.Field
 	TokensOut           apijson.Field
+	CollectLogPayload   apijson.Field
 	Cost                apijson.Field
 	CustomCost          apijson.Field
 	Metadata            apijson.Field
@@ -257,16 +263,21 @@ func (r logDeleteResponseJSON) RawJSON() string {
 type LogEditResponse = interface{}
 
 type LogGetResponse struct {
-	ID                   string             `json:"id" api:"required"`
-	Cached               bool               `json:"cached" api:"required"`
-	CreatedAt            time.Time          `json:"created_at" api:"required" format:"date-time"`
-	Duration             int64              `json:"duration" api:"required"`
-	Model                string             `json:"model" api:"required"`
-	Path                 string             `json:"path" api:"required"`
-	Provider             string             `json:"provider" api:"required"`
-	Success              bool               `json:"success" api:"required"`
-	TokensIn             int64              `json:"tokens_in" api:"required,nullable"`
-	TokensOut            int64              `json:"tokens_out" api:"required,nullable"`
+	ID        string    `json:"id" api:"required"`
+	Cached    bool      `json:"cached" api:"required"`
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	Duration  int64     `json:"duration" api:"required"`
+	Model     string    `json:"model" api:"required"`
+	Path      string    `json:"path" api:"required"`
+	Provider  string    `json:"provider" api:"required"`
+	Success   bool      `json:"success" api:"required"`
+	TokensIn  int64     `json:"tokens_in" api:"required,nullable"`
+	TokensOut int64     `json:"tokens_out" api:"required,nullable"`
+	// Whether the request and response bodies were eligible to be stored. False when
+	// the request sent `cf-aig-collect-log-payload: false`, logging was off, or the
+	// gateway does not store bodies for the request. Null for logs written before this
+	// field existed.
+	CollectLogPayload    bool               `json:"collect_log_payload" api:"nullable"`
 	Cost                 float64            `json:"cost"`
 	CustomCost           bool               `json:"custom_cost"`
 	Metadata             string             `json:"metadata"`
@@ -297,6 +308,7 @@ type logGetResponseJSON struct {
 	Success              apijson.Field
 	TokensIn             apijson.Field
 	TokensOut            apijson.Field
+	CollectLogPayload    apijson.Field
 	Cost                 apijson.Field
 	CustomCost           apijson.Field
 	Metadata             apijson.Field

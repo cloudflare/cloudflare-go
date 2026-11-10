@@ -141,11 +141,12 @@ type CustomTrustStore struct {
 	Signature string `json:"signature" api:"required"`
 	// Status of the zone's custom SSL.
 	Status CustomTrustStoreStatus `json:"status" api:"required"`
-	// When the certificate was last modified.
-	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// When the certificate was uploaded to Cloudflare.
-	UploadedOn time.Time            `json:"uploaded_on" api:"required" format:"date-time"`
-	JSON       customTrustStoreJSON `json:"-"`
+	UploadedOn time.Time `json:"uploaded_on" api:"required" format:"date-time"`
+	// When the certificate was last modified. Only returned when uploading a
+	// certificate.
+	UpdatedAt time.Time            `json:"updated_at" format:"date-time"`
+	JSON      customTrustStoreJSON `json:"-"`
 }
 
 // customTrustStoreJSON contains the JSON metadata for the struct
@@ -157,8 +158,8 @@ type customTrustStoreJSON struct {
 	Issuer      apijson.Field
 	Signature   apijson.Field
 	Status      apijson.Field
-	UpdatedAt   apijson.Field
 	UploadedOn  apijson.Field
+	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

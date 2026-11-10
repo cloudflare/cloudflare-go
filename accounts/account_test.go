@@ -64,7 +64,6 @@ func TestAccountUpdateWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		ID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:      cloudflare.F("Demo Account"),
-		Type:      cloudflare.F(accounts.AccountUpdateParamsTypeStandard),
 		ManagedBy: cloudflare.F(accounts.AccountUpdateParamsManagedBy{}),
 		Settings: cloudflare.F(accounts.AccountUpdateParamsSettings{
 			AbuseContactEmail: cloudflare.F("abuse_contact_email"),

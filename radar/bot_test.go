@@ -30,7 +30,7 @@ func TestBotListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Bots.List(context.TODO(), radar.BotListParams{
-		BotCategory:           cloudflare.F(radar.BotListParamsBotCategorySearchEngineCrawler),
+		BotCategory:           cloudflare.F(radar.BotListParamsBotCategoryAcademicResearch),
 		BotOperator:           cloudflare.F("botOperator"),
 		BotVerificationStatus: cloudflare.F(radar.BotListParamsBotVerificationStatusVerified),
 		Format:                cloudflare.F(radar.BotListParamsFormatJson),
@@ -97,7 +97,7 @@ func TestBotSummaryWithOptionalParams(t *testing.T) {
 		radar.BotSummaryParams{
 			ASN:                   cloudflare.F([]string{"string"}),
 			Bot:                   cloudflare.F([]string{"string"}),
-			BotCategory:           cloudflare.F([]radar.BotSummaryParamsBotCategory{radar.BotSummaryParamsBotCategorySearchEngineCrawler}),
+			BotCategory:           cloudflare.F([]radar.BotSummaryParamsBotCategory{radar.BotSummaryParamsBotCategoryAcademicResearch}),
 			BotKind:               cloudflare.F([]radar.BotSummaryParamsBotKind{radar.BotSummaryParamsBotKindAgent}),
 			BotOperator:           cloudflare.F([]string{"string"}),
 			BotVerificationStatus: cloudflare.F([]radar.BotSummaryParamsBotVerificationStatus{radar.BotSummaryParamsBotVerificationStatusVerified}),
@@ -138,7 +138,7 @@ func TestBotTimeseriesWithOptionalParams(t *testing.T) {
 		AggInterval:           cloudflare.F(radar.BotTimeseriesParamsAggInterval1h),
 		ASN:                   cloudflare.F([]string{"string"}),
 		Bot:                   cloudflare.F([]string{"string"}),
-		BotCategory:           cloudflare.F([]radar.BotTimeseriesParamsBotCategory{radar.BotTimeseriesParamsBotCategorySearchEngineCrawler}),
+		BotCategory:           cloudflare.F([]radar.BotTimeseriesParamsBotCategory{radar.BotTimeseriesParamsBotCategoryAcademicResearch}),
 		BotKind:               cloudflare.F([]radar.BotTimeseriesParamsBotKind{radar.BotTimeseriesParamsBotKindAgent}),
 		BotOperator:           cloudflare.F([]string{"string"}),
 		BotVerificationStatus: cloudflare.F([]radar.BotTimeseriesParamsBotVerificationStatus{radar.BotTimeseriesParamsBotVerificationStatusVerified}),
@@ -180,7 +180,7 @@ func TestBotTimeseriesGroupsWithOptionalParams(t *testing.T) {
 			AggInterval:           cloudflare.F(radar.BotTimeseriesGroupsParamsAggInterval1h),
 			ASN:                   cloudflare.F([]string{"string"}),
 			Bot:                   cloudflare.F([]string{"string"}),
-			BotCategory:           cloudflare.F([]radar.BotTimeseriesGroupsParamsBotCategory{radar.BotTimeseriesGroupsParamsBotCategorySearchEngineCrawler}),
+			BotCategory:           cloudflare.F([]radar.BotTimeseriesGroupsParamsBotCategory{radar.BotTimeseriesGroupsParamsBotCategoryAcademicResearch}),
 			BotKind:               cloudflare.F([]radar.BotTimeseriesGroupsParamsBotKind{radar.BotTimeseriesGroupsParamsBotKindAgent}),
 			BotOperator:           cloudflare.F([]string{"string"}),
 			BotVerificationStatus: cloudflare.F([]radar.BotTimeseriesGroupsParamsBotVerificationStatus{radar.BotTimeseriesGroupsParamsBotVerificationStatusVerified}),

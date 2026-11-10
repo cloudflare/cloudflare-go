@@ -15,7 +15,6 @@ import (
 )
 
 func TestPresetNewWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -172,7 +171,6 @@ func TestPresetNewWithOptionalParams(t *testing.T) {
 }
 
 func TestPresetUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -330,7 +328,6 @@ func TestPresetUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestPresetDelete(t *testing.T) {
-	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -362,7 +359,6 @@ func TestPresetDelete(t *testing.T) {
 }
 
 func TestPresetGetWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -396,7 +392,6 @@ func TestPresetGetWithOptionalParams(t *testing.T) {
 }
 
 func TestPresetGetPresetByID(t *testing.T) {
-	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -428,7 +423,6 @@ func TestPresetGetPresetByID(t *testing.T) {
 }
 
 func TestPresetReplacePresetByIDWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: auth not handled well")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

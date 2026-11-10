@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/internal/param"
 	"github.com/cloudflare/cloudflare-go/v7/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v7/option"
-	"github.com/cloudflare/cloudflare-go/v7/rules"
 	"github.com/cloudflare/cloudflare-go/v7/shared"
 )
 
@@ -168,14 +167,14 @@ func (r environmentNewResponseJSON) RawJSON() string {
 }
 
 type EnvironmentNewResponseEnvironment struct {
-	Expression         string                                `json:"expression" api:"required"`
-	LockedOnDeployment bool                                  `json:"locked_on_deployment" api:"required,nullable"`
-	Name               string                                `json:"name" api:"required"`
-	Position           rules.ListCursor                      `json:"position" api:"required"`
-	Ref                string                                `json:"ref" api:"required"`
-	Version            int64                                 `json:"version" api:"required,nullable"`
-	HTTPApplicationID  string                                `json:"http_application_id" api:"nullable"`
-	JSON               environmentNewResponseEnvironmentJSON `json:"-"`
+	Expression         string                                     `json:"expression" api:"required"`
+	LockedOnDeployment bool                                       `json:"locked_on_deployment" api:"required,nullable"`
+	Name               string                                     `json:"name" api:"required"`
+	Position           EnvironmentNewResponseEnvironmentsPosition `json:"position" api:"required"`
+	Ref                string                                     `json:"ref" api:"required"`
+	Version            int64                                      `json:"version" api:"required,nullable"`
+	HTTPApplicationID  string                                     `json:"http_application_id" api:"nullable"`
+	JSON               environmentNewResponseEnvironmentJSON      `json:"-"`
 }
 
 // environmentNewResponseEnvironmentJSON contains the JSON metadata for the struct
@@ -197,6 +196,29 @@ func (r *EnvironmentNewResponseEnvironment) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r environmentNewResponseEnvironmentJSON) RawJSON() string {
+	return r.raw
+}
+
+type EnvironmentNewResponseEnvironmentsPosition struct {
+	After  string                                         `json:"after"`
+	Before string                                         `json:"before"`
+	JSON   environmentNewResponseEnvironmentsPositionJSON `json:"-"`
+}
+
+// environmentNewResponseEnvironmentsPositionJSON contains the JSON metadata for
+// the struct [EnvironmentNewResponseEnvironmentsPosition]
+type environmentNewResponseEnvironmentsPositionJSON struct {
+	After       apijson.Field
+	Before      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EnvironmentNewResponseEnvironmentsPosition) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r environmentNewResponseEnvironmentsPositionJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -222,14 +244,14 @@ func (r environmentUpdateResponseJSON) RawJSON() string {
 }
 
 type EnvironmentUpdateResponseEnvironment struct {
-	Expression         string                                   `json:"expression" api:"required"`
-	LockedOnDeployment bool                                     `json:"locked_on_deployment" api:"required,nullable"`
-	Name               string                                   `json:"name" api:"required"`
-	Position           rules.ListCursor                         `json:"position" api:"required"`
-	Ref                string                                   `json:"ref" api:"required"`
-	Version            int64                                    `json:"version" api:"required,nullable"`
-	HTTPApplicationID  string                                   `json:"http_application_id" api:"nullable"`
-	JSON               environmentUpdateResponseEnvironmentJSON `json:"-"`
+	Expression         string                                        `json:"expression" api:"required"`
+	LockedOnDeployment bool                                          `json:"locked_on_deployment" api:"required,nullable"`
+	Name               string                                        `json:"name" api:"required"`
+	Position           EnvironmentUpdateResponseEnvironmentsPosition `json:"position" api:"required"`
+	Ref                string                                        `json:"ref" api:"required"`
+	Version            int64                                         `json:"version" api:"required,nullable"`
+	HTTPApplicationID  string                                        `json:"http_application_id" api:"nullable"`
+	JSON               environmentUpdateResponseEnvironmentJSON      `json:"-"`
 }
 
 // environmentUpdateResponseEnvironmentJSON contains the JSON metadata for the
@@ -251,6 +273,29 @@ func (r *EnvironmentUpdateResponseEnvironment) UnmarshalJSON(data []byte) (err e
 }
 
 func (r environmentUpdateResponseEnvironmentJSON) RawJSON() string {
+	return r.raw
+}
+
+type EnvironmentUpdateResponseEnvironmentsPosition struct {
+	After  string                                            `json:"after"`
+	Before string                                            `json:"before"`
+	JSON   environmentUpdateResponseEnvironmentsPositionJSON `json:"-"`
+}
+
+// environmentUpdateResponseEnvironmentsPositionJSON contains the JSON metadata for
+// the struct [EnvironmentUpdateResponseEnvironmentsPosition]
+type environmentUpdateResponseEnvironmentsPositionJSON struct {
+	After       apijson.Field
+	Before      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EnvironmentUpdateResponseEnvironmentsPosition) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r environmentUpdateResponseEnvironmentsPositionJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -276,14 +321,14 @@ func (r environmentListResponseJSON) RawJSON() string {
 }
 
 type EnvironmentListResponseEnvironment struct {
-	Expression         string                                 `json:"expression" api:"required"`
-	LockedOnDeployment bool                                   `json:"locked_on_deployment" api:"required,nullable"`
-	Name               string                                 `json:"name" api:"required"`
-	Position           rules.ListCursor                       `json:"position" api:"required"`
-	Ref                string                                 `json:"ref" api:"required"`
-	Version            int64                                  `json:"version" api:"required,nullable"`
-	HTTPApplicationID  string                                 `json:"http_application_id" api:"nullable"`
-	JSON               environmentListResponseEnvironmentJSON `json:"-"`
+	Expression         string                                      `json:"expression" api:"required"`
+	LockedOnDeployment bool                                        `json:"locked_on_deployment" api:"required,nullable"`
+	Name               string                                      `json:"name" api:"required"`
+	Position           EnvironmentListResponseEnvironmentsPosition `json:"position" api:"required"`
+	Ref                string                                      `json:"ref" api:"required"`
+	Version            int64                                       `json:"version" api:"required,nullable"`
+	HTTPApplicationID  string                                      `json:"http_application_id" api:"nullable"`
+	JSON               environmentListResponseEnvironmentJSON      `json:"-"`
 }
 
 // environmentListResponseEnvironmentJSON contains the JSON metadata for the struct
@@ -305,6 +350,29 @@ func (r *EnvironmentListResponseEnvironment) UnmarshalJSON(data []byte) (err err
 }
 
 func (r environmentListResponseEnvironmentJSON) RawJSON() string {
+	return r.raw
+}
+
+type EnvironmentListResponseEnvironmentsPosition struct {
+	After  string                                          `json:"after"`
+	Before string                                          `json:"before"`
+	JSON   environmentListResponseEnvironmentsPositionJSON `json:"-"`
+}
+
+// environmentListResponseEnvironmentsPositionJSON contains the JSON metadata for
+// the struct [EnvironmentListResponseEnvironmentsPosition]
+type environmentListResponseEnvironmentsPositionJSON struct {
+	After       apijson.Field
+	Before      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EnvironmentListResponseEnvironmentsPosition) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r environmentListResponseEnvironmentsPositionJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -330,14 +398,14 @@ func (r environmentDeleteResponseJSON) RawJSON() string {
 }
 
 type EnvironmentDeleteResponseEnvironment struct {
-	Expression         string                                   `json:"expression" api:"required"`
-	LockedOnDeployment bool                                     `json:"locked_on_deployment" api:"required,nullable"`
-	Name               string                                   `json:"name" api:"required"`
-	Position           rules.ListCursor                         `json:"position" api:"required"`
-	Ref                string                                   `json:"ref" api:"required"`
-	Version            int64                                    `json:"version" api:"required,nullable"`
-	HTTPApplicationID  string                                   `json:"http_application_id" api:"nullable"`
-	JSON               environmentDeleteResponseEnvironmentJSON `json:"-"`
+	Expression         string                                        `json:"expression" api:"required"`
+	LockedOnDeployment bool                                          `json:"locked_on_deployment" api:"required,nullable"`
+	Name               string                                        `json:"name" api:"required"`
+	Position           EnvironmentDeleteResponseEnvironmentsPosition `json:"position" api:"required"`
+	Ref                string                                        `json:"ref" api:"required"`
+	Version            int64                                         `json:"version" api:"required,nullable"`
+	HTTPApplicationID  string                                        `json:"http_application_id" api:"nullable"`
+	JSON               environmentDeleteResponseEnvironmentJSON      `json:"-"`
 }
 
 // environmentDeleteResponseEnvironmentJSON contains the JSON metadata for the
@@ -359,6 +427,29 @@ func (r *EnvironmentDeleteResponseEnvironment) UnmarshalJSON(data []byte) (err e
 }
 
 func (r environmentDeleteResponseEnvironmentJSON) RawJSON() string {
+	return r.raw
+}
+
+type EnvironmentDeleteResponseEnvironmentsPosition struct {
+	After  string                                            `json:"after"`
+	Before string                                            `json:"before"`
+	JSON   environmentDeleteResponseEnvironmentsPositionJSON `json:"-"`
+}
+
+// environmentDeleteResponseEnvironmentsPositionJSON contains the JSON metadata for
+// the struct [EnvironmentDeleteResponseEnvironmentsPosition]
+type environmentDeleteResponseEnvironmentsPositionJSON struct {
+	After       apijson.Field
+	Before      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EnvironmentDeleteResponseEnvironmentsPosition) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r environmentDeleteResponseEnvironmentsPositionJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -384,14 +475,14 @@ func (r environmentEditResponseJSON) RawJSON() string {
 }
 
 type EnvironmentEditResponseEnvironment struct {
-	Expression         string                                 `json:"expression" api:"required"`
-	LockedOnDeployment bool                                   `json:"locked_on_deployment" api:"required,nullable"`
-	Name               string                                 `json:"name" api:"required"`
-	Position           rules.ListCursor                       `json:"position" api:"required"`
-	Ref                string                                 `json:"ref" api:"required"`
-	Version            int64                                  `json:"version" api:"required,nullable"`
-	HTTPApplicationID  string                                 `json:"http_application_id" api:"nullable"`
-	JSON               environmentEditResponseEnvironmentJSON `json:"-"`
+	Expression         string                                      `json:"expression" api:"required"`
+	LockedOnDeployment bool                                        `json:"locked_on_deployment" api:"required,nullable"`
+	Name               string                                      `json:"name" api:"required"`
+	Position           EnvironmentEditResponseEnvironmentsPosition `json:"position" api:"required"`
+	Ref                string                                      `json:"ref" api:"required"`
+	Version            int64                                       `json:"version" api:"required,nullable"`
+	HTTPApplicationID  string                                      `json:"http_application_id" api:"nullable"`
+	JSON               environmentEditResponseEnvironmentJSON      `json:"-"`
 }
 
 // environmentEditResponseEnvironmentJSON contains the JSON metadata for the struct
@@ -413,6 +504,29 @@ func (r *EnvironmentEditResponseEnvironment) UnmarshalJSON(data []byte) (err err
 }
 
 func (r environmentEditResponseEnvironmentJSON) RawJSON() string {
+	return r.raw
+}
+
+type EnvironmentEditResponseEnvironmentsPosition struct {
+	After  string                                          `json:"after"`
+	Before string                                          `json:"before"`
+	JSON   environmentEditResponseEnvironmentsPositionJSON `json:"-"`
+}
+
+// environmentEditResponseEnvironmentsPositionJSON contains the JSON metadata for
+// the struct [EnvironmentEditResponseEnvironmentsPosition]
+type environmentEditResponseEnvironmentsPositionJSON struct {
+	After       apijson.Field
+	Before      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EnvironmentEditResponseEnvironmentsPosition) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r environmentEditResponseEnvironmentsPositionJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -438,14 +552,14 @@ func (r environmentRollbackResponseJSON) RawJSON() string {
 }
 
 type EnvironmentRollbackResponseEnvironment struct {
-	Expression         string                                     `json:"expression" api:"required"`
-	LockedOnDeployment bool                                       `json:"locked_on_deployment" api:"required,nullable"`
-	Name               string                                     `json:"name" api:"required"`
-	Position           rules.ListCursor                           `json:"position" api:"required"`
-	Ref                string                                     `json:"ref" api:"required"`
-	Version            int64                                      `json:"version" api:"required,nullable"`
-	HTTPApplicationID  string                                     `json:"http_application_id" api:"nullable"`
-	JSON               environmentRollbackResponseEnvironmentJSON `json:"-"`
+	Expression         string                                          `json:"expression" api:"required"`
+	LockedOnDeployment bool                                            `json:"locked_on_deployment" api:"required,nullable"`
+	Name               string                                          `json:"name" api:"required"`
+	Position           EnvironmentRollbackResponseEnvironmentsPosition `json:"position" api:"required"`
+	Ref                string                                          `json:"ref" api:"required"`
+	Version            int64                                           `json:"version" api:"required,nullable"`
+	HTTPApplicationID  string                                          `json:"http_application_id" api:"nullable"`
+	JSON               environmentRollbackResponseEnvironmentJSON      `json:"-"`
 }
 
 // environmentRollbackResponseEnvironmentJSON contains the JSON metadata for the
@@ -470,6 +584,29 @@ func (r environmentRollbackResponseEnvironmentJSON) RawJSON() string {
 	return r.raw
 }
 
+type EnvironmentRollbackResponseEnvironmentsPosition struct {
+	After  string                                              `json:"after"`
+	Before string                                              `json:"before"`
+	JSON   environmentRollbackResponseEnvironmentsPositionJSON `json:"-"`
+}
+
+// environmentRollbackResponseEnvironmentsPositionJSON contains the JSON metadata
+// for the struct [EnvironmentRollbackResponseEnvironmentsPosition]
+type environmentRollbackResponseEnvironmentsPositionJSON struct {
+	After       apijson.Field
+	Before      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EnvironmentRollbackResponseEnvironmentsPosition) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r environmentRollbackResponseEnvironmentsPositionJSON) RawJSON() string {
+	return r.raw
+}
+
 type EnvironmentNewParams struct {
 	ZoneID       param.Field[string]                            `path:"zone_id" api:"required"`
 	Environments param.Field[[]EnvironmentNewParamsEnvironment] `json:"environments" api:"required"`
@@ -480,16 +617,25 @@ func (r EnvironmentNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EnvironmentNewParamsEnvironment struct {
-	Expression         param.Field[string]                `json:"expression" api:"required"`
-	LockedOnDeployment param.Field[bool]                  `json:"locked_on_deployment" api:"required"`
-	Name               param.Field[string]                `json:"name" api:"required"`
-	Position           param.Field[rules.ListCursorParam] `json:"position" api:"required"`
-	Ref                param.Field[string]                `json:"ref" api:"required"`
-	Version            param.Field[int64]                 `json:"version" api:"required"`
-	HTTPApplicationID  param.Field[string]                `json:"http_application_id"`
+	Expression         param.Field[string]                                   `json:"expression" api:"required"`
+	LockedOnDeployment param.Field[bool]                                     `json:"locked_on_deployment" api:"required"`
+	Name               param.Field[string]                                   `json:"name" api:"required"`
+	Position           param.Field[EnvironmentNewParamsEnvironmentsPosition] `json:"position" api:"required"`
+	Ref                param.Field[string]                                   `json:"ref" api:"required"`
+	Version            param.Field[int64]                                    `json:"version" api:"required"`
+	HTTPApplicationID  param.Field[string]                                   `json:"http_application_id"`
 }
 
 func (r EnvironmentNewParamsEnvironment) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type EnvironmentNewParamsEnvironmentsPosition struct {
+	After  param.Field[string] `json:"after"`
+	Before param.Field[string] `json:"before"`
+}
+
+func (r EnvironmentNewParamsEnvironmentsPosition) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -530,16 +676,25 @@ func (r EnvironmentUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EnvironmentUpdateParamsEnvironment struct {
-	Expression         param.Field[string]                `json:"expression" api:"required"`
-	LockedOnDeployment param.Field[bool]                  `json:"locked_on_deployment" api:"required"`
-	Name               param.Field[string]                `json:"name" api:"required"`
-	Position           param.Field[rules.ListCursorParam] `json:"position" api:"required"`
-	Ref                param.Field[string]                `json:"ref" api:"required"`
-	Version            param.Field[int64]                 `json:"version" api:"required"`
-	HTTPApplicationID  param.Field[string]                `json:"http_application_id"`
+	Expression         param.Field[string]                                      `json:"expression" api:"required"`
+	LockedOnDeployment param.Field[bool]                                        `json:"locked_on_deployment" api:"required"`
+	Name               param.Field[string]                                      `json:"name" api:"required"`
+	Position           param.Field[EnvironmentUpdateParamsEnvironmentsPosition] `json:"position" api:"required"`
+	Ref                param.Field[string]                                      `json:"ref" api:"required"`
+	Version            param.Field[int64]                                       `json:"version" api:"required"`
+	HTTPApplicationID  param.Field[string]                                      `json:"http_application_id"`
 }
 
 func (r EnvironmentUpdateParamsEnvironment) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type EnvironmentUpdateParamsEnvironmentsPosition struct {
+	After  param.Field[string] `json:"after"`
+	Before param.Field[string] `json:"before"`
+}
+
+func (r EnvironmentUpdateParamsEnvironmentsPosition) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -642,16 +797,25 @@ func (r EnvironmentEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EnvironmentEditParamsEnvironment struct {
-	Expression         param.Field[string]                `json:"expression" api:"required"`
-	LockedOnDeployment param.Field[bool]                  `json:"locked_on_deployment" api:"required"`
-	Name               param.Field[string]                `json:"name" api:"required"`
-	Position           param.Field[rules.ListCursorParam] `json:"position" api:"required"`
-	Ref                param.Field[string]                `json:"ref" api:"required"`
-	Version            param.Field[int64]                 `json:"version" api:"required"`
-	HTTPApplicationID  param.Field[string]                `json:"http_application_id"`
+	Expression         param.Field[string]                                    `json:"expression" api:"required"`
+	LockedOnDeployment param.Field[bool]                                      `json:"locked_on_deployment" api:"required"`
+	Name               param.Field[string]                                    `json:"name" api:"required"`
+	Position           param.Field[EnvironmentEditParamsEnvironmentsPosition] `json:"position" api:"required"`
+	Ref                param.Field[string]                                    `json:"ref" api:"required"`
+	Version            param.Field[int64]                                     `json:"version" api:"required"`
+	HTTPApplicationID  param.Field[string]                                    `json:"http_application_id"`
 }
 
 func (r EnvironmentEditParamsEnvironment) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type EnvironmentEditParamsEnvironmentsPosition struct {
+	After  param.Field[string] `json:"after"`
+	Before param.Field[string] `json:"before"`
+}
+
+func (r EnvironmentEditParamsEnvironmentsPosition) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

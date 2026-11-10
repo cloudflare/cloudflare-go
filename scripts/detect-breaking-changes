@@ -64,6 +64,7 @@ TEST_PATHS=(
 	zones/subscription_test.go
 	zones/plan_test.go
 	zones/rateplan_test.go
+	zones/ohttpgateway_test.go
 	zones/entitlement_test.go
 	zones/ctalerting_test.go
 	load_balancers/loadbalancer_test.go
@@ -228,6 +229,9 @@ TEST_PATHS=(
 	workers/domain_test.go
 	workers/subdomain_test.go
 	workers/observabilitytelemetry_test.go
+	workers/observabilityagenttrace_test.go
+	workers/observabilityissue_test.go
+	workers/observabilityissueautomation_test.go
 	workers/observabilitydestination_test.go
 	workers/observabilityquery_test.go
 	workers/observabilitysharedquery_test.go
@@ -515,6 +519,7 @@ TEST_PATHS=(
 	zero_trust/identityprovidersamlcertificate_test.go
 	zero_trust/organization_test.go
 	zero_trust/organizationdoh_test.go
+	zero_trust/organizationtrustsetting_test.go
 	zero_trust/seat_test.go
 	zero_trust/accessaicontrolmcpportal_test.go
 	zero_trust/accessaicontrolmcpserver_test.go

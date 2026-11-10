@@ -15,7 +15,6 @@ import (
 )
 
 func TestActiveSessionNewPollWithOptionalParams(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -51,7 +50,6 @@ func TestActiveSessionNewPollWithOptionalParams(t *testing.T) {
 }
 
 func TestActiveSessionGetActiveSession(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -83,7 +81,6 @@ func TestActiveSessionGetActiveSession(t *testing.T) {
 }
 
 func TestActiveSessionKickAllParticipants(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -115,7 +112,6 @@ func TestActiveSessionKickAllParticipants(t *testing.T) {
 }
 
 func TestActiveSessionKickParticipantsWithOptionalParams(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -137,6 +133,71 @@ func TestActiveSessionKickParticipantsWithOptionalParams(t *testing.T) {
 			AccountID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			CustomParticipantIDs: cloudflare.F([]string{"string"}),
 			ParticipantIDs:       cloudflare.F([]string{"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"}),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestActiveSessionMuteAllParticipantsWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.RealtimeKit.ActiveSession.MuteAllParticipants(
+		context.TODO(),
+		"14a396e7-ca44-4937-bf1f-050a69118543",
+		"meeting_id",
+		realtime_kit.ActiveSessionMuteAllParticipantsParams{
+			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AllowUnmute: cloudflare.F(true),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestActiveSessionMuteParticipantsWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.RealtimeKit.ActiveSession.MuteParticipants(
+		context.TODO(),
+		"14a396e7-ca44-4937-bf1f-050a69118543",
+		"meeting_id",
+		realtime_kit.ActiveSessionMuteParticipantsParams{
+			AccountID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CustomParticipantIDs: cloudflare.F([]string{"string"}),
+			ParticipantIDs:       cloudflare.F([]string{"string"}),
 		},
 	)
 	if err != nil {

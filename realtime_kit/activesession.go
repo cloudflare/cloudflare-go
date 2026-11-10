@@ -115,6 +115,47 @@ func (r *ActiveSessionService) KickParticipants(ctx context.Context, appID strin
 	return res, err
 }
 
+// Mutes all participants of an active session for the given meeting ID.
+func (r *ActiveSessionService) MuteAllParticipants(ctx context.Context, appID string, meetingID string, params ActiveSessionMuteAllParticipantsParams, opts ...option.RequestOption) (res *ActiveSessionMuteAllParticipantsResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return nil, err
+	}
+	if meetingID == "" {
+		err = errors.New("missing required meeting_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s/active-session/mute-all", params.AccountID, appID, meetingID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
+	return res, err
+}
+
+// Mutes one or more participants from an active session using user ID or custom
+// participant ID.
+func (r *ActiveSessionService) MuteParticipants(ctx context.Context, appID string, meetingID string, params ActiveSessionMuteParticipantsParams, opts ...option.RequestOption) (res *ActiveSessionMuteParticipantsResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return nil, err
+	}
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return nil, err
+	}
+	if meetingID == "" {
+		err = errors.New("missing required meeting_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("accounts/%s/realtime/kit/%s/meetings/%s/active-session/mute", params.AccountID, appID, meetingID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
+	return res, err
+}
+
 type ActiveSessionNewPollResponse struct {
 	Data    ActiveSessionNewPollResponseData `json:"data"`
 	Success bool                             `json:"success"`
@@ -491,6 +532,133 @@ func (r activeSessionKickParticipantsResponseDataParticipantJSON) RawJSON() stri
 	return r.raw
 }
 
+type ActiveSessionMuteAllParticipantsResponse struct {
+	Data    ActiveSessionMuteAllParticipantsResponseData `json:"data"`
+	Success bool                                         `json:"success"`
+	JSON    activeSessionMuteAllParticipantsResponseJSON `json:"-"`
+}
+
+// activeSessionMuteAllParticipantsResponseJSON contains the JSON metadata for the
+// struct [ActiveSessionMuteAllParticipantsResponse]
+type activeSessionMuteAllParticipantsResponseJSON struct {
+	Data        apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ActiveSessionMuteAllParticipantsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r activeSessionMuteAllParticipantsResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ActiveSessionMuteAllParticipantsResponseData struct {
+	Action                 string                                           `json:"action"`
+	MutedParticipantsCount float64                                          `json:"muted_participants_count"`
+	JSON                   activeSessionMuteAllParticipantsResponseDataJSON `json:"-"`
+}
+
+// activeSessionMuteAllParticipantsResponseDataJSON contains the JSON metadata for
+// the struct [ActiveSessionMuteAllParticipantsResponseData]
+type activeSessionMuteAllParticipantsResponseDataJSON struct {
+	Action                 apijson.Field
+	MutedParticipantsCount apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *ActiveSessionMuteAllParticipantsResponseData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r activeSessionMuteAllParticipantsResponseDataJSON) RawJSON() string {
+	return r.raw
+}
+
+type ActiveSessionMuteParticipantsResponse struct {
+	Data    ActiveSessionMuteParticipantsResponseData `json:"data"`
+	Success bool                                      `json:"success"`
+	JSON    activeSessionMuteParticipantsResponseJSON `json:"-"`
+}
+
+// activeSessionMuteParticipantsResponseJSON contains the JSON metadata for the
+// struct [ActiveSessionMuteParticipantsResponse]
+type activeSessionMuteParticipantsResponseJSON struct {
+	Data        apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ActiveSessionMuteParticipantsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r activeSessionMuteParticipantsResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ActiveSessionMuteParticipantsResponseData struct {
+	Action       string                                                 `json:"action"`
+	Participants []ActiveSessionMuteParticipantsResponseDataParticipant `json:"participants"`
+	JSON         activeSessionMuteParticipantsResponseDataJSON          `json:"-"`
+}
+
+// activeSessionMuteParticipantsResponseDataJSON contains the JSON metadata for the
+// struct [ActiveSessionMuteParticipantsResponseData]
+type activeSessionMuteParticipantsResponseDataJSON struct {
+	Action       apijson.Field
+	Participants apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ActiveSessionMuteParticipantsResponseData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r activeSessionMuteParticipantsResponseDataJSON) RawJSON() string {
+	return r.raw
+}
+
+type ActiveSessionMuteParticipantsResponseDataParticipant struct {
+	// ID of the session participant
+	ID        string `json:"id" api:"required"`
+	CreatedAt string `json:"created_at" api:"required"`
+	UpdatedAt string `json:"updated_at" api:"required"`
+	// Email of the session participant.
+	Email string `json:"email"`
+	// Name of the session participant.
+	Name string `json:"name"`
+	// A URL pointing to a picture of the participant.
+	Picture string                                                   `json:"picture"`
+	JSON    activeSessionMuteParticipantsResponseDataParticipantJSON `json:"-"`
+}
+
+// activeSessionMuteParticipantsResponseDataParticipantJSON contains the JSON
+// metadata for the struct [ActiveSessionMuteParticipantsResponseDataParticipant]
+type activeSessionMuteParticipantsResponseDataParticipantJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	UpdatedAt   apijson.Field
+	Email       apijson.Field
+	Name        apijson.Field
+	Picture     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ActiveSessionMuteParticipantsResponseDataParticipant) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r activeSessionMuteParticipantsResponseDataParticipantJSON) RawJSON() string {
+	return r.raw
+}
+
 type ActiveSessionNewPollParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
@@ -526,5 +694,27 @@ type ActiveSessionKickParticipantsParams struct {
 }
 
 func (r ActiveSessionKickParticipantsParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ActiveSessionMuteAllParticipantsParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id" api:"required"`
+	// if false, participants won't be able to unmute themselves after they are muted
+	AllowUnmute param.Field[bool] `json:"allow_unmute"`
+}
+
+func (r ActiveSessionMuteAllParticipantsParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ActiveSessionMuteParticipantsParams struct {
+	// The account identifier tag.
+	AccountID            param.Field[string]   `path:"account_id" api:"required"`
+	CustomParticipantIDs param.Field[[]string] `json:"custom_participant_ids"`
+	ParticipantIDs       param.Field[[]string] `json:"participant_ids"`
+}
+
+func (r ActiveSessionMuteParticipantsParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }

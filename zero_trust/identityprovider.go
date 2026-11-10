@@ -1726,7 +1726,9 @@ type IdentityProviderAccessOIDCConfig struct {
 	PKCEEnabled bool `json:"pkce_enabled"`
 	// OAuth scopes
 	Scopes []string `json:"scopes"`
-	// The token_endpoint URL of your IdP
+	// The token_endpoint URL of your IdP. Updates that change its origin (scheme,
+	// host, or port) require client_secret in the request. Path-only changes do not
+	// require client_secret.
 	TokenURL string                               `json:"token_url"`
 	JSON     identityProviderAccessOIDCConfigJSON `json:"-"`
 }
@@ -3839,7 +3841,9 @@ type IdentityProviderAccessOIDCConfigParam struct {
 	PKCEEnabled param.Field[bool] `json:"pkce_enabled"`
 	// OAuth scopes
 	Scopes param.Field[[]string] `json:"scopes"`
-	// The token_endpoint URL of your IdP
+	// The token_endpoint URL of your IdP. Updates that change its origin (scheme,
+	// host, or port) require client_secret in the request. Path-only changes do not
+	// require client_secret.
 	TokenURL param.Field[string] `json:"token_url"`
 }
 
@@ -5939,7 +5943,9 @@ type IdentityProviderListResponseAccessOIDCConfig struct {
 	PKCEEnabled bool `json:"pkce_enabled"`
 	// OAuth scopes
 	Scopes []string `json:"scopes"`
-	// The token_endpoint URL of your IdP
+	// The token_endpoint URL of your IdP. Updates that change its origin (scheme,
+	// host, or port) require client_secret in the request. Path-only changes do not
+	// require client_secret.
 	TokenURL string                                           `json:"token_url"`
 	JSON     identityProviderListResponseAccessOIDCConfigJSON `json:"-"`
 }

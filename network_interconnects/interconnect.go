@@ -52,8 +52,9 @@ func (r *InterconnectService) New(ctx context.Context, params InterconnectNewPar
 	return res, err
 }
 
-// Lists all network interconnects configured for the account, including physical
-// and virtual connections.
+// Lists network interconnects of a single type configured for the account. The
+// `type` query parameter selects the type to list; when omitted, only `direct`
+// interconnects are returned.
 func (r *InterconnectService) List(ctx context.Context, params InterconnectListParams, opts ...option.RequestOption) (res *InterconnectListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -135,7 +136,6 @@ func (r *InterconnectService) Status(ctx context.Context, icon string, query Int
 }
 
 type InterconnectNewResponse struct {
-	Account                  string `json:"account" api:"required"`
 	Name                     string `json:"name" api:"required"`
 	Type                     string `json:"type" api:"required"`
 	VirtualPortReservationID string `json:"virtual_port_reservation_id" api:"required" format:"uuid"`
@@ -143,7 +143,6 @@ type InterconnectNewResponse struct {
 	// This field can have the runtime type of
 	// [InterconnectNewResponseNscInterconnectPhysicalBodyFacility].
 	Facility interface{} `json:"facility"`
-	Owner    string      `json:"owner"`
 	Region   string      `json:"region"`
 	// A Cloudflare site name.
 	Site   string                      `json:"site"`
@@ -156,13 +155,11 @@ type InterconnectNewResponse struct {
 // interconnectNewResponseJSON contains the JSON metadata for the struct
 // [InterconnectNewResponse]
 type interconnectNewResponseJSON struct {
-	Account                  apijson.Field
 	Name                     apijson.Field
 	Type                     apijson.Field
 	VirtualPortReservationID apijson.Field
 	CcrDeviceName            apijson.Field
 	Facility                 apijson.Field
-	Owner                    apijson.Field
 	Region                   apijson.Field
 	Site                     apijson.Field
 	SlotID                   apijson.Field
@@ -216,7 +213,6 @@ func init() {
 }
 
 type InterconnectNewResponseNscInterconnectPhysicalBody struct {
-	Account  string                                                     `json:"account" api:"required"`
 	Facility InterconnectNewResponseNscInterconnectPhysicalBodyFacility `json:"facility" api:"required"`
 	Name     string                                                     `json:"name" api:"required"`
 	// A Cloudflare site name.
@@ -226,14 +222,12 @@ type InterconnectNewResponseNscInterconnectPhysicalBody struct {
 	Type                     string                                                 `json:"type" api:"required"`
 	VirtualPortReservationID string                                                 `json:"virtual_port_reservation_id" api:"required" format:"uuid"`
 	CcrDeviceName            string                                                 `json:"ccr_device_name" api:"nullable"`
-	Owner                    string                                                 `json:"owner"`
 	JSON                     interconnectNewResponseNscInterconnectPhysicalBodyJSON `json:"-"`
 }
 
 // interconnectNewResponseNscInterconnectPhysicalBodyJSON contains the JSON
 // metadata for the struct [InterconnectNewResponseNscInterconnectPhysicalBody]
 type interconnectNewResponseNscInterconnectPhysicalBodyJSON struct {
-	Account                  apijson.Field
 	Facility                 apijson.Field
 	Name                     apijson.Field
 	Site                     apijson.Field
@@ -242,7 +236,6 @@ type interconnectNewResponseNscInterconnectPhysicalBodyJSON struct {
 	Type                     apijson.Field
 	VirtualPortReservationID apijson.Field
 	CcrDeviceName            apijson.Field
-	Owner                    apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -282,12 +275,10 @@ func (r interconnectNewResponseNscInterconnectPhysicalBodyFacilityJSON) RawJSON(
 }
 
 type InterconnectNewResponseNscInterconnectGcpPartnerBody struct {
-	Account                  string `json:"account" api:"required"`
 	Name                     string `json:"name" api:"required"`
 	Region                   string `json:"region" api:"required"`
 	Type                     string `json:"type" api:"required"`
 	VirtualPortReservationID string `json:"virtual_port_reservation_id" api:"required" format:"uuid"`
-	Owner                    string `json:"owner"`
 	// Bandwidth structure as visible through the customer-facing API.
 	Speed InterconnectNewResponseNscInterconnectGcpPartnerBodySpeed `json:"speed"`
 	JSON  interconnectNewResponseNscInterconnectGcpPartnerBodyJSON  `json:"-"`
@@ -296,12 +287,10 @@ type InterconnectNewResponseNscInterconnectGcpPartnerBody struct {
 // interconnectNewResponseNscInterconnectGcpPartnerBodyJSON contains the JSON
 // metadata for the struct [InterconnectNewResponseNscInterconnectGcpPartnerBody]
 type interconnectNewResponseNscInterconnectGcpPartnerBodyJSON struct {
-	Account                  apijson.Field
 	Name                     apijson.Field
 	Region                   apijson.Field
 	Type                     apijson.Field
 	VirtualPortReservationID apijson.Field
-	Owner                    apijson.Field
 	Speed                    apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -367,7 +356,6 @@ func (r interconnectListResponseJSON) RawJSON() string {
 }
 
 type InterconnectListResponseItem struct {
-	Account                  string `json:"account" api:"required"`
 	Name                     string `json:"name" api:"required"`
 	Type                     string `json:"type" api:"required"`
 	VirtualPortReservationID string `json:"virtual_port_reservation_id" api:"required" format:"uuid"`
@@ -375,7 +363,6 @@ type InterconnectListResponseItem struct {
 	// This field can have the runtime type of
 	// [InterconnectListResponseItemsNscInterconnectPhysicalBodyFacility].
 	Facility interface{} `json:"facility"`
-	Owner    string      `json:"owner"`
 	Region   string      `json:"region"`
 	// A Cloudflare site name.
 	Site   string                           `json:"site"`
@@ -388,13 +375,11 @@ type InterconnectListResponseItem struct {
 // interconnectListResponseItemJSON contains the JSON metadata for the struct
 // [InterconnectListResponseItem]
 type interconnectListResponseItemJSON struct {
-	Account                  apijson.Field
 	Name                     apijson.Field
 	Type                     apijson.Field
 	VirtualPortReservationID apijson.Field
 	CcrDeviceName            apijson.Field
 	Facility                 apijson.Field
-	Owner                    apijson.Field
 	Region                   apijson.Field
 	Site                     apijson.Field
 	SlotID                   apijson.Field
@@ -448,7 +433,6 @@ func init() {
 }
 
 type InterconnectListResponseItemsNscInterconnectPhysicalBody struct {
-	Account  string                                                           `json:"account" api:"required"`
 	Facility InterconnectListResponseItemsNscInterconnectPhysicalBodyFacility `json:"facility" api:"required"`
 	Name     string                                                           `json:"name" api:"required"`
 	// A Cloudflare site name.
@@ -458,7 +442,6 @@ type InterconnectListResponseItemsNscInterconnectPhysicalBody struct {
 	Type                     string                                                       `json:"type" api:"required"`
 	VirtualPortReservationID string                                                       `json:"virtual_port_reservation_id" api:"required" format:"uuid"`
 	CcrDeviceName            string                                                       `json:"ccr_device_name" api:"nullable"`
-	Owner                    string                                                       `json:"owner"`
 	JSON                     interconnectListResponseItemsNscInterconnectPhysicalBodyJSON `json:"-"`
 }
 
@@ -466,7 +449,6 @@ type InterconnectListResponseItemsNscInterconnectPhysicalBody struct {
 // metadata for the struct
 // [InterconnectListResponseItemsNscInterconnectPhysicalBody]
 type interconnectListResponseItemsNscInterconnectPhysicalBodyJSON struct {
-	Account                  apijson.Field
 	Facility                 apijson.Field
 	Name                     apijson.Field
 	Site                     apijson.Field
@@ -475,7 +457,6 @@ type interconnectListResponseItemsNscInterconnectPhysicalBodyJSON struct {
 	Type                     apijson.Field
 	VirtualPortReservationID apijson.Field
 	CcrDeviceName            apijson.Field
-	Owner                    apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -516,12 +497,10 @@ func (r interconnectListResponseItemsNscInterconnectPhysicalBodyFacilityJSON) Ra
 }
 
 type InterconnectListResponseItemsNscInterconnectGcpPartnerBody struct {
-	Account                  string `json:"account" api:"required"`
 	Name                     string `json:"name" api:"required"`
 	Region                   string `json:"region" api:"required"`
 	Type                     string `json:"type" api:"required"`
 	VirtualPortReservationID string `json:"virtual_port_reservation_id" api:"required" format:"uuid"`
-	Owner                    string `json:"owner"`
 	// Bandwidth structure as visible through the customer-facing API.
 	Speed InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed `json:"speed"`
 	JSON  interconnectListResponseItemsNscInterconnectGcpPartnerBodyJSON  `json:"-"`
@@ -531,12 +510,10 @@ type InterconnectListResponseItemsNscInterconnectGcpPartnerBody struct {
 // metadata for the struct
 // [InterconnectListResponseItemsNscInterconnectGcpPartnerBody]
 type interconnectListResponseItemsNscInterconnectGcpPartnerBodyJSON struct {
-	Account                  apijson.Field
 	Name                     apijson.Field
 	Region                   apijson.Field
 	Type                     apijson.Field
 	VirtualPortReservationID apijson.Field
-	Owner                    apijson.Field
 	Speed                    apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -580,7 +557,6 @@ func (r InterconnectListResponseItemsNscInterconnectGcpPartnerBodySpeed) IsKnown
 }
 
 type InterconnectGetResponse struct {
-	Account                  string `json:"account" api:"required"`
 	Name                     string `json:"name" api:"required"`
 	Type                     string `json:"type" api:"required"`
 	VirtualPortReservationID string `json:"virtual_port_reservation_id" api:"required" format:"uuid"`
@@ -588,7 +564,6 @@ type InterconnectGetResponse struct {
 	// This field can have the runtime type of
 	// [InterconnectGetResponseNscInterconnectPhysicalBodyFacility].
 	Facility interface{} `json:"facility"`
-	Owner    string      `json:"owner"`
 	Region   string      `json:"region"`
 	// A Cloudflare site name.
 	Site   string                      `json:"site"`
@@ -601,13 +576,11 @@ type InterconnectGetResponse struct {
 // interconnectGetResponseJSON contains the JSON metadata for the struct
 // [InterconnectGetResponse]
 type interconnectGetResponseJSON struct {
-	Account                  apijson.Field
 	Name                     apijson.Field
 	Type                     apijson.Field
 	VirtualPortReservationID apijson.Field
 	CcrDeviceName            apijson.Field
 	Facility                 apijson.Field
-	Owner                    apijson.Field
 	Region                   apijson.Field
 	Site                     apijson.Field
 	SlotID                   apijson.Field
@@ -661,7 +634,6 @@ func init() {
 }
 
 type InterconnectGetResponseNscInterconnectPhysicalBody struct {
-	Account  string                                                     `json:"account" api:"required"`
 	Facility InterconnectGetResponseNscInterconnectPhysicalBodyFacility `json:"facility" api:"required"`
 	Name     string                                                     `json:"name" api:"required"`
 	// A Cloudflare site name.
@@ -671,14 +643,12 @@ type InterconnectGetResponseNscInterconnectPhysicalBody struct {
 	Type                     string                                                 `json:"type" api:"required"`
 	VirtualPortReservationID string                                                 `json:"virtual_port_reservation_id" api:"required" format:"uuid"`
 	CcrDeviceName            string                                                 `json:"ccr_device_name" api:"nullable"`
-	Owner                    string                                                 `json:"owner"`
 	JSON                     interconnectGetResponseNscInterconnectPhysicalBodyJSON `json:"-"`
 }
 
 // interconnectGetResponseNscInterconnectPhysicalBodyJSON contains the JSON
 // metadata for the struct [InterconnectGetResponseNscInterconnectPhysicalBody]
 type interconnectGetResponseNscInterconnectPhysicalBodyJSON struct {
-	Account                  apijson.Field
 	Facility                 apijson.Field
 	Name                     apijson.Field
 	Site                     apijson.Field
@@ -687,7 +657,6 @@ type interconnectGetResponseNscInterconnectPhysicalBodyJSON struct {
 	Type                     apijson.Field
 	VirtualPortReservationID apijson.Field
 	CcrDeviceName            apijson.Field
-	Owner                    apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -727,12 +696,10 @@ func (r interconnectGetResponseNscInterconnectPhysicalBodyFacilityJSON) RawJSON(
 }
 
 type InterconnectGetResponseNscInterconnectGcpPartnerBody struct {
-	Account                  string `json:"account" api:"required"`
 	Name                     string `json:"name" api:"required"`
 	Region                   string `json:"region" api:"required"`
 	Type                     string `json:"type" api:"required"`
 	VirtualPortReservationID string `json:"virtual_port_reservation_id" api:"required" format:"uuid"`
-	Owner                    string `json:"owner"`
 	// Bandwidth structure as visible through the customer-facing API.
 	Speed InterconnectGetResponseNscInterconnectGcpPartnerBodySpeed `json:"speed"`
 	JSON  interconnectGetResponseNscInterconnectGcpPartnerBodyJSON  `json:"-"`
@@ -741,12 +708,10 @@ type InterconnectGetResponseNscInterconnectGcpPartnerBody struct {
 // interconnectGetResponseNscInterconnectGcpPartnerBodyJSON contains the JSON
 // metadata for the struct [InterconnectGetResponseNscInterconnectGcpPartnerBody]
 type interconnectGetResponseNscInterconnectGcpPartnerBodyJSON struct {
-	Account                  apijson.Field
 	Name                     apijson.Field
 	Region                   apijson.Field
 	Type                     apijson.Field
 	VirtualPortReservationID apijson.Field
-	Owner                    apijson.Field
 	Speed                    apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -1157,7 +1122,8 @@ type InterconnectListParams struct {
 	Limit     param.Field[int64]  `query:"limit"`
 	// If specified, only show interconnects located at the given site
 	Site param.Field[string] `query:"site"`
-	// If specified, only show interconnects of the given type
+	// Type of interconnect to list, such as `direct` or `gcp_partner`. Defaults to
+	// `direct`.
 	Type param.Field[string] `query:"type"`
 }
 

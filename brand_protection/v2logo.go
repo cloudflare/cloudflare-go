@@ -36,7 +36,11 @@ func NewV2LogoService(opts ...option.RequestOption) (r *V2LogoService) {
 	return
 }
 
-// Create a new saved brand protection logo query for visual similarity matching
+// Uploads a logo and creates a saved logo query that finds visually similar images
+// on scanned websites. The tag must be unique among the account's logo queries. By
+// default, the new query also searches previously scanned images (see
+// `search_lookback`). Creation fails when the account has reached its Brand
+// Protection query limit, which counts domain and logo queries together.
 func (r *V2LogoService) New(ctx context.Context, params V2LogoNewParams, opts ...option.RequestOption) (res *V2LogoNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID.Value == "" {
@@ -48,8 +52,8 @@ func (r *V2LogoService) New(ctx context.Context, params V2LogoNewParams, opts ..
 	return res, err
 }
 
-// Delete a saved brand protection logo query. Returns 404 if the query ID doesn't
-// exist.
+// Permanently deletes a saved logo query and all of its matches. If the query does
+// not exist in this account, the request fails with error code 404.
 func (r *V2LogoService) Delete(ctx context.Context, queryID string, body V2LogoDeleteParams, opts ...option.RequestOption) (res *V2LogoDeleteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID.Value == "" {
@@ -65,8 +69,8 @@ func (r *V2LogoService) Delete(ctx context.Context, queryID string, body V2LogoD
 	return res, err
 }
 
-// Get all saved brand protection logo queries for an account. Optionally specify
-// id to get a single query. Set download=true to include base64-encoded image
+// Lists the account's saved logo queries. Set `id` to return a single query object
+// instead of an array. Set `download=true` to include each logo image as base64
 // data.
 func (r *V2LogoService) Get(ctx context.Context, params V2LogoGetParams, opts ...option.RequestOption) (res *[]V2LogoGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
@@ -80,8 +84,9 @@ func (r *V2LogoService) Get(ctx context.Context, params V2LogoGetParams, opts ..
 }
 
 type V2LogoNewResponse struct {
-	Message string                `json:"message" api:"required"`
-	Success bool                  `json:"success" api:"required"`
+	Message string `json:"message" api:"required"`
+	Success bool   `json:"success" api:"required"`
+	// ID of the created logo query.
 	QueryID int64                 `json:"query_id"`
 	JSON    v2LogoNewResponseJSON `json:"-"`
 }
@@ -128,11 +133,15 @@ func (r v2LogoDeleteResponseJSON) RawJSON() string {
 }
 
 type V2LogoGetResponse struct {
-	ID                  int64   `json:"id" api:"required"`
-	R2Path              string  `json:"r2_path" api:"required"`
+	// ID of the logo query.
+	ID     int64  `json:"id" api:"required"`
+	R2Path string `json:"r2_path" api:"required"`
+	// Minimum similarity score (0-1) required for a visual match.
 	SimilarityThreshold float64 `json:"similarity_threshold" api:"required"`
-	Tag                 string  `json:"tag" api:"required"`
-	UploadedAt          string  `json:"uploaded_at" api:"required,nullable"`
+	// Name of the logo query.
+	Tag string `json:"tag" api:"required"`
+	// When the logo was uploaded.
+	UploadedAt string `json:"uploaded_at" api:"required,nullable"`
 	// MIME type of the image (only present when download=true)
 	ContentType string `json:"content_type"`
 	// Base64-encoded image data (only present when download=true)
@@ -165,14 +174,16 @@ func (r v2LogoGetResponseJSON) RawJSON() string {
 type V2LogoNewParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
 	// Base64 encoded image data. Can include data URI prefix (e.g.,
-	// 'data:image/png;base64,...') or just the base64 string.
+	// 'data:image/png;base64,...') or just the base64 string. Supported formats: PNG,
+	// JPEG, GIF, WebP, BMP, and SVG. ICO is also accepted when the data includes a
+	// `data:image/x-icon;base64,` prefix.
 	ImageData param.Field[string] `json:"image_data" api:"required"`
 	// Minimum similarity score (0-1) required for visual matches
 	SimilarityThreshold param.Field[float64] `json:"similarity_threshold" api:"required"`
-	// Unique identifier for the logo query
+	// Name of the logo query. Must be unique among the account's logo queries.
 	Tag param.Field[string] `json:"tag" api:"required"`
-	// If true, search historic scanned images for matches above the similarity
-	// threshold
+	// If true, also search previously scanned images for matches above the similarity
+	// threshold. Defaults to `true`.
 	SearchLookback param.Field[bool] `json:"search_lookback"`
 }
 
@@ -186,9 +197,11 @@ type V2LogoDeleteParams struct {
 
 type V2LogoGetParams struct {
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Optional query ID to retrieve a specific logo query
+	// ID of a logo query. When set, `result` is that single query object instead of an
+	// array.
 	ID param.Field[string] `query:"id"`
-	// If true, include base64-encoded image data in the response
+	// Set to `true` to include each logo image as base64 data in `image_data`, with
+	// its MIME type in `content_type`.
 	Download param.Field[string] `query:"download"`
 }
 

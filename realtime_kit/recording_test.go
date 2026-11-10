@@ -16,7 +16,6 @@ import (
 )
 
 func TestRecordingGetActiveRecordings(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -48,7 +47,6 @@ func TestRecordingGetActiveRecordings(t *testing.T) {
 }
 
 func TestRecordingGetOneRecording(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -80,7 +78,6 @@ func TestRecordingGetOneRecording(t *testing.T) {
 }
 
 func TestRecordingGetRecordingsWithOptionalParams(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -121,7 +118,6 @@ func TestRecordingGetRecordingsWithOptionalParams(t *testing.T) {
 }
 
 func TestRecordingPauseResumeStopRecording(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -154,7 +150,6 @@ func TestRecordingPauseResumeStopRecording(t *testing.T) {
 }
 
 func TestRecordingStartRecordingsWithOptionalParams(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -232,7 +227,6 @@ func TestRecordingStartRecordingsWithOptionalParams(t *testing.T) {
 }
 
 func TestRecordingStartTrackRecordingWithOptionalParams(t *testing.T) {
-	t.Skip("requires active WebRTC session with real participants")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

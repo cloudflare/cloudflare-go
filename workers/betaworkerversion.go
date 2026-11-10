@@ -196,9 +196,12 @@ type Version struct {
 	// Date indicating targeted support in the Workers runtime. Backwards incompatible
 	// fixes to the runtime following this date will not affect this Worker.
 	CompatibilityDate string `json:"compatibility_date"`
-	// Flags that enable or disable certain features in the Workers runtime. Used to
-	// enable upcoming features or opt in or out of specific changes not included in a
-	// `compatibility_date`.
+	// Enables or disables specific Workers runtime features, such as upcoming features
+	// or changes outside the `compatibility_date`.
+	//
+	// Responses list only the flags this version sets explicitly and exclude behavior
+	// that `compatibility_date` enables. Responses omit the field when the list is
+	// empty, so a missing field means the version sets zero flags.
 	CompatibilityFlags []string `json:"compatibility_flags"`
 	// List of containers attached to a Worker. Containers can only be attached to
 	// Durable Object classes of this Worker script.
@@ -226,6 +229,11 @@ type Version struct {
 	// applied when the version is deployed.
 	Migrations VersionMigrations `json:"migrations"`
 	// Code, sourcemaps, and other content used at runtime.
+	//
+	// Source maps use content type `application/source-map`. Responses include them
+	// only when requested with `include=modules,sourcemaps`. Workers stores the source
+	// map fields used to remap stack traces, so a returned source map is equivalent to
+	// the uploaded file but not byte-identical.
 	//
 	// This includes
 	// [`_headers`](https://developers.cloudflare.com/workers/static-assets/headers/#custom-headers)
@@ -680,7 +688,8 @@ func (r *VersionBinding) UnmarshalJSON(data []byte) (err error) {
 // [VersionBindingsWorkersBindingKindWorkflow],
 // [VersionBindingsWorkersBindingKindWasmModule],
 // [VersionBindingsWorkersBindingKindVPCService],
-// [VersionBindingsWorkersBindingKindVPCNetwork].
+// [VersionBindingsWorkersBindingKindVPCNetwork],
+// [VersionBindingsWorkersBindingKindWorkerLoader].
 func (r VersionBinding) AsUnion() VersionBindingsUnion {
 	return r.union
 }
@@ -722,8 +731,9 @@ func (r VersionBinding) AsUnion() VersionBindingsUnion {
 // [VersionBindingsWorkersBindingKindSecretKey],
 // [VersionBindingsWorkersBindingKindWorkflow],
 // [VersionBindingsWorkersBindingKindWasmModule],
-// [VersionBindingsWorkersBindingKindVPCService] or
-// [VersionBindingsWorkersBindingKindVPCNetwork].
+// [VersionBindingsWorkersBindingKindVPCService],
+// [VersionBindingsWorkersBindingKindVPCNetwork] or
+// [VersionBindingsWorkersBindingKindWorkerLoader].
 type VersionBindingsUnion interface {
 	implementsVersionBinding()
 }
@@ -921,6 +931,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindVPCNetwork{}),
 			DiscriminatorValue: "vpc_network",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(VersionBindingsWorkersBindingKindWorkerLoader{}),
+			DiscriminatorValue: "worker_loader",
 		},
 	)
 }
@@ -2907,6 +2922,48 @@ func (r VersionBindingsWorkersBindingKindVPCNetworkIdentity) IsKnown() bool {
 	return false
 }
 
+type VersionBindingsWorkersBindingKindWorkerLoader struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name" api:"required"`
+	// The kind of resource that the binding provides.
+	Type VersionBindingsWorkersBindingKindWorkerLoaderType `json:"type" api:"required"`
+	JSON versionBindingsWorkersBindingKindWorkerLoaderJSON `json:"-"`
+}
+
+// versionBindingsWorkersBindingKindWorkerLoaderJSON contains the JSON metadata for
+// the struct [VersionBindingsWorkersBindingKindWorkerLoader]
+type versionBindingsWorkersBindingKindWorkerLoaderJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VersionBindingsWorkersBindingKindWorkerLoader) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionBindingsWorkersBindingKindWorkerLoaderJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionBindingsWorkersBindingKindWorkerLoader) implementsVersionBinding() {}
+
+// The kind of resource that the binding provides.
+type VersionBindingsWorkersBindingKindWorkerLoaderType string
+
+const (
+	VersionBindingsWorkersBindingKindWorkerLoaderTypeWorkerLoader VersionBindingsWorkersBindingKindWorkerLoaderType = "worker_loader"
+)
+
+func (r VersionBindingsWorkersBindingKindWorkerLoaderType) IsKnown() bool {
+	switch r {
+	case VersionBindingsWorkersBindingKindWorkerLoaderTypeWorkerLoader:
+		return true
+	}
+	return false
+}
+
 // The kind of resource that the binding provides.
 type VersionBindingsType string
 
@@ -2949,11 +3006,12 @@ const (
 	VersionBindingsTypeWasmModule             VersionBindingsType = "wasm_module"
 	VersionBindingsTypeVPCService             VersionBindingsType = "vpc_service"
 	VersionBindingsTypeVPCNetwork             VersionBindingsType = "vpc_network"
+	VersionBindingsTypeWorkerLoader           VersionBindingsType = "worker_loader"
 )
 
 func (r VersionBindingsType) IsKnown() bool {
 	switch r {
-	case VersionBindingsTypeAI, VersionBindingsTypeAISearch, VersionBindingsTypeAISearchNamespace, VersionBindingsTypeMessaging, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeArtifacts, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMedia, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeK2, VersionBindingsTypeQueue, VersionBindingsTypeRatelimit, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeFlagship, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule, VersionBindingsTypeVPCService, VersionBindingsTypeVPCNetwork:
+	case VersionBindingsTypeAI, VersionBindingsTypeAISearch, VersionBindingsTypeAISearchNamespace, VersionBindingsTypeMessaging, VersionBindingsTypeAnalyticsEngine, VersionBindingsTypeArtifacts, VersionBindingsTypeAssets, VersionBindingsTypeBrowser, VersionBindingsTypeD1, VersionBindingsTypeDataBlob, VersionBindingsTypeDispatchNamespace, VersionBindingsTypeDurableObjectNamespace, VersionBindingsTypeHyperdrive, VersionBindingsTypeInherit, VersionBindingsTypeImages, VersionBindingsTypeJson, VersionBindingsTypeKVNamespace, VersionBindingsTypeMedia, VersionBindingsTypeMTLSCertificate, VersionBindingsTypePlainText, VersionBindingsTypePipelines, VersionBindingsTypeK2, VersionBindingsTypeQueue, VersionBindingsTypeRatelimit, VersionBindingsTypeR2Bucket, VersionBindingsTypeSecretText, VersionBindingsTypeSendEmail, VersionBindingsTypeService, VersionBindingsTypeTextBlob, VersionBindingsTypeVectorize, VersionBindingsTypeVersionMetadata, VersionBindingsTypeSecretsStoreSecret, VersionBindingsTypeFlagship, VersionBindingsTypeSecretKey, VersionBindingsTypeWorkflow, VersionBindingsTypeWasmModule, VersionBindingsTypeVPCService, VersionBindingsTypeVPCNetwork, VersionBindingsTypeWorkerLoader:
 		return true
 	}
 	return false
@@ -4518,9 +4576,12 @@ type VersionParam struct {
 	// Date indicating targeted support in the Workers runtime. Backwards incompatible
 	// fixes to the runtime following this date will not affect this Worker.
 	CompatibilityDate param.Field[string] `json:"compatibility_date"`
-	// Flags that enable or disable certain features in the Workers runtime. Used to
-	// enable upcoming features or opt in or out of specific changes not included in a
-	// `compatibility_date`.
+	// Enables or disables specific Workers runtime features, such as upcoming features
+	// or changes outside the `compatibility_date`.
+	//
+	// Responses list only the flags this version sets explicitly and exclude behavior
+	// that `compatibility_date` enables. Responses omit the field when the list is
+	// empty, so a missing field means the version sets zero flags.
 	CompatibilityFlags param.Field[[]string] `json:"compatibility_flags"`
 	// List of containers attached to a Worker. Containers can only be attached to
 	// Durable Object classes of this Worker script.
@@ -4540,6 +4601,11 @@ type VersionParam struct {
 	// applied when the version is deployed.
 	Migrations param.Field[VersionMigrationsUnionParam] `json:"migrations"`
 	// Code, sourcemaps, and other content used at runtime.
+	//
+	// Source maps use content type `application/source-map`. Responses include them
+	// only when requested with `include=modules,sourcemaps`. Workers stores the source
+	// map fields used to remap stack traces, so a returned source map is equivalent to
+	// the uploaded file but not byte-identical.
 	//
 	// This includes
 	// [`_headers`](https://developers.cloudflare.com/workers/static-assets/headers/#custom-headers)
@@ -4787,6 +4853,7 @@ func (r VersionBindingParam) implementsVersionBindingsUnionParam() {}
 // [workers.VersionBindingsWorkersBindingKindWasmModuleParam],
 // [workers.VersionBindingsWorkersBindingKindVPCServiceParam],
 // [workers.VersionBindingsWorkersBindingKindVPCNetworkParam],
+// [workers.VersionBindingsWorkersBindingKindWorkerLoaderParam],
 // [VersionBindingParam].
 type VersionBindingsUnionParam interface {
 	implementsVersionBindingsUnionParam()
@@ -5460,6 +5527,19 @@ func (r VersionBindingsWorkersBindingKindVPCNetworkParam) MarshalJSON() (data []
 }
 
 func (r VersionBindingsWorkersBindingKindVPCNetworkParam) implementsVersionBindingsUnionParam() {}
+
+type VersionBindingsWorkersBindingKindWorkerLoaderParam struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name" api:"required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[VersionBindingsWorkersBindingKindWorkerLoaderType] `json:"type" api:"required"`
+}
+
+func (r VersionBindingsWorkersBindingKindWorkerLoaderParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r VersionBindingsWorkersBindingKindWorkerLoaderParam) implementsVersionBindingsUnionParam() {}
 
 // Global CacheW configuration for the Worker. When caching is on, the platform
 // provisions a `cloudflare.app` zone for the Worker. A `type: worker` entry in the
@@ -6323,9 +6403,9 @@ type BetaWorkerVersionDeleteParams struct {
 type BetaWorkerVersionGetParams struct {
 	// Identifier.
 	AccountID param.Field[string] `path:"account_id" api:"required"`
-	// Whether to include the `modules` property of the version in the response, which
-	// contains code and sourcemap content and may add several megabytes to the
-	// response size.
+	// Optional properties to include in the response. `modules` includes the `modules`
+	// property, which contains code and may add several megabytes to the response
+	// size. `modules,sourcemaps` also includes the version's source maps in `modules`.
 	Include param.Field[BetaWorkerVersionGetParamsInclude] `query:"include"`
 }
 
@@ -6338,18 +6418,19 @@ func (r BetaWorkerVersionGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Whether to include the `modules` property of the version in the response, which
-// contains code and sourcemap content and may add several megabytes to the
-// response size.
+// Optional properties to include in the response. `modules` includes the `modules`
+// property, which contains code and may add several megabytes to the response
+// size. `modules,sourcemaps` also includes the version's source maps in `modules`.
 type BetaWorkerVersionGetParamsInclude string
 
 const (
-	BetaWorkerVersionGetParamsIncludeModules BetaWorkerVersionGetParamsInclude = "modules"
+	BetaWorkerVersionGetParamsIncludeModules           BetaWorkerVersionGetParamsInclude = "modules"
+	BetaWorkerVersionGetParamsIncludeModulesSourcemaps BetaWorkerVersionGetParamsInclude = "modules,sourcemaps"
 )
 
 func (r BetaWorkerVersionGetParamsInclude) IsKnown() bool {
 	switch r {
-	case BetaWorkerVersionGetParamsIncludeModules:
+	case BetaWorkerVersionGetParamsIncludeModules, BetaWorkerVersionGetParamsIncludeModulesSourcemaps:
 		return true
 	}
 	return false

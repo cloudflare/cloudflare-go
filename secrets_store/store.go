@@ -57,7 +57,8 @@ func (r *StoreService) New(ctx context.Context, params StoreNewParams, opts ...o
 	return res, nil
 }
 
-// Lists all the stores in an account.
+// Lists account stores from an eventually consistent projection. Returns retryable
+// HTTP 503 until initial backfill completes; empty accounts are ready immediately.
 func (r *StoreService) List(ctx context.Context, params StoreListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[StoreListResponse], err error) {
 	var raw *http.Response
 	opts = slices.Concat(r.Options, opts)
@@ -79,7 +80,8 @@ func (r *StoreService) List(ctx context.Context, params StoreListParams, opts ..
 	return res, nil
 }
 
-// Lists all the stores in an account.
+// Lists account stores from an eventually consistent projection. Returns retryable
+// HTTP 503 until initial backfill completes; empty accounts are ready immediately.
 func (r *StoreService) ListAutoPaging(ctx context.Context, params StoreListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[StoreListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
