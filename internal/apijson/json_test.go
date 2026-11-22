@@ -3,6 +3,7 @@ package apijson
 import (
 	"reflect"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -614,4 +615,40 @@ func TestEncode(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestMarshalDateFormatsThroughInterfaces(t *testing.T) {
+	type request struct {
+		Day     map[string]any `json:"day" format:"date"`
+		Instant map[string]any `json:"instant" format:"date-time"`
+	}
+	at := time.Date(2026, 1, 2, 3, 4, 5, 0, time.UTC)
+	data, err := MarshalRoot(request{map[string]any{"at": at}, map[string]any{"at": at}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := `{"day":{"at":"2026-01-02"},"instant":{"at":"2026-01-02T03:04:05Z"}}`; string(data) != want {
+		t.Fatalf("got %s, want %s", data, want)
+	}
+}
+
+func TestMarshalConcurrentInterfaceValues(t *testing.T) {
+	type label string
+	type request struct {
+		Data any `json:"data"`
+	}
+	payload := request{map[label]string{"name": "value"}}
+	start := make(chan struct{})
+	var wg sync.WaitGroup
+	for range 16 {
+		wg.Go(func() {
+			<-start
+			data, err := MarshalRoot(payload)
+			if err != nil || string(data) != `{"data":{"name":"value"}}` {
+				t.Errorf("unexpected encoded value %s, error %v", data, err)
+			}
+		})
+	}
+	close(start)
+	wg.Wait()
 }
