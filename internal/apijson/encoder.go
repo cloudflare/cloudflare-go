@@ -104,7 +104,7 @@ func indirectMarshalerEncoder(v reflect.Value) ([]byte, error) {
 	return v.Addr().Interface().(json.Marshaler).MarshalJSON()
 }
 
-func (e *encoder) newTypeEncoder(t reflect.Type) encoderFunc {
+func (e encoder) newTypeEncoder(t reflect.Type) encoderFunc {
 	if t.ConvertibleTo(reflect.TypeOf(time.Time{})) {
 		return e.newTimeTypeEncoder()
 	}
@@ -252,17 +252,16 @@ func (e *encoder) newStructTypeEncoder(t reflect.Type) encoderFunc {
 			}
 
 			dateFormat, ok := parseFormatStructTag(field)
-			oldFormat := e.dateFormat
+			fieldEncoder := *e
 			if ok {
 				switch dateFormat {
 				case "date-time":
-					e.dateFormat = time.RFC3339
+					fieldEncoder.dateFormat = time.RFC3339
 				case "date":
-					e.dateFormat = "2006-01-02"
+					fieldEncoder.dateFormat = "2006-01-02"
 				}
 			}
-			encoderFields = append(encoderFields, encoderField{ptag, e.typeEncoder(field.Type), idx})
-			e.dateFormat = oldFormat
+			encoderFields = append(encoderFields, encoderField{ptag, fieldEncoder.typeEncoder(field.Type), idx})
 		}
 	}
 	collectEncoderFields(t, []int{})
