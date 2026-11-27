@@ -2,7 +2,10 @@ package apiform
 
 import (
 	"bytes"
+	"io"
+	"mime"
 	"mime/multipart"
+	"os"
 	"strings"
 	"testing"
 	"time"
@@ -94,7 +97,24 @@ type UnionTime time.Time
 func (UnionTime) union() {}
 
 type ReaderStruct struct {
+	Files []io.Reader `form:"files"`
 }
+
+type nameReader struct {
+	io.Reader
+	name string
+}
+
+func (r *nameReader) Name() string { return r.name }
+
+type filenameReader struct {
+	io.Reader
+	filename    string
+	contentType string
+}
+
+func (r *filenameReader) Filename() string    { return r.filename }
+func (r *filenameReader) ContentType() string { return r.contentType }
 
 var tests = map[string]struct {
 	buf string
@@ -437,4 +457,95 @@ func TestEncode(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestEncodeReaderFilenames(t *testing.T) {
+	t.Run("preserves subdirectory paths for Name() and Filename() readers", func(t *testing.T) {
+		val := ReaderStruct{
+			Files: []io.Reader{
+				&nameReader{Reader: strings.NewReader("first"), name: "worker/index.js"},
+				&filenameReader{Reader: strings.NewReader("second"), filename: "worker/lib/api.js", contentType: "application/javascript+module"},
+				strings.NewReader("third"),
+			},
+		}
+
+		buf := bytes.NewBuffer(nil)
+		writer := multipart.NewWriter(buf)
+		writer.SetBoundary("xxx")
+		if err := Marshal(val, writer); err != nil {
+			t.Fatalf("Marshal failed: %v", err)
+		}
+		if err := writer.Close(); err != nil {
+			t.Fatalf("Close failed: %v", err)
+		}
+
+		want := strings.ReplaceAll(`--xxx
+Content-Disposition: form-data; name="files.0"; filename="worker/index.js"
+Content-Type: application/octet-stream
+
+first
+--xxx
+Content-Disposition: form-data; name="files.1"; filename="worker/lib/api.js"
+Content-Type: application/javascript+module
+
+second
+--xxx
+Content-Disposition: form-data; name="files.2"; filename="anonymous_file"
+Content-Type: application/octet-stream
+
+third
+--xxx--
+`, "\n", "\r\n")
+
+		if got := buf.String(); got != want {
+			t.Errorf("got:\n%s\nwant:\n%s", got, want)
+		}
+
+		reader := multipart.NewReader(bytes.NewReader(buf.Bytes()), "xxx")
+		wantFilenames := []string{"worker/index.js", "worker/lib/api.js", "anonymous_file"}
+		for i, wantFilename := range wantFilenames {
+			part, err := reader.NextPart()
+			if err != nil {
+				t.Fatalf("part %d: %v", i, err)
+			}
+			_, dispParams, err := mime.ParseMediaType(part.Header.Get("Content-Disposition"))
+			if err != nil {
+				t.Fatalf("part %d ParseMediaType: %v", i, err)
+			}
+			if dispParams["filename"] != wantFilename {
+				t.Errorf("part %d filename = %q, want %q", i, dispParams["filename"], wantFilename)
+			}
+		}
+	})
+
+	t.Run("preserves relative path for os.Open file", func(t *testing.T) {
+		tmp := t.TempDir()
+		t.Chdir(tmp)
+		if err := os.MkdirAll("worker", 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile("worker/index.js", []byte("export default {}"), 0o644); err != nil {
+			t.Fatal(err)
+		}
+		f, err := os.Open("worker/index.js")
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer f.Close()
+
+		buf := bytes.NewBuffer(nil)
+		writer := multipart.NewWriter(buf)
+		writer.SetBoundary("xxx")
+		if err := Marshal(ReaderStruct{Files: []io.Reader{f}}, writer); err != nil {
+			t.Fatalf("Marshal failed: %v", err)
+		}
+		if err := writer.Close(); err != nil {
+			t.Fatalf("Close failed: %v", err)
+		}
+
+		wantSubstr := `Content-Disposition: form-data; name="files.0"; filename="worker/index.js"`
+		if !strings.Contains(buf.String(), wantSubstr) {
+			t.Errorf("expected %q in:\n%s", wantSubstr, buf.String())
+		}
+	})
 }

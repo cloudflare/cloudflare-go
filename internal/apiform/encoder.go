@@ -6,7 +6,6 @@ import (
 	"io"
 	"mime/multipart"
 	"net/textproto"
-	"path"
 	"reflect"
 	"sort"
 	"strconv"
@@ -365,7 +364,7 @@ func (e *encoder) newReaderTypeEncoder() encoderFunc {
 		if named, ok := reader.(interface{ Filename() string }); ok {
 			filename = named.Filename()
 		} else if named, ok := reader.(interface{ Name() string }); ok {
-			filename = path.Base(named.Name())
+			filename = named.Name()
 		}
 		if typed, ok := reader.(interface{ ContentType() string }); ok {
 			contentType = typed.ContentType()
